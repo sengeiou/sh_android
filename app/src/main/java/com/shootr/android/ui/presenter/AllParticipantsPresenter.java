@@ -6,7 +6,9 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.AllParticipantsView;
@@ -18,8 +20,8 @@ public class AllParticipantsPresenter implements Presenter {
 
     private final GetAllParticipantsInteractor getAllParticipantsInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
-    private final FollowFaketeractor followFaketeractor;
-    private final UnfollowFaketeractor unfollowFaketeractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
 
@@ -29,12 +31,12 @@ public class AllParticipantsPresenter implements Presenter {
     private String idStream;
 
     @Inject public AllParticipantsPresenter(GetAllParticipantsInteractor getAllParticipantsInteractor,
-      SelectStreamInteractor selectStreamInteractor, FollowFaketeractor followFaketeractor,
-      UnfollowFaketeractor unfollowFaketeractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+      SelectStreamInteractor selectStreamInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
         this.getAllParticipantsInteractor = getAllParticipantsInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
-        this.followFaketeractor = followFaketeractor;
-        this.unfollowFaketeractor = unfollowFaketeractor;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
     }
@@ -93,7 +95,7 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     public void followUser(final UserModel userModel) {
-        followFaketeractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+        followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
             }
@@ -101,7 +103,7 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     public void unfollowUser(final UserModel userModel) {
-        unfollowFaketeractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+        unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
             }

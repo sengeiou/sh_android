@@ -9,6 +9,8 @@ import java.util.List;
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.DELETE;
+import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
@@ -47,4 +49,10 @@ public interface UserApiService {
 
     @GET("/user/search/{query}?includeLinks=false&includeEmbed=false")
     List<UserEntity> search(@Path("query") String query, @Query("page") int pageOffset) throws IOException, ApiException;
+
+    @POST("/user/{idUser}/follow")
+    Response follow(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @DELETE("/user/{idUser}/follow")
+    Response unfollow(@Path("idUser") String idUser) throws IOException, ApiException;
 }

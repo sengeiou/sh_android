@@ -17,6 +17,7 @@ import javax.inject.Singleton;
     DatabaseUtilsModule.class,
     NiceShotRepositoryModule.class,
     DeviceRepositoryModule.class,
+    FollowRepositoryModule.class,
   },
   complete = false,
   library = true

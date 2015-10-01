@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,15 +43,11 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
@@ -315,7 +310,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
-            @Override public void onUserClick(String idUser) {
+            @Override
+            public void onUserClick(String idUser) {
                 Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
                 startActivity(suggestedUserIntent);
             }
@@ -536,17 +532,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         jobManager.addJobInBackground(job);
     }
 
-    public void startFollowUnfollowUserJob(Context context, int followType) {
-        GetFollowUnFollowUserOfflineJob job2 =
-          ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(idUser, followType);
-        jobManager.addJobInBackground(job2);
-
-        GetFollowUnfollowUserOnlineJob job =
-          ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(job);
-    }
-
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         if (event.getResult() != null) {
@@ -604,7 +589,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         } else {
             boolean isFollowing = followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING
               || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
-            followButton.setFollowing(isFollowing);
+            setFollowing(isFollowing);
         }
     }
 
@@ -641,14 +626,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     public void followUser() {
-        startFollowUnfollowUserJob(getActivity(), UserDtoFactory.FOLLOW_TYPE);
+        profilePresenter.follow();
     }
 
     public void unfollowUser() {
         new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  startFollowUnfollowUserJob(getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+                  profilePresenter.unfollow();
               }
           })
           .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
@@ -883,7 +868,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void follow(int position) {
-        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
+        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
     }
 
     @Override public void unFollow(final int position) {
@@ -891,7 +876,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  suggestedPeoplePresenter.unfollowUser(userModel, getActivity());
+                  suggestedPeoplePresenter.unfollowUser(userModel);
               }
           })
           .setNegativeButton("No", null)
@@ -899,16 +884,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .show();
     }
 
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<String, Boolean> result = event.getResult();
-        if (result != null) {
-            String idUserFromResult = result.first;
-            Boolean following = result.second;
-            if (idUserFromResult.equals(this.idUser)) {
-                followButton.setFollowing(following);
-            }
-        }
+    @Override
+    public void setFollowing(Boolean following) {
+        followButton.setFollowing(following);
     }
 
     @OnClick(R.id.profile_open_stream)

@@ -33,4 +33,6 @@ public interface ProfileView {
     void navigateToCreatedStreamDetail(String streamId);
 
     void showShotShared();
+
+    void setFollowing(Boolean following);
 }

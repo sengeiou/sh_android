@@ -1,9 +1,7 @@
 package com.shootr.android.data.repository.dagger;
 
-import com.shootr.android.data.repository.datasource.user.DatabaseFollowDataSource;
 import com.shootr.android.data.repository.datasource.user.DatabaseSuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.DatabaseUserDataSource;
-import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.datasource.user.ServiceSuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.ServiceUserDataSource;
 import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -39,11 +37,6 @@ public class UserRepositoryModule {
 
     @Provides @Singleton @Remote UserDataSource provideRemoteUserDataSource(ServiceUserDataSource userDataSource) {
         return userDataSource;
-    }
-
-    @Provides @Singleton @Local FollowDataSource provideLocalFollowDataSource(
-      DatabaseFollowDataSource databaseFollowDataSource) {
-        return databaseFollowDataSource;
     }
 
     @Provides @Singleton @Local SuggestedPeopleDataSource provideLocalSuggestedPeopleDataSource(DatabaseSuggestedPeopleDataSource suggestedPeopleDataSource) {

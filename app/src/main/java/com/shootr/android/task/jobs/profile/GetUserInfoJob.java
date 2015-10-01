@@ -77,14 +77,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
         if(hasInternetConnection()){
             UserEntity userFromService = getUserFromService();
             boolean isMe = idCurrentUser.equals(userId);
-            FollowEntity followFromService = null;
-            if(!isMe){
-                followFromService = getFolloFromService();
-                if(followFromService!=null && followFromService.getIdUser()!=null) {
-                    followManager.saveFollowFromServer(followFromService);
-                }
-            }
-            postSuccessfulEvent(new UserInfoResultEvent(userVOMapper.toUserModel(userFromService,followFromService,isMe)));
+            postSuccessfulEvent(new UserInfoResultEvent(userVOMapper.toUserModel(userFromService,follow,isMe)));
             if (userFromLocalDatabase != null) {
                 Timber.d("Obtained user from server found in database. Updating database.");
                 userManager.saveUser(userFromService);
@@ -97,9 +90,6 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     }
 
-    private FollowEntity getFolloFromService() throws IOException {
-        return service.getFollowByIdUserFollowed(sessionRepository.getCurrentUserId(), userId);
-    }
     private UserEntity getUserFromDatabase() {
         return userManager.getUserByIdUser(userId);
     }

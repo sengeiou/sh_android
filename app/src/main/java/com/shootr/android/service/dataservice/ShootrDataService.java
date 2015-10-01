@@ -1,6 +1,5 @@
 package com.shootr.android.service.dataservice;
 
-import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.SuggestedPeopleMapper;
@@ -14,7 +13,6 @@ import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
-import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.util.VersionUpdater;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.MediaType;
@@ -23,7 +21,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
-import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -69,49 +66,6 @@ public class ShootrDataService implements ShootrService {
         this.shotEntityMapper = shotEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
-    }
-
-    @Override public FollowEntity getFollowByIdUserFollowed(String idCurrentUser,String idUser) throws IOException {
-        GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        if(ops[0] != null && ops[0].getData() != null && ops[0].getData().length > 0){
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            FollowEntity followReceived = followMapper.fromDto(dataItem);
-            return followReceived;
-
-        }
-        return null;
-    }
-
-    @Override public FollowEntity followUser(FollowEntity follow) throws IOException {
-        GenericDto requestDto = userDtoFactory.followUserDto(follow);
-        GenericDto reponseDto = postRequest(requestDto);
-        OperationDto[] ops = reponseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        Map<String, Object> dataItem = ops[0].getData()[0];
-        FollowEntity followReceived = followMapper.fromDto(dataItem);
-        return followReceived;
-    }
-
-    @Override public FollowEntity unfollowUser(FollowEntity follow) throws IOException {
-        GenericDto requestDto = userDtoFactory.unfollowUserDto(follow);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        Map<String, Object> dataItem = ops[0].getData()[0];
-        FollowEntity followReceived = followMapper.fromDto(dataItem);
-        return followReceived;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

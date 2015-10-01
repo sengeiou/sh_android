@@ -2,12 +2,10 @@ package com.shootr.android.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +22,14 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -60,6 +58,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject NetworkUtil networkUtil;
     @Inject SessionRepository sessionRepository;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject FollowInteractor followInteractor;
+    @Inject UnfollowInteractor unfollowInteractor;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -174,24 +174,22 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
-    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        //Proceso de insercción en base de datos
-        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(userVO.getIdUser(),followType);
-        jobManager.addJobInBackground(job2);
-
-        //Al instante
-        GetFollowUnfollowUserOnlineJob
-          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(job);
+    public void followUser(final UserModel user){
+        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                onFollowUpdated(user.getIdUser(), true);
+            }
+        });
     }
 
-    public void followUser(UserModel user){
-        startFollowUnfollowUserJob(user, getActivity(), UserDtoFactory.FOLLOW_TYPE);
-    }
-
-    public void unfollowUser(UserModel user){
-        startFollowUnfollowUserJob(user,getActivity(),UserDtoFactory.UNFOLLOW_TYPE);
+    public void unfollowUser(final UserModel user){
+        unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                onFollowUpdated(user.getIdUser(), false);
+            }
+        });
     }
 
     @Override public void onResume() {
@@ -247,12 +245,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
           .show();
     }
 
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-
+    protected void onFollowUpdated(String idUser, boolean following) {
         List<UserModel> usersInList = userListAdapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);

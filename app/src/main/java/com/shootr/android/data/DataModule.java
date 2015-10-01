@@ -35,8 +35,6 @@ import com.shootr.android.service.ApiModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
@@ -98,7 +96,7 @@ import static android.content.Context.MODE_PRIVATE;
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
     GetUserInfoJob.class, GetUsersFollowsJob.class,
-    GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLatestShotsJob.class,
+    GetLatestShotsJob.class,
 
     ProfileFragment.class,
     UploadProfilePhotoJob.class,
