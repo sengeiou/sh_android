@@ -192,6 +192,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override public void onResume() {
         super.onResume();
         bus.register(this);
+        retrieveUsers();
     }
 
     @Override public void onPause() {
