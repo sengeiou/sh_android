@@ -13,7 +13,7 @@ public class DatabaseSuggestedPeopleDataSource implements SuggestedPeopleDataSou
         this.suggestedPeopleManager = suggestedPeopleManager;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
         return suggestedPeopleManager.getSuggestedPeople();
     }
 

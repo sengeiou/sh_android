@@ -1,8 +1,6 @@
 package com.shootr.android.service.dataservice;
 
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.SuggestedPeopleEntity;
-import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.SuggestedPeopleMapper;
@@ -13,11 +11,9 @@ import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
-import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
-import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.util.VersionUpdater;
 import com.sloydev.jsonadapters.JsonAdapter;
@@ -27,8 +23,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -77,48 +71,6 @@ public class ShootrDataService implements ShootrService {
         this.versionUpdater = versionUpdater;
     }
 
-    @Override
-    public UserEntity getUserByIdUser(String idUser) throws IOException {
-        GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata()!=null) {
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            return userMapper.fromDto(dataItem);
-        }
-        return null;
-    }
-
-    @Override
-    public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
-      int pageOffset) throws IOException{
-        List<UserEntity> users = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.searchUserOperation(searchQuery, SEARCH_PAGE_LIMIT, pageOffset);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else{
-            MetadataDto metadata = ops[0].getMetadata();
-            if(metadata!=null){
-                Long items = metadata.getItems();
-                for (int i = 0; i < items; i++) {
-                    Map<String, Object> dataItem = ops[0].getData()[i];
-                    users.add(userMapper.fromDto(dataItem));
-                }
-                if(metadata.getTotalItems()!=null){
-                    int totalItems = metadata.getTotalItems().intValue();
-                    return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT)
-                            .setPageOffset(pageOffset)
-                            .setTotalItems(totalItems);
-                }
-            }
-        }
-        return null;
-    }
-
     @Override public FollowEntity getFollowByIdUserFollowed(String idCurrentUser,String idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
         GenericDto responseDto = postRequest(requestDto);
@@ -160,51 +112,6 @@ public class ShootrDataService implements ShootrService {
         Map<String, Object> dataItem = ops[0].getData()[0];
         FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
-    }
-
-    @Override public void performCheckin(String idUser, String idStream) throws IOException {
-        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idStream);
-        postRequest(checkinDto);
-    }
-
-    @Override
-    public UserEntity getUserByUsername(String username) throws IOException {
-        GenericDto requestDto = userDtoFactory.getUserByUsername(username);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            Map<String, Object>[] data = ops[0].getData();
-            if (data.length > 0) {
-                Map<String, Object> dataItem = data[0];
-                return userMapper.fromDto(dataItem);
-            }
-        }
-        return null;
-    }
-
-    @Override public void logout(String idUser, String idDevice) throws IOException {
-        GenericDto logoutOperationDto = userDtoFactory.getLogoutOperationDto(idUser, idDevice);
-        postRequest(logoutOperationDto);
-    }
-
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException {
-        List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.getSuggestedPeople(currentUserId);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else {
-            MetadataDto md = ops[0].getMetadata();
-            Long items = md.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                suggestedPeopleEntities.add(suggestedPeopleMapper.fromDto(dataItem));
-            }
-        }
-        return suggestedPeopleEntities;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

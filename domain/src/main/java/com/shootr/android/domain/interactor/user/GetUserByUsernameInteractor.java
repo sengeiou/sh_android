@@ -46,13 +46,9 @@ public class GetUserByUsernameInteractor implements Interactor {
     private void loadRemoteUser(User localUser) {
         try {
             User remoteUser = remoteUserRepository.getUserByUsername(username);
-            if (remoteUser != null) {
-                notifyResult(remoteUser);
-                if (localUser != null) {
-                    localUserRepository.putUser(remoteUser);
-                }
-            } else {
-                notifyError(new UserNotFoundException(username));
+            notifyResult(remoteUser);
+            if (localUser != null) {
+                localUserRepository.putUser(remoteUser);
             }
         } catch (ShootrException error) {
             notifyError(error);

@@ -152,8 +152,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public List<SuggestedPeople> getSuggestedPeople() {
-        List<SuggestedPeopleEntity> suggestedPeopleEntities = remoteSuggestedPeopleDataSource.getSuggestedPeople(
-          sessionRepository.getCurrentUserId());
+        List<SuggestedPeopleEntity> suggestedPeopleEntities = remoteSuggestedPeopleDataSource.getSuggestedPeople();
         cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestedPeopleEntities);
         return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }

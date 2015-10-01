@@ -5,8 +5,6 @@ import android.database.Cursor;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.db.DatabaseContract;
 import java.text.Normalizer;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SuggestedPeopleMapper extends GenericMapper {
 
@@ -54,90 +52,6 @@ public class SuggestedPeopleMapper extends GenericMapper {
             setSynchronizedtoContentValues(suggestedPeopleEntity, cv);
         }
         return cv;
-    }
-
-    public SuggestedPeopleEntity fromDto(Map<String, Object> dto) {
-        SuggestedPeopleEntity suggestedPeopleEntity = new SuggestedPeopleEntity();
-        suggestedPeopleEntity.setIdUser(dto.containsKey(DatabaseContract.SuggestedPeopleTable.ID)
-          ? (String) dto.get(DatabaseContract.SuggestedPeopleTable.ID) : null);
-        suggestedPeopleEntity.setSessionToken(dto.containsKey(DatabaseContract.SuggestedPeopleTable.SESSION_TOKEN) ? (String) dto.get(
-          DatabaseContract.SuggestedPeopleTable.SESSION_TOKEN) : null);
-        suggestedPeopleEntity.setUserName(dto.containsKey(DatabaseContract.SuggestedPeopleTable.USER_NAME) ? (String) dto.get(
-          DatabaseContract.SuggestedPeopleTable.USER_NAME) : null);
-        suggestedPeopleEntity.setEmail(dto.containsKey(DatabaseContract.SuggestedPeopleTable.EMAIL)
-          ? (String) dto.get(DatabaseContract.SuggestedPeopleTable.EMAIL) : null);
-        suggestedPeopleEntity.setName(dto.containsKey(DatabaseContract.SuggestedPeopleTable.NAME)
-          ? (String) dto.get(DatabaseContract.SuggestedPeopleTable.NAME) : null);
-        suggestedPeopleEntity.setPhoto(dto.containsKey(DatabaseContract.SuggestedPeopleTable.PHOTO)
-          ? (String) dto.get(DatabaseContract.SuggestedPeopleTable.PHOTO) : null);
-        suggestedPeopleEntity.setNumFollowers(dto.containsKey(DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWERS) ? ((Number) dto.get(
-          DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWERS)).longValue() : null);
-        suggestedPeopleEntity.setNumFollowings(dto.containsKey(DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWINGS) ? ((Number) dto.get(
-          DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWINGS)).longValue() : null);
-        if(dto.get(DatabaseContract.SuggestedPeopleTable.POINTS)!= null){
-            suggestedPeopleEntity.setPoints(dto.containsKey(DatabaseContract.SuggestedPeopleTable.POINTS) ? ((Number) dto.get(
-              DatabaseContract.SuggestedPeopleTable.POINTS)).longValue() : null);
-        }
-        suggestedPeopleEntity.setWebsite(dto.containsKey(DatabaseContract.SuggestedPeopleTable.WEBSITE) ? (String) dto.get(
-          DatabaseContract.SuggestedPeopleTable.WEBSITE) : null);
-        suggestedPeopleEntity.setBio(dto.containsKey(DatabaseContract.SuggestedPeopleTable.BIO)
-          ? (String) dto.get(DatabaseContract.SuggestedPeopleTable.BIO) : null);
-        if(dto.get(DatabaseContract.SuggestedPeopleTable.RANK) != null){
-            suggestedPeopleEntity.setRank(dto.containsKey(DatabaseContract.SuggestedPeopleTable.RANK) ? ((Number) dto.get(
-              DatabaseContract.SuggestedPeopleTable.RANK)).longValue() : null);
-        }
-        String eventId = (String) dto.get(DatabaseContract.SuggestedPeopleTable.ID_WATCHING_STREAM);
-        if (eventId != null) {
-            suggestedPeopleEntity.setIdWatchingStream(eventId);
-        }
-
-        suggestedPeopleEntity.setWatchingStreamTitle(
-          dto.containsKey(DatabaseContract.SuggestedPeopleTable.WATCHING_STREAM_TITLE) ? (String) dto.get(
-            DatabaseContract.SuggestedPeopleTable.WATCHING_STREAM_TITLE) : null);
-        if(dto.get(DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE)!=null) {
-            suggestedPeopleEntity.setJoinStreamDate(
-              dto.containsKey(DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE) ? ((Number) dto.get(
-                DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE)).longValue() : null);
-        }
-
-        suggestedPeopleEntity.setRelevance(dto.containsKey(DatabaseContract.SuggestedPeopleTable.RELEVANCE) ? ((Number) dto
-            .get(DatabaseContract.SuggestedPeopleTable.RELEVANCE)).longValue() : null);
-
-        setSynchronizedfromDto(dto,suggestedPeopleEntity);
-        return suggestedPeopleEntity;
-    }
-
-    //TODO bad smell: nombre de método ofuscado
-    public Map<String, Object> reqRestUsersToDto(SuggestedPeopleEntity suggestedPeopleEntity) {
-        Map<String, Object> dto = new HashMap<>();
-        return fillDtoWithCommonFields(dto, suggestedPeopleEntity);
-    }
-
-
-    public Map<String, Object> toDto(SuggestedPeopleEntity suggestedPeopleEntity) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(DatabaseContract.SuggestedPeopleTable.EMAIL, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getEmail());
-        dto = fillDtoWithCommonFields(dto, suggestedPeopleEntity);
-        return dto;
-    }
-
-    public Map<String, Object> fillDtoWithCommonFields(Map<String, Object> dto, SuggestedPeopleEntity suggestedPeopleEntity){
-        dto.put(DatabaseContract.SuggestedPeopleTable.ID, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getIdUser());
-        dto.put(DatabaseContract.SuggestedPeopleTable.USER_NAME, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getUserName());
-        dto.put(DatabaseContract.SuggestedPeopleTable.NAME, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getName());
-        dto.put(DatabaseContract.SuggestedPeopleTable.PHOTO, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getPhoto());
-        dto.put(DatabaseContract.SuggestedPeopleTable.POINTS, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getPoints());
-        dto.put(DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWERS, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getNumFollowers());
-        dto.put(DatabaseContract.SuggestedPeopleTable.NUM_FOLLOWINGS, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getNumFollowings());
-        dto.put(DatabaseContract.SuggestedPeopleTable.BIO, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getBio());
-        dto.put(DatabaseContract.SuggestedPeopleTable.RANK, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getRank());
-        dto.put(DatabaseContract.SuggestedPeopleTable.WEBSITE, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getWebsite());
-        dto.put(DatabaseContract.SuggestedPeopleTable.ID_WATCHING_STREAM, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getIdWatchingStream());
-        dto.put(DatabaseContract.SuggestedPeopleTable.WATCHING_STREAM_TITLE, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getWatchingStreamTitle());
-        dto.put(DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getJoinStreamDate());
-        dto.put(DatabaseContract.SuggestedPeopleTable.RELEVANCE, suggestedPeopleEntity == null ? null : suggestedPeopleEntity.getRelevance());
-        setSynchronizedtoDto(suggestedPeopleEntity, dto);
-        return dto;
     }
 
     public SuggestedPeopleEntity suggestedPeopleEntityWithCommonFieldsFromCursor(Cursor c){

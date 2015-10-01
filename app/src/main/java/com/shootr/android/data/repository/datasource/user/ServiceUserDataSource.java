@@ -5,6 +5,7 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.UserNotFoundException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
@@ -45,8 +46,8 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity getUser(String id) {
         try {
-            return service.getUserByIdUser(id);
-        } catch (IOException e) {
+            return userApiService.getUser(id);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -62,9 +63,15 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override
     public UserEntity getUserByUsername(String username) {
         try {
-            return service.getUserByUsername(username);
+            return userApiService.getUserByUsername(username);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            if (e.getErrorInfo().httpCode() == 404) {
+                throw new UserNotFoundException(username);
+            } else {
+                throw new ServerCommunicationException(e);
+            }
         }
     }
 

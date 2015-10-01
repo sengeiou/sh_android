@@ -74,7 +74,7 @@ public class LocalUserRepository implements UserRepository {
 
     @Override public List<SuggestedPeople> getSuggestedPeople() {
         List<SuggestedPeopleEntity> suggestedPeople =
-          cachedSuggestedPeopleDataSource.getSuggestedPeople(sessionRepository.getCurrentUserId());
+          cachedSuggestedPeopleDataSource.getSuggestedPeople();
         return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 

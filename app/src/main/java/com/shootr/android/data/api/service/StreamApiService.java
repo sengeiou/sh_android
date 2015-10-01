@@ -45,4 +45,7 @@ public interface StreamApiService {
     Response shareStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
+
+    @PUT("/streams/{idStream}/checkin")
+    Response checkIn(@Path("idStream") String idStream) throws IOException, ApiException;
 }
