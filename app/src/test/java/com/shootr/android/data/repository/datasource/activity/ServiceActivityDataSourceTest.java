@@ -12,6 +12,7 @@ import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import org.junit.Before;
@@ -34,7 +35,8 @@ public class ServiceActivityDataSourceTest {
 
     private static final String ID_USER_STUB = "user";
     public static final String ANOTHER_ID_USER_STUB = "user_id";
-    private static final Date DATE_NEWER = new Date(2000);
+    private static final Date DATE_NEWER = new Date(3000);
+    private static final Date DATE_NOW = new Date(2000);
     private static final Date DATE_OLDER = new Date(1000);
 
     @Mock ActivityDataSource activityDataSource;
@@ -56,7 +58,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostStreamToBusWhenSyncTriggerActivityReceived() throws Exception {
+    public void shouldPostEventToBusWhenSyncTriggerActivityReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
@@ -67,7 +69,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostOnlyOneStreamWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
+    public void shouldPostOnlyOneEventWhenTwoSyncTriggerActivitiesReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
           syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -79,9 +81,9 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostOnlyOneStreamWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
-          twoTriggerActivity());
+    public void shouldPostEventOnceWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+          .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_NOW)));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
         datasource.getActivityTimeline(activityTimelineParameters);
@@ -89,21 +91,53 @@ public class ServiceActivityDataSourceTest {
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
     }
 
     @Test
-    public void shouldPostOnlyOneStreamWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
-          twoTriggerActivityWithDifferentDates());
+    public void shouldPostEventOnceWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+          .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_OLDER)));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
         datasource.getActivityTimeline(activityTimelineParameters);
         datasource.getActivityTimeline(activityTimelineParameters);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
-        verify(busPublisher).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
+        verify(busPublisher, times(1)).post(captor.capture());
+    }
+
+    @Test
+    public void shouldPostEventTwiceWhenReceivedActivityWithNewerDateThanPreviousTime() throws Exception {
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+          .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_NEWER)));
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
+
+        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters);
+
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        verify(busPublisher, times(2)).post(captor.capture());
+    }
+
+    @Test
+    public void shouldPostEventOnce_When_receivedTwoActivitiesFirst_and_sameLastActivitySecond()
+      throws Exception {
+        ActivityApiEntity t1 = syncActivityApiWithDate(DATE_OLDER);
+        ActivityApiEntity t2 = syncActivityApiWithDate(DATE_NOW);
+
+        List<ActivityApiEntity> firstRefresh = Arrays.asList(t2, t1);
+        List<ActivityApiEntity> secondRefresh = Collections.singletonList(t2);
+
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+          .thenReturn(firstRefresh, secondRefresh);
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
+
+
+        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters);
+
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        verify(busPublisher, times(1)).post(captor.capture());
     }
 
     @Test
@@ -153,5 +187,9 @@ public class ServiceActivityDataSourceTest {
         activityEntity.setIdUser(ID_USER_STUB);
         activityEntity.setBirth(DATE_NEWER);
         return activityEntity;
+    }
+
+    private List<ActivityApiEntity> list(ActivityApiEntity activityApiEntity) {
+        return Collections.singletonList(activityApiEntity);
     }
 }
