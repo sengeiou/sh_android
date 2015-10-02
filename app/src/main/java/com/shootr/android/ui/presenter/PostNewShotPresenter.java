@@ -44,7 +44,7 @@ public class PostNewShotPresenter implements Presenter {
 
     protected void setView(PostNewShotView postNewShotView) {
         this.postNewShotView = postNewShotView;
-        this.isInitialized = false;
+        this.isInitialized = true;
     }
 
     public void initializeAsNewShot(PostNewShotView postNewShotView) {
