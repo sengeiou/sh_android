@@ -31,8 +31,8 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 0
 def versionMinor = 2
-def versionRevision = 0
-def isSnapshot = false
+def versionRevision = 1
+def isSnapshot = true
 def databaseVersion = 11
 
 android {
