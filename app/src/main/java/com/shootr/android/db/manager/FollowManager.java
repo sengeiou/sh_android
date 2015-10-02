@@ -29,32 +29,14 @@ public class FollowManager extends AbstractManager{
         this.followMapper = followMapper;
     }
 
-    /**
-     * Insert a Follow from Server datas
-     */
-    public void saveFollowFromServer(FollowEntity follow) throws SQLException {
-        long id = 0;
-        if(follow!=null){
-            ContentValues contentValues = followMapper.toContentValues(follow);
-
-            if (contentValues.get(DatabaseContract.SyncColumns.DELETED) != null) {
-                deleteFollow(follow);
-            } else {
-                contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
-                id = getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-            }
-        }
-        if(id!=-1){
-            insertInSync();
-        }
-    }
-
-
     /** Insert a Follow **/
     public void saveFollow(FollowEntity follow) {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
-            getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
          }
     }
 
@@ -110,85 +92,6 @@ public class FollowManager extends AbstractManager{
         }
         c.close();
         return userIds;
-    }
-
-    public List<String> getUserFollowingIdsWithOwnUser(String idUser) throws SQLException{
-        List<String> userIds = getUserFollowingIds(idUser);
-        userIds.add(idUser);
-        return userIds;
-    }
-
-    public int getFollowRelationshipState(String idFromUser, String idToUser) {
-        int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
-        String fromUserIdArgument = String.valueOf(idFromUser);
-        String toUserIdArgument = String.valueOf(idToUser);
-
-        String selection = "("
-            + ID_USER
-            + "=? and "
-            + ID_FOLLOWED_USER
-            + "=?) OR ("
-            + ID_USER
-            + "=? and "
-            + ID_FOLLOWED_USER
-            + "=?)";
-        Cursor queryResults = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
-            new String[] {
-                fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument
-            }, null, null, null, null);
-
-        if (queryResults.getCount() > 0) {
-            queryResults.moveToFirst();
-            boolean iFollowHim = false;
-            boolean heFollowsMe = false;
-            do {
-                FollowEntity follow = followMapper.fromCursor(queryResults);
-                if (follow != null) {
-                    if (follow.getIdUser().equals(idFromUser) && follow.getFollowedUser()
-                        .equals(idToUser)) {
-                        iFollowHim = true;
-                    } else if (follow.getIdUser().equals(idToUser)
-                        && follow.getFollowedUser().equals(idFromUser)) {
-                        heFollowsMe = true;
-                    }
-
-                    if (iFollowHim && heFollowsMe) {
-                        resultRelationship = FollowEntity.RELATIONSHIP_BOTH;
-                    }else if (iFollowHim) {
-                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
-                    }else if (heFollowsMe) {
-                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWER;
-                    }
-                }
-            } while (queryResults.moveToNext());
-        }
-        queryResults.close();
-        return resultRelationship;
-    }
-
-    public int doIFollowHimState(Long idCurrentUser, Long idUser){
-        int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
-        if(idCurrentUser.equals(idUser)){
-            return FollowEntity.RELATIONSHIP_OWN;
-        }else {
-            String fromUserIdArgument = String.valueOf(idCurrentUser);
-            String toUserIdArgument = String.valueOf(idUser);
-            String selection = "(" + ID_USER + "=? and " + ID_FOLLOWED_USER + "=?)";
-            Cursor queryResults = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION, selection, new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
-            if (queryResults.getCount() > 0) {
-                queryResults.moveToFirst();
-                do {
-                    FollowEntity follow = followMapper.fromCursor(queryResults);
-                    if (follow != null && follow.getDeleted() == null) {
-                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
-                    }else if(follow!=null && follow.getDeleted() !=null){
-                        resultRelationship = FollowEntity.RELATIONSHIP_NONE;
-                    }
-                } while (queryResults.moveToNext());
-            }
-            queryResults.close();
-        }
-        return resultRelationship;
     }
 
     /**
