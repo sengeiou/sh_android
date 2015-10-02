@@ -60,6 +60,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private int charCounterColorError;
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
+    private File selectedFile;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getToolbar().setVisibility(View.GONE);
@@ -90,6 +91,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             }
         }
         presenter.initializeAsNewShot(this);
+        presenter.selectImage(selectedFile);
     }
 
     private void initializeViews() {
@@ -197,10 +199,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        File selectedFile = (File) savedInstanceState.getSerializable(EXTRA_SELECTED_IMAGE);
-        if (presenter.isInitialized()) {
-            presenter.selectImage(selectedFile);
-        }
+        selectedFile = (File) savedInstanceState.getSerializable(EXTRA_SELECTED_IMAGE);
     }
 
     @Override public void setResultOk() {
