@@ -92,18 +92,21 @@ public class ShotManager extends  AbstractManager{
         return latestShots;
     }
 
-    /**
-     * Insert a shot list
-     */
     public void saveShots(List<ShotEntity> shotList) {
         SQLiteDatabase database = getWritableDatabase();
-        for (ShotEntity shot : shotList) {
-            if (shot.getDeleted() != null) {
-                deleteShot(shot);
-            } else {
-                ContentValues contentValues = shotEntityMapper.toContentValues(shot);
-                database.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        try{
+            database.beginTransaction();
+            for (ShotEntity shot : shotList) {
+                if (shot.getDeleted() != null) {
+                    deleteShot(shot.getIdShot());
+                } else {
+                    ContentValues contentValues = shotEntityMapper.toContentValues(shot);
+                    database.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
             }
+            database.setTransactionSuccessful();
+        }finally {
+            database.endTransaction();
         }
     }
 
