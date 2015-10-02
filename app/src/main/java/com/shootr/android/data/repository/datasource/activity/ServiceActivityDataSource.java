@@ -97,15 +97,18 @@ public class ServiceActivityDataSource implements ActivityDataSource{
     }
 
     private void notifySyncTrigger(List<ActivityEntity> newActivities) {
+        boolean shouldTriggerSync = false;
         String currentUserId = sessionRepository.getCurrentUserId();
         for (ActivityEntity newActivity : newActivities) {
             if (isSyncTriggerActivity(newActivity)
               && isNewerThanLastTrigger(newActivity)
               && !newActivity.getIdUser().equals(currentUserId)) {
-                busPublisher.post(new WatchUpdateRequest.Event());
+                shouldTriggerSync = true;
                 lastTriggerDate = newActivity.getBirth().getTime();
-                break;
             }
+        }
+        if (shouldTriggerSync) {
+            busPublisher.post(new WatchUpdateRequest.Event());
         }
     }
 
