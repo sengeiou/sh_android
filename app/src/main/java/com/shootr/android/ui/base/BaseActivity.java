@@ -45,6 +45,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews(savedInstanceState);
+            initializePresenter();
         } else {
             redirectToLogin();
         }
@@ -52,11 +53,6 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     protected boolean requiresUserLogin() {
         return true;
-    }
-
-    @Override protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        initializePresenter();
     }
 
     protected void injectDependencies() {
