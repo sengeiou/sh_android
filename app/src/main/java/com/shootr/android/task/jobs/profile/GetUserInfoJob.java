@@ -72,12 +72,9 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
             UserEntity userFromService = getUserFromService();
             boolean isMe = idCurrentUser.equals(userId);
             postSuccessfulEvent(new UserInfoResultEvent(userVOMapper.toUserModel(userFromService,follow,isMe)));
-            if (userFromLocalDatabase != null) {
-                Timber.d("Obtained user from server found in database. Updating database.");
-                userManager.saveUser(userFromService);
-                if (isMe) {
-                    sessionRepository.setCurrentUser(userEntityMapper.transform(userFromService));
-                }
+            userManager.saveUser(userFromService);
+            if (isMe) {
+                sessionRepository.setCurrentUser(userEntityMapper.transform(userFromService));
             }
         }
 

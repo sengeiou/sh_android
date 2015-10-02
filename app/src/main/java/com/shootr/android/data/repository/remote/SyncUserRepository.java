@@ -108,10 +108,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public User getUserById(String id) {
         UserEntity remoteUser = remoteUserDataSource.getUser(id);
-        UserEntity localUser = localUserDataSource.getUser(id);
-        if (localUser != null) {
-            localUserDataSource.putUser(remoteUser);
-        }
+        localUserDataSource.putUser(remoteUser);
         return entityToDomain(remoteUser);
     }
 
