@@ -76,12 +76,17 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         if (people == null) {
             List<UserEntity> remotePeopleEntities =
               remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
-            markSynchronized(remotePeopleEntities);
-            localFollowDataSource.putFollows(createFollowsFromUsers(remotePeopleEntities));
+            savePeopleInLocal(remotePeopleEntities);
             people = transformUserEntitiesForPeople(remotePeopleEntities);
             userCache.putPeople(people);
         }
         return people;
+    }
+
+    private void savePeopleInLocal(List<UserEntity> remotePeople) {
+        markSynchronized(remotePeople);
+        localFollowDataSource.putFollows(createFollowsFromUsers(remotePeople));
+        localUserDataSource.putUsers(remotePeople);
     }
 
     private List<FollowEntity> createFollowsFromUsers(List<UserEntity> following) {
