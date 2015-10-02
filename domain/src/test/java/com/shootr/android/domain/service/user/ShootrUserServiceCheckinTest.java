@@ -1,6 +1,5 @@
 package com.shootr.android.domain.service.user;
 
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
@@ -10,13 +9,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ShootrUserServiceCheckinTest {
 
-    private static final String CURRENT_USER_ID = "user_id";
     private static final String STUB_STREAM_ID = "stream_id";
 
     @Mock UserRepository localUserRepository;
@@ -51,21 +47,8 @@ public class ShootrUserServiceCheckinTest {
     }
 
     @Test public void shouldCallGatewayWithCurrentUserIdAndStream() throws Exception {
-        setupCurrentUser();
-
         shootrUserService.checkInStream(STUB_STREAM_ID);
 
-        verify(checkinGateway).performCheckin(CURRENT_USER_ID, STUB_STREAM_ID);
-    }
-
-
-    private void setupCurrentUser() {
-        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser());
-    }
-
-    private User currentUser() {
-        User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
-        return user;
+        verify(checkinGateway).performCheckin(STUB_STREAM_ID);
     }
 }

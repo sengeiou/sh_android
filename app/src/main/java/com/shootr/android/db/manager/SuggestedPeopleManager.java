@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.mappers.SuggestedPeopleMapper;
+import com.shootr.android.db.mappers.SuggestedPeopleDBMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -15,9 +15,9 @@ public class SuggestedPeopleManager extends AbstractManager {
 
     private static final String SUGGESTED_PEOPLE_TABLE = DatabaseContract.SuggestedPeopleTable.TABLE;
 
-    private final SuggestedPeopleMapper suggestedPeopleMapper;
+    private final SuggestedPeopleDBMapper suggestedPeopleMapper;
 
-    @Inject public SuggestedPeopleManager(SQLiteOpenHelper dbHelper, SuggestedPeopleMapper suggestedPeopleMapper) {
+    @Inject public SuggestedPeopleManager(SQLiteOpenHelper dbHelper, SuggestedPeopleDBMapper suggestedPeopleMapper) {
         super(dbHelper);
         this.suggestedPeopleMapper = suggestedPeopleMapper;
     }

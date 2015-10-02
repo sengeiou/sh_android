@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import com.shootr.android.R;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
@@ -78,7 +78,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setScreenTitle() {
-        String title = followType.equals(UserDtoFactory.GET_FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(R.string.activity_following_title);
+        String title = followType.equals(GetUsersFollowsJob.FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(R.string.activity_following_title);
         getSupportActionBar().setTitle(title);
     }
 

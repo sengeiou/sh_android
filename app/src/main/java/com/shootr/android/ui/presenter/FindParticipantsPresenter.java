@@ -5,6 +5,8 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.FindParticipantsInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.FindParticipantsView;
@@ -16,8 +18,8 @@ import javax.inject.Inject;
 public class FindParticipantsPresenter implements Presenter {
 
     private final FindParticipantsInteractor findParticipantsInteractor;
-    private final FollowFaketeractor followFaketeractor;
-    private final UnfollowFaketeractor unfollowFaketeractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -28,11 +30,11 @@ public class FindParticipantsPresenter implements Presenter {
     private Boolean hasBeenPaused = false;
 
     @Inject public FindParticipantsPresenter(FindParticipantsInteractor findParticipantsInteractor,
-      FollowFaketeractor followFaketeractor, UnfollowFaketeractor unfollowFaketeractor, UserModelMapper userModelMapper,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findParticipantsInteractor = findParticipantsInteractor;
-        this.followFaketeractor = followFaketeractor;
-        this.unfollowFaketeractor = unfollowFaketeractor;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -93,7 +95,7 @@ public class FindParticipantsPresenter implements Presenter {
     }
 
     public void followUser(final UserModel userModel) {
-        followFaketeractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+        followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
             }
@@ -101,7 +103,7 @@ public class FindParticipantsPresenter implements Presenter {
     }
 
     public void unfollowUser(final UserModel userModel) {
-        unfollowFaketeractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+        unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
             }

@@ -5,12 +5,10 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
-import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.InvalidPasswordException;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UnauthorizedRequestException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
@@ -56,12 +54,7 @@ public class ShootrUserService {
     }
 
     public void checkInStream(String idEvent) {
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        try {
-            checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);
-        } catch (IOException e) {
-            throw new InvalidCheckinException(e);
-        }
+        checkinGateway.performCheckin(idEvent);
     }
 
     public void createAccount(String username, String email, String password)
@@ -108,14 +101,10 @@ public class ShootrUserService {
     }
 
     public void performLogout() {
-        try {
-            User currentUser = sessionRepository.getCurrentUser();
-            loginGateway.performLogout(currentUser.getIdUser());
-            removeSession();
-            databaseUtils.clearDataOnLogout();
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
+        User currentUser = sessionRepository.getCurrentUser();
+        loginGateway.performLogout(currentUser.getIdUser());
+        removeSession();
+        databaseUtils.clearDataOnLogout();
     }
 
     private void removeSession() {

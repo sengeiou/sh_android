@@ -2,7 +2,6 @@ package com.shootr.android.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
@@ -43,10 +42,11 @@ public interface IntentFactory {
     public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
       String subjectPattern = launchActivity.getString(R.string.share_shot_subject);
       String messagePattern = launchActivity.getString(R.string.share_shot_message);
+      String urlPattern = launchActivity.getString(R.string.share_shot_base_url);
 
+      String shotUrl = String.format(urlPattern, shotModel.getIdShot());
       String subject = String.format(subjectPattern, shotModel.getUsername(), shotModel.getStreamTitle());
-      String sharedText =
-        String.format(messagePattern, shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot());
+      String sharedText = String.format(messagePattern, shotModel.getUsername(), shotModel.getStreamTitle(), shotUrl);
 
       return ShareCompat.IntentBuilder.from(launchActivity)
         .setType("text/plain")

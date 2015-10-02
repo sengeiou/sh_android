@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.mappers.ActivityEntityMapper;
+import com.shootr.android.db.mappers.ActivityEntityDBMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 public class ActivityManager extends AbstractManager {
 
-    @Inject ActivityEntityMapper activityEntityMapper;
+    @Inject ActivityEntityDBMapper activityEntityMapper;
 
     private static final String ACTIVITY_TABLE = DatabaseContract.ActivityTable.TABLE;
 

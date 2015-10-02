@@ -4,6 +4,8 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.FindParticipantsInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.utils.DateRangeTextProvider;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -34,8 +36,8 @@ public class FindParticipantsTest {
     public static final String ID_USER = "idUser";
 
     @Mock FindParticipantsInteractor findParticipantsInteractor;
-    @Mock FollowFaketeractor followFaketeractor;
-    @Mock UnfollowFaketeractor unfollowFaketeractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
     @Mock FindParticipantsView findParticipantsView;
@@ -50,8 +52,8 @@ public class FindParticipantsTest {
         UserModelMapper
           userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         presenter = new FindParticipantsPresenter(findParticipantsInteractor,
-          followFaketeractor,
-          unfollowFaketeractor,
+          followInteractor,
+          unfollowInteractor,
           userModelMapper,
           errorMessageFactory);
         presenter.setView(findParticipantsView);
@@ -199,7 +201,7 @@ public class FindParticipantsTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(followFaketeractor).follow(anyString(), any(Interactor.CompletedCallback.class));
+        }).when(followInteractor).follow(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private List<User> participants() {

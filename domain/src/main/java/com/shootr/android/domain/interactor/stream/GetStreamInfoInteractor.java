@@ -87,7 +87,7 @@ public class GetStreamInfoInteractor implements Interactor {
     protected StreamInfo getStreamInfo(UserRepository userRepository,
       final StreamRepository streamRepository,
       boolean localOnly) {
-        User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         Stream stream = streamRepository.getStreamById(idStreamWanted);
         checkNotNull(stream, new Preconditions.LazyErrorMessage() {
             @Override

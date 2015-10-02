@@ -30,6 +30,7 @@ public class PostNewShotPresenter implements Presenter {
     private String currentTextWritten = "";
     private boolean isReply;
     private String replyParentId;
+    private boolean isInitialized = false;
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
@@ -43,6 +44,7 @@ public class PostNewShotPresenter implements Presenter {
 
     protected void setView(PostNewShotView postNewShotView) {
         this.postNewShotView = postNewShotView;
+        this.isInitialized = true;
     }
 
     public void initializeAsNewShot(PostNewShotView postNewShotView) {
@@ -235,6 +237,10 @@ public class PostNewShotPresenter implements Presenter {
         postNewShotView.hideLoading();
         postNewShotView.enableSendButton();
         postNewShotView.showSendButton();
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     @Override public void resume() {

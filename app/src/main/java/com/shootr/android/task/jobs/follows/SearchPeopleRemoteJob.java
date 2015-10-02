@@ -3,13 +3,14 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
@@ -26,7 +27,7 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private static final int PRIORITY = 4;
     public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
 
-    ShootrService service;
+    UserApiService userApiService;
 
     private String searchString;
     private int pageOffset;
@@ -37,10 +38,10 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private UserEntityModelMapper userModelMapper;
 
     @Inject
-    public SearchPeopleRemoteJob(Application app, @Main Bus bus, ShootrService service, NetworkUtil networkUtil,
+    public SearchPeopleRemoteJob(Application app, @Main Bus bus, UserApiService userApiService, NetworkUtil networkUtil,
       FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
-        this.service = service;
+        this.userApiService = userApiService;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
         this.sessionRepository = sessionRepository;
@@ -52,9 +53,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     }
 
     @Override protected void run() throws SQLException, IOException {
-        PaginatedResult<List<UserEntity>> searchResults = getSearchFromServer();
+        List<UserModel> searchResults = getSearchFromServer();
         if(searchResults!=null){
-            postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
+            postSuccessfulEvent(new SearchPeopleRemoteResultEvent(searchResults));
         }
     }
 
@@ -71,8 +72,12 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
         return userVOs;
     }
 
-    private PaginatedResult<List<UserEntity>> getSearchFromServer() throws IOException {
-        return service.searchUsersByNameOrNickNamePaginated(searchString, pageOffset);
+    private List<UserModel> getSearchFromServer() throws IOException {
+        try {
+            return getUserVOs(userApiService.search(searchString, pageOffset));
+        } catch (ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override protected boolean isNetworkRequired() {

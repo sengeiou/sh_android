@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,15 +23,13 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -52,17 +49,19 @@ import timber.log.Timber;
 
 public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements UserListAdapter.FollowUnfollowAdapterCallback {
 
-    public static final int NO_OFFSET = 0;
+    public static final int FIRST_PAGE = 0;
     private static final String EXTRA_RESULTS = "results";
     private static final String EXTRA_SEARCH_TEXT = "search";
-    private static final String EXTRA_SEARCH_OFFSET = "offset";
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
+    private static final String EXTRA_SEARCH_PAGE = "currentPage";
 
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @Main Bus bus;
+    @Inject FollowInteractor followInteractor;
+    @Inject UnfollowInteractor unfollowInteractor;
 
     private SearchView searchView;
 
@@ -76,7 +75,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     private ObjectGraph objectGraph;
 
     private String currentSearchQuery;
-    private int currentResultOffset;
+    private int currentPage;
     private boolean hasMoreItemsToLoad;
     private boolean isLoadingRemoteData;
 
@@ -100,6 +99,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void setupViews() {
+        currentPage = 0;
         if (adapter == null) {
             adapter = new UserListAdapter(this, imageLoader);
             adapter.setCallback(this);
@@ -216,7 +216,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     public void makeNewRemoteSearch() {
-        currentResultOffset = 0;
+        currentPage = 0;
         hasMoreItemsToLoad = true;
         makeNextRemoteSearch();
     }
@@ -224,7 +224,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     public void makeNextRemoteSearch() {
         if (!isLoadingRemoteData) {
             SearchPeopleRemoteJob remoteSearchJob = objectGraph.get(SearchPeopleRemoteJob.class);
-            remoteSearchJob.init(currentSearchQuery, currentResultOffset);
+            remoteSearchJob.init(currentSearchQuery, currentPage);
             jobManager.addJobInBackground(remoteSearchJob);
             isLoadingRemoteData = true;
         }
@@ -233,20 +233,17 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     @Subscribe
     public void receivedRemoteResult(SearchPeopleRemoteResultEvent event) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<UserModel>> results = event.getResult();
-        List<UserModel> users = results.getResult();
+        List<UserModel> users = event.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
             Timber.d("Received %d remote results", usersReturned);
-            setListContent(users, currentResultOffset);
+            setListContent(users, currentPage);
             setEmpty(false);
-            incrementOffset(usersReturned);
-            hasMoreItemsToLoad = currentResultOffset < results.getTotalItems();
-            if (!hasMoreItemsToLoad) {
-                setLoading(false);
-            }
+            incrementPage();
         } else {
-            if (currentResultOffset == 0) {
+            hasMoreItemsToLoad = false;
+            setLoading(false);
+            if (adapter.getCount() == 0) {
                 Timber.d("No remote results found.");
                 setEmpty(true);
             }
@@ -257,7 +254,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     public void receivedLocalResult(SearchPeopleLocalResultEvent event) {
         List<UserModel> results = event.getResult();
         Timber.d("Received %d local results", results.size());
-        setListContent(results, NO_OFFSET);
+        setListContent(results, FIRST_PAGE);
         setEmpty(false);
 
     }
@@ -277,12 +274,12 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         Timber.d("No local results. Waiting for remote results");
     }
 
-    private void incrementOffset(int newItems) {
-        currentResultOffset += newItems;
+    private void incrementPage() {
+        currentPage++;
     }
 
-    private void setListContent(List<UserModel> users, int offset) {
-        if (offset > NO_OFFSET) {
+    private void setListContent(List<UserModel> users, int page) {
+        if (page > FIRST_PAGE) {
             adapter.addItems(users);
         } else {
             adapter.setItems(users);
@@ -321,7 +318,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
         outState.putString(EXTRA_SEARCH_TEXT, currentSearchQuery);
-        outState.putInt(EXTRA_SEARCH_OFFSET, currentResultOffset);
+        outState.putInt(EXTRA_SEARCH_PAGE, currentPage);
         outState.putBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, hasMoreItemsToLoad);
         outState.putBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, isLoadingRemoteData);
     }
@@ -330,13 +327,13 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
-        currentResultOffset = savedInstanceState.getInt(EXTRA_SEARCH_OFFSET, 0);
+        currentPage = savedInstanceState.getInt(EXTRA_SEARCH_PAGE, 0);
         hasMoreItemsToLoad = savedInstanceState.getBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, false);
         isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
         List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
 
         if (restoredResults != null && !restoredResults.isEmpty()) {
-            setListContent(restoredResults, currentResultOffset);
+            setListContent(restoredResults, currentPage);
             setEmpty(false);
             setLoading(hasMoreItemsToLoad);
         }
@@ -352,25 +349,25 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         unfollowUser(user);
     }
 
-    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob jobOffline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        jobOffline.init(userVO.getIdUser(), followType);
-        jobManager.addJobInBackground(jobOffline);
-
-        GetFollowUnfollowUserOnlineJob
-          jobOnline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(jobOnline);
-    }
-
-    public void followUser(UserModel user){
-        startFollowUnfollowUserJob(user, this, UserDtoFactory.FOLLOW_TYPE);
+    public void followUser(final UserModel user){
+        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                onUserFollowUpdated(user.getIdUser(), true);
+            }
+        });
     }
 
     public void unfollowUser(final UserModel user){
         new AlertDialog.Builder(this).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);
+                  unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
+                      @Override
+                      public void onCompleted() {
+                          onUserFollowUpdated(user.getIdUser(), false);
+                      }
+                  });
               }
           })
           .setNegativeButton("No", null)
@@ -378,12 +375,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
           .show();
     }
 
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-
+    protected void onUserFollowUpdated(String idUser, Boolean following) {
         List<UserModel> usersInList = adapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);

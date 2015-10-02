@@ -5,7 +5,6 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +14,9 @@ import javax.inject.Inject;
 public class ServiceStreamDataSource implements StreamDataSource {
 
     public static final int MAX_NUMBER_OF_LISTING_STREAMS = 100;
-    private final ShootrService service;
     private final StreamApiService streamApiService;
 
-    @Inject public ServiceStreamDataSource(ShootrService service, StreamApiService streamApiService) {
-        this.service = service;
+    @Inject public ServiceStreamDataSource(StreamApiService streamApiService) {
         this.streamApiService = streamApiService;
     }
 
@@ -33,16 +30,20 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
         try {
-            return service.getStreamsByIds(streamIds);
-        } catch (IOException e) {
+            return streamApiService.getStreams(streamIds);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
     @Override public StreamEntity putStream(StreamEntity streamEntity) {
         try {
-            return service.saveStream(streamEntity);
-        } catch (IOException e) {
+            if (streamEntity.getIdStream() == null) {
+                return streamApiService.createStream(streamEntity);
+            } else {
+                return streamApiService.updateStream(streamEntity);
+            }
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

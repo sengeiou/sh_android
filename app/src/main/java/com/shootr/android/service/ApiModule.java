@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializer;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
+import com.shootr.android.data.api.service.DeviceApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -19,9 +20,6 @@ import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.domain.repository.PhotoService;
-import com.shootr.android.service.dataservice.DataServiceModule;
-import com.shootr.android.service.dataservice.ShootrDataService;
-import com.shootr.android.service.dataservice.ShootrPhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
@@ -33,23 +31,19 @@ import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+import timber.log.Timber;
 
 @Module(
         injects = {
                 ShootrPhotoService.class,
                 PhotoService.class,
         },
-        includes = DataServiceModule.class,
         complete = false,
   library = true
 )
 public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
-
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
-        return dataService;
-    }
 
     @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
         return photoService;
@@ -67,6 +61,13 @@ public final class ApiModule {
           .setConverter(new GsonConverter(gson))
           .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
+          .setLog(new RestAdapter.Log() {
+              @Override
+              public void log(String message) {
+                  Timber.tag("Retrofit");
+                  Timber.d(message);
+              }
+          })
           .build();
     }
 
@@ -109,6 +110,10 @@ public final class ApiModule {
         return restAdapter.create(ChangePasswordApiService.class);
     }
 
+    @Provides DeviceApiService provideDeviceApiService(RestAdapter restAdapter) {
+        return restAdapter.create(DeviceApiService.class);
+    }
+
     @Provides @Singleton Gson provideGson() {
         return new GsonBuilder() //
           .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -124,7 +129,6 @@ public final class ApiModule {
                   return new JsonPrimitive(src.getTime());
               }
           })
-          .serializeNulls() // TODO remove when dataservice is GONE
           .create();
     }
 

@@ -77,7 +77,6 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializePresenter() {
         initializePresenterWithIntentExtras(getIntent().getExtras());
         setupPhotoIfAny();
-        setTextReceivedFromIntentIfAny();
     }
 
     private void initializePresenterWithIntentExtras(Bundle extras) {
@@ -124,11 +123,6 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
           .build();
     }
 
-    private void setTextReceivedFromIntentIfAny() {
-        String sentText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        editTextView.setText(sentText);
-    }
-
     private void setupPhotoIfAny() {
         File inputImageFile = (File) getIntent().getSerializableExtra(EXTRA_PHOTO);
         if (inputImageFile != null) {
@@ -138,7 +132,9 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @OnTextChanged(R.id.new_shot_text)
     public void onTextChanged() {
-        presenter.textChanged(editTextView.getText().toString());
+        if (presenter.isInitialized()) {
+            presenter.textChanged(editTextView.getText().toString());
+        }
     }
 
     @OnClick(R.id.new_shot_send_button)

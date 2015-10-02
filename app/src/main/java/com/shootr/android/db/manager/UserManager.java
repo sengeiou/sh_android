@@ -8,7 +8,7 @@ import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
-import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.mappers.UserEntityDBMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.sql.SQLException;
 import java.text.Normalizer;
@@ -18,12 +18,12 @@ import javax.inject.Inject;
 
 public class UserManager extends AbstractManager {
 
-    UserMapper userMapper;
+    UserEntityDBMapper userMapper;
     private SessionRepository sessionRepository;
     private static final String USER_TABLE = UserTable.TABLE;
 
     @Inject
-    public UserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionRepository sessionRepository) {
+    public UserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper, SessionRepository sessionRepository) {
         super(openHelper);
         this.userMapper = userMapper;
         this.sessionRepository = sessionRepository;
@@ -192,12 +192,10 @@ public class UserManager extends AbstractManager {
     }
 
     public List<UserEntity> getUsersNotSynchronized() {
-        String whereFormat = "%s = '%s' or %s = '%s'";
-        String whereClause = String.format(whereFormat,
-          UserTable.SYNCHRONIZED,
-          LocalSynchronized.SYNC_NEW,
-          UserTable.SYNCHRONIZED,
-          LocalSynchronized.SYNC_UPDATED);
+        String whereClause = UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
+          + "or "+UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' "
+          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
+          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' ";
 
         Cursor queryResult =
           getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);

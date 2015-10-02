@@ -4,7 +4,9 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.utils.DateRangeTextProvider;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -36,8 +38,8 @@ public class AllParticipantsPresenterTest {
     public static final String ID_USER = "idUser";
     @Mock GetAllParticipantsInteractor getAllParticipantsInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
-    @Mock FollowFaketeractor followFaketeractor;
-    @Mock UnfollowFaketeractor unfollowFaketeractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock AllParticipantsView allParticipantsView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
@@ -49,7 +51,7 @@ public class AllParticipantsPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        presenter = new AllParticipantsPresenter(getAllParticipantsInteractor, selectStreamInteractor, followFaketeractor, unfollowFaketeractor, errorMessageFactory, userModelMapper);
+        presenter = new AllParticipantsPresenter(getAllParticipantsInteractor, selectStreamInteractor, followInteractor, unfollowInteractor, errorMessageFactory, userModelMapper);
         presenter.setView(allParticipantsView);
     }
 

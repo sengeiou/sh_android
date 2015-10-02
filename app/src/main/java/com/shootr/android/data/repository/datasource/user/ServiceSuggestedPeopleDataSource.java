@@ -1,24 +1,25 @@
 package com.shootr.android.data.repository.datasource.user;
 
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceSuggestedPeopleDataSource implements SuggestedPeopleDataSource {
 
-    private final ShootrService service;
+    private final UserApiService userApiService;
 
-    @Inject public ServiceSuggestedPeopleDataSource(ShootrService service) {
-        this.service = service;
+    @Inject public ServiceSuggestedPeopleDataSource(UserApiService userApiService) {
+        this.userApiService = userApiService;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
         try {
-            return service.getSuggestedPeople(currentUserId);
-        } catch (IOException e) {
+            return userApiService.getSuggestedPeople();
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

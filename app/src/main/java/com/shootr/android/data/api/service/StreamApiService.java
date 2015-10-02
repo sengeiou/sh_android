@@ -6,15 +6,26 @@ import com.shootr.android.data.entity.StreamEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface StreamApiService {
 
+    @POST("/streams")
+    StreamEntity createStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
+
+    @PUT("/streams")
+    StreamEntity updateStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
+
     @GET("/streams/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @GET("/streams?includeLinks=false")
+    List<StreamEntity> getStreams(@Query("idStreams") List<String> idStreams) throws IOException, ApiException;
 
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamList(@Query("locale") String locale) throws ApiException, IOException;
@@ -34,4 +45,7 @@ public interface StreamApiService {
     Response shareStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
+
+    @PUT("/streams/{idStream}/checkin")
+    Response checkIn(@Path("idStream") String idStream) throws IOException, ApiException;
 }

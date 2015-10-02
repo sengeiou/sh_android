@@ -13,12 +13,14 @@ public class ShootrDumperPluginsProvider implements DumperPluginsProvider {
 
     private final Context context;
     private final FakeWatchUpdateRequestPlugin fakeWatchUpdatePlugin;
+    private final SyncDispacherPlugin syncDispacherPlugin;
 
     @Inject
     public ShootrDumperPluginsProvider(@ApplicationContext Context context,
-      FakeWatchUpdateRequestPlugin fakeWatchUpdatePlugin) {
+      FakeWatchUpdateRequestPlugin fakeWatchUpdatePlugin, SyncDispacherPlugin syncDispacherPlugin) {
         this.context = context;
         this.fakeWatchUpdatePlugin = fakeWatchUpdatePlugin;
+        this.syncDispacherPlugin = syncDispacherPlugin;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class ShootrDumperPluginsProvider implements DumperPluginsProvider {
             plugins.add(defaultPlugin);
         }
         plugins.add(fakeWatchUpdatePlugin);
+        plugins.add(syncDispacherPlugin);
         return plugins;
     }
 }
