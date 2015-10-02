@@ -198,9 +198,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         File selectedFile = (File) savedInstanceState.getSerializable(EXTRA_SELECTED_IMAGE);
-        if (presenter.isInitialized()) {
-            presenter.selectImage(selectedFile);
-        }
+        presenter.selectImage(selectedFile);
     }
 
     @Override public void setResultOk() {
