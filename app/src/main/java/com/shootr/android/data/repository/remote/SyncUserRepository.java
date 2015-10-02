@@ -165,9 +165,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public List<SuggestedPeople> getSuggestedPeople() {
-        List<SuggestedPeopleEntity> suggestedPeopleEntities = remoteSuggestedPeopleDataSource.getSuggestedPeople();
-        cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestedPeopleEntities);
-        return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
+        List<SuggestedPeopleEntity> suggestions = cachedSuggestedPeopleDataSource.getSuggestedPeople();
+        if (suggestions == null || suggestions.isEmpty()) {
+            suggestions = remoteSuggestedPeopleDataSource.getSuggestedPeople();
+            cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestions);
+        }
+        return suggestedPeopleEntitiesToDomain(suggestions);
     }
 
     @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
