@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
+import com.shootr.android.data.repository.remote.cache.UserCache;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -21,16 +22,18 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     private final FollowDataSource localFollowDataSource;
     private final FollowDataSource remoteFollowDataSource;
     private final SyncTrigger syncTrigger;
+    private final UserCache userCache;
 
     @Inject
     public SyncFollowRepository(SessionRepository sessionRepository,
       @Local FollowDataSource localFollowDataSource,
       @Remote FollowDataSource remoteFollowDataSource,
-      SyncTrigger syncTrigger) {
+      SyncTrigger syncTrigger, UserCache userCache) {
         this.sessionRepository = sessionRepository;
         this.localFollowDataSource = localFollowDataSource;
         this.remoteFollowDataSource = remoteFollowDataSource;
         this.syncTrigger = syncTrigger;
+        this.userCache = userCache;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
             remoteFollowDataSource.putFollow(followEntity);
             followEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             localFollowDataSource.putFollow(followEntity);
+            userCache.invalidatePeople();
         } catch (ServerCommunicationException e) {
             followEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
             localFollowDataSource.putFollow(followEntity);
@@ -53,6 +57,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         try {
             remoteFollowDataSource.removeFollow(idUser);
             localFollowDataSource.removeFollow(idUser);
+            userCache.invalidatePeople();
         } catch (ServerCommunicationException e) {
             FollowEntity deletedFollow = createFollow(idUser);
             deletedFollow.setSynchronizedStatus(Synchronized.SYNC_DELETED);
@@ -73,6 +78,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
                 entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
                 localFollowDataSource.putFollow(entity);
             }
+            userCache.invalidatePeople();
         }
     }
 

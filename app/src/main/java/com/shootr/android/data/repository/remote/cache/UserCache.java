@@ -4,8 +4,10 @@ import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.android.domain.User;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import timber.log.Timber;
 
+@Singleton
 public class UserCache {
 
     public static final String GET_PEOPLE = "getPeople";
