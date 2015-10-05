@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 public class ManagerModule {
 
     @Provides @Singleton UserManager provideUserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper, SessionRepository sessionRepository) {
-        return new UserManager(openHelper, userMapper, sessionRepository);
+        return new UserManager(openHelper, userMapper);
     }
 
     @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper) {

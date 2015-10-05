@@ -11,7 +11,6 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityDBMapper;
 import com.shootr.android.domain.StreamTimelineParameters;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -28,7 +27,7 @@ public class ShotManager extends AbstractManager {
         this.shotEntityMapper = shotEntityMapper;
     }
 
-    public void saveShot(ShotEntity shot) throws SQLException {
+    public void saveShot(ShotEntity shot) {
         insertShot(shot, getWritableDatabase());
     }
 
@@ -103,7 +102,7 @@ public class ShotManager extends AbstractManager {
         return readShots(whereClause, whereArguments);
     }
 
-    public Long deleteShot(String idShot) {
+    public long deleteShot(String idShot) {
         String where = DatabaseContract.ShotTable.ID_SHOT + "=?";
         String[] whereArgs = new String[] { idShot };
         return (long) getWritableDatabase().delete(SHOT_TABLE, where, whereArgs);
