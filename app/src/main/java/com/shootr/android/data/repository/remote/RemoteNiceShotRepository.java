@@ -23,7 +23,7 @@ public class RemoteNiceShotRepository implements NiceShotRepository {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException error) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(error);
         }
     }
 
@@ -38,7 +38,7 @@ public class RemoteNiceShotRepository implements NiceShotRepository {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException error) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(error);
         }
     }
 }
