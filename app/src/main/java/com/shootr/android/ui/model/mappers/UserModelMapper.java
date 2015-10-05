@@ -32,6 +32,8 @@ public class UserModelMapper {
         userModel.setEmailConfirmed(user.isEmailConfirmed());
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
+        userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));

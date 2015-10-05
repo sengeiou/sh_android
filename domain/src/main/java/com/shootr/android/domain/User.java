@@ -26,6 +26,25 @@ public class User {
 
     private EntityMetadata metadata;
 
+    private Long createdStreamsCount;
+    private Long favoritedStreamsCount;
+
+    public Long getFavoritedStreamsCount() {
+        return favoritedStreamsCount;
+    }
+
+    public void setFavoritedStreamsCount(Long favoritedStreamsCount) {
+        this.favoritedStreamsCount = favoritedStreamsCount;
+    }
+
+    public Long getCreatedStreamsCount() {
+        return createdStreamsCount;
+    }
+
+    public void setCreatedStreamsCount(Long createdStreamsCount) {
+        this.createdStreamsCount = createdStreamsCount;
+    }
+
     public String getIdUser() {
         return idUser;
     }

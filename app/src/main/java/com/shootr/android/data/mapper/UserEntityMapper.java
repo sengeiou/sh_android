@@ -42,6 +42,9 @@ public class UserEntityMapper {
 
         user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
+        user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
+        user.setFavoritedStreamsCount(userEntity.getFavoritedStreamsCount());
+
         return user;
     }
 
@@ -69,6 +72,10 @@ public class UserEntityMapper {
         userEntity.setJoinStreamDate(user.getJoinStreamDate());
 
         metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
+
+        userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
+        userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        
         return userEntity;
     }
 

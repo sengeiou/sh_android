@@ -70,11 +70,13 @@ public class DatabaseContract {
         public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
         public static final String JOIN_STREAM_DATE = "joinStreamDate";
         public static final String WATCHING_SYNCHRONIZED = "watchingSynchronized";
+        public static final String CREATED_STREAMS_COUNT = "createdStreamsCount";
+        public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
-          WATCHING_SYNCHRONIZED,
+          WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
