@@ -250,4 +250,10 @@ public class StreamManager extends AbstractManager{
         stream.setRemoved(1);
         saveStream(stream);
     }
+
+    public void restoreStream(String idStream) {
+        StreamEntity stream = getStreamById(idStream);
+        stream.setRemoved(0);
+        saveStream(stream);
+    }
 }

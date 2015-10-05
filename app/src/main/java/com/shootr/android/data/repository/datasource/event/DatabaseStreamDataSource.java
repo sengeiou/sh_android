@@ -53,6 +53,6 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     }
 
     @Override public void restoreStream(String idStream) {
-        throw new IllegalArgumentException("method not implemented in local datasource");
+        streamManager.restoreStream(idStream);
     }
 }
