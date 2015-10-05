@@ -8,6 +8,7 @@ import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
+import com.shootr.android.db.DatabaseContract.SuggestedPeopleTable;
 
 public class SQLiteUtils {
 
@@ -197,6 +198,7 @@ public class SQLiteUtils {
       + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
       + UserTable.USER_NAME + " VARCHAR(255),"
       + UserTable.EMAIL + " VARCHAR(255),"
+      + UserTable.EMAIL_CONFIRMED + " INT NULL,"
       + UserTable.NAME + " VARCHAR(255),"
       + UserTable.PHOTO + " VARCHAR(1024) NULL,"
       + UserTable.POINTS+" INT NULL,"
@@ -211,7 +213,8 @@ public class SQLiteUtils {
       + UserTable.ID_WATCHING_STREAM +" TEXT NULL,"
       + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
       + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
-      + DatabaseContract.SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
+      + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
+      + SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
       + SyncColumns.BIRTH + " DATETIME NOT NULL,"
       + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
       + SyncColumns.DELETED + " DATETIME,"

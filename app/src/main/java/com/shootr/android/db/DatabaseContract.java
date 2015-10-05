@@ -261,8 +261,9 @@ public class DatabaseContract {
         public static final String RELEVANCE = "relevance";
 
         public static final String[] PROJECTION = {
-          ID, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
+          WATCHING_SYNCHRONIZED,
           BIRTH, RELEVANCE, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
