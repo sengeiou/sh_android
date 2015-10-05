@@ -78,7 +78,7 @@ public class DatabaseContract {
         };
     }
 
-    public static final class ShotTable implements SyncColumns {
+    public static class ShotTable implements SyncColumns {
 
         private ShotTable() {
 
@@ -117,7 +117,7 @@ public class DatabaseContract {
     public static final class FollowTable implements SyncColumns {
 
         private FollowTable() {
-
+            /* no instances */
         }
 
         public static final String TABLE = "Follow";
@@ -189,7 +189,7 @@ public class DatabaseContract {
 
     }
 
-    public static final class ShotQueueTable implements SyncColumns {
+    public static final class ShotQueueTable extends ShotTable {
 
         private ShotQueueTable() {
         }
@@ -198,24 +198,6 @@ public class DatabaseContract {
         public static final String ID_QUEUE = "idQueue";
         public static final String FAILED = "failed";
         public static final String IMAGE_FILE = "imageFile";
-        public static final String ID_SHOT = "idShot";
-        public static final String ID_USER = "idUser";
-        public static final String USERNAME = "userName";
-        public static final String USER_PHOTO = "userPhoto";
-        public static final String COMMENT = "comment";
-        public static final String IMAGE = "image";
-        public static final String ID_STREAM = "idStream";
-        public static final String STREAM_TAG = "streamTag";
-        public static final String STREAM_TITLE = "streamTitle";
-        public static final String TYPE = "type";
-
-        public static final String ID_SHOT_PARENT = "idShotParent";
-        public static final String ID_USER_PARENT = "idUserParent";
-        public static final String USERNAME_PARENT = "userNameParent";
-
-        public static final String VIDEO_URL = "videoUrl";
-        public static final String VIDEO_TITLE = "videoTitle";
-        public static final String VIDEO_DURATION = "videoDuration";
 
         public static final String[] PROJECTION = {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG,
