@@ -50,7 +50,6 @@ public class DatabaseContract {
         public static final String TABLE = "User";
 
         public static final String ID = "idUser";
-        public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
         public static final String EMAIL = "email";
         public static final String NAME = "name";
@@ -71,7 +70,7 @@ public class DatabaseContract {
         public static final String WATCHING_SYNCHRONIZED = "watchingSynchronized";
 
         public static final String[] PROJECTION = {
-          ID, SESSION_TOKEN, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
           WATCHING_SYNCHRONIZED,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
@@ -262,7 +261,7 @@ public class DatabaseContract {
         public static final String RELEVANCE = "relevance";
 
         public static final String[] PROJECTION = {
-          ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
           BIRTH, RELEVANCE, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };

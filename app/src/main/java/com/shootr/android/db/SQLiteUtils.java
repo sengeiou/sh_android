@@ -16,7 +16,6 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS " + UserTable.TABLE + " ("
             + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
-            + UserTable.SESSION_TOKEN + " VARCHAR(255),"
             + UserTable.USER_NAME + " VARCHAR(255),"
             + UserTable.EMAIL + " VARCHAR(255),"
             + UserTable.EMAIL_CONFIRMED + " INT NULL,"
@@ -196,7 +195,6 @@ public class SQLiteUtils {
 
     public static final String CREATE_SUGGESTED_PEOPLE = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.SuggestedPeopleTable.TABLE + " ("
       + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
-      + UserTable.SESSION_TOKEN + " VARCHAR(255),"
       + UserTable.USER_NAME + " VARCHAR(255),"
       + UserTable.EMAIL + " VARCHAR(255),"
       + UserTable.NAME + " VARCHAR(255),"

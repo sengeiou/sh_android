@@ -24,11 +24,7 @@ public class SuggestedPeopleDBMapper extends GenericDBMapper {
     public ContentValues toContentValues(SuggestedPeopleEntity suggestedPeopleEntity) {
         ContentValues cv = new ContentValues();
         if(suggestedPeopleEntity != null){
-            String sessionToken = suggestedPeopleEntity.getSessionToken();
             String email = suggestedPeopleEntity.getEmail();
-            if (sessionToken != null) {
-                cv.put(DatabaseContract.SuggestedPeopleTable.SESSION_TOKEN, sessionToken);
-            }
             if (email != null) {
                 cv.put(DatabaseContract.SuggestedPeopleTable.EMAIL, email);
             }

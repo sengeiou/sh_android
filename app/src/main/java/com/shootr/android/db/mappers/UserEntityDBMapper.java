@@ -16,10 +16,6 @@ public class UserEntityDBMapper extends GenericDBMapper {
     public UserEntity fromCursor(Cursor c) {
         UserEntity user = userEntityWithCommonFieldsFromCursor(c);
         // Fields that might not come from server for all users
-        int sessionTokenIndex = c.getColumnIndex(UserTable.SESSION_TOKEN);
-        if (sessionTokenIndex >= 0) {
-            user.setSessionToken(c.getString(sessionTokenIndex));
-        }
         int emailTokenIndex = c.getColumnIndex(UserTable.EMAIL);
         if (emailTokenIndex >= 0) {
             user.setEmail(c.getString(emailTokenIndex));
@@ -31,11 +27,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     public  ContentValues toContentValues(UserEntity u) {
         ContentValues cv = new ContentValues();
         if(u != null){
-            String sessionToken = u.getSessionToken();
             String email = u.getEmail();
-            if (sessionToken != null) {
-                cv.put(UserTable.SESSION_TOKEN, sessionToken);
-            }
             if (email != null) {
                 cv.put(UserTable.EMAIL, email);
             }
