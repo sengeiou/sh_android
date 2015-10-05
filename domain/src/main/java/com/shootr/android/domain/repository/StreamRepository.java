@@ -18,4 +18,6 @@ public interface StreamRepository {
     void shareStream(String idStream);
 
     void removeStream(String idStream);
+
+    void restoreStream(String idStream);
 }

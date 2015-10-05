@@ -77,6 +77,13 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         localStreamDataSource.putStream(streamEntity);
     }
 
+    @Override public void restoreStream(String idStream) {
+        remoteStreamDataSource.restoreStream(idStream);
+        StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream);
+        markEntityAsSynchronized(streamEntity);
+        localStreamDataSource.putStream(streamEntity);
+    }
+
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {
         for (StreamEntity event : remoteEvents) {
             markEntityAsSynchronized(event);

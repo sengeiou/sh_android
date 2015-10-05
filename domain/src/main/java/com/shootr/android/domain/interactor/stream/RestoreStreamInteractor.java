@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.stream;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -49,11 +48,7 @@ public class RestoreStreamInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            Stream stream = remoteStreamRepository.getStreamById(idStream);
-            stream.setRemoved(false);
-
-            remoteStreamRepository.putStream(stream);
-            
+            remoteStreamRepository.restoreStream(idStream);
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);

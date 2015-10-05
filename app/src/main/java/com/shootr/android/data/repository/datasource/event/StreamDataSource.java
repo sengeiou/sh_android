@@ -23,4 +23,6 @@ public interface StreamDataSource {
     Map<String, Integer> getHolderWatchers();
 
     void removeStream(String idStream);
+
+    void restoreStream(String idStream);
 }
