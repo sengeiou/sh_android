@@ -16,4 +16,6 @@ public interface StreamRepository {
     Integer getListingCount(String idUser);
 
     void shareStream(String idStream);
+
+    void removeStream(String idStream);
 }

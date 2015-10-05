@@ -70,6 +70,13 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         remoteStreamDataSource.shareStream(idStream);
     }
 
+    @Override public void removeStream(String idStream) {
+        remoteStreamDataSource.removeStream(idStream);
+        StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream);
+        markEntityAsSynchronized(streamEntity);
+        localStreamDataSource.putStream(streamEntity);
+    }
+
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {
         for (StreamEntity event : remoteEvents) {
             markEntityAsSynchronized(event);

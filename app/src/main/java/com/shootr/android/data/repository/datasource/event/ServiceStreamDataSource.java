@@ -87,4 +87,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public void removeStream(String idStream) {
+        try {
+            streamApiService.removeStream(idStream);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }

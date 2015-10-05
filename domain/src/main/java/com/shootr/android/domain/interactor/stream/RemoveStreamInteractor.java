@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.stream;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -30,7 +29,7 @@ public class RemoveStreamInteractor implements Interactor {
 
     @Inject
     public RemoveStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote StreamRepository remoteStreamRepository,SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Remote StreamRepository remoteStreamRepository, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -50,10 +49,7 @@ public class RemoveStreamInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            Stream stream = remoteStreamRepository.getStreamById(idStream);
-            stream.setRemoved(true);
-
-            remoteStreamRepository.putStream(stream);
+            remoteStreamRepository.removeStream(idStream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingStream(null);

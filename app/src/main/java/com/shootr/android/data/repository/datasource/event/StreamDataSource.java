@@ -21,4 +21,6 @@ public interface StreamDataSource {
     void shareStream(String idStream);
 
     Map<String, Integer> getHolderWatchers();
+
+    void removeStream(String idStream);
 }
