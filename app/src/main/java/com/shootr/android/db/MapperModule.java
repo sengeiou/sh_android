@@ -39,8 +39,8 @@ public class MapperModule {
     }
 
     @Provides
-    SuggestedPeopleDBMapper provideSuggestedPeopleMapper() {
-        return new SuggestedPeopleDBMapper();
+    SuggestedPeopleDBMapper provideSuggestedPeopleMapper(UserEntityDBMapper userEntityDBMapper) {
+        return new SuggestedPeopleDBMapper(userEntityDBMapper);
     }
 
     @Provides
