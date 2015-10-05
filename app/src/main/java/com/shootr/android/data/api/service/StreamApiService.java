@@ -48,4 +48,10 @@ public interface StreamApiService {
 
     @PUT("/streams/{idStream}/checkin")
     Response checkIn(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @PUT("/streams/{idStream}/remove")
+    Response removeStream(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @PUT("/streams/{idStream}/restore")
+    Response restoreStream(@Path("idStream") String idStream) throws IOException, ApiException;
 }
