@@ -104,12 +104,12 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
             public void run() {
                 findStreamsPresenter.addToFavorites(stream);
             }
-        }).addAction((getString(R.string.share_via_shootr)), new Runnable() {
+        }).addAction(getString(R.string.share_via_shootr), new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.shareStream(stream);
             }
         })
-          .addAction((getString(R.string.share_via)), new Runnable() {
+          .addAction(getString(R.string.share_via), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }

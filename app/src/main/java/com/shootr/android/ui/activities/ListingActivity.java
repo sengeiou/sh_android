@@ -130,12 +130,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                   presenter.addToFavorite(stream);
               }
           })
-          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
+          .addAction(getString(R.string.share_via_shootr), new Runnable() {
               @Override public void run() {
                   presenter.shareStream(stream);
               }
           })
-          .addAction((getString(R.string.share_via)), new Runnable() {
+          .addAction(getString(R.string.share_via), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
