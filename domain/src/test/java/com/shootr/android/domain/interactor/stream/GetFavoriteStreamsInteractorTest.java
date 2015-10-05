@@ -28,6 +28,7 @@ import org.mockito.stubbing.Answer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,6 +39,7 @@ public class GetFavoriteStreamsInteractorTest {
     private static final String STREAM_ID_0 = "id_0";
     private static final String STREAM_ID_1 = "id_1";
     private static final String STREAM_ID_2 = "id_2";
+    public static final String USER_ID = "userId";
 
     @Mock Interactor.Callback<List<StreamSearchResult>> callback;
     @Mock FavoriteRepository localFavoriteRepository;
@@ -69,13 +71,13 @@ public class GetFavoriteStreamsInteractorTest {
     @Test
     public void shouldLoadFavoritesFromLocal(){
         getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
-        verify(localFavoriteRepository).getFavorites();
+        verify(localFavoriteRepository).getFavorites(anyString());
     }
 
     @Test
     public void shouldLoadFavoritesFromRemote(){
         getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
-        verify(remoteFavoriteRepository).getFavorites();
+        verify(remoteFavoriteRepository).getFavorites(anyString());
     }
 
     @Test
@@ -94,7 +96,8 @@ public class GetFavoriteStreamsInteractorTest {
     @Test
     public void shouldCallbackStreamsSortedByName() throws Exception {
         setupStreamRepositoryReturnsStreamsWithInputIds();
-        when(localFavoriteRepository.getFavorites()).thenReturn(unorderedFavorites());
+        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(unorderedFavorites());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         getFavoriteStreamsInteractor.loadFavoriteStreams(spyCallback);
         List<StreamSearchResult> results = spyCallback.firstResult();
@@ -104,7 +107,8 @@ public class GetFavoriteStreamsInteractorTest {
 
     @Test
     public void shouldLoadLocalStreamsFromFavorites() {
-        when(localFavoriteRepository.getFavorites()).thenReturn(listWithOneFavorite());
+        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(listWithOneFavorite());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(localStreamRepository).getStreamsByIds(favoriteStreamsIds());
     }
@@ -167,6 +171,7 @@ public class GetFavoriteStreamsInteractorTest {
 
     private User userWatching() {
         User user = new User();
+        user.setIdUser(USER_ID);
         user.setIdWatchingStream("stream");
         return user;
     }

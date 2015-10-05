@@ -9,6 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
+import com.shootr.android.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,10 +28,12 @@ import static org.mockito.Mockito.when;
 public class AddToFavoritesInteractorTest {
 
     public static final String ID_STREAM = "id_stream";
+    public static final String USER_ID = "userId";
     @Mock Interactor.CompletedCallback callback;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
+    @Mock SessionRepository sessionRepository;
     @Mock Favorite favorite;
     @Mock BusPublisher busPublisher;
 
@@ -43,6 +46,7 @@ public class AddToFavoritesInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         addToFavoritesInteractor = new com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
           interactorHandler, postExecutionThread,
+          sessionRepository,
           busPublisher);
     }
 
@@ -67,7 +71,8 @@ public class AddToFavoritesInteractorTest {
     @Test
     public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites()).thenReturn(twoFavorites());
+        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(twoFavorites());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
@@ -75,7 +80,8 @@ public class AddToFavoritesInteractorTest {
     @Test
     public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites()).thenReturn(twoFavoritesReversed());
+        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(twoFavoritesReversed());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
@@ -83,7 +89,7 @@ public class AddToFavoritesInteractorTest {
     @Test
     public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites()).thenReturn(empty());
+        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(empty());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
     }

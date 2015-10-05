@@ -8,7 +8,7 @@ public interface FavoriteRepository {
 
     void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException;
 
-    List<Favorite> getFavorites();
+    List<Favorite> getFavorites(String userId);
 
     Favorite getFavoriteByStream(String eventId);
 

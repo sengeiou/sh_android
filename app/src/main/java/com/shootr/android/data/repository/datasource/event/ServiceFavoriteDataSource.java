@@ -50,9 +50,9 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public List<FavoriteEntity> getFavorites() {
+    public List<FavoriteEntity> getFavorites(String userId) {
         try {
-            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites();
+            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(userId);
             storeEmbedStreams(favorites);
             return favoriteApiEntityMapper.transform(favorites);
         } catch (ApiException | IOException error) {
