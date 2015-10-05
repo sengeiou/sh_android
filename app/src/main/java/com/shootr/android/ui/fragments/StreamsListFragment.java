@@ -154,8 +154,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override
     public void onResume() {
         super.onResume();
-        redrawStreamListWithCurrentValues();
         presenter.resume();
+        redrawStreamListWithCurrentValues();
     }
 
     private void redrawStreamListWithCurrentValues() {

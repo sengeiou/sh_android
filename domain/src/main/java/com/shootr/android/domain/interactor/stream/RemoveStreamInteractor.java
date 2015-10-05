@@ -52,17 +52,21 @@ public class RemoveStreamInteractor implements Interactor {
             remoteStreamRepository.removeStream(idStream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-            currentUser.setIdWatchingStream(null);
-            currentUser.setWatchingStreamTitle(null);
-            currentUser.setJoinStreamDate(null);
-
-            localUserRepository.putUser(currentUser);
-            remoteUserRepository.putUser(currentUser);
+            removeWatching(currentUser);
             sessionRepository.setCurrentUser(currentUser);
+            localUserRepository.updateWatch(currentUser);
+            remoteUserRepository.updateWatch(currentUser);
+
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
         }
+    }
+
+    private void removeWatching(User currentUser) {
+        currentUser.setIdWatchingStream(null);
+        currentUser.setWatchingStreamTitle(null);
+        currentUser.setJoinStreamDate(null);
     }
 
     private void notifyCompleted() {
