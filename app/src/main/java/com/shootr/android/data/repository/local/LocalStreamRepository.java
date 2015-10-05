@@ -63,7 +63,7 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override public void removeStream(String idStream) {
-        throw new IllegalStateException("Not allowed in local repository.");
+        localStreamDataSource.removeStream(idStream);
     }
 
     @Override public void restoreStream(String idStream) {

@@ -239,6 +239,15 @@ public class StreamManager extends AbstractManager{
         ContentValues values = new ContentValues(2);
         values.put(TimelineSyncTable.STREAM_ID, streamId);
         values.put(TimelineSyncTable.DATE, refreshDate);
-        getWritableDatabase().insertWithOnConflict(TimelineSyncTable.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        getWritableDatabase().insertWithOnConflict(TimelineSyncTable.TABLE,
+          null,
+          values,
+          SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public void removeStream(String idStream) {
+        StreamEntity stream = getStreamById(idStream);
+        stream.setRemoved(1);
+        saveStream(stream);
     }
 }

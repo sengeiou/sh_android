@@ -19,6 +19,7 @@ public class RemoveStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
+    private final StreamRepository localStreamRepository;
     private final StreamRepository remoteStreamRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
@@ -29,10 +30,11 @@ public class RemoveStreamInteractor implements Interactor {
 
     @Inject
     public RemoveStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote StreamRepository remoteStreamRepository, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
+        this.localStreamRepository = localStreamRepository;
         this.remoteStreamRepository = remoteStreamRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
@@ -50,6 +52,7 @@ public class RemoveStreamInteractor implements Interactor {
     public void execute() throws Exception {
         try {
             remoteStreamRepository.removeStream(idStream);
+            localStreamRepository.removeStream(idStream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             removeWatching(currentUser);
