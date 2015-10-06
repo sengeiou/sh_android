@@ -1,5 +1,6 @@
 package com.shootr.android.domain;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Listing {
@@ -13,31 +14,59 @@ public class Listing {
         return holdingStreams;
     }
 
-    public void setHoldingStreams(List<StreamSearchResult> holdingStreams) {
-        this.holdingStreams = holdingStreams;
-    }
-
     public List<Stream> getFavoritedStreams() {
         return favoritedStreams;
-    }
-
-    public void setFavoritedStreams(List<Stream> favoritedStreams) {
-        this.favoritedStreams = favoritedStreams;
     }
 
     public Boolean getIncludeHolding() {
         return includeHolding;
     }
 
-    public void setIncludeHolding(Boolean includeHolding) {
-        this.includeHolding = includeHolding;
-    }
-
     public Boolean getIncludeFavorited() {
         return includeFavorited;
     }
 
-    public void setIncludeFavorited(Boolean includeFavorited) {
-        this.includeFavorited = includeFavorited;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Listing listing = new Listing();
+
+        public Builder() {
+            setDefaults();
+        }
+
+        private void setDefaults() {
+            listing.holdingStreams = Collections.emptyList();
+            listing.favoritedStreams = Collections.emptyList();
+            listing.includeHolding = false;
+            listing.includeFavorited = false;
+        }
+
+        public Builder holdingStreams(List<StreamSearchResult> holding) {
+            listing.holdingStreams = holding;
+            return this;
+        }
+
+        public Builder favoritedStreams(List<Stream> favorited) {
+            listing.favoritedStreams = favorited;
+            return this;
+        }
+
+        public Builder includeHoldingStreams(Boolean includeHolding) {
+            listing.includeHolding = includeHolding;
+            return this;
+        }
+
+        public Builder includeFavoritedStreams(Boolean includeFavorited) {
+            listing.includeFavorited = includeFavorited;
+            return this;
+        }
+
+        public Listing build() {
+            return listing;
+        }
     }
 }

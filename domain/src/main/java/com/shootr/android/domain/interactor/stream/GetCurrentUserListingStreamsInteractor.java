@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Listing;
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -13,7 +12,6 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -40,7 +38,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadCurrentUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback){
+    public void loadCurrentUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         this.idUser = sessionRepository.getCurrentUserId();
@@ -64,18 +62,15 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         loadUserListingStreamsFromRepository(localStreamSearchRepository);
     }
 
-    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
+    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
         setWatchNumberInStreams(listingStreams);
         List<StreamSearchResult> listingWithoutRemoved = retainStreamsNotRemoved(listingStreams);
 
-        Listing listing = new Listing();
-        listing.setHoldingStreams(listingWithoutRemoved);
-        listing.setFavoritedStreams(Collections.<Stream>emptyList());
-        listing.setIncludeHolding(listingWithoutRemoved.size() > 0);
-        listing.setIncludeFavorited(false);
-
-        notifyLoaded(listing);
+        notifyLoaded(Listing.builder()
+            .holdingStreams(listingWithoutRemoved)
+            .includeHoldingStreams(listingWithoutRemoved.size() > 0)
+            .build());
     }
 
     private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {

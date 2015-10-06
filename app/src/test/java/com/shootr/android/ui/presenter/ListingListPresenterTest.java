@@ -55,15 +55,16 @@ public class ListingListPresenterTest {
     @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
         listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
           getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
-          getFavoriteStreamInteractor, shareStreamInteractor, streamResultModelMapper,
+          getFavoriteStreamInteractor,
+          shareStreamInteractor,
+          streamResultModelMapper,
           errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
@@ -71,9 +72,9 @@ public class ListingListPresenterTest {
 
     protected void setupFavoritesInteractorCallbacks() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<StreamSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<StreamSearchResult>> callback =
+                  (Interactor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(Collections.<StreamSearchResult>emptyList());
 
                 return null;
@@ -81,8 +82,7 @@ public class ListingListPresenterTest {
         }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
-    @Test
-    public void shouldShowContentIfUserHasCreatedStreams() throws Exception {
+    @Test public void shouldShowContentIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
@@ -90,8 +90,7 @@ public class ListingListPresenterTest {
         verify(listingView).showContent();
     }
 
-    @Test
-    public void shouldShowStreamsIfUserHasCreatedStreams() throws Exception {
+    @Test public void shouldShowStreamsIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
@@ -99,8 +98,7 @@ public class ListingListPresenterTest {
         verify(listingView).renderStreams(anyList());
     }
 
-    @Test
-    public void shouldHideContentIfUserHasNoCreatedStreams() throws Exception {
+    @Test public void shouldHideContentIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
@@ -108,8 +106,7 @@ public class ListingListPresenterTest {
         verify(listingView).hideContent();
     }
 
-    @Test
-    public void shouldShowNoStreamsIfUserHasNoCreatedStreams() throws Exception {
+    @Test public void shouldShowNoStreamsIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
@@ -137,12 +134,12 @@ public class ListingListPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
-                errorCallback.onError(new ShootrException() {});
+                errorCallback.onError(new ShootrException() {
+                });
                 return null;
             }
-        }).when(shareStreamInteractor).shareStream(anyString(),
-          any(Interactor.CompletedCallback.class),
-          anyErrorCallback());
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
     private void setupShareStreamCompletedCallback() {
@@ -153,9 +150,8 @@ public class ListingListPresenterTest {
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(shareStreamInteractor).shareStream(anyString(),
-          any(Interactor.CompletedCallback.class),
-          anyErrorCallback());
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
     private StreamResultModel streamModel() {
@@ -166,17 +162,16 @@ public class ListingListPresenterTest {
         return streamResultModel;
     }
 
-    @Test
-    public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
+    @Test public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
-        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class), anyErrorCallback());
+        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class),
+          anyErrorCallback());
     }
 
-    @Test
-    public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
+    @Test public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
@@ -185,16 +180,14 @@ public class ListingListPresenterTest {
     }
 
     private Listing listingWithEmptyHoldingList() {
-        Listing listing = new Listing();
-        listing.setFavoritedStreams(Collections.<Stream>emptyList());
-        listing.setHoldingStreams(Collections.<StreamSearchResult>emptyList());
-        return listing;
+        return Listing.builder().build();
     }
 
     private Listing listingWithUserStreams() {
-        Listing listing = new Listing();
-        listing.setHoldingStreams(Arrays.asList(getStreamSearchResult()));
-        return listing;
+        return Listing.builder()
+          .holdingStreams(Arrays.asList(getStreamSearchResult()))
+          .includeHoldingStreams(true)
+          .build();
     }
 
     private StreamSearchResult getStreamSearchResult() {
@@ -233,5 +226,4 @@ public class ListingListPresenterTest {
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
     }
-
 }

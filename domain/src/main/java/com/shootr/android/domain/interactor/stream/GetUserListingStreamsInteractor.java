@@ -31,8 +31,9 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private Callback<Listing> callback;
     private List<String> favoriteIds;
 
-    @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamSearchRepository,
+    @Inject
+    public GetUserListingStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local StreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository, @Local StreamRepository localStreamRepository,
       @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository) {
         this.interactorHandler = interactorHandler;
@@ -44,7 +45,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
         this.remoteFavoriteRepository = remoteFavoriteRepository;
     }
 
-    public void loadUserListingStreams(Callback<Listing> callback, String idUser){
+    public void loadUserListingStreams(Callback<Listing> callback, String idUser) {
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
@@ -89,15 +90,16 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     private Listing getListing(List<Stream> favoriteStreams, List<StreamSearchResult> streamSearchResults) {
-        Listing listing = new Listing();
-        listing.setHoldingStreams(streamSearchResults);
-        listing.setFavoritedStreams(favoriteStreams);
-        listing.setIncludeHolding(streamSearchResults.size() > 0);
-        listing.setIncludeFavorited(favoriteStreams.size() > 0);
-        return listing;
+        return Listing.builder()
+          .holdingStreams(streamSearchResults)
+          .favoritedStreams(favoriteStreams)
+          .includeHoldingStreams(streamSearchResults.size() > 0)
+          .includeFavoritedStreams(favoriteStreams.size() > 0)
+          .build();
     }
 
-    private List<StreamSearchResult> loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
+    private List<StreamSearchResult> loadUserListingStreamsFromRepository(
+      StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
         return getNotRemovedStreams(listingStreams);
     }
