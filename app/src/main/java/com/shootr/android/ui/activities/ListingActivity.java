@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.adapters.ListingAdapter;
 import com.shootr.android.ui.adapters.ListingStreamsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
@@ -44,7 +45,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
 
-    private ListingStreamsAdapter adapter;
+    private ListingAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser, Integer streamsCount) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -61,7 +62,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
-        adapter = new ListingStreamsAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
+        adapter = new ListingAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
