@@ -49,6 +49,9 @@ public class SuggestedPeopleDBMapper extends GenericDBMapper {
             cv.put(DatabaseContract.SuggestedPeopleTable.WATCHING_STREAM_TITLE, suggestedPeopleEntity.getWatchingStreamTitle());
             cv.put(DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE, suggestedPeopleEntity.getJoinStreamDate());
             cv.put(DatabaseContract.SuggestedPeopleTable.RELEVANCE, suggestedPeopleEntity.getRelevance());
+            cv.put(DatabaseContract.SuggestedPeopleTable.CREATED_STREAMS_COUNT, suggestedPeopleEntity.getCreatedStreamsCount());
+            cv.put(DatabaseContract.SuggestedPeopleTable.FAVORITED_STREAMS_COUNT, suggestedPeopleEntity.getFavoritedStreamsCount());
+
             setSynchronizedtoContentValues(suggestedPeopleEntity, cv);
         }
         return cv;
@@ -70,6 +73,8 @@ public class SuggestedPeopleDBMapper extends GenericDBMapper {
         suggestedPeople.setWatchingStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.SuggestedPeopleTable.WATCHING_STREAM_TITLE)));
         suggestedPeople.setJoinStreamDate(c.getLong(c.getColumnIndex(DatabaseContract.SuggestedPeopleTable.JOIN_STREAM_DATE)));
         suggestedPeople.setRelevance(c.getLong(c.getColumnIndex(DatabaseContract.SuggestedPeopleTable.RELEVANCE)));
+        suggestedPeople.setCreatedStreamsCount(c.getLong(c.getColumnIndex(DatabaseContract.SuggestedPeopleTable.CREATED_STREAMS_COUNT)));
+        suggestedPeople.setFavoritedStreamsCount(c.getLong(c.getColumnIndex(DatabaseContract.SuggestedPeopleTable.FAVORITED_STREAMS_COUNT)));
         return suggestedPeople;
     }
 

@@ -215,6 +215,8 @@ public class SQLiteUtils {
       + UserTable.ID_WATCHING_STREAM +" TEXT NULL,"
       + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
       + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
+      + UserTable.CREATED_STREAMS_COUNT +" INTEGER NULL,"
+      + UserTable.FAVORITED_STREAMS_COUNT +" INTEGER NULL,"
       + DatabaseContract.SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
       + SyncColumns.BIRTH + " DATETIME NOT NULL,"
       + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
