@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -81,17 +82,19 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadUserListingStreams() {
-        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> streams) {
-                handleStreamsInView(streams);
+        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
+            @Override public void onLoaded(Listing listing) {
+                //TODO real logic
+                handleStreamsInView(listing.getHoldingStreams());
             }
         }, profileIdUser);
     }
 
     private void loadCurrentUserListingStreams() {
-        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> streams) {
-                handleStreamsInView(streams);
+        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
+            @Override public void onLoaded(Listing listing) {
+                //TODO real logic
+                handleStreamsInView(listing.getHoldingStreams());
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

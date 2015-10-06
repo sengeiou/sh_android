@@ -1,12 +1,17 @@
 package com.shootr.android.domain.interactor.stream;
 
+import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.Listing;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,49 +23,86 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final StreamSearchRepository localStreamSearchRepository;
     private final StreamSearchRepository remoteStreamSearchRepository;
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
+    private final FavoriteRepository remoteFavoriteRepository;
 
     private String idUser;
-    private Callback<List<StreamSearchResult>> callback;
+    private Callback<Listing> callback;
+    private List<String> favoriteIds;
 
     @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamRepositoty,
-      @Remote StreamSearchRepository remoteStreamRepositoty) {
+      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamSearchRepository,
+      @Remote StreamSearchRepository remoteStreamSearchRepository, @Local StreamRepository localStreamRepository,
+      @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localStreamSearchRepository = localStreamRepositoty;
-        this.remoteStreamSearchRepository = remoteStreamRepositoty;
+        this.localStreamSearchRepository = localStreamSearchRepository;
+        this.remoteStreamSearchRepository = remoteStreamSearchRepository;
+        this.localStreamRepository = localStreamRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
+        this.remoteFavoriteRepository = remoteFavoriteRepository;
     }
 
-    public void loadUserListingStreams(Callback<List<StreamSearchResult>> callback, String idUser){
+    public void loadUserListingStreams(Callback<Listing> callback, String idUser){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
+        loadFavoriteIds();
         loadUserListingStreamsFromLocal();
         loadUserListingStreamsFromRemote();
     }
 
+    private void loadFavoriteIds() {
+        List<Favorite> favorites = remoteFavoriteRepository.getFavorites(idUser);
+        favoriteIds = new ArrayList<>(favorites.size());
+        for (Favorite favorite : favorites) {
+            favoriteIds.add(favorite.getIdStream());
+        }
+    }
+
     private void loadUserListingStreamsFromRemote() {
         try {
-            loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
+            List<Stream> favoriteStreams = remoteStreamRepository.getStreamsByIds(favoriteIds);
+            List<StreamSearchResult> holdingStreamResults =
+              loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
+
+            Listing listing = getListing(favoriteStreams, holdingStreamResults);
+
+            notifyLoaded(listing);
         } catch (ShootrException error) {
             /* swallow error */
         }
     }
 
     private void loadUserListingStreamsFromLocal() {
-        loadUserListingStreamsFromRepository(localStreamSearchRepository);
-    }
+        List<Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
+        List<StreamSearchResult> holdingStreamResults =
+          loadUserListingStreamsFromRepository(localStreamSearchRepository);
 
-    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
-        List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
-        List<StreamSearchResult> listing = retainStreamsNotRemoved(listingStreams);
+        Listing listing = getListing(favoriteStreams, holdingStreamResults);
+
         notifyLoaded(listing);
     }
 
-    private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {
+    private Listing getListing(List<Stream> favoriteStreams, List<StreamSearchResult> streamSearchResults) {
+        Listing listing = new Listing();
+        listing.setHoldingStreams(streamSearchResults);
+        listing.setFavoritedStreams(favoriteStreams);
+        listing.setIncludeHolding(streamSearchResults.size() > 0);
+        listing.setIncludeFavorited(favoriteStreams.size() > 0);
+        return listing;
+    }
+
+    private List<StreamSearchResult> loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
+        List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
+        return getNotRemovedStreams(listingStreams);
+    }
+
+    private List<StreamSearchResult> getNotRemovedStreams(List<StreamSearchResult> listingStreams) {
         List<StreamSearchResult> listing = new ArrayList<>();
         for (StreamSearchResult listingStream : listingStreams) {
             if (!listingStream.getStream().isRemoved()) {
@@ -70,7 +112,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
         return listing;
     }
 
-    private void notifyLoaded(final List<StreamSearchResult> listingStreams) {
+    private void notifyLoaded(final Listing listingStreams) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingStreams);

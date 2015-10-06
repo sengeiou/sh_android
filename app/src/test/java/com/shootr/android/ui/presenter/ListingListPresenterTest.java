@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
@@ -183,12 +184,17 @@ public class ListingListPresenterTest {
         verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
 
-    private List<StreamSearchResult> emptyStreamsList() {
-        return Collections.emptyList();
+    private Listing listingWithEmptyHoldingList() {
+        Listing listing = new Listing();
+        listing.setFavoritedStreams(Collections.<Stream>emptyList());
+        listing.setHoldingStreams(Collections.<StreamSearchResult>emptyList());
+        return listing;
     }
 
-    private List<StreamSearchResult> userStreams() {
-        return Arrays.asList(getStreamSearchResult());
+    private Listing listingWithUserStreams() {
+        Listing listing = new Listing();
+        listing.setHoldingStreams(Arrays.asList(getStreamSearchResult()));
+        return listing;
     }
 
     private StreamSearchResult getStreamSearchResult() {
@@ -207,7 +213,7 @@ public class ListingListPresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 GetUserListingStreamsInteractor.Callback callback =
                   (GetUserListingStreamsInteractor.Callback) invocation.getArguments()[0];
-                callback.onLoaded(userStreams());
+                callback.onLoaded(listingWithUserStreams());
                 return null;
             }
         }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
@@ -218,7 +224,7 @@ public class ListingListPresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 GetUserListingStreamsInteractor.Callback callback =
                   (GetUserListingStreamsInteractor.Callback) invocation.getArguments()[0];
-                callback.onLoaded(emptyStreamsList());
+                callback.onLoaded(listingWithEmptyHoldingList());
                 return null;
             }
         }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
