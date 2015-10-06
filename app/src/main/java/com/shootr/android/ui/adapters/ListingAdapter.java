@@ -1,5 +1,6 @@
 package com.shootr.android.ui.adapters;
 
+import android.support.annotation.IntegerRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,13 +77,22 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
 
     @Override
     protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
-        if (section == 0) {
-            //TODO from resources
-            holder.render("Holding$");
+        if (getItemCountForSection(section) <= 0) {
+            holder.itemView.findViewById(R.id.separator).setVisibility(View.GONE);
         } else {
-            holder.render("Favorites$");
+            holder.itemView.findViewById(R.id.separator).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(android.R.id.text1).setVisibility(View.VISIBLE);
+            holder.render(getTitleForSection(section));
         }
-        holder.itemView.findViewById(android.R.id.text1).setVisibility(View.VISIBLE);
+    }
+
+    @IntegerRes
+    private int getTitleForSection(int section) {
+        if (section == 0) {
+            return R.string.listing_title_holding;
+        } else {
+            return R.string.listing_title_favorites;
+        }
     }
 
     @Override

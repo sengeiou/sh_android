@@ -394,4 +394,6 @@
     <string name="downloaded_pictures_subfolder">Shootr/</string>
     <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
     <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
+    <string name="listing_title_holding">Holding</string>
+    <string name="listing_title_favorites">Favorites</string>
 </resources>
