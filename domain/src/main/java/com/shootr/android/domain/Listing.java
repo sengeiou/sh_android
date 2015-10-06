@@ -11,6 +11,7 @@ public class Listing {
     private Boolean includeFavorited;
 
     private Listing() {
+        /* private constructor */
     }
 
     public List<StreamSearchResult> getHoldingStreams() {
