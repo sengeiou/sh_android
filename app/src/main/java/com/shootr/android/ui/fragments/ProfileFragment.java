@@ -311,8 +311,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
-            @Override
-            public void onUserClick(String idUser) {
+            @Override public void onUserClick(String idUser) {
                 Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
                 startActivity(suggestedUserIntent);
             }
@@ -573,6 +572,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void setUserInfo(UserModel user) {
+        profilePresenter.loadCurrentUserListing(user);
         setBasicUserInfo(user);
         String bio = user.getBio();
         if (bio != null) {
@@ -759,14 +759,19 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 
-    @Override public void showListingCount(Integer listingCount) {
+    @Override public void showListingWithCount(Integer listingCount) {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
         listingNumber.setText(String.valueOf(listingCount));
     }
 
-    @Override public void navigateToListing(String idUser) {
-        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser());
+    @Override public void showListingWithoutCount() {
+        openStreamContainerView.setVisibility(View.GONE);
+        listingContainerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void navigateToListing(String idUser, Integer streamsCount) {
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser(), streamsCount);
         this.startActivity(intent);
     }
 
