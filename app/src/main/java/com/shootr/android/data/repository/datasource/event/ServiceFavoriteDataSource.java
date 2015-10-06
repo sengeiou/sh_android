@@ -40,7 +40,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException e) {
-            throw new StreamAlreadyInFavoritesException();
+            throw new StreamAlreadyInFavoritesException(e);
         }
     }
 

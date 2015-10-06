@@ -31,7 +31,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(e);
         }
     }
 
@@ -59,7 +59,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(error);
         }
     }
 
@@ -109,7 +109,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(e);
         }
     }
 
@@ -138,7 +138,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            throw new ShotRemovedException();
+            throw new ShotRemovedException(error);
         }
     }
 

@@ -8,90 +8,72 @@ import java.text.Normalizer;
 
 public class UserEntityDBMapper extends GenericDBMapper {
 
-
-    public UserEntityDBMapper(){
+    public UserEntityDBMapper() {
 
     }
 
     public UserEntity fromCursor(Cursor c) {
-        UserEntity user = userEntityWithCommonFieldsFromCursor(c);
-        // Fields that might not come from server for all users
-        int sessionTokenIndex = c.getColumnIndex(UserTable.SESSION_TOKEN);
-        if (sessionTokenIndex >= 0) {
-            user.setSessionToken(c.getString(sessionTokenIndex));
-        }
-        int emailTokenIndex = c.getColumnIndex(UserTable.EMAIL);
-        if (emailTokenIndex >= 0) {
-            user.setEmail(c.getString(emailTokenIndex));
-        }
-        setSynchronizedfromCursor(c, user);
+        UserEntity user = new UserEntity();
+        fillEntityWithCursor(user, c);
         return user;
     }
 
-    public  ContentValues toContentValues(UserEntity u) {
+    public ContentValues toContentValues(UserEntity u) {
         ContentValues cv = new ContentValues();
-        if(u != null){
-            String sessionToken = u.getSessionToken();
-            String email = u.getEmail();
-            if (sessionToken != null) {
-                cv.put(UserTable.SESSION_TOKEN, sessionToken);
-            }
-            if (email != null) {
-                cv.put(UserTable.EMAIL, email);
-            }
-            cv.put(UserTable.ID, u.getIdUser());
-            cv.put(UserTable.USER_NAME, u.getUserName());
-            cv.put(UserTable.NAME, u.getName());
-            cv.put(UserTable.PHOTO, u.getPhoto());
-            cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
-            cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
-            cv.put(UserTable.POINTS, u.getPoints());
-            cv.put(UserTable.RANK, u.getRank());
-            cv.put(UserTable.BIO, u.getBio());
-            cv.put(UserTable.WEBSITE, u.getWebsite());
-            cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
-            cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
-            cv.put(UserTable.EMAIL_CONFIRMED,u.getEmailConfirmed());
-            cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
-            cv.put(UserTable.ID_WATCHING_STREAM, u.getIdWatchingStream());
-            cv.put(UserTable.WATCHING_STREAM_TITLE, u.getWatchingStreamTitle());
-            cv.put(UserTable.JOIN_STREAM_DATE, u.getJoinStreamDate());
-            cv.put(UserTable.WATCHING_SYNCHRONIZED, u.getWatchSynchronizedStatus());
-            setSynchronizedtoContentValues(u, cv);
-        }
+        fillContentValuesWithEntity(cv, u);
         return cv;
     }
 
-    public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
-        UserEntity user = new UserEntity();
-        user.setIdUser(c.getString(c.getColumnIndex(UserTable.ID)));
-        user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
-        user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
-        user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
-        user.setEmailConfirmed(c.getInt(c.getColumnIndex(UserTable.EMAIL_CONFIRMED)));
-        user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
-        user.setNumFollowers(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
-        user.setNumFollowings(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
-        user.setPoints(c.getLong(c.getColumnIndex(UserTable.POINTS)));
-        user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
-        user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
-        user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
-        user.setIdWatchingStream(c.getString(c.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
-        user.setWatchingStreamTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_STREAM_TITLE)));
-        user.setJoinStreamDate(c.getLong(c.getColumnIndex(UserTable.JOIN_STREAM_DATE)));
-        user.setWatchSynchronizedStatus(c.getString(c.getColumnIndex(UserTable.WATCHING_SYNCHRONIZED)));
-        return user;
+    protected void fillContentValuesWithEntity(ContentValues contentValues, UserEntity entity) {
+        contentValues.put(UserTable.ID, entity.getIdUser());
+        contentValues.put(UserTable.USER_NAME, entity.getUserName());
+        contentValues.put(UserTable.EMAIL, entity.getEmail());
+        contentValues.put(UserTable.NAME, entity.getName());
+        contentValues.put(UserTable.PHOTO, entity.getPhoto());
+        contentValues.put(UserTable.NUM_FOLLOWERS, entity.getNumFollowers());
+        contentValues.put(UserTable.NUM_FOLLOWINGS, entity.getNumFollowings());
+        contentValues.put(UserTable.POINTS, entity.getPoints());
+        contentValues.put(UserTable.RANK, entity.getRank());
+        contentValues.put(UserTable.BIO, entity.getBio());
+        contentValues.put(UserTable.WEBSITE, entity.getWebsite());
+        contentValues.put(UserTable.NAME_NORMALIZED, normalizedText(entity.getName()));
+        contentValues.put(UserTable.EMAIL_NORMALIZED, normalizedText(entity.getEmail()));
+        contentValues.put(UserTable.EMAIL_CONFIRMED, entity.getEmailConfirmed());
+        contentValues.put(UserTable.USER_NAME_NORMALIZED, normalizedText(entity.getUserName()));
+        contentValues.put(UserTable.ID_WATCHING_STREAM, entity.getIdWatchingStream());
+        contentValues.put(UserTable.WATCHING_STREAM_TITLE, entity.getWatchingStreamTitle());
+        contentValues.put(UserTable.JOIN_STREAM_DATE, entity.getJoinStreamDate());
+        contentValues.put(UserTable.WATCHING_SYNCHRONIZED, entity.getWatchSynchronizedStatus());
+        setSynchronizedtoContentValues(entity, contentValues);
     }
 
+    protected void fillEntityWithCursor(UserEntity entity, Cursor cursor) {
+        entity.setIdUser(cursor.getString(cursor.getColumnIndex(UserTable.ID)));
+        entity.setUserName(cursor.getString(cursor.getColumnIndex(UserTable.USER_NAME)));
+        entity.setEmail(cursor.getString(cursor.getColumnIndex(UserTable.EMAIL)));
+        entity.setName(cursor.getString(cursor.getColumnIndex(UserTable.NAME)));
+        entity.setEmail(cursor.getString(cursor.getColumnIndex(UserTable.EMAIL)));
+        entity.setEmailConfirmed(cursor.getInt(cursor.getColumnIndex(UserTable.EMAIL_CONFIRMED)));
+        entity.setPhoto(cursor.getString(cursor.getColumnIndex(UserTable.PHOTO)));
+        entity.setNumFollowers(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWERS)));
+        entity.setNumFollowings(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
+        entity.setPoints(cursor.getLong(cursor.getColumnIndex(UserTable.POINTS)));
+        entity.setBio(cursor.getString(cursor.getColumnIndex(UserTable.BIO)));
+        entity.setRank(cursor.getLong(cursor.getColumnIndex(UserTable.RANK)));
+        entity.setWebsite(cursor.getString(cursor.getColumnIndex(UserTable.WEBSITE)));
+        entity.setIdWatchingStream(cursor.getString(cursor.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
+        entity.setWatchingStreamTitle(cursor.getString(cursor.getColumnIndex(UserTable.WATCHING_STREAM_TITLE)));
+        entity.setJoinStreamDate(cursor.getLong(cursor.getColumnIndex(UserTable.JOIN_STREAM_DATE)));
+        entity.setWatchSynchronizedStatus(cursor.getString(cursor.getColumnIndex(UserTable.WATCHING_SYNCHRONIZED)));
 
-    public String normalizedText(String s){
-        if(s!=null){
-            return Normalizer.normalize(s, Normalizer.Form.NFD)
-              .replaceAll("[^\\p{ASCII}]", "");
-        }else{
+        setSynchronizedfromCursor(cursor, entity);
+    }
+
+    public String normalizedText(String s) {
+        if (s != null) {
+            return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        } else {
             return null;
         }
-
     }
-
 }

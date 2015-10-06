@@ -39,7 +39,7 @@ public class ServiceLoginGateway implements LoginGateway {
             String sessionToken = loggedInUserEntity.getSessionToken();
             return new LoginResult(loggedInUser, sessionToken);
         } catch (ApiException error) {
-            throw new InvalidLoginException();
+            throw new InvalidLoginException(error);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         }
@@ -60,7 +60,7 @@ public class ServiceLoginGateway implements LoginGateway {
             }
             return loginResult;
         } catch (ApiException apiError) {
-            throw new InvalidLoginException();
+            throw new InvalidLoginException(apiError);
         } catch (IOException networkError) {
             throw new ServerCommunicationException(networkError);
         }

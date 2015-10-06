@@ -145,7 +145,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private void openContextualMenuForSharing() {
         new CustomContextMenu.Builder(this)
-          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
+          .addAction(getString(R.string.share_via_shootr), new Runnable() {
               @Override public void run() {
                   streamDetailPresenter.shareStreamViaShootr();
               }

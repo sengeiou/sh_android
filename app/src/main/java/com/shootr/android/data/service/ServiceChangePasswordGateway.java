@@ -24,7 +24,7 @@ public class ServiceChangePasswordGateway implements ChangePasswordGateway {
         try {
             changePasswordApiService.changePassword(changePasswordEntity);
         } catch (ApiException e) {
-            throw new InvalidPasswordException();
+            throw new InvalidPasswordException(e);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         }

@@ -4,8 +4,6 @@ import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.domain.StreamTimelineParameters;
-import com.shootr.android.domain.exception.RepositoryException;
-import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -18,12 +16,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     }
 
     @Override public ShotEntity putShot(ShotEntity shotEntity) {
-        try {
-            shotManager.saveShot(shotEntity);
-            return shotEntity;
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+        shotManager.saveShot(shotEntity);
+        return shotEntity;
     }
 
     @Override public void putShots(List<ShotEntity> shotEntities) {

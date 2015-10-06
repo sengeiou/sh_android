@@ -185,12 +185,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
                 presenter.addToFavorites(stream);
             }
         })
-          .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
+          .addAction(getActivity().getString(R.string.share_via_shootr), new Runnable() {
               @Override public void run() {
                   presenter.shareStream(stream);
               }
           })
-          .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
+          .addAction(getActivity().getString(R.string.share_via), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
