@@ -17,6 +17,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ListingStreamsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
@@ -87,9 +88,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         Intent intent = getIntent();
         String idUser = intent.getStringExtra(EXTRA_ID_USER);
         Integer streamsCount = intent.getIntExtra(EXTRA_STREAMS_COUNT, 0);
-        //TODO use streamsCount in the presenter in order to get or no streams
         Boolean isCurrentUser = intent.getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
-        presenter.initialize(this, idUser, isCurrentUser);
+        presenter.initialize(this, idUser, isCurrentUser, streamsCount);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -151,7 +151,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         Intents.maybeStartActivity(this, shareIntent);
     }
 
-    @Override public void renderStreams(List<StreamResultModel> streams) {
+    @Override public void renderHoldingStreams(List<StreamResultModel> streams) {
         adapter.setStreams(streams);
     }
 
@@ -185,6 +185,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showStreamShared() {
         feedbackMessage.show(getView(), sharedStream);
+    }
+
+    @Override public void renderFavoritedStreams(List<StreamModel> listingUserFavoritedStreams) {
+        //TODO
     }
 
     @Override public void showContent() {

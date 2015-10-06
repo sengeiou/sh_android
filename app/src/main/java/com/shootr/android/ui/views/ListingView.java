@@ -1,12 +1,13 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
 public interface ListingView extends LoadDataView {
 
-    void renderStreams(List<StreamResultModel> streams);
+    void renderHoldingStreams(List<StreamResultModel> streams);
 
     void showContent();
 
@@ -20,4 +21,6 @@ public interface ListingView extends LoadDataView {
     void navigateToCreatedStreamDetail(String streamId);
 
     void showStreamShared();
+
+    void renderFavoritedStreams(List<StreamModel> listingUserFavoritedStreams);
 }
