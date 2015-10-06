@@ -77,12 +77,12 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
 
     @Override
     protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
-        if (getItemCountForSection(section) <= 0) {
-            holder.itemView.findViewById(R.id.separator).setVisibility(View.GONE);
-        } else {
+        if (showTitles && getItemCountForSection(section) > 0) {
             holder.itemView.findViewById(R.id.separator).setVisibility(View.VISIBLE);
             holder.itemView.findViewById(android.R.id.text1).setVisibility(View.VISIBLE);
             holder.render(getTitleForSection(section));
+        } else {
+            holder.itemView.findViewById(R.id.separator).setVisibility(View.GONE);
         }
     }
 
@@ -142,5 +142,9 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
     public void setFavoritedStreams(List<StreamResultModel> streams) {
         this.favoritedStreams = streams;
         this.notifyDataSetChanged();
+    }
+
+    public void setShowTitles(boolean showTitles) {
+        this.showTitles = showTitles;
     }
 }
