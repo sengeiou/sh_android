@@ -93,8 +93,6 @@ public class GetUserListingStreamsInteractor implements Interactor {
         return Listing.builder()
           .holdingStreams(streamSearchResults)
           .favoritedStreams(favoriteStreams)
-          .includeHoldingStreams(streamSearchResults.size() > 0)
-          .includeFavoritedStreams(favoriteStreams.size() > 0)
           .build();
     }
 

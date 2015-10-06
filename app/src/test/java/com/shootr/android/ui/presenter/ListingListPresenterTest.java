@@ -204,7 +204,6 @@ public class ListingListPresenterTest {
     private Listing listingWithUserStreams() {
         return Listing.builder()
           .holdingStreams(Arrays.asList(getStreamSearchResult()))
-          .includeHoldingStreams(true)
           .build();
     }
 
@@ -212,7 +211,6 @@ public class ListingListPresenterTest {
         Stream stream = getStream();
         return Listing.builder()
           .favoritedStreams(Arrays.asList(stream))
-          .includeFavoritedStreams(true)
           .build();
     }
 

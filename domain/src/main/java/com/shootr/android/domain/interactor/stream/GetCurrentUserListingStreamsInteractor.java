@@ -69,7 +69,6 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
 
         notifyLoaded(Listing.builder()
             .holdingStreams(listingWithoutRemoved)
-            .includeHoldingStreams(listingWithoutRemoved.size() > 0)
             .build());
     }
 

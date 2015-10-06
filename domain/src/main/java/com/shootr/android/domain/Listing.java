@@ -10,6 +10,9 @@ public class Listing {
     private Boolean includeHolding;
     private Boolean includeFavorited;
 
+    private Listing() {
+    }
+
     public List<StreamSearchResult> getHoldingStreams() {
         return holdingStreams;
     }
@@ -47,21 +50,13 @@ public class Listing {
 
         public Builder holdingStreams(List<StreamSearchResult> holding) {
             listing.holdingStreams = holding;
+            listing.includeHolding = holding.size() > 0;
             return this;
         }
 
         public Builder favoritedStreams(List<Stream> favorited) {
             listing.favoritedStreams = favorited;
-            return this;
-        }
-
-        public Builder includeHoldingStreams(Boolean includeHolding) {
-            listing.includeHolding = includeHolding;
-            return this;
-        }
-
-        public Builder includeFavoritedStreams(Boolean includeFavorited) {
-            listing.includeFavorited = includeFavorited;
+            listing.includeFavorited = favorited.size() > 0;
             return this;
         }
 
