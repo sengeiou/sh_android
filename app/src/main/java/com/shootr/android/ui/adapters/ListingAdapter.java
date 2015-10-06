@@ -117,10 +117,19 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         }
     }
 
+    //TODO remove method: it's still alive just for developing purposes
     @Deprecated
     public void setStreams(List<StreamResultModel> streams) {
-        //TODO decompose in two methods
+        setCreatedStreams(streams);
+        setFavoritedStreams(streams);
+    }
+
+    public void setCreatedStreams(List<StreamResultModel> streams) {
         this.createdStreams = streams;
+        this.notifyDataSetChanged();
+    }
+
+    public void setFavoritedStreams(List<StreamResultModel> streams) {
         this.favoritedStreams = streams;
         this.notifyDataSetChanged();
     }
