@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -71,8 +72,7 @@ public class AddToFavoritesInteractorTest {
     @Test
     public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(twoFavorites());
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+        when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavorites());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
@@ -80,8 +80,7 @@ public class AddToFavoritesInteractorTest {
     @Test
     public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(twoFavoritesReversed());
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+        when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavoritesReversed());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
