@@ -64,11 +64,12 @@ public class ProfilePresenter implements Presenter {
         }
     }
 
-    public void loadCurrentUserListing(UserModel userModel) {
-        streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
+    public void loadProfileUserListing(UserModel userModel) {
         if (isCurrentUser) {
+            streamsCount = userModel.getCreatedStreamsCount();
             showCurrentUserListingCount();
         } else {
+            streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
             showAnotherUserListingCount();
         }
     }

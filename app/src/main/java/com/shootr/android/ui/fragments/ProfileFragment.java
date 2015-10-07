@@ -572,7 +572,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void setUserInfo(UserModel user) {
-        profilePresenter.loadCurrentUserListing(user);
+        profilePresenter.loadProfileUserListing(user);
         setBasicUserInfo(user);
         String bio = user.getBio();
         if (bio != null) {
