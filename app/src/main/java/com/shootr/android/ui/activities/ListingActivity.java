@@ -148,7 +148,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void renderHoldingStreams(List<StreamResultModel> streams) {
-        adapter.setStreams(streams);
+        adapter.setCreatedStreams(streams);
+    }
+
+    @Override public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
+        adapter.setFavoritedStreams(listingUserFavoritedStreams);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String tag) {
@@ -185,16 +189,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override
     public void hideSectionTitles() {
-
+        adapter.setShowTitles(false);
     }
 
     @Override
     public void showSectionTitles() {
-
-    }
-
-    @Override public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
-        //TODO
+        adapter.setShowTitles(true);
     }
 
     @Override public void showContent() {
