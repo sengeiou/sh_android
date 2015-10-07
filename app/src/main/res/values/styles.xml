@@ -329,10 +329,16 @@
         <item name="android:src">@drawable/ic_thumb_up_16_checkable_nopadding</item>
     </style>
 
-    <style name="SectionTitleAppearance">
+    <style name="ListSectionTitleAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/gray_45</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="ListSeparatorTitleAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/gray_45</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="InlineDescriptionAppearance" parent="TextAppearance.AppCompat">

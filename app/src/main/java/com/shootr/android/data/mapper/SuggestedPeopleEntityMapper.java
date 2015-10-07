@@ -33,6 +33,8 @@ public class SuggestedPeopleEntityMapper {
         user.setWatchingStreamTitle(suggestedPeopleEntity.getWatchingStreamTitle());
 
         user.setJoinStreamDate(suggestedPeopleEntity.getJoinStreamDate());
+        user.setCreatedStreamsCount(suggestedPeopleEntity.getCreatedStreamsCount());
+        user.setFavoritedStreamsCount(suggestedPeopleEntity.getFavoritedStreamsCount());
 
         suggestedPeople.setRelevance(suggestedPeopleEntity.getRelevance());
         suggestedPeople.setUser(user);
@@ -55,6 +57,8 @@ public class SuggestedPeopleEntityMapper {
         suggestedPeopleEntity.setNumFollowers(suggestedPeople.getUser().getNumFollowers());
         suggestedPeopleEntity.setWebsite(suggestedPeople.getUser().getWebsite());
         suggestedPeopleEntity.setBio(suggestedPeople.getUser().getBio());
+        suggestedPeopleEntity.setCreatedStreamsCount(suggestedPeople.getUser().getCreatedStreamsCount());
+        suggestedPeopleEntity.setFavoritedStreamsCount(suggestedPeople.getUser().getFavoritedStreamsCount());
 
         suggestedPeopleEntity.setIdWatchingStream(suggestedPeople.getUser().getIdWatchingStream());
 

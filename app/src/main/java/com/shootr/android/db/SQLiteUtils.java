@@ -4,11 +4,11 @@ import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.DatabaseContract.SuggestedPeopleTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
-import com.shootr.android.db.DatabaseContract.SuggestedPeopleTable;
 
 public class SQLiteUtils {
 
@@ -35,6 +35,8 @@ public class SQLiteUtils {
             + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
             + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
             + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
+            + UserTable.CREATED_STREAMS_COUNT +" INTEGER NULL,"
+            + UserTable.FAVORITED_STREAMS_COUNT +" INTEGER NULL,"
             + SyncColumns.BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.DELETED + " DATETIME,"
@@ -215,6 +217,8 @@ public class SQLiteUtils {
       + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
       + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
       + SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
+      + UserTable.CREATED_STREAMS_COUNT +" INTEGER NULL,"
+      + UserTable.FAVORITED_STREAMS_COUNT +" INTEGER NULL,"
       + SyncColumns.BIRTH + " DATETIME NOT NULL,"
       + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
       + SyncColumns.DELETED + " DATETIME,"

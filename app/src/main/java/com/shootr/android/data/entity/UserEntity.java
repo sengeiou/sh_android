@@ -22,8 +22,26 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String idWatchingStream;
     private Long joinStreamDate;
     private String watchSynchronizedStatus;
+    private Long createdStreamsCount;
+    private Long favoritedStreamsCount;
 
     public UserEntity(){
+    }
+
+    public Long getCreatedStreamsCount() {
+        return createdStreamsCount;
+    }
+
+    public void setCreatedStreamsCount(Long createdStreamsCount) {
+        this.createdStreamsCount = createdStreamsCount;
+    }
+
+    public Long getFavoritedStreamsCount() {
+        return favoritedStreamsCount;
+    }
+
+    public void setFavoritedStreamsCount(Long favoritedStreamsCount) {
+        this.favoritedStreamsCount = favoritedStreamsCount;
     }
 
     public Integer getEmailConfirmed() {

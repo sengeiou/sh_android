@@ -11,6 +11,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,7 @@ public class AddToFavoritesInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final FavoriteRepository localFavoriteRepository;
     private final FavoriteRepository remoteFavoriteRepository;
+    private final SessionRepository sessionRepository;
     private final BusPublisher busPublisher;
 
     private Interactor.CompletedCallback callback;
@@ -30,13 +32,13 @@ public class AddToFavoritesInteractor implements Interactor {
     private String idStream;
 
     @Inject public AddToFavoritesInteractor(@Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository,
-      InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, BusPublisher busPublisher) {
+      @Remote FavoriteRepository remoteFavoriteRepository, InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository, BusPublisher busPublisher) {
         this.localFavoriteRepository = localFavoriteRepository;
         this.interactorHandler = interactorHandler;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
         this.postExecutionThread = postExecutionThread;
+        this.sessionRepository = sessionRepository;
         this.busPublisher = busPublisher;
     }
 
@@ -76,7 +78,7 @@ public class AddToFavoritesInteractor implements Interactor {
     }
 
     private Favorite getLastLocalFavorite() {
-        List<Favorite> favorites = localFavoriteRepository.getFavorites();
+        List<Favorite> favorites = localFavoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
         Collections.sort(favorites, new Favorite.AscendingOrderComparator());
         if(!favorites.isEmpty()){
             return favorites.get(favorites.size() - 1);

@@ -25,7 +25,7 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public List<FavoriteEntity> getFavorites() {
+    public List<FavoriteEntity> getFavorites(String userId) {
         return favoriteManager.getFavorites();
     }
 

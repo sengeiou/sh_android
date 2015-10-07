@@ -75,7 +75,7 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     }
 
     private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
-        List<Favorite> favorites = favoriteRepository.getFavorites();
+        List<Favorite> favorites = favoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
         List<Stream> favoriteStreams = streamsFromFavorites(favorites);
         favoriteStreams = sortStreamsByName(favoriteStreams);
         List<StreamSearchResult> favoriteStreamsWithWatchers = addWatchersToStreams(favoriteStreams);

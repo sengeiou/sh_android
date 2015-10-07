@@ -6,18 +6,23 @@ import java.util.List;
 
 public interface ListingView extends LoadDataView {
 
-    void renderStreams(List<StreamResultModel> streams);
+    void renderHoldingStreams(List<StreamResultModel> streams);
+
+    void renderFavoritedStreams(List<StreamResultModel> listingUsrFavoritedStreams);
 
     void showContent();
 
     void navigateToStreamTimeline(String idStream, String tag);
 
-
-    void setFavoriteStreams(List<StreamResultModel> transform);
+    void setCurrentUserFavorites(List<StreamResultModel> transform);
 
     void hideContent();
 
     void navigateToCreatedStreamDetail(String streamId);
 
     void showStreamShared();
+
+    void hideSectionTitles();
+
+    void showSectionTitles();
 }

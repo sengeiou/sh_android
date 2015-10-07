@@ -13,6 +13,7 @@ import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -24,18 +25,19 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     private final FavoriteEntityMapper favoriteEntityMapper;
     private final SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
     private final SyncTrigger syncTrigger;
+    private final SessionRepository sessionRepository;
 
     @Inject
     public SyncFavoriteRepository(@Remote FavoriteDataSource remoteFavoriteDataSource,
-      @Local FavoriteDataSource localFavoriteDataSource,
-      FavoriteEntityMapper favoriteEntityMapper,
-      SyncableFavoriteEntityFactory syncableFavoriteEntityFactory,
-      SyncTrigger syncTrigger) {
+      @Local FavoriteDataSource localFavoriteDataSource, FavoriteEntityMapper favoriteEntityMapper,
+      SyncableFavoriteEntityFactory syncableFavoriteEntityFactory, SyncTrigger syncTrigger,
+      SessionRepository sessionRepository) {
         this.remoteFavoriteDataSource = remoteFavoriteDataSource;
         this.localFavoriteDataSource = localFavoriteDataSource;
         this.favoriteEntityMapper = favoriteEntityMapper;
         this.syncableFavoriteEntityFactory = syncableFavoriteEntityFactory;
         this.syncTrigger = syncTrigger;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -52,16 +54,18 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     }
 
     @Override
-    public List<Favorite> getFavorites() {
+    public List<Favorite> getFavorites(String userId) {
         syncTrigger.triggerSync();
-        List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites();
-        localFavoriteDataSource.clear();
-        // TODO Use method for putting the entire collection at once
-        for (FavoriteEntity remoteFavorite : remoteFavorites) {
-            try {
-                localFavoriteDataSource.putFavorite(remoteFavorite);
-            } catch (StreamAlreadyInFavoritesException e) {
-                /* swallow it */
+        List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites(userId);
+        if (sessionRepository.getCurrentUserId().equals(userId)) {
+            localFavoriteDataSource.clear();
+            // TODO Use method for putting the entire collection at once
+            for (FavoriteEntity remoteFavorite : remoteFavorites) {
+                try {
+                    localFavoriteDataSource.putFavorite(remoteFavorite);
+                } catch (StreamAlreadyInFavoritesException e) {
+                    /* swallow it */
+                }
             }
         }
         return favoriteEntityMapper.transformEntities(remoteFavorites);

@@ -21,6 +21,8 @@ public class UserEntityModelMapper {
         userModel.setWebsite(user.getWebsite());
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
+        userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         return userModel;
     }
 

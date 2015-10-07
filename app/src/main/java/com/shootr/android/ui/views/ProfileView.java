@@ -2,7 +2,7 @@ package com.shootr.android.ui.views;
 
 public interface ProfileView {
 
-    void showListingCount(Integer listingCount);
+    void showListingWithCount(Integer listingCount);
 
     void navigateToListing(String idUser);
 
@@ -35,4 +35,6 @@ public interface ProfileView {
     void showShotShared();
 
     void setFollowing(Boolean following);
+
+    void showListingWithoutCount();
 }

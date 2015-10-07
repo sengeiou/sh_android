@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -34,17 +35,15 @@ public class ListingListPresenter implements Presenter{
     private String profileIdUser;
     private boolean hasBeenPaused = false;
     private List<StreamResultModel> listingStreams;
+    private List<StreamResultModel> listingUserFavoritedStreams;
     private List<StreamResultModel> favoriteStreams;
     private boolean isCurrentUser;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
-      ShareStreamInteractor shareStreamInteractor,
-      StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, ShareStreamInteractor shareStreamInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.getCurrentUserListingStreamsInteractor = getCurrentUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
@@ -63,6 +62,10 @@ public class ListingListPresenter implements Presenter{
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
         this.isCurrentUser = isCurrentUser;
+        this.renderListing();
+    }
+
+    private void renderListing() {
         this.loadFavoriteStreams();
         this.startLoadingListing();
     }
@@ -81,35 +84,45 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadUserListingStreams() {
-        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> streams) {
-                handleStreamsInView(streams);
+        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
+            @Override
+            public void onLoaded(Listing listing) {
+                handleStreamsInView(listing);
             }
         }, profileIdUser);
     }
 
     private void loadCurrentUserListingStreams() {
-        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> streams) {
-                handleStreamsInView(streams);
+        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
+            @Override
+            public void onLoaded(Listing listing) {
+                handleStreamsInView(listing);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 showErrorInView(error);
             }
         });
     }
 
-    private void handleStreamsInView(List<StreamSearchResult> streams) {
+    private void handleStreamsInView(Listing listing) {
         listingView.hideLoading();
-        if (!streams.isEmpty()) {
-            listingStreams = streamResultModelMapper.transform(streams);
+        if (listing.getHoldingStreams().isEmpty() && listing.getFavoritedStreams().isEmpty()) {
+            listingView.showEmpty();
+            listingView.hideContent();
+        } else {
+            listingStreams = streamResultModelMapper.transform(listing.getHoldingStreams());
+            listingUserFavoritedStreams = streamResultModelMapper.transform(listing.getFavoritedStreams());
             renderStreams();
             listingView.hideEmpty();
             listingView.showContent();
-        } else {
-            listingView.showEmpty();
-            listingView.hideContent();
+            boolean showSections = listing.includesFavorited() && listing.includesHolding();
+            if (showSections) {
+                listingView.showSectionTitles();
+            } else {
+                listingView.hideSectionTitles();
+            }
         }
     }
 
@@ -123,9 +136,10 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void renderStreams() {
-        if (listingStreams != null && favoriteStreams != null) {
-            listingView.renderStreams(listingStreams);
-            listingView.setFavoriteStreams(favoriteStreams);
+        if (listingStreams != null && listingUserFavoritedStreams != null && favoriteStreams != null) {
+            listingView.renderHoldingStreams(listingStreams);
+            listingView.renderFavoritedStreams(listingUserFavoritedStreams);
+            listingView.setCurrentUserFavorites(favoriteStreams);
         }
     }
 

@@ -5,18 +5,17 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
-    private final GetListingCountInteractor getListingCountInteractor;
     private final LogoutInteractor logoutInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
@@ -27,16 +26,12 @@ public class ProfilePresenter implements Presenter {
     private ProfileView profileView;
     private String profileIdUser;
     private Boolean isCurrentUser;
+    private Long streamsCount;
 
-    @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      LogoutInteractor logoutInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor,
-      FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor,
+    @Inject public ProfilePresenter(LogoutInteractor logoutInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       ErrorMessageFactory errorMessageFactory) {
-        this.getListingCountInteractor = getListingCountInteractor;
         this.logoutInteractor = logoutInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
@@ -54,7 +49,6 @@ public class ProfilePresenter implements Presenter {
         this.setView(profileView);
         this.profileIdUser = idUser;
         setCurrentUser(isCurrentUser);
-        loadCurrentUserListing();
         setupMenuItemsVisibility();
     }
 
@@ -70,16 +64,30 @@ public class ProfilePresenter implements Presenter {
         }
     }
 
-    public void loadCurrentUserListing() {
-        getListingCountInteractor.loadListingCount(profileIdUser, new Interactor.Callback<Integer>() {
-            @Override public void onLoaded(Integer numberOfListingStreams) {
-                if (numberOfListingStreams > 0) {
-                    profileView.showListingCount(numberOfListingStreams);
-                } else {
-                    showCurrentUserOpenStream();
-                }
-            }
-        });
+    public void loadProfileUserListing(UserModel userModel) {
+        if (isCurrentUser) {
+            streamsCount = userModel.getCreatedStreamsCount();
+            showCurrentUserListingCount();
+        } else {
+            streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
+            showAnotherUserListingCount();
+        }
+    }
+
+    private void showCurrentUserListingCount() {
+        if (streamsCount > 0L) {
+            profileView.showListingWithCount(streamsCount.intValue());
+        } else {
+            showCurrentUserOpenStream();
+        }
+    }
+
+    private void showAnotherUserListingCount() {
+        if (streamsCount > 0L) {
+            profileView.showListingWithCount(streamsCount.intValue());
+        } else {
+            profileView.showListingWithoutCount();
+        }
     }
 
     private void showCurrentUserOpenStream() {

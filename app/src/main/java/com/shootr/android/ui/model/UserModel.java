@@ -21,6 +21,24 @@ public class UserModel implements Serializable, Cloneable {
     private Long joinStreamTimestamp;
     private String email;
     private Boolean emailConfirmed;
+    private Long createdStreamsCount;
+    private Long favoritedStreamsCount;
+
+    public Long getFavoritedStreamsCount() {
+        return favoritedStreamsCount;
+    }
+
+    public void setFavoritedStreamsCount(Long favoritedStreamsCount) {
+        this.favoritedStreamsCount = favoritedStreamsCount;
+    }
+
+    public Long getCreatedStreamsCount() {
+        return createdStreamsCount;
+    }
+
+    public void setCreatedStreamsCount(Long createdStreamsCount) {
+        this.createdStreamsCount = createdStreamsCount;
+    }
 
     public Boolean isEmailConfirmed() {
         return emailConfirmed;
