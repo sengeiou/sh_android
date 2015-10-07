@@ -80,7 +80,7 @@ public class GetUserListingStreamsInteractorTest {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.getIncludeHolding(), true);
+        assertEquals(listing.includesHolding(), true);
     }
 
     @Test public void shouldReturnListingWithIncludeFavoritesIfUserHaveFavoriteStreams() throws Exception {
@@ -91,14 +91,14 @@ public class GetUserListingStreamsInteractorTest {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.getIncludeFavorited(), true);
+        assertEquals(listing.includesFavorited(), true);
     }
 
     @Test public void shouldReturnListingWithoutIncludeHoldingTrueIfUserDoesNotHaveHoldingStreams() throws Exception {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.getIncludeHolding(), false);
+        assertEquals(listing.includesHolding(), false);
     }
 
     @Test public void shouldReturnListingWithoutIncludeFavoritesIfUserDoesNotHaveFavoriteStreams() throws Exception {
@@ -107,7 +107,7 @@ public class GetUserListingStreamsInteractorTest {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.getIncludeFavorited(), false);
+        assertEquals(listing.includesFavorited(), false);
     }
 
     @Test public void shouldLoadUserListingFromLocal() throws Exception {

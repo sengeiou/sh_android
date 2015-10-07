@@ -113,7 +113,7 @@ public class ListingListPresenter implements Presenter{
 
     private void handleStreamsInView(Listing listing) {
         listingView.hideLoading();
-        if (listing.getIncludeFavorited() || listing.getIncludeHolding()) {
+        if (listing.includesFavorited() || listing.includesHolding()) {
             listingStreams = streamResultModelMapper.transform(listing.getHoldingStreams());
             listingUserFavoritedStreams = streamModelMapper.transform(listing.getFavoritedStreams());
             renderStreams();

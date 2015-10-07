@@ -22,11 +22,11 @@ public class Listing {
         return favoritedStreams;
     }
 
-    public Boolean getIncludeHolding() {
+    public Boolean includesHolding() {
         return includeHolding;
     }
 
-    public Boolean getIncludeFavorited() {
+    public Boolean includesFavorited() {
         return includeFavorited;
     }
 

@@ -55,7 +55,7 @@ public class GetCurrentUserListingInteractorTest {
         when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.firstResult();
-        assertEquals(listing.getIncludeHolding(), true);
+        assertEquals(listing.includesHolding(), true);
     }
 
     @Test public void shouldReturnListingWithIncludeHoldingAlwaysTrueWhenSearchingInRemote() throws Exception {
@@ -63,7 +63,7 @@ public class GetCurrentUserListingInteractorTest {
         when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
-        assertEquals(listing.getIncludeHolding(), true);
+        assertEquals(listing.includesHolding(), true);
     }
 
     @Test public void shouldReturnListingWithIncludeFavoritedAlwaysFalseWhenSearchingInLocal() throws Exception {
@@ -71,7 +71,7 @@ public class GetCurrentUserListingInteractorTest {
         when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.firstResult();
-        assertEquals(listing.getIncludeFavorited(), false);
+        assertEquals(listing.includesFavorited(), false);
     }
 
     @Test public void shouldReturnListingWithIncludeFavoritedAlwaysFalseWhenSearchingInRemote() throws Exception {
@@ -79,7 +79,7 @@ public class GetCurrentUserListingInteractorTest {
         when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
-        assertEquals(listing.getIncludeFavorited(), false);
+        assertEquals(listing.includesFavorited(), false);
     }
 
     @Test public void shouldReturnListingWithHoldingStreamsEqualsToStreamsCreatedByUser() throws Exception {
