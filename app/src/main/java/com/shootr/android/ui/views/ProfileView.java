@@ -4,7 +4,7 @@ public interface ProfileView {
 
     void showListingWithCount(Integer listingCount);
 
-    void navigateToListing(String idUser, Integer streamsCount);
+    void navigateToListing(String idUser);
 
     void showLogoutInProgress();
 

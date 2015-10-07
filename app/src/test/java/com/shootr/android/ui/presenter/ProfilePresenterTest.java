@@ -20,7 +20,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -70,7 +69,7 @@ public class ProfilePresenterTest {
     public void shouldNavigateToListingWhenListingClicked() {
         profilePresenter.clickListing();
 
-        verify(profileView).navigateToListing(anyString(), anyInt());
+        verify(profileView).navigateToListing(anyString());
     }
 
     @Test

@@ -772,8 +772,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         listingNumber.setVisibility(View.GONE);
     }
 
-    @Override public void navigateToListing(String idUser, Integer streamsCount) {
-        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser(), streamsCount);
+    @Override public void navigateToListing(String idUser) {
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser());
         this.startActivity(intent);
     }
 

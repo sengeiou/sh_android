@@ -96,7 +96,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void clickListing() {
-        profileView.navigateToListing(profileIdUser, streamsCount.intValue());
+        profileView.navigateToListing(profileIdUser);
     }
 
     public void logoutSelected() {

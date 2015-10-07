@@ -58,20 +58,16 @@ public class ListingListPresenter implements Presenter{
         this.listingView = listingView;
     }
 
-    public void initialize(ListingView listingView, String profileIdUser, Boolean isCurrentUser, Integer streamsCount) {
+    public void initialize(ListingView listingView, String profileIdUser, Boolean isCurrentUser) {
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
         this.isCurrentUser = isCurrentUser;
-        this.renderListing(streamsCount);
+        this.renderListing();
     }
 
-    private void renderListing(Integer streamsCount) {
-        if (streamsCount == 0) {
-            listingView.showEmpty();
-        } else {
-            this.loadFavoriteStreams();
-            this.startLoadingListing();
-        }
+    private void renderListing() {
+        this.loadFavoriteStreams();
+        this.startLoadingListing();
     }
 
     private void startLoadingListing() {
@@ -89,7 +85,8 @@ public class ListingListPresenter implements Presenter{
 
     private void loadUserListingStreams() {
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
-            @Override public void onLoaded(Listing listing) {
+            @Override
+            public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
         }, profileIdUser);
@@ -97,11 +94,13 @@ public class ListingListPresenter implements Presenter{
 
     private void loadCurrentUserListingStreams() {
         getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
-            @Override public void onLoaded(Listing listing) {
+            @Override
+            public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 showErrorInView(error);
             }
         });

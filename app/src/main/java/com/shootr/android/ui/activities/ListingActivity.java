@@ -31,7 +31,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private static final String EXTRA_ID_USER = "idUser";
     private static final String EXTRA_IS_CURRENT_USER = "is_current_user";
-    private static final String EXTRA_STREAMS_COUNT = "streamsCount";
     public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
@@ -45,11 +44,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private ListingAdapter adapter;
 
-    public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser, Integer streamsCount) {
+    public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser) {
         Intent intent = new Intent(context, ListingActivity.class);
         intent.putExtra(EXTRA_ID_USER, idUser);
         intent.putExtra(EXTRA_IS_CURRENT_USER, isCurrentUser);
-        intent.putExtra(EXTRA_STREAMS_COUNT, streamsCount);
         return intent;
     }
 
@@ -86,9 +84,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
         String idUser = intent.getStringExtra(EXTRA_ID_USER);
-        Integer streamsCount = intent.getIntExtra(EXTRA_STREAMS_COUNT, 0);
         Boolean isCurrentUser = intent.getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
-        presenter.initialize(this, idUser, isCurrentUser, streamsCount);
+        presenter.initialize(this, idUser, isCurrentUser);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
