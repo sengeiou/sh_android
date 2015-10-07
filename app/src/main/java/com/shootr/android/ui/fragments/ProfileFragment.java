@@ -762,12 +762,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Override public void showListingWithCount(Integer listingCount) {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
+        listingNumber.setVisibility(View.VISIBLE);
         listingNumber.setText(String.valueOf(listingCount));
     }
 
     @Override public void showListingWithoutCount() {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
+        listingNumber.setVisibility(View.GONE);
     }
 
     @Override public void navigateToListing(String idUser, Integer streamsCount) {
