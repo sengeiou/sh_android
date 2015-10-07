@@ -51,13 +51,13 @@ public class Listing {
 
         public Builder holdingStreams(List<StreamSearchResult> holding) {
             listing.holdingStreams = holding;
-            listing.includeHolding = holding.size() > 0;
+            listing.includeHolding = true;
             return this;
         }
 
         public Builder favoritedStreams(List<StreamSearchResult> favorited) {
             listing.favoritedStreams = favorited;
-            listing.includeFavorited = favorited.size() > 0;
+            listing.includeFavorited = true;
             return this;
         }
 

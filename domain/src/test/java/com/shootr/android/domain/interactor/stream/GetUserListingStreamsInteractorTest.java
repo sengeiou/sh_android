@@ -94,20 +94,20 @@ public class GetUserListingStreamsInteractorTest {
         assertEquals(listing.includesFavorited(), true);
     }
 
-    @Test public void shouldReturnListingWithoutIncludeHoldingTrueIfUserDoesNotHaveHoldingStreams() throws Exception {
+    @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHoldingStreamsAreEmptyList() throws Exception {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.includesHolding(), false);
+        assertEquals(listing.includesHolding(), true);
     }
 
-    @Test public void shouldReturnListingWithoutIncludeFavoritesIfUserDoesNotHaveFavoriteStreams() throws Exception {
+    @Test public void shouldReturnListingWithIncludeFavoritesTrueIfUserFavoriteStreamsAreEmptyList() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.includesFavorited(), false);
+        assertEquals(listing.includesFavorited(), true);
     }
 
     @Test public void shouldLoadUserListingFromLocal() throws Exception {
