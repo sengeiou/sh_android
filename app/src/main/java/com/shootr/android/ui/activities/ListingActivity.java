@@ -15,10 +15,8 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ListingAdapter;
-import com.shootr.android.ui.adapters.ListingStreamsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
-import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
@@ -188,7 +186,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         feedbackMessage.show(getView(), sharedStream);
     }
 
-    @Override public void renderFavoritedStreams(List<StreamModel> listingUserFavoritedStreams) {
+    @Override public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
         //TODO
     }
 

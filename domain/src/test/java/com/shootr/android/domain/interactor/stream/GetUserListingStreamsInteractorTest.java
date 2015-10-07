@@ -71,7 +71,7 @@ public class GetUserListingStreamsInteractorTest {
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
-        assertEquals(listing.getFavoritedStreams(), favoriteStreams());
+        assertEquals(listing.getFavoritedStreams(), favoriteStreamResults());
     }
 
     @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHaveHoldingStreams() throws Exception {
@@ -150,6 +150,16 @@ public class GetUserListingStreamsInteractorTest {
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getFavoritedStreams(), Collections.emptyList());
+    }
+
+    private List<StreamSearchResult> favoriteStreamResults() {
+        List<StreamSearchResult> streamSearchResults = new ArrayList<>();
+        for (Stream stream : favoriteStreams()) {
+            StreamSearchResult streamSearchResult = new StreamSearchResult();
+            streamSearchResult.setStream(stream);
+            streamSearchResults.add(streamSearchResult);
+        }
+        return streamSearchResults;
     }
 
     private List<Stream> favoriteStreams() {

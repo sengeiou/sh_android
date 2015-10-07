@@ -6,7 +6,7 @@ import java.util.List;
 public class Listing {
 
     private List<StreamSearchResult> holdingStreams;
-    private List<Stream> favoritedStreams;
+    private List<StreamSearchResult> favoritedStreams;
     private Boolean includeHolding;
     private Boolean includeFavorited;
 
@@ -18,7 +18,7 @@ public class Listing {
         return holdingStreams;
     }
 
-    public List<Stream> getFavoritedStreams() {
+    public List<StreamSearchResult> getFavoritedStreams() {
         return favoritedStreams;
     }
 
@@ -55,7 +55,7 @@ public class Listing {
             return this;
         }
 
-        public Builder favoritedStreams(List<Stream> favorited) {
+        public Builder favoritedStreams(List<StreamSearchResult> favorited) {
             listing.favoritedStreams = favorited;
             listing.includeFavorited = favorited.size() > 0;
             return this;

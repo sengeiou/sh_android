@@ -90,10 +90,21 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     private Listing getListing(List<Stream> favoriteStreams, List<StreamSearchResult> streamSearchResults) {
+        List<StreamSearchResult> favoriteStreamResults = getFavoriteStreamSearchResults(favoriteStreams);
         return Listing.builder()
           .holdingStreams(streamSearchResults)
-          .favoritedStreams(favoriteStreams)
+          .favoritedStreams(favoriteStreamResults)
           .build();
+    }
+
+    private List<StreamSearchResult> getFavoriteStreamSearchResults(List<Stream> favoriteStreams) {
+        List<StreamSearchResult> favoriteStreamResults = new ArrayList<>(favoriteStreams.size());
+        for (Stream favoriteStream : favoriteStreams) {
+            StreamSearchResult streamSearchResult = new StreamSearchResult();
+            streamSearchResult.setStream(favoriteStream);
+            favoriteStreamResults.add(streamSearchResult);
+        }
+        return favoriteStreamResults;
     }
 
     private List<StreamSearchResult> loadUserListingStreamsFromRepository(

@@ -56,19 +56,17 @@ public class ListingListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
 
     private StreamResultModelMapper streamResultModelMapper;
-    private StreamModelMapper streamModelMapper;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
-        this.streamModelMapper = new StreamModelMapper(sessionRepository);
         listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
           getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
           getFavoriteStreamInteractor,
           shareStreamInteractor,
-          streamResultModelMapper, streamModelMapper, errorMessageFactory);
+          streamResultModelMapper, errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
     }
@@ -210,7 +208,7 @@ public class ListingListPresenterTest {
     private Listing listingWithFavoriteStreams() {
         Stream stream = getStream();
         return Listing.builder()
-          .favoritedStreams(Arrays.asList(stream))
+          .favoritedStreams(Arrays.asList(getStreamSearchResult()))
           .build();
     }
 
