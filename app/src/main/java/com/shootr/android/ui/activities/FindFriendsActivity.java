@@ -107,6 +107,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         resultsListView.setAdapter(adapter);
 
         progressView = getLoadingView();
+        progressView.setVisibility(View.GONE);
         progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
         resultsListView.addFooterView(progressView, null, false);
 
@@ -121,6 +122,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
                   int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
                   boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
                   if (shouldStartLoadingMore && hasMoreItemsToLoad) {
+                      progressView.setVisibility(View.VISIBLE);
                       makeNextRemoteSearch();
                   }
               }
@@ -243,6 +245,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         } else {
             hasMoreItemsToLoad = false;
             setLoading(false);
+            progressView.setVisibility(View.GONE);
             if (adapter.getCount() == 0) {
                 Timber.d("No remote results found.");
                 setEmpty(true);
