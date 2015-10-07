@@ -109,11 +109,16 @@ public class UserManager extends AbstractManager {
     public List<UserEntity> searchUsers(String searchString) {
         String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-        String whereClause =
-          UserTable.USER_NAME_NORMALIZED + " LIKE '%?%' OR " + UserTable.NAME_NORMALIZED + " LIKE '%?%'";
+        String whereClause = UserTable.USER_NAME_NORMALIZED
+          + " LIKE '%"
+          + stringToSearch
+          + "%' OR "
+          + UserTable.NAME_NORMALIZED
+          + " LIKE '%"
+          + stringToSearch
+          + "%'";
 
-        String[] whereArguments = new String[] { stringToSearch, stringToSearch };
-        return readUsers(whereClause, whereArguments);
+        return readUsers(whereClause, null);
     }
 
     public List<UserEntity> getUsersNotSynchronized() {
