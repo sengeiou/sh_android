@@ -186,6 +186,16 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         feedbackMessage.show(getView(), sharedStream);
     }
 
+    @Override
+    public void hideSectionTitles() {
+
+    }
+
+    @Override
+    public void showSectionTitles() {
+
+    }
+
     @Override public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
         //TODO
     }

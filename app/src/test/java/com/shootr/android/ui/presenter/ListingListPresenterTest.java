@@ -21,6 +21,7 @@ import com.shootr.android.util.ErrorMessageFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.xml.transform.stream.StreamResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -122,6 +123,31 @@ public class ListingListPresenterTest {
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER, STREAMS_COUNT);
 
         verify(listingView).showEmpty();
+    }
+
+    @Test
+    public void shouldShowSectionTitlesIfListingIncludesBothSections() throws Exception {
+        Listing listingBothSections = Listing.builder() //
+          .favoritedStreams(Collections.singletonList(getStreamSearchResult())) //
+          .holdingStreams(Collections.singletonList(getStreamSearchResult())) //
+          .build();
+        setupGetUserListingCallbacks(listingBothSections);
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER, STREAMS_COUNT);
+
+        verify(listingView).showSectionTitles();
+    }
+
+    @Test
+    public void shouldHideSectionTitlesIfListingIncludesHoldingOnly() throws Exception {
+        Listing listingHolding = Listing.builder() //
+          .holdingStreams(Collections.singletonList(getStreamSearchResult())) //
+          .build();
+        setupGetUserListingCallbacks(listingHolding);
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER, STREAMS_COUNT);
+
+        verify(listingView).hideSectionTitles();
     }
 
     @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {
@@ -256,6 +282,17 @@ public class ListingListPresenterTest {
                 GetUserListingStreamsInteractor.Callback callback =
                   (GetUserListingStreamsInteractor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(listingWithFavoriteStreams());
+                return null;
+            }
+        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+    }
+
+    private void setupGetUserListingCallbacks(final Listing resultListing) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetUserListingStreamsInteractor.Callback callback =
+                  (GetUserListingStreamsInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(resultListing);
                 return null;
             }
         }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
