@@ -109,15 +109,21 @@ public class ListingListPresenter implements Presenter{
 
     private void handleStreamsInView(Listing listing) {
         listingView.hideLoading();
-        if (listing.includesFavorited() || listing.includesHolding()) {
+        if (listing.getHoldingStreams().isEmpty() && listing.getFavoritedStreams().isEmpty()) {
+            listingView.showEmpty();
+            listingView.hideContent();
+        } else {
             listingStreams = streamResultModelMapper.transform(listing.getHoldingStreams());
             listingUserFavoritedStreams = streamResultModelMapper.transform(listing.getFavoritedStreams());
             renderStreams();
             listingView.hideEmpty();
             listingView.showContent();
-        } else {
-            listingView.showEmpty();
-            listingView.hideContent();
+            boolean showSections = listing.includesFavorited() && listing.includesHolding();
+            if (showSections) {
+                listingView.showSectionTitles();
+            } else {
+                listingView.hideSectionTitles();
+            }
         }
     }
 
@@ -132,13 +138,9 @@ public class ListingListPresenter implements Presenter{
 
     private void renderStreams() {
         if (listingStreams != null && listingUserFavoritedStreams != null && favoriteStreams != null) {
-            if (!listingStreams.isEmpty()) {
-                listingView.renderHoldingStreams(listingStreams);
-            }
-            if (!listingUserFavoritedStreams.isEmpty()) {
-                listingView.renderFavoritedStreams(listingUserFavoritedStreams);
-            }
-            listingView.setFavoriteStreams(favoriteStreams);
+            listingView.renderHoldingStreams(listingStreams);
+            listingView.renderFavoritedStreams(listingUserFavoritedStreams);
+            listingView.setCurrentUserFavorites(favoriteStreams);
         }
     }
 

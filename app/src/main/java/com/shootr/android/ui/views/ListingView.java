@@ -8,12 +8,13 @@ public interface ListingView extends LoadDataView {
 
     void renderHoldingStreams(List<StreamResultModel> streams);
 
+    void renderFavoritedStreams(List<StreamResultModel> listingUsrFavoritedStreams);
+
     void showContent();
 
     void navigateToStreamTimeline(String idStream, String tag);
 
-
-    void setFavoriteStreams(List<StreamResultModel> transform);
+    void setCurrentUserFavorites(List<StreamResultModel> transform);
 
     void hideContent();
 
@@ -21,5 +22,7 @@ public interface ListingView extends LoadDataView {
 
     void showStreamShared();
 
-    void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams);
+    void hideSectionTitles();
+
+    void showSectionTitles();
 }

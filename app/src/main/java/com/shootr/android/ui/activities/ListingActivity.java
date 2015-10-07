@@ -170,7 +170,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         loadingView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
+    @Override public void setCurrentUserFavorites(List<StreamResultModel> favoriteStreams) {
         adapter.setFavoriteStreams(favoriteStreams);
     }
 
