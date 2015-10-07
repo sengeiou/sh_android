@@ -94,7 +94,7 @@
     <string name="activity_find_friends_title">Find friends</string>
     <string name="activity_find_friends_hint">Find friends</string>
     <string name="activity_find_participants_hint">Find participants</string>
-    <string name="activity_find_friends_empty_message">No Results.</string>
+    <string name="activity_find_friends_empty_message">No Results</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
     <!-- Info -->
@@ -150,7 +150,7 @@
     <string name="menu_streams">Watching…</string>
     <string name="activity_stream_list_title">Watching…</string>
     <string name="menu_search_streams">Search</string>
-    <string name="stream_list_empty">No results.</string>
+    <string name="stream_list_empty">No results</string>
     <string name="add_photo">Add Photo</string>
     <string name="edit_stream">Edit Stream</string>
     <string name="activity_new_stream_title">New stream</string>
@@ -257,7 +257,7 @@
     <string name="title_activity_stream_media">Media</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="stream_media_empty_title">No photos or videos.</string>
+    <string name="stream_media_empty_title">No photos or videos</string>
     <string name="stream_detail_media">Media</string>
     <string name="stream_detail_media_number">0</string>
     <string name="stream_detail_edit_menu_title">Edit</string>
@@ -294,7 +294,7 @@
     <string name="email_confirmation_button_text">Done</string>
     <string name="email_confirmation_title">Confirm Your Email</string>
     <string name="email_confirmation_message_content">"Click the link in the email we've just sent to "</string>
-    <string name="email_confirmation_ok">Ok</string>
+    <string name="email_confirmation_ok">OK</string>
     <string name="email_already_registered">Email already registered</string>
     <string name="whale_retry_button_text">OK</string>
     <string name="remove_stream_label">Remove stream</string>
@@ -337,7 +337,7 @@
     <string name="error_stream_already_favorites">Already in favorites</string>
     <string name="add_to_favorites_menu_title">Add to Favorites</string>
     <string name="profile_open_stream">Open stream…</string>
-    <string name="include_listing_empty">No streams.</string>
+    <string name="include_listing_empty">No streams</string>
     <string name="alert_report_confirmed_email_message"><![CDATA[Go to Account > Edit Profile and confirm your email.]]></string>
     <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
     <string name="alert_report_confirmed_email_ok">OK</string>
@@ -369,8 +369,8 @@
     <string name="title_activity_all_participants">All Participants</string>
     <string name="menu_search_participants">Find participants</string>
     <string name="title_activity_find_participants">FindParticipantsActivity</string>
-    <string name="activity_find_participants_empty_message">No results.</string>
-    <string name="participants_list_empty">No participants.</string>
+    <string name="activity_find_participants_empty_message">No results</string>
+    <string name="participants_list_empty">No participants</string>
     <string name="unfollow_dialog_message">"Unfollow %s?"</string>
     <string name="unfollow_dialog_yes">Yes</string>
     <string name="unfollow_dialog_no">No</string>
