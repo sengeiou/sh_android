@@ -32,7 +32,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            if (e.getErrorInfo().httpCode() == ErrorInfo.NOT_FOUND) {
+            if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
                 throw new ShotNotFoundException(e);
             } else {
                 throw new ServerCommunicationException(e);
@@ -64,7 +64,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            if (error.getErrorInfo().httpCode() == ErrorInfo.NOT_FOUND) {
+            if (error.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
                 throw new ShotNotFoundException(error);
             } else {
                 throw new ServerCommunicationException(error);
@@ -118,7 +118,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            if (e.getErrorInfo().httpCode() == ErrorInfo.NOT_FOUND) {
+            if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
                 throw new ShotNotFoundException(e);
             } else {
                 throw new ServerCommunicationException(e);
@@ -151,7 +151,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            if (error.getErrorInfo().httpCode() == ErrorInfo.NOT_FOUND) {
+            if (error.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
                 throw new ShotNotFoundException(error);
             } else {
                 throw new ServerCommunicationException(error);
