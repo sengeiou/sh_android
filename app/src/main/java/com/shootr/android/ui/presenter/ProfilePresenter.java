@@ -44,6 +44,7 @@ public class ProfilePresenter implements Presenter {
     private Long streamsCount;
     private String username;
     private UserModel userModel;
+    private boolean hasBeenPaused = false;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
@@ -81,6 +82,7 @@ public class ProfilePresenter implements Presenter {
     public void initializeWithIdUser(ProfileView profileView, String idUser){
         this.profileIdUser = idUser;
         initialize(profileView);
+        loadLatestShots(idUser);
     }
 
     private void initialize(ProfileView profileView) {
@@ -93,7 +95,7 @@ public class ProfilePresenter implements Presenter {
         if (profileIdUser != null) {
             getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
                 @Override public void onLoaded(User user) {
-                    loadProfileInfo(user);
+                    onProfileLoaded(user);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -103,7 +105,9 @@ public class ProfilePresenter implements Presenter {
         } else {
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
                 @Override public void onLoaded(User user) {
-                    loadProfileInfo(user);
+                    profileIdUser = user.getIdUser();
+                    onProfileLoaded(user);
+                    loadLatestShots(userModel.getIdUser());
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -117,12 +121,11 @@ public class ProfilePresenter implements Presenter {
         profileView.showError(errorMessageFactory.getMessageForError(error));
     }
 
-    private void loadProfileInfo(User user) {
+    private void onProfileLoaded(User user) {
         this.isCurrentUser = user.isMe();
         this.setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
         loadProfileUserListing();
-        loadLatestShots();
         setRelationshipButtonStatus(user);
         if (isCurrentUser && user.getPhoto() == null) {
             profileView.showAddPhoto();
@@ -141,8 +144,8 @@ public class ProfilePresenter implements Presenter {
         }
     }
 
-    private void loadLatestShots() {
-        getLastShotsInteractor.loadLastShots(userModel.getIdUser(), new Interactor.Callback<List<Shot>>() {
+    private void loadLatestShots(String idUser) {
+        getLastShotsInteractor.loadLastShots(idUser, new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shotList) {
                 if (!shotList.isEmpty()) {
                     profileView.showLatestShots();
@@ -234,7 +237,7 @@ public class ProfilePresenter implements Presenter {
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadLatestShots();
+                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
             }
         });
     }
@@ -242,7 +245,7 @@ public class ProfilePresenter implements Presenter {
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadLatestShots();
+                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
             }
         });
     }
@@ -252,7 +255,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void refreshLatestShots() {
-        loadLatestShots();
+        loadLatestShots(userModel.getIdUser());
     }
 
     public void shareShot(ShotModel shotModel) {
@@ -306,14 +309,6 @@ public class ProfilePresenter implements Presenter {
         profileView.goToWebsite(website);
     }
 
-    @Override public void resume() {
-        /* no-op */
-    }
-
-    @Override public void pause() {
-        /* no-op */
-    }
-
     public void followersButtonClicked() {
         profileView.goToFollowersList(userModel.getIdUser());
     }
@@ -324,5 +319,16 @@ public class ProfilePresenter implements Presenter {
 
     public void allShotsClicked() {
         profileView.goToAllShots(userModel.getIdUser());
+    }
+
+    @Override public void resume() {
+        if (hasBeenPaused && userModel != null) {
+            loadProfileUser();
+            loadLatestShots(userModel.getIdUser());
+        }
+    }
+
+    @Override public void pause() {
+        hasBeenPaused = true;
     }
 }

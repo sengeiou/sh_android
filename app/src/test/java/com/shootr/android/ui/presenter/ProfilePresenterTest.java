@@ -36,8 +36,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
 public class ProfilePresenterTest {
@@ -84,18 +87,14 @@ public class ProfilePresenterTest {
     @Test public void shouldGetUserByIdIfItHasBeenInitializedWithUserId() throws Exception {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
-        verify(getUserByIdInteractor).loadUserById(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
 
     }
 
-    @Test public void shouldGetUserByYsernameIfItHasBeenInitializedWithUsername() throws Exception {
+    @Test public void shouldGetUserByUsernameIfItHasBeenInitializedWithUsername() throws Exception {
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
-        verify(getUserByUsernameInteractor).searchUserByUsername(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        verify(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
     }
 
     @Test public void shouldSetUserInfoWhenUserHasBeenInitializedWithUserId() throws Exception {
@@ -114,6 +113,22 @@ public class ProfilePresenterTest {
 
         verify(profileView).setUserInfo(any(UserModel.class));
 
+    }
+
+    @Test public void shouldLoadLastShotsWhenInitializedFromId() throws Exception {
+        setupUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldLoadLastShotsWhenInitializedFromUsername() throws Exception {
+        setupUserByUsername();
+
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
     }
 
     @Test
@@ -280,8 +295,11 @@ public class ProfilePresenterTest {
     public void shouldCallbackLogoutInteractorWhenLogoutSelected() {
         profilePresenter.logoutSelected();
 
-        verify(logoutInteractor).attempLogout(any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        verify(logoutInteractor).attempLogout(anyCompletedCallback(), anyErrorCallback());
+    }
+
+    private Interactor.CompletedCallback anyCompletedCallback() {
+        return any(Interactor.CompletedCallback.class);
     }
 
     @Test
@@ -433,6 +451,71 @@ public class ProfilePresenterTest {
         verify(profileView).goToWebsite(WEBSITE_HTTPS_PREFIX);
     }
 
+    @Test public void shouldGetUserByIdWhenResumed() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        profilePresenter.pause();
+        profilePresenter.resume();
+
+        verify(getUserByIdInteractor).loadUserById(eq(ID_USER), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldGetUserByIdWhenResumedIfInitializedByUsername() throws Exception {
+        setupUserByUsername();
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        profilePresenter.pause();
+        profilePresenter.resume();
+
+        verify(getUserByIdInteractor).loadUserById(eq(ID_USER), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldNotLoadProfileWhenIdInteractorNotReturned() throws Exception {
+        doNothing().when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        profilePresenter.resume();
+
+        verify(getUserByIdInteractor, never()).loadUserById(eq(ID_USER), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldNotLoadProfileWhenUsernameInteractorNotReturned() throws Exception {
+        doNothing().when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+        reset(getUserByUsernameInteractor);
+
+        profilePresenter.resume();
+
+        verify(getUserByIdInteractor, never()).loadUserById(eq(ID_USER), anyCallback(), anyErrorCallback());
+        verify(getUserByUsernameInteractor, never()).searchUserByUsername(anyString(),
+          anyCallback(),
+          anyErrorCallback());
+    }
+
+    @Test public void shouldLoadLatestShotsWhenResumed() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getLastShotsInteractor);
+
+        profilePresenter.pause();
+        profilePresenter.resume();
+
+        verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldNotLoadLatestShotsWhenInteractorNotReturned() throws Exception {
+        doNothing().when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getLastShotsInteractor);
+
+        profilePresenter.resume();
+
+        verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -441,7 +524,11 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(logoutInteractor)
-          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+          .attempLogout(anyCompletedCallback(), anyErrorCallback());
+    }
+
+    private Interactor.ErrorCallback anyErrorCallback() {
+        return any(Interactor.ErrorCallback.class);
     }
 
     private void setupLogoutInteractorErrorCallback() {
@@ -453,7 +540,7 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(logoutInteractor)
-          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+          .attempLogout(anyCompletedCallback(), anyErrorCallback());
     }
 
     private User user() {
@@ -473,7 +560,11 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getUserByUsernameInteractor)
-          .searchUserByUsername(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private Interactor.Callback anyCallback() {
+        return any(Interactor.Callback.class);
     }
 
     private void setupUserById() {
@@ -484,7 +575,7 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getUserByIdInteractor)
-          .loadUserById(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .loadUserById(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private List<Shot> shotList(int numberOfShots) {
@@ -506,7 +597,7 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getUserByIdInteractor)
-          .loadUserById(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .loadUserById(anyString(), anyCallback(), anyErrorCallback());
 
     }
 
@@ -524,8 +615,6 @@ public class ProfilePresenterTest {
                 callback.onLoaded(result);
                 return null;
             }
-        }).when(getLastShotsInteractor).loadLastShots(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
     }
 }
