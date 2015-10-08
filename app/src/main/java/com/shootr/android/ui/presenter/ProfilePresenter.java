@@ -113,6 +113,22 @@ public class ProfilePresenter implements Presenter {
         profileView.setUserInfo(userModel);
         loadProfileUserListing();
         loadLatestShots();
+        setRelationshipButtonStatus(user);
+        if (isCurrentUser && user.getPhoto() == null) {
+            profileView.showAddPhoto();
+        }
+    }
+
+    private void setRelationshipButtonStatus(User user) {
+        if (isCurrentUser) {
+            profileView.showEditProfileButton();
+        } else {
+            if (!user.isFollowing()) {
+                profileView.showFollowButton();
+            } else {
+                profileView.showUnfollowButton();
+            }
+        }
     }
 
     private void loadLatestShots() {

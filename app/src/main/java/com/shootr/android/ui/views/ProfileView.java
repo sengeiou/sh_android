@@ -47,4 +47,12 @@ public interface ProfileView {
     void hideAllShots();
 
     void showError(String messageForError);
+
+    void showEditProfileButton();
+
+    void showFollowButton();
+
+    void showUnfollowButton();
+
+    void showAddPhoto();
 }

@@ -176,6 +176,58 @@ public class ProfilePresenterTest {
         verify(profileView).hideAllShots();
     }
 
+    @Test public void shouldShowEditButtonWhenCurrentUserProfile() throws Exception {
+        User user = user();
+        user.setMe(true);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showEditProfileButton();
+    }
+
+    @Test public void shouldShowFollowButtonWhenNotFollowingUser() throws Exception {
+        User user = user();
+        user.setMe(false);
+        user.setFollowing(false);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showFollowButton();
+    }
+
+    @Test public void shouldShowUnfollowButtonWhenFollowingUser() throws Exception {
+        User user = user();
+        user.setFollowing(true);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showUnfollowButton();
+    }
+
+    @Test public void shouldShowAddPhotoIfCurrentUserHasNoPhoto() throws Exception {
+        User user = user();
+        user.setMe(true);
+        user.setPhoto(null);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showAddPhoto();
+    }
+
+    @Test public void shouldNotShowAddPhotoIfAnotherUserHasNoPhoto() throws Exception {
+        User user = user();
+        user.setPhoto(null);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView, never()).showAddPhoto();
+    }
+
     @Test
     public void shouldShowLogoutInProgressWhenLogoutSelected() {
         profilePresenter.logoutSelected();

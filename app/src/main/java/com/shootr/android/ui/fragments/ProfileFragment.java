@@ -525,17 +525,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             websiteTextView.setVisibility(View.GONE);
         }
 
-        String photo = user.getPhoto();
-        boolean isValidPhoto = photo != null && !photo.isEmpty();
-        if (isValidPhoto) {
-            imageLoader.loadProfilePhoto(photo, avatarImageView);
-        } else {
-            if (isCurrentUser()) {
-                avatarImageView.setImageResource(R.drawable.profile_photo_add);
-            } else {
-                avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
-            }
-        }
+        imageLoader.loadProfilePhoto(user.getPhoto(), avatarImageView);
     }
 
     public void setUserInfo(UserModel user) {
@@ -842,6 +832,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showError(String messageForError) {
         feedbackMessage.show(getView(), messageForError);
+    }
+
+    @Override public void showEditProfileButton() {
+
+    }
+
+    @Override public void showFollowButton() {
+
+    }
+
+    @Override public void showUnfollowButton() {
+
+    }
+
+    @Override public void showAddPhoto() {
+
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
