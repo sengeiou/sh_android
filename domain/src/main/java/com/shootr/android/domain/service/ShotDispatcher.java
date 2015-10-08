@@ -8,7 +8,6 @@ import com.shootr.android.domain.bus.ShotQueued;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import com.shootr.android.domain.utils.Patterns;
 import java.io.File;
@@ -154,9 +153,6 @@ public class ShotDispatcher implements ShotSender {
         } catch (ServerCommunicationException e) {
             persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
-        } catch (ShotRemovedException e) {
-            clearShotFromQueue(queuedShot);
-            notifyShotSendingHasDeletedParent(queuedShot, e);
         }
     }
 

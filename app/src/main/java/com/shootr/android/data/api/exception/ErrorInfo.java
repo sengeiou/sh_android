@@ -44,6 +44,9 @@ public enum ErrorInfo {
 
     ForbiddenRequestException(6001, "Forbidden request", 403);
 
+
+    public static final int NOT_FOUND = 404;
+
     private int code;
     private int httpCode;
     private String description;

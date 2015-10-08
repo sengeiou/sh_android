@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -37,11 +36,7 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     @Override protected void fillShotContextualInfo(Shot shot) {
         super.fillShotContextualInfo(shot);
-        try {
-            fillReplyInfo(shot);
-        } catch (NullPointerException error) {
-            // Swallow
-        }
+        fillReplyInfo(shot);
     }
 
     @Override protected void fillShotStreamInfo(Shot shot) {
@@ -58,15 +53,12 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
     }
 
     private Shot getParentShot() {
-        try {
+        if (parentShot == null) {
             parentShot = localShotRepository.getShot(replyParentId);
             if (parentShot == null) {
                 parentShot = remoteShotRepository.getShot(replyParentId);
             }
-            return parentShot;
-        } catch (ShotRemovedException error) {
-            /* nothing */
         }
-        return null;
+        return parentShot;
     }
 }
