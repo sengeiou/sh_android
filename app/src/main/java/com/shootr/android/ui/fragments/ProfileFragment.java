@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -34,17 +33,10 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.domain.exception.ShootrError;
-import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
-import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
-import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
-import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.ListingActivity;
@@ -65,7 +57,6 @@ import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfilePresenter;
@@ -86,15 +77,14 @@ import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback,
-  ReportShotView {
+public class ProfileFragment extends BaseFragment
+  implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback, ReportShotView {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -144,13 +134,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject ReportShotPresenter reportShotPresenter;
+    @Inject @TemporaryFilesDir File externalFilesDir;
 
     //endregion
-
     // Args
     String idUser;
-    String username;
 
+    String username;
     UserModel user;
     private OnAvatarClickListener avatarClickListener;
     private OnVideoClickListener videoClickListener;
@@ -183,8 +173,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     //endregion
 
     //region Initialization
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
@@ -192,8 +181,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         initializePresenter();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -203,25 +191,23 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         idUser = (String) arguments.getSerializable(ARGUMENT_USER);
         username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
     }
+
     private void initializeViews() {
         ButterKnife.bind(this, getView());
         avatarClickListener = new OnAvatarClickListener() {
-            @Override
-            public void onAvatarClick(String userId, View avatarView) {
+            @Override public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
             }
         };
 
-        onUsernameClickListener =  new OnUsernameClickListener() {
-            @Override
-            public void onUsernameClick(String username) {
+        onUsernameClickListener = new OnUsernameClickListener() {
+            @Override public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
         videoClickListener = new OnVideoClickListener() {
-            @Override
-            public void onVideoClick(String url) {
+            @Override public void onVideoClick(String url) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
@@ -229,13 +215,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         };
 
         onNiceShotListener = new OnNiceShotListener() {
-            @Override
-            public void markNice(String idShot) {
+            @Override public void markNice(String idShot) {
                 profilePresenter.markNiceShot(idShot);
             }
 
-            @Override
-            public void unmarkNice(String idShot) {
+            @Override public void unmarkNice(String idShot) {
                 profilePresenter.unmarkNiceShot(idShot);
             }
         };
@@ -260,8 +244,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     //endregion
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
@@ -290,38 +273,26 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         startActivity(intentForUser);
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         profilePresenter.resume();
         suggestedPeoplePresenter.resume();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         profilePresenter.resume();
         suggestedPeoplePresenter.pause();
     }
 
-    @OnClick(R.id.profile_avatar)
-    public void onAvatarClick() {
+    @OnClick(R.id.profile_avatar) public void onAvatarClick() {
         profilePresenter.avatarClicked();
     }
 
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File pictureTemporaryFile = getCameraPhotoFile();
-        if (!pictureTemporaryFile.exists()) {
-            try {
-                pictureTemporaryFile.getParentFile().mkdirs();
-                pictureTemporaryFile.createNewFile();
-            } catch (IOException e) {
-                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
-                //TODO cancelar operación y avisar al usuario
-            }
-        }
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        Uri temporaryPhotoUri = Uri.fromFile(getCameraPhotoFile());
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
@@ -334,6 +305,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void removePhoto() {
+        //TODO kill job
         new AlertDialog.Builder(getActivity()).setMessage(R.string.photo_edit_remove_confirmation)
           .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
@@ -342,7 +314,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                   jobManager.addJobInBackground(removeProfilePhotoJob);
               }
           })
-          .setNegativeButton(R.string.cancel, null).show();
+          .setNegativeButton(R.string.cancel, null)
+          .show();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -352,133 +325,48 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
                 changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                uploadPhoto(changedPhotoFile);
+                //TODO uploadPhoto(changedPhotoFile);
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
-                uploadPhoto(changedPhotoFile);
-            } else {
+                //TODO uploadPhoto(changedPhotoFile);
+            } else if (requestCode == REQUEST_NEW_STREAM) {
                 String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-                String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
                 profilePresenter.streamCreated(streamId);
             }
         }
     }
 
     private File getCameraPhotoFile() {
-        return new File(getActivity().getExternalFilesDir("tmp"), "profileUpload.jpg");
-    }
-
-    private void uploadPhoto(File changedPhotoFile) {
-        uploadingPhoto = true;
-        showLoadingPhoto();
-        UploadProfilePhotoJob job =
-          ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
-        job.init(changedPhotoFile);
-        jobManager.addJobInBackground(job);
-    }
-
-    private void showLoadingPhoto() {
-        avatarImageView.setVisibility(View.INVISIBLE);
-        avatarLoadingView.setVisibility(View.VISIBLE);
-    }
-
-    private void hideLoadingPhoto() {
-        avatarImageView.setVisibility(View.VISIBLE);
-        avatarLoadingView.setVisibility(View.GONE);
-    }
-
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-        String messageForError;
-        Exception exceptionProduced = event.getException();
-        if (exceptionProduced != null && exceptionProduced instanceof ShootrServerException) {
-            ShootrError shootrError = ((ShootrServerException) exceptionProduced).getShootrError();
-            messageForError = errorMessageFactory.getMessageForError(shootrError);
-        } else {
-            messageForError = errorMessageFactory.getCommunicationErrorMessage();
+        File photoFile = new File(externalFilesDir, "profileUpload.jpg");
+        if (!photoFile.exists()) {
+            try {
+                photoFile.getParentFile().mkdirs();
+                photoFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                throw new IllegalStateException(e);
+            }
         }
-        feedbackMessage.show(getView(), messageForError);
-        hideLoadingPhoto();
-    }
-
-    private void loadBasicProfileUsingJob(String idUser) {
-        Context context = getActivity();
-        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser);
-        jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void userInfoReceived(UserInfoResultEvent event) {
-        if (event.getResult() != null) {
-            setUserInfo(event.getResult());
-        }
-    }
-
-    private void setTitle(String title) {
-        ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle(title);
-    }
-
-    private void setBasicUserInfo(UserModel user) {
-        this.user = user;
-        setTitle(user.getUsername());
-        nameTextView.setText(user.getName());
-        followingTextView.setText(String.valueOf(user.getNumFollowings()));
-        followersTextView.setText(String.valueOf(user.getNumFollowers()));
-
-        String website = user.getWebsite();
-        if (website != null) {
-            websiteTextView.setText(website);
-            websiteTextView.setVisibility(View.VISIBLE);
-        } else {
-            websiteTextView.setVisibility(View.GONE);
-        }
-
-        imageLoader.loadProfilePhoto(user.getPhoto(), avatarImageView);
-    }
-
-    public void setUserInfo(UserModel user) {
-        setBasicUserInfo(user);
-        String bio = user.getBio();
-        if (bio != null) {
-            bioTextView.setText(bio);
-            bioTextView.setVisibility(View.VISIBLE);
-        } else {
-            bioTextView.setVisibility(View.GONE);
-        }
-        setMainButtonStatus(user.getRelationship());
+        return photoFile;
     }
 
     @Override public void showAllShots() {
-
+        allShotContainer.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideAllShots() {
-
+        allShotContainer.setVisibility(View.GONE);
     }
 
-    private void setMainButtonStatus(int followRelationship) {
-        if (isCurrentUser()) {
-            followButton.setEditProfile();
-        } else {
-            boolean isFollowing = followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING
-              || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
-            setFollowing(isFollowing);
-        }
+    @OnClick(R.id.profile_marks_following) public void openFollowingList() {
+        profilePresenter.followingButtonClicked();
     }
 
-    @OnClick(R.id.profile_marks_following)
-    public void openFollowingList() {
-        openUserFollowsList(GetUsersFollowsJob.FOLLOWING);
+    @OnClick(R.id.profile_marks_followers) public void openFollowersList() {
+        profilePresenter.followersButtonClicked();
     }
 
-    @OnClick(R.id.profile_marks_followers)
-    public void openFollowersList() {
-        openUserFollowsList(GetUsersFollowsJob.FOLLOWERS);
-    }
-
-    @OnClick(R.id.profile_follow_button)
-    public void onMainButonClick() {
+    @OnClick(R.id.profile_follow_button) public void onMainButonClick() {
         if (followButton.isEditProfile()) {
             editProfile();
         } else if (followButton.isFollowing()) {
@@ -488,15 +376,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         }
     }
 
-    @OnClick(R.id.profile_website)
-    public void onWebsiteClick() {
-        Intent linkIntent = new Intent(Intent.ACTION_VIEW);
-        String url = user.getWebsite();
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
-        }
-        linkIntent.setData(Uri.parse(url));
-        startActivity(linkIntent);
+    @OnClick(R.id.profile_website) public void onWebsiteClick() {
+        profilePresenter.websiteClicked();
     }
 
     public void followUser() {
@@ -504,7 +385,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     public void unfollowUser() {
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          user.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   profilePresenter.unfollow();
@@ -515,27 +397,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .show();
     }
 
-    private void openUserFollowsList(int followType) {
-        if (idUser == null) {
-            return;
-        }
-        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
-    }
-
-    private void loadLatestShots() {
-        GetLatestShotsJob getLatestShotsJob =
-          ShootrApplication.get(getActivity()).getObjectGraph().get(GetLatestShotsJob.class);
-
-        getLatestShotsJob.init(idUser);
-
-        jobManager.addJobInBackground(getLatestShotsJob);
-    }
-
     private void shareShot(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
+    //TODO ¿?¿?¿
     private void setShotItemBackgroundRetainPaddings(View shotView) {
         int paddingBottom = shotView.getPaddingBottom();
         int paddingLeft = shotView.getPaddingLeft();
@@ -545,6 +412,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         shotView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
+    //TODO ohmigó
     private void openShot(ShotModel shot) {
         Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(intent);
@@ -585,10 +453,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         startActivity(new Intent(getActivity(), ProfileEditActivity.class));
     }
 
-    private boolean isCurrentUser() {
-        return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
-    }
-
     @Override public void showListingButtonWithCount(Integer listingCount) {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
@@ -602,32 +466,30 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         listingNumber.setVisibility(View.GONE);
     }
 
-    @Override public void navigateToListing(String idUser) {
-        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser());
+    @Override public void setUserInfo(UserModel userModel) {
+        //TODO
+    }
+
+    @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser);
         this.startActivity(intent);
     }
 
     @Override public void showLogoutInProgress() {
-        if(getActivity() != null) {
-            progress = ProgressDialog.show(getActivity(),
-              null,
-              getActivity().getString(R.string.sign_out_message),
-              true);
+        if (getActivity() != null) {
+            progress =
+              ProgressDialog.show(getActivity(), null, getActivity().getString(R.string.sign_out_message), true);
         }
     }
 
-    @Override public void showError() {
-        feedbackMessage.show(getView(), getActivity().getString(R.string.communication_error));
-    }
-
     @Override public void hideLogoutInProgress() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             progress.dismiss();
         }
     }
 
     @Override public void navigateToWelcomeScreen() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override public void run() {
                     hideLogoutInProgress();
@@ -668,13 +530,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         feedbackMessage.show(getView(), getActivity().getString(R.string.shot_shared_message));
     }
 
-    @OnClick(R.id.profile_listing)
-    public void onListingClick() {
+    @OnClick(R.id.profile_listing) public void onListingClick() {
         profilePresenter.clickListing();
     }
 
-    @OnClick(R.id.profile_all_shots_button)
-    public void onAllShotsClick() {
+    @OnClick(R.id.profile_all_shots_button) public void onAllShotsClick() {
         startActivity(AllShotsActivity.newIntent(getActivity(), user.getIdUser()));
     }
 
@@ -696,19 +556,19 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showEditProfileButton() {
-
+        followButton.setEditProfile();
     }
 
     @Override public void showFollowButton() {
-
+        followButton.setFollowing(false);
     }
 
     @Override public void showUnfollowButton() {
-
+        followButton.setFollowing(true);
     }
 
     @Override public void showAddPhoto() {
-
+        avatarImageView.setImageResource(R.drawable.profile_photo_add);
     }
 
     @Override public void openPhoto(String photo) {
@@ -747,6 +607,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         menuBuilder.show();
     }
 
+    @Override public void goToWebsite(String website) {
+        //TODO ¿¿funciona sin http????????
+        Intent intent = intentFactory.openUrlIntent(website);
+        Intents.maybeStartActivity(getActivity(), intent);
+    }
+
+    @Override public void goToFollowersList(String idUser) {
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, GetUsersFollowsJob.FOLLOWERS);
+        startActivity(intent);
+    }
+
+    @Override public void goToFollowingList(String idUser) {
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, GetUsersFollowsJob.FOLLOWING);
+        startActivity(intent);
+    }
+
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
         getSuggestedPeopleAdapter().setItems(suggestedPeople);
         getSuggestedPeopleAdapter().notifyDataSetChanged();
@@ -758,7 +634,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void unFollow(final int position) {
         final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + userModel.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   suggestedPeoplePresenter.unfollowUser(userModel);
@@ -769,26 +645,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .show();
     }
 
-    @Override
-    public void setFollowing(Boolean following) {
+    @Override public void setFollowing(Boolean following) {
         followButton.setFollowing(following);
     }
 
-    @OnClick(R.id.profile_open_stream)
-    public void onOpenStreamClick() {
+    @OnClick(R.id.profile_open_stream) public void onOpenStreamClick() {
         startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
-          sessionToken,
-          shotModel.getIdShot())));
+        Intent browserIntent =
+          new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 
     @Override public void showEmailNotConfirmedError() {
-        AlertDialog.Builder builder =
-          new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(getString(R.string.alert_report_confirmed_email_message))
           .setTitle(getString(R.string.alert_report_confirmed_email_title))
@@ -798,17 +670,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+          new Runnable() {
               @Override public void run() {
                   profilePresenter.shareShot(shotModel);
               }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
             @Override public void run() {
                 Clipboard.copyShotComment(getActivity(), shotModel);
             }
@@ -820,17 +691,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+          new Runnable() {
               @Override public void run() {
                   profilePresenter.shareShot(shotModel);
               }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
             @Override public void run() {
                 Clipboard.copyShotComment(getActivity(), shotModel);
             }

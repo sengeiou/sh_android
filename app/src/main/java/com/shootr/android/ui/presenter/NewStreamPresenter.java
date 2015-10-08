@@ -206,7 +206,7 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private void streamCreated(Stream stream) {
-        newStreamView.closeScreenWithResult(stream.getId(), stream.getTitle());
+        newStreamView.closeScreenWithResult(stream.getId());
     }
 
     private void streamCreationError(ShootrException error) {

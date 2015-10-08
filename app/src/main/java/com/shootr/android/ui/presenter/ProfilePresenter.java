@@ -193,7 +193,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void clickListing() {
-        profileView.navigateToListing(profileIdUser);
+        profileView.navigateToListing(profileIdUser, isCurrentUser);
     }
 
     public void logoutSelected() {
@@ -205,7 +205,7 @@ public class ProfilePresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 profileView.hideLogoutInProgress();
-                profileView.showError();
+                profileView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
@@ -241,7 +241,7 @@ public class ProfilePresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                profileView.showError();
+                profileView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
@@ -271,11 +271,23 @@ public class ProfilePresenter implements Presenter {
         }
     }
 
+    public void websiteClicked() {
+        profileView.goToWebsite(userModel.getWebsite());
+    }
+
     @Override public void resume() {
         /* no-op */
     }
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void followersButtonClicked() {
+        profileView.goToFollowersList(userModel.getIdUser());
+    }
+
+    public void followingButtonClicked() {
+        profileView.goToFollowingList(userModel.getIdUser());
     }
 }

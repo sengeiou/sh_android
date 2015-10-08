@@ -6,11 +6,9 @@ public interface ProfileView {
 
     void showListingButtonWithCount(Integer listingCount);
 
-    void navigateToListing(String idUser);
+    void navigateToListing(String idUser, boolean isCurrentUser);
 
     void showLogoutInProgress();
-
-    void showError();
 
     void hideLogoutInProgress();
 
@@ -51,4 +49,10 @@ public interface ProfileView {
     void openPhoto(String photo);
 
     void openEditPhotoMenu(boolean showRemove);
+
+    void goToWebsite(String website);
+
+    void goToFollowersList(String idUser);
+
+    void goToFollowingList(String idUser);
 }

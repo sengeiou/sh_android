@@ -313,7 +313,7 @@ public class ProfilePresenterTest {
 
         profilePresenter.logoutSelected();
 
-        verify(profileView).showError();
+        verify(profileView).showError(anyString());
     }
 
     @Test
