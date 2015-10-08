@@ -1,59 +1,135 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.GetLastShotsInteractor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
+import java.util.List;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
+    private final GetUserByIdInteractor getUserByIdInteractor;
+    private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
+    private final GetLastShotsInteractor getLastShotsInteractor;
     private final ErrorMessageFactory errorMessageFactory;
+    private final UserModelMapper userModelMapper;
     private ProfileView profileView;
     private String profileIdUser;
-    private Boolean isCurrentUser;
+    private boolean isCurrentUser;
     private Long streamsCount;
+    private String username;
+    private UserModel userModel;
 
-    @Inject public ProfilePresenter(LogoutInteractor logoutInteractor,
+    @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
+      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      ErrorMessageFactory errorMessageFactory) {
+      GetLastShotsInteractor getLastShotsInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+        this.getUserByIdInteractor = getUserByIdInteractor;
+        this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
+        this.getLastShotsInteractor = getLastShotsInteractor;
         this.errorMessageFactory = errorMessageFactory;
+        this.userModelMapper = userModelMapper;
     }
 
     protected void setView(ProfileView profileView){
         this.profileView = profileView;
     }
 
-    public void initialize(ProfileView profileView, String idUser, boolean isCurrentUser){
-        this.setView(profileView);
+    public void initializeWithUsername(ProfileView profileView, String username){
+        this.username = username;
+        initialize(profileView);
+    }
+
+    public void initializeWithIdUser(ProfileView profileView, String idUser){
         this.profileIdUser = idUser;
-        setCurrentUser(isCurrentUser);
+        initialize(profileView);
+    }
+
+    private void initialize(ProfileView profileView) {
+        this.setView(profileView);
+        loadProfileUser();
         setupMenuItemsVisibility();
     }
 
-    protected void setCurrentUser(boolean isCurrentUser) {
-        this.isCurrentUser = isCurrentUser;
+    private void loadProfileUser() {
+        if (profileIdUser != null) {
+            getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+                @Override public void onLoaded(User user) {
+                    loadProfileInfo(user);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    showErrorInView(error);
+                }
+            });
+        } else {
+            getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+                @Override public void onLoaded(User user) {
+                    loadProfileInfo(user);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    showErrorInView(error);
+                }
+            });
+        }
+    }
+
+    private void showErrorInView(ShootrException error) {
+        profileView.showError(errorMessageFactory.getMessageForError(error));
+    }
+
+    private void loadProfileInfo(User user) {
+        this.isCurrentUser = user.isMe();
+        this.userModel = userModelMapper.transform(user);
+        profileView.setUserInfo(userModel);
+        loadProfileUserListing();
+        loadLatestShots();
+    }
+
+    private void loadLatestShots() {
+        getLastShotsInteractor.loadLastShots(userModel.getIdUser(), new Interactor.Callback<List<Shot>>() {
+            @Override public void onLoaded(List<Shot> shotList) {
+                //TODO remove magic number
+                if (shotList.size() == 4) {
+                    profileView.showAllShots();
+                } else {
+                    profileView.hideAllShots();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
     }
 
     protected void setupMenuItemsVisibility() {
@@ -64,7 +140,7 @@ public class ProfilePresenter implements Presenter {
         }
     }
 
-    public void loadProfileUserListing(UserModel userModel) {
+    private void loadProfileUserListing() {
         if (isCurrentUser) {
             streamsCount = userModel.getCreatedStreamsCount();
             showCurrentUserListingCount();
@@ -76,7 +152,7 @@ public class ProfilePresenter implements Presenter {
 
     private void showCurrentUserListingCount() {
         if (streamsCount > 0L) {
-            profileView.showListingWithCount(streamsCount.intValue());
+            profileView.showListingButtonWithCount(streamsCount.intValue());
         } else {
             showCurrentUserOpenStream();
         }
@@ -84,7 +160,7 @@ public class ProfilePresenter implements Presenter {
 
     private void showAnotherUserListingCount() {
         if (streamsCount > 0L) {
-            profileView.showListingWithCount(streamsCount.intValue());
+            profileView.showListingButtonWithCount(streamsCount.intValue());
         } else {
             profileView.showListingWithoutCount();
         }

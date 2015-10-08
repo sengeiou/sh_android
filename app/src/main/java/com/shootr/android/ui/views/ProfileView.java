@@ -1,8 +1,10 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.UserModel;
+
 public interface ProfileView {
 
-    void showListingWithCount(Integer listingCount);
+    void showListingButtonWithCount(Integer listingCount);
 
     void navigateToListing(String idUser);
 
@@ -37,4 +39,12 @@ public interface ProfileView {
     void setFollowing(Boolean following);
 
     void showListingWithoutCount();
+
+    void setUserInfo(UserModel userModel);
+
+    void showAllShots();
+
+    void hideAllShots();
+
+    void showError(String messageForError);
 }

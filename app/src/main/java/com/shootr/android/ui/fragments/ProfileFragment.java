@@ -36,11 +36,8 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrServerException;
-import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -237,6 +234,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 profilePresenter.unmarkNiceShot(idShot);
             }
         };
+        initializePresenter();
     }
 
     private void startProfileContainerActivity(String username) {
@@ -295,7 +293,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         bus.register(this);
         suggestedPeoplePresenter.resume();
         if (!uploadingPhoto) {
-            retrieveUserInfo();
+            //TODO retrieveUserInfo();
         }
     }
 
@@ -450,12 +448,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         UserModel updateduser = event.getResult();
         hideLoadingPhoto();
         setUserInfo(updateduser);
-        retrieveUserInfo();
+        //TODO retrieveUserInfo();
         setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
     }
 
     private void initializePresenter() {
-        profilePresenter.initialize(this, idUser, isCurrentUser());
+        if (idUser != null) {
+            profilePresenter.initializeWithIdUser(this, idUser);
+        } else {
+            profilePresenter.initializeWithUsername(this, username);
+        }
         suggestedPeoplePresenter.initialize(this);
         reportShotPresenter.initialize(this);
     }
@@ -488,41 +490,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         }
         feedbackMessage.show(getView(), messageForError);
         hideLoadingPhoto();
-    }
-
-    private void retrieveUserInfo() {
-        if(idUser != null){
-            loadProfileUsingJob(idUser);
-            initializePresenter();
-        }else{
-            getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-                @Override public void onLoaded(User userFromCallback) {
-                    loadProfileUsingUser(userFromCallback);
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    userNotFoundNotification();
-                }
-            });
-        }
-
-        //TODO loading
-    }
-
-    private void loadProfileUsingUser(User userFromCallback) {
-        idUser = userFromCallback.getIdUser();
-        user = userModelMapper.transform(userFromCallback);
-        initializePresenter();
-        loadLatestShots();
-        setUserInfo(user);
-    }
-
-    private void loadProfileUsingJob(String idUser) {
-        Context context = getActivity();
-        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser);
-        jobManager.addJobInBackground(job);
-        loadLatestShots();
     }
 
     private void loadBasicProfileUsingJob(String idUser) {
@@ -571,8 +538,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         }
     }
 
-    private void setUserInfo(UserModel user) {
-        profilePresenter.loadProfileUserListing(user);
+    public void setUserInfo(UserModel user) {
         setBasicUserInfo(user);
         String bio = user.getBio();
         if (bio != null) {
@@ -582,6 +548,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             bioTextView.setVisibility(View.GONE);
         }
         setMainButtonStatus(user.getRelationship());
+    }
+
+    @Override public void showAllShots() {
+
+    }
+
+    @Override public void hideAllShots() {
+
     }
 
     private void setMainButtonStatus(int followRelationship) {
@@ -759,7 +733,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 
-    @Override public void showListingWithCount(Integer listingCount) {
+    @Override public void showListingButtonWithCount(Integer listingCount) {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
         listingNumber.setVisibility(View.VISIBLE);
