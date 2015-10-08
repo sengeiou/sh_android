@@ -28,6 +28,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -54,11 +55,12 @@ public class ProfilePresenterTest {
     @Mock GetLastShotsInteractor getLastShotsInteractor;
 
     private ProfilePresenter profilePresenter;
+    private UserModelMapper userModelMapper;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
+        userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         profilePresenter = new ProfilePresenter(getUserByIdInteractor, getUserByUsernameInteractor, logoutInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
@@ -226,6 +228,50 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView, never()).showAddPhoto();
+    }
+
+    @Test public void shouldOpenPhotoWhenAvatarClickedAndNotCurrentUser() throws Exception {
+        setupUserIdInteractorCallbacks(user());
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openPhoto(anyString());
+    }
+
+    @Test public void shouldOpenEditPhotoMenuWhenAvatarClickedAndCurrentUser() throws Exception {
+        User user = user();
+        user.setMe(true);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openEditPhotoMenu(anyBoolean());
+    }
+
+    @Test public void shouldShowRemoveInPhotoMenuWhenAvatarClickedAndCurrentUserHasPhoto() throws Exception {
+        User user = user();
+        user.setMe(true);
+        user.setPhoto("photo");
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openEditPhotoMenu(true);
+    }
+
+    @Test public void shouldNotShowRemoveInPhotoMenuWhenAvatarClickedAndCurrentUserHasPhoto() throws Exception {
+        User user = user();
+        user.setMe(true);
+        user.setPhoto(null);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openEditPhotoMenu(false);
     }
 
     @Test

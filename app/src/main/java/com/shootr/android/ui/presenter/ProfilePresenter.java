@@ -63,6 +63,10 @@ public class ProfilePresenter implements Presenter {
         this.profileView = profileView;
     }
 
+    protected void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
+
     public void initializeWithUsername(ProfileView profileView, String username){
         this.username = username;
         initialize(profileView);
@@ -109,7 +113,7 @@ public class ProfilePresenter implements Presenter {
 
     private void loadProfileInfo(User user) {
         this.isCurrentUser = user.isMe();
-        this.userModel = userModelMapper.transform(user);
+        this.setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
         loadProfileUserListing();
         loadLatestShots();
@@ -258,15 +262,20 @@ public class ProfilePresenter implements Presenter {
         });
     }
 
+    public void avatarClicked() {
+        if (!isCurrentUser) {
+            profileView.openPhoto(userModel.getPhoto());
+        } else {
+            boolean shouldShowRemovePhoto = userModel.getPhoto() != null;
+            profileView.openEditPhotoMenu(shouldShowRemovePhoto);
+        }
+    }
+
     @Override public void resume() {
         /* no-op */
     }
 
     @Override public void pause() {
         /* no-op */
-    }
-
-    public void avatarClicked() {
-
     }
 }

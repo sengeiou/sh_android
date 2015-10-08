@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +39,6 @@ import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
@@ -159,7 +156,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
     private OnNiceShotListener onNiceShotListener;
-    private BottomSheet.Builder editPhotoMenuBuilder;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
@@ -192,7 +188,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onActivityCreated(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
-        setupPhotoBottomSheet();
         initializeViews();
         initializePresenter();
     }
@@ -309,42 +304,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         suggestedPeoplePresenter.pause();
     }
 
-    private void setupPhotoBottomSheet() {
-        editPhotoMenuBuilder = new BottomSheet.Builder(getActivity()) //
-          .title(R.string.change_photo) //
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          takePhotoFromCamera();
-                          break;
-                      case R.id.menu_photo_remove:
-                          removePhoto();
-                          break;
-                      default:
-                          break;
-                  }
-              }
-          });
-    }
-
     @OnClick(R.id.profile_avatar)
     public void onAvatarClick() {
         profilePresenter.avatarClicked();
-    }
-
-    private void openPhotoBig() {
-        FragmentActivity context = getActivity();
-        String preview = user.getPhoto();
-        boolean canOpenPhoto = preview != null;
-        if (canOpenPhoto) {
-            String photoBig = preview.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
-            Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(context, photoBig, preview);
-            startActivity(intentForPhoto);
-        }
     }
 
     private void takePhotoFromCamera() {
@@ -747,6 +709,42 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showAddPhoto() {
 
+    }
+
+    @Override public void openPhoto(String photo) {
+        String photoBig = photo.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
+        Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(getActivity(), photoBig, photo);
+        startActivity(intentForPhoto);
+    }
+
+    @Override public void openEditPhotoMenu(boolean showRemove) {
+        BottomSheet.Builder menuBuilder = new BottomSheet.Builder(getActivity()) //
+          .sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery) //
+          .sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take) //
+          .title(R.string.change_photo) //
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                      case R.id.menu_photo_remove:
+                          removePhoto();
+                          break;
+                      default:
+                          break;
+                  }
+              }
+          });
+
+        if (showRemove) {
+            menuBuilder.sheet(R.id.menu_photo_remove, R.drawable.ic_photo_remove, R.string.photo_edit_remove);
+        }
+
+        menuBuilder.show();
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

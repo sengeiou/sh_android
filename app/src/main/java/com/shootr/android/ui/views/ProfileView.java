@@ -47,4 +47,8 @@ public interface ProfileView {
     void showUnfollowButton();
 
     void showAddPhoto();
+
+    void openPhoto(String photo);
+
+    void openEditPhotoMenu(boolean showRemove);
 }
