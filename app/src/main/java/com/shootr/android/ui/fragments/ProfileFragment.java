@@ -7,8 +7,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +35,7 @@ import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.ListingActivity;
@@ -53,6 +52,7 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -66,7 +66,9 @@ import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.ui.widgets.ShotListView;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -113,7 +115,7 @@ public class ProfileFragment extends BaseFragment
     @Bind(R.id.profile_follow_button) FollowButton followButton;
 
     @Bind(R.id.profile_shots_empty) View shotsListEmpty;
-    @Bind(R.id.profile_shots_list) ViewGroup shotsList;
+    @Bind(R.id.profile_shots_list) ShotListView shotsList;
 
     @Bind(R.id.profile_all_shots_container) View allShotContainer;
 
@@ -130,18 +132,19 @@ public class ProfileFragment extends BaseFragment
     @Inject ErrorMessageFactory errorMessageFactory;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject ToolbarDecorator toolbarDecorator;
 
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject @TemporaryFilesDir File externalFilesDir;
+    @Inject AndroidTimeUtils timeUtils;
 
     //endregion
-    // Args
-    String idUser;
 
-    String username;
-    UserModel user;
+    String idUserArgument;
+    String usernameArgument;
+
     private OnAvatarClickListener avatarClickListener;
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
@@ -188,8 +191,8 @@ public class ProfileFragment extends BaseFragment
 
     private void injectArguments() {
         Bundle arguments = getArguments();
-        idUser = (String) arguments.getSerializable(ARGUMENT_USER);
-        username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
+        idUserArgument = (String) arguments.getSerializable(ARGUMENT_USER);
+        usernameArgument = (String) arguments.getSerializable(ARGUMENT_USERNAME);
     }
 
     private void initializeViews() {
@@ -230,13 +233,28 @@ public class ProfileFragment extends BaseFragment
                 startActivity(suggestedUserIntent);
             }
         });
+
+        latestsShotsAdapter =
+          new TimelineAdapter(getActivity(),
+            imageLoader, timeUtils, avatarClickListener,
+            videoClickListener, onNiceShotListener, onUsernameClickListener){
+              @Override protected boolean shouldShowTag() {
+                  return true;
+              }
+          };
+        shotsList.setAdapter(latestsShotsAdapter);
+        shotsList.setOnShotClick(new OnShotClick() {
+            @Override public void onShotClick(ShotModel shot) {
+                openShot(shot);
+            }
+        });
     }
 
     private void initializePresenter() {
-        if (idUser != null) {
-            profilePresenter.initializeWithIdUser(this, idUser);
+        if (idUserArgument != null) {
+            profilePresenter.initializeWithIdUser(this, idUserArgument);
         } else {
-            profilePresenter.initializeWithUsername(this, username);
+            profilePresenter.initializeWithUsername(this, usernameArgument);
         }
         suggestedPeoplePresenter.initialize(this);
         reportShotPresenter.initialize(this);
@@ -350,11 +368,11 @@ public class ProfileFragment extends BaseFragment
         return photoFile;
     }
 
-    @Override public void showAllShots() {
+    @Override public void showAllShotsButton() {
         allShotContainer.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideAllShots() {
+    @Override public void hideAllShotsButton() {
         allShotContainer.setVisibility(View.GONE);
     }
 
@@ -385,16 +403,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     public void unfollowUser() {
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
-          user.getUsername()))
-          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  profilePresenter.unfollow();
-              }
-          })
-          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-          .create()
-          .show();
+        profilePresenter.unfollow();
     }
 
     private void shareShot(ShotModel shotModel) {
@@ -402,27 +411,9 @@ public class ProfileFragment extends BaseFragment
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
-    //TODO ¿?¿?¿
-    private void setShotItemBackgroundRetainPaddings(View shotView) {
-        int paddingBottom = shotView.getPaddingBottom();
-        int paddingLeft = shotView.getPaddingLeft();
-        int paddingRight = shotView.getPaddingRight();
-        int paddingTop = shotView.getPaddingTop();
-        shotView.setBackgroundDrawable(getSelectableBackground());
-        shotView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-    }
-
-    //TODO ohmigó
     private void openShot(ShotModel shot) {
         Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(intent);
-    }
-
-    private Drawable getSelectableBackground() {
-        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[] { R.attr.selectableItemBackground });
-        Drawable drawable = a.getDrawable(0);
-        a.recycle();
-        return drawable;
     }
 
     private void onShotAvatarClick(View avatarItem) {
@@ -467,7 +458,33 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void setUserInfo(UserModel userModel) {
-        //TODO
+        toolbarDecorator.setTitle(userModel.getUsername());
+        nameTextView.setText(userModel.getName());
+        renderWebsite(userModel);
+        renderBio(userModel);
+        imageLoader.load(userModel.getPhoto(), avatarImageView);
+        followersTextView.setText(String.valueOf(userModel.getNumFollowers()));
+        followingTextView.setText(String.valueOf(userModel.getNumFollowings()));
+    }
+
+    private void renderBio(UserModel userModel) {
+        String bio = userModel.getBio();
+        if (bio != null) {
+            bioTextView.setText(bio);
+            bioTextView.setVisibility(View.VISIBLE);
+        } else {
+            bioTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void renderWebsite(UserModel userModel) {
+        String website = userModel.getWebsite();
+        if (website != null) {
+            websiteTextView.setText(website);
+            websiteTextView.setVisibility(View.VISIBLE);
+        } else {
+            websiteTextView.setVisibility(View.GONE);
+        }
     }
 
     @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
@@ -535,7 +552,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @OnClick(R.id.profile_all_shots_button) public void onAllShotsClick() {
-        startActivity(AllShotsActivity.newIntent(getActivity(), user.getIdUser()));
+        profilePresenter.allShotsClicked();
     }
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
@@ -621,6 +638,44 @@ public class ProfileFragment extends BaseFragment
     @Override public void goToFollowingList(String idUser) {
         Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, GetUsersFollowsJob.FOLLOWING);
         startActivity(intent);
+    }
+
+    @Override public void renderLastShots(List<ShotModel> shots) {
+        latestsShotsAdapter.setShots(shots);
+        latestsShotsAdapter.notifyDataSetChanged();
+    }
+
+    @Override public void showUnfollowConfirmation(String username) {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          username))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  profilePresenter.confirmUnfollow();
+              }
+          })
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+          .create()
+          .show();
+    }
+
+    @Override public void goToAllShots(String idUser) {
+        startActivity(AllShotsActivity.newIntent(getActivity(), idUser));
+    }
+
+    @Override public void showLatestShots() {
+        shotsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLatestShots() {
+        shotsList.setVisibility(View.GONE);
+    }
+
+    @Override public void showLatestShotsEmpty() {
+        shotsListEmpty.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLatestShotsEmpty() {
+        shotsListEmpty.setVisibility(View.GONE);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

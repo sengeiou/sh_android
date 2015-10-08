@@ -24,7 +24,6 @@ import javax.inject.Singleton;
                 GetUsersFollowsJob.class,
                 GetUserInfoJob.class,
 
-                ProfileFragment.class,
                 ProfileContainerActivity.class,
 
                 GCMIntentService.class,

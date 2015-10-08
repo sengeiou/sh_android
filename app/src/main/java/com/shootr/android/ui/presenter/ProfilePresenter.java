@@ -15,6 +15,7 @@ import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -23,6 +24,8 @@ import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
+    public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 4;
+    public static final int MAX_SHOTS_SHOWN = 3;
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
@@ -34,6 +37,7 @@ public class ProfilePresenter implements Presenter {
     private final GetLastShotsInteractor getLastShotsInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
+    private final ShotModelMapper shotModelMapper;
     private ProfileView profileView;
     private String profileIdUser;
     private boolean isCurrentUser;
@@ -45,7 +49,8 @@ public class ProfilePresenter implements Presenter {
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      GetLastShotsInteractor getLastShotsInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+      GetLastShotsInteractor getLastShotsInteractor, ErrorMessageFactory errorMessageFactory,
+      UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
@@ -57,6 +62,7 @@ public class ProfilePresenter implements Presenter {
         this.getLastShotsInteractor = getLastShotsInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
+        this.shotModelMapper = shotModelMapper;
     }
 
     protected void setView(ProfileView profileView){
@@ -138,11 +144,18 @@ public class ProfilePresenter implements Presenter {
     private void loadLatestShots() {
         getLastShotsInteractor.loadLastShots(userModel.getIdUser(), new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shotList) {
-                //TODO remove magic number
-                if (shotList.size() == 4) {
-                    profileView.showAllShots();
+                if (!shotList.isEmpty()) {
+                    profileView.showLatestShots();
+                    profileView.hideLatestShotsEmpty();
+                    if (shotList.size() == ALL_SHOTS_VISIBILITY_TRESHOLD) {
+                        profileView.showAllShotsButton();
+                    } else {
+                        profileView.hideAllShotsButton();
+                    }
+                    profileView.renderLastShots(shotModelMapper.transform(getLimitedShotList(shotList)));
                 } else {
-                    profileView.hideAllShots();
+                    profileView.hideLatestShots();
+                    profileView.showLatestShotsEmpty();
                 }
             }
         }, new Interactor.ErrorCallback() {
@@ -150,6 +163,14 @@ public class ProfilePresenter implements Presenter {
                 showErrorInView(error);
             }
         });
+    }
+
+    private List<Shot> getLimitedShotList(List<Shot> shotList) {
+        if (shotList.size() > MAX_SHOTS_SHOWN) {
+            return shotList.subList(0, MAX_SHOTS_SHOWN);
+        } else {
+            return shotList;
+        }
     }
 
     protected void setupMenuItemsVisibility() {
@@ -255,6 +276,10 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void unfollow() {
+        profileView.showUnfollowConfirmation(userModel.getUsername());
+    }
+
+    public void confirmUnfollow() {
         unfollowInteractor.unfollow(profileIdUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 profileView.setFollowing(false);
@@ -272,7 +297,13 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void websiteClicked() {
-        profileView.goToWebsite(userModel.getWebsite());
+        String website = userModel.getWebsite();
+        String httpPrefix = "http://";
+        String httpsPrefix = "https://";
+        if (!website.contains(httpPrefix) && !website.contains(httpsPrefix)) {
+            website = httpPrefix + website;
+        }
+        profileView.goToWebsite(website);
     }
 
     @Override public void resume() {
@@ -289,5 +320,9 @@ public class ProfilePresenter implements Presenter {
 
     public void followingButtonClicked() {
         profileView.goToFollowingList(userModel.getIdUser());
+    }
+
+    public void allShotsClicked() {
+        profileView.goToAllShots(userModel.getIdUser());
     }
 }

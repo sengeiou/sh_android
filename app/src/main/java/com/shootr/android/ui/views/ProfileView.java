@@ -1,6 +1,8 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import java.util.List;
 
 public interface ProfileView {
 
@@ -32,9 +34,9 @@ public interface ProfileView {
 
     void setUserInfo(UserModel userModel);
 
-    void showAllShots();
+    void showAllShotsButton();
 
-    void hideAllShots();
+    void hideAllShotsButton();
 
     void showError(String messageForError);
 
@@ -55,4 +57,18 @@ public interface ProfileView {
     void goToFollowersList(String idUser);
 
     void goToFollowingList(String idUser);
+
+    void renderLastShots(List<ShotModel> shots);
+
+    void showUnfollowConfirmation(String username);
+
+    void goToAllShots(String idUser);
+
+    void showLatestShots();
+
+    void hideLatestShots();
+
+    void showLatestShotsEmpty();
+
+    void hideLatestShotsEmpty();
 }

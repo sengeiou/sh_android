@@ -14,7 +14,9 @@ import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -22,11 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
@@ -40,6 +45,10 @@ public class ProfilePresenterTest {
     public static final String ID_USER = "id_user";
     public static final String SELECTED_STREAM_ID = "selected_stream_id";
     public static final String USERNAME = "username";
+    public static final String WEBSITE_NO_PREFIX = "website";
+    public static final String HTTP_PREFIX = "http://";
+    private static final String WEBSITE_HTTP_PREFIX = "http://website";
+    private static final String WEBSITE_HTTPS_PREFIX = "https://website";
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
@@ -56,17 +65,19 @@ public class ProfilePresenterTest {
 
     private ProfilePresenter profilePresenter;
     private UserModelMapper userModelMapper;
+    @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userModelMapper = new UserModelMapper(streamJoinDateFormatter);
+        ShotModelMapper shotModelMapper = new ShotModelMapper();
         profilePresenter = new ProfilePresenter(getUserByIdInteractor, getUserByUsernameInteractor, logoutInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
           shareShotInteractor,
           followInteractor,
-          unfollowInteractor, getLastShotsInteractor, errorMessageFactory, userModelMapper);
+          unfollowInteractor, getLastShotsInteractor, errorMessageFactory, userModelMapper, shotModelMapper);
         profilePresenter.setView(profileView);
     }
 
@@ -146,36 +157,20 @@ public class ProfilePresenterTest {
 
     @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
         setupUserById();
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(shotList(4));
-                return null;
-            }
-        }).when(getLastShotsInteractor).loadLastShots(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        setupLatestShotCallbacks(shotList(4));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
-        verify(profileView).showAllShots();
+        verify(profileView).showAllShotsButton();
     }
 
     @Test public void shouldHideAllShotsIfUserHaveThreeLatestShots() throws Exception {
         setupUserById();
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(shotList(3));
-                return null;
-            }
-        }).when(getLastShotsInteractor).loadLastShots(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        setupLatestShotCallbacks(shotList(3));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
-        verify(profileView).hideAllShots();
+        verify(profileView).hideAllShotsButton();
     }
 
     @Test public void shouldShowEditButtonWhenCurrentUserProfile() throws Exception {
@@ -339,6 +334,105 @@ public class ProfilePresenterTest {
         verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
+    @Test public void shouldShowLatestListIfThereAreShots() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(3));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showLatestShots();
+    }
+
+    @Test public void shouldHideLatestListIfThereAreNoShots() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(0));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).hideLatestShots();
+    }
+
+    @Test public void shouldShowLatestShotsEmptyIfThereAreNoShots() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(0));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showLatestShotsEmpty();
+    }
+
+    @Test public void shouldHideShowLatestShotsEmptyIfThereAreShots() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(1));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).hideLatestShotsEmpty();
+    }
+
+    @Test public void shouldShowThreeLatestShotsWhenReceivedFour() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(4));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).renderLastShots(shotModelListCaptor.capture());
+        assertThat(shotModelListCaptor.getValue()).hasSize(3);
+    }
+
+    @Test public void shouldShowThreeLatestShotsWhenReceivedThree() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(3));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).renderLastShots(shotModelListCaptor.capture());
+        assertThat(shotModelListCaptor.getValue()).hasSize(3);
+    }
+
+    @Test public void shouldShowTwoLatestShotsWhenReceivedTwo() throws Exception {
+        setupUserById();
+        setupLatestShotCallbacks(shotList(2));
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).renderLastShots(shotModelListCaptor.capture());
+        assertThat(shotModelListCaptor.getValue()).hasSize(2);
+    }
+
+    @Test public void shouldOpenWebsiteWithHttpPrefixWhenWebsiteHasNoHttpPrefix() throws Exception {
+        User user = user();
+        user.setWebsite(WEBSITE_NO_PREFIX);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.websiteClicked();
+
+        verify(profileView).goToWebsite(HTTP_PREFIX + WEBSITE_NO_PREFIX);
+    }
+
+    @Test public void shouldOpenWebsiteWithoutHttpPrefixWhenWebsiteHasHttpPrefix() throws Exception {
+        User user = user();
+        user.setWebsite(WEBSITE_HTTP_PREFIX);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.websiteClicked();
+
+        verify(profileView).goToWebsite(WEBSITE_HTTP_PREFIX);
+    }
+
+    @Test public void shouldOpenWebsiteWithoutHttpPrefixWhenWebsiteHasHttpsPrefix() throws Exception {
+        User user = user();
+        user.setWebsite(WEBSITE_HTTPS_PREFIX);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.websiteClicked();
+
+        verify(profileView).goToWebsite(WEBSITE_HTTPS_PREFIX);
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -398,6 +492,7 @@ public class ProfilePresenterTest {
         for(int i = 0; i<numberOfShots;i++) {
             Shot shot = new Shot();
             shot.setIdShot("idShot"+i);
+            shot.setUserInfo(new Shot.ShotUserInfo());
             shots.add(shot);
         }
         return shots;
@@ -420,5 +515,17 @@ public class ProfilePresenterTest {
         user.setCreatedStreamsCount((long) createdCount);
         user.setFavoritedStreamsCount((long) favoritedCount);
         return user;
+    }
+
+    private void setupLatestShotCallbacks(final List<Shot> result) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(result);
+                return null;
+            }
+        }).when(getLastShotsInteractor).loadLastShots(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 }

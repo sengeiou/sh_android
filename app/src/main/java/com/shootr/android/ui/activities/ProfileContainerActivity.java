@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import com.shootr.android.R;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import timber.log.Timber;
 
-public class ProfileContainerActivity extends BaseSignedInActivity {
+public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_USERNAME = "username";
@@ -30,16 +31,11 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         return i;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()){
-            return;
-        }
-        setContainerContent(R.layout.activity_fragment_container);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_fragment_container;
+    }
 
-        setupActionBar();
-
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             idUser = (String) getIntent().getSerializableExtra(EXTRA_USER);
             username = (String) getIntent().getSerializableExtra(EXTRA_USERNAME);
@@ -55,17 +51,15 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
                 profileFragment = ProfileFragment.newInstanceFromUsername(username);
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //TODO check que no hubiera ya uno? necesario?
             transaction.add(R.id.container, profileFragment, ProfileFragment.TAG);
             transaction.commit();
         }
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+    @Override protected void initializePresenter() {
+        /* no-op */
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -75,5 +69,11 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         }else{
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        ActionBar actionBar = toolbarDecorator.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 }

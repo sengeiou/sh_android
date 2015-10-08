@@ -100,13 +100,10 @@ import static android.content.Context.MODE_PRIVATE;
     GetUserInfoJob.class, GetUsersFollowsJob.class,
     GetLatestShotsJob.class,
 
-    ProfileFragment.class,
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
-
-    ProfileFragment.class,
 
     UserManager.class, DeviceManager.class,
 

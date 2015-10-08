@@ -42,12 +42,12 @@ public class GetLastShotsInteractor implements Interactor {
         loadLastShotsFromRemote();
     }
 
-    private void loadLastShotsFromRemote() {
+    private void loadLastShotsFromLocal() {
         List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, 4);
         notifyLoaded(lastShots);
     }
 
-    private void loadLastShotsFromLocal() {
+    private void loadLastShotsFromRemote() {
         try {
             List<Shot> lastShots = remoteShotRepository.getShotsFromUser(userId, 4);
             notifyLoaded(lastShots);
