@@ -20,14 +20,6 @@ public interface ProfileView {
 
     void showSupportButton();
 
-    /**
-     * @deprecated Este metodo se añade para no refactorizar ahora la carga de shots de ProfileFragment, pero
-     * lo marco como deprecated porque el presenter no deberia llamar asi a la vista y este esta interaccion deberia
-     * borrarse cuanto sea posible.
-     */
-    @Deprecated
-    void loadLastShots();
-
     void showChangePasswordButton();
 
     void showOpenStream();

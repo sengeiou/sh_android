@@ -195,13 +195,11 @@ public class ProfilePresenter implements Presenter {
     public void logoutSelected() {
         profileView.showLogoutInProgress();
         logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 profileView.navigateToWelcomeScreen();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 profileView.hideLogoutInProgress();
                 profileView.showError();
             }
@@ -210,18 +208,16 @@ public class ProfilePresenter implements Presenter {
 
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
-                profileView.loadLastShots();
+            @Override public void onCompleted() {
+                loadLatestShots();
             }
         });
     }
 
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
-                profileView.loadLastShots();
+            @Override public void onCompleted() {
+                loadLatestShots();
             }
         });
     }
@@ -230,15 +226,17 @@ public class ProfilePresenter implements Presenter {
         profileView.navigateToCreatedStreamDetail(streamId);
     }
 
+    public void refreshLatestShots() {
+        loadLatestShots();
+    }
+
     public void shareShot(ShotModel shotModel) {
         shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 profileView.showShotShared();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 profileView.showError();
             }
         });
@@ -246,8 +244,7 @@ public class ProfilePresenter implements Presenter {
 
     public void follow() {
         followInteractor.follow(profileIdUser, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 profileView.setFollowing(true);
             }
         });
@@ -255,8 +252,7 @@ public class ProfilePresenter implements Presenter {
 
     public void unfollow() {
         unfollowInteractor.unfollow(profileIdUser, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 profileView.setFollowing(false);
             }
         });
@@ -268,5 +264,9 @@ public class ProfilePresenter implements Presenter {
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void avatarClicked() {
+
     }
 }

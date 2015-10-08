@@ -38,13 +38,11 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
-import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
@@ -73,7 +71,6 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
 import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
@@ -82,7 +79,6 @@ import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
-import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -143,16 +139,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Inject @Main Bus bus;
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
-    @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
-
-    @Inject
-    GetUserByUsernameInteractor getUserByUsernameInteractor;
-    @Inject
-    UserModelMapper userModelMapper;
 
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
@@ -169,7 +159,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
     private OnNiceShotListener onNiceShotListener;
-    private BottomSheet.Builder editPhotoBottomSheet;
+    private BottomSheet.Builder editPhotoMenuBuilder;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
@@ -177,8 +167,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
-    private View shotView;
 
+    //region Construction
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
@@ -194,12 +184,32 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         fragment.setArguments(arguments);
         return fragment;
     }
+    //endregion
 
+    //region Initialization
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
+        setupPhotoBottomSheet();
+        initializeViews();
+        initializePresenter();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    private void injectArguments() {
+        Bundle arguments = getArguments();
+        idUser = (String) arguments.getSerializable(ARGUMENT_USER);
+        username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
+    }
+    private void initializeViews() {
+        ButterKnife.bind(this, getView());
         avatarClickListener = new OnAvatarClickListener() {
             @Override
             public void onAvatarClick(String userId, View avatarView) {
@@ -234,27 +244,26 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 profilePresenter.unmarkNiceShot(idShot);
             }
         };
-        initializePresenter();
+        suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
+        suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
+            @Override public void onUserClick(String idUser) {
+                Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+                startActivity(suggestedUserIntent);
+            }
+        });
     }
 
-    private void startProfileContainerActivity(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
+    private void initializePresenter() {
+        if (idUser != null) {
+            profilePresenter.initializeWithIdUser(this, idUser);
+        } else {
+            profilePresenter.initializeWithUsername(this, username);
+        }
+        suggestedPeoplePresenter.initialize(this);
+        reportShotPresenter.initialize(this);
     }
 
-    private void goToUserProfile(String username) {
-        startProfileContainerActivity(username);
-    }
-
-    private void userNotFoundNotification(){
-        feedbackMessage.show(getView(), getString(R.string.user_not_found));
-    }
-
-    private void injectArguments() {
-        Bundle arguments = getArguments();
-        idUser = (String) arguments.getSerializable(ARGUMENT_USER);
-        username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
-    }
+    //endregion
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -266,101 +275,65 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_profile_logout) {
-            profilePresenter.logoutSelected();
-            return true;
-        } else if (id == R.id.menu_profile_change_password) {
-            startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_profile_logout:
+                profilePresenter.logoutSelected();
+                return true;
+            case R.id.menu_profile_change_password:
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                return true;
+            case R.id.menu_profile_support:
+                startActivity(new Intent(this.getActivity(), SupportActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        if (id == R.id.menu_profile_support) {
-            startActivity(new Intent(this.getActivity(), SupportActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+    private void goToUserProfile(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        bus.register(this);
+        profilePresenter.resume();
         suggestedPeoplePresenter.resume();
-        if (!uploadingPhoto) {
-            //TODO retrieveUserInfo();
-        }
     }
 
     @Override
     public void onPause() {
-        super.onDetach();
+        super.onPause();
+        profilePresenter.resume();
         suggestedPeoplePresenter.pause();
-        bus.unregister(this);
     }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
-            @Override public void onUserClick(String idUser) {
-                Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
-                startActivity(suggestedUserIntent);
-            }
-        });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setupPhotoBottomSheet();
-        suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
-    }
-
 
     private void setupPhotoBottomSheet() {
-        //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
-        if (isCurrentUser()) {
-            boolean canRemovePhoto = sessionRepository.getCurrentUser().getPhoto() != null;
-            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo).sheet(
-              canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
-              .listener(new DialogInterface.OnClickListener() {
-                  @Override public void onClick(DialogInterface dialog, int which) {
-                      switch (which) {
-                          case R.id.menu_photo_gallery:
-                              choosePhotoFromGallery();
-                              break;
-                          case R.id.menu_photo_take:
-                              takePhotoFromCamera();
-                              break;
-                          case R.id.menu_photo_remove:
-                              removePhoto();
-                              break;
-                          default:
-                              break;
-                      }
+        editPhotoMenuBuilder = new BottomSheet.Builder(getActivity()) //
+          .title(R.string.change_photo) //
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                      case R.id.menu_photo_remove:
+                          removePhoto();
+                          break;
+                      default:
+                          break;
                   }
-              });
-        }
+              }
+          });
     }
 
     @OnClick(R.id.profile_avatar)
     public void onAvatarClick() {
-        if (isCurrentUser()) {
-            if (editPhotoBottomSheet != null) {
-                editPhotoBottomSheet.show();
-            }
-        } else {
-            if(user != null){
-                openPhotoBig();
-            }
-        }
+        profilePresenter.avatarClicked();
     }
 
     private void openPhotoBig() {
@@ -440,32 +413,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
         job.init(changedPhotoFile);
         jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void onPhotoUploaded(UploadProfilePhotoEvent event) {
-        uploadingPhoto = false;
-        UserModel updateduser = event.getResult();
-        hideLoadingPhoto();
-        setUserInfo(updateduser);
-        //TODO retrieveUserInfo();
-        setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
-    }
-
-    private void initializePresenter() {
-        if (idUser != null) {
-            profilePresenter.initializeWithIdUser(this, idUser);
-        } else {
-            profilePresenter.initializeWithUsername(this, username);
-        }
-        suggestedPeoplePresenter.initialize(this);
-        reportShotPresenter.initialize(this);
-    }
-
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackMessage.show(getView(), getString(R.string.connection_lost));
-        hideLoadingPhoto();
     }
 
     private void showLoadingPhoto() {
@@ -622,49 +569,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         jobManager.addJobInBackground(getLatestShotsJob);
     }
 
-    @Subscribe
-    public void onLatestShotsLoaded(LatestShotsResultEvent event) {
-        List<ShotModel> shots = event.getResult();
-        if (shots != null && !shots.isEmpty()) {
-            shotsList.removeAllViews();
-            latestsShotsAdapter =
-              new TimelineAdapter(getActivity(),
-                imageLoader, timeUtils, avatarClickListener,
-                videoClickListener, onNiceShotListener, onUsernameClickListener){
-                  @Override protected boolean shouldShowTag() {
-                      return true;
-                  }
-              };
-            latestsShotsAdapter.setShots(shots);
-            for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
-                shotView = latestsShotsAdapter.getView(i, null, shotsList);
-                setShotItemBackgroundRetainPaddings(shotView);
-                final int finalI = i;
-                shotView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
-                        openShot(shot);
-                    }
-                });
-                shotView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override public boolean onLongClick(View view) {
-                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
-                        reportShotPresenter.onShotLongPressed(shot);
-                        return true;
-                    }
-                });
-                shotsList.addView(shotView);
-            }
-            shotsList.setVisibility(View.VISIBLE);
-            allShotContainer.setVisibility(View.VISIBLE);
-            shotsListEmpty.setVisibility(View.GONE);
-        } else if(shots != null && (latestsShotsAdapter == null || latestsShotsAdapter.getCount() == 0)){
-            shotsList.setVisibility(View.GONE);
-            allShotContainer.setVisibility(View.GONE);
-            shotsListEmpty.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void shareShot(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
@@ -779,11 +683,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showLogoutButton() {
         logoutMenuItem.setVisible(true);
-    }
-
-    @Override
-    public void loadLastShots() {
-        loadLatestShots();
     }
 
     @Override public void showSupportButton() {
@@ -959,7 +858,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
-        shotsList.removeView(shotView);
-        loadLatestShots();
+        profilePresenter.refreshLatestShots();
     }
 }
