@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
@@ -44,6 +45,7 @@ import timber.log.Timber;
 public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
+    public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api.shootr.com/v1";
 
     @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
         return photoService;
@@ -140,7 +142,7 @@ public final class ApiModule {
         return new Endpoint() {
             @Override
             public String getUrl() {
-                return PRODUCTION_ENDPOINT_URL;
+                return BuildConfig.USE_PRE_PRODUCTION ? PRE_PRODUCTION_ENDPOINT_URL : PRODUCTION_ENDPOINT_URL;
             }
 
             @Override
