@@ -32,7 +32,9 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 def versionMajor = 0
 def versionMinor = 2
 def versionRevision = 1
+
 def isSnapshot = true
+def isPreProduction = false
 def databaseVersion = 12
 
 android {
@@ -46,15 +48,17 @@ android {
 
         versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
         versionName versionMajor + "." + versionMinor + "." + versionRevision
+        versionName isPreProduction ? versionName + "-pre" : versionName
         versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
         archivesBaseName = "Shootr-" + versionName
 
         resConfigs "es", "en"
         resConfigs "hdpi", "xhdpi", "xxhdpi"
 
-        buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
+        buildConfigField "int", "DATABASE_VERSION", databaseVersion.toString()
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "GIT_BRANCH", "\"${gitBranch}\""
+        buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
     }
 
     signingConfigs {
@@ -77,17 +81,11 @@ android {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "API_ENDPOINT_BASE", "\"http://tst.api.shootr.com/v1\""
-            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.tst.shootr.com/\""
-
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-
-            buildConfigField "String", "API_ENDPOINT_BASE", "\"http://api.shootr.com/v1\""
-            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
         }
     }
 

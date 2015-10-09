@@ -8,6 +8,7 @@ public enum ApiEndpoints {
   TEST("Tst", DebugApiModule.TEST_ENDPOINT_URL),
   TEST_SSL("Tst SSL", DebugApiModule.TEST_SSL_ENDPOINT_URL),
   PRODUCTION("Production", ApiModule.PRODUCTION_ENDPOINT_URL),
+  PRE("Pre-production", ApiModule.PRE_PRODUCTION_ENDPOINT_URL),
   CUSTOM("Custom", null);
 
   public final String name;
