@@ -365,7 +365,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if (hasBeenPaused && userModel != null) {
+        if (hasBeenPaused && userModel != null && !uploadingPhoto) {
             loadProfileUser();
             loadLatestShots(userModel.getIdUser());
         }

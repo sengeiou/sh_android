@@ -621,6 +621,30 @@ public class ProfilePresenterTest {
         verify(profileView).showError(anyString());
     }
 
+    @Test public void shouldNotLoadProfileWhenPhotoUploadedCallbacksError() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupUploadPhotoErrorCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(getUserByIdInteractor, never()).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldNotLoadLastestShotsAgainWhenPhotoUploadedCallbacksError() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getLastShotsInteractor);
+
+        setupUploadPhotoErrorCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
