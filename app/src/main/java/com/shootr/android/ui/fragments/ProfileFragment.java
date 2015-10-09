@@ -508,7 +508,7 @@ public class ProfileFragment extends BaseFragment
         nameTextView.setText(userModel.getName());
         renderWebsite(userModel);
         renderBio(userModel);
-        imageLoader.load(userModel.getPhoto(), avatarImageView);
+        imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
         followersTextView.setText(String.valueOf(userModel.getNumFollowers()));
         followingTextView.setText(String.valueOf(userModel.getNumFollowings()));
     }
@@ -657,8 +657,7 @@ public class ProfileFragment extends BaseFragment
               }
           })
           .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-          .create()
-          .show();
+          .create().show();
     }
 
     @Override public void goToAllShots(String idUser) {
