@@ -29,8 +29,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final int RESULT_EXIT_STREAM = 3;
     public static final String KEY_STREAM_ID = "stream_id";
 
-    public static final String KEY_STREAM_TITLE = "stream_title";
-
     private static final String EXTRA_EDITED_TITLE = "title";
     private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
@@ -180,10 +178,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         titleErrorView.setText(errorMessage);
     }
 
-    @Override public void closeScreenWithResult(String streamId, String title) {
+    @Override public void closeScreenWithResult(String streamId) {
         setResult(RESULT_OK, new Intent() //
-          .putExtra(KEY_STREAM_ID, streamId) //
-          .putExtra(KEY_STREAM_TITLE, title));
+          .putExtra(KEY_STREAM_ID, streamId));
         finish();
     }
 

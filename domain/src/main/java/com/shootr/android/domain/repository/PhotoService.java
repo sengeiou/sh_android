@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public interface PhotoService {
 
-    public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException;
+    String uploadProfilePhotoAndGetUrl(File photoFile);
 
     String uploadShotImageAndGetUrl(File imageFile) throws IOException;
 
