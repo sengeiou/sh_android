@@ -3,11 +3,9 @@
 
     <color name="primary">#0288d1</color>
     <color name="primary_dark">#01579b</color>
-    <color name="primary_text_dark_color">#ff022c4d</color>
     <color name="primary_disabled">#80d8ff</color>
     <color name="accent">#ff71b4d9</color>
     <color name="links">#478ceb</color>
-    <color name="facebook">#4c66a4</color>
     <color name="transparent">#00000000</color>
     <color name="separator">#ffe0e0e0</color>
     <color name="disabled">#aaaaaa</color>
@@ -15,11 +13,8 @@
     <color name="material_black">#de000000</color>
     <color name="hint_black">#bbbbbb</color>
 
-    <color name="background_dark">#ececec</color>
-
     <!-- Shadows -->
     <color name="shadow_start">#33000000</color>
-    <color name="shadow_dark_start">#66000000</color>
 
     <!-- Gray scale -->
     <color name="gray_10">#1a1a1a</color>
@@ -31,12 +26,9 @@
     <color name="gray_60">#9a9a9a</color>
     <color name="gray_70">#bbbbbb</color>
     <color name="gray_80">#cccccc</color>
-    <color name="gray_85">#ffd9d9d9</color>
     <color name="gray_90">#e6e6e6</color>
     <color name="gray_92">#eeeeee</color>
-    <color name="gray_95">#f2f2f2</color>
     <color name="white">#ffffff</color>
-    <color name="white_backround">#FAFAFA</color>
     <color name="white_disabled">#aaffffff</color>
 
     <color name="refresh_1">#0288d1</color>
@@ -44,19 +36,9 @@
     <color name="refresh_3">#0288d1</color>
     <color name="refresh_4">#01579b</color>
 
-    <!-- Drawer -->
-    <color name="drawer_background">#ffffff</color>
-    <color name="drawer_indicator">#0091ea</color>
-    <color name="drawer_text">#de000000</color>
-    <color name="navdrawer_icon_tint">#888</color>
-    <color name="navdrawer_icon_tint_selected">@color/primary</color>
-
-
     <color name="new_shot_bottom">#09000000</color>
 
-    <color name="watcher_name">@color/gray_20</color>
     <color name="watching">#737373</color>
-    <color name="not_watching">#bbbbbb</color>
 
     <color name="error">#ffcc0000</color>
 
@@ -67,7 +49,6 @@
     <color name="black">#000000</color>
     <color name="tag_color">#C7C7C7</color>
 
-    <color name="checkin_bar_background_action_checkin">@color/primary_dark</color>
     <color name="intro_create_background">#4CAF50</color>
     <color name="intro_friends_background">#EF6C00</color>
     <color name="intro_streams_background">#F06292</color>
