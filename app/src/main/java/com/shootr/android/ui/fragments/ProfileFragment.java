@@ -249,6 +249,7 @@ public class ProfileFragment extends BaseFragment
 
     //endregion
 
+    //region Lifecycle
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
@@ -273,11 +274,6 @@ public class ProfileFragment extends BaseFragment
         }
     }
 
-    private void goToUserProfile(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
-    }
-
     @Override public void onResume() {
         super.onResume();
         profilePresenter.resume();
@@ -288,29 +284,6 @@ public class ProfileFragment extends BaseFragment
         super.onPause();
         profilePresenter.pause();
         suggestedPeoplePresenter.pause();
-    }
-
-    @OnClick(R.id.profile_avatar) public void onAvatarClick() {
-        profilePresenter.avatarClicked();
-    }
-
-    private void takePhotoFromCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri temporaryPhotoUri = Uri.fromFile(getCameraPhotoFile());
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
-        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-    }
-
-    private void choosePhotoFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
-          REQUEST_CHOOSE_PHOTO);
-    }
-
-    private void removePhoto() {
-        profilePresenter.removePhoto();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -330,6 +303,27 @@ public class ProfileFragment extends BaseFragment
             }
         }
     }
+    //endregion
+
+    //region Photo methods
+    private void takePhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri temporaryPhotoUri = Uri.fromFile(getCameraPhotoFile());
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
+          REQUEST_CHOOSE_PHOTO);
+    }
+
+    private void removePhoto() {
+        profilePresenter.removePhoto();
+    }
 
     private File getCameraPhotoFile() {
         File photoFile = new File(externalFilesDir, "profileUpload.jpg");
@@ -344,13 +338,112 @@ public class ProfileFragment extends BaseFragment
         }
         return photoFile;
     }
+    //endregion
 
-    @Override public void showAllShotsButton() {
-        allShotContainer.setVisibility(View.VISIBLE);
+    //region Shot methods
+    private void shareShot(ShotModel shotModel) {
+        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
-    @Override public void hideAllShotsButton() {
-        allShotContainer.setVisibility(View.GONE);
+    private void openShot(ShotModel shot) {
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
+    }
+
+    private void onShotAvatarClick(View avatarItem) {
+        animateBigAvatarClick();
+
+        float scale = 0.8f;
+        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarItem, "scaleX", 1f, scale, 1f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarItem, "scaleY", 1f, scale, 1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX, animY);
+        animatorSet.setDuration(200);
+        animatorSet.setInterpolator(new LinearInterpolator());
+        animatorSet.start();
+    }
+
+    private void openDeleteShotConfirmation(final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                reportShotPresenter.deleteShot(shotModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+    //endregion
+
+    private void goToUserProfile(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
+    }
+
+    private void followUser() {
+        profilePresenter.follow();
+    }
+
+    private void unfollowUser() {
+        profilePresenter.unfollow();
+    }
+
+    private void animateBigAvatarClick() {
+        float scale = 1.1f;
+        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarImageView, "scaleX", 1f, scale, 1f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarImageView, "scaleY", 1f, scale, 1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX, animY);
+        animatorSet.setDuration(200);
+        animatorSet.setInterpolator(new LinearInterpolator());
+        animatorSet.start();
+    }
+
+    private void editProfile() {
+        startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+    }
+
+    private void renderBio(UserModel userModel) {
+        String bio = userModel.getBio();
+        if (bio != null) {
+            bioTextView.setText(bio);
+            bioTextView.setVisibility(View.VISIBLE);
+        } else {
+            bioTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void renderWebsite(UserModel userModel) {
+        String website = userModel.getWebsite();
+        if (website != null) {
+            websiteTextView.setText(website);
+            websiteTextView.setVisibility(View.VISIBLE);
+        } else {
+            websiteTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void redirectToWelcome() {
+        Intent intent = new Intent(getActivity(), LoginSelectionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private UserListAdapter getSuggestedPeopleAdapter() {
+        if (suggestedPeopleAdapter == null) {
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), imageLoader);
+            suggestedPeopleAdapter.setCallback(this);
+        }
+        return suggestedPeopleAdapter;
+    }
+
+    //region Click listeners
+    @OnClick(R.id.profile_avatar) public void onAvatarClick() {
+        profilePresenter.avatarClicked();
     }
 
     @OnClick(R.id.profile_marks_following) public void openFollowingList() {
@@ -375,57 +468,33 @@ public class ProfileFragment extends BaseFragment
         profilePresenter.websiteClicked();
     }
 
-    public void followUser() {
-        profilePresenter.follow();
+    @OnClick(R.id.profile_listing) public void onListingClick() {
+        profilePresenter.clickListing();
     }
 
-    public void unfollowUser() {
-        profilePresenter.unfollow();
+    @OnClick(R.id.profile_all_shots_button) public void onAllShotsClick() {
+        profilePresenter.allShotsClicked();
     }
 
-    private void shareShot(ShotModel shotModel) {
-        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
-        Intents.maybeStartActivity(getActivity(), shareIntent);
+    @OnClick(R.id.profile_open_stream) public void onOpenStreamClick() {
+        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
     }
+    //endregion
 
-    private void openShot(ShotModel shot) {
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
-        startActivity(intent);
-    }
-
-    private void onShotAvatarClick(View avatarItem) {
-        animateBigAvatarClick();
-
-        float scale = 0.8f;
-        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarItem, "scaleX", 1f, scale, 1f);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarItem, "scaleY", 1f, scale, 1f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animX, animY);
-        animatorSet.setDuration(200);
-        animatorSet.setInterpolator(new LinearInterpolator());
-        animatorSet.start();
-    }
-
-    private void animateBigAvatarClick() {
-        float scale = 1.1f;
-        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarImageView, "scaleX", 1f, scale, 1f);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarImageView, "scaleY", 1f, scale, 1f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animX, animY);
-        animatorSet.setDuration(200);
-        animatorSet.setInterpolator(new LinearInterpolator());
-        animatorSet.start();
-    }
-
-    private void editProfile() {
-        startActivity(new Intent(getActivity(), ProfileEditActivity.class));
-    }
-
+    //region View methods
     @Override public void showListingButtonWithCount(Integer listingCount) {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
         listingNumber.setVisibility(View.VISIBLE);
         listingNumber.setText(String.valueOf(listingCount));
+    }
+
+    @Override public void showAllShotsButton() {
+        allShotContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideAllShotsButton() {
+        allShotContainer.setVisibility(View.GONE);
     }
 
     @Override public void showListingWithoutCount() {
@@ -442,26 +511,6 @@ public class ProfileFragment extends BaseFragment
         imageLoader.load(userModel.getPhoto(), avatarImageView);
         followersTextView.setText(String.valueOf(userModel.getNumFollowers()));
         followingTextView.setText(String.valueOf(userModel.getNumFollowings()));
-    }
-
-    private void renderBio(UserModel userModel) {
-        String bio = userModel.getBio();
-        if (bio != null) {
-            bioTextView.setText(bio);
-            bioTextView.setVisibility(View.VISIBLE);
-        } else {
-            bioTextView.setVisibility(View.GONE);
-        }
-    }
-
-    private void renderWebsite(UserModel userModel) {
-        String website = userModel.getWebsite();
-        if (website != null) {
-            websiteTextView.setText(website);
-            websiteTextView.setVisibility(View.VISIBLE);
-        } else {
-            websiteTextView.setVisibility(View.GONE);
-        }
     }
 
     @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
@@ -493,12 +542,6 @@ public class ProfileFragment extends BaseFragment
         }
     }
 
-    private void redirectToWelcome() {
-        Intent intent = new Intent(getActivity(), LoginSelectionActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
     @Override public void showLogoutButton() {
         logoutMenuItem.setVisible(true);
     }
@@ -524,25 +567,9 @@ public class ProfileFragment extends BaseFragment
         feedbackMessage.show(getView(), getActivity().getString(R.string.shot_shared_message));
     }
 
-    @OnClick(R.id.profile_listing) public void onListingClick() {
-        profilePresenter.clickListing();
-    }
-
-    @OnClick(R.id.profile_all_shots_button) public void onAllShotsClick() {
-        profilePresenter.allShotsClicked();
-    }
-
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
         suggestedPeopleAdapter.setItems(users);
         suggestedPeopleAdapter.notifyDataSetChanged();
-    }
-
-    private UserListAdapter getSuggestedPeopleAdapter() {
-        if (suggestedPeopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), imageLoader);
-            suggestedPeopleAdapter.setCallback(this);
-        }
-        return suggestedPeopleAdapter;
     }
 
     @Override public void showError(String messageForError) {
@@ -701,10 +728,6 @@ public class ProfileFragment extends BaseFragment
         followButton.setFollowing(following);
     }
 
-    @OnClick(R.id.profile_open_stream) public void onOpenStreamClick() {
-        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-    }
-
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
@@ -758,26 +781,13 @@ public class ProfileFragment extends BaseFragment
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                openDeleteConfirmation(shotModel);
+                openDeleteShotConfirmation(shotModel);
             }
         }).show();
-    }
-
-    private void openDeleteConfirmation(final ShotModel shotModel) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-
-        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
-        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                reportShotPresenter.deleteShot(shotModel);
-            }
-        });
-        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
         profilePresenter.refreshLatestShots();
     }
+    //endregion
 }
