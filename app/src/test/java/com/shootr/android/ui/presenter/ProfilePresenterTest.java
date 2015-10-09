@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
+import com.shootr.android.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
@@ -69,10 +70,12 @@ public class ProfilePresenterTest {
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock GetLastShotsInteractor getLastShotsInteractor;
     @Mock UploadUserPhotoInteractor uploadUserPhotoInteractor;
+    @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
+
+    @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
     private ProfilePresenter profilePresenter;
     private UserModelMapper userModelMapper;
-    @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -88,6 +91,7 @@ public class ProfilePresenterTest {
           unfollowInteractor,
           getLastShotsInteractor,
           uploadUserPhotoInteractor,
+          removeUserPhotoInteractor,
           errorMessageFactory,
           userModelMapper,
           shotModelMapper);
@@ -569,6 +573,30 @@ public class ProfilePresenterTest {
         verify(profileView).hideLoadingPhoto();
     }
 
+    @Test public void shouldLoadProfileAgainWhenPhotoRemoved() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupRemovePhotoCompletedCallback();
+
+        profilePresenter.removePhotoConfirmed();
+
+        verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldShowErrorIfRemovePhotoCallbacksError() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupRemovePhotoErrorCallback();
+
+        profilePresenter.removePhotoConfirmed();
+
+        verify(profileView).showError(anyString());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -670,7 +698,8 @@ public class ProfilePresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[2];
-                callback.onError(new ShootrException() {});
+                callback.onError(new ShootrException() {
+                });
                 return null;
             }
         }).when(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(), anyErrorCallback());
@@ -684,5 +713,26 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(), anyErrorCallback());
+    }
+
+    private void setupRemovePhotoCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(removeUserPhotoInteractor).removeUserPhoto(anyCompletedCallback(), anyErrorCallback());
+    }
+
+    private void setupRemovePhotoErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[1];
+                callback.onError(new ShootrException() {
+                });
+                return null;
+            }
+        }).when(removeUserPhotoInteractor).removeUserPhoto(anyCompletedCallback(), anyErrorCallback());
     }
 }

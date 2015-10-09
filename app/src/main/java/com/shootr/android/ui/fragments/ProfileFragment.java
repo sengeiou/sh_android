@@ -27,14 +27,9 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.dagger.TemporaryFilesDir;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
-import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
@@ -71,14 +66,12 @@ import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
-import com.squareup.otto.Bus;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -104,7 +97,6 @@ public class ProfileFragment extends BaseFragment
     @Bind(R.id.profile_avatar) ImageView avatarImageView;
 
     @Bind(R.id.profile_listing_container) View listingContainerView;
-    @Bind(R.id.profile_listing) TextView listingText;
     @Bind(R.id.profile_listing_number) TextView listingNumber;
 
     @Bind(R.id.profile_open_stream_container) View openStreamContainerView;
@@ -125,11 +117,7 @@ public class ProfileFragment extends BaseFragment
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
-    @Inject @Main Bus bus;
     @Inject ImageLoader imageLoader;
-    @Inject JobManager jobManager;
-    @Inject SessionRepository sessionRepository;
-    @Inject ErrorMessageFactory errorMessageFactory;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject ToolbarDecorator toolbarDecorator;
@@ -149,7 +137,6 @@ public class ProfileFragment extends BaseFragment
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
     private OnNiceShotListener onNiceShotListener;
-    private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
@@ -323,17 +310,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     private void removePhoto() {
-        //TODO kill job
-        new AlertDialog.Builder(getActivity()).setMessage(R.string.photo_edit_remove_confirmation)
-          .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  RemoveProfilePhotoJob removeProfilePhotoJob =
-                    ShootrApplication.get(getActivity()).getObjectGraph().get(RemoveProfilePhotoJob.class);
-                  jobManager.addJobInBackground(removeProfilePhotoJob);
-              }
-          })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
+        profilePresenter.removePhoto();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -625,7 +602,6 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToWebsite(String website) {
-        //TODO ¿¿funciona sin http????????
         Intent intent = intentFactory.openUrlIntent(website);
         Intents.maybeStartActivity(getActivity(), intent);
     }
@@ -686,6 +662,17 @@ public class ProfileFragment extends BaseFragment
     @Override public void hideLoadingPhoto() {
         avatarImageView.setVisibility(View.VISIBLE);
         avatarLoadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showRemovePhotoConfirmation() {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.photo_edit_remove_confirmation)
+          .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  profilePresenter.removePhotoConfirmed();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

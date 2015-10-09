@@ -75,4 +75,6 @@ public interface ProfileView {
     void showLoadingPhoto();
 
     void hideLoadingPhoto();
+
+    void showRemovePhotoConfirmation();
 }

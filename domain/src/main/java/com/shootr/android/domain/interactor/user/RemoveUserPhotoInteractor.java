@@ -7,65 +7,48 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.utils.ImageResizer;
-import java.io.File;
-import java.io.IOException;
 import javax.inject.Inject;
 
-public class UploadUserPhotoInteractor implements Interactor {
+public class RemoveUserPhotoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-
-    private final PhotoService photoService;
-    private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
-    private final ImageResizer imageResizer;
+    private final SessionRepository sessionRepository;
 
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
-    private File photo;
 
     @Inject
-    public UploadUserPhotoInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      PhotoService photoService, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, ImageResizer imageResizer) {
+    public RemoveUserPhotoInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.photoService = photoService;
-        this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
-        this.imageResizer = imageResizer;
+        this.sessionRepository = sessionRepository;
     }
 
-    public void uploadUserPhoto(File photo, CompletedCallback completedCallback, ErrorCallback errorCallback) {
-        this.photo = photo;
+    public void removeUserPhoto(CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        File imageFile = getResizedImage(photo);
-        String photoUrl = uploadPhoto(imageFile);
-        updateUserWithPhoto(photoUrl);
-    }
-
-    private void updateUserWithPhoto(String photoUrl) {
-        User user = getUserWithPhoto(photoUrl);
+        User user = getUserWithoutPhoto();
         updateLocalUser(user);
         updateRemoteUser(user);
     }
 
-    private User getUserWithPhoto(String photoUrl) {
+    private User getUserWithoutPhoto() {
         User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        user.setPhoto(photoUrl);
+        user.setPhoto(null);
         return user;
     }
 
@@ -81,14 +64,6 @@ public class UploadUserPhotoInteractor implements Interactor {
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
-    }
-
-    private File getResizedImage(File newPhotoFile) throws IOException {
-        return imageResizer.getResizedCroppedImageFile(newPhotoFile);
-    }
-
-    private String uploadPhoto(File imageFile) throws IOException {
-        return photoService.uploadProfilePhotoAndGetUrl(imageFile);
     }
 
     private void notifyLoaded() {

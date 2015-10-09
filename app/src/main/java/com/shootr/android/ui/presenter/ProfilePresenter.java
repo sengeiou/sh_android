@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
+import com.shootr.android.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.android.ui.model.ShotModel;
@@ -38,6 +39,7 @@ public class ProfilePresenter implements Presenter {
     private final UnfollowInteractor unfollowInteractor;
     private final GetLastShotsInteractor getLastShotsInteractor;
     private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
+    private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final ShotModelMapper shotModelMapper;
@@ -55,7 +57,7 @@ public class ProfilePresenter implements Presenter {
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
-      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
+      RemoveUserPhotoInteractor removeUserPhotoInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
@@ -66,6 +68,7 @@ public class ProfilePresenter implements Presenter {
         this.unfollowInteractor = unfollowInteractor;
         this.getLastShotsInteractor = getLastShotsInteractor;
         this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
+        this.removeUserPhotoInteractor = removeUserPhotoInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
@@ -120,10 +123,6 @@ public class ProfilePresenter implements Presenter {
                 }
             });
         }
-    }
-
-    private void showErrorInView(ShootrException error) {
-        profileView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     private void onProfileLoaded(User user) {
@@ -341,6 +340,26 @@ public class ProfilePresenter implements Presenter {
                 profileView.hideLoadingPhoto();
             }
         });
+    }
+
+    public void removePhoto() {
+        profileView.showRemovePhotoConfirmation();
+    }
+
+    public void removePhotoConfirmed() {
+        removeUserPhotoInteractor.removeUserPhoto(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadProfileUser();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
+    }
+
+    private void showErrorInView(ShootrException error) {
+        profileView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     @Override public void resume() {
