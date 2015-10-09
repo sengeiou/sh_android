@@ -331,7 +331,7 @@ public class ProfilePresenterTest {
         verify(profileView).showError(anyString());
     }
 
-    @Test public void shouldShowLogoutButtonWhenUserIsCurrentUser() {
+    @Test public void shouldShowLogoutButtonWhenUserIsCurrentUserAndInitializedById() {
         User user = user();
         user.setMe(true);
         setupUserIdInteractorCallbacks(user);
@@ -645,6 +645,14 @@ public class ProfilePresenterTest {
         verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
     }
 
+    @Test public void shouldShowLogoutButtonWhenUserIsCurrentUserAndInitializedByUsername() {
+        setupCurrentUserByUsername();
+
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        verify(profileView).showLogoutButton();
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -685,6 +693,18 @@ public class ProfilePresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(user());
+                return null;
+            }
+        }).when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupCurrentUserByUsername() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                User user = user();
+                user.setMe(true);
+                callback.onLoaded(user);
                 return null;
             }
         }).when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());

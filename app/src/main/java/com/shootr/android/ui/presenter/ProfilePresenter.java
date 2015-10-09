@@ -96,7 +96,6 @@ public class ProfilePresenter implements Presenter {
     private void initialize(ProfileView profileView) {
         this.setView(profileView);
         loadProfileUser();
-        setupMenuItemsVisibility();
     }
 
     private void loadProfileUser() {
@@ -127,6 +126,7 @@ public class ProfilePresenter implements Presenter {
 
     private void onProfileLoaded(User user) {
         this.isCurrentUser = user.isMe();
+        setupMenuItemsVisibility();
         this.setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
         loadProfileUserListing();
