@@ -10,6 +10,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.Local;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -49,12 +50,23 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     public List<FavoriteEntity> getFavorites(String userId) {
         try {
             List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(userId);
+            favorites = filterFavoritesWithoutStreams(favorites);
             storeEmbedStreams(favorites);
             return favoriteApiEntityMapper.transform(favorites);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
 
+    }
+
+    private List<FavoriteApiEntity> filterFavoritesWithoutStreams(List<FavoriteApiEntity> favorites) {
+        List<FavoriteApiEntity> filtered = new ArrayList<>(favorites.size());
+        for (FavoriteApiEntity favorite : favorites) {
+            if (favorite.getStream() != null) {
+                filtered.add(favorite);
+            }
+        }
+        return filtered;
     }
 
     @Override
