@@ -337,6 +337,7 @@ public class ProfilePresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                uploadingPhoto = false;
                 showErrorInView(error);
                 profileView.hideLoadingPhoto();
             }
