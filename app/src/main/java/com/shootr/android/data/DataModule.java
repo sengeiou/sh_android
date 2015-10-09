@@ -41,14 +41,11 @@ import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
-import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
-import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
-import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.fragments.UserFollowsFragment;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
@@ -100,8 +97,7 @@ import static android.content.Context.MODE_PRIVATE;
     GetUserInfoJob.class, GetUsersFollowsJob.class,
     GetLatestShotsJob.class,
 
-    UploadProfilePhotoJob.class,
-    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
+    UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
