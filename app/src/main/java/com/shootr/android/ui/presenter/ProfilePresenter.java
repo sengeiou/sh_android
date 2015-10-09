@@ -332,6 +332,7 @@ public class ProfilePresenter implements Presenter {
             @Override public void onCompleted() {
                 uploadingPhoto = false;
                 loadProfileUser();
+                loadLatestShots(userModel.getIdUser());
                 profileView.hideLoadingPhoto();
             }
         }, new Interactor.ErrorCallback() {
@@ -350,6 +351,7 @@ public class ProfilePresenter implements Presenter {
         removeUserPhotoInteractor.removeUserPhoto(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadProfileUser();
+                loadLatestShots(userModel.getIdUser());
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

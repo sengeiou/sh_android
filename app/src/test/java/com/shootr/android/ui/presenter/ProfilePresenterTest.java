@@ -549,6 +549,18 @@ public class ProfilePresenterTest {
         verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
     }
 
+    @Test public void shouldLoadLastestShotsAgainWhenPhotoUploaded() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getLastShotsInteractor);
+
+        setupUploadPhotoCompletedCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    }
+
     @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksCompleted() throws Exception {
         setupUserById();
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
@@ -583,6 +595,18 @@ public class ProfilePresenterTest {
         profilePresenter.removePhotoConfirmed();
 
         verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldLoadLatestShotsAgainWhenPhotoRemoved() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getLastShotsInteractor);
+
+        setupRemovePhotoCompletedCallback();
+
+        profilePresenter.removePhotoConfirmed();
+
+        verify(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
     }
 
     @Test public void shouldShowErrorIfRemovePhotoCallbacksError() throws Exception {
