@@ -71,4 +71,8 @@ public interface ProfileView {
     void showLatestShotsEmpty();
 
     void hideLatestShotsEmpty();
+
+    void showLoadingPhoto();
+
+    void hideLoadingPhoto();
 }

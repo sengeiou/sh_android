@@ -13,6 +13,7 @@ import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
+import com.shootr.android.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -20,6 +21,7 @@ import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -52,6 +54,7 @@ public class ProfilePresenterTest {
     public static final String HTTP_PREFIX = "http://";
     private static final String WEBSITE_HTTP_PREFIX = "http://website";
     private static final String WEBSITE_HTTPS_PREFIX = "https://website";
+    public static final String PHOTO_PATH = "photoPath";
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
@@ -65,22 +68,29 @@ public class ProfilePresenterTest {
     @Mock GetUserByIdInteractor getUserByIdInteractor;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock GetLastShotsInteractor getLastShotsInteractor;
+    @Mock UploadUserPhotoInteractor uploadUserPhotoInteractor;
 
     private ProfilePresenter profilePresenter;
     private UserModelMapper userModelMapper;
     @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        profilePresenter = new ProfilePresenter(getUserByIdInteractor, getUserByUsernameInteractor, logoutInteractor,
+        profilePresenter = new ProfilePresenter(getUserByIdInteractor,
+          getUserByUsernameInteractor,
+          logoutInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
           shareShotInteractor,
           followInteractor,
-          unfollowInteractor, getLastShotsInteractor, errorMessageFactory, userModelMapper, shotModelMapper);
+          unfollowInteractor,
+          getLastShotsInteractor,
+          uploadUserPhotoInteractor,
+          errorMessageFactory,
+          userModelMapper,
+          shotModelMapper);
         profilePresenter.setView(profileView);
     }
 
@@ -88,7 +98,6 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
-
     }
 
     @Test public void shouldGetUserByUsernameIfItHasBeenInitializedWithUsername() throws Exception {
@@ -103,7 +112,6 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView).setUserInfo(any(UserModel.class));
-
     }
 
     @Test public void shouldSetUserInfoWhenUserHasBeenInitializedWithUsername() throws Exception {
@@ -112,7 +120,6 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
         verify(profileView).setUserInfo(any(UserModel.class));
-
     }
 
     @Test public void shouldLoadLastShotsWhenInitializedFromId() throws Exception {
@@ -131,8 +138,7 @@ public class ProfilePresenterTest {
         verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldShowListingButtonWithCountWhenPresenterInitializedWithIdUserAndUserHasStreams() {
+    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithIdUserAndUserHasStreams() {
         setupUserById();
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
@@ -140,8 +146,7 @@ public class ProfilePresenterTest {
         verify(profileView).showListingButtonWithCount(anyInt());
     }
 
-    @Test
-    public void shouldShowListingButtonWithCountWhenPresenterInitializedWithUsernameAndUserHasStreams() {
+    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithUsernameAndUserHasStreams() {
         setupUserByUsername();
 
         profilePresenter.initializeWithUsername(profileView, USERNAME);
@@ -149,8 +154,7 @@ public class ProfilePresenterTest {
         verify(profileView).showListingButtonWithCount(anyInt());
     }
 
-    @Test
-    public void shouldNotShowOpenStreamWhenInOtherUsersProfileWithoutCount() {
+    @Test public void shouldNotShowOpenStreamWhenInOtherUsersProfileWithoutCount() {
         User userWithoutListing = userWithCounts(0, 0);
         setupUserIdInteractorCallbacks(userWithoutListing);
 
@@ -159,8 +163,7 @@ public class ProfilePresenterTest {
         verify(profileView, never()).showOpenStream();
     }
 
-    @Test
-    public void shouldShowOpenStreamWhenInCurrentUsersProfileWithoutCount() {
+    @Test public void shouldShowOpenStreamWhenInCurrentUsersProfileWithoutCount() {
         User userWithoutListing = userWithCounts(0, 0);
         userWithoutListing.setMe(true);
         setupUserIdInteractorCallbacks(userWithoutListing);
@@ -284,15 +287,13 @@ public class ProfilePresenterTest {
         verify(profileView).openEditPhotoMenu(false);
     }
 
-    @Test
-    public void shouldShowLogoutInProgressWhenLogoutSelected() {
+    @Test public void shouldShowLogoutInProgressWhenLogoutSelected() {
         profilePresenter.logoutSelected();
 
         verify(profileView).showLogoutInProgress();
     }
 
-    @Test
-    public void shouldCallbackLogoutInteractorWhenLogoutSelected() {
+    @Test public void shouldCallbackLogoutInteractorWhenLogoutSelected() {
         profilePresenter.logoutSelected();
 
         verify(logoutInteractor).attempLogout(anyCompletedCallback(), anyErrorCallback());
@@ -302,8 +303,7 @@ public class ProfilePresenterTest {
         return any(Interactor.CompletedCallback.class);
     }
 
-    @Test
-    public void shouldNavigateToWelcomeScreenWhenLogoutSelectedAndCompletedCallback() {
+    @Test public void shouldNavigateToWelcomeScreenWhenLogoutSelectedAndCompletedCallback() {
         setupLogoutInteractorCompletedCallback();
 
         profilePresenter.logoutSelected();
@@ -311,8 +311,7 @@ public class ProfilePresenterTest {
         verify(profileView).navigateToWelcomeScreen();
     }
 
-    @Test
-    public void shouldHideLogoutInProgressWhenLogoutSelectedAndErrorCallback() {
+    @Test public void shouldHideLogoutInProgressWhenLogoutSelectedAndErrorCallback() {
         setupLogoutInteractorErrorCallback();
 
         profilePresenter.logoutSelected();
@@ -320,8 +319,7 @@ public class ProfilePresenterTest {
         verify(profileView).hideLogoutInProgress();
     }
 
-    @Test
-    public void shouldShowErrorWhenLogoutSelectedAndErrorCallback() {
+    @Test public void shouldShowErrorWhenLogoutSelectedAndErrorCallback() {
         setupLogoutInteractorErrorCallback();
 
         profilePresenter.logoutSelected();
@@ -329,8 +327,7 @@ public class ProfilePresenterTest {
         verify(profileView).showError(anyString());
     }
 
-    @Test
-    public void shouldShowLogoutButtonWhenUserIsCurrentUser() {
+    @Test public void shouldShowLogoutButtonWhenUserIsCurrentUser() {
         User user = user();
         user.setMe(true);
         setupUserIdInteractorCallbacks(user);
@@ -346,7 +343,8 @@ public class ProfilePresenterTest {
         verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
-    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId()
+      throws Exception {
         profilePresenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
@@ -483,7 +481,8 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldNotLoadProfileWhenUsernameInteractorNotReturned() throws Exception {
-        doNothing().when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
+        doNothing().when(getUserByUsernameInteractor)
+          .searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
         profilePresenter.initializeWithUsername(profileView, USERNAME);
         reset(getUserByUsernameInteractor);
 
@@ -516,15 +515,69 @@ public class ProfilePresenterTest {
         verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
     }
 
+    @Test public void shouldShowLoadingWhenUploadingPhoto() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(profileView).showLoadingPhoto();
+    }
+
+    @Test public void shouldCallUploadPhotoInteractorWhenUploadingPhoto() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldLoadProfileAgainWhenPhotoUploaded() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupUploadPhotoCompletedCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksCompleted() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupUploadPhotoCompletedCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(profileView).hideLoadingPhoto();
+    }
+
+    @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksError() throws Exception {
+        setupUserById();
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        reset(getUserByIdInteractor);
+
+        setupUploadPhotoErrorCallback();
+
+        profilePresenter.uploadPhoto(new File(PHOTO_PATH));
+
+        verify(profileView).hideLoadingPhoto();
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[0];
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(logoutInteractor)
-          .attempLogout(anyCompletedCallback(), anyErrorCallback());
+        }).when(logoutInteractor).attempLogout(anyCompletedCallback(), anyErrorCallback());
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {
@@ -539,8 +592,7 @@ public class ProfilePresenterTest {
                 });
                 return null;
             }
-        }).when(logoutInteractor)
-          .attempLogout(anyCompletedCallback(), anyErrorCallback());
+        }).when(logoutInteractor).attempLogout(anyCompletedCallback(), anyErrorCallback());
     }
 
     private User user() {
@@ -559,8 +611,7 @@ public class ProfilePresenterTest {
                 callback.onLoaded(user());
                 return null;
             }
-        }).when(getUserByUsernameInteractor)
-          .searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
+        }).when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private Interactor.Callback anyCallback() {
@@ -574,15 +625,14 @@ public class ProfilePresenterTest {
                 callback.onLoaded(user());
                 return null;
             }
-        }).when(getUserByIdInteractor)
-          .loadUserById(anyString(), anyCallback(), anyErrorCallback());
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private List<Shot> shotList(int numberOfShots) {
         List<Shot> shots = new ArrayList<>();
-        for(int i = 0; i<numberOfShots;i++) {
+        for (int i = 0; i < numberOfShots; i++) {
             Shot shot = new Shot();
-            shot.setIdShot("idShot"+i);
+            shot.setIdShot("idShot" + i);
             shot.setUserInfo(new Shot.ShotUserInfo());
             shots.add(shot);
         }
@@ -596,9 +646,7 @@ public class ProfilePresenterTest {
                 callback.onLoaded(user);
                 return null;
             }
-        }).when(getUserByIdInteractor)
-          .loadUserById(anyString(), anyCallback(), anyErrorCallback());
-
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private User userWithCounts(int createdCount, int favoritedCount) {
@@ -616,5 +664,25 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupUploadPhotoErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                callback.onError(new ShootrException() {});
+                return null;
+            }
+        }).when(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(), anyErrorCallback());
+    }
+
+    private void setupUploadPhotoCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(), anyErrorCallback());
     }
 }

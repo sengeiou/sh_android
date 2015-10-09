@@ -343,10 +343,10 @@ public class ProfileFragment extends BaseFragment
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
                 changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                //TODO uploadPhoto(changedPhotoFile);
+                profilePresenter.uploadPhoto(changedPhotoFile);
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
-                //TODO uploadPhoto(changedPhotoFile);
+                profilePresenter.uploadPhoto(changedPhotoFile);
             } else if (requestCode == REQUEST_NEW_STREAM) {
                 String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
                 profilePresenter.streamCreated(streamId);
@@ -676,6 +676,16 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void hideLatestShotsEmpty() {
         shotsListEmpty.setVisibility(View.GONE);
+    }
+
+    @Override public void showLoadingPhoto() {
+        avatarImageView.setVisibility(View.INVISIBLE);
+        avatarLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoadingPhoto() {
+        avatarImageView.setVisibility(View.VISIBLE);
+        avatarLoadingView.setVisibility(View.GONE);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

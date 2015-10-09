@@ -13,12 +13,14 @@ import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
+import com.shootr.android.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -35,6 +37,7 @@ public class ProfilePresenter implements Presenter {
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final GetLastShotsInteractor getLastShotsInteractor;
+    private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final ShotModelMapper shotModelMapper;
@@ -45,13 +48,14 @@ public class ProfilePresenter implements Presenter {
     private String username;
     private UserModel userModel;
     private boolean hasBeenPaused = false;
+    private boolean uploadingPhoto = false;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      GetLastShotsInteractor getLastShotsInteractor, ErrorMessageFactory errorMessageFactory,
-      UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
+      GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
+      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
@@ -61,12 +65,13 @@ public class ProfilePresenter implements Presenter {
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.getLastShotsInteractor = getLastShotsInteractor;
+        this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
     }
 
-    protected void setView(ProfileView profileView){
+    protected void setView(ProfileView profileView) {
         this.profileView = profileView;
     }
 
@@ -74,12 +79,12 @@ public class ProfilePresenter implements Presenter {
         this.userModel = userModel;
     }
 
-    public void initializeWithUsername(ProfileView profileView, String username){
+    public void initializeWithUsername(ProfileView profileView, String username) {
         this.username = username;
         initialize(profileView);
     }
 
-    public void initializeWithIdUser(ProfileView profileView, String idUser){
+    public void initializeWithIdUser(ProfileView profileView, String idUser) {
         this.profileIdUser = idUser;
         initialize(profileView);
         loadLatestShots(idUser);
@@ -177,7 +182,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     protected void setupMenuItemsVisibility() {
-        if(isCurrentUser){
+        if (isCurrentUser) {
             profileView.showLogoutButton();
             profileView.showSupportButton();
             profileView.showChangePasswordButton();
@@ -211,7 +216,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void showCurrentUserOpenStream() {
-        if(isCurrentUser){
+        if (isCurrentUser) {
             profileView.showOpenStream();
         }
     }
@@ -319,6 +324,23 @@ public class ProfilePresenter implements Presenter {
 
     public void allShotsClicked() {
         profileView.goToAllShots(userModel.getIdUser());
+    }
+
+    public void uploadPhoto(File changedPhotoFile) {
+        this.uploadingPhoto = true;
+        profileView.showLoadingPhoto();
+        uploadUserPhotoInteractor.uploadUserPhoto(changedPhotoFile, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                uploadingPhoto = false;
+                loadProfileUser();
+                profileView.hideLoadingPhoto();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+                profileView.hideLoadingPhoto();
+            }
+        });
     }
 
     @Override public void resume() {
