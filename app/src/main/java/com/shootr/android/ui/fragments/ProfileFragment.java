@@ -299,7 +299,7 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void onPause() {
         super.onPause();
-        profilePresenter.resume();
+        profilePresenter.pause();
         suggestedPeoplePresenter.pause();
     }
 
