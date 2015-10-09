@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public interface ImageResizer {
 
-    public File getResizedCroppedImageFile(File originalImageFile) throws IOException;
+    File getResizedCroppedImageFile(File originalImageFile) throws IOException;
 
     File getResizedImageFile(File originalImageFile) throws IOException;
 }

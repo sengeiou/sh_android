@@ -1,11 +1,10 @@
 package com.shootr.android.service;
 
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.Endpoint;
-import com.shootr.android.service.ShootrPhotoUploadError;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
@@ -40,13 +39,17 @@ public class ShootrPhotoService implements PhotoService {
         uploadStreamPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/stream";
     }
 
-    @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
+    @Override public String uploadProfilePhotoAndGetUrl(File photoFile) {
         Timber.d("Uploading photo with file path %s", photoFile.getAbsolutePath());
         RequestBody body = buildRequestBody(photoFile);
 
-        Response response = executeProfileRequest(body);
-
-        return parseProfileResponse(response);
+        Response response = null;
+        try {
+            response = executeProfileRequest(body);
+            return parseProfileResponse(response);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public String uploadShotImageAndGetUrl(File imageFile) throws IOException {

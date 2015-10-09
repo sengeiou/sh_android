@@ -42,28 +42,19 @@ public class RemoveUserPhotoInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         User user = getUserWithoutPhoto();
-        updateLocalUser(user);
-        updateRemoteUser(user);
+        try {
+            remoteUserRepository.putUser(user);
+            localUserRepository.putUser(user);
+            notifyLoaded();
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        }
     }
 
     private User getUserWithoutPhoto() {
         User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         user.setPhoto(null);
         return user;
-    }
-
-    private void updateLocalUser(User user) {
-        localUserRepository.putUser(user);
-        notifyLoaded();
-    }
-
-    private void updateRemoteUser(User user) {
-        try {
-            remoteUserRepository.putUser(user);
-            notifyLoaded();
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
     }
 
     private void notifyLoaded() {

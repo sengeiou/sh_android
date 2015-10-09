@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ImageResizingException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -52,15 +53,22 @@ public class UploadUserPhotoInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        File imageFile = getResizedImage(photo);
-        String photoUrl = uploadPhoto(imageFile);
-        updateUserWithPhoto(photoUrl);
+        try {
+            File imageFile = getResizedImage(photo);
+            String photoUrl = uploadPhoto(imageFile);
+            updateUserWithPhoto(photoUrl);
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        } catch (IOException error) {
+            notifyError(new ImageResizingException(error));
+        }
     }
 
     private void updateUserWithPhoto(String photoUrl) {
         User user = getUserWithPhoto(photoUrl);
-        updateLocalUser(user);
-        updateRemoteUser(user);
+        remoteUserRepository.putUser(user);
+        localUserRepository.putUser(user);
+        notifyLoaded();
     }
 
     private User getUserWithPhoto(String photoUrl) {
@@ -69,25 +77,11 @@ public class UploadUserPhotoInteractor implements Interactor {
         return user;
     }
 
-    private void updateLocalUser(User user) {
-        localUserRepository.putUser(user);
-        notifyLoaded();
-    }
-
-    private void updateRemoteUser(User user) {
-        try {
-            remoteUserRepository.putUser(user);
-            notifyLoaded();
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
-    }
-
     private File getResizedImage(File newPhotoFile) throws IOException {
         return imageResizer.getResizedCroppedImageFile(newPhotoFile);
     }
 
-    private String uploadPhoto(File imageFile) throws IOException {
+    private String uploadPhoto(File imageFile) {
         return photoService.uploadProfilePhotoAndGetUrl(imageFile);
     }
 
