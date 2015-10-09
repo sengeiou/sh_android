@@ -21,12 +21,6 @@
     <string name="welcome_title_login">Cloud</string>
     <string name="welcome_subtitle_login">Goles guarda tus equipos y suscripciones en la nube.</string>
 
-    <string-array name="emails_test">
-        <item>rafa.vazsan@gmail.com</item>
-        <item>rafagames92@gmail.com</item>
-        <item>rafael.vazquez@gmail.com</item>
-    </string-array>
-
     <string name="title_activity_partido">Sevilla-R.Madrid</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
