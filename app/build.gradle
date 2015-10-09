@@ -18,7 +18,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'hugo'
 apply plugin: "sonar-runner"
-apply plugin: 'maven'
 
 
 repositories {
@@ -248,21 +247,6 @@ sonarRunner {
         properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
     }
 }
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "http://nexus.fav24.net/content/repositories/snapshots/") {
-                authentication(userName: "deployment", password: "deployment123")
-            }
-            pom.version = android.defaultConfig.versionName
-            pom.artifactId = 'Shootr'
-            pom.groupId = "com.shooter.android"
-            uniqueVersion = false
-        }
-    }
-}
-
 
 //TODO Wrap this thing into an indepentent plugin
 import com.amazonaws.auth.BasicAWSCredentials
