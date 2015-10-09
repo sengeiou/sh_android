@@ -9,7 +9,6 @@
     <dimen name="keyline_2_minus_icon">32dp</dimen>
 
     <dimen name="card_elevation">3dp</dimen>
-    <dimen name="reply_card_elevation">2dp</dimen>
 
     <dimen name="shot_avatar_size">52dp</dimen>
 
@@ -21,23 +20,14 @@
     <dimen name="profile_avatar_size">120dp</dimen>
     <dimen name="follow_button_radius">2dp</dimen>
 
-    <!-- Drawer -->
-    <dimen name="drawer_indicator_width">6dp</dimen>
-    <dimen name="drawer_width">304dp</dimen>
-    <dimen name="drawer_avatar_size">120dp</dimen>
-
     <!-- User Lists -->
     <dimen name="userlist_avatar_size">40dp</dimen>
-
-    <!-- Info -->
-    <dimen name="info_match_title_height">40dp</dimen>
 
     <!--Badge-->
     <dimen name="badge_text_size">10sp</dimen>
     <dimen name="badge_stroke_width">2dp</dimen>
     <dimen name="stream_result_picture_height">52dp</dimen>
     <dimen name="stream_result_picture_width">52dp</dimen>
-    <dimen name="navdrawer_profile_avatar_size">64dp</dimen>
     <dimen name="shot_item_image_height">185dp</dimen>
     <dimen name="view_pager_margin">16dp</dimen>
     <dimen name="toolbar_title_padding">16dp</dimen>

@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_registration_email">Register with Email</string>
 
-    <!-- Time strings -->
-    <string name="day_title_today">Today</string>
-    <string name="day_title_tomorrow">Tomorrow</string>
-    <string name="day_title_yesterday">Yesterday</string>
-
-    <!-- Welcome texts -->
-    <string name="welcome_title_0">Goles</string>
-    <string name="welcome_subtitle_0">Convierte tu móvil en el notificador de goles más rápido del mundo.</string>
-    <string name="welcome_title_1">Rápida</string>
-    <string name="welcome_subtitle_1"><b>Goles</b> notifica goles y resultados antes que cualquier app.</string>
-    <string name="welcome_title_2">Simple</string>
-    <string name="welcome_subtitle_2"><b>Goles</b> es increíblemente fácil de usar.</string>
-    <string name="welcome_title_3">Sin publicidad</string>
-    <string name="welcome_subtitle_3"><b>Goles</b> no te molesta con anuncios ni cosas raras.</string>
-    <string name="welcome_title_login">Cloud</string>
-    <string name="welcome_subtitle_login">Goles guarda tus equipos y suscripciones en la nube.</string>
-
-    <string-array name="emails_test">
-        <item>rafa.vazsan@gmail.com</item>
-        <item>rafagames92@gmail.com</item>
-        <item>rafael.vazquez@gmail.com</item>
-    </string-array>
-
-    <string name="title_activity_partido">Sevilla-R.Madrid</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="facebookID">389647124570169</string>
     <string name="connection_lost">The network connection was lost</string>
 
@@ -52,14 +24,10 @@
     <string name="activity_followers_title">Followers</string>
     <string name="following_list_empty">Not following anyone</string>
     <string name="follower_list_empty">No followers</string>
-    <string name="no_more_shots">No more shots</string>
-    <string name="new_shoot_action">Shoot</string>
     <string name="new_shot_repeated">Whoops! You already shot that</string>
     <string name="profile_following">Following</string>
     <string name="profile_follow">Follow</string>
     <string name="profile_edit_profile">Edit Profile</string>
-    <string name="profile_rank_format">rank %s</string>
-    <string name="profile_marks_points">points</string>
     <string name="profile_marks_following">following</string>
     <string name="profile_marks_followers">followers</string>
 
@@ -71,24 +39,15 @@
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
 
-    <!-- Watching status texts -->
-    <string name="watching_text">Watching</string>
-    <string name="watching_not_text">Not Watching</string>
-
     <!-- TimeUtils -->
-    <string name="plural_days">days</string>
-    <string name="singular_day">day</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
     <string name="hours">h</string>
     <string name="days">d</string>
     <string name="now">now</string>
-    <string name="drawer_open">Open menu</string>
-    <string name="drawer_close">Close menu</string>
 
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-    <string name="notification_follow_title">%s is now following you</string>
 
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
@@ -97,35 +56,13 @@
     <string name="activity_find_friends_empty_message">No Results</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
-    <!-- Info -->
-    <string name="activity_empty_info">No people watching</string>
-    <string name="enter_to_confirm">Now Playing</string>
-    <string name="following_notif_text">Touch to access the profile</string>
-    <string name="activity_info_title">Friends</string>
-
-    <!-- Watching requests -->
-    <string name="watching_request_subtitle_none">Now Playing</string>
-    <string name="watching_request_subtitle_one">%s is now watching</string>
-    <string name="watching_request_subtitle_two">%1$s &amp; %2$s are now watching</string>
-    <string name="watching_request_subtitle_more">%d people are now watching</string>
-    <string name="watching_stream_question">Watching %s?</string>
-
-
-    <!-- Watch requests -->
-    <string name="watching_request_subtitle_none_and_not_started">Playing Soon</string>
-    <string name="action_settings">Settings</string>
-
     <string name="cancel">Cancel</string>
 
-    <string name="watching_switch">I\'m watching it</string>
-    <string name="search_warning_minimun_characters">Type 3 or more characters.</string>
 
     <string name="activity_edit_profile_name_hint">Name</string>
     <string name="activity_edit_profile_username_hint">Username</string>
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_profile_bio_hint">Bio</string>
-    <string name="edit">Edit</string>
-    <string name="edit_info_place_placeholder">Where are you?</string>
 
     <string name="photo_edit_take">Camera</string>
     <string name="photo_edit_gallery">Gallery</string>
@@ -136,36 +73,21 @@
     <string name="profile_updated">Profile updated</string>
     <string name="discard_profile_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
-    <string name="watching_place_not_watching_alert">Try a different text. \"Not Watching\" is used when the switch is off.</string>
     <string name="notification_image">Image</string>
     <string name="notification_image_and_text">Image: %s</string>
     <string name="new_shot_discard_message">Discard shot?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="activity_info_title_pattern">%1$s (%2$d)</string>
-    <string name="watching_notifications_alert">You will receive notifications from people watching this stream</string>
-    <string name="menu_notifications">Notifications</string>
-    <string name="single_stream_empty">Load a stream to see who\'s Watching</string>
-    <string name="stream_title_default">Select Stream</string>
-    <string name="menu_streams">Watching…</string>
-    <string name="activity_stream_list_title">Watching…</string>
     <string name="menu_search_streams">Search</string>
     <string name="stream_list_empty">No results</string>
-    <string name="add_photo">Add Photo</string>
     <string name="edit_stream">Edit Stream</string>
     <string name="activity_new_stream_title">New stream</string>
     <string name="activity_edit_stream_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
-    <string name="activity_pick_timezone_title">Select time zone</string>
     <string name="new_stream_title_label">Title</string>
-    <string name="new_stream_starts_label">Starts</string>
-    <string name="new_stream_timezone_label">Time zone</string>
-    <string name="new_stream_ends_label">Ends before</string>
-    <string name="stream_subtitle_nothing">Hall</string>
     <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_notification_confirmation_no">Nope</string>
-    <string name="profile_watching_label">Watching</string>
     <string name="menu_stream_edit_info">Stream info</string>
     <string name="menu_stream_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
@@ -173,20 +95,12 @@
     <string name="notification_shot_failed">Shot failed</string>
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
     <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
-    <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
-    <string name="draft_label">Draft</string>
     <string name="drafts_empty">No Drafts</string>
-    <string name="timeline_hall_title">Hall</string>
-    <string name="drawer_timeline_title">Timeline</string>
     <string name="drawer_friends_title">Friends</string>
     <string name="drawer_favorites_title">Favorites</string>
     <string name="title_activity_email_confirmation">Email</string>
-    <string name="checkin_action">Check In</string>
-    <string name="checkin_done">Checked In</string>
-    <string name="retry">Retry</string>
-    <string name="checkin_notification_message">This will notify your followers you are here.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
     <string name="activity_registration_email_hint">Email</string>
@@ -211,9 +125,6 @@
     <string name="entered_long_time_ago">Entered many days ago</string>
 
     <string name="user_not_found">User not found</string>
-    <string name="dont_show_again">Ok, don\'t show again</string>
-    <string name="problem_while_checkin">There was a problem while checking in</string>
-    <string name="successfully_checked_in">Checked in</string>
 
     <string name="starting_in">Starting in&#160;</string>
     <string name="space_and_minutes">&#160;min</string>
@@ -229,10 +140,6 @@
     <string name="today_at">Today&#160;</string>
     <string name="tomorrow_at">Tomorrow&#160;</string>
 
-    <string name="checked_in">Checked In</string>
-    <string name="check_in_action">Check In</string>
-    <string name="check_out_action">Check Out</string>
-    <string name="reset_password_button">Enter your username or email</string>
     <string name="title_activity_reset_password">Reset Password</string>
 
     <plurals name="listing_watchers">
@@ -256,10 +163,8 @@
     <string name="stream_participants_following_number">following %d</string>
     <string name="title_activity_stream_media">Media</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="stream_media_empty_title">No photos or videos</string>
     <string name="stream_detail_media">Media</string>
-    <string name="stream_detail_media_number">0</string>
     <string name="stream_detail_edit_menu_title">Edit</string>
     <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
     <string name="done">Done</string>
@@ -274,13 +179,11 @@
     <string name="menu_add_favorite">Add to Favorites</string>
     <string name="menu_remove_favorite">Remove from Favorites</string>
     <string name="added_to_favorites">Added to Favorites</string>
-    <string name="notifications_off_alert">Notifications off</string>
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <string name="share_stream_activity_text_pattern">Shared (stream)</string>
     <string name="opened_activity_text_pattern">Opened (stream)</string>
     <string name="stream_favorited_activity_text_pattern">Favorited (stream)</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
-    <string name="title_activity_stream_search">StreamSearchActivity</string>
     <string name="activity_find_streams_hint">Find streams</string>
     <string name="activity_find_streams_title">Find streams</string>
     <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
@@ -291,7 +194,6 @@
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="activity_edit_profile_email_hint">Email</string>
     <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
-    <string name="email_confirmation_button_text">Done</string>
     <string name="email_confirmation_title">Confirm Your Email</string>
     <string name="email_confirmation_message_content">"Click the link in the email we've just sent to "</string>
     <string name="email_confirmation_ok">OK</string>
@@ -309,9 +211,7 @@
             %d nices
         </item>
     </plurals>
-    <string name="new_stream_short_title_text">Short title</string>
     <string name="new_stream_short_title_label">Short title</string>
-    <string name="short_title_warning">3 to 15 characters</string>
     <string name="profile_all_shots">All shots</string>
     <string name="title_activity_all_shots">All shots</string>
     <string name="new_stream_description_label">Description</string>
@@ -346,10 +246,6 @@
     <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
     <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
-    <string name="notification_nice_content_text">Niced your shot</string>
-    <string name="notification_nice_text_pattern">%s niced your shot</string>
-    <string name="activity_nice_shot_text_base">Niced by @%s</string>
-    <string name="activity_share_shot_text_base">Shared by @%s</string>
     <string name="share_shot_chooser_title">Share</string>
     <string name="menu_share_shot_via">Share via…</string>
     <string name="error_stream_read_only">This stream was removed and is read-only</string>
@@ -368,7 +264,6 @@
     <string name="drafts_action_shoot">Shoot</string>
     <string name="title_activity_all_participants">All Participants</string>
     <string name="menu_search_participants">Find participants</string>
-    <string name="title_activity_find_participants">FindParticipantsActivity</string>
     <string name="activity_find_participants_empty_message">No results</string>
     <string name="participants_list_empty">No participants</string>
     <string name="unfollow_dialog_message">"Unfollow %s?"</string>
