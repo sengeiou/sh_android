@@ -12,6 +12,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 @Singleton
 public class ShotNotificationManager {
 
@@ -33,6 +35,7 @@ public class ShotNotificationManager {
     }
 
     public void sendNewShotNotification(ShotModel shot) {
+        checkNotNull(shot);
         shotsCurrentlyNotified.add(shot);
 
         CommonNotification notification;

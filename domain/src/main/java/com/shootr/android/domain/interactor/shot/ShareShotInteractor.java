@@ -1,14 +1,11 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.service.shot.DeletedShotException;
 import javax.inject.Inject;
 
 public class ShareShotInteractor implements Interactor {
@@ -38,10 +35,8 @@ public class ShareShotInteractor implements Interactor {
         try {
             remoteShotRepository.shareShot(idShot);
             notifyCompleted();
-        } catch (ServerCommunicationException networkError) {
-            notifyError(networkError);
-        } catch (ShotRemovedException error) {
-            notifyError(new DeletedShotException(error));
+        } catch (ShootrException error) {
+            notifyError(error);
         }
     }
 

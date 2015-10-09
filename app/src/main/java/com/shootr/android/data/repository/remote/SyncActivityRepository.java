@@ -6,7 +6,6 @@ import com.shootr.android.data.repository.datasource.activity.ActivityDataSource
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -47,11 +46,7 @@ public class SyncActivityRepository implements ActivityRepository {
     @Override
     public Activity getActivity(String activityId) {
         ActivityEntity activity = remoteActivityDataSource.getActivity(activityId);
-        try {
-            bindActivityShot(activity);
-        } catch (ShotRemovedException e) {
-            throw new IllegalArgumentException(e);
-        }
+        bindActivityShot(activity);
         return activityEntityMapper.transform(activity);
     }
 
@@ -62,24 +57,20 @@ public class SyncActivityRepository implements ActivityRepository {
     private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activityEntities) {
         List<ActivityEntity> activities = new ArrayList<>();
         for (ActivityEntity entity : activityEntities) {
-            try {
-                bindActivityShot(entity);
-                activities.add(entity);
-            } catch (ShotRemovedException error) {
-                /* swallow it */
-            }
+            bindActivityShot(entity);
+            activities.add(entity);
         }
         return activities;
     }
 
-    private void bindActivityShot(ActivityEntity entity) throws ShotRemovedException {
+    private void bindActivityShot(ActivityEntity entity) {
         if (entity.getIdShot() != null) {
             Shot shot = ensureShotExistInLocal(entity);
             entity.setShotForMapping(shot);
         }
     }
 
-    private Shot ensureShotExistInLocal(ActivityEntity activity) throws ShotRemovedException {
+    private Shot ensureShotExistInLocal(ActivityEntity activity) {
         String idShot = checkNotNull(activity.getIdShot());
         Shot localShot = localShotRepository.getShot(idShot);
         if (localShot != null) {

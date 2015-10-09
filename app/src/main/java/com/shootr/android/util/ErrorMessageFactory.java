@@ -7,9 +7,9 @@ import com.shootr.android.R;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShotNotFoundException;
 import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
-import com.shootr.android.domain.service.shot.DeletedShotException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -106,7 +106,7 @@ public class ErrorMessageFactory {
             return context.getString(R.string.email_already_registered);
         } else if(error instanceof StreamIsAlreadyInFavoritesException) {
             return getStreamIsAlreadyInFavoritesError();
-        } else if(error instanceof DeletedShotException) {
+        } else if(error instanceof ShotNotFoundException) {
             return getShotDeletedException();
         } else {
             return getUnknownErrorMessage();

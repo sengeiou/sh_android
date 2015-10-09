@@ -3,13 +3,14 @@ package com.shootr.android.data.repository.datasource.shot;
 import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShotRemovedException;
+import com.shootr.android.domain.exception.ShotNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,17 +26,21 @@ public class ServiceShotDatasource implements ShotDataSource {
         this.shotApiEntityMapper = shotApiEntityMapper;
     }
 
-    @Override public ShotEntity putShot(ShotEntity shotEntity) throws ShotRemovedException {
+    @Override public ShotEntity putShot(ShotEntity shotEntity) {
         try {
             return shotApiService.postNewShot(shotEntity);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            throw new ShotRemovedException(e);
+            if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
+                throw new ShotNotFoundException(e);
+            } else {
+                throw new ServerCommunicationException(e);
+            }
         }
     }
 
-    @Override public void putShots(List<ShotEntity> shotEntities) throws ShotRemovedException {
+    @Override public void putShots(List<ShotEntity> shotEntities) {
         for (ShotEntity shotEntity : shotEntities) {
             putShot(shotEntity);
         }
@@ -53,13 +58,17 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public ShotEntity getShot(String shotId) throws ShotRemovedException {
+    @Override public ShotEntity getShot(String shotId) throws ShotNotFoundException {
         try {
             return shotApiEntityMapper.transform(shotApiService.getShot(shotId));
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            throw new ShotRemovedException(error);
+            if (error.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
+                throw new ShotNotFoundException(error);
+            } else {
+                throw new ServerCommunicationException(error);
+            }
         }
     }
 
@@ -93,7 +102,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     @Override
-    public ShotDetailEntity getShotDetail(String idShot) throws ShotRemovedException {
+    public ShotDetailEntity getShotDetail(String idShot) throws ShotNotFoundException {
         try {
             ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
 
@@ -109,7 +118,11 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         } catch (ApiException e) {
-            throw new ShotRemovedException(e);
+            if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
+                throw new ShotNotFoundException(e);
+            } else {
+                throw new ServerCommunicationException(e);
+            }
         }
     }
 
@@ -132,13 +145,17 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public void shareShot(String idShot) throws ShotRemovedException {
+    @Override public void shareShot(String idShot) throws ShotNotFoundException {
         try {
             shotApiService.shareShot(idShot);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException error) {
-            throw new ShotRemovedException(error);
+            if (error.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
+                throw new ShotNotFoundException(error);
+            } else {
+                throw new ServerCommunicationException(error);
+            }
         }
     }
 
