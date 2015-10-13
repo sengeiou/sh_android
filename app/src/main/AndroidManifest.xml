@@ -24,6 +24,7 @@
         android:name=".ShootrApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:supportsRtl="false"
         android:theme="@style/ShootrTheme" >
         <activity
             android:name=".ui.activities.MainTabbedActivity"
@@ -137,7 +138,8 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.gcm.NotificationIntentReceiver" >
+        <receiver android:name=".notifications.gcm.NotificationIntentReceiver"
+          android:exported="false">
             <intent-filter>
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />

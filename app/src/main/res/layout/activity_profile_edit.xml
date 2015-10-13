@@ -16,7 +16,7 @@
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:orientation="vertical">
 
             <com.shootr.android.ui.widgets.FloatLabelLayout
@@ -119,11 +119,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/activity_edit_profile_email_hint"
-                android:imeOptions="actionDone"
                 android:maxLength="150"
                 android:maxLines="4"
                 android:clickable="true"
-                android:inputType="text|textEmailAddress"
                 style="@android:style/Widget.EditText" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
