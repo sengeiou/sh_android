@@ -2,9 +2,12 @@ package com.shootr.android.domain.utils;
 
 import javax.inject.Inject;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Hours;
-import org.joda.time.Minutes;
+import org.threeten.bp.Duration;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.temporal.ChronoUnit;
+import org.threeten.bp.temporal.Temporal;
 
 public class StreamJoinDateFormatter {
 
@@ -71,18 +74,42 @@ public class StreamJoinDateFormatter {
     }
 
     private int getMinutesBetween(DateTime date, DateTime now) {
-        DateTime dateRounded = now.withSecondOfMinute(0).withMillisOfSecond(0);
-        DateTime nowRounded = date.withSecondOfMinute(0).withMillisOfSecond(0);
-        return Math.abs(Minutes.minutesBetween(dateRounded, nowRounded).getMinutes());
-    }
+        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
+        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
 
+        Duration between = Duration.between(truncateMinutes(dateInstant), truncateMinutes(nowInstant)).abs();
+        return (int) between.toMinutes();
+    }
 
     private int getHoursBetween(DateTime date, DateTime now) {
-        return Math.abs(Hours.hoursBetween(now.withMinuteOfHour(0), date.withMinuteOfHour(0)).getHours());
+        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
+        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
+
+        Duration between = Duration.between(truncateHours(dateInstant), truncateHours(nowInstant)).abs();
+        return (int) between.toHours();
     }
 
-    private int getDaysBetween(DateTime targetDate, DateTime now) {
-        return Math.abs(Days.daysBetween(targetDate.withTimeAtStartOfDay(), now.withTimeAtStartOfDay()).getDays());
+    private int getDaysBetween(DateTime date, DateTime now) {
+        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
+        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
+
+        Duration between = Duration.between(truncateDays(dateInstant), truncateDays(nowInstant)).abs();
+        return (int) between.toDays();
+    }
+
+    private Temporal truncateMinutes(Instant dateInstant) {
+        ZonedDateTime zonedDateTime = dateInstant.atZone(ZoneId.systemDefault());
+        return zonedDateTime.truncatedTo(ChronoUnit.MINUTES);
+    }
+
+    private Temporal truncateHours(Instant dateInstant) {
+        ZonedDateTime zonedDateTime = dateInstant.atZone(ZoneId.systemDefault());
+        return zonedDateTime.truncatedTo(ChronoUnit.HOURS);
+    }
+
+    private Temporal truncateDays(Instant dateInstant) {
+        ZonedDateTime zonedDateTime = dateInstant.atZone(ZoneId.systemDefault());
+        return zonedDateTime.truncatedTo(ChronoUnit.DAYS);
     }
     //endregion
 }
