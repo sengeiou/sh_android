@@ -60,7 +60,7 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
         this.hideViewLoading();
         List<User> people = userList.getUsers();
         List<UserModel> userModels = userModelMapper.transform(people);
-
+        peopleView.showPeopleList();
         if (people != null && !people.isEmpty()) {
             this.showPeopleListInView(userModels);
             this.hideViewEmpty();

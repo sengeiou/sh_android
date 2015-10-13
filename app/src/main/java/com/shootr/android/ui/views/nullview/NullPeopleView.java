@@ -10,6 +10,10 @@ public class NullPeopleView implements PeopleView {
         /* no-op */
     }
 
+    @Override public void showPeopleList() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

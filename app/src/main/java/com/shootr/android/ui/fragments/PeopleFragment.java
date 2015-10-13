@@ -33,6 +33,7 @@ import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -67,7 +68,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         presenter.setView(this);
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
-        userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
         userlistListView.setAdapter(getPeopleAdapter());
     }
@@ -168,13 +168,19 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void renderUserList(List<UserModel> people) {
-        userlistListView.setVisibility(View.VISIBLE);
         getPeopleAdapter().setItems(people);
         getPeopleAdapter().notifyDataSetChanged();
     }
 
+    @Override public void showPeopleList() {
+        userlistListView.setVisibility(View.VISIBLE);
+    }
+
     @Override public void showEmpty() {
-        userlistListView.setVisibility(View.GONE);
+        getPeopleAdapter().removeItems();
+        getSuggestedPeopleAdapter().removeItems();
+        getPeopleAdapter().notifyDataSetChanged();
+        getSuggestedPeopleAdapter().notifyDataSetChanged();
         emptyTextView.setVisibility(View.VISIBLE);
     }
 
