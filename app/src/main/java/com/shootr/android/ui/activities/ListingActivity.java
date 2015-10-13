@@ -139,6 +139,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
               @Override public void run() {
                   shareStream(stream);
               }
+          })
+          .addAction(getString(R.string.edit_stream), new Runnable() {
+              @Override public void run() {
+                  Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                  startActivity(intent);
+              }
           }).show();
     }
 
