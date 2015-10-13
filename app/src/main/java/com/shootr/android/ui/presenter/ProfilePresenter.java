@@ -125,14 +125,16 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void onProfileLoaded(User user) {
-        this.isCurrentUser = user.isMe();
-        setupMenuItemsVisibility();
-        this.setUserModel(userModelMapper.transform(user));
-        profileView.setUserInfo(userModel);
-        loadProfileUserListing();
-        setRelationshipButtonStatus(user);
-        if (isCurrentUser && user.getPhoto() == null) {
-            profileView.showAddPhoto();
+        if (user != null) {
+            this.isCurrentUser = user.isMe();
+            setupMenuItemsVisibility();
+            this.setUserModel(userModelMapper.transform(user));
+            profileView.setUserInfo(userModel);
+            loadProfileUserListing();
+            setRelationshipButtonStatus(user);
+            if (isCurrentUser && user.getPhoto() == null) {
+                profileView.showAddPhoto();
+            }
         }
     }
 
