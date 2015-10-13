@@ -23,6 +23,7 @@ apply plugin: "sonar-runner"
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'http://dl.bintray.com/sloy/maven'} //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -176,7 +177,7 @@ dependencies {
         transitive = true;
     }
 
-    compile 'com.fewlaps.quitnowcache:quitnow-cache:1.2'
+    compile 'com.sloydev.quitnowcache:quitnow-cache:1.2' //TODO use original when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
 
 }
 
