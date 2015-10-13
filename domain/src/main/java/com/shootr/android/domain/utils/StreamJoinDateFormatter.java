@@ -1,7 +1,6 @@
 package com.shootr.android.domain.utils;
 
 import javax.inject.Inject;
-import org.joda.time.DateTime;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
@@ -21,12 +20,12 @@ public class StreamJoinDateFormatter {
     }
 
     public String format(long eventTimestamp) {
-        DateTime date = new DateTime(eventTimestamp);
-        DateTime now = new DateTime(timeUtils.getCurrentTime());
+        Instant date = Instant.ofEpochMilli(eventTimestamp);
+        Instant now = Instant.ofEpochMilli(timeUtils.getCurrentTime());
         return formatRelativeJoinStreamDate(date, now);
     }
 
-    private String formatRelativeJoinStreamDate(DateTime joinDate, DateTime now) {
+    private String formatRelativeJoinStreamDate(Instant joinDate, Instant now) {
         if (isPast(joinDate, now)) {
             return formatPastDate(joinDate, now);
         }else{
@@ -38,7 +37,7 @@ public class StreamJoinDateFormatter {
         return dateRangeTextProvider.formatJustNow();
     }
 
-    private String formatPastDate(DateTime date, DateTime now) {
+    private String formatPastDate(Instant date, Instant now) {
         if (differsLessThanOneMinute(date, now)) {
             return dateRangeTextProvider.formatJustNow();
         }else if (differsLessThan60Minutes(date, now)) {
@@ -53,47 +52,38 @@ public class StreamJoinDateFormatter {
     }
 
     //region Helper functions
-    private boolean isPast(DateTime date, DateTime now) {
+    private boolean isPast(Instant date, Instant now) {
         return date.isBefore(now);
     }
 
-    private boolean differsOneWeekOrLess(DateTime date, DateTime now) {
+    private boolean differsOneWeekOrLess(Instant date, Instant now) {
         return getDaysBetween(date, now) <= 7;
     }
 
-    private boolean differsLessThan24Hours(DateTime date, DateTime now) {
+    private boolean differsLessThan24Hours(Instant date, Instant now) {
         return getHoursBetween(date, now) < 24;
     }
 
-    private boolean differsLessThanOneMinute(DateTime date, DateTime now) {
+    private boolean differsLessThanOneMinute(Instant date, Instant now) {
         return getMinutesBetween(date, now) < 1;
     }
 
-    private boolean differsLessThan60Minutes(DateTime date, DateTime now) {
+    private boolean differsLessThan60Minutes(Instant date, Instant now) {
         return getMinutesBetween(date, now) < 60;
     }
 
-    private int getMinutesBetween(DateTime date, DateTime now) {
-        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
-        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
-
-        Duration between = Duration.between(truncateMinutes(dateInstant), truncateMinutes(nowInstant)).abs();
+    private int getMinutesBetween(Instant date, Instant now) {
+        Duration between = Duration.between(truncateMinutes(date), truncateMinutes(now)).abs();
         return (int) between.toMinutes();
     }
 
-    private int getHoursBetween(DateTime date, DateTime now) {
-        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
-        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
-
-        Duration between = Duration.between(truncateHours(dateInstant), truncateHours(nowInstant)).abs();
+    private int getHoursBetween(Instant date, Instant now) {
+        Duration between = Duration.between(truncateHours(date), truncateHours(now)).abs();
         return (int) between.toHours();
     }
 
-    private int getDaysBetween(DateTime date, DateTime now) {
-        Instant dateInstant = Instant.ofEpochMilli(date.getMillis());
-        Instant nowInstant = Instant.ofEpochMilli(now.getMillis());
-
-        Duration between = Duration.between(truncateDays(dateInstant), truncateDays(nowInstant)).abs();
+    private int getDaysBetween(Instant date, Instant now) {
+        Duration between = Duration.between(truncateDays(date), truncateDays(now)).abs();
         return (int) between.toDays();
     }
 
