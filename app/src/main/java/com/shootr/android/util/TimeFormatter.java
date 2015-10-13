@@ -1,73 +1,26 @@
 package com.shootr.android.util;
 
 import javax.inject.Inject;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 public class TimeFormatter {
 
-    DateTimeFormatter hourFormater = DateTimeFormat.forPattern("HH:mm");
-    DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
-    DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
-    DateTimeFormatter detailedFormater = DateTimeFormat.forPattern("EEEE dd MMMM HH:mm");
-
-    DateTimeFormatter absoluteTimeFormater = DateTimeFormat.forPattern("HH:mm");
+    DateTimeFormatter detailedFormater = DateTimeFormatter.ofPattern("EEEE dd MMMM HH:mm");
 
     @Inject public TimeFormatter() {
 
     }
 
-    //region Getters
-    public String getDateAndTimeTextRelative(long targetTimestamp) {
-        DateTime targetDate = new DateTime(targetTimestamp);
-        if (isToday(targetDate)) {
-            return getTodayFormat(targetDate);
-        }else if (isLessThanAWeek(targetDate)) {
-            return getDayOfWeek(targetDate).toUpperCase();
-        } else {
-            return getDayFormat(targetDate);
-        }
-    }
-
     public String getDateAndTimeDetailed(long timestamp) {
-        DateTime targetDate = new DateTime(timestamp);
+        ZonedDateTime targetDate = ZonedDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
         return getDetailedFormat(targetDate);
     }
 
-    private String getDayOfWeek(DateTime targetDate) {
-        return weekDayFormater.print(targetDate);
+    private String getDetailedFormat(ZonedDateTime targetDate) {
+        return detailedFormater.format(targetDate);
     }
 
-    private String getDayFormat(DateTime targetDate) {
-        return dayFormater.print(targetDate);
-    }
-
-    private String getTodayFormat(DateTime dateTime) {
-        return hourFormater.print(dateTime);
-    }
-
-    private String getDetailedFormat(DateTime targetDate) {
-        return detailedFormater.print(targetDate);
-    }
-
-    public String getAbsoluteTime(long targetTimestamp) {
-        return absoluteTimeFormater.print(targetTimestamp);
-    }
-
-    private int getDaysUntil(DateTime targetDate) {
-        return Days.daysBetween(DateTime.now(), targetDate).getDays();
-    }
-    //endregion
-
-    //region Checkers
-    private boolean isToday(DateTime targetDate) {
-        return getDaysUntil(targetDate) == 0;
-    }
-
-    private boolean isLessThanAWeek(DateTime targetDate) {
-        return getDaysUntil(targetDate) < 7;
-    }
-    //endregion
 }
