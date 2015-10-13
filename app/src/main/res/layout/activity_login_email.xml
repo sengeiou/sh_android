@@ -62,34 +62,25 @@
             </EditText>
         </com.shootr.android.ui.widgets.FloatLabelLayout>
 
-        <!--<Button
-        android:id="@+id/email_login_button"
-        style="@style/BlueButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Iniciar sesión"
-        />-->
+        <TextView android:id="@+id/email_login_button"
+          style="@style/LoginButton"
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:enabled="false"
+          android:fontFamily="sans-serif-medium"
+          android:text="@string/activity_login_email_button" />
 
-        <com.dd.CircularProgressButton
-            android:id="@+id/email_login_button"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:textAllCaps="true"
-            app:cpb_colorIndicator="@color/primary"
-            app:cpb_colorProgress="@color/transparent"
-            app:cpb_selectorIdle="@drawable/btn_circular_progress_background"
-            app:cpb_textError="@string/activity_login_email_error_credentials"
-            app:cpb_textIdle="@string/activity_login_email_button"
-            />
+        <ProgressBar android:id="@+id/login_loading"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:indeterminate="true"
+          android:layout_gravity="center"
+          android:visibility="gone"
+          tools:visibility="visible" />
 
         <TextView
             android:id="@+id/email_login_forgot"

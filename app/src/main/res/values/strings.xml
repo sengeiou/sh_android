@@ -111,7 +111,7 @@
     <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
     <string name="registration_create_button_text">Create account</string>
     <string name="account_confirmation_title">Is this correct?</string>
-    <string name="error_login_credentials_invalid">ID OR PASSWORD ARE NOT VALID</string>
+    <string name="error_login_credentials_invalid">Id or password are not valid</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
 

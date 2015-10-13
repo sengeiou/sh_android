@@ -171,6 +171,14 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="LoginButton">
+        <item name="android:background">@drawable/button_login_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/button_login_text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="LoginSessionButton">
         <item name="android:background">@color/transparent</item>x
         <item name="android:textColor">@color/primary</item>

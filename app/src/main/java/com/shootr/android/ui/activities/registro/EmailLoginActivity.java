@@ -3,18 +3,20 @@ package com.shootr.android.ui.activities.registro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import com.dd.CircularProgressButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.presenter.EmailLoginPresenter;
 import com.shootr.android.ui.views.EmailLoginView;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
@@ -25,9 +27,11 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     @Bind(R.id.email_login_username_email) public EditText emailUsername;
     @Bind(R.id.email_login_password) public EditText password;
-    @Bind(R.id.email_login_button) CircularProgressButton loginButton;
+    @Bind(R.id.email_login_button) TextView loginButton;
+    @Bind(R.id.login_loading) View loadingView;
 
     @Inject EmailLoginPresenter presenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     /* --- UI methods --- */
 
@@ -90,17 +94,19 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void showLoading() {
-        loginButton.setIndeterminateProgressMode(true);
-        loginButton.setProgress(BUTTON_LOADING);
+        loginButton.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoading() {
-        loginButton.setProgress(BUTTON_NORMAL);
+        loadingView.setVisibility(View.GONE);
+        loginButton.setVisibility(View.VISIBLE);
     }
 
     @Override public void showError(String errorMessage) {
-        loginButton.setErrorText(errorMessage);
-        loginButton.setProgress(BUTTON_ERROR);
+        feedbackMessage.show(getView(), errorMessage);
+        loadingView.setVisibility(View.GONE);
+        loginButton.setVisibility(View.VISIBLE);
     }
 
     @Override public void disableLoginButton() {
@@ -109,10 +115,6 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void enableLoginButton() {
         loginButton.setEnabled(true);
-    }
-
-    @Override public void hideError() {
-        loginButton.setProgress(BUTTON_NORMAL);
     }
 
     @Override protected boolean requiresUserLogin() {
