@@ -118,31 +118,4 @@ public class EmailLoginPresenterTest {
         verify(emailLoginView).showError(anyString());
     }
 
-    @Test public void shouldHideErrorWhenInputHasChangedAndBothHaveText() throws Exception {
-        when(emailLoginView.getUsernameOrEmail()).thenReturn(USERNAME_STUB);
-        when(emailLoginView.getPassword()).thenReturn(PASSWORD_STUB);
-
-        presenter.inputTextChanged();
-
-        verify(emailLoginView).hideError();
-    }
-
-    @Test public void shouldHideErrorWhenInputHasChangedAndUsernameIsEmpty() throws Exception {
-        when(emailLoginView.getUsernameOrEmail()).thenReturn(EMPTY_INPUT);
-        when(emailLoginView.getPassword()).thenReturn(PASSWORD_STUB);
-
-        presenter.inputTextChanged();
-
-        verify(emailLoginView).hideError();
-    }
-
-    @Test public void shouldHideErrorWhenInputHasChangedAndPasswordIsEmpty() throws Exception {
-        when(emailLoginView.getUsernameOrEmail()).thenReturn(USERNAME_STUB);
-        when(emailLoginView.getPassword()).thenReturn(EMPTY_INPUT);
-
-        presenter.inputTextChanged();
-
-        verify(emailLoginView).hideError();
-    }
-
 }
