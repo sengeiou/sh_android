@@ -15,7 +15,7 @@
 
     <!-- Profile: Name -->
     <string name="error_message_name_invalid">Invalid characters</string>
-    <string name="error_message_name_long">Maximum length is 20 characters</string>
+    <string name="error_message_name_long">Maximum length is 25 characters</string>
 
     <!-- Profile: Website -->
     <string name="error_message_website_invalid">Invalid website</string>
