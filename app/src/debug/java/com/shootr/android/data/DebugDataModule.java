@@ -3,7 +3,6 @@ package com.shootr.android.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
@@ -83,10 +82,6 @@ public class DebugDataModule {
     @Provides @Singleton @CaptureIntents
     BooleanPreference provideCaptureIntentsPreference(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_capture_intents", DEFAULT_CAPTURE_INTENTS);
-    }
-
-    @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {
-        return networkUtil;
     }
 
     @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application, Version version) {

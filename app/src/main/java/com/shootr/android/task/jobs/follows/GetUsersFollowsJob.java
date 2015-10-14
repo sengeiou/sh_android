@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.follows;
 
 import android.app.Application;
-import com.path.android.jobqueue.Params;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
@@ -35,12 +33,11 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     private SessionRepository sessionRepository;
 
     @Inject public GetUsersFollowsJob(Application application,
-      @Main Bus bus, NetworkUtil networkUtil,
-      UserApiService userApiService,
+      @Main Bus bus, UserApiService userApiService,
       FollowManager followManager,
       UserEntityModelMapper userModelMapper,
       SessionRepository sessionRepository) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(application, bus);
         this.userApiService = userApiService;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
@@ -85,10 +82,5 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
         }
     }
 
-
-
-    @Override protected boolean isNetworkRequired() {
-        return true;
-    }
 
 }

@@ -2,9 +2,7 @@ package com.shootr.android.task.jobs;
 
 import android.app.Application;
 import android.content.Context;
-import com.path.android.jobqueue.Job;
-import com.path.android.jobqueue.Params;
-import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.DatabaseErrorEvent;
@@ -13,27 +11,26 @@ import java.io.IOException;
 import java.sql.SQLException;
 import timber.log.Timber;
 
-public abstract class ShootrBaseJob<T> extends Job {
+//TODO all children must die
+public abstract class ShootrBaseJob<T> implements Interactor {
 
     private final Application application;
 
     private Bus bus;
-    private NetworkUtil networkUtil;
 
-    protected ShootrBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
-        super(params);
+    protected ShootrBaseJob(Application application, Bus bus) {
         this.application = application;
         this.bus = bus;
-        this.networkUtil = networkUtil;
     }
 
     @Override
-    public void onRun() throws Throwable {
+    public void execute() throws Exception {
+        onRun();
+    }
+
+    public void onRun() throws Exception {
         if (!hasInternetConnection()) {
             postConnectionNotAvailableEvent();
-            if (isNetworkRequired()) {
-                return;
-            }
         }
 
         try {
@@ -47,8 +44,8 @@ public abstract class ShootrBaseJob<T> extends Job {
         }
     }
 
-    public boolean hasInternetConnection(){
-        return networkUtil.isConnected(application);
+    public boolean hasInternetConnection() {
+        return true;
     }
 
     protected abstract void run() throws SQLException, IOException, Exception;
@@ -73,27 +70,11 @@ public abstract class ShootrBaseJob<T> extends Job {
         bus.post(o);
     }
 
-    protected abstract boolean isNetworkRequired();
-
-    @Override public void onAdded() {
-    }
-
-    @Override protected void onCancel() {
-    }
-
-    @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return false;
-    }
-
     protected Context getContext() {
         return application;
     }
     public void setBus(Bus bus) {
         this.bus = bus;
-    }
-
-    public void setNetworkUtil(NetworkUtil networkUtil) {
-        this.networkUtil = networkUtil;
     }
 
     public static class SuccessEvent<T> {

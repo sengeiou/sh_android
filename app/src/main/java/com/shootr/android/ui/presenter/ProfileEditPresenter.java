@@ -1,9 +1,9 @@
 package com.shootr.android.ui.presenter;
 
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -31,19 +31,19 @@ public class ProfileEditPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final JobManager jobManager;
+    private final InteractorHandler interactorHandler;
 
     private UserModel currentUserModel;
     private boolean hasBeenPaused = false;
     private boolean discardConfirmEmailAlert = false;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
+      ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.jobManager = jobManager;
+        this.interactorHandler = interactorHandler;
     }
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
@@ -154,7 +154,7 @@ public class ProfileEditPresenter implements Presenter {
     private void saveUpdatedProfile(UserModel updatedUserModel) {
         UpdateUserProfileJob job = objectGraph.get(UpdateUserProfileJob.class);
         job.init(updatedUserModel);
-        jobManager.addJobInBackground(job);
+        interactorHandler.execute(job);
         this.showLoading();
     }
 

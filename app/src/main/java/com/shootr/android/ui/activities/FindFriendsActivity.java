@@ -18,12 +18,12 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -57,7 +57,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_SEARCH_PAGE = "currentPage";
 
     @Inject ImageLoader imageLoader;
-    @Inject JobManager jobManager;
+    @Inject InteractorHandler interactorHandler;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @Main Bus bus;
     @Inject FollowInteractor followInteractor;
@@ -214,7 +214,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     public void makeLocalSearch() {
         SearchPeopleLocalJob job = objectGraph.get(SearchPeopleLocalJob.class);
         job.init(currentSearchQuery);
-        jobManager.addJobInBackground(job);
+        interactorHandler.execute(job);
     }
 
     public void makeNewRemoteSearch() {
@@ -227,7 +227,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         if (!isLoadingRemoteData) {
             SearchPeopleRemoteJob remoteSearchJob = objectGraph.get(SearchPeopleRemoteJob.class);
             remoteSearchJob.init(currentSearchQuery, currentPage);
-            jobManager.addJobInBackground(remoteSearchJob);
+            interactorHandler.execute(remoteSearchJob);
             isLoadingRemoteData = true;
         }
     }
