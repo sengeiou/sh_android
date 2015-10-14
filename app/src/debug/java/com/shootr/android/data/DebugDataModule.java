@@ -62,10 +62,6 @@ public class DebugDataModule {
         return new IntPreference(preferences, "debug_animation_speed", DEFAULT_ANIMATION_SPEED);
     }
 
-    @Provides @Singleton @PicassoDebugging BooleanPreference providePicassoDebugging(SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "debug_picasso_debugging", DEFAULT_PICASSO_DEBUGGING);
-    }
-
     @Provides @Singleton @ScalpelEnabled BooleanPreference provideScalpelEnabled(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_scalpel_enabled", DEFAULT_SCALPEL_ENABLED);
     }
