@@ -48,6 +48,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
+import com.shootr.android.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -121,7 +122,6 @@ public class ProfileFragment extends BaseFragment
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject ToolbarDecorator toolbarDecorator;
-
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject ReportShotPresenter reportShotPresenter;
@@ -233,6 +233,11 @@ public class ProfileFragment extends BaseFragment
         shotsList.setOnShotClick(new OnShotClick() {
             @Override public void onShotClick(ShotModel shot) {
                 openShot(shot);
+            }
+        });
+        shotsList.setOnShotLongClick(new OnShotLongClick() {
+            @Override public void onShotLongClick(ShotModel shot) {
+                reportShotPresenter.onShotLongPressed(shot);
             }
         });
     }
@@ -744,28 +749,25 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+        getBaseContextMenuOptions(shotModel).addAction(getActivity().getString(R.string.report_context_menu_report),
           new Runnable() {
               @Override public void run() {
-                  profilePresenter.shareShot(shotModel);
+                  reportShotPresenter.report(shotModel);
               }
-          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-            @Override public void run() {
-                shareShot(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
-            @Override public void run() {
-                Clipboard.copyShotComment(getActivity(), shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
+          }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+        getBaseContextMenuOptions(shotModel).addAction(getActivity().getString(R.string.report_context_menu_delete),
+          new Runnable() {
+              @Override public void run() {
+                  openDeleteShotConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
+        return new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
           new Runnable() {
               @Override public void run() {
                   profilePresenter.shareShot(shotModel);
@@ -778,11 +780,7 @@ public class ProfileFragment extends BaseFragment
             @Override public void run() {
                 Clipboard.copyShotComment(getActivity(), shotModel);
             }
-        }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
-            @Override public void run() {
-                openDeleteShotConfirmation(shotModel);
-            }
-        }).show();
+        });
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
