@@ -11,7 +11,6 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotDispatcher;
-import hugo.weaving.DebugLog;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +129,7 @@ public class ShotDispatcherBackgroundService extends Service {
             this.imageFile = imageFile;
         }
 
-        @DebugLog @Override public void run() {
+        @Override public void run() {
             shotDispatcher.sendShot(shot, imageFile);
             synchronized (threadList) {
                 threadList.remove(thread);
@@ -142,7 +141,7 @@ public class ShotDispatcherBackgroundService extends Service {
 
         Thread thread;
 
-        @DebugLog @Override public void run() {
+        @Override public void run() {
             shotDispatcher.restartQueue();
             synchronized (threadList) {
                 threadList.remove(thread);
