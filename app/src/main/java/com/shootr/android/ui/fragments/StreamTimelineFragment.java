@@ -592,24 +592,19 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
-              @Override public void run() {
-                  streamTimelinePresenter.shareShot(shotModel);
-              }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShotIntent(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
-            @Override
-            public void run() {
-                copyShotCommentToClipboard(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+        builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+        builder.addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
             }
         }).show();
     }
@@ -628,27 +623,21 @@ public class StreamTimelineFragment extends BaseFragment
         alertDialog.show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+    private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
+        return new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+          new Runnable() {
               @Override public void run() {
                   streamTimelinePresenter.shareShot(shotModel);
               }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShotIntent(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
-            @Override
-            public void run() {
+          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+            @Override public void run() {
+                shareShotIntent(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+            @Override public void run() {
                 copyShotCommentToClipboard(shotModel);
             }
-        }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
-            @Override public void run() {
-                openDeleteConfirmation(shotModel);
-            }
-        }).show();
+        });
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
