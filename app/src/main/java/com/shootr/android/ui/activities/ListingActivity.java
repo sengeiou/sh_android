@@ -122,30 +122,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         presenter.pause();
     }
 
-    private void openContextualMenu(final StreamResultModel stream) {
-        new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
-              @Override
-              public void run() {
-                  presenter.addToFavorite(stream);
-              }
-          })
-          .addAction(getString(R.string.share_via_shootr), new Runnable() {
-              @Override public void run() {
-                  presenter.shareStream(stream);
-              }
-          })
-          .addAction(getString(R.string.share_via), new Runnable() {
-              @Override public void run() {
-                  shareStream(stream);
-              }
-          })
-          .addAction(getString(R.string.edit_stream), new Runnable() {
-              @Override public void run() {
-                  Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
-                  startActivity(intent);
-              }
-          }).show();
+    private void openContextualMenu(StreamResultModel stream) {
+        presenter.openContextualMenu(stream);
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -201,6 +179,52 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override
     public void showSectionTitles() {
         adapter.setShowTitles(true);
+    }
+
+    @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+              @Override
+              public void run() {
+                  presenter.addToFavorite(stream);
+              }
+          })
+          .addAction(getString(R.string.share_via_shootr), new Runnable() {
+              @Override public void run() {
+                  presenter.shareStream(stream);
+              }
+          })
+          .addAction(getString(R.string.share_via), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          })
+          .addAction(getString(R.string.edit_stream), new Runnable() {
+              @Override public void run() {
+                  Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                  startActivity(intent);
+              }
+          }).show();
+    }
+
+    @Override public void showContextMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+              @Override public void run() {
+                  presenter.addToFavorite(stream);
+              }
+          })
+          .addAction(getString(R.string.share_via_shootr), new Runnable() {
+              @Override public void run() {
+                  presenter.shareStream(stream);
+              }
+          })
+          .addAction(getString(R.string.share_via), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          })
+          .show();
     }
 
     @Override public void showContent() {

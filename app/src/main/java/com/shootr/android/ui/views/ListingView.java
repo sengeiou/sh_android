@@ -25,4 +25,8 @@ public interface ListingView extends LoadDataView {
     void hideSectionTitles();
 
     void showSectionTitles();
+
+    void showCurrentUserContextMenu(StreamResultModel stream);
+
+    void showContextMenu(StreamResultModel stream);
 }
