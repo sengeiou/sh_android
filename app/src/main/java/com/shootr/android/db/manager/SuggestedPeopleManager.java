@@ -35,11 +35,6 @@ public class SuggestedPeopleManager extends AbstractManager {
         } else {
             getWritableDatabase().insertWithOnConflict(DatabaseContract.SuggestedPeopleTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertInSync();
-    }
-
-    private void insertInSync() {
-        insertInTableSync(SUGGESTED_PEOPLE_TABLE, 1, 0, 0);
     }
 
     private long deleteSuggestedPeople(SuggestedPeopleEntity suggestedPeople) {
