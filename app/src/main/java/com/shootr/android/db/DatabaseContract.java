@@ -19,28 +19,6 @@ public class DatabaseContract {
         String REVISION = "revision";
     }
 
-    public static final class TablesSync implements SyncColumns {
-
-        private TablesSync() {
-
-        }
-
-        public static final String TABLE = "TablesSync";
-
-        public static final String ORDER = "idOrder";
-        public static final String ENTITY = "entity";
-        public static final String FREQUENCY = "frequency";
-        public static final String MAX_TIMESTAMP = "max_timestamp";
-        public static final String MIN_TIMESTAMP = "min_timestamp";
-        public static final String MIN_ROWS = "min_rows";
-        public static final String MAX_ROWS = "max_rows";
-        public static final String DIRECTION = "direction";
-
-        public static final String[] PROJECTION = {
-          ORDER, ENTITY, FREQUENCY, MAX_ROWS, MIN_ROWS, MAX_TIMESTAMP, MIN_TIMESTAMP, DIRECTION
-        };
-    }
-
     public static class UserTable implements SyncColumns {
 
         private UserTable() {
