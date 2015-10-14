@@ -43,7 +43,10 @@ public class GetUserByIdInteractor implements Interactor {
     }
 
     private void loadLocalUser() {
-        notifyResult(localUserRepository.getUserById(userId));
+        User localUser = localUserRepository.getUserById(userId);
+        if (localUser != null) {
+            notifyResult(localUser);
+        }
     }
 
     private void loadRemoteUser() {
