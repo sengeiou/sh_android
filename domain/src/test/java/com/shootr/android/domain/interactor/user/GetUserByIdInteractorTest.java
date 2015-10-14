@@ -1,6 +1,8 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -15,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 public class GetUserByIdInteractorTest {
 
+    public static final String ID_USER = "idUser";
     private GetUserByIdInteractor interactor;
 
     @Mock UserRepository localUserRepository;
@@ -59,11 +63,34 @@ public class GetUserByIdInteractorTest {
         inOrder.verify(remoteUserRepository).getUserById(anyString());
     }
 
-    @Test public void shouldNotLoadUserFromLocalRepositoryIfRepositoryReturnsNull() throws Exception {
+    @Test public void shouldCallbackUserOnceIfLocalRepositoryReturnsNull() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(null);
 
         interactor.loadUserById(anyString(), callback, errorCallback);
 
         verify(callback, times(1)).onLoaded(any(User.class));
+    }
+
+    @Test public void shouldCallbackUserTwiceIfLocalRepositoryReturnsUser() throws Exception {
+        when(localUserRepository.getUserById(anyString())).thenReturn(user());
+        when(remoteUserRepository.getUserById(anyString())).thenReturn(user());
+
+        interactor.loadUserById(anyString(), callback, errorCallback);
+
+        verify(callback, times(2)).onLoaded(any(User.class));
+    }
+
+    @Test public void shouldCallbackErrorIfRemoteRepositoryFailsWithException() throws Exception {
+        doThrow(new ServerCommunicationException(null)).when(remoteUserRepository).getUserById(anyString());
+
+        interactor.loadUserById(anyString(), callback, errorCallback);
+
+        verify(errorCallback).onError(any(ShootrException.class));
+    }
+
+    private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        return user;
     }
 }
