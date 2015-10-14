@@ -42,15 +42,11 @@
       android:visibility="gone"
       tools:visibility="visible" />
 
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/streams_add_stream"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|right"
-      android:layout_margin="16dp"
-      android:src="@drawable/ic_action_add"
-      fab:fab_colorNormal="@color/primary"
-      fab:fab_colorPressed="@color/primary_dark"
-      fab:fab_colorRipple="@color/primary_disabled"
-      fab:fab_shadow="true" />
-
+  <com.shootr.android.ui.widgets.PrimaryFloatingActionButton android:id="@+id/streams_add_stream"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|right"
+    android:layout_margin="16dp"
+    android:src="@drawable/ic_action_add_white_24"
+    />
 </FrameLayout>
