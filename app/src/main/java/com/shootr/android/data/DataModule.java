@@ -29,7 +29,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.DeviceFactory;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
-import com.shootr.android.domain.utils.StreamDateTimeTextProvider;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.notifications.gcm.GCMIntentService;
@@ -62,7 +61,6 @@ import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.ResourcesLocaleProvider;
-import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.SnackbarFeedbackMessage;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
@@ -150,11 +148,6 @@ public class DataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application, Version version) {
         return new ShootrDbOpenHelper(application.getApplicationContext(), version);
-    }
-
-    @Provides @Singleton
-    StreamDateTimeTextProvider provideStreamTimeFormatter(ResourcesStreamDateTimeTextProvider timeTextFormatter) {
-        return timeTextFormatter;
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {

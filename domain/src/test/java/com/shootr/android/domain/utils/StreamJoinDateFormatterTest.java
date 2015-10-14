@@ -1,11 +1,12 @@
 package com.shootr.android.domain.utils;
 
 import java.util.Date;
-import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -135,19 +136,13 @@ public class StreamJoinDateFormatterTest {
 
     //region Date constructors
     private long date(int day, int month, int year) {
-        MutableDateTime date = new MutableDateTime(0);
-        date.setDayOfMonth(day);
-        date.setMonthOfYear(month);
-        date.setYear(year);
-        return date.getMillis();
+        LocalDateTime datetime = LocalDateTime.of(year, month, day, 0, 0, 0);
+        return datetime.toEpochSecond(ZoneOffset.UTC)*1000;
     }
 
     private long time(int hour, int minutes, int seconds) {
-        MutableDateTime time = new MutableDateTime(0);
-        time.setHourOfDay(hour);
-        time.setMinuteOfHour(minutes);
-        time.setSecondOfMinute(seconds);
-        return time.getMillis();
+        LocalDateTime datetime = LocalDateTime.of(1970, 1, 1, hour, minutes, seconds);
+        return datetime.toEpochSecond(ZoneOffset.UTC)*1000;
     }
 
     private long time(int hour, int minutes) {
