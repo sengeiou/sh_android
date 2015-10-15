@@ -71,7 +71,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void selectStream(StreamResultModel stream) {
         streamsListView.setCurrentWatchingStreamId(stream);
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle());
     }
 
     private void selectStream(final String idStream, String streamTag) {

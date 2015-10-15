@@ -78,7 +78,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         Stream stream = new Stream();
         stream.setId(String.valueOf(WATCHING_STREAM_ID));
         stream.setTitle(STREAM_TITLE_STUB);
-        stream.setTag(STREAM_TAG_STUB);
+        stream.setShortTitle(STREAM_TAG_STUB);
         return stream;
     }
 

@@ -24,7 +24,7 @@ public class StreamEntityMapper {
         stream.setAuthorId(streamEntity.getIdUser());
         stream.setTitle(streamEntity.getTitle());
         stream.setPicture(streamEntity.getPhoto());
-        stream.setTag(streamEntity.getTag());
+        stream.setShortTitle(streamEntity.getTag());
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setLocale(streamEntity.getLocale());
         stream.setDescription(streamEntity.getDescription());
@@ -55,7 +55,7 @@ public class StreamEntityMapper {
         entityTemplate.setIdUser(stream.getAuthorId());
         entityTemplate.setTitle(stream.getTitle());
         entityTemplate.setPhoto(stream.getPicture());
-        entityTemplate.setTag(stream.getTag());
+        entityTemplate.setTag(stream.getShortTitle());
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setLocale(stream.getLocale());
         entityTemplate.setDescription(stream.getDescription());

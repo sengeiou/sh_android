@@ -88,7 +88,7 @@ public abstract class PostNewShotInteractorTestBase {
     protected void assertStreamInfoIsFromStream(Shot.ShotStreamInfo streamInfo, Stream stream) {
         assertThat(streamInfo.getIdStream()).isEqualTo(stream.getId());
         assertThat(streamInfo.getStreamTitle()).isEqualTo(stream.getTitle());
-        assertThat(streamInfo.getStreamTag()).isEqualTo(stream.getTag());
+        assertThat(streamInfo.getStreamTag()).isEqualTo(stream.getShortTitle());
     }
     //endregion
 

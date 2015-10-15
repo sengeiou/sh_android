@@ -9,7 +9,7 @@ public class StreamModel implements Serializable {
     private String authorUsername;
     private String title;
     private String picture;
-    private String tag;
+    private String shortTitle;
     private String description;
     private boolean amIAuthor;
     private Integer mediaCount;
@@ -87,12 +87,12 @@ public class StreamModel implements Serializable {
         this.amIAuthor = amIAuthor;
     }
 
-    public String getTag() {
-        return tag;
+    public String getShortTitle() {
+        return shortTitle;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getAuthorId() {

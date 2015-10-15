@@ -82,7 +82,7 @@ public class CreateStreamInteractor implements Interactor {
             stream = localStreamRepository.getStreamById(idStream);
         }
         stream.setTitle(title);
-        stream.setTag(shortTitle);
+        stream.setShortTitle(shortTitle);
         stream.setDescription(removeDescriptionLineBreaks(description));
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);

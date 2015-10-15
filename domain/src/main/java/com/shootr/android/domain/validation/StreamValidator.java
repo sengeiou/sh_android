@@ -70,14 +70,14 @@ public class StreamValidator {
 
     //region Short Title
     private void validateShortTitleTooLong(Stream stream) {
-        if (stream.getTag() != null && alphanumericLength(stream.getTag()) > TAG_MAXIMUM_LENGTH) {
+        if (stream.getShortTitle() != null && alphanumericLength(stream.getShortTitle()) > TAG_MAXIMUM_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_LONG, FIELD_SHORT_TITLE));
         }
     }
 
     private void validateShortTitleTooShort(Stream stream) {
-        String shortTitle = stream.getTag();
+        String shortTitle = stream.getShortTitle();
         if (shortTitle == null || alphanumericLength(shortTitle) < TAG_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_SHORT, FIELD_SHORT_TITLE));
