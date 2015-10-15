@@ -69,16 +69,7 @@ public class EmailLoginPresenter implements Presenter {
     //endregion
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof LoginException){
-            errorMessage = errorMessageFactory.getLoginCredentialsError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        emailLoginView.showError(errorMessage);
+        emailLoginView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     @Override public void resume() {

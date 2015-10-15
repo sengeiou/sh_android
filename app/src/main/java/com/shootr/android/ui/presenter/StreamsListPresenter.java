@@ -80,7 +80,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void unwatchStream() {
         unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
                 loadDefaultStreamList();
                 removeCurrentWatchingStream();
             }
@@ -135,12 +136,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         if (error instanceof ShootrValidationException) {
             String errorCode = ((ShootrValidationException) error).getErrorCode();
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
-        } else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        } else if (error instanceof StreamIsAlreadyInFavoritesException) {
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
         } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+            errorMessage = errorMessageFactory.getMessageForError(error);
         }
         streamsListView.showError(errorMessage);
     }

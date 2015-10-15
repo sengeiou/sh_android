@@ -70,16 +70,7 @@ public class ChangePasswordPresenter implements Presenter {
     }
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof ChangePasswordInvalidException){
-            errorMessage = errorMessageFactory.getChangePasswordError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        changePasswordView.showError(errorMessage);
+        changePasswordView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     private boolean validatePasswords(String currentPassword, String newPassword, String newPasswordAgain) {

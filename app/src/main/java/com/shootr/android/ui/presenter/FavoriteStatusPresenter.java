@@ -69,16 +69,7 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof StreamIsAlreadyInFavoritesException){
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        favoriteStatusView.showError(errorMessage);
+        favoriteStatusView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     public void removeFromFavorites() {

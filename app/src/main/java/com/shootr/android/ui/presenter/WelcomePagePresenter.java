@@ -65,12 +65,8 @@ public class WelcomePagePresenter implements Presenter {
         if (error instanceof ShootrValidationException) {
             String errorCode = ((ShootrValidationException) error).getErrorCode();
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
-        } else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        } else if (error instanceof StreamIsAlreadyInFavoritesException) {
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
         } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+            errorMessage = errorMessageFactory.getMessageForError(error);
         }
         welcomePageView.showError(errorMessage);
     }

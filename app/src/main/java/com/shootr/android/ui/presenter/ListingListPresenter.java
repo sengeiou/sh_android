@@ -186,16 +186,7 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof StreamIsAlreadyInFavoritesException){
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        listingView.showError(errorMessage);
+        listingView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     @Override public void resume() {
