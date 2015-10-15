@@ -7,12 +7,6 @@ import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.path.android.jobqueue.JobManager;
-import com.path.android.jobqueue.config.Configuration;
-import com.path.android.jobqueue.log.CustomLogger;
-import com.path.android.jobqueue.network.NetworkUtil;
-import com.path.android.jobqueue.network.NetworkUtilImpl;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.data.prefs.PreferenceModule;
 import com.shootr.android.data.repository.SessionRepositoryImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
@@ -33,8 +27,6 @@ import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.notifications.gcm.GCMIntentService;
 import com.shootr.android.service.ApiModule;
-import com.shootr.android.task.NetworkConnection;
-import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
@@ -67,8 +59,6 @@ import com.shootr.android.util.Version;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
@@ -120,8 +110,6 @@ import static android.content.Context.MODE_PRIVATE;
 
     BitmapImageResizer.class,
 
-    NetworkConnection.class,
-
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
@@ -152,12 +140,6 @@ public class DataModule {
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
         return app.getSharedPreferences("shootr", MODE_PRIVATE);
-    }
-
-    @Provides @Singleton Picasso providePicasso(Application app, OkHttpClient okHttpClient) {
-        return new Picasso.Builder(app)
-          .downloader(new OkHttpDownloader(okHttpClient))
-          .build();
     }
 
     @Provides ImageLoader provideImageLoader(GlideImageLoader imageLoader) {
@@ -203,18 +185,6 @@ public class DataModule {
         return client;
     }
 
-    @Provides @Singleton NetworkUtil provideNetworkUtil(Application app) {
-        return new NetworkUtilImpl(app);
-    }
-
-    @Provides @Singleton NetworkConnection provideNetworkConnection(Application application, NetworkUtil networkUtil) {
-        return new NetworkConnectionImpl(application, networkUtil);
-    }
-
-    @Provides @Singleton JobManager provideJobManager(Application app, NetworkUtil networkUtil) {
-        return configureJobManager(app, networkUtil);
-    }
-
     @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
         return GoogleCloudMessaging.getInstance(application);
     }
@@ -242,33 +212,5 @@ public class DataModule {
     @Provides @Singleton
     QNCache provideQNCache() {
         return new QNCacheBuilder().createQNCache();
-    }
-
-    static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
-        // Custom config: https://github.com/path/android-priority-jobqueue/wiki/Job-Manager-Configuration, https://github.com/path/android-priority-jobqueue/blob/master/examples/twitter/TwitterClient/src/com/path/android/jobqueue/examples/twitter/TwitterApplication.java
-        Configuration configuration =
-          new Configuration.Builder(app).networkUtil(networkUtil).customLogger(new CustomLogger() {
-
-              @Override
-              public boolean isDebugEnabled() {
-                  return BuildConfig.DEBUG;
-              }
-
-              @Override
-              public void d(String text, Object... args) {
-                  Timber.v(text, args);
-              }
-
-              @Override
-              public void e(Throwable t, String text, Object... args) {
-                  Timber.e(t, text, args);
-              }
-
-              @Override
-              public void e(String text, Object... args) {
-                  Timber.e(text, args);
-              }
-          }).build();
-        return new JobManager(app, configuration);
     }
 }

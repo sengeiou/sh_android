@@ -6,7 +6,6 @@ import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SuggestedPeopleTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
-import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 
@@ -103,17 +102,6 @@ public class SQLiteUtils {
             + SyncColumns.REVISION + " INT NOT NULL,"
             + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL,"
             + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + "))";
-
-    public static final String CREATE_TABLE_TABLESSYNC = "CREATE TABLE IF NOT EXISTS "+ TablesSync.TABLE+" ("
-            + TablesSync.MIN_TIMESTAMP+" DATETIME,"
-            + TablesSync.MAX_TIMESTAMP+" DATETIME,"
-            + TablesSync.MIN_ROWS+" INT,"
-            + TablesSync.MAX_ROWS+" INT,"
-            + TablesSync.DIRECTION+" VARCHAR(255) NULL,"
-            + TablesSync.ORDER +" INT NOT NULL,"
-            + TablesSync.ENTITY+" VARCHAR(255) NOT NULL,"
-            + TablesSync.FREQUENCY+" INT NULL, " +
-            "PRIMARY KEY("+TablesSync.ORDER+"));";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
             + DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"

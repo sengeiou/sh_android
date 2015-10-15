@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.profile;
 
 import android.app.Application;
-import com.path.android.jobqueue.Params;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
@@ -47,15 +45,13 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public UpdateUserProfileJob(Application application,
-      @Main Bus bus,
-      NetworkUtil networkUtil,
-      SessionRepository sessionRepository,
+      @Main Bus bus, SessionRepository sessionRepository,
       UserManager userManager,
       TimeUtils timeUtils,
       UserEntityMapper userEntityMapper,
       UserApiService userApiService,
       UserApiEntityMapper userApiEntityMapper) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(application, bus);
         this.userApiService = userApiService;
         this.sessionRepository = sessionRepository;
         this.userManager = userManager;
@@ -205,9 +201,5 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         if (validationResult != null && !validationResult.isEmpty()) {
             fieldValidationErrors.addAll(validationResult);
         }
-    }
-
-    @Override protected boolean isNetworkRequired() {
-        return true;
     }
 }

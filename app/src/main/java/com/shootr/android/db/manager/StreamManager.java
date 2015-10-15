@@ -90,7 +90,6 @@ public class StreamManager extends AbstractManager{
               contentValues,
               SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertInSync();
     }
 
     public long deleteStream(StreamEntity streamEntity){
@@ -114,10 +113,6 @@ public class StreamManager extends AbstractManager{
         }
         c.close();
         return res;
-    }
-
-    public void insertInSync(){
-        insertInTableSync(DatabaseContract.StreamTable.TABLE, 10, 1000, 0);
     }
 
     public List<StreamSearchEntity> getDefaultStreamSearch() {

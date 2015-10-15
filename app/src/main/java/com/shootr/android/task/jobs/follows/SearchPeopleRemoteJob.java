@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.follows;
 
 import android.app.Application;
-import com.path.android.jobqueue.Params;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
@@ -24,9 +22,6 @@ import javax.inject.Inject;
 
 public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResultEvent> {
 
-    private static final int PRIORITY = 4;
-    public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
-
     UserApiService userApiService;
 
     private String searchString;
@@ -38,9 +33,13 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private UserEntityModelMapper userModelMapper;
 
     @Inject
-    public SearchPeopleRemoteJob(Application app, @Main Bus bus, UserApiService userApiService, NetworkUtil networkUtil,
-      FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
-        super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
+    public SearchPeopleRemoteJob(Application app,
+      @Main Bus bus,
+      UserApiService userApiService,
+      FollowManager followManager,
+      UserEntityModelMapper userModelMapper,
+      SessionRepository sessionRepository) {
+        super(app, bus);
         this.userApiService = userApiService;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
@@ -78,9 +77,5 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
         } catch (ApiException e) {
             throw new ServerCommunicationException(e);
         }
-    }
-
-    @Override protected boolean isNetworkRequired() {
-        return true;
     }
 }
