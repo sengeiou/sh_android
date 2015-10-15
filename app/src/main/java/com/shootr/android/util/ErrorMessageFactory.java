@@ -8,6 +8,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShotNotFoundException;
+import com.shootr.android.domain.exception.UserNotFoundException;
 import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.HashMap;
@@ -108,9 +109,15 @@ public class ErrorMessageFactory {
             return getStreamIsAlreadyInFavoritesError();
         } else if(error instanceof ShotNotFoundException) {
             return getShotDeletedException();
+        }else if (error instanceof UserNotFoundException) {
+            return getUserNotFoundException();
         } else {
             return getUnknownErrorMessage();
         }
+    }
+
+    private String getUserNotFoundException() {
+        return context.getString(R.string.user_not_found);
     }
 
     private String getShotDeletedException() {
