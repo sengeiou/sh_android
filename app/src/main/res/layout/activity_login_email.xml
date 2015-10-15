@@ -49,7 +49,7 @@
             </EditText>
         </com.shootr.android.ui.widgets.FloatLabelLayout>
 
-        <FrameLayout android:id="@+id/registration_create_button_container"
+        <FrameLayout android:id="@+id/email_login_button_container"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="right"
@@ -61,7 +61,6 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:background="?selectableItemBackground"
-              android:clickable="true"
               android:text="@string/activity_login_email_button"
               android:textSize="14sp" />
 

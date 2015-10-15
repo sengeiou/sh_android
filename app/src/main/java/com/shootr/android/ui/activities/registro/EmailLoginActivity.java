@@ -41,6 +41,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected  void initializeViews(Bundle savedInstanceState){
         ButterKnife.bind(this);
+        loginButton.setEnabled(false);
     }
 
     @Override protected int getLayoutResource() {
