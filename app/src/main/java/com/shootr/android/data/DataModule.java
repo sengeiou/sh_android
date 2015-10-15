@@ -43,12 +43,14 @@ import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.CrashReportTool;
 import com.shootr.android.util.CrashReportToolFactoryImpl;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.GlideImageLoader;
+import com.shootr.android.util.GoogleAnalyticsTool;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
@@ -193,8 +195,12 @@ public class DataModule {
         return new CrashReportToolFactoryImpl();
     }
 
-    @Provides CrashReportTool provideCrashReportTool(CrashReportTool.Factory factory) {
+    @Provides @Singleton CrashReportTool provideCrashReportTool(CrashReportTool.Factory factory) {
         return factory.create();
+    }
+
+    @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
+        return new GoogleAnalyticsTool();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
