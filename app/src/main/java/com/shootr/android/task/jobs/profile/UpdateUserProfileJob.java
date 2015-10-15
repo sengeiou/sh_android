@@ -3,13 +3,14 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
-import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
@@ -25,9 +26,7 @@ import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 
 public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
@@ -66,7 +65,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         this.updatedUserModel = updatedUserModel;
     }
 
-    @Override protected void run() throws SQLException, IOException, Exception {
+    @Override protected void run() throws IOException {
         localValidation();
         if (hasLocalErrors()) {
             postValidationErrors();
@@ -76,14 +75,15 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         try {
             sendUpdatedProfileToServer();
             postSuccessfulEvent(new UpdateUserProfileEvent(null));
-        } catch (ShootrServerException serverException) {
-            ShootrError shootrError = serverException.getShootrError();
-            FieldValidationError fieldValidationError = fieldErrorFromServer(shootrError.getErrorCode());
-            if (fieldValidationError != null) {
+        } catch (ApiException apiError) {
+            if (apiError.getErrorInfo() == ErrorInfo.UserNameAlreadyExistsException) {
+                FieldValidationError fieldValidationError =
+                  new FieldValidationError(ShootrError.ERROR_CODE_USERNAME_DUPLICATE,
+                    FieldValidationError.FIELD_USERNAME);
                 fieldValidationErrors.add(fieldValidationError);
                 postValidationErrors();
             } else {
-                throw serverException;
+                throw new IOException(apiError);
             }
         }
     }
@@ -94,58 +94,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void postValidationErrors() {
         postCustomEvent(new FieldValidationErrorEvent(fieldValidationErrors));
-    }
-
-    private FieldValidationError fieldErrorFromServer(String errorCode) {
-        int field = 0;
-        if (isUsernameError(errorCode)) {
-            field = FieldValidationError.FIELD_USERNAME;
-        } else if (isNameError(errorCode)) {
-            field = FieldValidationError.FIELD_NAME;
-        } else if (isWebsiteError(errorCode)) {
-               field = FieldValidationError.FIELD_WEBSITE;
-        }else if (isBioError(errorCode)) {
-            field = FieldValidationError.FIELD_BIO;
-
-        }
-
-        if (field > 0) {
-            return new FieldValidationError(errorCode, field);
-        } else {
-            return null;
-        }
-    }
-
-    private boolean isUsernameError(String errorCode) {
-        Set<String> usernameCodes = new HashSet<>();
-        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_DUPLICATE);
-        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_NULL);
-        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_TOO_SHORT);
-        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_TOO_LONG);
-        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS);
-        return usernameCodes.contains(errorCode);
-    }
-
-    private boolean isNameError(String errorCode) {
-        Set<String> nameCodes = new HashSet<>();
-        nameCodes.add(ShootrError.ERROR_CODE_NAME_TOO_LONG);
-        nameCodes.add(ShootrError.ERROR_CODE_NAME_TOO_SHORT);
-        nameCodes.add(ShootrError.ERROR_CODE_NAME_INVALID_CHARACTERS);
-        return nameCodes.contains(errorCode);
-    }
-
-    private boolean isWebsiteError(String errorCode) {
-        Set<String> websiteCodes = new HashSet<>();
-        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG);
-        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_WRONG_URI);
-        return websiteCodes.contains(errorCode);
-    }
-
-    private boolean isBioError(String errorCode) {
-        Set<String> bioCodes = new HashSet<>();
-        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_LONG);
-        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_SHORT);
-        return bioCodes.contains(errorCode);
     }
 
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
@@ -159,19 +107,15 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         return updatedUserEntity;
     }
 
-    private void sendUpdatedProfileToServer() throws IOException {
+    private void sendUpdatedProfileToServer() throws IOException, ApiException {
         UserEntity updatedUserEntity = updateEntityWithValues(updatedUserModel);
 
         updatedUserEntity.setModified(timeUtils.getCurrentDate());
         updatedUserEntity.setRevision(updatedUserEntity.getRevision() + 1);
 
-        try {
-            updatedUserEntity = userApiService.putUser(userApiEntityMapper.transform(updatedUserEntity));
-            userManager.saveUser(updatedUserEntity);
-            sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
-        } catch (ApiException e) {
-            throw new IOException(e);
-        }
+        updatedUserEntity = userApiService.putUser(userApiEntityMapper.transform(updatedUserEntity));
+        userManager.saveUser(updatedUserEntity);
+        sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
     }
 
     private void localValidation() {
