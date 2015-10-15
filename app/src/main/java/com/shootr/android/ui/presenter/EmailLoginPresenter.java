@@ -65,7 +65,6 @@ public class EmailLoginPresenter implements Presenter {
         } else {
             emailLoginView.enableLoginButton();
         }
-        emailLoginView.hideError();
     }
     //endregion
 
