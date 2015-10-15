@@ -9,11 +9,18 @@ import timber.log.Timber;
 
 public class GoogleAnalyticsTool implements AnalyticsTool {
 
+    private Tracker tracker;
+
     @Override
     public void init(Context context) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-        Tracker tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
+        tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
         tracker.enableAutoActivityTracking(true);
         tracker.enableExceptionReporting(true);
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        tracker.set("&uid", userId);
     }
 }

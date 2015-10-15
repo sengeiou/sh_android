@@ -5,4 +5,6 @@ import android.content.Context;
 public interface AnalyticsTool {
 
     void init(Context context);
+
+    void setUserId(String userId);
 }
