@@ -12,6 +12,8 @@ import com.shootr.android.service.ApiModule;
 import com.shootr.android.service.DebugApiModule;
 import com.shootr.android.ui.debug.CaptureIntents;
 import com.shootr.android.ui.debug.NetworkProxy;
+import com.shootr.android.util.AnalyticsTool;
+import com.shootr.android.util.GoogleAnalyticsTool;
 import com.shootr.android.util.Version;
 import dagger.Module;
 import dagger.Provides;
