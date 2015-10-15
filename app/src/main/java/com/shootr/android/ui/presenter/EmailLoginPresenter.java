@@ -1,14 +1,11 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.PerformEmailLoginInteractor;
-import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.ui.views.EmailLoginView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class EmailLoginPresenter implements Presenter {
 

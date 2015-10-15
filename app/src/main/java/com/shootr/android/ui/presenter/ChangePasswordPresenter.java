@@ -1,19 +1,16 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangePasswordInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.service.ChangePasswordInvalidException;
 import com.shootr.android.domain.validation.ChangePasswordValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.views.ChangePasswordView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ChangePasswordPresenter implements Presenter {
 

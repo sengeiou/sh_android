@@ -4,7 +4,6 @@ import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
-import com.shootr.android.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
@@ -16,8 +15,6 @@ import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-
-import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class LocalUserRepository implements UserRepository {
 

@@ -1,16 +1,13 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
-import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class FavoriteStatusPresenter implements Presenter {
 

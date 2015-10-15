@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
-import com.shootr.android.ui.model.UserModel;
 
 public class ShotListView extends LinearLayout {
 

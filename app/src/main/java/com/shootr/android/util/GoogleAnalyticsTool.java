@@ -2,10 +2,8 @@ package com.shootr.android.util;
 
 import android.content.Context;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.shootr.android.R;
-import timber.log.Timber;
 
 public class GoogleAnalyticsTool implements AnalyticsTool {
 

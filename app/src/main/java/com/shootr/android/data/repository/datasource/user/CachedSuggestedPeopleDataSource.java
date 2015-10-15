@@ -3,7 +3,6 @@ package com.shootr.android.data.repository.datasource.user;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.domain.repository.Local;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;

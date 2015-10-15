@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import timber.log.Timber;
 
