@@ -294,49 +294,40 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+        getBaseContextMenu(shotModel)
+          .addAction(R.string.report_context_menu_report, new Runnable() {
               @Override public void run() {
-                  presenter.shareShot(shotModel);
+                  reportShotPresenter.report(shotModel);
               }
-          })
-          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          })
-          .addAction(getString(R.string.menu_copy_text), new Runnable() {
-              @Override public void run() {
-                  Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
-              }
-          }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
+          }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+        getBaseContextMenu(shotModel)
+          .addAction(R.string.report_context_menu_delete, new Runnable() {
+              @Override public void run() {
+                  openDeleteConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    private CustomContextMenu.Builder getBaseContextMenu(final ShotModel shotModel) {
+        return new CustomContextMenu.Builder(this)
+          .addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
                   presenter.shareShot(shotModel);
               }
           })
-          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
+          .addAction(R.string.menu_share_shot_via, new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
           })
-          .addAction(getString(R.string.menu_copy_text), new Runnable() {
+          .addAction(R.string.menu_copy_text, new Runnable() {
               @Override public void run() {
                   Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
               }
-          }).addAction(this.getString(R.string.report_context_menu_delete), new Runnable() {
-            @Override public void run() {
-                openDeleteConfirmation(shotModel);
-            }
-        }).show();
+          });
     }
 
     private void openDeleteConfirmation(final ShotModel shotModel) {

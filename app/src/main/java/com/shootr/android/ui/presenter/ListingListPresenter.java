@@ -94,13 +94,11 @@ public class ListingListPresenter implements Presenter{
 
     private void loadCurrentUserListingStreams() {
         getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
-            @Override
-            public void onLoaded(Listing listing) {
+            @Override public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 showErrorInView(error);
             }
         });
@@ -163,8 +161,7 @@ public class ListingListPresenter implements Presenter{
     public void removeFromFavorites(StreamResultModel stream) {
         removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+              @Override public void onCompleted() {
                   if (isCurrentUser) {
                       loadCurrentUserListingStreams();
                   }
@@ -219,5 +216,13 @@ public class ListingListPresenter implements Presenter{
                   showErrorInView(error);
               }
           });
+    }
+
+    public void openContextualMenu(StreamResultModel stream) {
+        if (isCurrentUser) {
+            listingView.showCurrentUserContextMenu(stream);
+        } else {
+            listingView.showContextMenu(stream);
+        }
     }
 }

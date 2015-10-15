@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
-import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.adapters.listeners.OnShotLongClick;
 
 public class ShotListView extends LinearLayout {
 
     private OnShotClick onShotClick;
+    private OnShotLongClick onShotLongClick;
     private TimelineAdapter timelineAdapter;
     private Drawable selectableBackground;
 
@@ -62,6 +62,12 @@ public class ShotListView extends LinearLayout {
                     onShotClick.onShotClick(timelineAdapter.getItem(position));
                 }
             });
+            itemView.setOnLongClickListener(new OnLongClickListener() {
+                @Override public boolean onLongClick(View view) {
+                    onShotLongClick.onShotLongClick(timelineAdapter.getItem(position));
+                    return false;
+                }
+            });
             setItemBackgroundRetainPaddings(itemView);
             this.addView(itemView);
         }
@@ -78,5 +84,9 @@ public class ShotListView extends LinearLayout {
 
     public void setOnShotClick(OnShotClick onShotClick) {
         this.onShotClick = onShotClick;
+    }
+
+    public void setOnShotLongClick(OnShotLongClick onShotLongClick) {
+        this.onShotLongClick = onShotLongClick;
     }
 }

@@ -3,6 +3,7 @@ package com.shootr.android.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import com.shootr.android.domain.utils.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,10 @@ public class CustomContextMenu {
 
         public Builder addAction(String title, Runnable callback) {
             return addAction(new MenuAction(title, callback));
+        }
+
+        public Builder addAction(@StringRes int titleRes, Runnable callback) {
+            return addAction(new MenuAction(context.getString(titleRes), callback));
         }
 
         public CustomContextMenu build() {

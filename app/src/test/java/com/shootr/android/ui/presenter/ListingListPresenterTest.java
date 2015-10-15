@@ -213,6 +213,24 @@ public class ListingListPresenterTest {
         verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
 
+    @Test public void shouldShowCurrentUserContextMenuIfIsCurrentUser() throws Exception {
+        setupUserWithoutListingCallback();
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
+        listingListPresenter.openContextualMenu(any(StreamResultModel.class));
+
+        verify(listingView).showCurrentUserContextMenu(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldShowContextMenuIfIsNotCurrentUser() throws Exception {
+        setupUserWithoutListingCallback();
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
+        listingListPresenter.openContextualMenu(any(StreamResultModel.class));
+
+        verify(listingView).showContextMenu(any(StreamResultModel.class));
+    }
+
     private Listing listingWithEmptyHoldingList() {
         return Listing.builder().build();
     }
