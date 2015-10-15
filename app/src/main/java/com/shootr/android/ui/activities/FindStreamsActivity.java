@@ -99,17 +99,17 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void openContextualMenu(final StreamResultModel stream) {
-        new CustomContextMenu.Builder(this).addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title, new Runnable() {
             @Override
             public void run() {
                 findStreamsPresenter.addToFavorites(stream);
             }
-        }).addAction(getString(R.string.share_via_shootr), new Runnable() {
+        }).addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.shareStream(stream);
             }
         })
-          .addAction(getString(R.string.share_via), new Runnable() {
+          .addAction(R.string.share_via, new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }

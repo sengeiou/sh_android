@@ -593,7 +593,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showContextMenu(final ShotModel shotModel) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+        builder.addAction(R.string.report_context_menu_report, new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
@@ -602,7 +602,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
+        builder.addAction(R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {
                 openDeleteConfirmation(shotModel);
             }
@@ -624,16 +624,16 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
-        return new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
           new Runnable() {
               @Override public void run() {
                   streamTimelinePresenter.shareShot(shotModel);
               }
-          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+          }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 shareShotIntent(shotModel);
             }
-        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+        }).addAction(R.string.menu_copy_text, new Runnable() {
             @Override public void run() {
                 copyShotCommentToClipboard(shotModel);
             }

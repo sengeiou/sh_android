@@ -749,7 +749,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(getActivity().getString(R.string.report_context_menu_report),
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
           new Runnable() {
               @Override public void run() {
                   reportShotPresenter.report(shotModel);
@@ -758,7 +758,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(getActivity().getString(R.string.report_context_menu_delete),
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
                   openDeleteShotConfirmation(shotModel);
@@ -767,16 +767,16 @@ public class ProfileFragment extends BaseFragment
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
-        return new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot_via_shootr),
+        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
           new Runnable() {
               @Override public void run() {
                   profilePresenter.shareShot(shotModel);
               }
-          }).addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+          }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 shareShot(shotModel);
             }
-        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+        }).addAction(R.string.menu_copy_text, new Runnable() {
             @Override public void run() {
                 Clipboard.copyShotComment(getActivity(), shotModel);
             }
