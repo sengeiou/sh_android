@@ -2,6 +2,7 @@ package com.shootr.android;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.CrashReportTool;
 import com.shootr.android.util.DatabaseVersionUtils;
 import com.shootr.android.util.LogTreeFactory;
@@ -14,6 +15,7 @@ public class ShootrApplication extends MultiDexApplication {
     private ObjectGraph objectGraph;
     @Inject DatabaseVersionUtils databaseVersionUtils;
     @Inject CrashReportTool crashReportTool;
+    @Inject AnalyticsTool analyticsTool;
 
     @Override
     public void onCreate() {
@@ -21,6 +23,7 @@ public class ShootrApplication extends MultiDexApplication {
         buildObjectGraphAndInject();
         plantLoggerTrees();
         crashReportTool.init(this);
+        analyticsTool.init(this);
         databaseVersionUtils.clearDataOnNewerVersion();
     }
 
