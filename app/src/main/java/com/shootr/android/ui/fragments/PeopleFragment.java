@@ -67,7 +67,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         presenter.setView(this);
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
-        userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
         userlistListView.setAdapter(getPeopleAdapter());
     }
@@ -168,14 +167,17 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void renderUserList(List<UserModel> people) {
-        userlistListView.setVisibility(View.VISIBLE);
         getPeopleAdapter().setItems(people);
         getPeopleAdapter().notifyDataSetChanged();
     }
 
+    @Override public void showPeopleList() {
+        userlistListView.setVisibility(View.VISIBLE);
+    }
+
     @Override public void showEmpty() {
-        userlistListView.setVisibility(View.GONE);
-        emptyTextView.setVisibility(View.VISIBLE);
+        getPeopleAdapter().removeItems();
+        getPeopleAdapter().notifyDataSetChanged();
     }
 
     @Override public void hideEmpty() {

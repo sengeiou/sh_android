@@ -14,6 +14,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.ImageLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserListAdapter extends BindableAdapter<UserModel> {
@@ -38,7 +39,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     public void removeItems(){
-        this.users = null;
+        this.users = Collections.emptyList();
     }
 
     public boolean isFollowButtonVisible() {

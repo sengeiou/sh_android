@@ -7,4 +7,6 @@ import java.util.List;
 public interface PeopleView extends LoadDataView {
 
     void renderUserList(List<UserModel> people);
+
+    void showPeopleList();
 }

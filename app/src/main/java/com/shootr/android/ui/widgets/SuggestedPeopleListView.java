@@ -78,6 +78,8 @@ public class SuggestedPeopleListView extends FrameLayout {
         }
         if(userListAdapter.getCount() > 0) {
             suggestedPeopleTitle.setVisibility(VISIBLE);
+        } else {
+            suggestedPeopleTitle.setVisibility(GONE);
         }
     }
 
