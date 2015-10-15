@@ -33,7 +33,6 @@ import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -178,10 +177,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void showEmpty() {
         getPeopleAdapter().removeItems();
-        getSuggestedPeopleAdapter().removeItems();
         getPeopleAdapter().notifyDataSetChanged();
-        getSuggestedPeopleAdapter().notifyDataSetChanged();
-        emptyTextView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideEmpty() {
