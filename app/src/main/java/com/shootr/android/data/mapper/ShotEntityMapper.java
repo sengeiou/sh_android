@@ -36,7 +36,7 @@ public class ShotEntityMapper {
             Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
             eventInfo.setIdStream(shotEntity.getIdStream());
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
-            eventInfo.setStreamTag(shotEntity.getStreamTag());
+            eventInfo.setStreamShortTitle(shotEntity.getStreamTag());
             shot.setStreamInfo(eventInfo);
         }
 
@@ -95,7 +95,7 @@ public class ShotEntityMapper {
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
             shotEntity.setStreamTitle(eventInfo.getStreamTitle());
-            shotEntity.setStreamTag(eventInfo.getStreamTag());
+            shotEntity.setStreamTag(eventInfo.getStreamShortTitle());
         }
 
         shotEntity.setIdShotParent(shot.getParentShotId());

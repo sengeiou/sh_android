@@ -27,7 +27,7 @@ public abstract class PostNewShotInteractorTestBase {
     public static final File IMAGE_NULL = null;
     public static final File IMAGE_STUB = new File(".");
     public static final String STREAM_TITLE_STUB = "title";
-    public static final String STREAM_TAG_STUB = "tag";
+    public static final String STREAM_SHORT_TITLE_STUB = "shortTitle";
 
     @Mock SessionRepository sessionRepository;
     @Mock ShotSender shotSender;
@@ -88,7 +88,7 @@ public abstract class PostNewShotInteractorTestBase {
     protected void assertStreamInfoIsFromStream(Shot.ShotStreamInfo streamInfo, Stream stream) {
         assertThat(streamInfo.getIdStream()).isEqualTo(stream.getId());
         assertThat(streamInfo.getStreamTitle()).isEqualTo(stream.getTitle());
-        assertThat(streamInfo.getStreamTag()).isEqualTo(stream.getShortTitle());
+        assertThat(streamInfo.getStreamShortTitle()).isEqualTo(stream.getShortTitle());
     }
     //endregion
 

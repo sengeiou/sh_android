@@ -93,7 +93,7 @@ public class ParcelableShotTest {
 
         assertThat(streamInfoFromParcel.getIdStream()).isEqualTo(streamInfoStub.getIdStream());
         assertThat(streamInfoFromParcel.getStreamTitle()).isEqualTo(streamInfoStub.getStreamTitle());
-        assertThat(streamInfoFromParcel.getStreamTag()).isEqualTo(streamInfoStub.getStreamTag());
+        assertThat(streamInfoFromParcel.getStreamShortTitle()).isEqualTo(streamInfoStub.getStreamShortTitle());
     }
 
     @Test
@@ -185,7 +185,7 @@ public class ParcelableShotTest {
         Shot.ShotStreamInfo streamInfo = new Shot.ShotStreamInfo();
         streamInfo.setIdStream(String.valueOf(STREAM_ID));
         streamInfo.setStreamTitle(STREAM_TITLE);
-        streamInfo.setStreamTag(STREAM_TAG);
+        streamInfo.setStreamShortTitle(STREAM_TAG);
         return streamInfo;
     }
 

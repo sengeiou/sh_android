@@ -29,7 +29,7 @@ public class ShotModelMapper {
         Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
         if (streamInfo != null) {
             shotModel.setStreamId(streamInfo.getIdStream());
-            shotModel.setStreamTag(streamInfo.getStreamTag());
+            shotModel.setStreamShortTitle(streamInfo.getStreamShortTitle());
             shotModel.setStreamTitle(streamInfo.getStreamTitle());
         }
 

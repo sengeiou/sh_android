@@ -75,7 +75,7 @@ public class StreamTimelineFragment extends BaseFragment
   implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_TAG = "streamTag";
+    public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
     //region Fields
@@ -147,7 +147,7 @@ public class StreamTimelineFragment extends BaseFragment
         initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_TAG));
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         initializePresenters(idStream);
     }
 

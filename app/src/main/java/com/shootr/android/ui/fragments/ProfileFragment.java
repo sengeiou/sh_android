@@ -225,7 +225,7 @@ public class ProfileFragment extends BaseFragment
           new TimelineAdapter(getActivity(),
             imageLoader, timeUtils, avatarClickListener,
             videoClickListener, onNiceShotListener, onUsernameClickListener){
-              @Override protected boolean shouldShowTag() {
+              @Override protected boolean shouldShowShortTitle() {
                   return true;
               }
           };

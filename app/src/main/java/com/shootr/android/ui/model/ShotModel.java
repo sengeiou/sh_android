@@ -15,7 +15,7 @@ public class ShotModel implements Serializable{
     private String userName;
     private String photo;
     private String streamId;
-    private String streamTag;
+    private String streamShortTitle;
     private String streamTitle;
 
     private String replyUsername;
@@ -84,12 +84,12 @@ public class ShotModel implements Serializable{
         this.image = image;
     }
 
-    public String getStreamTag() {
-        return streamTag;
+    public String getStreamShortTitle() {
+        return streamShortTitle;
     }
 
-    public void setStreamTag(String streamTag) {
-        this.streamTag = streamTag;
+    public void setStreamShortTitle(String streamShortTitle) {
+        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {

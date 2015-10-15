@@ -181,7 +181,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
           videoClickListener, onNiceShotListener, onUsernameClickListener){
-            @Override protected boolean shouldShowTag() {
+            @Override protected boolean shouldShowShortTitle() {
                 return true;
             }
         };
