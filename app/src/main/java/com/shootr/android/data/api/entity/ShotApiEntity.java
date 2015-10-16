@@ -8,7 +8,7 @@ public class ShotApiEntity {
     private String comment;
     private String image;
     private String idStream;
-    private String streamTag;
+    private String streamShortTitle;
     private String streamTitle;
 
     private Integer niceCount;
@@ -63,12 +63,12 @@ public class ShotApiEntity {
         this.idStream = idStream;
     }
 
-    public String getStreamTag() {
-        return streamTag;
+    public String getStreamShortTitle() {
+        return streamShortTitle;
     }
 
-    public void setStreamTag(String streamTag) {
-        this.streamTag = streamTag;
+    public void setStreamShortTitle(String streamShortTitle) {
+        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {

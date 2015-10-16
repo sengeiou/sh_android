@@ -7,7 +7,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String idStream;
     private String idUser;
     private String userName;
-    private String tag;
+    private String shortTitle;
     private String description;
     private String title;
     private String photo;
@@ -111,12 +111,12 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         this.idUser = idUser;
     }
 
-    public String getTag() {
-        return tag;
+    public String getShortTitle() {
+        return shortTitle;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getUserName() {

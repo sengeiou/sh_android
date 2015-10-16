@@ -72,7 +72,7 @@ public class DatabaseContract {
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_STREAM = "idStream";
-        public static final String STREAM_TAG = "streamTag";
+        public static final String STREAM_SHORT_TITLE = "streamShortTitle";
         public static final String STREAM_TITLE = "streamTitle";
         public static final String NICE_COUNT = "niceCount";
         public static final String TYPE = "type";
@@ -86,7 +86,7 @@ public class DatabaseContract {
         public static final String VIDEO_DURATION = "videoDuration";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG, STREAM_TITLE,
+          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_SHORT_TITLE, STREAM_TITLE,
           NICE_COUNT, TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
@@ -143,7 +143,7 @@ public class DatabaseContract {
         public static final String USERNAME = "userName";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
-        public static final String TAG = "tag";
+        public static final String SHORT_TITLE = "shortTitle";
         public static final String DESCRIPTION = "description";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
         public static final String LOCALE = "locale";
@@ -152,7 +152,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT,
-                PHOTO, TAG, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, REMOVED, DELETED, REVISION, SYNCHRONIZED
+                PHOTO, SHORT_TITLE, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -163,7 +163,7 @@ public class DatabaseContract {
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS, LOCALE, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, TAG, DESCRIPTION, REMOVED, MEDIA_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          WATCHERS, LOCALE, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, SHORT_TITLE, DESCRIPTION, REMOVED, MEDIA_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
 
     }
@@ -179,7 +179,8 @@ public class DatabaseContract {
         public static final String IMAGE_FILE = "imageFile";
 
         public static final String[] PROJECTION = {
-          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG,
+          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM,
+          STREAM_SHORT_TITLE,
           STREAM_TITLE,
           TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
@@ -218,14 +219,14 @@ public class DatabaseContract {
         public static final String USERNAME = "userName";
         public static final String ID_STREAM = "idStream";
         public static final String USER_PHOTO = "userPhoto";
-        public static final String STREAM_TAG = "streamTag";
+        public static final String STREAM_SHORT_TITLE = "streamShortTitle";
         public static final String STREAM_TITLE = "streamTitle";
         public static final String COMMENT = "comment";
         public static final String TYPE = "type";
         public static final String ID_SHOT = "idShot";
 
         public static final String[] PROJECTION = {
-          ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TAG, STREAM_TITLE, ID_SHOT,
+          ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_SHORT_TITLE, STREAM_TITLE, ID_SHOT,
           COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }

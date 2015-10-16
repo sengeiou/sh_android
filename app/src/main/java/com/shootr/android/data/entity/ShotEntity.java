@@ -5,11 +5,11 @@ public class ShotEntity extends Synchronized{
     private String idShot;
     private String idUser;
     private String username;
-    private String userPhoto; /* Only local and api, not datasource. Super clean, right? */
+    private String userPhoto;
     private String comment;
     private String image;
     private String idStream;
-    private String streamTag;
+    private String streamShortTitle;
     private String streamTitle;
 
     private Integer niceCount;
@@ -72,12 +72,12 @@ public class ShotEntity extends Synchronized{
         this.type = type;
     }
 
-    public String getStreamTag() {
-        return streamTag;
+    public String getStreamShortTitle() {
+        return streamShortTitle;
     }
 
-    public void setStreamTag(String streamTag) {
-        this.streamTag = streamTag;
+    public void setStreamShortTitle(String streamShortTitle) {
+        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {
