@@ -94,7 +94,7 @@
       android:layout_width="match_parent"
       android:layout_height="1dp"
       android:layout_below="@+id/profile_scores_bar"
-      android:background="?dividerHorizontal" />
+      android:background="@color/gray_90" />
 
     <FrameLayout android:id="@+id/profile_listing_container"
       android:layout_width="match_parent"
