@@ -1,4 +1,4 @@
-image: sloydev/android-env:23.0
+image: sloydev/android-env:23.1
 
 before_script:
 
@@ -17,7 +17,7 @@ integration:
         - /^bugfix\/.*$/
 
 distribution:
-    script: gradle assembleRelease -PdisablePreDex publishReleaseApkToS3
+    script: gradle assembleProdRelease -PdisablePreDex publishProdReleaseApkToS3
     stage: deploy
     only:
         - master

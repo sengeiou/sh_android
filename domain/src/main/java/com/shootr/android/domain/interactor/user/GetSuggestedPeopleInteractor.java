@@ -42,16 +42,10 @@ public class GetSuggestedPeopleInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            if(currentUserIsFollowingSomeone()) {
-                loadSuggestedPeople();
-            }
+            loadSuggestedPeople();
         } catch (ServerCommunicationException e) {
             notifyError(e);
         }
-    }
-
-    private boolean currentUserIsFollowingSomeone() {
-        return !localUserRepository.getPeople().isEmpty();
     }
 
     private void loadSuggestedPeople() {

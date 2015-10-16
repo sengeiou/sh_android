@@ -38,7 +38,6 @@ import com.shootr.android.data.ApiEndpoints;
 import com.shootr.android.data.CustomEndpoint;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.NetworkEnabled;
-import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.PollerEnabled;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
@@ -59,8 +58,6 @@ import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.okresponsefaker.EmptyBodyFakeResponse;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.StatsSnapshot;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -96,13 +93,11 @@ public class DebugAppContainer implements AppContainer {
 
     private final JsonAdapter jsonAdapter;
     private final OkHttpClient client;
-    private final Picasso picasso;
     private final StringPreference networkEndpoint;
     private final BooleanPreference networkEnabled;
     private final BooleanPreference debugMode;
     private final StringPreference networkProxy;
     private final IntPreference animationSpeed;
-    private final BooleanPreference picassoDebugging;
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference captureIntentsEnabled;
@@ -119,13 +114,11 @@ public class DebugAppContainer implements AppContainer {
     @Inject
     public DebugAppContainer(JsonAdapter jsonAdapter,
       OkHttpClient client,
-      Picasso picasso,
       @ApiEndpoint StringPreference networkEndpoint,
       @NetworkEnabled BooleanPreference networkEnabled,
       @DebugMode BooleanPreference debugMode,
       @NetworkProxy StringPreference networkProxy,
       @AnimationSpeed IntPreference animationSpeed,
-      @PicassoDebugging BooleanPreference picassoDebugging,
       @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @CaptureIntents BooleanPreference captureIntentsEnabled,
@@ -136,7 +129,6 @@ public class DebugAppContainer implements AppContainer {
       Application app) {
         this.jsonAdapter = jsonAdapter;
         this.client = client;
-        this.picasso = picasso;
         this.debugMode = debugMode;
         this.networkProxy = networkProxy;
         this.networkEnabled = networkEnabled;
@@ -144,7 +136,6 @@ public class DebugAppContainer implements AppContainer {
         this.scalpelEnabled = scalpelEnabled;
         this.scalpelWireframeEnabled = scalpelWireframeEnabled;
         this.animationSpeed = animationSpeed;
-        this.picassoDebugging = picassoDebugging;
         this.captureIntentsEnabled = captureIntentsEnabled;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
@@ -194,17 +185,6 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_logs_show) TextView deviceLogView;
     @Bind(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
-    @Bind(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
-    @Bind(R.id.debug_picasso_cache_size) TextView picassoCacheSizeView;
-    @Bind(R.id.debug_picasso_cache_hit) TextView picassoCacheHitView;
-    @Bind(R.id.debug_picasso_cache_miss) TextView picassoCacheMissView;
-    @Bind(R.id.debug_picasso_decoded) TextView picassoDecodedView;
-    @Bind(R.id.debug_picasso_decoded_total) TextView picassoDecodedTotalView;
-    @Bind(R.id.debug_picasso_decoded_avg) TextView picassoDecodedAvgView;
-    @Bind(R.id.debug_picasso_transformed) TextView picassoTransformedView;
-    @Bind(R.id.debug_picasso_transformed_total) TextView picassoTransformedTotalView;
-    @Bind(R.id.debug_picasso_transformed_avg) TextView picassoTransformedAvgView;
-
     @Override
     public ViewGroup get(final Activity activity) {
         this.activity = activity;
@@ -223,7 +203,6 @@ public class DebugAppContainer implements AppContainer {
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
-                refreshPicassoStats();
             }
         });
 
@@ -234,7 +213,6 @@ public class DebugAppContainer implements AppContainer {
         setupUserInterfaceSection();
         setupBuildSection();
         setupDeviceSection();
-        setupPicassoSection();
 
         return content;
     }
@@ -254,10 +232,8 @@ public class DebugAppContainer implements AppContainer {
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
         debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
         debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
-        debugActions.add(new LoginDebugAction("rafa", "123456"));
-        debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
+        debugActions.add(new LoginDebugAction("artjimlop", "654321"));
         debugActions.add(new LoginDebugAction("heisenberg", "123456"));
-        debugActions.add(new LoginDebugAction("ensaladilla", "123456"));
         debugActions.add(new LoginDebugAction("fakeuser", "fakepassword"));
         return debugActions;
     }
@@ -464,7 +440,8 @@ public class DebugAppContainer implements AppContainer {
         boolean showNotifications = notificationsEnabled.get();
         notificationsEnabledView.setChecked(showNotifications);
         notificationsEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting notifications %s", isChecked ? "on" : "off");
                 notificationsEnabled.set(isChecked);
             }
@@ -552,7 +529,8 @@ public class DebugAppContainer implements AppContainer {
         boolean captureIntents  = captureIntentsEnabled.get();
         uiCaptureIntents.setChecked(captureIntents);
         uiCaptureIntents.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting capture intents to " + isChecked);
                 captureIntentsEnabled.set(isChecked);
             }
@@ -610,40 +588,6 @@ public class DebugAppContainer implements AppContainer {
         } catch (Exception e) {
             Timber.e(e, "Error while copying database to sdcard");
         }
-    }
-
-    private void setupPicassoSection() {
-        boolean picassoDebuggingValue = picassoDebugging.get();
-        picasso.setIndicatorsEnabled(picassoDebuggingValue);
-        picasso.setLoggingEnabled(picassoDebuggingValue);
-        picassoIndicatorView.setChecked(picassoDebuggingValue);
-        picassoIndicatorView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-                Timber.d("Setting Picasso debugging to " + isChecked);
-                picasso.setIndicatorsEnabled(isChecked);
-                picasso.setLoggingEnabled(isChecked);
-                picassoDebugging.set(isChecked);
-            }
-        });
-
-        refreshPicassoStats();
-    }
-
-    private void refreshPicassoStats() {
-        StatsSnapshot snapshot = picasso.getSnapshot();
-        String size = getSizeString(snapshot.size);
-        String total = getSizeString(snapshot.maxSize);
-        int percentage = (int) ((1f * snapshot.size / snapshot.maxSize) * 100);
-        picassoCacheSizeView.setText(size + " / " + total + " (" + percentage + "%)");
-        picassoCacheHitView.setText(String.valueOf(snapshot.cacheHits));
-        picassoCacheMissView.setText(String.valueOf(snapshot.cacheMisses));
-        picassoDecodedView.setText(String.valueOf(snapshot.originalBitmapCount));
-        picassoDecodedTotalView.setText(getSizeString(snapshot.totalOriginalBitmapSize));
-        picassoDecodedAvgView.setText(getSizeString(snapshot.averageOriginalBitmapSize));
-        picassoTransformedView.setText(String.valueOf(snapshot.transformedBitmapCount));
-        picassoTransformedTotalView.setText(getSizeString(snapshot.totalTransformedBitmapSize));
-        picassoTransformedAvgView.setText(getSizeString(snapshot.averageTransformedBitmapSize));
     }
 
     private void applyAnimationSpeed(int multiplier) {

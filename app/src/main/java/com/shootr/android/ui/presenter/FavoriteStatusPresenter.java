@@ -1,16 +1,13 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
-import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class FavoriteStatusPresenter implements Presenter {
 
@@ -69,16 +66,7 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof StreamIsAlreadyInFavoritesException){
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        favoriteStatusView.showError(errorMessage);
+        favoriteStatusView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     public void removeFromFavorites() {

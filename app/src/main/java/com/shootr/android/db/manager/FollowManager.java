@@ -8,7 +8,6 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.mappers.FollowEntityDBMapper;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -54,7 +53,6 @@ public class FollowManager extends AbstractManager{
                 getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
-       insertInSync();
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
@@ -106,11 +104,6 @@ public class FollowManager extends AbstractManager{
         String[] whereArgs = new String[]{followedUser, idUser};
         return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
-
-    public void insertInSync(){
-        insertInTableSync(FOLLOW_TABLE, 2,0,0);
-    }
-
 
     public List<FollowEntity> getFollowsNotSynchronized(){
         List<FollowEntity> followsToUpdate = new ArrayList<>();

@@ -19,7 +19,6 @@ import org.mockito.Spy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class GetSuggestedPeopleInteractorTest {
@@ -86,12 +85,12 @@ public class GetSuggestedPeopleInteractorTest {
     }
 
     @Test
-    public void shouldNotCallbackWhenNoPeopleFound() throws Exception {
+    public void shouldCallbackWhenNoPeopleFound() throws Exception {
         when(localUserRepository.getPeople()).thenReturn(Collections.<User>emptyList());
 
         interactor.loadSuggestedPeople(callback, errorCallback);
 
-        verifyZeroInteractions(callback);
+        verify(remoteUserRepository).getSuggestedPeople();
     }
 
     protected void setupDoesFollowSomeone() {

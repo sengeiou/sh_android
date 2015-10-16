@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.stream;
 
+import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -24,7 +25,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
     private final SessionRepository sessionRepository;
 
     private String idUser;
-    private Callback<List<StreamSearchResult>> callback;
+    private Callback<Listing> callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetCurrentUserListingStreamsInteractor(InteractorHandler interactorHandler,
@@ -37,7 +38,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadCurrentUserListingStreams(Callback<List<StreamSearchResult>> callback, ErrorCallback errorCallback){
+    public void loadCurrentUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         this.idUser = sessionRepository.getCurrentUserId();
@@ -61,11 +62,14 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         loadUserListingStreamsFromRepository(localStreamSearchRepository);
     }
 
-    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
+    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
         setWatchNumberInStreams(listingStreams);
         List<StreamSearchResult> listingWithoutRemoved = retainStreamsNotRemoved(listingStreams);
-        notifyLoaded(listingWithoutRemoved);
+
+        notifyLoaded(Listing.builder()
+            .holdingStreams(listingWithoutRemoved)
+            .build());
     }
 
     private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {
@@ -85,7 +89,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         }
     }
 
-    private void notifyLoaded(final List<StreamSearchResult> listingStreams) {
+    private void notifyLoaded(final Listing listingStreams) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingStreams);

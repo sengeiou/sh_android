@@ -4,7 +4,6 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -168,7 +167,7 @@ public class StreamsListInteractorTest {
 
     @Test public void shouldNotifyErrorCallbackWhenRefreshRemoteFails() throws Exception {
         setupNeedsRefresh();
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new RepositoryException("test exception"));
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new ShootrException("test exception") {});
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 

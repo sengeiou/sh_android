@@ -19,29 +19,7 @@ public class DatabaseContract {
         String REVISION = "revision";
     }
 
-    public static final class TablesSync implements SyncColumns {
-
-        private TablesSync() {
-
-        }
-
-        public static final String TABLE = "TablesSync";
-
-        public static final String ORDER = "idOrder";
-        public static final String ENTITY = "entity";
-        public static final String FREQUENCY = "frequency";
-        public static final String MAX_TIMESTAMP = "max_timestamp";
-        public static final String MIN_TIMESTAMP = "min_timestamp";
-        public static final String MIN_ROWS = "min_rows";
-        public static final String MAX_ROWS = "max_rows";
-        public static final String DIRECTION = "direction";
-
-        public static final String[] PROJECTION = {
-          ORDER, ENTITY, FREQUENCY, MAX_ROWS, MIN_ROWS, MAX_TIMESTAMP, MIN_TIMESTAMP, DIRECTION
-        };
-    }
-
-    public static final class UserTable implements SyncColumns {
+    public static class UserTable implements SyncColumns {
 
         private UserTable() {
 
@@ -50,9 +28,7 @@ public class DatabaseContract {
         public static final String TABLE = "User";
 
         public static final String ID = "idUser";
-        public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
-        public static final String PASSWORD = "password"; // Only used for Login request, never in Database
         public static final String EMAIL = "email";
         public static final String NAME = "name";
         public static final String PHOTO = "photo";
@@ -70,16 +46,18 @@ public class DatabaseContract {
         public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
         public static final String JOIN_STREAM_DATE = "joinStreamDate";
         public static final String WATCHING_SYNCHRONIZED = "watchingSynchronized";
+        public static final String CREATED_STREAMS_COUNT = "createdStreamsCount";
+        public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
 
         public static final String[] PROJECTION = {
-          ID, SESSION_TOKEN, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
-          WATCHING_SYNCHRONIZED,
+          WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
-    public static final class ShotTable implements SyncColumns {
+    public static class ShotTable implements SyncColumns {
 
         private ShotTable() {
 
@@ -118,7 +96,7 @@ public class DatabaseContract {
     public static final class FollowTable implements SyncColumns {
 
         private FollowTable() {
-
+            /* no instances */
         }
 
         public static final String TABLE = "Follow";
@@ -190,7 +168,7 @@ public class DatabaseContract {
 
     }
 
-    public static final class ShotQueueTable implements SyncColumns {
+    public static final class ShotQueueTable extends ShotTable {
 
         private ShotQueueTable() {
         }
@@ -199,24 +177,6 @@ public class DatabaseContract {
         public static final String ID_QUEUE = "idQueue";
         public static final String FAILED = "failed";
         public static final String IMAGE_FILE = "imageFile";
-        public static final String ID_SHOT = "idShot";
-        public static final String ID_USER = "idUser";
-        public static final String USERNAME = "userName";
-        public static final String USER_PHOTO = "userPhoto";
-        public static final String COMMENT = "comment";
-        public static final String IMAGE = "image";
-        public static final String ID_STREAM = "idStream";
-        public static final String STREAM_TAG = "streamTag";
-        public static final String STREAM_TITLE = "streamTitle";
-        public static final String TYPE = "type";
-
-        public static final String ID_SHOT_PARENT = "idShotParent";
-        public static final String ID_USER_PARENT = "idUserParent";
-        public static final String USERNAME_PARENT = "userNameParent";
-
-        public static final String VIDEO_URL = "videoUrl";
-        public static final String VIDEO_TITLE = "videoTitle";
-        public static final String VIDEO_DURATION = "videoDuration";
 
         public static final String[] PROJECTION = {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG,
@@ -270,7 +230,7 @@ public class DatabaseContract {
         };
     }
 
-    public static final class SuggestedPeopleTable implements SyncColumns {
+    public static final class SuggestedPeopleTable extends UserTable {
 
         private SuggestedPeopleTable() {
 
@@ -278,30 +238,15 @@ public class DatabaseContract {
 
         public static final String TABLE = "SuggestedPeople";
 
-        public static final String ID = "idUser";
-        public static final String SESSION_TOKEN = "sessionToken";
-        public static final String USER_NAME = "userName";
-        public static final String EMAIL = "email";
-        public static final String NAME = "name";
-        public static final String PHOTO = "photo";
-        public static final String NUM_FOLLOWERS = "numFollowers";
-        public static final String NUM_FOLLOWINGS = "numFollowings";
-        public static final String POINTS = "points";
-        public static final String WEBSITE = "website";
-        public static final String BIO = "bio";
-        public static final String RANK = "rank";
-        public static final String NAME_NORMALIZED = "nameNormalized";
-        public static final String USER_NAME_NORMALIZED = "userNameNormalized";
-        public static final String EMAIL_NORMALIZED = "emailNormalized";
-        public static final String ID_WATCHING_STREAM = "idWatchingStream";
-        public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
-        public static final String JOIN_STREAM_DATE = "joinStreamDate";
         public static final String RELEVANCE = "relevance";
+        public static final String CREATED_STREAMS_COUNT = "createdStreamsCount";
+        public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
 
         public static final String[] PROJECTION = {
-          ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
-          BIRTH, RELEVANCE, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          WATCHING_SYNCHRONIZED,
+          BIRTH, RELEVANCE, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 

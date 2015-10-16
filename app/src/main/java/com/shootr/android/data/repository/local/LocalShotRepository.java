@@ -6,7 +6,6 @@ import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.StreamTimelineParameters;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
 import java.util.List;
@@ -23,11 +22,7 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Shot putShot(Shot shot) {
-        try {
-            localShotDataSource.putShot(shotEntityMapper.transform(shot));
-        } catch (ShotRemovedException e) {
-            throw new IllegalArgumentException(e);
-        }
+        localShotDataSource.putShot(shotEntityMapper.transform(shot));
         return shot;
     }
 
@@ -37,17 +32,8 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Shot getShot(String shotId) {
-        ShotEntity shot = null;
-        try {
-            shot = localShotDataSource.getShot(shotId);
-        } catch (ShotRemovedException e) {
-            /* nothing */
-        }
-        if (shot != null) {
-            return shotEntityMapper.transform(shot);
-        } else {
-            return null;
-        }
+        ShotEntity shot = localShotDataSource.getShot(shotId);
+        return shotEntityMapper.transform(shot);
     }
 
     @Override public List<Shot> getReplies(String shot) {
@@ -66,7 +52,7 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override
-    public ShotDetail getShotDetail(String idShot) throws ShotRemovedException {
+    public ShotDetail getShotDetail(String idShot) {
         return shotEntityMapper.transform(localShotDataSource.getShotDetail(idShot));
     }
 

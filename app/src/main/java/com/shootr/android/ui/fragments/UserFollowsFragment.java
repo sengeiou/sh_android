@@ -16,16 +16,14 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import com.path.android.jobqueue.JobManager;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
@@ -51,9 +49,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Inject ImageLoader imageLoader;
     @Inject @Main Bus bus;
-    @Inject JobManager jobManager;
-    @Inject NetworkUtil networkUtil;
-    @Inject SessionRepository sessionRepository;
+    @Inject InteractorHandler interactorHandler;
     @Inject FeedbackMessage feedbackMessage;
     @Inject FollowInteractor followInteractor;
     @Inject UnfollowInteractor unfollowInteractor;
@@ -128,7 +124,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void startJob(){
         GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
         job.init(userId, followType);
-        jobManager.addJobInBackground(job);
+        interactorHandler.execute(job);
     }
 
     private void setEmptyMessage() {

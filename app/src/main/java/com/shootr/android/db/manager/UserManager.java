@@ -4,225 +4,194 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserEntityDBMapper;
-import com.shootr.android.domain.repository.SessionRepository;
-import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 public class UserManager extends AbstractManager {
 
-    UserEntityDBMapper userMapper;
-    private SessionRepository sessionRepository;
-    private static final String USER_TABLE = UserTable.TABLE;
+    private final UserEntityDBMapper userMapper;
 
     @Inject
-    public UserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper, SessionRepository sessionRepository) {
+    public UserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper) {
         super(openHelper);
         this.userMapper = userMapper;
-        this.sessionRepository = sessionRepository;
-    }
-
-    /**
-     * Insert User list
-     */
-    public void saveUsersAndDeleted(List<UserEntity> users) throws SQLException {
-        for (UserEntity user : users) {
-            ContentValues contentValues = userMapper.toContentValues(user);
-            contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
-            if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                deleteUser(user);
-            } else {
-                getWritableDatabase().insertWithOnConflict(USER_TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
-            }
-            insertInSync();
-        }
     }
 
     public void saveUsers(List<UserEntity> userEntities) {
-        for (UserEntity userEntity : userEntities) {
-            saveUser(userEntity);
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (UserEntity userEntity : userEntities) {
+                insertUser(userEntity, database);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
     }
 
-    /**
-     * Insert a user
-     */
     public void saveUser(UserEntity user) {
-        ContentValues contentValues = userMapper.toContentValues(user);
-        if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-            deleteUser(user);
-        } else {
-            getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        }
-        insertInSync();
+        insertUser(user, getWritableDatabase());
     }
 
-    public void saveCurrentUser(UserEntity user) throws  SQLException{
+    private void insertUser(UserEntity user, SQLiteDatabase writableDatabase) {
         ContentValues contentValues = userMapper.toContentValues(user);
-        if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
+        if (contentValues.getAsString(DatabaseContract.SyncColumns.DELETED) != null) {
             deleteUser(user);
         } else {
-            getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            writableDatabase.insertWithOnConflict(UserTable.TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertInSync();
     }
 
-    /**
-     * Delete a user
-     */
     public long deleteUser(UserEntity user) {
-        long res = 0;
-        String args = DatabaseContract.UserTable.ID + "=?";
-        String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
-        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, stringArgs, null, null, null);
-        if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(USER_TABLE, UserTable.ID+"=?", new String[] { String.valueOf(user.getIdUser()) });
-        }
-        c.close();
-        return res;
+        String where = DatabaseContract.UserTable.ID + "=?";
+        String[] whereArguments = new String[] { user.getIdUser() };
+        return getWritableDatabase().delete(UserTable.TABLE, where, whereArguments);
     }
 
-    /**
-     * Retrieve User by idUser
-     */
     public UserEntity getUserByIdUser(String idUser) {
-        UserEntity resUser = null;
-        String args = UserTable.ID + "= ?";
-        String[] argsString = new String[] { idUser };
+        String where = UserTable.ID + "= ?";
+        String[] whereArguments = new String[] { idUser };
 
-        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            resUser = userMapper.fromCursor(c);
-        }
-        c.close();
-        return resUser;
-    }
-
-    public void insertInSync(){
-        insertInTableSync(USER_TABLE, 1, 0, 0);
+        return readUser(where, whereArguments);
     }
 
     public List<UserEntity> getUsersByIds(List<String> usersIds) {
         int userIdsSize = usersIds.size();
-        List<UserEntity> result = new ArrayList<>(userIdsSize);
         if (userIdsSize == 0) {
-            return result;
+            return Collections.emptyList();
         }
-        String[] selectionArguments = new String[userIdsSize];
-        for (int i = 0; i < userIdsSize; i++) {
-            selectionArguments[i] = String.valueOf(usersIds.get(i));
-        }
-        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
-          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")", selectionArguments, null, null,
-          UserTable.USER_NAME+" COLLATE NOCASE");
 
-        if (queryResults.getCount() > 0) {
-            queryResults.moveToFirst();
-            do {
-                UserEntity user = userMapper.fromCursor(queryResults);
-                if (user != null) {
-                    result.add(user);
-                }
-            } while (queryResults.moveToNext());
+        String whereClause = UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")";
+        String[] whereArguments = new String[userIdsSize];
+        for (int i = 0; i < userIdsSize; i++) {
+            whereArguments[i] = String.valueOf(usersIds.get(i));
         }
-        queryResults.close();
-        return result;
+
+        return readUsers(whereClause, whereArguments);
     }
 
     public List<UserEntity> getUsersWatchingSomething(List<String> usersIds) {
         int userIdsSize = usersIds.size();
-        List<UserEntity> result = new ArrayList<>(userIdsSize);
 
         if (userIdsSize == 0) {
-            return result;
+            return Collections.emptyList();
         }
 
-        String whereSelection =
-          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ") AND " + UserTable.ID_WATCHING_STREAM + " IS NOT NULL";
+        String whereSelection = UserTable.ID
+          + " IN ("
+          + createListPlaceholders(userIdsSize)
+          + ") AND "
+          + UserTable.ID_WATCHING_STREAM
+          + " IS NOT NULL";
 
         String[] selectionArguments = new String[userIdsSize];
         for (int i = 0; i < userIdsSize; i++) {
             selectionArguments[i] = String.valueOf(usersIds.get(i));
         }
 
-        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
-          whereSelection, selectionArguments, null, null,
-          UserTable.NAME);
-
-        if (queryResults.getCount() > 0) {
-            queryResults.moveToFirst();
-            do {
-                UserEntity user = userMapper.fromCursor(queryResults);
-                if (user != null) {
-                    result.add(user);
-                }
-            } while (queryResults.moveToNext());
-        }
-        queryResults.close();
-        return result;
+        return readUsers(whereSelection, selectionArguments);
     }
 
-    public List<UserEntity> searchUsers(String searchString){
-        List<UserEntity> users = new ArrayList<>();
-        String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)
-          .replaceAll("[^\\p{ASCII}]", "");
+    public List<UserEntity> searchUsers(String searchString) {
+        String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-        String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
-          Cursor c = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
+        String whereClause = UserTable.USER_NAME_NORMALIZED
+          + " LIKE '%"
+          + stringToSearch
+          + "%' OR "
+          + UserTable.NAME_NORMALIZED
+          + " LIKE '%"
+          + stringToSearch
+          + "%'";
 
-          if(c.getCount()>0){
-            c.moveToFirst();
-              do {
-                  UserEntity user = userMapper.fromCursor(c);
-                  if (user != null) {
-                      users.add(user);
-                  }
-              }while(c.moveToNext());
-          }
-        c.close();
-        return users;
+        return readUsers(whereClause, null);
     }
 
     public List<UserEntity> getUsersNotSynchronized() {
-        String whereClause = UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
-          + "or "+UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' "
-          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
-          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' ";
+        String whereClause = UserTable.SYNCHRONIZED
+          + " = '"
+          + LocalSynchronized.SYNC_NEW
+          + "' "
+          + "or "
+          + UserTable.SYNCHRONIZED
+          + " = '"
+          + LocalSynchronized.SYNC_UPDATED
+          + "' "
+          + "or "
+          + UserTable.WATCHING_SYNCHRONIZED
+          + " = '"
+          + LocalSynchronized.SYNC_NEW
+          + "' "
+          + "or "
+          + UserTable.WATCHING_SYNCHRONIZED
+          + " = '"
+          + LocalSynchronized.SYNC_UPDATED
+          + "' ";
 
-        Cursor queryResult =
-          getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);
-
-        List<UserEntity> resultUsers = new ArrayList<>(queryResult.getCount());
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                UserEntity watchEntity = userMapper.fromCursor(queryResult);
-                resultUsers.add(watchEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultUsers;
+        return readUsers(whereClause, null);
     }
 
     public UserEntity getUserByUsername(String username) {
-        UserEntity resUser = null;
         String args = UserTable.USER_NAME + "= ?";
         String[] argsString = new String[] { username };
 
-        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
+        return readUser(args, argsString);
+    }
+
+    @Nullable
+    private UserEntity readUser(String whereClause, String[] whereArguments) {
+        UserEntity resUser = null;
+        Cursor c = getReadableDatabase().query(UserTable.TABLE,
+          UserTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          null,
+          null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             resUser = userMapper.fromCursor(c);
         }
         c.close();
         return resUser;
+    }
+
+    @NonNull
+    private List<UserEntity> readUsers(String whereClause, String[] whereArguments) {
+        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE,
+          UserTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          UserTable.USER_NAME + " COLLATE NOCASE");
+
+        List<UserEntity> result = new ArrayList<>(queryResults.getCount());
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                UserEntity user = userMapper.fromCursor(queryResults);
+                if (user != null) {
+                    result.add(user);
+                }
+            } while (queryResults.moveToNext());
+        }
+        queryResults.close();
+        return result;
     }
 }

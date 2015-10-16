@@ -4,7 +4,6 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.bus.UnwatchDone;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -13,7 +12,6 @@ import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
-import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.StreamsListView;
@@ -80,7 +78,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void unwatchStream() {
         unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
                 loadDefaultStreamList();
                 removeCurrentWatchingStream();
             }
@@ -135,12 +134,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         if (error instanceof ShootrValidationException) {
             String errorCode = ((ShootrValidationException) error).getErrorCode();
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
-        } else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        } else if (error instanceof StreamIsAlreadyInFavoritesException) {
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
         } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+            errorMessage = errorMessageFactory.getMessageForError(error);
         }
         streamsListView.showError(errorMessage);
     }

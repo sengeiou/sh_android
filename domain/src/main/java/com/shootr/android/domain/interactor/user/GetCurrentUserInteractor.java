@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.interactor.Fast;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -18,7 +19,7 @@ public class GetCurrentUserInteractor implements Interactor {
 
     private Callback<User> callback;
 
-    @Inject public GetCurrentUserInteractor(InteractorHandler interactorHandler,
+    @Inject public GetCurrentUserInteractor(@Fast InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository,
       @Local UserRepository localUserRepository) {

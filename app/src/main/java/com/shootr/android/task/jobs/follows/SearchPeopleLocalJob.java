@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.follows;
 
 import android.app.Application;
-import com.path.android.jobqueue.Params;
-import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -22,8 +20,6 @@ import javax.inject.Inject;
 
 public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultEvent> {
 
-    private static final int PRIORITY = 4;
-
     private UserManager userManager;
     private FollowManager followManager;
 
@@ -33,9 +29,9 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     private SessionRepository sessionRepository;
 
     @Inject
-    public SearchPeopleLocalJob(Application app, @Main Bus bus, NetworkUtil networkUtil, UserManager userManager,
+    public SearchPeopleLocalJob(Application app, @Main Bus bus, UserManager userManager,
       FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
-        super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
+        super(app, bus);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
@@ -50,11 +46,6 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
         List<UserEntity> results = retrieveDataFromDatabase();
         postSuccessfulEvent(new SearchPeopleLocalResultEvent(getUserVOs(results)));
     }
-
-    @Override protected boolean isNetworkRequired() {
-        return false;
-    }
-
 
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();

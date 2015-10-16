@@ -4,8 +4,8 @@ import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.DatabaseContract.SuggestedPeopleTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
-import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 
@@ -16,7 +16,6 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS " + UserTable.TABLE + " ("
             + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
-            + UserTable.SESSION_TOKEN + " VARCHAR(255),"
             + UserTable.USER_NAME + " VARCHAR(255),"
             + UserTable.EMAIL + " VARCHAR(255),"
             + UserTable.EMAIL_CONFIRMED + " INT NULL,"
@@ -35,6 +34,8 @@ public class SQLiteUtils {
             + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
             + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
             + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
+            + UserTable.CREATED_STREAMS_COUNT +" INTEGER NULL,"
+            + UserTable.FAVORITED_STREAMS_COUNT +" INTEGER NULL,"
             + SyncColumns.BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.DELETED + " DATETIME,"
@@ -101,17 +102,6 @@ public class SQLiteUtils {
             + SyncColumns.REVISION + " INT NOT NULL,"
             + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL,"
             + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + "))";
-
-    public static final String CREATE_TABLE_TABLESSYNC = "CREATE TABLE IF NOT EXISTS "+ TablesSync.TABLE+" ("
-            + TablesSync.MIN_TIMESTAMP+" DATETIME,"
-            + TablesSync.MAX_TIMESTAMP+" DATETIME,"
-            + TablesSync.MIN_ROWS+" INT,"
-            + TablesSync.MAX_ROWS+" INT,"
-            + TablesSync.DIRECTION+" VARCHAR(255) NULL,"
-            + TablesSync.ORDER +" INT NOT NULL,"
-            + TablesSync.ENTITY+" VARCHAR(255) NOT NULL,"
-            + TablesSync.FREQUENCY+" INT NULL, " +
-            "PRIMARY KEY("+TablesSync.ORDER+"));";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
             + DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"
@@ -196,9 +186,9 @@ public class SQLiteUtils {
 
     public static final String CREATE_SUGGESTED_PEOPLE = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.SuggestedPeopleTable.TABLE + " ("
       + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
-      + UserTable.SESSION_TOKEN + " VARCHAR(255),"
       + UserTable.USER_NAME + " VARCHAR(255),"
       + UserTable.EMAIL + " VARCHAR(255),"
+      + UserTable.EMAIL_CONFIRMED + " INT NULL,"
       + UserTable.NAME + " VARCHAR(255),"
       + UserTable.PHOTO + " VARCHAR(1024) NULL,"
       + UserTable.POINTS+" INT NULL,"
@@ -213,7 +203,10 @@ public class SQLiteUtils {
       + UserTable.ID_WATCHING_STREAM +" TEXT NULL,"
       + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
       + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
-      + DatabaseContract.SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
+      + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
+      + SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
+      + UserTable.CREATED_STREAMS_COUNT +" INTEGER NULL,"
+      + UserTable.FAVORITED_STREAMS_COUNT +" INTEGER NULL,"
       + SyncColumns.BIRTH + " DATETIME NOT NULL,"
       + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
       + SyncColumns.DELETED + " DATETIME,"

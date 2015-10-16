@@ -36,9 +36,9 @@ public class ServiceCreateAccountGateway implements CreateAccountGateway {
             return sendCreateAccount(username, email, password);
         } catch (ApiException apiException) {
             if (ErrorInfo.EmailAlreadyExistsException == apiException.getErrorInfo()) {
-                throw new EmailAlreadyExistsException();
+                throw new EmailAlreadyExistsException(apiException);
             } else if (ErrorInfo.UserNameAlreadyExistsException == apiException.getErrorInfo()) {
-                throw new UsernameAlreadyExistsException();
+                throw new UsernameAlreadyExistsException(apiException);
             } else {
                 throw new ServerCommunicationException(apiException);
             }

@@ -2,7 +2,6 @@ package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotType;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -41,7 +40,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
           shotSender, localShotRepository, remoteShotRepository);
     }
 
-    @Override protected PostNewShotInteractor getInteractorForCommonTests() throws ShotRemovedException {
+    @Override protected PostNewShotInteractor getInteractorForCommonTests() {
         setupParentShot();
         return interactor;
     }
@@ -120,11 +119,11 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         return shotStreamInfo;
     }
 
-    private void setupParentShot() throws ShotRemovedException {
+    private void setupParentShot() {
         when(localShotRepository.getShot(anyString())).thenReturn(parentShot());
     }
 
-    private void setupParentShotFromRemote() throws ShotRemovedException {
+    private void setupParentShotFromRemote() {
         when(localShotRepository.getShot(anyString())).thenReturn(null);
         when(remoteShotRepository.getShot(anyString())).thenReturn(parentShot());
     }

@@ -2,7 +2,6 @@ package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.exception.InvalidLoginException;
-import java.io.IOException;
 
 public interface LoginGateway {
 

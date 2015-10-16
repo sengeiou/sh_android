@@ -91,7 +91,7 @@
       android:layout_height="@dimen/nice_button_size"
       android:layout_alignParentRight="true"
       android:layout_below="@+id/shot_media_content"
-      android:layout_marginTop="4dp"
+      android:layout_marginTop="@dimen/nice_button_margin_top_normal"
       style="@style/NiceButton" />
 
 </RelativeLayout>

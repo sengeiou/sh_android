@@ -90,7 +90,6 @@ public class StreamManager extends AbstractManager{
               contentValues,
               SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertInSync();
     }
 
     public long deleteStream(StreamEntity streamEntity){
@@ -114,10 +113,6 @@ public class StreamManager extends AbstractManager{
         }
         c.close();
         return res;
-    }
-
-    public void insertInSync(){
-        insertInTableSync(DatabaseContract.StreamTable.TABLE, 10, 1000, 0);
     }
 
     public List<StreamSearchEntity> getDefaultStreamSearch() {
@@ -239,6 +234,21 @@ public class StreamManager extends AbstractManager{
         ContentValues values = new ContentValues(2);
         values.put(TimelineSyncTable.STREAM_ID, streamId);
         values.put(TimelineSyncTable.DATE, refreshDate);
-        getWritableDatabase().insertWithOnConflict(TimelineSyncTable.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        getWritableDatabase().insertWithOnConflict(TimelineSyncTable.TABLE,
+          null,
+          values,
+          SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public void removeStream(String idStream) {
+        StreamEntity stream = getStreamById(idStream);
+        stream.setRemoved(1);
+        saveStream(stream);
+    }
+
+    public void restoreStream(String idStream) {
+        StreamEntity stream = getStreamById(idStream);
+        stream.setRemoved(0);
+        saveStream(stream);
     }
 }

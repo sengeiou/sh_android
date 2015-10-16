@@ -74,7 +74,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
     private String getNewGcmToken() {
         try {
             return gcm.register(GCMConstants.GCM_SENDER_ID);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             Timber.e(e, "Error registering GCM");
             throw new GCMNotAvailableException(e);
         }

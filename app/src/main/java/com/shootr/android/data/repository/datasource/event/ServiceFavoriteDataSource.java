@@ -9,25 +9,22 @@ import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.SessionRepository;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
     private final FavoriteApiService favoriteApiService;
-    private final SessionRepository sessionRepository;
     private final FavoriteApiEntityMapper favoriteApiEntityMapper;
     private final StreamDataSource localStreamDataSource;
 
     @Inject
     public ServiceFavoriteDataSource(FavoriteApiService favoriteApiService,
-      SessionRepository sessionRepository,
       FavoriteApiEntityMapper favoriteApiEntityMapper,
       @Local StreamDataSource localStreamDataSource) {
         this.favoriteApiService = favoriteApiService;
-        this.sessionRepository = sessionRepository;
         this.favoriteApiEntityMapper = favoriteApiEntityMapper;
         this.localStreamDataSource = localStreamDataSource;
     }
@@ -40,7 +37,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         } catch (ApiException e) {
-            throw new StreamAlreadyInFavoritesException();
+            throw new StreamAlreadyInFavoritesException(e);
         }
     }
 
@@ -50,15 +47,26 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public List<FavoriteEntity> getFavorites() {
+    public List<FavoriteEntity> getFavorites(String userId) {
         try {
-            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites();
+            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(userId);
+            favorites = filterFavoritesWithoutStreams(favorites);
             storeEmbedStreams(favorites);
             return favoriteApiEntityMapper.transform(favorites);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
 
+    }
+
+    private List<FavoriteApiEntity> filterFavoritesWithoutStreams(List<FavoriteApiEntity> favorites) {
+        List<FavoriteApiEntity> filtered = new ArrayList<>(favorites.size());
+        for (FavoriteApiEntity favorite : favorites) {
+            if (favorite.getStream() != null) {
+                filtered.add(favorite);
+            }
+        }
+        return filtered;
     }
 
     @Override
@@ -85,9 +93,5 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
             StreamEntity stream = favorite.getStream();
             localStreamDataSource.putStream(stream);
         }
-    }
-
-    private String currentUserId() {
-        return sessionRepository.getCurrentUserId();
     }
 }

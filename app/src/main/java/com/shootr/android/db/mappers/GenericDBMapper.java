@@ -5,7 +5,6 @@ import android.database.Cursor;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.db.DatabaseContract;
 import java.util.Date;
-import java.util.Map;
 
 public abstract class GenericDBMapper {
 

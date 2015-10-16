@@ -34,8 +34,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
             localStreamDataSource.putStream(streamEntity);
-            Stream stream = streamEntityMapper.transform(streamEntity);
-            return stream;
+            return streamEntityMapper.transform(streamEntity);
         } else {
             return null;
         }
@@ -68,6 +67,14 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
 
     @Override public void shareStream(String idStream) {
         remoteStreamDataSource.shareStream(idStream);
+    }
+
+    @Override public void removeStream(String idStream) {
+        remoteStreamDataSource.removeStream(idStream);
+    }
+
+    @Override public void restoreStream(String idStream) {
+        remoteStreamDataSource.restoreStream(idStream);
     }
 
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {

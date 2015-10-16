@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.ListingStreamsAdapter;
+import com.shootr.android.ui.adapters.ListingAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -42,7 +42,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
 
-    private ListingStreamsAdapter adapter;
+    private ListingAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -58,7 +58,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
-        adapter = new ListingStreamsAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
+        adapter = new ListingAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
@@ -122,24 +122,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         presenter.pause();
     }
 
-    private void openContextualMenu(final StreamResultModel stream) {
-        new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
-              @Override
-              public void run() {
-                  presenter.addToFavorite(stream);
-              }
-          })
-          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
-              @Override public void run() {
-                  presenter.shareStream(stream);
-              }
-          })
-          .addAction((getString(R.string.share_via)), new Runnable() {
-              @Override public void run() {
-                  shareStream(stream);
-              }
-          }).show();
+    private void openContextualMenu(StreamResultModel stream) {
+        presenter.openContextualMenu(stream);
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -147,8 +131,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         Intents.maybeStartActivity(this, shareIntent);
     }
 
-    @Override public void renderStreams(List<StreamResultModel> streams) {
-        adapter.setStreams(streams);
+    @Override public void renderHoldingStreams(List<StreamResultModel> streams) {
+        adapter.setCreatedStreams(streams);
+    }
+
+    @Override public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
+        adapter.setFavoritedStreams(listingUserFavoritedStreams);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String tag) {
@@ -167,7 +155,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         loadingView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
+    @Override public void setCurrentUserFavorites(List<StreamResultModel> favoriteStreams) {
         adapter.setFavoriteStreams(favoriteStreams);
     }
 
@@ -181,6 +169,47 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showStreamShared() {
         feedbackMessage.show(getView(), sharedStream);
+    }
+
+    @Override
+    public void hideSectionTitles() {
+        adapter.setShowTitles(false);
+    }
+
+    @Override
+    public void showSectionTitles() {
+        adapter.setShowTitles(true);
+    }
+
+    @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(stream);
+        builder.addAction(R.string.edit_stream, new Runnable() {
+            @Override public void run() {
+                Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                startActivity(intent);
+            }
+        }).show();
+    }
+
+    @Override public void showContextMenu(final StreamResultModel stream) {
+        getBaseContextMenuOptions(stream).show();
+    }
+
+    private CustomContextMenu.Builder getBaseContextMenuOptions(final StreamResultModel stream) {
+        return new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title,
+          new Runnable() {
+              @Override public void run() {
+                  presenter.addToFavorite(stream);
+              }
+          }).addAction(R.string.share_via_shootr, new Runnable() {
+            @Override public void run() {
+                presenter.shareStream(stream);
+            }
+        }).addAction(R.string.share_via, new Runnable() {
+            @Override public void run() {
+                shareStream(stream);
+            }
+        });
     }
 
     @Override public void showContent() {

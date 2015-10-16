@@ -2,7 +2,7 @@ package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.path.android.jobqueue.persistentQueue.sqlite.DbOpenHelper;
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.FacebookController;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
@@ -28,7 +28,7 @@ public class DatabaseVersionUtilsTest {
     @Mock IntPreference preferencesDatabaseVersion;
     @Mock Context context;
     @Mock Version version;
-    @Mock DbOpenHelper dbOpenHelper;
+    @Mock SQLiteOpenHelper dbOpenHelper;
     @Mock FacebookController facebookController;
     @Mock BooleanPreference shouldShowIntro;
 

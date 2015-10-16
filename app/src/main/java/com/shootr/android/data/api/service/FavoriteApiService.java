@@ -11,15 +11,16 @@ import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 public interface FavoriteApiService {
 
-    @GET("/user/favorites/")
-    List<FavoriteApiEntity> getFavorites() throws ApiException, IOException;
+    @GET("/favorite")
+    List<FavoriteApiEntity> getFavorites(@Query("idUser") String userId) throws ApiException, IOException;
 
-    @POST("/user/favorites/")
+    @POST("/favorite")
     FavoriteApiEntity createFavorite(@Body FavoriteEntity favorite) throws IOException, ApiException;
 
-    @DELETE("/user/favorites/stream/{idStream}")
-    Response deleteFavorite(@Path("idStream") String idStream) throws ApiException, IOException;
+    @DELETE("/favorite/{idFavoriteOrStream}")
+    Response deleteFavorite(@Path("idFavoriteOrStream") String idStream) throws ApiException, IOException;
 }

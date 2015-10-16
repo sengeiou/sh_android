@@ -31,7 +31,7 @@ public class ServiceResetPasswordGateway implements ResetPasswordGateway {
         try {
             forgotPasswordResultEntity = resetPasswordApiService.passwordReset(forgotPasswordEntity);
         } catch (ApiException error) {
-            throw new InvalidForgotPasswordException();
+            throw new InvalidForgotPasswordException(error);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         }

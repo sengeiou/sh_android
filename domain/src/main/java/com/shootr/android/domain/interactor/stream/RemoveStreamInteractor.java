@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.stream;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -20,6 +19,7 @@ public class RemoveStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
+    private final StreamRepository localStreamRepository;
     private final StreamRepository remoteStreamRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
@@ -30,10 +30,11 @@ public class RemoveStreamInteractor implements Interactor {
 
     @Inject
     public RemoveStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote StreamRepository remoteStreamRepository,SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
+        this.localStreamRepository = localStreamRepository;
         this.remoteStreamRepository = remoteStreamRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
@@ -50,23 +51,25 @@ public class RemoveStreamInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            Stream stream = remoteStreamRepository.getStreamById(idStream);
-            stream.setRemoved(true);
-
-            remoteStreamRepository.putStream(stream);
+            remoteStreamRepository.removeStream(idStream);
+            localStreamRepository.removeStream(idStream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-            currentUser.setIdWatchingStream(null);
-            currentUser.setWatchingStreamTitle(null);
-            currentUser.setJoinStreamDate(null);
-
-            localUserRepository.putUser(currentUser);
-            remoteUserRepository.putUser(currentUser);
+            removeWatching(currentUser);
             sessionRepository.setCurrentUser(currentUser);
+            localUserRepository.updateWatch(currentUser);
+            remoteUserRepository.updateWatch(currentUser);
+
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
         }
+    }
+
+    private void removeWatching(User currentUser) {
+        currentUser.setIdWatchingStream(null);
+        currentUser.setWatchingStreamTitle(null);
+        currentUser.setJoinStreamDate(null);
     }
 
     private void notifyCompleted() {

@@ -154,8 +154,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override
     public void onResume() {
         super.onResume();
-        redrawStreamListWithCurrentValues();
         presenter.resume();
+        redrawStreamListWithCurrentValues();
     }
 
     private void redrawStreamListWithCurrentValues() {
@@ -179,18 +179,18 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     private void openContextualMenu(final StreamResultModel stream) {
         new CustomContextMenu.Builder(getActivity())
-          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+          .addAction(R.string.add_to_favorites_menu_title, new Runnable() {
             @Override
             public void run() {
                 presenter.addToFavorites(stream);
             }
         })
-          .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
+          .addAction(R.string.share_via_shootr, new Runnable() {
               @Override public void run() {
                   presenter.shareStream(stream);
               }
           })
-          .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
+          .addAction(R.string.share_via, new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }

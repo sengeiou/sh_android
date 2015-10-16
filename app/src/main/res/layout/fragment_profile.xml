@@ -6,7 +6,7 @@
 
     <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:orientation="vertical">
 
         <include
@@ -25,23 +25,15 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/profile_header">
 
-            <LinearLayout
+            <com.shootr.android.ui.widgets.ShotListView
               android:id="@+id/profile_shots_list"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
               android:visibility="gone"
               android:showDividers="middle"
               android:divider="?android:listDivider"
               tools:visibility="visible"
-              >
-
-                <include layout="@layout/item_list_shot" />
-
-                <include layout="@layout/item_list_shot" />
-
-                <include layout="@layout/item_list_shot" />
-            </LinearLayout>
+              />
 
             <TextView
               android:id="@+id/profile_shots_empty"

@@ -10,7 +10,7 @@ public interface NewStreamView extends DataTransferView{
 
     void showTitleError(String errorMessage);
 
-    void closeScreenWithResult(String streamId, String title);
+    void closeScreenWithResult(String streamId);
 
     void closeScreenWithExitStream();
 

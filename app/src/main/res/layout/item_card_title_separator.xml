@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
   android:layout_height="wrap_content"
-  android:layout_marginBottom="8dp"
-  android:background="#f0f0f0"
-  android:minHeight="16dp">
+  android:layout_width="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" >
+
+  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/separator"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="#f0f0f0"
+    android:minHeight="16dp"
+    tools:ignore="UselessParent">
 
     <View android:layout_width="match_parent"
       android:layout_height="2dp"
@@ -15,4 +23,15 @@
       android:layout_gravity="bottom"
       android:background="@color/gray_80" />
 
+    <TextView android:id="@android:id/text1"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:minHeight="44dp"
+      android:paddingLeft="16dp"
+      android:gravity="center_vertical"
+      android:textAppearance="@style/ListSeparatorTitleAppearance"
+      android:visibility="gone"
+      tools:text="Title"
+      tools:visibility="visible" />
+  </FrameLayout>
 </FrameLayout>
