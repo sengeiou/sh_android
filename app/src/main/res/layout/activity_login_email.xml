@@ -77,10 +77,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/keyline_1"
-          android:layout_marginTop="16dp"
           android:background="?selectableItemBackground"
           android:gravity="center_vertical"
-          android:minHeight="48dp"
           android:text="@string/activity_login_email_forgot"
           android:textColor="@color/primary" />
 
