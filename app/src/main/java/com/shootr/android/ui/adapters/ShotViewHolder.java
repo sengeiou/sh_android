@@ -6,10 +6,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
@@ -24,6 +26,8 @@ import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
 public class ShotViewHolder {
+
+    private static final int LONG_COMMENT_THRESHOLD = 20;
 
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
@@ -43,6 +47,9 @@ public class ShotViewHolder {
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
     @BindColor(R.color.tag_color) int tagColor;
+    @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
+    @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
+
     public int position;
     private View view;
 
@@ -177,6 +184,12 @@ public class ShotViewHolder {
     }
 
     private void bindNiceInfo(final ShotModel shot) {
+        boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
+        int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
+
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
+        lp.setMargins(0, marginTop, 0, 0);
+
         niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,5 +201,13 @@ public class ShotViewHolder {
                 }
             }
         });
+    }
+
+    private boolean hasLongComment(ShotModel shot) {
+        return shot.getComment() != null && shot.getComment().length() > LONG_COMMENT_THRESHOLD;
+    }
+
+    private boolean hasImage(ShotModel shot) {
+        return shot.getImage() != null;
     }
 }

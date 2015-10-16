@@ -43,4 +43,7 @@
 
     <dimen name="stream_detail_expanded_toolbar_height">144dp</dimen>
 
+    <dimen name="nice_button_margin_top_normal">4dp</dimen>
+    <dimen name="nice_button_margin_top_short">-16dp</dimen>
+
 </resources>
