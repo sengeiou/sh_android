@@ -40,7 +40,8 @@ public class GlideImageLoader implements ImageLoader {
     public void loadProfilePhoto(String url, ImageView view) {
         boolean isValidPhoto = url != null && !url.isEmpty();
         if (isValidPhoto) {
-            glide.load(url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
+            /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
+            glide.load(url).dontAnimate().placeholder(DEFAULT_PROFILE_PHOTO_RES).diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
         } else {
             view.setImageResource(DEFAULT_PROFILE_PHOTO_RES);
         }
@@ -50,7 +51,8 @@ public class GlideImageLoader implements ImageLoader {
     public void loadStreamPicture(String url, ImageView view) {
         boolean isValidPicture = url != null && !url.isEmpty();
         if (isValidPicture) {
-            glide.load(url).placeholder(DEFAULT_STREAM_PICTURE_RES).into(view);
+            /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
+            glide.load(url).dontAnimate().placeholder(DEFAULT_STREAM_PICTURE_RES).into(view);
         } else {
             view.setImageResource(DEFAULT_STREAM_PICTURE_RES);
         }
