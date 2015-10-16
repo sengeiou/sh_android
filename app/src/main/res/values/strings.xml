@@ -2,7 +2,7 @@
 <resources>
 
     <string name="title_activity_registration_email">Register with Email</string>
-
+    
     <string name="facebookID">389647124570169</string>
     <string name="connection_lost">The network connection was lost</string>
 

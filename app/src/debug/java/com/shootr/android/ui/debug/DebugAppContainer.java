@@ -232,10 +232,8 @@ public class DebugAppContainer implements AppContainer {
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
         debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
         debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
-        debugActions.add(new LoginDebugAction("rafa", "123456"));
-        debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
+        debugActions.add(new LoginDebugAction("artjimlop", "654321"));
         debugActions.add(new LoginDebugAction("heisenberg", "123456"));
-        debugActions.add(new LoginDebugAction("ensaladilla", "123456"));
         debugActions.add(new LoginDebugAction("fakeuser", "fakepassword"));
         return debugActions;
     }
