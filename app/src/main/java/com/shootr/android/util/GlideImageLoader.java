@@ -50,7 +50,7 @@ public class GlideImageLoader implements ImageLoader {
     public void loadStreamPicture(String url, ImageView view) {
         boolean isValidPicture = url != null && !url.isEmpty();
         if (isValidPicture) {
-            glide.load(url).into(view);
+            glide.load(url).placeholder(DEFAULT_STREAM_PICTURE_RES).into(view);
         } else {
             view.setImageResource(DEFAULT_STREAM_PICTURE_RES);
         }
