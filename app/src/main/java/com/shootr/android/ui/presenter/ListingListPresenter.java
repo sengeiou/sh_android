@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.StreamSearchResult;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
@@ -11,14 +10,12 @@ import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
-import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ListingListPresenter implements Presenter{
 
@@ -183,16 +180,7 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void showErrorInView(ShootrException error) {
-        String errorMessage;
-        if(error instanceof StreamIsAlreadyInFavoritesException){
-            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
-        }else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        }else{
-            Timber.e(error, "Unhandled error logging in");
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        listingView.showError(errorMessage);
+        listingView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     @Override public void resume() {

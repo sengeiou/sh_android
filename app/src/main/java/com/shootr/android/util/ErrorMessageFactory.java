@@ -8,8 +8,11 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShotNotFoundException;
+import com.shootr.android.domain.exception.UserNotFoundException;
+import com.shootr.android.domain.service.ChangePasswordInvalidException;
 import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
+import com.shootr.android.domain.service.user.LoginException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -105,28 +108,18 @@ public class ErrorMessageFactory {
         } else if(error instanceof EmailInUseException) {
             return context.getString(R.string.email_already_registered);
         } else if(error instanceof StreamIsAlreadyInFavoritesException) {
-            return getStreamIsAlreadyInFavoritesError();
+            return context.getString(R.string.error_stream_already_favorites);
         } else if(error instanceof ShotNotFoundException) {
-            return getShotDeletedException();
+            return context.getString(R.string.error_deleted_shot);
+        }else if(error instanceof UserNotFoundException) {
+            return context.getString(R.string.user_not_found);
+        }else if(error instanceof LoginException) {
+            return context.getString(R.string.error_login_credentials_invalid);
+        }else if(error instanceof ChangePasswordInvalidException) {
+            return context.getString(R.string.error_message_invalid_change_password);
         } else {
             return getUnknownErrorMessage();
         }
-    }
-
-    private String getShotDeletedException() {
-        return context.getString(R.string.error_deleted_shot);
-    }
-
-    public String getLoginCredentialsError(){
-        return context.getString(R.string.error_login_credentials_invalid);
-    }
-
-    public String getChangePasswordError() {
-        return context.getString(R.string.error_message_invalid_change_password);
-    }
-
-    public String getStreamIsAlreadyInFavoritesError(){
-        return context.getString(R.string.error_stream_already_favorites);
     }
 
     public String getStreamReadOnlyError() {
