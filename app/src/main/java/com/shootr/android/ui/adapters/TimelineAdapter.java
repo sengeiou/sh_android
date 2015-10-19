@@ -108,10 +108,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     public void bindView(final ShotModel item, int position, View view) {
         ShotViewHolder vh = (ShotViewHolder) view.getTag();
         vh.position = position;
-        vh.render(item, this.shouldShowTag());
+        vh.render(item, this.shouldShowShortTitle());
     }
 
-    protected boolean shouldShowTag() {
+    protected boolean shouldShowShortTitle() {
         return false;
     }
 

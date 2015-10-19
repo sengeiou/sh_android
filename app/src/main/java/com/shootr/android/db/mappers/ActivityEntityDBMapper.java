@@ -21,7 +21,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         activity.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.USER_PHOTO)));
         activity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_STREAM)));
         activity.setStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_TITLE)));
-        activity.setStreamTag(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_TAG)));
+        activity.setStreamShortTitle(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_SHORT_TITLE)));
         activity.setComment(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.COMMENT)));
         activity.setType(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TYPE)));
         activity.setIdShot(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_SHOT)));
@@ -38,7 +38,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ActivityTable.USER_PHOTO, activity.getUserPhoto());
         cv.put(DatabaseContract.ActivityTable.ID_STREAM, activity.getIdStream());
         cv.put(DatabaseContract.ActivityTable.STREAM_TITLE, activity.getStreamTitle());
-        cv.put(DatabaseContract.ActivityTable.STREAM_TAG, activity.getStreamTag());
+        cv.put(DatabaseContract.ActivityTable.STREAM_SHORT_TITLE, activity.getStreamShortTitle());
         cv.put(DatabaseContract.ActivityTable.COMMENT, activity.getComment());
         cv.put(DatabaseContract.ActivityTable.TYPE, activity.getType());
         cv.put(DatabaseContract.ActivityTable.ID_SHOT, activity.getIdShot());

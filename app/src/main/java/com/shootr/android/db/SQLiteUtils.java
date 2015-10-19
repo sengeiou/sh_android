@@ -50,7 +50,7 @@ public class SQLiteUtils {
             + ShotTable.COMMENT + " VARCHAR(255) NULL,"
             + ShotTable.IMAGE + " VARCHAR(255) NULL,"
             + ShotTable.ID_STREAM + " TEXT NULL,"
-            + ShotTable.STREAM_TAG + " TEXT NULL,"
+            + ShotTable.STREAM_SHORT_TITLE + " TEXT NULL,"
             + ShotTable.STREAM_TITLE + " TEXT NULL,"
             + ShotTable.NICE_COUNT+ " NUMBER NOT NULL,"
             + ShotTable.TYPE+ " TEXT NOT NULL,"
@@ -77,7 +77,7 @@ public class SQLiteUtils {
           + ShotQueueTable.COMMENT + " VARCHAR(255) NULL,"
           + ShotQueueTable.IMAGE + " VARCHAR(255) NULL,"
           + ShotQueueTable.ID_STREAM + " TEXT NULL,"
-          + ShotQueueTable.STREAM_TAG + " TEXT NULL,"
+          + ShotQueueTable.STREAM_SHORT_TITLE + " TEXT NULL,"
           + ShotQueueTable.STREAM_TITLE + " TEXT NULL,"
           + ShotTable.TYPE+ " TEXT NOT NULL,"
           + ShotTable.ID_SHOT_PARENT+ " TEXT NULL,"
@@ -120,7 +120,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.USERNAME +" TEXT NOT NULL,"
             + DatabaseContract.StreamTable.TITLE +" VARCHAR(255) NOT NULL,"
             + DatabaseContract.StreamTable.PHOTO +" TEXT NULL,"
-            + DatabaseContract.StreamTable.TAG +" TEXT NULL,"
+            + DatabaseContract.StreamTable.SHORT_TITLE +" TEXT NULL,"
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
             + DatabaseContract.StreamTable.LAST_UPDATED_USER +" TEXT NULL,"
             + DatabaseContract.StreamTable.LOCALE +" TEXT NULL,"
@@ -140,7 +140,8 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.TITLE +" VARCHAR(255) NOT NULL,"
             + DatabaseContract.StreamTable.PHOTO +" TEXT NULL,"
             + DatabaseContract.StreamTable.LOCALE +" TEXT NULL,"
-            + DatabaseContract.StreamTable.TAG +" TEXT NULL,"
+            + DatabaseContract.StreamTable.SHORT_TITLE
+      +" TEXT NULL,"
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
             + DatabaseContract.StreamTable.MEDIA_COUNT +" INTEGER NULL,"
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
@@ -171,7 +172,7 @@ public class SQLiteUtils {
       + DatabaseContract.ActivityTable.ID_STREAM
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.USER_PHOTO + " TEXT NULL,"
-      + DatabaseContract.ActivityTable.STREAM_TAG
+      + DatabaseContract.ActivityTable.STREAM_SHORT_TITLE
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ActivityTable.STREAM_TITLE
       + " VARCHAR(255) NULL,"

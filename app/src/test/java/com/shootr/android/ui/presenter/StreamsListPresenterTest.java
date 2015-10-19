@@ -219,7 +219,7 @@ public class StreamsListPresenterTest {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setTitle(SELECTED_STREAM_TITLE);
-        streamModel.setTag(SELECTED_STREAM_TITLE);
+        streamModel.setShortTitle(SELECTED_STREAM_TITLE);
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;

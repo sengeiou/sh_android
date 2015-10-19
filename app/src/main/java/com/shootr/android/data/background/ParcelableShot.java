@@ -41,7 +41,7 @@ public class ParcelableShot implements Parcelable {
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         dest.writeString(eventInfo != null ? eventInfo.getIdStream() : null);
         dest.writeString(eventInfo != null ? eventInfo.getStreamTitle() : null);
-        dest.writeString(eventInfo != null ? eventInfo.getStreamTag() : null);
+        dest.writeString(eventInfo != null ? eventInfo.getStreamShortTitle() : null);
 
         dest.writeString(shot.getParentShotId());
         dest.writeString(shot.getParentShotUserId());
@@ -74,7 +74,7 @@ public class ParcelableShot implements Parcelable {
         Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
         eventInfo.setIdStream(parcel.readString());
         eventInfo.setStreamTitle(parcel.readString());
-        eventInfo.setStreamTag(parcel.readString());
+        eventInfo.setStreamShortTitle(parcel.readString());
         String idEvent = eventInfo.getIdStream();
         if (idEvent != null) {
             shot.setStreamInfo(eventInfo);

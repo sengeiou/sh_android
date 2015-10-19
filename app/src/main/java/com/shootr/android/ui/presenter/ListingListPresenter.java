@@ -168,7 +168,7 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle());
     }
 
     private void selectStream(final String idStream, String treamTag) {

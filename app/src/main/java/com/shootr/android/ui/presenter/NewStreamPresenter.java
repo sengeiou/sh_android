@@ -81,7 +81,7 @@ public class NewStreamPresenter implements Presenter {
         preloadedStreamId = streamModel.getIdStream();
         preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
-        newStreamView.showShortTitle(streamModel.getTag());
+        newStreamView.showShortTitle(streamModel.getShortTitle());
         newStreamView.showDescription(streamModel.getDescription());
 
         if (streamModel.isRemoved()) {
@@ -91,7 +91,7 @@ public class NewStreamPresenter implements Presenter {
         }
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
-            preloadedShortTitle = streamModel.getTag();
+            preloadedShortTitle = streamModel.getShortTitle();
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
             newStreamView.setStreamTitle(preloadedTitle);

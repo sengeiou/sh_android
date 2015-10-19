@@ -11,7 +11,7 @@ public class ActivityEntity extends Synchronized {
     private String username;
     private String idStream;
     private String streamTitle;
-    private String streamTag;
+    private String streamShortTitle;
     private String comment;
     private String type;
     private String userPhoto;
@@ -66,12 +66,12 @@ public class ActivityEntity extends Synchronized {
         this.streamTitle = streamTitle;
     }
 
-    public String getStreamTag() {
-        return streamTag;
+    public String getStreamShortTitle() {
+        return streamShortTitle;
     }
 
-    public void setStreamTag(String streamTag) {
-        this.streamTag = streamTag;
+    public void setStreamShortTitle(String streamShortTitle) {
+        this.streamShortTitle = streamShortTitle;
     }
 
     public String getComment() {
