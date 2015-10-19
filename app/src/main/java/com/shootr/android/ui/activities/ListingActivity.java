@@ -196,13 +196,15 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(stream);
+        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
         builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
             }
-        }).addAction(R.string.remove_stream_listing_context_menu, new Runnable() {
+        });
+        addBaseContextMenuOptions(builder, stream);
+        builder.addAction(R.string.remove_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 presenter.remove(stream.getStreamModel().getIdStream());
             }
@@ -210,11 +212,13 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showContextMenu(final StreamResultModel stream) {
-        getBaseContextMenuOptions(stream).show();
+        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
+        addBaseContextMenuOptions(builder, stream);
+        builder.show();
     }
 
-    private CustomContextMenu.Builder getBaseContextMenuOptions(final StreamResultModel stream) {
-        return new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title,
+    private void addBaseContextMenuOptions(CustomContextMenu.Builder builder, final StreamResultModel stream) {
+        builder.addAction(R.string.add_to_favorites_menu_title,
           new Runnable() {
               @Override public void run() {
                   presenter.addToFavorite(stream);
