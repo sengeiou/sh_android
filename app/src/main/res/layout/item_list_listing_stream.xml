@@ -47,7 +47,7 @@
         tools:text="Titulo Dos líneas" />
 
 
-      <TextView android:id="@+id/stream_favorites"
+      <TextView android:id="@+id/stream_watchers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

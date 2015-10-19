@@ -30,7 +30,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
-    @Bind(R.id.stream_favorites) TextView favorites;
+    @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
@@ -67,10 +67,10 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || showsFavoritesText) {
-            favorites.setVisibility(View.VISIBLE);
-            favorites.setText(getFavoritesText(watchersCount));
+            watchers.setVisibility(View.VISIBLE);
+            watchers.setText(getFavoritesText(watchersCount));
         } else {
-            favorites.setVisibility(View.GONE);
+            watchers.setVisibility(View.GONE);
         }
 
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
