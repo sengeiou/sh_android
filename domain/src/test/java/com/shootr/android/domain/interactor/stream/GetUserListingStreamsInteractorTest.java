@@ -11,11 +11,14 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -39,6 +43,7 @@ public class GetUserListingStreamsInteractorTest {
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Interactor.ErrorCallback errorCallback;
     @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
+    @Mock SessionRepository sessionRepository;
     private GetUserListingStreamsInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -51,11 +56,13 @@ public class GetUserListingStreamsInteractorTest {
           remoteStreamSearchRepository,
           localStreamRepository,
           remoteStreamRepository,
-          remoteFavoriteRepository);
+          remoteFavoriteRepository, sessionRepository);
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 
     @Test public void shouldReturnListingWithHoldingIfUserHaveHoldingStreams() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
@@ -67,6 +74,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
@@ -76,6 +84,7 @@ public class GetUserListingStreamsInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHaveHoldingStreams() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
@@ -87,6 +96,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
@@ -103,6 +113,7 @@ public class GetUserListingStreamsInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeFavoritesTrueIfUserFavoriteStreamsAreEmptyList() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
@@ -145,11 +156,20 @@ public class GetUserListingStreamsInteractorTest {
 
     @Test public void shouldReturnListingWithoutFavoritesIfUserHaveNoFavoriteStreams() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
+        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
 
         interactor.loadUserListingStreams(spyCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getFavoritedStreams(), Collections.emptyList());
+    }
+
+    private Map<String, Integer> holderWatchers() {
+        Map<String, Integer> map = new HashMap<>();
+        for (Stream stream : favoriteStreams()) {
+            map.put(stream.getId(), 0);
+        }
+        return map;
     }
 
     private List<StreamSearchResult> favoriteStreamResults() {

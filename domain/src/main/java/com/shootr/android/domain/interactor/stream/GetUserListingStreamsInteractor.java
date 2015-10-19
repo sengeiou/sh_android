@@ -11,10 +11,12 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class GetUserListingStreamsInteractor implements Interactor {
@@ -26,16 +28,19 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private final StreamRepository localStreamRepository;
     private final StreamRepository remoteStreamRepository;
     private final FavoriteRepository remoteFavoriteRepository;
+    private final SessionRepository sessionRepository;
 
     private String idUser;
     private Callback<Listing> callback;
     private List<String> favoriteIds;
+    private boolean isCurrentUser;
 
     @Inject
     public GetUserListingStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local StreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository, @Local StreamRepository localStreamRepository,
-      @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository) {
+      @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamSearchRepository = localStreamSearchRepository;
@@ -43,6 +48,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
         this.localStreamRepository = localStreamRepository;
         this.remoteStreamRepository = remoteStreamRepository;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public void loadUserListingStreams(Callback<Listing> callback, String idUser) {
@@ -52,6 +58,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
+        this.isCurrentUser = sessionRepository.getCurrentUserId().equals(idUser);
         loadFavoriteIds();
         loadUserListingStreamsFromLocal();
         loadUserListingStreamsFromRemote();
@@ -83,7 +90,6 @@ public class GetUserListingStreamsInteractor implements Interactor {
         List<Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
         List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(localStreamSearchRepository);
-
         Listing listing = getListing(favoriteStreams, holdingStreamResults);
 
         notifyLoaded(listing);
@@ -110,6 +116,9 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private List<StreamSearchResult> loadUserListingStreamsFromRepository(
       StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
+        if (isCurrentUser) {
+            setWatchNumberInStreams(listingStreams);
+        }
         return getNotRemovedStreams(listingStreams);
     }
 
@@ -121,6 +130,13 @@ public class GetUserListingStreamsInteractor implements Interactor {
             }
         }
         return listing;
+    }
+
+    private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
+        Map<String, Integer> watchers = remoteStreamSearchRepository.getHolderWatchers();
+        for (StreamSearchResult listingStream : listingStreams) {
+            listingStream.setWatchersNumber(watchers.get(listingStream.getStream().getId()));
+        }
     }
 
     private void notifyLoaded(final Listing listingStreams) {
