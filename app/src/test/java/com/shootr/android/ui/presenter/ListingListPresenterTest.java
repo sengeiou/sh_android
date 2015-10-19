@@ -6,7 +6,6 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -44,7 +43,6 @@ public class ListingListPresenterTest {
     public static final boolean IS_CURRENT_USER = true;
 
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    @Mock GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor;
     @Mock ListingView listingView;
     @Mock SessionRepository sessionRepository;
     @Mock ListingListPresenter listingListPresenter;
@@ -60,7 +58,6 @@ public class ListingListPresenterTest {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
         listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
-          getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
           getFavoriteStreamInteractor,
@@ -137,7 +134,7 @@ public class ListingListPresenterTest {
     }
 
     @Test
-    public void shouldHideSectionTitlesIfListingIncludesHoldingOnly() throws Exception {
+    public void shouldShowSectionTitlesIfListingIncludesHoldingOnly() throws Exception {
         Listing listingHolding = Listing.builder() //
           .holdingStreams(Collections.singletonList(getStreamSearchResult())) //
           .build();
@@ -145,7 +142,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
-        verify(listingView).hideSectionTitles();
+        verify(listingView).showSectionTitles();
     }
 
     @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {
@@ -196,13 +193,13 @@ public class ListingListPresenterTest {
         return streamResultModel;
     }
 
-    @Test public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
+    @Test public void shouldCallGetUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
-        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class),
-          anyErrorCallback());
+        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class),
+          anyString());
     }
 
     @Test public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {

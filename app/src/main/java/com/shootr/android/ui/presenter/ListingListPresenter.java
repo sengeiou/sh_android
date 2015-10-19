@@ -5,7 +5,6 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -20,7 +19,6 @@ import javax.inject.Inject;
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    private final GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
@@ -37,12 +35,10 @@ public class ListingListPresenter implements Presenter{
     private boolean isCurrentUser;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, ShareStreamInteractor shareStreamInteractor,
       StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
-        this.getCurrentUserListingStreamsInteractor = getCurrentUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
@@ -73,32 +69,15 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadListing() {
-        if (isCurrentUser) {
-            loadCurrentUserListingStreams();
-        } else {
-            loadUserListingStreams();
-        }
+        loadUserListingStreams();
     }
 
     private void loadUserListingStreams() {
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
-            @Override
-            public void onLoaded(Listing listing) {
-                handleStreamsInView(listing);
-            }
-        }, profileIdUser);
-    }
-
-    private void loadCurrentUserListingStreams() {
-        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
             @Override public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
-        });
+        }, profileIdUser);
     }
 
     private void handleStreamsInView(Listing listing) {
@@ -112,12 +91,7 @@ public class ListingListPresenter implements Presenter{
             renderStreams();
             listingView.hideEmpty();
             listingView.showContent();
-            boolean showSections = listing.includesFavorited() && listing.includesHolding();
-            if (showSections) {
-                listingView.showSectionTitles();
-            } else {
-                listingView.hideSectionTitles();
-            }
+            listingView.showSectionTitles();
         }
     }
 
@@ -143,7 +117,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   if (isCurrentUser) {
-                      loadCurrentUserListingStreams();
+                      loadUserListingStreams();
                   }
                   loadFavoriteStreams();
               }
@@ -160,7 +134,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   if (isCurrentUser) {
-                      loadCurrentUserListingStreams();
+                      loadUserListingStreams();
                   }
                   loadFavoriteStreams();
               }
