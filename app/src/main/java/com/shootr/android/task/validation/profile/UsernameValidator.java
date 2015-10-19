@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class UsernameValidator extends FieldValidator {
 
-    public static final int MAX_LENGTH = 20;
+    public static final int MAX_LENGTH = 25;
     public static final int MIN_LENGHT = 3;
     private static final String USERNAME_FORMAT_REGEX = "^([_A-Za-z0-9])*$";
 
