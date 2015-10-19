@@ -12,7 +12,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String title;
     private String photo;
     private Integer notifyCreation;
-    private String locale;
+    private String country;
     private Integer mediaCountByRelatedUsers;
     private Integer removed;
     private List<UserEntity> watchers;
@@ -41,12 +41,12 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         this.idStream = idStream;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getDescription() {
