@@ -81,6 +81,8 @@
     <string name="menu_search_streams">Search</string>
     <string name="stream_list_empty">No results</string>
     <string name="edit_stream">Edit Stream</string>
+    <string name="edit_stream_listing_context_menu">Edit</string>
+    <string name="remove_stream_listing_context_menu">Remove</string>
     <string name="activity_new_stream_title">New stream</string>
     <string name="activity_edit_stream_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>

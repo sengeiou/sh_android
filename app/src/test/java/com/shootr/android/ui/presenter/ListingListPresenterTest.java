@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsI
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.StreamModel;
@@ -51,6 +52,7 @@ public class ListingListPresenterTest {
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamInteractor;
+    @Mock RemoveStreamInteractor removeStreamInteractor;
     @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
@@ -64,22 +66,9 @@ public class ListingListPresenterTest {
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
           getFavoriteStreamInteractor,
-          shareStreamInteractor,
-          streamResultModelMapper, errorMessageFactory);
+          shareStreamInteractor, removeStreamInteractor, streamResultModelMapper, errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
-    }
-
-    protected void setupFavoritesInteractorCallbacks() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<StreamSearchResult>> callback =
-                  (Interactor.Callback) invocation.getArguments()[0];
-                callback.onLoaded(Collections.<StreamSearchResult>emptyList());
-
-                return null;
-            }
-        }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
     @Test public void shouldShowContentIfUserHasHoldingOrFavoriteStreams() throws Exception {
@@ -164,38 +153,6 @@ public class ListingListPresenterTest {
         verify(listingView).showError(anyString());
     }
 
-    private void setupShareStreamErrorCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
-                errorCallback.onError(new ShootrException() {
-                });
-                return null;
-            }
-        }).when(shareStreamInteractor)
-          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
-    }
-
-    private void setupShareStreamCompletedCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
-                completedCallback.onCompleted();
-                return null;
-            }
-        }).when(shareStreamInteractor)
-          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
-    }
-
-    private StreamResultModel streamModel() {
-        StreamResultModel streamResultModel = new StreamResultModel();
-        StreamModel streamModel = new StreamModel();
-        streamModel.setIdStream(STREAM_ID);
-        streamResultModel.setStreamModel(streamModel);
-        return streamResultModel;
-    }
-
     @Test public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
@@ -229,6 +186,67 @@ public class ListingListPresenterTest {
         listingListPresenter.openContextualMenu(any(StreamResultModel.class));
 
         verify(listingView).showContextMenu(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldAskConfirmationWhenRemoveStream() throws Exception {
+        setupGetUserListingCallback();
+
+        listingListPresenter.remove(STREAM_ID);
+
+        verify(listingView).askRemoveStreamConfirmation();
+    }
+
+    @Test public void shouldCallRemoveStreamInteractorWhenRemoveStream() throws Exception {
+        setupGetUserListingCallback();
+
+        listingListPresenter.remove(STREAM_ID);
+        listingListPresenter.removeStream();
+
+        verify(removeStreamInteractor).removeStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+    }
+
+    protected void setupFavoritesInteractorCallbacks() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<StreamSearchResult>> callback =
+                  (Interactor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(Collections.<StreamSearchResult>emptyList());
+
+                return null;
+            }
+        }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
+    }
+
+    private void setupShareStreamErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                errorCallback.onError(new ShootrException() {
+                });
+                return null;
+            }
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+    }
+
+    private void setupShareStreamCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+    }
+
+    private StreamResultModel streamModel() {
+        StreamResultModel streamResultModel = new StreamResultModel();
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(STREAM_ID);
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
     }
 
     private Listing listingWithEmptyHoldingList() {

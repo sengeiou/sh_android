@@ -1,7 +1,9 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -181,12 +183,28 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         adapter.setShowTitles(true);
     }
 
+    @Override
+    public void askRemoveStreamConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                 presenter.removeStream();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
     @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(stream);
-        builder.addAction(R.string.edit_stream, new Runnable() {
+        builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
+            }
+        }).addAction(R.string.remove_stream_listing_context_menu, new Runnable() {
+            @Override public void run() {
+                presenter.remove(stream.getStreamModel().getIdStream());
             }
         }).show();
     }
