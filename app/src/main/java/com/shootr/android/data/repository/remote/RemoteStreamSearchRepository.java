@@ -112,7 +112,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
     }
 
-    @Override public Map<String, Integer> getHolderWatchers() {
-        return remoteStreamDataSource.getHolderWatchers();
+    @Override public Map<String, Integer> getHolderFavorites() {
+        return remoteStreamDataSource.getHolderFavorites();
     }
 }

@@ -25,12 +25,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private final ImageLoader imageLoader;
     private OnUnwatchClickListener unwatchClickListener;
 
-    private boolean showsWatchersText = false;
+    private boolean showsFavoritesText = false;
     private boolean isWatchingStateEnabled = false;
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
-    @Bind(R.id.stream_watchers) TextView watchers;
+    @Bind(R.id.stream_favorites) TextView favorites;
     @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
@@ -66,11 +66,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         title.setText(streamResultModel.getStreamModel().getTitle());
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
-        if (watchersCount > 0 || showsWatchersText) {
-            watchers.setVisibility(View.VISIBLE);
-            watchers.setText(getWatchersText(watchersCount));
+        if (watchersCount > 0 || showsFavoritesText) {
+            favorites.setVisibility(View.VISIBLE);
+            favorites.setText(getFavoritesText(watchersCount));
         } else {
-            watchers.setVisibility(View.GONE);
+            favorites.setVisibility(View.GONE);
         }
 
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
@@ -103,13 +103,13 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private String getWatchersText(int watchers) {
-        if (showsWatchersText) {
+    private String getFavoritesText(int favorites) {
+        if (showsFavoritesText) {
             return itemView.getContext()
               .getResources()
-              .getQuantityString(R.plurals.listing_watchers, watchers, watchers);
+              .getQuantityString(R.plurals.listing_favorites, favorites, favorites);
         } else {
-            return String.valueOf(watchers);
+            return String.valueOf(favorites);
         }
     }
 
@@ -144,7 +144,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setShowsWatchersText(Boolean showWatchersText) {
-        this.showsWatchersText = showWatchersText;
+    public void setShowsFavoritesText(Boolean showFavoritesText) {
+        this.showsFavoritesText = showFavoritesText;
     }
 }

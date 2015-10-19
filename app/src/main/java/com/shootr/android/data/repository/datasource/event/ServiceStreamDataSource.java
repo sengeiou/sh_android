@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
-import com.shootr.android.data.api.entity.WatchersApiEntity;
+import com.shootr.android.data.api.entity.FavoritesApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
@@ -76,13 +76,13 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public Map<String, Integer> getHolderWatchers() {
+    @Override public Map<String, Integer> getHolderFavorites() {
         try {
-            Map<String, Integer> watchers = new HashMap<>();
-            for (WatchersApiEntity watchersApiEntity : streamApiService.getHolderWatchers()) {
-                watchers.put(watchersApiEntity.getIdStream(), watchersApiEntity.getWatchers());
+            Map<String, Integer> favorites = new HashMap<>();
+            for (FavoritesApiEntity favoritesApiEntity : streamApiService.getHolderFavorites()) {
+                favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavorites());
             }
-            return watchers;
+            return favorites;
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

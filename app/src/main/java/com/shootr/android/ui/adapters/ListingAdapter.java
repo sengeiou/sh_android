@@ -70,7 +70,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
           new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
 
         if (isCurrentUser) {
-            listingStreamResultViewHolder.setShowsWatchersText(true);
+            listingStreamResultViewHolder.setShowsFavoritesText(true);
         }
         return listingStreamResultViewHolder;
     }

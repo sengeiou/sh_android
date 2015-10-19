@@ -20,7 +20,7 @@ public interface StreamDataSource {
 
     void shareStream(String idStream);
 
-    Map<String, Integer> getHolderWatchers();
+    Map<String, Integer> getHolderFavorites();
 
     void removeStream(String idStream);
 

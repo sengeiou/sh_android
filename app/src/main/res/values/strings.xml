@@ -142,12 +142,12 @@
 
     <string name="title_activity_reset_password">Reset Password</string>
 
-    <plurals name="listing_watchers">
+    <plurals name="listing_favorites">
         <item quantity="one">
-            %d watcher
+            %d favorite
         </item>
         <item quantity="other">
-            %d watchers
+            %d favorites
         </item>
     </plurals>
 

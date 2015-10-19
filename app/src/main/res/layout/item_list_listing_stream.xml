@@ -47,13 +47,13 @@
         tools:text="Titulo Dos líneas" />
 
 
-      <TextView android:id="@+id/stream_watchers"
+      <TextView android:id="@+id/stream_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         style="@style/WatchersIndicator"
         android:drawableRight="@null"
-        tools:text="2 watchers" />
+        tools:text="2 favorites" />
 
     </LinearLayout>
 

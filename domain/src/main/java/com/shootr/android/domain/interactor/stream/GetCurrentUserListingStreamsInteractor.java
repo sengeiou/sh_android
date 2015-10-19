@@ -64,7 +64,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
 
     private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
-        setWatchNumberInStreams(listingStreams);
+        setFavoritesNumberInStreams(listingStreams);
         List<StreamSearchResult> listingWithoutRemoved = retainStreamsNotRemoved(listingStreams);
 
         notifyLoaded(Listing.builder()
@@ -82,10 +82,10 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         return listing;
     }
 
-    private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
-        Map<String, Integer> watchers = remoteStreamSearchRepository.getHolderWatchers();
+    private void setFavoritesNumberInStreams(List<StreamSearchResult> listingStreams) {
+        Map<String, Integer> favorites = remoteStreamSearchRepository.getHolderFavorites();
         for (StreamSearchResult listingStream : listingStreams) {
-            listingStream.setWatchersNumber(watchers.get(listingStream.getStream().getId()));
+            listingStream.setWatchersNumber(favorites.get(listingStream.getStream().getId()));
         }
     }
 
