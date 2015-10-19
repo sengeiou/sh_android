@@ -291,4 +291,5 @@
     <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
     <string name="listing_title_holding">Holding</string>
     <string name="listing_title_favorites">Favorites</string>
+    <string name="analytics_screen_stream_list">popularStreams</string>
 </resources>

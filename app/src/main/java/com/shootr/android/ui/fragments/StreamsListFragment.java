@@ -32,6 +32,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
@@ -56,6 +57,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     private StreamsListAdapter adapter;
 
@@ -75,11 +77,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         setHasOptionsMenu(true);
         initializePresenter();
         initializeViews(savedInstanceState);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_list));
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         presenter.setView(new NullStreamListView());
     }
