@@ -75,7 +75,13 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
 
     @Override public Stream getBlogStream(String country) {
         StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country);
-        return streamEntityMapper.transform(blogStream);
+        if (blogStream != null) {
+            markEntityAsSynchronized(blogStream);
+            localStreamDataSource.putStream(blogStream);
+            return streamEntityMapper.transform(blogStream);
+        } else {
+            return null;
+        }
     }
 
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {
