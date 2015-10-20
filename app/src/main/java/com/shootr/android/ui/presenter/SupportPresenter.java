@@ -27,7 +27,7 @@ public class SupportPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    private void setView(SupportView supportView) {
+    protected void setView(SupportView supportView) {
         this.supportView = supportView;
     }
 
