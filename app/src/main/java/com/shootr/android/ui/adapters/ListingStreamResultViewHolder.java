@@ -70,7 +70,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         });
     }
 
-    public void setShowWatchersText(boolean showWatchersText) {
-        super.setShowsWatchersText(showWatchersText);
+    public void setShowFavoritesText(boolean showFavoritesText) {
+        super.setShowsFavoritesText(showFavoritesText);
     }
 }

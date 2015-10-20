@@ -52,7 +52,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeHoldingAlwaysTrueWhenSearchingInLocal() throws Exception {
         when(localStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.firstResult();
         assertEquals(listing.includesHolding(), true);
@@ -60,7 +60,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeHoldingAlwaysTrueWhenSearchingInRemote() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
         assertEquals(listing.includesHolding(), true);
@@ -68,7 +68,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeFavoritedAlwaysFalseWhenSearchingInLocal() throws Exception {
         when(localStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.firstResult();
         assertEquals(listing.includesFavorited(), false);
@@ -76,7 +76,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithIncludeFavoritedAlwaysFalseWhenSearchingInRemote() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
         assertEquals(listing.includesFavorited(), false);
@@ -84,7 +84,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithHoldingStreamsEqualsToStreamsCreatedByUser() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
         assertEquals(listing.getHoldingStreams(), holdingStreams());
@@ -92,7 +92,7 @@ public class GetCurrentUserListingInteractorTest {
 
     @Test public void shouldReturnListingWithFavoritedStreamsEmpty() throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(streamSearchResults());
-        when(remoteStreamSearchRepository.getHolderWatchers()).thenReturn(holderWatchers());
+        when(remoteStreamSearchRepository.getHolderFavorites()).thenReturn(holderFavorites());
         interactor.loadCurrentUserListingStreams(spyCallback, errorCallback);
         Listing listing = spyCallback.lastResult();
         assertEquals(listing.getFavoritedStreams(), Collections.emptyList());
@@ -116,10 +116,10 @@ public class GetCurrentUserListingInteractorTest {
         return streams;
     }
 
-    private Map<String, Integer> holderWatchers() {
-        Map<String, Integer> watchers = new HashMap<>();
-        watchers.put(ID_STREAM, 1);
-        return watchers;
+    private Map<String, Integer> holderFavorites() {
+        Map<String, Integer> favorites = new HashMap<>();
+        favorites.put(ID_STREAM, 1);
+        return favorites;
     }
 
     private List<StreamSearchResult> streamSearchResults() {
