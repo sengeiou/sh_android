@@ -26,4 +26,6 @@ public interface StreamDataSource {
     void restoreStream(String idStream);
 
     StreamEntity getBlogStream(String country);
+
+    StreamEntity getHelpStream(String country);
 }

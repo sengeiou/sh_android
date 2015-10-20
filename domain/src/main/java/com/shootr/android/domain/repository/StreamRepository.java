@@ -20,4 +20,6 @@ public interface StreamRepository {
     void restoreStream(String idStream);
 
     Stream getBlogStream(String country);
+
+    Stream getHelpStream(String country);
 }

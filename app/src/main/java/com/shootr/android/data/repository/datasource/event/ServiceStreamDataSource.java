@@ -104,4 +104,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public StreamEntity getHelpStream(String country) {
+        try {
+            return streamApiService.getHelpStream(country);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }

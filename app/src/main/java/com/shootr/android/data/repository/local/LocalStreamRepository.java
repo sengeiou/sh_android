@@ -69,4 +69,8 @@ public class LocalStreamRepository implements StreamRepository {
     @Override public Stream getBlogStream(String country) {
         throw new IllegalStateException("Not allowed in local repository.");
     }
+
+    @Override public Stream getHelpStream(String country) {
+        throw new IllegalStateException("Not allowed in local repository.");
+    }
 }

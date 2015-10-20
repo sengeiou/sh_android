@@ -54,4 +54,7 @@ public interface StreamApiService {
 
     @GET("/streams/blog/")
     StreamEntity getBlogStream(@Query("country") String country) throws IOException, ApiException;
+
+    @GET("/streams/help/")
+    StreamEntity getHelpStream(@Query("country") String country) throws IOException, ApiException;
 }
