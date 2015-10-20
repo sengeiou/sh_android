@@ -73,7 +73,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             watchers.setVisibility(View.GONE);
         }
-
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         imageLoader.loadStreamPicture(pictureUrl, picture);
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
@@ -85,8 +84,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
-            watchers.setVisibility(View.VISIBLE);
-            watchers.setText(getFavoritesText(watchersCount));
+            renderHolderSubttile(streamResultModel);
+            watchers.setVisibility(View.GONE);
         } else {
             watchers.setVisibility(View.GONE);
         }
@@ -134,6 +133,19 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
                 subtitle.setText(getConnectedSubtitle(stream));
             } else {
                 subtitle.setText(getAuthorSubtitleWithDescription(stream));
+            }
+        }
+    }
+
+    private void renderHolderSubttile(StreamResultModel stream) {
+        if (subtitle != null) {
+            if (isWatchingStateEnabled) {
+                subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
+            } else {
+                String favorites = subtitle.getContext()
+                  .getResources()
+                  .getQuantityString(R.plurals.listing_favorites, stream.getWatchers(), stream.getWatchers());
+                subtitle.setText(favorites);
             }
         }
     }
