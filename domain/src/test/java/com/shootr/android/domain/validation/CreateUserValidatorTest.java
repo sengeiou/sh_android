@@ -11,7 +11,7 @@ public class CreateUserValidatorTest {
     //region Constants
     private static final String USERNAME_SMALLER_THAN_MINIMUM = "aa";
     private static final String USERNAME_NULL = null;
-    private static final String USERNAME_LONGER_THAN_MAXIMUM = "IT_HAS_21_CHARACTERS_";
+    private static final String USERNAME_LONGER_THAN_MAXIMUM = "IT_HAS_26_CHARACTERS_ASDFG";
     private static final String EMAIL_INVALID_FORMAT = "invalidemail";
     private static final String EMAIL_NULL = null;
     private static final String PASSWORD_NULL = null;
