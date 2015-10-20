@@ -11,12 +11,13 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.views.SupportView;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.VersionUtils;
 import javax.inject.Inject;
 
-public class SupportActivity extends BaseToolbarDecoratedActivity {
+public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
 
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
@@ -60,11 +61,14 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
         Intents.maybeStartActivity(this, termsIntent);
     }
 
-    @OnClick(R.id.privacy_policy_text)
-    public void onPrivacyPolicyClick() {
-        String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-        Intent privacyIntent = intentFactory.openEmbededUrlIntent(this, privacyUrl);
-        Intents.maybeStartActivity(this, privacyIntent);
+    @OnClick(R.id.support_blog_text)
+    public void onBlogClick() {
+        // TODO
+    }
+
+    @OnClick(R.id.support_help_text)
+    public void onHelpClick() {
+        // TODO
     }
 
 }
