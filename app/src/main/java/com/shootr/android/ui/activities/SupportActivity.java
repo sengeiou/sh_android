@@ -9,9 +9,12 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.presenter.SupportPresenter;
 import com.shootr.android.ui.views.SupportView;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.VersionUtils;
@@ -21,12 +24,15 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
+    @Inject SupportPresenter supportPresenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.support_version_number) TextView versionNumber;
 
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
 
+    //region lifecycle methods
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
     }
@@ -41,7 +47,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     }
 
     @Override protected void initializePresenter() {
-        /* no-op */
+        supportPresenter.initialize(this);
     }
 
     @Override
@@ -53,7 +59,9 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
             return super.onOptionsItemSelected(item);
         }
     }
+    //endregion
 
+    //region Click listeners
     @OnClick(R.id.support_terms_service_text)
     public void onTermsAndServiceClick() {
         String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
@@ -63,12 +71,21 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @OnClick(R.id.support_blog_text)
     public void onBlogClick() {
-        // TODO
+        supportPresenter.blogClicked();
     }
 
     @OnClick(R.id.support_help_text)
     public void onHelpClick() {
         // TODO
     }
+    //endregion
 
+    @Override public void showError(String errorMessage) {
+        feedbackMessage.show(getView(), errorMessage);
+    }
+
+    @Override public void goToBlogStream(Stream blog) {
+        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle());
+        startActivity(intent);
+    }
 }
