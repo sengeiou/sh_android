@@ -14,8 +14,6 @@ public interface StreamDataSource {
 
     List<StreamEntity> putStreams(List<StreamEntity> streams);
 
-    Integer getListingCount(String idUser);
-
     List<StreamEntity> getStreamsListing(String idUser);
 
     void shareStream(String idStream);

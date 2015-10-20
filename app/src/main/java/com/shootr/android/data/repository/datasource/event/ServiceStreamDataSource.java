@@ -52,14 +52,6 @@ public class ServiceStreamDataSource implements StreamDataSource {
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        try {
-            return streamApiService.getListingCount(idUser);
-        } catch (ApiException | IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         try {
             return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
@@ -80,7 +72,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         try {
             Map<String, Integer> favorites = new HashMap<>();
             for (FavoritesApiEntity favoritesApiEntity : streamApiService.getHolderFavorites()) {
-                favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavorites());
+                favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavoriteCount());
             }
             return favorites;
         } catch (IOException | ApiException e) {

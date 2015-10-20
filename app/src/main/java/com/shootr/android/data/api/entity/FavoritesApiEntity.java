@@ -3,7 +3,7 @@ package com.shootr.android.data.api.entity;
 public class FavoritesApiEntity {
 
     private String idStream;
-    private Integer favorites;
+    private Integer favoriteCount;
 
     public String getIdStream() {
         return idStream;
@@ -13,11 +13,11 @@ public class FavoritesApiEntity {
         this.idStream = idStream;
     }
 
-    public Integer getFavorites() {
-        return favorites;
+    public Integer getFavoriteCount() {
+        return favoriteCount;
     }
 
-    public void setFavorites(Integer favorites) {
-        this.favorites = favorites;
+    public void setFavoriteCount(Integer favoriteCount) {
+        this.favoriteCount = favoriteCount;
     }
 }

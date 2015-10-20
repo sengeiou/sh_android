@@ -61,10 +61,6 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         return streamEntityMapper.transform(remoteStreamEntity);
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        return remoteStreamDataSource.getListingCount(idUser);
-    }
-
     @Override public void shareStream(String idStream) {
         remoteStreamDataSource.shareStream(idStream);
     }

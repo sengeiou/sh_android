@@ -16,46 +16,46 @@ import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shots/streamTimeline?includeLinks=false&includeAll=true")
+    @GET("/shot/streamTimeline?includeLinks=false&includeAll=true")
     List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream, @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
-    @GET("/shots/{idShot}/?includeLinks=false")
+    @GET("/shot/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/shots/{idShot}/?includeLinks=false&includeReplies=true")
+    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true")
     ShotApiEntity getShotWithReplies(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/shots/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true")
+    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true")
     ShotApiEntity getShotDetail(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/shots/user/{idUser}/?includeLinks=false")
+    @GET("/shot/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit,
       @Query("types") String[] types) throws ApiException, IOException;
 
-    @GET("/shots/user/{idUser}/?includeLinks=false")
+    @GET("/shot/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
 
-    @GET("/shots/user/{idUser}/?includeLinks=false")
+    @GET("/shot/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
       @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
 
-    @PUT("/shots/{idShot}/nice")
+    @PUT("/shot/{idShot}/nice")
     Response markNice(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @DELETE("/shots/{idShot}/nice")
+    @DELETE("/shot/{idShot}/nice")
     Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/streams/{idStream}/media?includeLinks=false")
+    @GET("/shot/media/{idStream}/?count=100&includeLinks=false")
     List<ShotApiEntity> getMediaShots(@Path("idStream") String idStream, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
-    @POST("/shots/{idShot}/share")
+    @POST("/shot/{idShot}/share")
     Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @DELETE("/shots/{idShot}")
+    @DELETE("/shot/{idShot}")
     Response deleteShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @POST("/shots")
+    @POST("/shot")
     ShotEntity postNewShot(@Body ShotEntity shotEntity) throws ApiException, IOException;
 }

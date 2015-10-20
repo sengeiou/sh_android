@@ -32,10 +32,6 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streams;
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        return streamManager.getListingNotRemoved(idUser);
-    }
-
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         return streamManager.getStreamsListingNotRemoved(idUser);
     }
