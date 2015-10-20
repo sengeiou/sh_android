@@ -6,5 +6,5 @@ public interface SupportView {
 
     void showError(String errorMessage);
 
-    void goToBlogStream(Stream blog);
+    void goToStream(Stream blog);
 }

@@ -76,7 +76,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @OnClick(R.id.support_help_text)
     public void onHelpClick() {
-        // TODO
+        supportPresenter.helpClicked();
     }
     //endregion
 
@@ -84,7 +84,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         feedbackMessage.show(getView(), errorMessage);
     }
 
-    @Override public void goToBlogStream(Stream blog) {
+    @Override public void goToStream(Stream blog) {
         Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle());
         startActivity(intent);
     }

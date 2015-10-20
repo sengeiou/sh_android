@@ -5,6 +5,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetBlogInteractor;
+import com.shootr.android.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.android.ui.views.SupportView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
@@ -12,13 +13,17 @@ import javax.inject.Inject;
 public class SupportPresenter implements Presenter {
 
     private final GetBlogInteractor getBlogInteractor;
+    private final GetHelpInteractor getHelpInteractor;
     private final ErrorMessageFactory errorMessageFactory;
 
     private SupportView supportView;
     private Stream blog;
+    private Stream help;
 
-    @Inject public SupportPresenter(GetBlogInteractor getBlogInteractor, ErrorMessageFactory errorMessageFactory) {
+    @Inject public SupportPresenter(GetBlogInteractor getBlogInteractor, GetHelpInteractor getHelpInteractor,
+      ErrorMessageFactory errorMessageFactory) {
         this.getBlogInteractor = getBlogInteractor;
+        this.getHelpInteractor = getHelpInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -29,6 +34,19 @@ public class SupportPresenter implements Presenter {
     public void initialize(SupportView supportView) {
         this.setView(supportView);
         loadBlog();
+        loadHelp();
+    }
+
+    private void loadHelp() {
+        getHelpInteractor.obtainHelpStream(new Interactor.Callback<Stream>() {
+            @Override public void onLoaded(Stream helpStream) {
+                help = helpStream;
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
     }
 
     private void loadBlog() {
@@ -55,7 +73,13 @@ public class SupportPresenter implements Presenter {
 
     public void blogClicked() {
         if (blog != null) {
-            supportView.goToBlogStream(blog);
+            supportView.goToStream(blog);
+        }
+    }
+
+    public void helpClicked() {
+        if (help != null) {
+            supportView.goToStream(help);
         }
     }
 
