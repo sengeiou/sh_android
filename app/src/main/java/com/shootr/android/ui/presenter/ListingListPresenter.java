@@ -9,6 +9,7 @@ import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsI
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -25,6 +26,7 @@ public class ListingListPresenter implements Presenter{
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
+    private final RemoveStreamInteractor removeStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -35,18 +37,21 @@ public class ListingListPresenter implements Presenter{
     private List<StreamResultModel> listingUserFavoritedStreams;
     private List<StreamResultModel> favoriteStreams;
     private boolean isCurrentUser;
+    private String idStreamToRemove;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, ShareStreamInteractor shareStreamInteractor,
-      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      RemoveStreamInteractor removeStreamInteractor, StreamResultModelMapper streamResultModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.getCurrentUserListingStreamsInteractor = getCurrentUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
+        this.removeStreamInteractor = removeStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -183,6 +188,46 @@ public class ListingListPresenter implements Presenter{
         listingView.showError(errorMessageFactory.getMessageForError(error));
     }
 
+    public void shareStream(StreamResultModel stream) {
+        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                listingView.showStreamShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
+    }
+
+    public void openContextualMenu(StreamResultModel stream) {
+        if (isCurrentUser) {
+            listingView.showCurrentUserContextMenu(stream);
+        } else {
+            listingView.showContextMenu(stream);
+        }
+    }
+
+    public void remove(String idStream) {
+        this.idStreamToRemove = idStream;
+        listingView.askRemoveStreamConfirmation();
+    }
+
+    public void removeStream() {
+        if (idStreamToRemove != null) {
+            removeStreamInteractor.removeStream(idStreamToRemove, new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    loadListing();
+                    loadFavoriteStreams();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    showErrorInView(error);
+                }
+            });
+        }
+    }
+
     @Override public void resume() {
         if (hasBeenPaused) {
             loadListing();
@@ -192,25 +237,5 @@ public class ListingListPresenter implements Presenter{
 
     @Override public void pause() {
         hasBeenPaused = true;
-    }
-
-    public void shareStream(StreamResultModel stream) {
-        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  listingView.showStreamShared();
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showErrorInView(error);
-              }
-          });
-    }
-
-    public void openContextualMenu(StreamResultModel stream) {
-        if (isCurrentUser) {
-            listingView.showCurrentUserContextMenu(stream);
-        } else {
-            listingView.showContextMenu(stream);
-        }
     }
 }
