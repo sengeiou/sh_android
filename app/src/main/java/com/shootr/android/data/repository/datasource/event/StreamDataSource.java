@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.domain.Stream;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +24,6 @@ public interface StreamDataSource {
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+    StreamEntity getBlogStream(String country);
 }

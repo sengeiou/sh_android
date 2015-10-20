@@ -4,6 +4,7 @@ import com.shootr.android.data.api.entity.FavoritesApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -91,6 +92,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
     @Override public void restoreStream(String idStream) {
         try {
             streamApiService.restoreStream(idStream);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public StreamEntity getBlogStream(String country) {
+        try {
+            return streamApiService.getBlogStream(country);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

@@ -18,4 +18,6 @@ public interface StreamRepository {
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+    Stream getBlogStream(String country);
 }

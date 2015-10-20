@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.db.manager.StreamManager;
+import com.shootr.android.domain.Stream;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -50,5 +51,9 @@ public class DatabaseStreamDataSource implements StreamDataSource {
 
     @Override public void restoreStream(String idStream) {
         streamManager.restoreStream(idStream);
+    }
+
+    @Override public StreamEntity getBlogStream(String country) {
+        throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

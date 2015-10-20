@@ -51,4 +51,7 @@ public interface StreamApiService {
 
     @PUT("/stream/{idStream}/restore")
     Response restoreStream(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @GET("/streams/blog/")
+    StreamEntity getBlogStream(@Query("country") String country) throws IOException, ApiException;
 }
