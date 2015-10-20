@@ -77,7 +77,7 @@ public class CreateStreamInteractor implements Interactor {
         Stream stream;
         if (isNewStream()) {
             stream = new Stream();
-            stream.setLocale(localeProvider.getLocale());
+            stream.setCountry(localeProvider.getCountry().toUpperCase());
         } else {
             stream = localStreamRepository.getStreamById(idStream);
         }

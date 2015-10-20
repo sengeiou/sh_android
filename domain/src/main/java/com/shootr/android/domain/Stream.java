@@ -14,7 +14,7 @@ public class Stream {
     private String picture;
     private String shortTitle;
     private String description;
-    private String locale;
+    private String country;
     private Integer mediaCount;
     private boolean removed;
     private List<User> watchers;
@@ -38,12 +38,12 @@ public class Stream {
         this.description = description;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getTitle() {
@@ -117,7 +117,7 @@ public class Stream {
         if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
         if (shortTitle != null ? !shortTitle.equals(stream.shortTitle) : stream.shortTitle != null) return false;
         if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
-        return !(locale != null ? !locale.equals(stream.locale) : stream.locale != null);
+        return !(country != null ? !country.equals(stream.country) : stream.country != null);
     }
 
     @Override public int hashCode() {
@@ -128,7 +128,7 @@ public class Stream {
         result = 31 * result + (picture != null ? picture.hashCode() : 0);
         result = 31 * result + (shortTitle != null ? shortTitle.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (locale != null ? locale.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;
     }
 
