@@ -58,6 +58,7 @@ import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
@@ -91,6 +92,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -134,6 +136,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         streamTimelinePresenter.setView(new NullStreamTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
@@ -149,6 +152,7 @@ public class StreamTimelineFragment extends BaseFragment
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         initializePresenters(idStream);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_timeline));
     }
 
     @Override

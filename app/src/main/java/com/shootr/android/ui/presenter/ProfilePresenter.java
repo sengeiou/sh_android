@@ -134,6 +134,7 @@ public class ProfilePresenter implements Presenter {
         if (isCurrentUser && user.getPhoto() == null) {
             profileView.showAddPhoto();
         }
+        profileView.setupAnalytics(isCurrentUser);
     }
 
     private void setRelationshipButtonStatus(User user) {

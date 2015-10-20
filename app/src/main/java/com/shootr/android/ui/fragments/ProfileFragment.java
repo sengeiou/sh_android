@@ -64,6 +64,7 @@ import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.ShotListView;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
@@ -127,6 +128,7 @@ public class ProfileFragment extends BaseFragment
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject @TemporaryFilesDir File externalFilesDir;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject AnalyticsTool analyticsTool;
 
     //endregion
 
@@ -287,6 +289,7 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void onPause() {
         super.onPause();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         profilePresenter.pause();
         suggestedPeoplePresenter.pause();
     }
@@ -706,6 +709,14 @@ public class ProfileFragment extends BaseFragment
           .show();
     }
 
+    @Override public void setupAnalytics(boolean isCurrentUser) {
+        if (isCurrentUser) {
+            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_me));
+        } else {
+            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_userProfile));
+        }
+    }
+
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
         getSuggestedPeopleAdapter().setItems(suggestedPeople);
         getSuggestedPeopleAdapter().notifyDataSetChanged();
@@ -749,8 +760,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
-          new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.report(shotModel);
               }
