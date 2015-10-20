@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.Truss;
+import java.util.List;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
@@ -78,16 +79,31 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
+    public void render(StreamResultModel streamResultModel, boolean showSeparator, List<StreamResultModel> favoritedStreams) {
+        this.setClickListener(streamResultModel);
+        title.setText(streamResultModel.getStreamModel().getTitle());
+        renderSubttile(streamResultModel.getStreamModel());
+        int watchersCount = streamResultModel.getWatchers();
+        if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
+            watchers.setVisibility(View.VISIBLE);
+            watchers.setText(getFavoritesText(watchersCount));
+        } else {
+            watchers.setVisibility(View.GONE);
+        }
+
+        String pictureUrl = streamResultModel.getStreamModel().getPicture();
+        imageLoader.loadStreamPicture(pictureUrl, picture);
+        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
+    }
+
     private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 onStreamClickListener.onStreamClick(streamResult);
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+            @Override public boolean onLongClick(View v) {
                 return onStreamClickListener.onStreamLongClick(streamResult);
             }
         });
@@ -96,8 +112,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private void setUnwatchClickListener() {
         checkNotNull(actionsContainer, "The view used in this ViewHolder doesn't contain the unwatch button.");
         actionsContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 unwatchClickListener.onUnwatchClick();
             }
         });
