@@ -31,6 +31,7 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
@@ -43,6 +44,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -64,6 +66,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_friends));
         presenter.setView(this);
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
@@ -83,6 +86,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         presenter.setView(new NullPeopleView());
         suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());

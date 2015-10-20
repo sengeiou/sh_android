@@ -28,6 +28,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
@@ -42,6 +43,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.timeline_activity_list) RecyclerView activityList;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -70,6 +72,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         timelinePresenter.setView(new NullActivityTimelineView());
     }
@@ -77,6 +80,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_activity));
         initializeViews();
         initializePresenter();
     }
