@@ -6,7 +6,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.android.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.android.ui.views.SupportView;
-import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,7 +23,6 @@ public class SupportPresenterTest {
     public static final String ID_STREAM = "idStream";
     public static final String TITLE = "title";
     public static final String ID_AUTHOR = "id_author";
-    @Mock ErrorMessageFactory errorMessageFactory;
     @Mock GetBlogInteractor getBlogInteractor;
     @Mock GetHelpInteractor getHelpInteractor;
     @Mock SupportView supportView;
@@ -33,7 +31,7 @@ public class SupportPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new SupportPresenter(getBlogInteractor, getHelpInteractor, errorMessageFactory);
+        presenter = new SupportPresenter(getBlogInteractor, getHelpInteractor);
     }
 
     @Test public void shouldLoadBlogWhenPresenterInitialized() throws Exception {

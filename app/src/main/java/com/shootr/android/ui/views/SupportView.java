@@ -4,7 +4,7 @@ import com.shootr.android.domain.Stream;
 
 public interface SupportView {
 
-    void showError(String errorMessage);
+    void showError();
 
     void goToStream(Stream blog);
 }

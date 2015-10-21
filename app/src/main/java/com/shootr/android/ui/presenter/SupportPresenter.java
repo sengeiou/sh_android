@@ -1,30 +1,25 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.android.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.android.ui.views.SupportView;
-import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class SupportPresenter implements Presenter {
 
     private final GetBlogInteractor getBlogInteractor;
     private final GetHelpInteractor getHelpInteractor;
-    private final ErrorMessageFactory errorMessageFactory;
 
     private SupportView supportView;
     private Stream blog;
     private Stream help;
 
-    @Inject public SupportPresenter(GetBlogInteractor getBlogInteractor, GetHelpInteractor getHelpInteractor,
-      ErrorMessageFactory errorMessageFactory) {
+    @Inject public SupportPresenter(GetBlogInteractor getBlogInteractor, GetHelpInteractor getHelpInteractor) {
         this.getBlogInteractor = getBlogInteractor;
         this.getHelpInteractor = getHelpInteractor;
-        this.errorMessageFactory = errorMessageFactory;
     }
 
     protected void setView(SupportView supportView) {
@@ -44,7 +39,7 @@ public class SupportPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                showViewError(error);
+                supportView.showError();
             }
         });
     }
@@ -56,19 +51,9 @@ public class SupportPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                showViewError(error);
+                supportView.showError();
             }
         });
-    }
-
-    private void showViewError(ShootrException error) {
-        String errorMessage;
-        if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        supportView.showError(errorMessage);
     }
 
     public void blogClicked() {

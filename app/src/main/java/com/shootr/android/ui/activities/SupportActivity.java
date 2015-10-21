@@ -4,17 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.shootr.android.R;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.SupportPresenter;
 import com.shootr.android.ui.views.SupportView;
-import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.VersionUtils;
@@ -25,9 +26,10 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
     @Inject SupportPresenter supportPresenter;
-    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.support_version_number) TextView versionNumber;
+    @Bind(R.id.support_blog_text) TextView blog;
+    @Bind(R.id.support_help_text) TextView help;
 
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
@@ -69,6 +71,13 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         Intents.maybeStartActivity(this, termsIntent);
     }
 
+    @OnClick(R.id.privacy_policy_text)
+    public void onPrivacyPolicyClick() {
+        String termsUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+        Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
+        Intents.maybeStartActivity(this, termsIntent);
+    }
+
     @OnClick(R.id.support_blog_text)
     public void onBlogClick() {
         supportPresenter.blogClicked();
@@ -78,10 +87,20 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     public void onHelpClick() {
         supportPresenter.helpClicked();
     }
+
+    @OnLongClick(R.id.support_version_number)
+    public boolean onVersionLongClick() {
+        Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
     //endregion
 
-    @Override public void showError(String errorMessage) {
-        feedbackMessage.show(getView(), errorMessage);
+    @Override public void showError() {
+        help.setEnabled(false);
+        help.setTextColor(getResources().getColor(R.color.gray_60));
+        blog.setEnabled(false);
+        blog.setTextColor(getResources().getColor(R.color.gray_60));
     }
 
     @Override public void goToStream(Stream blog) {
