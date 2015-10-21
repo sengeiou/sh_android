@@ -195,6 +195,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
           .show();
     }
 
+    @Override public void updateStreams() {
+        adapter.notifyDataSetChanged();
+    }
+
     @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
         builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {

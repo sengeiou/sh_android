@@ -21,12 +21,13 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import static org.mockito.Mockito.inOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -42,8 +43,9 @@ public class GetUserListingStreamsInteractorTest {
     @Mock StreamRepository remoteStreamRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Interactor.ErrorCallback errorCallback;
-    @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
     @Mock SessionRepository sessionRepository;
+    @Mock FavoriteRepository localFavoriteRepository;
+    @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
     private GetUserListingStreamsInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -55,8 +57,7 @@ public class GetUserListingStreamsInteractorTest {
           localStreamSearchRepository,
           remoteStreamSearchRepository,
           localStreamRepository,
-          remoteStreamRepository,
-          remoteFavoriteRepository, sessionRepository);
+          remoteStreamRepository, localFavoriteRepository, remoteFavoriteRepository, sessionRepository);
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 
@@ -162,6 +163,21 @@ public class GetUserListingStreamsInteractorTest {
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getFavoritedStreams(), Collections.emptyList());
+    }
+
+    @Test public void shouldCallbackLocalFavoritesInteractorWhenLoadUserListing() throws Exception {
+        interactor.loadUserListingStreams(spyCallback, ID_USER);
+
+        verify(localFavoriteRepository).getFavorites(ID_USER);
+    }
+
+    @Test public void shouldCallbackLocalFavoritesInteractorBeforeRemoteFavoritesInteractorWhenLoadUserListing() throws Exception {
+        interactor.loadUserListingStreams(spyCallback, ID_USER);
+
+        InOrder inOrder = inOrder(localFavoriteRepository, remoteFavoriteRepository);
+
+        inOrder.verify(localFavoriteRepository).getFavorites(ID_USER);
+        inOrder.verify(remoteFavoriteRepository).getFavorites(ID_USER);
     }
 
     private Map<String, Integer> holderWatchers() {

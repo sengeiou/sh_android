@@ -110,11 +110,16 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void renderStreams() {
-        if (listingStreams != null && listingUserFavoritedStreams != null && favoriteStreams != null) {
+        if (listingStreams != null) {
             listingView.renderHoldingStreams(listingStreams);
+        }
+        if (listingUserFavoritedStreams != null) {
             listingView.renderFavoritedStreams(listingUserFavoritedStreams);
+        }
+        if (favoriteStreams != null) {
             listingView.setCurrentUserFavorites(favoriteStreams);
         }
+        listingView.updateStreams();
     }
 
     public void addToFavorite(StreamResultModel streamResultModel) {

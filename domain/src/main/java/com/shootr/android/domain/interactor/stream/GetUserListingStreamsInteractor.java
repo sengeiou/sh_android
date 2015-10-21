@@ -27,6 +27,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private final StreamSearchRepository remoteStreamSearchRepository;
     private final StreamRepository localStreamRepository;
     private final StreamRepository remoteStreamRepository;
+    private final FavoriteRepository localFavoriteRepository;
     private final FavoriteRepository remoteFavoriteRepository;
     private final SessionRepository sessionRepository;
 
@@ -39,14 +40,15 @@ public class GetUserListingStreamsInteractor implements Interactor {
     public GetUserListingStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local StreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository, @Local StreamRepository localStreamRepository,
-      @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository,
-      SessionRepository sessionRepository) {
+      @Remote StreamRepository remoteStreamRepository, @Local FavoriteRepository localFavoriteRepository,
+      @Remote FavoriteRepository remoteFavoriteRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamSearchRepository = localStreamSearchRepository;
         this.remoteStreamSearchRepository = remoteStreamSearchRepository;
         this.localStreamRepository = localStreamRepository;
         this.remoteStreamRepository = remoteStreamRepository;
+        this.localFavoriteRepository = localFavoriteRepository;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
         this.sessionRepository = sessionRepository;
     }
@@ -59,12 +61,19 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         this.isCurrentUser = sessionRepository.getCurrentUserId().equals(idUser);
-        loadFavoriteIds();
         loadUserListingStreamsFromLocal();
         loadUserListingStreamsFromRemote();
     }
 
-    private void loadFavoriteIds() {
+    private void loadLocalFavoriteIds() {
+        List<Favorite> favorites = localFavoriteRepository.getFavorites(idUser);
+        favoriteIds = new ArrayList<>(favorites.size());
+        for (Favorite favorite : favorites) {
+            favoriteIds.add(favorite.getIdStream());
+        }
+    }
+
+    private void loadRemoteFavoriteIds() {
         List<Favorite> favorites = remoteFavoriteRepository.getFavorites(idUser);
         favoriteIds = new ArrayList<>(favorites.size());
         for (Favorite favorite : favorites) {
@@ -74,6 +83,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     private void loadUserListingStreamsFromRemote() {
         try {
+            loadRemoteFavoriteIds();
             List<Stream> favoriteStreams = remoteStreamRepository.getStreamsByIds(favoriteIds);
             List<StreamSearchResult> holdingStreamResults =
               loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
@@ -87,6 +97,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     private void loadUserListingStreamsFromLocal() {
+        loadLocalFavoriteIds();
         List<Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
         List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(localStreamSearchRepository);
