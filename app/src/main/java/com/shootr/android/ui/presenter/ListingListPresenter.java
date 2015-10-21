@@ -180,7 +180,7 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void openContextualMenu(StreamResultModel stream) {
-        if (isCurrentUser) {
+        if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser)) {
             listingView.showCurrentUserContextMenu(stream);
         } else {
             listingView.showContextMenu(stream);

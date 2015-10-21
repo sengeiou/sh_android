@@ -42,6 +42,7 @@ public class ListingListPresenterTest {
     public static final String STREAM_AUTHOR_ID = "stream_author_id";
     public static final String STREAM_TITLE = "stream_title";
     public static final boolean IS_CURRENT_USER = true;
+    public static final String ANOTHER_USER_ID = "another_user";
 
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     @Mock ListingView listingView;
@@ -137,7 +138,7 @@ public class ListingListPresenterTest {
     @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {
         setupShareStreamCompletedCallback();
 
-        listingListPresenter.shareStream(streamModel());
+        listingListPresenter.shareStream(streamResultModel());
 
         verify(listingView).showStreamShared();
     }
@@ -145,7 +146,7 @@ public class ListingListPresenterTest {
     @Test public void shouldShowErrorStreamWhenShareStreamsErrorCallback() throws Exception {
         setupShareStreamErrorCallback();
 
-        listingListPresenter.shareStream(streamModel());
+        listingListPresenter.shareStream(streamResultModel());
 
         verify(listingView).showError(anyString());
     }
@@ -155,8 +156,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
-        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class),
-          anyString());
+        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
 
     @Test public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
@@ -167,13 +167,22 @@ public class ListingListPresenterTest {
         verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
 
-    @Test public void shouldShowCurrentUserContextMenuIfIsCurrentUser() throws Exception {
+    @Test public void shouldShowCurrentUserContextMenuIfIsCurrentUserAndItsMyStream() throws Exception {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
-        listingListPresenter.openContextualMenu(any(StreamResultModel.class));
+        listingListPresenter.openContextualMenu(streamResultModel());
 
         verify(listingView).showCurrentUserContextMenu(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldShowContextMenuIfIsCurrentUserAndItsNotMyStream() throws Exception {
+        setupUserWithoutListingCallback();
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
+        listingListPresenter.openContextualMenu(notMyStreamResultModel());
+
+        verify(listingView).showContextMenu(any(StreamResultModel.class));
     }
 
     @Test public void shouldShowContextMenuIfIsNotCurrentUser() throws Exception {
@@ -199,7 +208,9 @@ public class ListingListPresenterTest {
         listingListPresenter.remove(STREAM_ID);
         listingListPresenter.removeStream();
 
-        verify(removeStreamInteractor).removeStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+        verify(removeStreamInteractor).removeStream(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
     }
 
     protected void setupFavoritesInteractorCallbacks() {
@@ -238,10 +249,20 @@ public class ListingListPresenterTest {
           .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
-    private StreamResultModel streamModel() {
+    private StreamResultModel streamResultModel() {
         StreamResultModel streamResultModel = new StreamResultModel();
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(STREAM_ID);
+        streamModel.setAuthorId(PROFILE_ID_USER);
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
+    }
+
+    private StreamResultModel notMyStreamResultModel() {
+        StreamResultModel streamResultModel = new StreamResultModel();
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(STREAM_ID);
+        streamModel.setAuthorId(ANOTHER_USER_ID);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
