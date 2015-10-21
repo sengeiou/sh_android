@@ -85,7 +85,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
             renderHolderSubttile(streamResultModel);
-            watchers.setVisibility(View.GONE);
+            if(watchersCount > 0) {
+                watchers.setVisibility(View.VISIBLE);
+                watchers.setText(String.valueOf(watchersCount));
+            } else {
+                watchers.setVisibility(View.GONE);
+            }
         } else {
             watchers.setVisibility(View.GONE);
         }
@@ -144,7 +149,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             } else {
                 String favorites = subtitle.getContext()
                   .getResources()
-                  .getQuantityString(R.plurals.listing_favorites, stream.getWatchers(), stream.getWatchers());
+                  .getQuantityString(R.plurals.listing_favorites, stream.getFavorites(), stream.getFavorites());
                 subtitle.setText(favorites);
             }
         }
