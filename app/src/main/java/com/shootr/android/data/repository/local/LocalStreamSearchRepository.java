@@ -57,7 +57,7 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
         return transformStreamEntitiesWithWatchers(eventEntitiesListing, watchers);
     }
 
-    @Override public Map<String,Integer> getHolderFavorites() {
+    @Override public Map<String,Integer> getHolderFavorites(String idUser) {
         throw new IllegalArgumentException("method not implemented in local repository");
     }
 

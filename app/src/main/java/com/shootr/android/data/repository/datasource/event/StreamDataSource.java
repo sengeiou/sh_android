@@ -18,7 +18,7 @@ public interface StreamDataSource {
 
     void shareStream(String idStream);
 
-    Map<String, Integer> getHolderFavorites();
+    Map<String, Integer> getHolderFavorites(String idUser);
 
     void removeStream(String idStream);
 

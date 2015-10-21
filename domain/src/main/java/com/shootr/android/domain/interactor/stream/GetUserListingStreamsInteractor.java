@@ -144,7 +144,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
-        Map<String, Integer> favorites = remoteStreamSearchRepository.getHolderFavorites();
+        Map<String, Integer> favorites = remoteStreamSearchRepository.getHolderFavorites(idUser);
         for (StreamSearchResult listingStream : listingStreams) {
             listingStream.setFavoritesNumber(favorites.get(listingStream.getStream().getId()));
         }

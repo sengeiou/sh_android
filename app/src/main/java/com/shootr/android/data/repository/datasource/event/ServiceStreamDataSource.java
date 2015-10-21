@@ -68,10 +68,11 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public Map<String, Integer> getHolderFavorites() {
+    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
         try {
             Map<String, Integer> favorites = new HashMap<>();
-            for (FavoritesApiEntity favoritesApiEntity : streamApiService.getHolderFavorites()) {
+            List<FavoritesApiEntity> holderFavorites = streamApiService.getHolderFavorites(idUser);
+            for (FavoritesApiEntity favoritesApiEntity : holderFavorites) {
                 favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavoriteCount());
             }
             return favorites;
