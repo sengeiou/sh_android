@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_action_profile_open_stream_gray_24" />
+        android:src="@drawable/ic_action_profile_listing_gray_24" />
       <TextView android:id="@+id/profile_open_stream"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -152,8 +152,8 @@
         android:paddingLeft="@dimen/keyline_2"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/gray_30"
-        android:text="@string/profile_open_stream"
-        tools:text="Open stream" />
+        android:text="@string/profile_listing"
+        tools:text="Streams" />
   
     </FrameLayout>
 
