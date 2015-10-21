@@ -66,11 +66,11 @@ public class LocalStreamRepository implements StreamRepository {
         localStreamDataSource.restoreStream(idStream);
     }
 
-    @Override public Stream getBlogStream(String country) {
+    @Override public Stream getBlogStream(String country, String language) {
         throw new IllegalStateException("Not allowed in local repository.");
     }
 
-    @Override public Stream getHelpStream(String country) {
+    @Override public Stream getHelpStream(String country, String language) {
         throw new IllegalStateException("Not allowed in local repository.");
     }
 }

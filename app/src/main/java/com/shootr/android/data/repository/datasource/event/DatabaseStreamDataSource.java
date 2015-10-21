@@ -52,11 +52,11 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         streamManager.restoreStream(idStream);
     }
 
-    @Override public StreamEntity getBlogStream(String country) {
+    @Override public StreamEntity getBlogStream(String country, String language) {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 
-    @Override public StreamEntity getHelpStream(String country) {
+    @Override public StreamEntity getHelpStream(String country, String language) {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

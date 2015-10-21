@@ -37,7 +37,7 @@ public class GetBlogInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(remoteStreamRepository.getBlogStream(localeProvider.getCountry().toUpperCase()));
+            notifyLoaded(remoteStreamRepository.getBlogStream(localeProvider.getCountry().toUpperCase(), localeProvider.getLanguage().toUpperCase()));
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
