@@ -52,9 +52,9 @@ public interface StreamApiService {
     @PUT("/stream/{idStream}/restore")
     Response restoreStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
-    @GET("/streams/blog/")
+    @GET("/stream/blog/")
     StreamEntity getBlogStream(@Query("country") String country) throws IOException, ApiException;
 
-    @GET("/streams/help/")
+    @GET("/stream/help/")
     StreamEntity getHelpStream(@Query("country") String country) throws IOException, ApiException;
 }
