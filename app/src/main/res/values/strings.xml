@@ -227,7 +227,8 @@
     <string name="support_version">Version</string>
     <string name="support_terms_service">Terms of Service</string>
     <string name="support_privacy_policy">Privacy Policy</string>
-    <string name="support_faq">FAQ</string>
+    <string name="support_blog">Blog</string>
+    <string name="support_help">Help</string>
     <string name="menu_profile_chage_password">Change password</string>
     <string name="title_activity_change_password">Change Password</string>
     <string name="current_password_hint">Current password</string>
@@ -301,4 +302,5 @@
     <string name="analytics_screen_friends">friends</string>
     <string name="analytics_screen_me">me</string>
     <string name="analytics_screen_userProfile">userProfile</string>
+    <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
 </resources>

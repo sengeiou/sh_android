@@ -18,4 +18,8 @@ public interface StreamRepository {
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+    Stream getBlogStream(String country, String language);
+
+    Stream getHelpStream(String country, String language);
 }
