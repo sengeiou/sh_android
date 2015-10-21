@@ -7,7 +7,7 @@ import com.shootr.android.ui.model.UserModel;
 
 public class NameValidator extends FieldValidator {
 
-    public static final int MAX_LENGTH = 20;
+    public static final int MAX_LENGTH = 25;
 
     private String name;
 
