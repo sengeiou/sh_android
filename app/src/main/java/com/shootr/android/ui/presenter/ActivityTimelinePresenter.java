@@ -90,11 +90,6 @@ public class ActivityTimelinePresenter implements Presenter {
                 }
                 loadNewActivities();
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                timelineView.hideLoading();
-                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-            }
         });
     }
 

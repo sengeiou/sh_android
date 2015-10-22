@@ -161,7 +161,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
-        timelineInteractorWrapper.obtainOlderTimeline(streamId, lastShotInScreenDate, new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 isLoadingOlderShots = false;

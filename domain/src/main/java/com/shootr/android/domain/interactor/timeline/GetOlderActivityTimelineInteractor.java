@@ -9,14 +9,12 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 public class GetOlderActivityTimelineInteractor implements Interactor {
 
-    private final SessionRepository sessionRepository;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ActivityRepository remoteActivityRepository;
@@ -26,9 +24,8 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
-                                                      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+                                                      PostExecutionThread postExecutionThread,
                                                       @Remote ActivityRepository remoteActivityRepository) {
-        this.sessionRepository = sessionRepository;
         this.remoteActivityRepository = remoteActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;

@@ -226,14 +226,14 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldObtainOlderTimelineWhenShowingLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyCallback(), anyErrorCallback());
+        verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
     @Test public void shouldObtainOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyCallback(), anyErrorCallback());
+        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
     @Test public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
@@ -248,7 +248,7 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyCallback(), anyErrorCallback());
+        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
     //endregion
 
@@ -328,10 +328,10 @@ public class StreamTimelinePresenterTest {
     private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.Callback<Timeline>) invocation.getArguments()[2]).onLoaded(timeline);
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[1]).onLoaded(timeline);
                 return null;
             }
-        }).when(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyCallback(), anyErrorCallback());
+        }).when(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
     private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {

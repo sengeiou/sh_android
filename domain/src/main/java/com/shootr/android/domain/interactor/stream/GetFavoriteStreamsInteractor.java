@@ -100,14 +100,6 @@ public class GetFavoriteStreamsInteractor implements Interactor {
         return streams;
     }
 
-    private List<String> idsFromFavorites(List<Favorite> favorites) {
-        List<String> ids = new ArrayList<>(favorites.size());
-        for (Favorite favorite : favorites) {
-            ids.add(favorite.getIdStream());
-        }
-        return ids;
-    }
-
     private List<Stream> streamsFromFavorites(List<Favorite> favorites) {
         List<String> idStreams = new ArrayList<>();
         for (Favorite favorite : favorites) {

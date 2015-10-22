@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 public class RemoveFromFavoritesInteractorTest {
 
     private static final String ID_STREAM_FAVORITE = "stream";
-    private static final String ID_STREAM_NOT_FAVORITE = "stream_not_favorite";
 
     private com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor interactor;
 

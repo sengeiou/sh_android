@@ -21,7 +21,6 @@ public class WatchNumberInteractor implements Interactor{
     public static final int NO_STREAM = -1;
     private String idStream;
     private Callback callback;
-    private ErrorCallback errorCallback;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -41,10 +40,9 @@ public class WatchNumberInteractor implements Interactor{
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadWatchNumber(String idStream, Callback callback, ErrorCallback errorCallback) {
+    public void loadWatchNumber(String idStream, Callback callback) {
         this.idStream = idStream;
         this.callback = callback;
-        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -70,11 +68,6 @@ public class WatchNumberInteractor implements Interactor{
                 callback.onLoaded(countIsWatching);
             }
         });
-    }
-
-    protected String getCurrentVisibleStreamId() {
-        User currentUser = sessionRepository.getCurrentUser();
-        return currentUser.getIdWatchingStream();
     }
 
     //TODO want local or remote?
