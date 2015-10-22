@@ -33,3 +33,4 @@ Etiquetas para el changelog:
 - Convertidas strong references en weak references
 - Corregida apariencia de Niced/Shared shots en Activity.
 - LocaleProvider devuelve el Country en uppercase por defecto.
+- Ya no se hace logout tras hacer un change password. Ahora solo se borran datos locales y se dirige a la LoginSelectionActivity.
