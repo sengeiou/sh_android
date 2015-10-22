@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangePasswordInteractor;
-import com.shootr.android.domain.interactor.user.LogoutInteractor;
+import com.shootr.android.domain.interactor.user.RemoveSessionDataInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.validation.ChangePasswordValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -16,17 +16,17 @@ public class ChangePasswordPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
     private final ChangePasswordInteractor changePasswordInteractor;
-    private final LogoutInteractor logoutInteractor;
+    private final RemoveSessionDataInteractor removeSessionDataInteractor;
     private final SessionRepository sessionRepository;
 
     private ChangePasswordView changePasswordView;
 
     @Inject public ChangePasswordPresenter(ErrorMessageFactory errorMessageFactory,
-      ChangePasswordInteractor changePasswordInteractor, LogoutInteractor logoutInteractor,
+      ChangePasswordInteractor changePasswordInteractor, RemoveSessionDataInteractor removeSessionDataInteractor,
       SessionRepository sessionRepository) {
         this.errorMessageFactory = errorMessageFactory;
         this.changePasswordInteractor = changePasswordInteractor;
-        this.logoutInteractor = logoutInteractor;
+        this.removeSessionDataInteractor = removeSessionDataInteractor;
         this.sessionRepository = sessionRepository;
     }
 
@@ -45,9 +45,9 @@ public class ChangePasswordPresenter implements Presenter {
               new Interactor.CompletedCallback() {
                   @Override public void onCompleted() {
                       changePasswordView.showLogoutInProgress();
-                      logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
+                      removeSessionDataInteractor.removeData(new Interactor.CompletedCallback() {
                           @Override public void onCompleted() {
-                                changePasswordView.navigateToWelcomeScreen();
+                              changePasswordView.navigateToWelcomeScreen();
                           }
                       }, new Interactor.ErrorCallback() {
                           @Override public void onError(ShootrException error) {
