@@ -38,8 +38,6 @@ public class NewStreamPresenter implements Presenter {
     private NewStreamView newStreamView;
 
     private boolean isNewStream;
-    private String preloadedTitle;
-    private String preloadedShortTitle;
     private String preloadedStreamId;
     private String currentTitle;
     private String currentShortTitle;
@@ -79,7 +77,7 @@ public class NewStreamPresenter implements Presenter {
 
     private void setDefaultStreamInfo(StreamModel streamModel) {
         preloadedStreamId = streamModel.getIdStream();
-        preloadedTitle = streamModel.getTitle();
+        String preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showShortTitle(streamModel.getShortTitle());
         newStreamView.showDescription(streamModel.getDescription());
@@ -91,7 +89,7 @@ public class NewStreamPresenter implements Presenter {
         }
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
-            preloadedShortTitle = streamModel.getShortTitle();
+            String preloadedShortTitle = streamModel.getShortTitle();
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
             newStreamView.setStreamTitle(preloadedTitle);

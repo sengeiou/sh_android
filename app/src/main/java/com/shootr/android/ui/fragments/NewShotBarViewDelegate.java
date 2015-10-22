@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +17,12 @@ import com.shootr.android.util.FeedbackMessage;
 
 public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
-    private final Context context;
     private final PhotoPickerController photoPickerController;
     private final View draftsButton;
     private final FeedbackMessage feedbackMessage;
 
-    public NewShotBarViewDelegate(Context context, PhotoPickerController photoPickerController, View draftsButton,
+    public NewShotBarViewDelegate(PhotoPickerController photoPickerController, View draftsButton,
       FeedbackMessage feedbackMessage) {
-        this.context = context;
         this.photoPickerController = photoPickerController;
         this.draftsButton = draftsButton;
         this.feedbackMessage = feedbackMessage;

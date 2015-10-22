@@ -23,7 +23,6 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
-import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
 import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
@@ -43,7 +42,6 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.profile_edit_website) TextView website;
     @Bind(R.id.profile_edit_bio) TextView bio;
     @Bind(R.id.profile_edit_email) TextView email;
-    @Bind(R.id.profile_edit_email_layout) FloatLabelLayout emailLayout;
     @BindString(R.string.profile_updated) String profileUpdated;
     @BindString(R.string.communication_error) String communicationError;
     @BindString(R.string.connection_lost) String connectionLost;

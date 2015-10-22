@@ -29,8 +29,6 @@ public interface PostNewShotView extends DataTransferView {
 
     void hideKeyboard();
 
-    void showImagePreviewFromUrl(String imageUrl);
-
     void showImagePreview(File imageFile);
 
     void hideImagePreview();

@@ -4,7 +4,6 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -14,8 +13,6 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.StreamRepository;
-import com.shootr.android.domain.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,7 +24,6 @@ public class GetOlderStreamTimelineInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository remoteShotRepository;
     private final StreamRepository localStreamRepository;
-    private final UserRepository localUserRepository;
 
     private Long currentOldestDate;
     private Callback<Timeline> callback;
@@ -35,17 +31,15 @@ public class GetOlderStreamTimelineInteractor implements Interactor {
 
     @Inject public GetOlderStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository) {
+      @Remote ShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;
-        this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderStreamTimeline(String idStream, Long currentOldestDate, Callback<Timeline> callback,
+    public void loadOlderStreamTimeline(Long currentOldestDate, Callback<Timeline> callback,
       ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
@@ -75,14 +69,6 @@ public class GetOlderStreamTimelineInteractor implements Interactor {
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
         Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
-    }
-
-    private List<String> getPeopleIds() {
-        List<String> ids = new ArrayList<>();
-        for (User user : localUserRepository.getPeople()) {
-            ids.add(user.getIdUser());
-        }
-        return ids;
     }
 
     //region Result

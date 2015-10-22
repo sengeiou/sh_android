@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -29,7 +28,6 @@ import org.mockito.Spy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetStreamTimelineInteractorTest {
@@ -104,31 +102,8 @@ public class GetStreamTimelineInteractorTest {
 
     //region Stubs
 
-    private List<Shot> shotsFromAuthor() {
-        return Arrays.asList(shotFromAuthor());
-    }
-
     private List<User> people() {
         return Arrays.asList(new User());
-    }
-
-    private Shot shotFromAuthor() {
-        Shot shot = new Shot();
-        shot.setIdShot(ID_SHOT_FROM_AUTHOR);
-        return shot;
-    }
-
-    private Shot shotWithStream() {
-        Shot shot = new Shot();
-        shot.setIdShot(ID_SHOT_WITH_STREAM);
-        shot.setStreamInfo(watchingStreamInfo());
-        return shot;
-    }
-
-    private Shot.ShotStreamInfo watchingStreamInfo() {
-        Shot.ShotStreamInfo streamInfo = new Shot.ShotStreamInfo();
-        streamInfo.setIdStream(WATCHING_STREAM_ID);
-        return streamInfo;
     }
 
     private Stream watchingStream() {
@@ -141,12 +116,6 @@ public class GetStreamTimelineInteractorTest {
     //endregion
 
     //region Spies
-    private StreamTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
-        ArgumentCaptor<StreamTimelineParameters> captor = ArgumentCaptor.forClass(StreamTimelineParameters.class);
-        verify(shotRepository).getShotsForStreamTimeline(captor.capture());
-        return captor.getValue();
-    }
-
     static class SpyCallback implements Interactor.Callback<Timeline> {
 
         public List<Timeline> timelinesReturned = new ArrayList<>();

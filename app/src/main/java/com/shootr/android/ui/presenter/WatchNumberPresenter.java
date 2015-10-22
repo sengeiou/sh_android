@@ -3,8 +3,6 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.bus.StreamChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
@@ -43,10 +41,6 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         watchNumberInteractor.loadWatchNumber(idStream, new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer count) {
                 setViewWathingCount(count);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO error handling
             }
         });
     }

@@ -6,7 +6,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final UserRepository remoteUserRepository;
-    private final UserRepository localUserRepository;
     private final PostExecutionThread postExecutionThread;
 
     private Callback<List<User>> callback;
@@ -30,10 +28,9 @@ public class GetAllParticipantsInteractor implements Interactor {
     private Boolean isPaginating;
 
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
+      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
-        this.localUserRepository = localUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 

@@ -1,8 +1,6 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -59,16 +57,6 @@ public class ProfileEditPresenter implements Presenter {
         if(!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
             profileEditView.showEmailNotConfirmedError();
         }
-    }
-
-    private void showViewError(ShootrException error) {
-        String errorMessage;
-        if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
-        }
-        profileEditView.showError(errorMessage);
     }
 
     public void discard() {

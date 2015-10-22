@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.stream;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -84,7 +85,11 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     }
 
     private void markWatchingStream(List<StreamSearchResult> streams) {
-        String watchingId = sessionRepository.getCurrentUser().getIdWatchingStream();
+        String watchingId = null;
+        User currentUser = sessionRepository.getCurrentUser();
+        if (currentUser != null) {
+            watchingId = sessionRepository.getCurrentUser().getIdWatchingStream();
+        }
         if (watchingId == null) {
             return;
         }
@@ -98,14 +103,6 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     private List<Stream> sortStreamsByName(List<Stream> streams) {
         Collections.sort(streams, new Stream.StreamNameComparator());
         return streams;
-    }
-
-    private List<String> idsFromFavorites(List<Favorite> favorites) {
-        List<String> ids = new ArrayList<>(favorites.size());
-        for (Favorite favorite : favorites) {
-            ids.add(favorite.getIdStream());
-        }
-        return ids;
     }
 
     private List<Stream> streamsFromFavorites(List<Favorite> favorites) {

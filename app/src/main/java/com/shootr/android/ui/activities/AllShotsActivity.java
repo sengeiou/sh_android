@@ -41,8 +41,6 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
-    public static final String CLIPBOARD_LABEL = "Shot";
-
     private static final String EXTRA_USER = "user";
 
     @Inject AllShotsPresenter presenter;
@@ -60,10 +58,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Deprecated private TimelineAdapter adapter;
 
-    private OnAvatarClickListener avatarClickListener;
-    private OnVideoClickListener videoClickListener;
-    private OnUsernameClickListener onUsernameClickListener;
-    private OnNiceShotListener onNiceShotListener;
     private View footerProgress;
 
     public static Intent newIntent(Context context, String userId) {
@@ -139,35 +133,30 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void setupListAdapter() {
-        avatarClickListener = new OnAvatarClickListener() {
-            @Override
-            public void onAvatarClick(String userId, View avatarView) {
+        OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
+            @Override public void onAvatarClick(String userId, View avatarView) {
                 openProfile(userId);
             }
         };
 
-        onUsernameClickListener = new OnUsernameClickListener() {
-            @Override
-            public void onUsernameClick(String username) {
+        OnUsernameClickListener onUsernameClickListener = new OnUsernameClickListener() {
+            @Override public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
-        videoClickListener = new OnVideoClickListener() {
-            @Override
-            public void onVideoClick(String url) {
+        OnVideoClickListener videoClickListener = new OnVideoClickListener() {
+            @Override public void onVideoClick(String url) {
                 onShotVideoClick(url);
             }
         };
 
-        onNiceShotListener = new OnNiceShotListener() {
-            @Override
-            public void markNice(String idShot) {
+        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
+            @Override public void markNice(String idShot) {
                 presenter.markNiceShot(idShot);
             }
 
-            @Override
-            public void unmarkNice(String idShot) {
+            @Override public void unmarkNice(String idShot) {
                 presenter.unmarkNiceShot(idShot);
             }
         };
