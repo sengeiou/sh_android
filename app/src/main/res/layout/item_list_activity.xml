@@ -60,6 +60,7 @@
       android:ellipsize="end"
       android:maxLines="2"
       android:paddingLeft="8dp"
+      android:layout_marginRight="4dp"
       tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" />
 
     <FrameLayout android:id="@+id/shot_media_content"

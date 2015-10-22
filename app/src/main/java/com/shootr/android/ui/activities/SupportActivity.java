@@ -88,7 +88,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         supportPresenter.helpClicked();
     }
 
-    @OnLongClick(R.id.support_version_number)
+    @OnLongClick(R.id.support_version_container)
     public boolean onVersionLongClick() {
         Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_SHORT).show();
         return true;

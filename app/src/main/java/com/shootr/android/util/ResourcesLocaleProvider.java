@@ -32,7 +32,7 @@ public class ResourcesLocaleProvider implements LocaleProvider {
     public String getCountry() {
         String country = telephonyManager.getNetworkCountryIso();
         if (country != null) {
-            return country;
+            return country.toUpperCase();
         }
         country = telephonyManager.getSimCountryIso();
         if (country != null) {
