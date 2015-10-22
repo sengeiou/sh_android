@@ -7,7 +7,6 @@ public class StreamResultModel implements Serializable {
     private StreamModel streamModel;
     private int watchers;
     private boolean isWatching;
-    private int favorites;
 
     public StreamModel getStreamModel() {
         return streamModel;
@@ -33,11 +32,4 @@ public class StreamResultModel implements Serializable {
         this.isWatching = isWatching;
     }
 
-    public int getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(int favorites) {
-        this.favorites = favorites;
-    }
 }

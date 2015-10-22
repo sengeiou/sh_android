@@ -16,6 +16,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Integer mediaCountByRelatedUsers;
     private Integer removed;
     private List<UserEntity> watchers;
+    private Long totalFavorites;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -141,5 +142,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setMediaCountByRelatedUsers(Integer mediaCountByRelatedUsers) {
         this.mediaCountByRelatedUsers = mediaCountByRelatedUsers;
+    }
+
+    public Long getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Long totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 }

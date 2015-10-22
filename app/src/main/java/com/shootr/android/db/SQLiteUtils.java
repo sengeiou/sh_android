@@ -126,6 +126,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.COUNTRY +" TEXT NULL,"
             + DatabaseContract.StreamTable.MEDIA_COUNT +" INTEGER NULL,"
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
+            + DatabaseContract.StreamTable.TOTAL_FAVORITES +" INTEGER NOT NULL,"
             + SyncColumns.BIRTH +" DATETIME NOT NULL,"
             + SyncColumns.MODIFIED +" DATETIME NOT NULL,"
             + SyncColumns.DELETED +" DATETIME NULL,"
@@ -145,6 +146,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
             + DatabaseContract.StreamTable.MEDIA_COUNT +" INTEGER NULL,"
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
+            + DatabaseContract.StreamTable.TOTAL_FAVORITES +" INTEGER NOT NULL,"
             + SyncColumns.BIRTH
       +" DATETIME NOT NULL,"
             + SyncColumns.MODIFIED

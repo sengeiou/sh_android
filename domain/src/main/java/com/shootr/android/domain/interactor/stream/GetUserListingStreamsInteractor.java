@@ -16,7 +16,6 @@ import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class GetUserListingStreamsInteractor implements Interactor {
@@ -127,9 +126,6 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private List<StreamSearchResult> loadUserListingStreamsFromRepository(
       StreamSearchRepository streamSearchRepository) {
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
-        if (isCurrentUser) {
-            setWatchNumberInStreams(listingStreams);
-        }
         return getNotRemovedStreams(listingStreams);
     }
 
@@ -141,13 +137,6 @@ public class GetUserListingStreamsInteractor implements Interactor {
             }
         }
         return listing;
-    }
-
-    private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
-        Map<String, Integer> favorites = remoteStreamSearchRepository.getHolderFavorites(idUser);
-        for (StreamSearchResult listingStream : listingStreams) {
-            listingStream.setFavoritesNumber(favorites.get(listingStream.getStream().getId()));
-        }
     }
 
     private void notifyLoaded(final Listing listingStreams) {

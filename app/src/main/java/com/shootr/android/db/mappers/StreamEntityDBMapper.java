@@ -25,6 +25,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.COUNTRY, streamEntity.getCountry());
         contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT, streamEntity.getMediaCountByRelatedUsers());
         contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
+        contentValues.put(DatabaseContract.StreamTable.TOTAL_FAVORITES, streamEntity.getTotalFavorites());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -45,6 +46,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setCountry(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.COUNTRY)));
         streamEntity.setMediaCountByRelatedUsers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
         streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
+        streamEntity.setTotalFavorites(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FAVORITES)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

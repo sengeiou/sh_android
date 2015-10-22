@@ -149,7 +149,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             } else {
                 String favorites = subtitle.getContext()
                   .getResources()
-                  .getQuantityString(R.plurals.listing_favorites, stream.getFavorites(), stream.getFavorites());
+                  .getQuantityString(R.plurals.listing_favorites, stream.getStreamModel().getTotalFavorites(), stream.getStreamModel().getTotalFavorites());
                 subtitle.setText(favorites);
             }
         }
