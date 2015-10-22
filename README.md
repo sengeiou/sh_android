@@ -7,3 +7,4 @@ Welcome to Shootr!
 
 ## Docs técnicos
 - [Sincronización de datos](./docs/sincro.md): Descripción del sistema de sincronización y encolamiento offline de la app.
+- [Changelog](./docs/changelog.md): Contiene el histórico cronológico de los cambios importantes que han ocurrido en cada versión del proyecto.
