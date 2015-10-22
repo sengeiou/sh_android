@@ -1,7 +1,6 @@
 package com.shootr.android.ui.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -187,12 +186,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     protected void openStream(String idStream, String streamTitle) {
         Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle);
         startActivity(streamIntent);
-    }
-
-    private void openVideo(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
     }
 
     private void openProfileFromUsername(String username) {

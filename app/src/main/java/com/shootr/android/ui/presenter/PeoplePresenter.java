@@ -41,10 +41,6 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
         this.peopleView = peopleView;
     }
 
-    public void refresh() {
-        this.loadPeopleList();
-    }
-
     private void loadPeopleList() {
         this.showViewLoading();
         this.hideViewEmpty();

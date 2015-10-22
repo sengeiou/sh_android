@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,7 +26,6 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @Bind(R.id.current_password) EditText currentPasswordInput;
     @Bind(R.id.new_password) EditText newPasswordInput;
     @Bind(R.id.new_password_again) EditText newPasswordAgainInput;
-    @Bind(R.id.change_password_button) View changePasswordButton;
 
     @Inject ChangePasswordPresenter changePasswordPresenter;
     @Inject FeedbackMessage feedbackMessage;

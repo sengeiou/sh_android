@@ -41,7 +41,6 @@ public class StreamDetailPresenter implements Presenter {
     private StreamDetailView streamDetailView;
     private String idStream;
 
-    private UserModel currentUserWatchingModel;
     private StreamModel streamModel;
 
     private Integer streamMediaCount;
@@ -187,7 +186,7 @@ public class StreamDetailPresenter implements Presenter {
 
     private void renderCurrentUserWatching(User currentUserWatch) {
         if (currentUserWatch != null) {
-            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+            UserModel currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             streamDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }

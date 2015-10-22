@@ -135,10 +135,6 @@ public class ProfileFragment extends BaseFragment
     String idUserArgument;
     String usernameArgument;
 
-    private OnAvatarClickListener avatarClickListener;
-    private OnVideoClickListener videoClickListener;
-    private OnUsernameClickListener onUsernameClickListener;
-    private OnNiceShotListener onNiceShotListener;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
@@ -186,19 +182,19 @@ public class ProfileFragment extends BaseFragment
 
     private void initializeViews() {
         ButterKnife.bind(this, getView());
-        avatarClickListener = new OnAvatarClickListener() {
+        OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
             @Override public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
             }
         };
 
-        onUsernameClickListener = new OnUsernameClickListener() {
+        OnUsernameClickListener onUsernameClickListener = new OnUsernameClickListener() {
             @Override public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
-        videoClickListener = new OnVideoClickListener() {
+        OnVideoClickListener videoClickListener = new OnVideoClickListener() {
             @Override public void onVideoClick(String url) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -206,7 +202,7 @@ public class ProfileFragment extends BaseFragment
             }
         };
 
-        onNiceShotListener = new OnNiceShotListener() {
+        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
             @Override public void markNice(String idShot) {
                 profilePresenter.markNiceShot(idShot);
             }
@@ -225,8 +221,8 @@ public class ProfileFragment extends BaseFragment
 
         latestsShotsAdapter =
           new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener,
-            videoClickListener, onNiceShotListener, onUsernameClickListener){
+            imageLoader, timeUtils, avatarClickListener, videoClickListener, onNiceShotListener,
+            onUsernameClickListener){
               @Override protected boolean shouldShowShortTitle() {
                   return true;
               }

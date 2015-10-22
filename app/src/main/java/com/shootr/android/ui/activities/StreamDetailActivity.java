@@ -407,11 +407,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override
-    public void hideEditStreamButton() {
-        editMenuItem.setVisible(false);
-    }
-
-    @Override
     public void navigateToMedia(String idStream, Integer streamMediaCount) {
         Intent intent = StreamMediaActivity.newIntent(this, idStream, streamMediaCount);
         this.startActivity(intent);

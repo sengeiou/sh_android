@@ -18,7 +18,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
@@ -54,7 +53,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Inject StreamsListPresenter presenter;
     @Inject ImageLoader imageLoader;
-    @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
