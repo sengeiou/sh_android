@@ -254,6 +254,7 @@ public class ListingListPresenterTest {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(PROFILE_ID_USER);
+        streamModel.setRemoved(false);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
