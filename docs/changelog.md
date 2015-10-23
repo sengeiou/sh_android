@@ -20,6 +20,9 @@ Etiquetas para el changelog:
 - Se utiliza Country para obtener streams
 - Identificador de Analytics
 - Long Click del Easter Egg
+- Welcome Page
+- Intro
+- Listing de current user
 
 ### Added
 - Long Press en Listing muestra remove stream
