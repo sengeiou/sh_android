@@ -22,7 +22,7 @@
       android:scaleType="fitCenter"
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
-      android:src="@drawable/intro_friends"/>
+      android:src="@drawable/intro_free"/>
   </LinearLayout>
 
   <TextView
@@ -36,7 +36,7 @@
     android:paddingTop="40dp"
     android:textSize="28sp"
     android:layout_weight="1"
-    android:text="Friends"/>
+    android:text="@string/intro_free_title"/>
 
   <TextView
     android:layout_width="wrap_content"
@@ -50,5 +50,5 @@
     android:textSize="16sp"
     android:fontFamily="sans-serif-light"
     android:layout_weight="1"
-    android:text="Experience live events with friends like never before."/>
+    android:text="@string/intro_friends_text"/>
 </LinearLayout>

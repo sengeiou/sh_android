@@ -50,5 +50,5 @@
     android:textSize="16sp"
     android:fontFamily="sans-serif-light"
     android:layout_weight="1"
-    android:text="Start your own stream now, any topic."/>
+    android:text="@string/intro_create_text"/>
 </LinearLayout>

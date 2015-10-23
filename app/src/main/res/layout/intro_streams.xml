@@ -50,5 +50,5 @@
     android:textSize="16sp"
     android:fontFamily="sans-serif-light"
     android:layout_weight="1"
-    android:text="Shootr chats are called streams. Build your own Favorites."/>
+    android:text="@string/intro_favorites_text"/>
 </LinearLayout>
