@@ -15,25 +15,27 @@ Etiquetas para el changelog:
 
 ## [0.4.0] - 2015-10-23
 ### Changed
-- Refactor de endpoints
-- Renombrado watchers por favorites
-- Se utiliza Country para obtener streams
-- Identificador de Analytics
-- Long Click del Easter Egg
-- Welcome Page
-- Intro
-- Listing de current user
+- Refactor de endpoints.
+- Renombrado watchers por favorites.
+- Se utiliza Country para obtener streams.
+- Identificador de Analytics.
+- Long Click del Easter Egg.
+- Welcome Page.
+- Intro.
+- Listing de current user.
 
 ### Added
-- Long Press en Listing muestra remove stream
-- Support ahora tiene las secciones blog y help
-- Añadidas pantallas que se quieren trackear en analytics
-- Changelog
+- Long Press en Listing muestra remove stream.
+- Support ahora tiene las secciones blog y help.
+- Añadidas pantallas que se quieren trackear en analytics.
+- Changelog.
 
 ### Fixed
-- Limpiadas dependencias sin uso
-- Limpiadas variables sin uso
+- Limpiadas dependencias sin uso.
+- Limpiadas variables sin uso.
 - Convertidas strong references en weak references
 - Corregida apariencia de Niced/Shared shots en Activity.
 - LocaleProvider devuelve el Country en uppercase por defecto.
 - Ya no se hace logout tras hacer un change password. Ahora solo se borran datos locales y se dirige a la LoginSelectionActivity.
+- Apariencia de los shots que aparecen en el perfil de un usuario.
+- Acceso a streams desde shots de perfil y busqueda de streams.
