@@ -31,4 +31,6 @@ public interface ListingView extends LoadDataView {
     void showContextMenu(StreamResultModel stream);
 
     void askRemoveStreamConfirmation();
+
+    void updateStreams();
 }

@@ -149,10 +149,11 @@ public class DatabaseContract {
         public static final String COUNTRY = "country";
         public static final String MEDIA_COUNT = "mediaCount";
         public static final String REMOVED = "removed";
+        public static final String TOTAL_FAVORITES = "totalFavorites";
 
         public static final String[] PROJECTION = {
           ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT,
-                PHOTO, SHORT_TITLE, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, REMOVED, DELETED, REVISION, SYNCHRONIZED
+                PHOTO, SHORT_TITLE, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -163,7 +164,7 @@ public class DatabaseContract {
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, SHORT_TITLE, DESCRIPTION, REMOVED, MEDIA_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, SHORT_TITLE, DESCRIPTION, REMOVED, MEDIA_COUNT, TOTAL_FAVORITES, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
 
     }

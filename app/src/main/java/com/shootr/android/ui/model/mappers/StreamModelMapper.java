@@ -27,6 +27,7 @@ public class StreamModelMapper {
         streamModel.setDescription(stream.getDescription());
         streamModel.setMediaCount(stream.getMediaCount() != null ? stream.getMediaCount() : 0);
         streamModel.setRemoved(stream.isRemoved());
+        streamModel.setTotalFavorites(stream.getTotalFavorites());
         return streamModel;
     }
 

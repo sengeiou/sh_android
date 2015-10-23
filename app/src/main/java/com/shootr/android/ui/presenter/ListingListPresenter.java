@@ -5,7 +5,6 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -21,7 +20,6 @@ import javax.inject.Inject;
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    private final GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
@@ -40,13 +38,11 @@ public class ListingListPresenter implements Presenter{
     private String idStreamToRemove;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, ShareStreamInteractor shareStreamInteractor,
       RemoveStreamInteractor removeStreamInteractor, StreamResultModelMapper streamResultModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
-        this.getCurrentUserListingStreamsInteractor = getCurrentUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
@@ -78,32 +74,15 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadListing() {
-        if (isCurrentUser) {
-            loadCurrentUserListingStreams();
-        } else {
-            loadUserListingStreams();
-        }
+        loadUserListingStreams();
     }
 
     private void loadUserListingStreams() {
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
-            @Override
-            public void onLoaded(Listing listing) {
-                handleStreamsInView(listing);
-            }
-        }, profileIdUser);
-    }
-
-    private void loadCurrentUserListingStreams() {
-        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<Listing>() {
             @Override public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
-        });
+        }, profileIdUser);
     }
 
     private void handleStreamsInView(Listing listing) {
@@ -117,12 +96,7 @@ public class ListingListPresenter implements Presenter{
             renderStreams();
             listingView.hideEmpty();
             listingView.showContent();
-            boolean showSections = listing.includesFavorited() && listing.includesHolding();
-            if (showSections) {
-                listingView.showSectionTitles();
-            } else {
-                listingView.hideSectionTitles();
-            }
+            listingView.showSectionTitles();
         }
     }
 
@@ -136,11 +110,16 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void renderStreams() {
-        if (listingStreams != null && listingUserFavoritedStreams != null && favoriteStreams != null) {
+        if (listingStreams != null) {
             listingView.renderHoldingStreams(listingStreams);
+        }
+        if (listingUserFavoritedStreams != null) {
             listingView.renderFavoritedStreams(listingUserFavoritedStreams);
+        }
+        if (favoriteStreams != null) {
             listingView.setCurrentUserFavorites(favoriteStreams);
         }
+        listingView.updateStreams();
     }
 
     public void addToFavorite(StreamResultModel streamResultModel) {
@@ -148,7 +127,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   if (isCurrentUser) {
-                      loadCurrentUserListingStreams();
+                      loadUserListingStreams();
                   }
                   loadFavoriteStreams();
               }
@@ -165,7 +144,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   if (isCurrentUser) {
-                      loadCurrentUserListingStreams();
+                      loadUserListingStreams();
                   }
                   loadFavoriteStreams();
               }
@@ -201,7 +180,7 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void openContextualMenu(StreamResultModel stream) {
-        if (isCurrentUser) {
+        if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel().isRemoved()) {
             listingView.showCurrentUserContextMenu(stream);
         } else {
             listingView.showContextMenu(stream);

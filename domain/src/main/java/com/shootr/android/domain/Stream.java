@@ -18,6 +18,7 @@ public class Stream {
     private Integer mediaCount;
     private boolean removed;
     private List<User> watchers;
+    private Integer totalFavorites;
 
     public Stream() {
     }
@@ -146,6 +147,14 @@ public class Stream {
 
     public void setMediaCount(Integer mediaCount) {
         this.mediaCount = mediaCount;
+    }
+
+    public Integer getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Integer totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {

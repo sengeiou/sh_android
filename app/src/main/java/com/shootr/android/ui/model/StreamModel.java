@@ -14,6 +14,7 @@ public class StreamModel implements Serializable {
     private boolean amIAuthor;
     private Integer mediaCount;
     private Boolean removed;
+    private Integer totalFavorites;
 
     public Boolean isRemoved() {
         return removed;
@@ -117,5 +118,13 @@ public class StreamModel implements Serializable {
 
     public void setMediaCount(Integer mediaCount) {
         this.mediaCount = mediaCount;
+    }
+
+    public Integer getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Integer totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 }

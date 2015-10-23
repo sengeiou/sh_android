@@ -40,7 +40,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         throw new IllegalStateException("Not allowed in local");
     }
 
-    @Override public Map<String, Integer> getHolderFavorites() {
+    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 

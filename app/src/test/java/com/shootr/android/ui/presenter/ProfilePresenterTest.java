@@ -158,25 +158,6 @@ public class ProfilePresenterTest {
         verify(profileView).showListingButtonWithCount(anyInt());
     }
 
-    @Test public void shouldNotShowOpenStreamWhenInOtherUsersProfileWithoutCount() {
-        User userWithoutListing = userWithCounts(0, 0);
-        setupUserIdInteractorCallbacks(userWithoutListing);
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView, never()).showOpenStream();
-    }
-
-    @Test public void shouldShowOpenStreamWhenInCurrentUsersProfileWithoutCount() {
-        User userWithoutListing = userWithCounts(0, 0);
-        userWithoutListing.setMe(true);
-        setupUserIdInteractorCallbacks(userWithoutListing);
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView).showOpenStream();
-    }
-
     @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
         setupUserById();
         setupLatestShotCallbacks(shotList(4));
