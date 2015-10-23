@@ -34,6 +34,10 @@
       android:background="?selectableItemBackground"
       android:layout_marginLeft="@dimen/keyline_2"
       android:layout_marginRight="@dimen/keyline_2"
+      android:paddingLeft="8dp"
+      android:paddingRight="8dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
       android:text="@string/welcome_get_started_button"
       android:textSize="14sp" />
 
