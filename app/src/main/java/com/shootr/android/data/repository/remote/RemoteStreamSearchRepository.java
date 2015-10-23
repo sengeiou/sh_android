@@ -90,6 +90,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
 
     @Override public List<StreamSearchResult> getStreams(String query, String locale) {
         List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale);
+        localStreamDataSource.putStreams(streamEntityList);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
 
         localStreamSearchDataSource.setLastSearchResults(transformStreamEntitiesInStreamSearchEntities(streamEntityList,
