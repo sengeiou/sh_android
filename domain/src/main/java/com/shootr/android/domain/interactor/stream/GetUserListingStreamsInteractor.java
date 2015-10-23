@@ -96,7 +96,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
 
     private void loadUserListingStreamsFromLocal() {
-        loadLocalFavoriteIds();
+        loadRemoteFavoriteIds();
         List<Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
         List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(localStreamSearchRepository);

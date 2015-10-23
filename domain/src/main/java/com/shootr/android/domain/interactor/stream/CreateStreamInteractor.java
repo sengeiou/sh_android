@@ -87,6 +87,7 @@ public class CreateStreamInteractor implements Interactor {
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
         stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
+        stream.setTotalFavorites(0);
         return stream;
     }
 
