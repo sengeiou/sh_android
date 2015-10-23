@@ -303,4 +303,9 @@
     <string name="analytics_screen_me">me</string>
     <string name="analytics_screen_userProfile">userProfile</string>
     <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
+    <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
+    <string name="intro_favorites_text">Dozens of streams are added every day. Build your Favorites.</string>
+    <string name="intro_friends_text">Register your @name before someone else does.</string>
+    <string name="intro_create_text">Running a community? Make it a stream and... Shoot!</string>
+    <string name="intro_free_title">Free</string>
 </resources>
