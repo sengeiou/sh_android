@@ -134,6 +134,7 @@ public class ProfilePresenter implements Presenter {
         if (isCurrentUser && user.getPhoto() == null) {
             profileView.showAddPhoto();
         }
+        profileView.setupAnalytics(isCurrentUser);
     }
 
     private void setRelationshipButtonStatus(User user) {
@@ -189,34 +190,15 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void loadProfileUserListing() {
-        if (isCurrentUser) {
-            streamsCount = userModel.getCreatedStreamsCount();
-            showCurrentUserListingCount();
-        } else {
-            streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
-            showAnotherUserListingCount();
-        }
+        streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
+        showUserListingCount();
     }
 
-    private void showCurrentUserListingCount() {
-        if (streamsCount > 0L) {
-            profileView.showListingButtonWithCount(streamsCount.intValue());
-        } else {
-            showCurrentUserOpenStream();
-        }
-    }
-
-    private void showAnotherUserListingCount() {
+    private void showUserListingCount() {
         if (streamsCount > 0L) {
             profileView.showListingButtonWithCount(streamsCount.intValue());
         } else {
             profileView.showListingWithoutCount();
-        }
-    }
-
-    private void showCurrentUserOpenStream() {
-        if (isCurrentUser) {
-            profileView.showOpenStream();
         }
     }
 

@@ -14,15 +14,17 @@ public interface StreamDataSource {
 
     List<StreamEntity> putStreams(List<StreamEntity> streams);
 
-    Integer getListingCount(String idUser);
-
     List<StreamEntity> getStreamsListing(String idUser);
 
     void shareStream(String idStream);
 
-    Map<String, Integer> getHolderWatchers();
+    Map<String, Integer> getHolderFavorites(String idUser);
 
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+    StreamEntity getBlogStream(String country, String language);
+
+    StreamEntity getHelpStream(String country, String language);
 }

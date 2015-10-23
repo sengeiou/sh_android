@@ -5,6 +5,7 @@ public class StreamSearchResult {
     private Stream stream;
     private int watchersNumber;
     private boolean isWatching;
+    private int favoritesNumber;
 
     public StreamSearchResult() {
     }
@@ -64,5 +65,13 @@ public class StreamSearchResult {
 
     public void setIsWatching(boolean isWatching) {
         this.isWatching = isWatching;
+    }
+
+    public int getFavoritesNumber() {
+        return favoritesNumber;
+    }
+
+    public void setFavoritesNumber(int favoritesNumber) {
+        this.favoritesNumber = favoritesNumber;
     }
 }

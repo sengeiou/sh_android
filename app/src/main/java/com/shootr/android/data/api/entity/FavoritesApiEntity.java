@@ -1,9 +1,9 @@
 package com.shootr.android.data.api.entity;
 
-public class WatchersApiEntity {
+public class FavoritesApiEntity {
 
     private String idStream;
-    private Integer watchers;
+    private Integer favoriteCount;
 
     public String getIdStream() {
         return idStream;
@@ -13,11 +13,11 @@ public class WatchersApiEntity {
         this.idStream = idStream;
     }
 
-    public Integer getWatchers() {
-        return watchers;
+    public Integer getFavoriteCount() {
+        return favoriteCount;
     }
 
-    public void setWatchers(Integer watchers) {
-        this.watchers = watchers;
+    public void setFavoriteCount(Integer favoriteCount) {
+        this.favoriteCount = favoriteCount;
     }
 }

@@ -18,7 +18,7 @@ public class ParcelableShotTest {
     private static final String AVATAR = "avatar";
     private static final Long STREAM_ID = 3L;
     private static final String STREAM_TITLE = "title";
-    private static final String STREAM_TAG = "tag";
+    private static final String STREAM_SHORT_TITLE = "shortTitle";
     private static final Long QUEUE_ID = 4L;
     private static final Long PARENT_ID = 5L;
     private static final Long PARENT_USER_ID = 6L;
@@ -93,7 +93,7 @@ public class ParcelableShotTest {
 
         assertThat(streamInfoFromParcel.getIdStream()).isEqualTo(streamInfoStub.getIdStream());
         assertThat(streamInfoFromParcel.getStreamTitle()).isEqualTo(streamInfoStub.getStreamTitle());
-        assertThat(streamInfoFromParcel.getStreamTag()).isEqualTo(streamInfoStub.getStreamTag());
+        assertThat(streamInfoFromParcel.getStreamShortTitle()).isEqualTo(streamInfoStub.getStreamShortTitle());
     }
 
     @Test
@@ -185,7 +185,7 @@ public class ParcelableShotTest {
         Shot.ShotStreamInfo streamInfo = new Shot.ShotStreamInfo();
         streamInfo.setIdStream(String.valueOf(STREAM_ID));
         streamInfo.setStreamTitle(STREAM_TITLE);
-        streamInfo.setStreamTag(STREAM_TAG);
+        streamInfo.setStreamShortTitle(STREAM_SHORT_TITLE);
         return streamInfo;
     }
 

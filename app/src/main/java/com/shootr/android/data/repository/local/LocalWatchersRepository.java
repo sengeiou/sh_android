@@ -2,7 +2,6 @@ package com.shootr.android.data.repository.local;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.HashMap;
@@ -12,12 +11,10 @@ import javax.inject.Inject;
 
 public class LocalWatchersRepository implements WatchersRepository {
 
-    private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
 
     @Inject
-    public LocalWatchersRepository(SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
-        this.sessionRepository = sessionRepository;
+    public LocalWatchersRepository(@Local UserRepository localUserRepository) {
         this.localUserRepository = localUserRepository;
     }
 

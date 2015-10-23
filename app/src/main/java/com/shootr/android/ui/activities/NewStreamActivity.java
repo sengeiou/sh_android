@@ -39,7 +39,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
     @Bind(R.id.new_stream_short_title) EditText shortTitleView;
-    @Bind(R.id.new_stream_short_title_warning) TextView shortTitleErrorView;
     @Bind(R.id.new_stream_description) EditText descriptionView;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();

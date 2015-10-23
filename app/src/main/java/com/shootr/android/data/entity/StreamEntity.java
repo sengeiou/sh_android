@@ -7,15 +7,16 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String idStream;
     private String idUser;
     private String userName;
-    private String tag;
+    private String shortTitle;
     private String description;
     private String title;
     private String photo;
     private Integer notifyCreation;
-    private String locale;
+    private String country;
     private Integer mediaCountByRelatedUsers;
     private Integer removed;
     private List<UserEntity> watchers;
+    private Long totalFavorites;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -41,12 +42,12 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         this.idStream = idStream;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getDescription() {
@@ -111,12 +112,12 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         this.idUser = idUser;
     }
 
-    public String getTag() {
-        return tag;
+    public String getShortTitle() {
+        return shortTitle;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getUserName() {
@@ -141,5 +142,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setMediaCountByRelatedUsers(Integer mediaCountByRelatedUsers) {
         this.mediaCountByRelatedUsers = mediaCountByRelatedUsers;
+    }
+
+    public Long getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Long totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 }

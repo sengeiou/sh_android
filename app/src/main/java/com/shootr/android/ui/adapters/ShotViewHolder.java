@@ -46,10 +46,10 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
-    @BindColor(R.color.tag_color) int tagColor;
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
 
+    @BindColor(R.color.short_title_color) int shortTitleColor;
     public int position;
     private View view;
 
@@ -71,9 +71,9 @@ public class ShotViewHolder {
         this.view = view;
     }
 
-    protected void render(ShotModel shot, boolean shouldShowTag) {
+    protected void render(ShotModel shot, boolean shouldShowShortTitle) {
         bindUsername(shot);
-        bindComment(shot, shouldShowTag);
+        bindComment(shot, shouldShowShortTitle);
         bindElapsedTime(shot);
         bindUserPhoto(shot);
         bindImageInfo(shot);
@@ -81,16 +81,16 @@ public class ShotViewHolder {
         bindNiceInfo(shot);
     }
 
-    protected void bindComment(ShotModel item, boolean shouldShowTag) {
+    protected void bindComment(ShotModel item, boolean shouldShowShortTitle) {
         String comment = item.getComment();
-        String tag = null;
-        if (shouldShowTag && item.getStreamTag() != null) {
-            tag = item.getStreamTag();
+        String shortTitle = null;
+        if (shouldShowShortTitle && item.getStreamShortTitle() != null) {
+            shortTitle = item.getStreamShortTitle();
         }
 
-        SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
-        if (commentWithTag != null) {
-            addShotComment(this, commentWithTag);
+        SpannableStringBuilder commentWithShortTitle = buildCommentTextWithShortTitle(comment, shortTitle);
+        if (commentWithShortTitle != null) {
+            addShotComment(this, commentWithShortTitle);
             text.setVisibility(View.VISIBLE);
         } else {
             text.setVisibility(View.GONE);
@@ -98,29 +98,29 @@ public class ShotViewHolder {
     }
 
     private @Nullable
-    SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
+    SpannableStringBuilder buildCommentTextWithShortTitle(@Nullable String comment, @Nullable String shortTitle) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        if (comment == null && tag == null) {
+        if (comment == null && shortTitle == null) {
             return null;
         }
         if (comment != null) {
             builder.append(comment);
         }
-        if (comment != null && tag != null) {
+        if (comment != null && shortTitle != null) {
             builder.append(" ");
         }
-        if (tag != null) {
-            builder.append(formatTag(tag));
+        if (shortTitle != null) {
+            builder.append(formatShortTitle(shortTitle));
         }
         return builder;
     }
 
-    private SpannableString formatTag(String tag) {
-        ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
+    private SpannableString formatShortTitle(String shortTitle) {
+        ForegroundColorSpan span = new ForegroundColorSpan(shortTitleColor);
 
-        SpannableString tagSpan = new SpannableString(tag);
-        tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return tagSpan;
+        SpannableString shortTitleSpan = new SpannableString(shortTitle);
+        shortTitleSpan.setSpan(span, 0, shortTitleSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return shortTitleSpan;
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment) {

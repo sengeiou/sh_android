@@ -21,10 +21,6 @@ import javax.inject.Inject;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
 
-    private static final int BUTTON_ERROR = -1;
-    private static final int BUTTON_NORMAL = 0;
-    private static final int BUTTON_LOADING = 1;
-
     @Bind(R.id.email_login_username_email) public EditText emailUsername;
     @Bind(R.id.email_login_password) public EditText password;
     @Bind(R.id.email_login_button) TextView loginButton;

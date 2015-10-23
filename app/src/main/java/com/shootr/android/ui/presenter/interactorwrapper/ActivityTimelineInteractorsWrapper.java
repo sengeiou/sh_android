@@ -22,8 +22,8 @@ public class ActivityTimelineInteractorsWrapper {
         this.getOlderActivityTimelineInteractor = getOlderActivityTimelineInteractor;
     }
 
-    public void loadTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
-        getActivityTimelineInteractor.loadActivityTimeline(callback, errorCallback);
+    public void loadTimeline(Interactor.Callback<ActivityTimeline> callback) {
+        getActivityTimelineInteractor.loadActivityTimeline(callback);
     }
 
     public void refreshTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {

@@ -81,6 +81,8 @@
     <string name="menu_search_streams">Search</string>
     <string name="stream_list_empty">No results</string>
     <string name="edit_stream">Edit Stream</string>
+    <string name="edit_stream_listing_context_menu">Edit</string>
+    <string name="remove_stream_listing_context_menu">Remove</string>
     <string name="activity_new_stream_title">New stream</string>
     <string name="activity_edit_stream_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
@@ -142,12 +144,12 @@
 
     <string name="title_activity_reset_password">Reset Password</string>
 
-    <plurals name="listing_watchers">
+    <plurals name="listing_favorites">
         <item quantity="one">
-            %d watcher
+            %d favorite
         </item>
         <item quantity="other">
-            %d watchers
+            %d favorites
         </item>
     </plurals>
 
@@ -225,7 +227,8 @@
     <string name="support_version">Version</string>
     <string name="support_terms_service">Terms of Service</string>
     <string name="support_privacy_policy">Privacy Policy</string>
-    <string name="support_faq">FAQ</string>
+    <string name="support_blog">Blog</string>
+    <string name="support_help">Help</string>
     <string name="menu_profile_chage_password">Change password</string>
     <string name="title_activity_change_password">Change Password</string>
     <string name="current_password_hint">Current password</string>
@@ -291,4 +294,18 @@
     <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
     <string name="listing_title_holding">Holding</string>
     <string name="listing_title_favorites">Favorites</string>
+    <string name="analytics_screen_stream_list">popularStreams</string>
+    <string name="analytics_screen_stream_timeline">streamTimeline</string>
+    <string name="analytics_screen_stream_detail">streamDetail</string>
+    <string name="analytics_screen_favorites">favorites</string>
+    <string name="analytics_screen_activity">activity</string>
+    <string name="analytics_screen_friends">friends</string>
+    <string name="analytics_screen_me">me</string>
+    <string name="analytics_screen_userProfile">userProfile</string>
+    <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
+    <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
+    <string name="intro_favorites_text">Dozens of streams are added every day. Build your Favorites.</string>
+    <string name="intro_friends_text">Register your @name before someone else does.</string>
+    <string name="intro_create_text">Running a community? Make it a stream and... Shoot!</string>
+    <string name="intro_free_title">Free</string>
 </resources>

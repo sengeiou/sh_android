@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
-import com.shootr.android.data.api.entity.WatchersApiEntity;
+import com.shootr.android.data.api.entity.FavoritesApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
@@ -52,14 +52,6 @@ public class ServiceStreamDataSource implements StreamDataSource {
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        try {
-            return streamApiService.getListingCount(idUser);
-        } catch (ApiException | IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         try {
             return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
@@ -76,13 +68,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public Map<String, Integer> getHolderWatchers() {
+    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
         try {
-            Map<String, Integer> watchers = new HashMap<>();
-            for (WatchersApiEntity watchersApiEntity : streamApiService.getHolderWatchers()) {
-                watchers.put(watchersApiEntity.getIdStream(), watchersApiEntity.getWatchers());
+            Map<String, Integer> favorites = new HashMap<>();
+            List<FavoritesApiEntity> holderFavorites = streamApiService.getHolderFavorites(idUser);
+            for (FavoritesApiEntity favoritesApiEntity : holderFavorites) {
+                favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavoriteCount());
             }
-            return watchers;
+            return favorites;
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
@@ -99,6 +92,22 @@ public class ServiceStreamDataSource implements StreamDataSource {
     @Override public void restoreStream(String idStream) {
         try {
             streamApiService.restoreStream(idStream);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public StreamEntity getBlogStream(String country, String language) {
+        try {
+            return streamApiService.getBlogStream(country, language);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public StreamEntity getHelpStream(String country, String language) {
+        try {
+            return streamApiService.getHelpStream(country, language);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

@@ -12,12 +12,13 @@ public class Stream {
     private String authorUsername;
     private String title;
     private String picture;
-    private String tag;
+    private String shortTitle;
     private String description;
-    private String locale;
+    private String country;
     private Integer mediaCount;
     private boolean removed;
     private List<User> watchers;
+    private Integer totalFavorites;
 
     public Stream() {
     }
@@ -38,12 +39,12 @@ public class Stream {
         this.description = description;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getTitle() {
@@ -78,12 +79,12 @@ public class Stream {
         this.authorId = authorId;
     }
 
-    public String getTag() {
-        return tag;
+    public String getShortTitle() {
+        return shortTitle;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getAuthorUsername() {
@@ -115,9 +116,9 @@ public class Stream {
         }
         if (title != null ? !title.equals(stream.title) : stream.title != null) return false;
         if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
-        if (tag != null ? !tag.equals(stream.tag) : stream.tag != null) return false;
+        if (shortTitle != null ? !shortTitle.equals(stream.shortTitle) : stream.shortTitle != null) return false;
         if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
-        return !(locale != null ? !locale.equals(stream.locale) : stream.locale != null);
+        return !(country != null ? !country.equals(stream.country) : stream.country != null);
     }
 
     @Override public int hashCode() {
@@ -126,9 +127,9 @@ public class Stream {
         result = 31 * result + (authorUsername != null ? authorUsername.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (picture != null ? picture.hashCode() : 0);
-        result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        result = 31 * result + (shortTitle != null ? shortTitle.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (locale != null ? locale.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;
     }
 
@@ -146,6 +147,14 @@ public class Stream {
 
     public void setMediaCount(Integer mediaCount) {
         this.mediaCount = mediaCount;
+    }
+
+    public Integer getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Integer totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {

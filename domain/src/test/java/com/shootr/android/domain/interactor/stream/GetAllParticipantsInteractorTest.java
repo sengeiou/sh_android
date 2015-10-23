@@ -40,7 +40,7 @@ public class GetAllParticipantsInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetAllParticipantsInteractor(interactorHandler, remoteUserRepository, localUserRepository, postExecutionThread);
+        interactor = new GetAllParticipantsInteractor(interactorHandler, remoteUserRepository, postExecutionThread);
     }
 
     @Test

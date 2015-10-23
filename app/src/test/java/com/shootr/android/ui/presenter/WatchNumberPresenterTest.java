@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.bus.StreamChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
-import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
@@ -53,7 +52,7 @@ public class WatchNumberPresenterTest {
         presenter.initialize(watchNumberView, STREAM_ID_STUB);
 
         verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+          any(WatchNumberInteractor.Callback.class));
     }
 
     @Test
@@ -97,7 +96,7 @@ public class WatchNumberPresenterTest {
         watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
 
         verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+          any(WatchNumberInteractor.Callback.class));
     }
 
     @Test
@@ -105,7 +104,7 @@ public class WatchNumberPresenterTest {
         streamChangedReceiver.onStreamChanged(streamChangedStream());
 
         verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+          any(WatchNumberInteractor.Callback.class));
     }
 
     @Test
@@ -114,13 +113,13 @@ public class WatchNumberPresenterTest {
         presenter.resume();
 
         verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+          any(WatchNumberInteractor.Callback.class));
     }
 
     @Test
     public void shouldHideWatchNumberWhenExitStreamReceivedAlthougInteractorHasntCallback() throws Exception {
         doNothing().when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+          any(WatchNumberInteractor.Callback.class));
 
         streamChangedReceiver.onStreamChanged(exitStream());
 
@@ -159,8 +158,7 @@ public class WatchNumberPresenterTest {
                 ((WatchNumberInteractor.Callback) invocation.getArguments()[1]).onLoaded(count);
                 return null;
             }
-        }).when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
 }

@@ -130,4 +130,9 @@ public class ShootrUserService {
     public void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException {
         changePasswordGateway.changePassword(currentPassword, newPassword);
     }
+
+    public void removeSessionData() {
+        removeSession();
+        databaseUtils.clearDataOnLogout();
+    }
 }

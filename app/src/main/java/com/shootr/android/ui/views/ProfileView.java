@@ -77,4 +77,6 @@ public interface ProfileView {
     void hideLoadingPhoto();
 
     void showRemovePhotoConfirmation();
+
+    void setupAnalytics(boolean isCurrentUser);
 }

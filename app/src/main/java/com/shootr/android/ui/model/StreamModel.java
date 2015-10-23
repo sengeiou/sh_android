@@ -9,11 +9,12 @@ public class StreamModel implements Serializable {
     private String authorUsername;
     private String title;
     private String picture;
-    private String tag;
+    private String shortTitle;
     private String description;
     private boolean amIAuthor;
     private Integer mediaCount;
     private Boolean removed;
+    private Integer totalFavorites;
 
     public Boolean isRemoved() {
         return removed;
@@ -87,12 +88,12 @@ public class StreamModel implements Serializable {
         this.amIAuthor = amIAuthor;
     }
 
-    public String getTag() {
-        return tag;
+    public String getShortTitle() {
+        return shortTitle;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getAuthorId() {
@@ -117,5 +118,13 @@ public class StreamModel implements Serializable {
 
     public void setMediaCount(Integer mediaCount) {
         this.mediaCount = mediaCount;
+    }
+
+    public Integer getTotalFavorites() {
+        return totalFavorites;
+    }
+
+    public void setTotalFavorites(Integer totalFavorites) {
+        this.totalFavorites = totalFavorites;
     }
 }

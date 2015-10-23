@@ -64,6 +64,7 @@ import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.ShotListView;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
@@ -127,16 +128,13 @@ public class ProfileFragment extends BaseFragment
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject @TemporaryFilesDir File externalFilesDir;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject AnalyticsTool analyticsTool;
 
     //endregion
 
     String idUserArgument;
     String usernameArgument;
 
-    private OnAvatarClickListener avatarClickListener;
-    private OnVideoClickListener videoClickListener;
-    private OnUsernameClickListener onUsernameClickListener;
-    private OnNiceShotListener onNiceShotListener;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
@@ -184,19 +182,19 @@ public class ProfileFragment extends BaseFragment
 
     private void initializeViews() {
         ButterKnife.bind(this, getView());
-        avatarClickListener = new OnAvatarClickListener() {
+        OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
             @Override public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
             }
         };
 
-        onUsernameClickListener = new OnUsernameClickListener() {
+        OnUsernameClickListener onUsernameClickListener = new OnUsernameClickListener() {
             @Override public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
-        videoClickListener = new OnVideoClickListener() {
+        OnVideoClickListener videoClickListener = new OnVideoClickListener() {
             @Override public void onVideoClick(String url) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -204,7 +202,7 @@ public class ProfileFragment extends BaseFragment
             }
         };
 
-        onNiceShotListener = new OnNiceShotListener() {
+        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
             @Override public void markNice(String idShot) {
                 profilePresenter.markNiceShot(idShot);
             }
@@ -223,9 +221,9 @@ public class ProfileFragment extends BaseFragment
 
         latestsShotsAdapter =
           new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener,
-            videoClickListener, onNiceShotListener, onUsernameClickListener){
-              @Override protected boolean shouldShowTag() {
+            imageLoader, timeUtils, avatarClickListener, videoClickListener, onNiceShotListener,
+            onUsernameClickListener){
+              @Override protected boolean shouldShowShortTitle() {
                   return true;
               }
           };
@@ -287,6 +285,7 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void onPause() {
         super.onPause();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         profilePresenter.pause();
         suggestedPeoplePresenter.pause();
     }
@@ -706,6 +705,14 @@ public class ProfileFragment extends BaseFragment
           .show();
     }
 
+    @Override public void setupAnalytics(boolean isCurrentUser) {
+        if (isCurrentUser) {
+            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_me));
+        } else {
+            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_userProfile));
+        }
+    }
+
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
         getSuggestedPeopleAdapter().setItems(suggestedPeople);
         getSuggestedPeopleAdapter().notifyDataSetChanged();
@@ -749,8 +756,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
-          new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.report(shotModel);
               }

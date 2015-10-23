@@ -1,7 +1,6 @@
 package com.shootr.android.ui.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +27,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
@@ -42,6 +42,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.timeline_activity_list) RecyclerView activityList;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -70,6 +71,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         timelinePresenter.setView(new NullActivityTimelineView());
     }
@@ -77,6 +79,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_activity));
         initializeViews();
         initializePresenter();
     }
@@ -183,12 +186,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     protected void openStream(String idStream, String streamTitle) {
         Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle);
         startActivity(streamIntent);
-    }
-
-    private void openVideo(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
     }
 
     private void openProfileFromUsername(String username) {

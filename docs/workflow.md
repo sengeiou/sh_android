@@ -25,6 +25,7 @@ Para las releases se usa **git-flow**. A continuación se describe el proceso a 
 4. TODO: Añadir los cambios al changelog.
 5. Finalizar la release con `git flow release finish`. Se realizará un merge con master, se creará un tag, y se realizará un merge del tag con develop.
 6. En develop, incrementar el número de revisión y quitar el flag de snapshot. Es el típico commit con mensaje `Bump version for next release vX.Y.z-snapshot`
-7. Hacer push de master, develop, **y tags**.
+7. Hacer push de master, develop, **y tags** (git push --tags).
 
+> Al finalizar la release, en el commit de tags poner vX.Y.Z (si se deja vacío git flow falla).  
 > Commitear en la rama master provoca una compilación completa, subida a Amazon S3 del apk como Shootr-latest.apk y con su número de versión, y se lanza un análisis de sonar.

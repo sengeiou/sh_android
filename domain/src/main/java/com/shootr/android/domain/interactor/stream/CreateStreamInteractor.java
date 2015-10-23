@@ -77,16 +77,17 @@ public class CreateStreamInteractor implements Interactor {
         Stream stream;
         if (isNewStream()) {
             stream = new Stream();
-            stream.setLocale(localeProvider.getLocale());
+            stream.setCountry(localeProvider.getCountry());
         } else {
             stream = localStreamRepository.getStreamById(idStream);
         }
         stream.setTitle(title);
-        stream.setTag(shortTitle);
+        stream.setShortTitle(shortTitle);
         stream.setDescription(removeDescriptionLineBreaks(description));
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
         stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
+        stream.setTotalFavorites(0);
         return stream;
     }
 

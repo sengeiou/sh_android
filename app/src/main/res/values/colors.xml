@@ -47,7 +47,7 @@
 
     <color name="switch_disabled">#ececec</color>
     <color name="black">#000000</color>
-    <color name="tag_color">#C7C7C7</color>
+    <color name="short_title_color">#C7C7C7</color>
 
     <color name="intro_create_background">#4CAF50</color>
     <color name="intro_friends_background">#EF6C00</color>

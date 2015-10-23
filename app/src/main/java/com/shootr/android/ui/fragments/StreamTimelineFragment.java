@@ -58,6 +58,7 @@ import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
@@ -75,7 +76,7 @@ public class StreamTimelineFragment extends BaseFragment
   implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_TAG = "streamTag";
+    public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
     //region Fields
@@ -91,6 +92,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -134,6 +136,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         streamTimelinePresenter.setView(new NullStreamTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
@@ -147,8 +150,9 @@ public class StreamTimelineFragment extends BaseFragment
         initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_TAG));
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         initializePresenters(idStream);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_timeline));
     }
 
     @Override
@@ -237,7 +241,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton,
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton,
           feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //

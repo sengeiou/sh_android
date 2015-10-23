@@ -205,7 +205,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
               @Override
               public void onError(Exception e) {
-                  //TODO mostrar algo
                   Timber.e(e, "Error selecting image");
               }
 
@@ -218,7 +217,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupNewShotBarDelegate(final ShotModel shotModel) {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton,
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton,
           feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
@@ -306,21 +305,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
     }
 
-    @Override public void hideNewReply() {
-        newShotBar.setVisibility(View.GONE);
-    }
-
     @Override public void scrollToBottom() {
         detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
     }
 
     @Override public void renderParent(ShotModel parentShot) {
         detailAdapter.renderParentShot(parentShot);
-    }
-
-    @Override
-    public void showUserNotFoundNotification() {
-        feedbackMessage.show(getView(), userNotFoundMessage);
     }
 
     @Override

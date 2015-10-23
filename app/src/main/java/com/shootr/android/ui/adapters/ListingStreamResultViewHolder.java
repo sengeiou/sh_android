@@ -8,6 +8,7 @@ import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
+import java.util.List;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
@@ -30,6 +31,16 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     @Override
     public void render(StreamResultModel streamResultModel, boolean showSeparator) {
         super.render(streamResultModel, showSeparator);
+        setupFavoriteIndicator(streamResultModel);
+    }
+
+    @Override public void render(StreamResultModel streamResultModel, boolean showSeparator,
+      List<StreamResultModel> favoritedStreams) {
+        super.render(streamResultModel, showSeparator, favoritedStreams);
+        setupFavoriteIndicator(streamResultModel);
+    }
+
+    private void setupFavoriteIndicator(StreamResultModel streamResultModel) {
         checkNotNull(isFavorite, "Should call setFavorite(boolean) before calling render()");
         favoriteIndicator.setVisibility(View.VISIBLE);
         setupFavoriteClickListener(streamResultModel);
@@ -70,7 +81,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         });
     }
 
-    public void setShowWatchersText(boolean showWatchersText) {
-        super.setShowsWatchersText(showWatchersText);
+    public void setShowFavoritesText(boolean showFavoritesText) {
+        super.setShowsFavoritesText(showFavoritesText);
     }
 }

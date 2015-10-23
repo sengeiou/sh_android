@@ -72,12 +72,12 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setIdStream(streamEntity.getIdStream());
         streamSearchEntity.setIdUser(streamEntity.getIdUser());
         streamSearchEntity.setUserName(streamEntity.getUserName());
-        streamSearchEntity.setTag(streamEntity.getTag());
+        streamSearchEntity.setShortTitle(streamEntity.getShortTitle());
         streamSearchEntity.setTitle(streamEntity.getTitle());
         streamSearchEntity.setPhoto(streamEntity.getPhoto());
         streamSearchEntity.setNotifyCreation(streamEntity.getNotifyCreation());
         streamSearchEntity.setRemoved(streamEntity.getRemoved());
-        streamSearchEntity.setLocale(streamEntity.getLocale());
+        streamSearchEntity.setCountry(streamEntity.getCountry());
         streamSearchEntity.setBirth(streamEntity.getBirth());
         streamSearchEntity.setDeleted(streamEntity.getDeleted());
         streamSearchEntity.setModified(streamEntity.getModified());
@@ -90,6 +90,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
 
     @Override public List<StreamSearchResult> getStreams(String query, String locale) {
         List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale);
+        localStreamDataSource.putStreams(streamEntityList);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
 
         localStreamSearchDataSource.setLastSearchResults(transformStreamEntitiesInStreamSearchEntities(streamEntityList,
@@ -112,7 +113,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
     }
 
-    @Override public Map<String, Integer> getHolderWatchers() {
-        return remoteStreamDataSource.getHolderWatchers();
+    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
+        return remoteStreamDataSource.getHolderFavorites(idUser);
     }
 }

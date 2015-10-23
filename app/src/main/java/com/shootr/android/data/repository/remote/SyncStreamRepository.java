@@ -61,10 +61,6 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         return streamEntityMapper.transform(remoteStreamEntity);
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        return remoteStreamDataSource.getListingCount(idUser);
-    }
-
     @Override public void shareStream(String idStream) {
         remoteStreamDataSource.shareStream(idStream);
     }
@@ -75,6 +71,28 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
 
     @Override public void restoreStream(String idStream) {
         remoteStreamDataSource.restoreStream(idStream);
+    }
+
+    @Override public Stream getBlogStream(String country, String language) {
+        StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
+        if (blogStream != null) {
+            markEntityAsSynchronized(blogStream);
+            localStreamDataSource.putStream(blogStream);
+            return streamEntityMapper.transform(blogStream);
+        } else {
+            return null;
+        }
+    }
+
+    @Override public Stream getHelpStream(String country, String language) {
+        StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, language);
+        if (helpStream != null) {
+            markEntityAsSynchronized(helpStream);
+            localStreamDataSource.putStream(helpStream);
+            return streamEntityMapper.transform(helpStream);
+        } else {
+            return null;
+        }
     }
 
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {

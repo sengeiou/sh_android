@@ -9,8 +9,8 @@ public class StreamValidator {
 
     public static final int TITLE_MINIMUN_LENGTH = 3;
     public static final int TITLE_MAXIMUN_LENGTH = 50;
-    public static final int TAG_MINIMUN_LENGTH = 3;
-    public static final int TAG_MAXIMUM_LENGTH = 20;
+    public static final int SHORT_TITLE_MINIMUN_LENGTH = 3;
+    public static final int SHORT_TITLE_MAXIMUM_LENGTH = 20;
     public static final int DESCRIPTION_MAXIMUM_LENGTH = 60;
     public static final String EMOJI_RANGE_REGEX = "[\\x{1F300}-\\x{1F64F}\\x{1f680}-\\x{1f6ff}\\x{2600}-\\x{27bf}]";
 
@@ -70,17 +70,17 @@ public class StreamValidator {
 
     //region Short Title
     private void validateShortTitleTooLong(Stream stream) {
-        if (stream.getTag() != null && alphanumericLength(stream.getTag()) > TAG_MAXIMUM_LENGTH) {
+        if (stream.getShortTitle() != null && alphanumericLength(stream.getShortTitle()) > SHORT_TITLE_MAXIMUM_LENGTH) {
             fieldValidationErrors.add(
-              new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_LONG, FIELD_SHORT_TITLE));
+              new FieldValidationError(ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_LONG, FIELD_SHORT_TITLE));
         }
     }
 
     private void validateShortTitleTooShort(Stream stream) {
-        String shortTitle = stream.getTag();
-        if (shortTitle == null || alphanumericLength(shortTitle) < TAG_MINIMUN_LENGTH) {
+        String shortTitle = stream.getShortTitle();
+        if (shortTitle == null || alphanumericLength(shortTitle) < SHORT_TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
-              new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_SHORT, FIELD_SHORT_TITLE));
+              new FieldValidationError(ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_SHORT, FIELD_SHORT_TITLE));
         }
     }
 

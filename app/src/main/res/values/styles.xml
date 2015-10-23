@@ -161,6 +161,11 @@
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="LoginEmailButton">
@@ -172,6 +177,14 @@
     </style>
 
     <style name="LoginSessionButton">
+        <item name="android:background">@color/transparent</item>x
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="WelcomeButton">
         <item name="android:background">@color/transparent</item>x
         <item name="android:textColor">@color/primary</item>
         <item name="android:textAllCaps">true</item>

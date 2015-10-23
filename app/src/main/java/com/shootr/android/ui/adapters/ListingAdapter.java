@@ -63,14 +63,13 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
 
     @Override
     protected StreamResultViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        int layoutRes = isCurrentUser ? R.layout.item_list_listing_stream : R.layout.item_list_stream;
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
 
         ListingStreamResultViewHolder listingStreamResultViewHolder =
           new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
 
         if (isCurrentUser) {
-            listingStreamResultViewHolder.setShowsWatchersText(true);
+            listingStreamResultViewHolder.setShowsFavoritesText(true);
         }
         return listingStreamResultViewHolder;
     }
@@ -101,7 +100,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         StreamResultModel stream = getItem(section, position);
         boolean showSeparator = position != 0;
         if (isCurrentUser) {
-            holder.render(stream, showSeparator);
+            holder.render(stream, showSeparator, favoritedStreams);
         } else {
             holder.render(stream, showSeparator);
         }

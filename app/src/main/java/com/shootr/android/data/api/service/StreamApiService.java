@@ -1,6 +1,6 @@
 package com.shootr.android.data.api.service;
 
-import com.shootr.android.data.api.entity.WatchersApiEntity;
+import com.shootr.android.data.api.entity.FavoritesApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.StreamEntity;
 import java.io.IOException;
@@ -15,43 +15,46 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
-    @POST("/streams")
+    @POST("/stream")
     StreamEntity createStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
 
-    @PUT("/streams")
+    @PUT("/stream")
     StreamEntity updateStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
 
-    @GET("/streams/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
+    @GET("/stream/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
-    @GET("/streams?includeLinks=false")
+    @GET("/stream?includeLinks=false")
     List<StreamEntity> getStreams(@Query("idStreams") List<String> idStreams) throws IOException, ApiException;
 
-    @GET("/streams/popular?includeLinks=false&includeEmbed=false")
+    @GET("/stream/popular?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamList(@Query("locale") String locale) throws ApiException, IOException;
 
-    @GET("/user/{idUser}/streams?includeLinks=false&includeEmbed=false")
+    @GET("/stream/user/{idUser}?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamListing(@Path("idUser") String idUserStream,
       @Query("count") Integer maxNumberOfListingStreams) throws ApiException, IOException;
 
-    @GET("/streams/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
+    @GET("/stream/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
       @Query("query") String query, @Query("locale") String locale) throws
       ApiException, IOException;
 
-    @GET("/user/{idUser}/listedCount")
-    Integer getListingCount(@Path("idUser")String idUser) throws ApiException, IOException;
-
-    @POST("/streams/{idStream}/share")
+    @POST("/stream/{idStream}/share")
     Response shareStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
-    @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
+    @GET("/stream/favoriteCount/") List<FavoritesApiEntity> getHolderFavorites(@Query("idUser") String idUser) throws IOException, ApiException;
 
-    @PUT("/streams/{idStream}/checkin")
+    @PUT("/user/checkin/{idStream}")
     Response checkIn(@Path("idStream") String idStream) throws IOException, ApiException;
 
-    @PUT("/streams/{idStream}/remove")
+    @PUT("/stream/{idStream}/remove")
     Response removeStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
-    @PUT("/streams/{idStream}/restore")
+    @PUT("/stream/{idStream}/restore")
     Response restoreStream(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @GET("/stream/blog/")
+    StreamEntity getBlogStream(@Query("country") String country, @Query("language") String language) throws IOException, ApiException;
+
+    @GET("/stream/help/")
+    StreamEntity getHelpStream(@Query("country") String country, @Query("language") String language) throws IOException, ApiException;
 }

@@ -4,7 +4,6 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
-import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -33,7 +32,6 @@ public class WatchNumberInteractorTest {
     @Mock UserRepository remoteUserRepository;
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock Interactor.ErrorCallback dummyErrorCallback;
     @Spy SpyCallback spyCallback = new SpyCallback();
 
     @Before
@@ -64,7 +62,7 @@ public class WatchNumberInteractorTest {
         when(remoteUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
         when(sessionRepository.getCurrentUser()).thenReturn(me());
 
-        interactor.loadWatchNumber(STREAM_ID, spyCallback, dummyErrorCallback);
+        interactor.loadWatchNumber(STREAM_ID, spyCallback);
 
         assertThat(spyCallback.count).isEqualTo(2);
     }
@@ -85,7 +83,7 @@ public class WatchNumberInteractorTest {
         when(sessionRepository.getCurrentUser()).thenReturn(me());
         when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
 
-        interactor.loadWatchNumber(STREAM_ID, spyCallback, dummyErrorCallback);
+        interactor.loadWatchNumber(STREAM_ID, spyCallback);
 
         verify(localUserRepository).getPeople();
     }

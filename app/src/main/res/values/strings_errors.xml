@@ -10,12 +10,12 @@
     <string name="error_message_username_duplicate">Username already taken</string>
     <string name="error_message_username_empty">3 or more characters required</string>
     <string name="error_message_username_short">3 or more characters required</string>
-    <string name="error_message_username_long">3 to 20 characters required</string>
+    <string name="error_message_username_long">3 to 25 characters required</string>
     <string name="error_message_username_invalid">Use only a–z, 0–9 and underscores</string>
 
     <!-- Profile: Name -->
     <string name="error_message_name_invalid">Invalid characters</string>
-    <string name="error_message_name_long">Maximum length is 20 characters</string>
+    <string name="error_message_name_long">Maximum length is 25 characters</string>
 
     <!-- Profile: Website -->
     <string name="error_message_website_invalid">Invalid website</string>

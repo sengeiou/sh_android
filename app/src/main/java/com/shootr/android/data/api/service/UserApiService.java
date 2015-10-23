@@ -17,28 +17,28 @@ import retrofit.http.Query;
 
 public interface UserApiService {
 
-    @GET("/user/id/{idUser}")
+    @GET("/user/{idUser}")
     UserEntity getUser(@Path("idUser") String idUser) throws IOException, ApiException;
 
-    @GET("/user/")
+    @GET("/user?includeLinks=false&includeEmbed=false")
     UserEntity getUser() throws IOException, ApiException;
 
-    @GET("/user/{username}")
-    UserEntity getUserByUsername(@Path("username") String username) throws IOException, ApiException;
+    @GET("/user?includeLinks=false&includeEmbed=false")
+    UserEntity getUserByUsername(@Query("userName") String username) throws IOException, ApiException;
 
-    @GET("/user/{idUser}/following")
+    @GET("/user/{idUser}/following?includeLinks=false&includeEmbed=false")
     List<UserEntity> getFollowing(@Path("idUser") String idUser) throws IOException, ApiException;
 
-    @GET("/user/{idUser}/followers")
+    @GET("/user/{idUser}/followers?includeLinks=false&includeEmbed=false")
     List<UserEntity> getFollowers(@Path("idUser") String idUser) throws IOException, ApiException;
 
-    @GET("/streams/{idStream}/participants")
+    @GET("/user/streamParticipants/{idStream}")
     List<UserEntity> getAllParticipants(@Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
 
-    @GET("/streams/{idStream}/participants/search")
+    @GET("/user/streamParticipants/{idStream}/search")
     List<UserEntity> findParticipants(@Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
 
-    @PUT("/streams/{idStream}/watch")
+    @PUT("/user/watch/{idStream}")
     Response watch(@Path("idStream") String idStream) throws IOException, ApiException;
 
     @PUT("/user/unwatch")
@@ -53,9 +53,9 @@ public interface UserApiService {
     @GET("/user/search/{query}?includeLinks=false&includeEmbed=false")
     List<UserEntity> search(@Path("query") String query, @Query("page") int pageOffset) throws IOException, ApiException;
 
-    @POST("/user/{idUser}/follow")
+    @POST("/follow/{idUser}")
     Response follow(@Path("idUser") String idUser) throws IOException, ApiException;
 
-    @DELETE("/user/{idUser}/follow")
+    @DELETE("/follow/{idUser}")
     Response unfollow(@Path("idUser") String idUser) throws IOException, ApiException;
 }

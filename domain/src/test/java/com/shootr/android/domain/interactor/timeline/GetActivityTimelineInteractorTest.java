@@ -61,10 +61,7 @@ public class GetActivityTimelineInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
         interactor = new GetActivityTimelineInteractor(interactorHandler,
-                postExecutionThread,
-                sessionRepository, localActivityRepository,
-                localUserRepository
-        );
+                postExecutionThread, localActivityRepository);
     }
 
     @Test
@@ -73,7 +70,7 @@ public class GetActivityTimelineInteractorTest {
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(spyCallback, errorCallback);
+        interactor.loadActivityTimeline(spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
@@ -84,7 +81,7 @@ public class GetActivityTimelineInteractorTest {
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(spyCallback, errorCallback);
+        interactor.loadActivityTimeline(spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());

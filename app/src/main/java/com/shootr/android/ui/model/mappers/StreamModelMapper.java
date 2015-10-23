@@ -20,13 +20,14 @@ public class StreamModelMapper {
         streamModel.setIdStream(stream.getId());
         streamModel.setTitle(stream.getTitle());
         streamModel.setPicture(stream.getPicture());
-        streamModel.setTag(stream.getTag());
+        streamModel.setShortTitle(stream.getShortTitle());
         streamModel.setAmIAuthor(stream.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         streamModel.setAuthorId(stream.getAuthorId());
         streamModel.setAuthorUsername(stream.getAuthorUsername());
         streamModel.setDescription(stream.getDescription());
         streamModel.setMediaCount(stream.getMediaCount() != null ? stream.getMediaCount() : 0);
         streamModel.setRemoved(stream.isRemoved());
+        streamModel.setTotalFavorites(stream.getTotalFavorites());
         return streamModel;
     }
 

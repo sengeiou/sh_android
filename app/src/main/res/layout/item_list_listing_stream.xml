@@ -53,7 +53,7 @@
         android:layout_alignParentRight="true"
         style="@style/WatchersIndicator"
         android:drawableRight="@null"
-        tools:text="2 watchers" />
+        tools:text="2 favorites" />
 
     </LinearLayout>
 

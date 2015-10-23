@@ -5,90 +5,99 @@
   android:orientation="vertical"
   tools:context="com.shootr.android.ui.activities.SupportActivity">
 
-  <TextView
-    android:id="@+id/support_faq_text"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:paddingLeft="16dp"
-    android:gravity="center_vertical"
-    android:textAppearance="@style/TextAppearance.Switch"
-    android:textColor="@color/gray_60"
-    android:text="@string/support_faq"
-    />
-
-  <View android:layout_width="match_parent"
-    android:layout_height="0.5dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
-    android:background="@color/separator" />
-
-    <TextView
-      android:id="@+id/privacy_policy_text"
+    <TextView android:id="@+id/support_blog_text"
       android:layout_width="match_parent"
       android:layout_height="56dp"
-      android:paddingLeft="16dp"
-      android:gravity="center_vertical"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_30"
       android:background="?selectableItemBackground"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
+      android:text="@string/support_blog"
+      android:textAppearance="@style/TextAppearance.Switch"
+      android:textColor="@color/gray_30" />
+
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
+
+    <TextView android:id="@+id/support_help_text"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
+      android:text="@string/support_help"
+      android:textAppearance="@style/TextAppearance.Switch"
+      android:textColor="@color/gray_30" />
+
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
+
+    <TextView android:id="@+id/privacy_policy_text"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
       android:text="@string/support_privacy_policy"
-      />
+      android:textAppearance="@style/TextAppearance.Switch"
+      android:textColor="@color/gray_30" />
 
-  <View android:layout_width="match_parent"
-    android:layout_height="0.5dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
-    android:background="@color/separator" />
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
 
-    <TextView
-      android:id="@+id/support_terms_service_text"
+    <TextView android:id="@+id/support_terms_service_text"
       android:layout_width="match_parent"
       android:layout_height="56dp"
-      android:paddingLeft="16dp"
-      android:gravity="center_vertical"
       android:background="?selectableItemBackground"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_30"
-      android:text="@string/support_terms_service"
-      />
-
-  <View android:layout_width="match_parent"
-    android:layout_height="0.5dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
-    android:background="@color/separator" />
-
-  <FrameLayout android:id="@+id/support_version_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-
-    <TextView android:id="@+id/support_version_number"
-      android:layout_width="wrap_content"
-      android:layout_height="56dp"
       android:gravity="center_vertical"
-      android:paddingRight="16dp"
-      android:layout_gravity="end|center_vertical"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_60"
-      tools:text="0.47 - 6" />
-
-    <TextView
-      android:id="@+id/support_text"
-      android:layout_width="match_parent"
-      android:layout_height="56dp"
       android:paddingLeft="16dp"
-      android:gravity="center_vertical"
+      android:text="@string/support_terms_service"
       android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_30"
-      android:text="@string/support_version"
-      />
+      android:textColor="@color/gray_30" />
 
-  </FrameLayout>
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
 
-  <View android:layout_width="match_parent"
-    android:layout_height="0.5dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
-    android:background="@color/separator" />
+    <FrameLayout android:id="@+id/support_version_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/support_version_number"
+          android:layout_width="wrap_content"
+          android:layout_height="56dp"
+          android:layout_gravity="end|center_vertical"
+          android:gravity="center_vertical"
+          android:paddingRight="16dp"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textColor="@color/gray_60"
+          tools:text="0.47 - 6" />
+
+        <TextView android:id="@+id/support_text"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:gravity="center_vertical"
+          android:paddingLeft="16dp"
+          android:text="@string/support_version"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textColor="@color/gray_30" />
+
+    </FrameLayout>
+
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
 
 </LinearLayout>

@@ -22,6 +22,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
@@ -36,6 +37,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -59,6 +61,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         favoritesListPresenter.setView(new NullFavoritesListView());
     }
@@ -66,6 +69,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_favorites));
         initializePresenter();
         initializeViews();
     }

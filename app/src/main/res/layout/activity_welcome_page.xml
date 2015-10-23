@@ -4,16 +4,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:orientation="vertical">
 
-    <ImageView android:layout_width="@dimen/logo_size_104"
-      android:layout_height="@dimen/logo_size_104"
-      android:layout_marginTop="160dp"
-      android:layout_gravity="center"
-      android:src="@drawable/ic_welcome_page"/>
-
     <TextView android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:paddingTop="88dp"
+      android:paddingTop="240dp"
       android:text="@string/welcome_shootr_title"
       android:textColor="@color/black"
       android:textSize="22sp" />
@@ -29,18 +23,23 @@
 
   <FrameLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="40dp"
+    android:paddingTop="140dp"
     android:animateLayoutChanges="true" >
 
-    <Button android:id="@+id/button_get_started"
+    <TextView android:id="@+id/button_get_started"
+      style="@style/WelcomeButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
-      android:textColor="@color/black"
+      android:background="?selectableItemBackground"
       android:layout_marginLeft="@dimen/keyline_2"
       android:layout_marginRight="@dimen/keyline_2"
+      android:paddingLeft="8dp"
+      android:paddingRight="8dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
       android:text="@string/welcome_get_started_button"
-      android:visibility="visible" />
+      android:textSize="14sp" />
 
     <ProgressBar android:id="@+id/get_started_progress"
       android:layout_width="match_parent"

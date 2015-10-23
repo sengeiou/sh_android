@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.Truss;
+import java.util.List;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
@@ -25,7 +26,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private final ImageLoader imageLoader;
     private OnUnwatchClickListener unwatchClickListener;
 
-    private boolean showsWatchersText = false;
+    private boolean showsFavoritesText = false;
     private boolean isWatchingStateEnabled = false;
 
     @Bind(R.id.stream_picture) ImageView picture;
@@ -66,9 +67,30 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         title.setText(streamResultModel.getStreamModel().getTitle());
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
-        if (watchersCount > 0 || showsWatchersText) {
+        if (watchersCount > 0 || showsFavoritesText) {
             watchers.setVisibility(View.VISIBLE);
-            watchers.setText(getWatchersText(watchersCount));
+            watchers.setText(getFavoritesText(watchersCount));
+        } else {
+            watchers.setVisibility(View.GONE);
+        }
+        String pictureUrl = streamResultModel.getStreamModel().getPicture();
+        imageLoader.loadStreamPicture(pictureUrl, picture);
+        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
+    }
+
+    public void render(StreamResultModel streamResultModel, boolean showSeparator, List<StreamResultModel> favoritedStreams) {
+        this.setClickListener(streamResultModel);
+        title.setText(streamResultModel.getStreamModel().getTitle());
+        renderSubttile(streamResultModel.getStreamModel());
+        int watchersCount = streamResultModel.getWatchers();
+        if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
+            renderHolderSubttile(streamResultModel);
+            if(watchersCount > 0) {
+                watchers.setVisibility(View.VISIBLE);
+                watchers.setText(String.valueOf(watchersCount));
+            } else {
+                watchers.setVisibility(View.GONE);
+            }
         } else {
             watchers.setVisibility(View.GONE);
         }
@@ -80,14 +102,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 onStreamClickListener.onStreamClick(streamResult);
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+            @Override public boolean onLongClick(View v) {
                 return onStreamClickListener.onStreamLongClick(streamResult);
             }
         });
@@ -96,20 +116,19 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private void setUnwatchClickListener() {
         checkNotNull(actionsContainer, "The view used in this ViewHolder doesn't contain the unwatch button.");
         actionsContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 unwatchClickListener.onUnwatchClick();
             }
         });
     }
 
-    private String getWatchersText(int watchers) {
-        if (showsWatchersText) {
+    private String getFavoritesText(int favorites) {
+        if (showsFavoritesText) {
             return itemView.getContext()
               .getResources()
-              .getQuantityString(R.plurals.listing_watchers, watchers, watchers);
+              .getQuantityString(R.plurals.listing_favorites, favorites, favorites);
         } else {
-            return String.valueOf(watchers);
+            return String.valueOf(favorites);
         }
     }
 
@@ -119,6 +138,19 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
                 subtitle.setText(getConnectedSubtitle(stream));
             } else {
                 subtitle.setText(getAuthorSubtitleWithDescription(stream));
+            }
+        }
+    }
+
+    private void renderHolderSubttile(StreamResultModel stream) {
+        if (subtitle != null) {
+            if (isWatchingStateEnabled) {
+                subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
+            } else {
+                String favorites = subtitle.getContext()
+                  .getResources()
+                  .getQuantityString(R.plurals.listing_favorites, stream.getStreamModel().getTotalFavorites(), stream.getStreamModel().getTotalFavorites());
+                subtitle.setText(favorites);
             }
         }
     }
@@ -144,7 +176,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setShowsWatchersText(Boolean showWatchersText) {
-        this.showsWatchersText = showWatchersText;
+    public void setShowsFavoritesText(Boolean showFavoritesText) {
+        this.showsFavoritesText = showFavoritesText;
     }
 }

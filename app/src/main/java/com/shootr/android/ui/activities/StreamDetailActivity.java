@@ -32,6 +32,7 @@ import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
+import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.FileChooserUtils;
@@ -74,6 +75,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Inject StreamDetailPresenter streamDetailPresenter;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -92,6 +94,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), getString(R.string.analytics_screen_stream_detail));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
@@ -213,6 +216,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     protected void onPause() {
         super.onPause();
         streamDetailPresenter.pause();
+        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 
     private void setShortTitleResultForPreviousActivity(String shortTitle) {
@@ -400,11 +404,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 streamTitleContainer.setPadding(0, 0, paddingRight, 0);
             }
         });
-    }
-
-    @Override
-    public void hideEditStreamButton() {
-        editMenuItem.setVisible(false);
     }
 
     @Override

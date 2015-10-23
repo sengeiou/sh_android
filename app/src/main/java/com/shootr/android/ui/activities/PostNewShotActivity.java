@@ -242,11 +242,6 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
-    @Override public void showImagePreviewFromUrl(String imageUrl) {
-        imageLoader.load(imageUrl, image);
-        imageContainer.setVisibility(View.VISIBLE);
-    }
-
     @Override public void showImagePreview(File imageFile) {
         int maxScreenDimension = getScreenWidth();
         imageLoader.load(imageFile, image, maxScreenDimension);

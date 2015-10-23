@@ -32,10 +32,6 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streams;
     }
 
-    @Override public Integer getListingCount(String idUser) {
-        return streamManager.getListingNotRemoved(idUser);
-    }
-
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         return streamManager.getStreamsListingNotRemoved(idUser);
     }
@@ -44,7 +40,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         throw new IllegalStateException("Not allowed in local");
     }
 
-    @Override public Map<String, Integer> getHolderWatchers() {
+    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 
@@ -54,5 +50,13 @@ public class DatabaseStreamDataSource implements StreamDataSource {
 
     @Override public void restoreStream(String idStream) {
         streamManager.restoreStream(idStream);
+    }
+
+    @Override public StreamEntity getBlogStream(String country, String language) {
+        throw new IllegalArgumentException("method not implemented in local datasource");
+    }
+
+    @Override public StreamEntity getHelpStream(String country, String language) {
+        throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

@@ -24,15 +24,16 @@ public class StreamEntityMapper {
         stream.setAuthorId(streamEntity.getIdUser());
         stream.setTitle(streamEntity.getTitle());
         stream.setPicture(streamEntity.getPhoto());
-        stream.setTag(streamEntity.getTag());
+        stream.setShortTitle(streamEntity.getShortTitle());
         stream.setAuthorUsername(streamEntity.getUserName());
-        stream.setLocale(streamEntity.getLocale());
+        stream.setCountry(streamEntity.getCountry());
         stream.setDescription(streamEntity.getDescription());
         stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
         stream.setRemoved(streamEntity.getRemoved() == 1);
         if (streamEntity.getWatchers() != null) {
             stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
         }
+        stream.setTotalFavorites(streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
         return stream;
     }
 
@@ -55,13 +56,14 @@ public class StreamEntityMapper {
         entityTemplate.setIdUser(stream.getAuthorId());
         entityTemplate.setTitle(stream.getTitle());
         entityTemplate.setPhoto(stream.getPicture());
-        entityTemplate.setTag(stream.getTag());
+        entityTemplate.setShortTitle(stream.getShortTitle());
         entityTemplate.setUserName(stream.getAuthorUsername());
-        entityTemplate.setLocale(stream.getLocale());
+        entityTemplate.setCountry(stream.getCountry());
         entityTemplate.setDescription(stream.getDescription());
         entityTemplate.setMediaCountByRelatedUsers(stream.getMediaCount());
 
         entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
+        entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFavorites()));
     }
 }

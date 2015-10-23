@@ -20,11 +20,12 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.USERNAME, streamEntity.getUserName());
         contentValues.put(DatabaseContract.StreamTable.TITLE, streamEntity.getTitle());
         contentValues.put(DatabaseContract.StreamTable.PHOTO, streamEntity.getPhoto());
-        contentValues.put(DatabaseContract.StreamTable.TAG, streamEntity.getTag());
+        contentValues.put(DatabaseContract.StreamTable.SHORT_TITLE, streamEntity.getShortTitle());
         contentValues.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity.getDescription());
-        contentValues.put(DatabaseContract.StreamTable.LOCALE, streamEntity.getLocale());
+        contentValues.put(DatabaseContract.StreamTable.COUNTRY, streamEntity.getCountry());
         contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT, streamEntity.getMediaCountByRelatedUsers());
         contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
+        contentValues.put(DatabaseContract.StreamTable.TOTAL_FAVORITES, streamEntity.getTotalFavorites());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -40,11 +41,12 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.USERNAME)));
         streamEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TITLE)));
         streamEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.PHOTO)));
-        streamEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TAG)));
+        streamEntity.setShortTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.SHORT_TITLE)));
         streamEntity.setDescription(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.DESCRIPTION)));
-        streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.LOCALE)));
+        streamEntity.setCountry(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.COUNTRY)));
         streamEntity.setMediaCountByRelatedUsers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
         streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
+        streamEntity.setTotalFavorites(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FAVORITES)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

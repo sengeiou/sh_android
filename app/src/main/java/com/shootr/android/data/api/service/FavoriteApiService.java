@@ -15,7 +15,7 @@ import retrofit.http.Query;
 
 public interface FavoriteApiService {
 
-    @GET("/favorite")
+    @GET("/favorite?includeLinks=false&includeEmbed=true")
     List<FavoriteApiEntity> getFavorites(@Query("idUser") String userId) throws ApiException, IOException;
 
     @POST("/favorite")

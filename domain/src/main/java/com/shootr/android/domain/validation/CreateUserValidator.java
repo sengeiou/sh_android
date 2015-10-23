@@ -9,7 +9,7 @@ public class CreateUserValidator {
 
     private static final String USERNAME_PATTERN = "^([_A-Za-z0-9])*$";
     private static final int USERNAME_MINIMUM_LENGTH = 3;
-    private static final int USERNAME_MAXIMUM_LENGTH = 20;
+    private static final int USERNAME_MAXIMUM_LENGTH = 25;
     private static final int PASSWORD_MINIMUM_LENGTH = 6;
     private static final int PASSWORD_MAXIMUM_LENGTH = 20;
     private static final String PASSWORD_PATTERN = "^([A-Za-z0-9_.,&%€@#~])*$";
@@ -65,7 +65,7 @@ public class CreateUserValidator {
     private void validateUsername(String username) {
         validateUsernameHasTheCorrectFormat(username);
         validateUsernameHasMoreThanThreeCharacters(username);
-        validateUsernameHasLessThanTwentyCharacters(username);
+        validateUsernameHasLessThan25Characters(username);
         validateUsernameIsNotNull(username);
     }
 
@@ -91,7 +91,7 @@ public class CreateUserValidator {
         }
     }
 
-    private void validateUsernameHasLessThanTwentyCharacters(String username) {
+    private void validateUsernameHasLessThan25Characters(String username) {
         if (username != null && username.length() > USERNAME_MAXIMUM_LENGTH) {
             addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG, FIELD_USERNAME);
         }

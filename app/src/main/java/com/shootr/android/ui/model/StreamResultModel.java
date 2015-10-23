@@ -31,4 +31,5 @@ public class StreamResultModel implements Serializable {
     public void setIsWatching(boolean isWatching) {
         this.isWatching = isWatching;
     }
+
 }

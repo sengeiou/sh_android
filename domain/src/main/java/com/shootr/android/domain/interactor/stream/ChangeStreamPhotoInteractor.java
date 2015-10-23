@@ -81,7 +81,7 @@ public class ChangeStreamPhotoInteractor implements Interactor {
 
     public interface Callback {
 
-        public void onLoaded(Stream stream);
+        void onLoaded(Stream stream);
 
     }
 }

@@ -38,7 +38,7 @@ public class ShotApiEntityMapper {
 
         shotEntity.setIdStream(shotApiEntity.getIdStream());
         shotEntity.setStreamTitle(shotApiEntity.getStreamTitle());
-        shotEntity.setStreamTag(shotApiEntity.getStreamTag());
+        shotEntity.setStreamShortTitle(shotApiEntity.getStreamShortTitle());
 
         shotEntity.setVideoUrl(shotApiEntity.getVideoUrl());
         shotEntity.setVideoTitle(shotApiEntity.getVideoTitle());

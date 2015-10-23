@@ -13,11 +13,13 @@ public interface StreamRepository {
 
     Stream putStream(Stream stream, boolean notify);
 
-    Integer getListingCount(String idUser);
-
     void shareStream(String idStream);
 
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+    Stream getBlogStream(String country, String language);
+
+    Stream getHelpStream(String country, String language);
 }

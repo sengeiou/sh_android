@@ -8,7 +8,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
@@ -26,7 +25,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     private final StreamsListInteractor streamsListInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
-    private final SelectStreamInteractor selectStreamInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -38,7 +36,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor,
-      SelectStreamInteractor selectStreamInteractor,
       ShareStreamInteractor shareStreamInteractor,
       StreamResultModelMapper streamResultModelMapper,
       ErrorMessageFactory errorMessageFactory,
@@ -46,7 +43,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
-        this.selectStreamInteractor = selectStreamInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -69,7 +65,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void selectStream(StreamResultModel stream) {
         streamsListView.setCurrentWatchingStreamId(stream);
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle());
     }
 
     private void selectStream(final String idStream, String streamTag) {
@@ -138,10 +134,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
             errorMessage = errorMessageFactory.getMessageForError(error);
         }
         streamsListView.showError(errorMessage);
-    }
-
-    public void onCommunicationError() {
-        streamsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     public void addToFavorites(StreamResultModel streamResultModel) {
