@@ -213,6 +213,18 @@ public class ListingListPresenterTest {
           anyErrorCallback());
     }
 
+    @Test public void shouldShowAddButtonIfIsCurrentUserListing() throws Exception {
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, true);
+
+        verify(listingView).showAddStream();
+    }
+
+    @Test public void shouldHideAddButtonIfIsAnotherUserListing() throws Exception {
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, false);
+
+        verify(listingView).hideAddStream();
+    }
+
     protected void setupFavoritesInteractorCallbacks() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

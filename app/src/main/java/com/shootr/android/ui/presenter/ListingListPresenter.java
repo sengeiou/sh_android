@@ -60,7 +60,16 @@ public class ListingListPresenter implements Presenter{
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
         this.isCurrentUser = isCurrentUser;
+        this.loadAddStreamVisibility();
         this.renderListing();
+    }
+
+    private void loadAddStreamVisibility() {
+        if (isCurrentUser) {
+            listingView.showAddStream();
+        } else {
+            listingView.hideAddStream();
+        }
     }
 
     private void renderListing() {

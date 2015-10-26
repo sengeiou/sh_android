@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
     @Bind(R.id.listing_empty_title) View emptyView;
+    @Bind(R.id.listing_add_stream) FloatingActionButton addStream;
     @BindString(R.string.shared_stream_notification) String sharedStream;
 
     @Inject ListingListPresenter presenter;
@@ -197,6 +199,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void updateStreams() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override public void showAddStream() {
+        addStream.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideAddStream() {
+        addStream.setVisibility(View.GONE);
     }
 
     @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
