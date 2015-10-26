@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ProfileView {
 
-    void showListingButtonWithCount(Integer listingCount);
-
     void navigateToListing(String idUser, boolean isCurrentUser);
 
     void showLogoutInProgress();
@@ -30,7 +28,7 @@ public interface ProfileView {
 
     void setFollowing(Boolean following);
 
-    void showListingWithoutCount();
+    void showListing();
 
     void setUserInfo(UserModel userModel);
 

@@ -37,7 +37,6 @@ import org.mockito.stubbing.Answer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -140,22 +139,6 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
         verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
-    }
-
-    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithIdUserAndUserHasStreams() {
-        setupUserById();
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView).showListingButtonWithCount(anyInt());
-    }
-
-    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithUsernameAndUserHasStreams() {
-        setupUserByUsername();
-
-        profilePresenter.initializeWithUsername(profileView, USERNAME);
-
-        verify(profileView).showListingButtonWithCount(anyInt());
     }
 
     @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
@@ -632,6 +615,14 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
         verify(profileView).showLogoutButton();
+    }
+
+    @Test public void shouldShowListing() throws Exception {
+        setupUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showListing();
     }
 
     private void setupLogoutInteractorCompletedCallback() {

@@ -99,7 +99,6 @@ public class ProfileFragment extends BaseFragment
     @Bind(R.id.profile_avatar) ImageView avatarImageView;
 
     @Bind(R.id.profile_listing_container) View listingContainerView;
-    @Bind(R.id.profile_listing_number) TextView listingNumber;
 
     @Bind(R.id.profile_open_stream_container) View openStreamContainerView;
 
@@ -479,19 +478,9 @@ public class ProfileFragment extends BaseFragment
     @OnClick(R.id.profile_all_shots_button) public void onAllShotsClick() {
         profilePresenter.allShotsClicked();
     }
-
-    @OnClick(R.id.profile_open_stream) public void onOpenStreamClick() {
-        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-    }
     //endregion
 
     //region View methods
-    @Override public void showListingButtonWithCount(Integer listingCount) {
-        openStreamContainerView.setVisibility(View.GONE);
-        listingContainerView.setVisibility(View.VISIBLE);
-        listingNumber.setVisibility(View.VISIBLE);
-        listingNumber.setText(String.valueOf(listingCount));
-    }
 
     @Override public void showAllShotsButton() {
         allShotContainer.setVisibility(View.VISIBLE);
@@ -501,10 +490,9 @@ public class ProfileFragment extends BaseFragment
         allShotContainer.setVisibility(View.GONE);
     }
 
-    @Override public void showListingWithoutCount() {
+    @Override public void showListing() {
         openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
-        listingNumber.setVisibility(View.GONE);
     }
 
     @Override public void setUserInfo(UserModel userModel) {

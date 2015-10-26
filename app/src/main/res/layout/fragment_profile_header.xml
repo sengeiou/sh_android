@@ -102,17 +102,6 @@
       android:layout_below="@+id/profile_scores_bar"
       android:visibility="gone" >
 
-        <TextView android:id="@+id/profile_listing_number"
-          android:layout_width="wrap_content"
-          android:layout_height="56dp"
-          android:gravity="center_vertical"
-          android:paddingRight="16dp"
-          android:layout_gravity="end|center_vertical"
-          android:textAppearance="@style/TextAppearance.Switch"
-          android:text="@string/profile_listing_number"
-          android:textColor="@color/gray_60"
-          android:visibility="visible"
-          tools:text="7" />
         <ImageView android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
@@ -143,7 +132,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:src="@drawable/ic_action_profile_listing_gray_24" />
-      <TextView android:id="@+id/profile_open_stream"
+
+      <TextView android:id="@+id/profile_streams"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="?selectableItemBackground"
