@@ -128,4 +128,12 @@ public class ShotEntityMapper {
 
         return shotDetail;
     }
+
+    public List<ShotEntity> transformInEntities(List<Shot> shots) {
+        List<ShotEntity> shotEntities = new ArrayList<>(shots.size());
+        for (Shot shot : shots) {
+            shotEntities.add(transform(shot));
+        }
+        return shotEntities;
+    }
 }

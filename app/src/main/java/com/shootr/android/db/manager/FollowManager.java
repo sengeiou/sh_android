@@ -44,15 +44,24 @@ public class FollowManager extends AbstractManager{
      * *
      */
     public void saveFollowsFromServer(List<FollowEntity> followList) {
-        for (FollowEntity follow : followList) {
-            ContentValues contentValues = followMapper.toContentValues(follow);
-            if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                 deleteFollow(follow);
-            } else {
-                contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
-                getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (FollowEntity follow : followList) {
+                ContentValues contentValues = followMapper.toContentValues(follow);
+                if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
+                    deleteFollow(follow.getFollowedUser(), follow.getIdUser(), database);
+                } else {
+                    contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
+                    database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
             }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
+
+
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
@@ -95,14 +104,17 @@ public class FollowManager extends AbstractManager{
     /**
      * Delete one Follow
      */
-    public long deleteFollow(FollowEntity follow) {
-        return deleteFollow(follow.getFollowedUser(), follow.getIdUser());
-    }
 
     public long deleteFollow(String followedUser, String idUser) {
         String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] whereArgs = new String[]{followedUser, idUser};
         return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
+    }
+
+    private long deleteFollow(String followedUser, String idUser, SQLiteDatabase database) {
+        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{followedUser, idUser};
+        return database.delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
     public List<FollowEntity> getFollowsNotSynchronized(){
