@@ -55,7 +55,7 @@ public class GetUserListingStreamsInteractorTest {
           localStreamSearchRepository,
           remoteStreamSearchRepository,
           localStreamRepository,
-          remoteStreamRepository, localFavoriteRepository, remoteFavoriteRepository, sessionRepository);
+          remoteStreamRepository, localFavoriteRepository);
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 
