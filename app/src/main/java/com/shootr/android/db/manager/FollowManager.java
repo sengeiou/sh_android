@@ -50,7 +50,7 @@ public class FollowManager extends AbstractManager{
             for (FollowEntity follow : followList) {
                 ContentValues contentValues = followMapper.toContentValues(follow);
                 if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                    deleteFollow(follow);
+                    deleteFollow(follow.getFollowedUser(), follow.getIdUser(), database);
                 } else {
                     contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
                     database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -104,14 +104,17 @@ public class FollowManager extends AbstractManager{
     /**
      * Delete one Follow
      */
-    public long deleteFollow(FollowEntity follow) {
-        return deleteFollow(follow.getFollowedUser(), follow.getIdUser());
-    }
 
     public long deleteFollow(String followedUser, String idUser) {
         String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] whereArgs = new String[]{followedUser, idUser};
         return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
+    }
+
+    private long deleteFollow(String followedUser, String idUser, SQLiteDatabase database) {
+        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{followedUser, idUser};
+        return database.delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
     public List<FollowEntity> getFollowsNotSynchronized(){
