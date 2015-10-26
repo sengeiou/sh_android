@@ -21,6 +21,7 @@ Etiquetas para el changelog:
 ### Fixed
 - Add Streams solo aparece en tus streams, no el el apartado streams de otro usuario.
 - ServerCommunicationException controlada en el interactor de Listinig.
+- Eliminadas dependencias sin uso en Presenters e Interators.
 
 ## [0.4.0] - 2015-10-23
 
