@@ -20,7 +20,8 @@ Etiquetas para el changelog:
 
 ### Fixed
 - Add Streams solo aparece en tus streams, no el el apartado streams de otro usuario.
-- ServerCommunicationException controlada en el interactor de Listinig.
+- ServerCommunicationException controlada en el interactor de Listing.
+- Eliminados los rastros del listing count en ProfileFragment.
 
 ## [0.4.0] - 2015-10-23
 

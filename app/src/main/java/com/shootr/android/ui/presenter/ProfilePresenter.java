@@ -129,7 +129,7 @@ public class ProfilePresenter implements Presenter {
         setupMenuItemsVisibility();
         this.setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
-        loadProfileUserListing();
+        profileView.showListing();
         setRelationshipButtonStatus(user);
         if (isCurrentUser && user.getPhoto() == null) {
             profileView.showAddPhoto();
@@ -186,19 +186,6 @@ public class ProfilePresenter implements Presenter {
             profileView.showLogoutButton();
             profileView.showSupportButton();
             profileView.showChangePasswordButton();
-        }
-    }
-
-    private void loadProfileUserListing() {
-        streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
-        showUserListingCount();
-    }
-
-    private void showUserListingCount() {
-        if (streamsCount > 0L) {
-            profileView.showListingButtonWithCount(streamsCount.intValue());
-        } else {
-            profileView.showListingWithoutCount();
         }
     }
 
