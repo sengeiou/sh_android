@@ -28,6 +28,8 @@
     android:layout_gravity="bottom|right"
     android:layout_margin="16dp"
     android:src="@drawable/ic_action_add_white_24"
+    android:visibility="gone"
+    tools:visibility="visible"
   />
   <TextView
     android:id="@+id/listing_empty_title"
