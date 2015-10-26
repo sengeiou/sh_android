@@ -44,15 +44,24 @@ public class FollowManager extends AbstractManager{
      * *
      */
     public void saveFollowsFromServer(List<FollowEntity> followList) {
-        for (FollowEntity follow : followList) {
-            ContentValues contentValues = followMapper.toContentValues(follow);
-            if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                 deleteFollow(follow);
-            } else {
-                contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
-                getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (FollowEntity follow : followList) {
+                ContentValues contentValues = followMapper.toContentValues(follow);
+                if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
+                    deleteFollow(follow);
+                } else {
+                    contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
+                    database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
             }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
+
+
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){

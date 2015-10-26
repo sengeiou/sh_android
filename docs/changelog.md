@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [0.4.1] - 2015-10-30
+### Changed
+- Cuando se insertan listas en BDD se utilizan transactions siempre para agilizar la carga.
+
 ## [0.4.0] - 2015-10-23
 ### Changed
 - Refactor de endpoints.

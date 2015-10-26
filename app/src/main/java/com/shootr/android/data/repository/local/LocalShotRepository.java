@@ -65,9 +65,7 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public void putShots(List<Shot> shotsFromUser) {
-        for (Shot shot : shotsFromUser) {
-            putShot(shot);
-        }
+        localShotDataSource.putShots(shotEntityMapper.transformInEntities(shotsFromUser));
     }
 
     @Override public void shareShot(String idShot) {
