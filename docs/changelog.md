@@ -20,6 +20,7 @@ Etiquetas para el changelog:
 
 ### Fixed
 - Add Streams solo aparece en tus streams, no el el apartado streams de otro usuario.
+- ServerCommunicationException controlada en el interactor de Listinig.
 
 ## [0.4.0] - 2015-10-23
 

@@ -4,6 +4,7 @@ import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.Listing;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -32,8 +33,8 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     private String idUser;
     private Callback<Listing> callback;
+    private ErrorCallback errorCallback;
     private List<String> favoriteIds;
-    private boolean isCurrentUser;
 
     @Inject
     public GetUserListingStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -52,16 +53,20 @@ public class GetUserListingStreamsInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadUserListingStreams(Callback<Listing> callback, String idUser) {
+    public void loadUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback, String idUser) {
         this.callback = callback;
+        this.errorCallback = errorCallback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        this.isCurrentUser = sessionRepository.getCurrentUserId().equals(idUser);
-        loadUserListingStreamsFromLocal();
-        loadUserListingStreamsFromRemote();
+        try {
+            loadUserListingStreamsFromLocal();
+            loadUserListingStreamsFromRemote();
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        }
     }
 
     private void loadLocalFavoriteIds() {
@@ -143,6 +148,15 @@ public class GetUserListingStreamsInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingStreams);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                errorCallback.onError(error);
             }
         });
     }

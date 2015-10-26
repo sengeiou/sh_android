@@ -91,6 +91,10 @@ public class ListingListPresenter implements Presenter{
             @Override public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
         }, profileIdUser);
     }
 

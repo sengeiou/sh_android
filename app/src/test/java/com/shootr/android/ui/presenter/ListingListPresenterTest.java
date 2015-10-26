@@ -156,7 +156,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
-        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     @Test public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
@@ -164,7 +164,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
-        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class),anyString());
     }
 
     @Test public void shouldShowCurrentUserContextMenuIfIsCurrentUserAndItsMyStream() throws Exception {
@@ -321,7 +321,7 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithUserStreams());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupUserWithoutListingCallback() {
@@ -332,7 +332,7 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithEmptyHoldingList());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupGetUserWithFavoritesListingCallback() {
@@ -343,7 +343,7 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithFavoriteStreams());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupGetUserListingCallbacks(final Listing resultListing) {
@@ -354,7 +354,7 @@ public class ListingListPresenterTest {
                 callback.onLoaded(resultListing);
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
+        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {
