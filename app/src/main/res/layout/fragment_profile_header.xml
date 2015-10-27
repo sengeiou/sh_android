@@ -54,6 +54,7 @@
 
         <TextView
           style="@style/ProfileMarkTitle"
+          android:id="@+id/profile_following"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
@@ -83,6 +84,7 @@
 
         <TextView
           style="@style/ProfileMarkTitle"
+          android:id="@+id/profile_followers"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
