@@ -20,8 +20,8 @@
         android:protectionLevel="signature" />
 
     <application
-        android:allowBackup="false"
         android:name=".ShootrApplication"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="false"
@@ -76,8 +76,7 @@
         </activity>
         <activity
             android:name=".ui.activities.StreamDetailActivity"
-            android:label="Participants"
-            >
+            android:label="Participants" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainTabbedActivity" />
@@ -112,8 +111,8 @@
         </activity>
         <activity
             android:name=".ui.activities.DraftsActivity"
-            android:launchMode="singleTop"
             android:label="@string/activity_drafts_title"
+            android:launchMode="singleTop"
             android:theme="@style/ShootrTheme.DarkToolbar" >
         </activity>
         <activity android:name=".ui.activities.UpdateWarningActivity" />
@@ -138,8 +137,9 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.gcm.NotificationIntentReceiver"
-          android:exported="false">
+        <receiver
+            android:name=".notifications.gcm.NotificationIntentReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
@@ -209,22 +209,31 @@
         </activity>
         <activity
             android:name=".ui.activities.FindParticipantsActivity"
-            android:theme="@style/ShootrTheme.Closable">
-        </activity>
-
-        <meta-data android:name="com.shootr.android.util.GlideConfiguration"
-          android:value="GlideModule"/>
-
-        <activity
-          android:name=".ui.activities.WelcomePageActivity"
-          android:configChanges="orientation"
-          android:screenOrientation="portrait" >
+            android:theme="@style/ShootrTheme.Closable" >
         </activity>
 
         <meta-data
-          android:name="com.google.android.gms.version"
-          android:value="@integer/google_play_services_version" />
+            android:name="com.shootr.android.util.GlideConfiguration"
+            android:value="GlideModule" />
 
+        <activity
+            android:name=".ui.activities.WelcomePageActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".ui.activities.ErrorActivity"
+            android:theme="@style/ShootrTheme"
+            android:process=":error_activity">
+            <intent-filter>
+                <action android:name="cat.ereza.customactivityoncrash.RESTART" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

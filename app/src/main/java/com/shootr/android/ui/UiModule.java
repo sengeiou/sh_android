@@ -8,6 +8,7 @@ import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EmailConfirmationActivity;
+import com.shootr.android.ui.activities.ErrorActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.FindParticipantsActivity;
 import com.shootr.android.ui.activities.FindStreamsActivity;
@@ -80,7 +81,8 @@ import javax.inject.Singleton;
     ChangePasswordActivity.class,
     AllParticipantsActivity.class,
     FindParticipantsActivity.class,
-    WelcomePageActivity.class
+    WelcomePageActivity.class,
+    ErrorActivity.class,
   },
   complete = false) public class UiModule {
 

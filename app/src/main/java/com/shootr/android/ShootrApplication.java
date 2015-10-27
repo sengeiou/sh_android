@@ -2,6 +2,8 @@ package com.shootr.android;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
+import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+import com.shootr.android.ui.activities.ErrorActivity;
 import com.shootr.android.util.AnalyticsTool;
 import com.shootr.android.util.CrashReportTool;
 import com.shootr.android.util.DatabaseVersionUtils;
@@ -25,6 +27,8 @@ public class ShootrApplication extends MultiDexApplication {
         crashReportTool.init(this);
         analyticsTool.init(this);
         databaseVersionUtils.clearDataOnNewerVersion();
+        CustomActivityOnCrash.install(this);
+        CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
     }
 
     public void plantLoggerTrees() {
