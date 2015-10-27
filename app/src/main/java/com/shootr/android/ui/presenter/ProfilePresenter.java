@@ -264,9 +264,9 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void avatarClicked() {
-        if (!isCurrentUser && userModel.getPhoto()  != null) {
+        if (userModel != null && !isCurrentUser && userModel.getPhoto()  != null) {
             profileView.openPhoto(userModel.getPhoto());
-        } else if (isCurrentUser) {
+        } else if (userModel != null && isCurrentUser) {
             boolean shouldShowRemovePhoto = userModel.getPhoto() != null;
             profileView.openEditPhotoMenu(shouldShowRemovePhoto);
         }
@@ -283,11 +283,15 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void followersButtonClicked() {
-        profileView.goToFollowersList(userModel.getIdUser());
+        if (userModel != null) {
+            profileView.goToFollowersList(userModel.getIdUser());
+        }
     }
 
     public void followingButtonClicked() {
-        profileView.goToFollowingList(userModel.getIdUser());
+        if (userModel != null) {
+            profileView.goToFollowingList(userModel.getIdUser());
+        }
     }
 
     public void allShotsClicked() {
