@@ -5,9 +5,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
@@ -31,7 +29,6 @@ public class WatchNumberInteractorTest {
 
     @Mock UserRepository remoteUserRepository;
     @Mock UserRepository localUserRepository;
-    @Mock SessionRepository sessionRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
 
     @Before
@@ -41,30 +38,8 @@ public class WatchNumberInteractorTest {
         TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
         interactor = new com.shootr.android.domain.interactor.stream.WatchNumberInteractor(testInteractorHandler,
           postExecutionThread,
-          sessionRepository,
           remoteUserRepository,
           localUserRepository);
-    }
-
-    @Test
-    public void testPeopleAndMeIncludesMe() throws Exception {
-        when(remoteUserRepository.getPeople()).thenReturn(onePersonList());
-        when(sessionRepository.getCurrentUser()).thenReturn(me());
-
-        List<User> peopleAndMe = interactor.getPeopleAndMe();
-
-        assertThat(peopleAndMe).contains(me()).hasSize(2);
-        assertThat(peopleAndMe.get(1).isMe()).isTrue();
-    }
-
-    @Test
-    public void shouldIncludeMeInTheCount() throws Exception {
-        when(remoteUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
-        when(sessionRepository.getCurrentUser()).thenReturn(me());
-
-        interactor.loadWatchNumber(STREAM_ID, spyCallback);
-
-        assertThat(spyCallback.count).isEqualTo(2);
     }
 
     @Test
@@ -80,7 +55,6 @@ public class WatchNumberInteractorTest {
 
     @Test
     public void shouldFallbackToLocalUserRepositoryWhenRemoteRepositoryFails() throws Exception {
-        when(sessionRepository.getCurrentUser()).thenReturn(me());
         when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
 
         interactor.loadWatchNumber(STREAM_ID, spyCallback);
@@ -93,12 +67,6 @@ public class WatchNumberInteractorTest {
         user.setMe(true);
         user.setIdWatchingStream(STREAM_ID);
         return user;
-    }
-
-    private List<User> onePersonList() {
-        List<User> users = new ArrayList<>();
-        users.add(newUserWatching(ID_USER_1));
-        return users;
     }
 
     private User newUserWatching(Long id) {
