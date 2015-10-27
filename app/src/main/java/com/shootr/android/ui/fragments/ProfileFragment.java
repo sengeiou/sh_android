@@ -449,11 +449,11 @@ public class ProfileFragment extends BaseFragment
         profilePresenter.avatarClicked();
     }
 
-    @OnClick(R.id.profile_marks_following) public void openFollowingList() {
+    @OnClick({ R.id.profile_marks_following, R.id.profile_following}) public void openFollowingList() {
         profilePresenter.followingButtonClicked();
     }
 
-    @OnClick(R.id.profile_marks_followers) public void openFollowersList() {
+    @OnClick({ R.id.profile_marks_followers, R.id.profile_followers}) public void openFollowersList() {
         profilePresenter.followersButtonClicked();
     }
 
