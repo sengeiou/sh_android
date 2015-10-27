@@ -625,6 +625,24 @@ public class ProfilePresenterTest {
         verify(profileView).showListing();
     }
 
+    @Test public void shouldShowAvatarPhotoIfNotCurrentUserAndHasPhoto() throws Exception {
+        setupUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openPhoto(anyString());
+    }
+
+    @Test public void shouldNotShowAvatarPhotoIfNotCurrentUserAndHasNotPhoto() throws Exception {
+        setupUserByIdWithoutPhoto();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView, never()).openPhoto(anyString());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -652,6 +670,16 @@ public class ProfilePresenterTest {
     }
 
     private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        user.setUsername(USERNAME);
+        user.setCreatedStreamsCount(1L);
+        user.setFavoritedStreamsCount(1L);
+        user.setPhoto("photo");
+        return user;
+    }
+
+    private User userWithoutPhoto() {
         User user = new User();
         user.setIdUser(ID_USER);
         user.setUsername(USERNAME);
@@ -691,6 +719,16 @@ public class ProfilePresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(user());
+                return null;
+            }
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupUserByIdWithoutPhoto() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(userWithoutPhoto());
                 return null;
             }
         }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
