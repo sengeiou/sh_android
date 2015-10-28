@@ -14,7 +14,10 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 @Singleton
 public class ActivityEntityMapper {
 
-    @Inject public ActivityEntityMapper() {
+    private final StreamEntityMapper streamEntityMapper;
+
+    @Inject public ActivityEntityMapper(StreamEntityMapper streamEntityMapper) {
+        this.streamEntityMapper = streamEntityMapper;
     }
 
     public Activity transform(ActivityEntity activityEntity) {
@@ -27,12 +30,12 @@ public class ActivityEntityMapper {
         activity.setType(activityEntity.getType());
         activity.setPublishDate(activityEntity.getBirth());
 
-
         if (activityEntity.getIdStream() != null) {
             Activity.ActivityStreamInfo eventInfo = new Activity.ActivityStreamInfo();
             eventInfo.setIdStream(activityEntity.getIdStream());
             eventInfo.setStreamTitle(activityEntity.getStreamTitle());
             eventInfo.setStreamShortTitle(activityEntity.getStreamShortTitle());
+            activity.setIdAuthorStream(eventInfo.getIdUser());
             activity.setStreamInfo(eventInfo);
         }
 

@@ -16,6 +16,7 @@ public class Activity {
     private String type;
     private Date publishDate;
     private Shot shot;
+    private String idAuthorStream;
 
     private ActivityUserInfo userInfo;
 
@@ -177,6 +178,14 @@ public class Activity {
         this.shot = shot;
     }
 
+    public String getIdAuthorStream() {
+        return idAuthorStream;
+    }
+
+    public void setIdAuthorStream(String idAuthorStream) {
+        this.idAuthorStream = idAuthorStream;
+    }
+
     public static class ActivityUserInfo {
 
         private String idUser;
@@ -237,6 +246,7 @@ public class Activity {
         private String idStream;
         private String streamTitle;
         private String streamShortTitle;
+        private String idUser;
 
         public String getStreamShortTitle() {
             return streamShortTitle;
@@ -284,6 +294,14 @@ public class Activity {
               "streamTitle='" + streamTitle + '\'' +
               ", idStream=" + idStream +
               '}';
+        }
+
+        public String getIdUser() {
+            return idUser;
+        }
+
+        public void setIdUser(String idUser) {
+            this.idUser = idUser;
         }
     }
 

@@ -77,7 +77,7 @@ public class StreamsListPresenterTest {
     @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
         presenter.selectStream(selectedStreamModel());
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE, authorId);
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {

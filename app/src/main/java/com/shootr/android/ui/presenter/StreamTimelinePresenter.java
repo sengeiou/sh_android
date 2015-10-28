@@ -13,6 +13,7 @@ import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.presenter.interactorwrapper.StreamHoldingTimelineInteractorsWrapper;
 import com.shootr.android.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -26,6 +27,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
     private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
+    private final StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
     private final SelectStreamInteractor selectStreamInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
@@ -42,12 +44,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isRefreshing = false;
     private boolean hasBeenPaused = false;
     private boolean isEmpty = true;
+    private String idAuthor;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
-      SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
+      StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper,
       @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
+        this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
@@ -62,8 +66,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.streamTimelineView = streamTimelineView;
     }
 
-    public void initialize(StreamTimelineView streamTimelineView, String streamId) {
-        this.streamId = streamId;
+    public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor) {
+        this.streamId = idStream;
+        this.idAuthor = idAuthor;
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
         this.selectStream();
@@ -89,7 +94,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 /* no-op */
             }
         });
-
     }
 
     protected void loadTimeline() {
@@ -227,11 +231,29 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void onHoldingShotsClick() {
-        streamTimelineView.hideHoldingShots();
-        streamTimelineView.showAllStreamShots();
+        streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, new Interactor.Callback<Timeline>() {
+            @Override public void onLoaded(Timeline timeline) {
+                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+                streamTimelineView.setShots(shotModels);
+                isEmpty = shotModels.isEmpty();
+                streamTimelineView.hideCheckingForShots();
+                if (isEmpty) {
+                    streamTimelineView.showEmpty();
+                    streamTimelineView.hideShots();
+                } else {
+                    streamTimelineView.hideEmpty();
+                    streamTimelineView.showShots();
+                }
+                streamTimelineView.hideHoldingShots();
+                streamTimelineView.showAllStreamShots();
+                //loadNewShots();
+            }
+        });
     }
 
     public void onAllStreamShotsClick() {
+        loadTimeline();
+        selectStream();
         streamTimelineView.showHoldingShots();
         streamTimelineView.hideAllStreamShots();
     }

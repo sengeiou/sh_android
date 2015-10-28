@@ -22,7 +22,7 @@ public class NullFavoritesListView implements FavoritesListView {
     }
 
     @Override
-    public void navigateToStreamTimeline(String idStream, String title) {
+    public void navigateToStreamTimeline(String idStream, String title, String authorId) {
         /* no-op */
     }
 

@@ -63,7 +63,9 @@ public class StreamTimelinePresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new StreamTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
+        presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
+          streamHoldingTimelineInteractorsWrapper,
+          selectStreamInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(streamTimelineView);
@@ -74,7 +76,7 @@ public class StreamTimelinePresenterTest {
 
     @Test
     public void shouldSelectStreamWhenInitialized() throws Exception {
-        presenter.initialize(streamTimelineView, SELECTED_STREAM_ID);
+        presenter.initialize(streamTimelineView, idStream, SELECTED_STREAM_ID);
 
         verify(selectStreamInteractor).selectStream(eq(SELECTED_STREAM_ID), anySelectCallback());
     }
@@ -268,7 +270,7 @@ public class StreamTimelinePresenterTest {
     }
 
     @Test public void shouldShowHoldingShotsButtonWhenInitialize() throws Exception {
-        presenter.initialize(streamTimelineView, SELECTED_STREAM_ID);
+        presenter.initialize(streamTimelineView, idStream, SELECTED_STREAM_ID);
 
         verify(streamTimelineView).showHoldingShots();
     }

@@ -77,6 +77,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
+    public static final String EXTRA_ID_USER = "userId";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
     //region Fields
@@ -152,8 +153,9 @@ public class StreamTimelineFragment extends BaseFragment
         initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
-        initializePresenters(idStream);
+        initializePresenters(idStream, streamAuthorIdUser);
         analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_timeline));
     }
 
@@ -237,8 +239,8 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.pause();
     }
 
-    private void initializePresenters(String idStream) {
-        streamTimelinePresenter.initialize(this, idStream);
+    private void initializePresenters(String idStream, String streamAuthorIdUser) {
+        streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);

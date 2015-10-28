@@ -12,7 +12,7 @@ public interface StreamsListView extends LoadDataView {
 
     void showContent();
 
-    void navigateToStreamTimeline(String idStream, String tag);
+    void navigateToStreamTimeline(String idStream, String tag, String authorId);
 
     void navigateToCreatedStreamDetail(String streamId);
 
