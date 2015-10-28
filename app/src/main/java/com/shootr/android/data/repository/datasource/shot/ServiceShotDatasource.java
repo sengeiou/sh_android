@@ -166,4 +166,8 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
+        throw new IllegalArgumentException("not implemented yet");
+    }
 }

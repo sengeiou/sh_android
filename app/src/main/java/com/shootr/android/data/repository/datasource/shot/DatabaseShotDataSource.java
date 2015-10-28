@@ -81,4 +81,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public void deleteShot(String idShot) {
         shotManager.deleteShot(idShot);
     }
+
+    @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
+        return shotManager.getUserShotsByParameters(timelineParameters);
+    }
 }

@@ -83,4 +83,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public void deleteShot(String idShot) {
         remoteShotDataSource.deleteShot(idShot);
     }
+
+    @Override public List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
+        throw new IllegalArgumentException("not implemented yet");
+    }
 }

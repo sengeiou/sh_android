@@ -6,6 +6,8 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     private String shotType;
 
+    private String userId;
+
     private StreamTimelineParameters() {
         /* private constructor, use builder */
     }
@@ -16,6 +18,10 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     public String getShotType() {
         return shotType;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public static Builder builder() {
@@ -43,6 +49,11 @@ public class StreamTimelineParameters extends TimelineParameters {
 
         public Builder forStream(String idStream) {
             parameters.streamId = idStream;
+            return this;
+        }
+
+        public Builder forUser(String idUser) {
+            parameters.userId = idUser;
             return this;
         }
 

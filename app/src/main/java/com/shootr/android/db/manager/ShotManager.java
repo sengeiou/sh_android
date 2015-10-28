@@ -164,4 +164,18 @@ public class ShotManager extends AbstractManager {
             writableDatabase.insertWithOnConflict(SHOT_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
+
+    public List<ShotEntity> getUserShotsByParameters(StreamTimelineParameters timelineParameters) {
+        String streamSelection = ShotTable.ID_STREAM + " = ?";
+        String typeSelection = ShotTable.TYPE + " = ?";
+        String userSelection = ShotTable.ID_USER + " = ?";
+
+        String[] whereArguments = new String[3];
+        whereArguments[0] = String.valueOf(timelineParameters.getStreamId());
+        whereArguments[1] = String.valueOf(timelineParameters.getShotType());
+        whereArguments[2] = String.valueOf(timelineParameters.getUserId());
+        String whereClause = streamSelection + " AND " + typeSelection + " AND " + userSelection;
+
+        return readShots(whereClause, whereArguments);
+    }
 }
