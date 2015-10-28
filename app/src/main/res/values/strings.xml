@@ -311,4 +311,6 @@
     <string name="error_message">Shootr encountered a problem and needs to close.</string>
     <string name="error_title">Ooops!</string>
     <string name="error_restart_button">Restart</string>
+    <string name="stream_timeline_add_favorite">Add to favorites</string>
+    <string name="stream_timeline_remove_favorite">Remove from favorites</string>
 </resources>

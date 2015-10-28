@@ -115,6 +115,7 @@ public class StreamTimelineFragment extends BaseFragment
     private View footerProgress;
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder favoriteMenuItem = new MenuItemValueHolder();
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -178,6 +179,8 @@ public class StreamTimelineFragment extends BaseFragment
         addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_add_favorite));
         addToFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
+        favoriteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+
         removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove_favorite));
         removeFromFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
@@ -202,6 +205,10 @@ public class StreamTimelineFragment extends BaseFragment
                 return true;
             case R.id.menu_remove_favorite:
                 favoriteStatusPresenter.removeFromFavorites();
+                return true;
+            case R.id.menu_stream_add_favorite:
+                return true;
+            case R.id.menu_stream_remove_favorite:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res/">
+  xmlns:app="http://schemas.android.com/apk/res/"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".StreamTimelineFragment">
 
     <item
       android:id="@+id/menu_add_favorite"
@@ -22,5 +24,18 @@
       android:icon="@drawable/ic_action_ic_one_people"
       android:title="@string/menu_info"
       app:showAsAction="always" />
+
+  <item
+    android:id="@+id/menu_stream_add_favorite"
+    android:orderInCategory="100"
+    android:title="@string/stream_timeline_add_favorite"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/menu_stream_remove_favorite"
+    android:orderInCategory="100"
+    android:title="@string/stream_timeline_remove_favorite"
+    android:visible="false"
+    app:showAsAction="never" />
 
 </menu>
