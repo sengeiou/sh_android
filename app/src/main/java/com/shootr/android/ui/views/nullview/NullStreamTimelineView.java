@@ -46,6 +46,22 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void hideHoldingShots() {
+        /* no-op */
+    }
+
+    @Override public void showAllStreamShots() {
+        /* no-op */
+    }
+
+    @Override public void showHoldingShots() {
+        /* no-op */
+    }
+
+    @Override public void hideAllStreamShots() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

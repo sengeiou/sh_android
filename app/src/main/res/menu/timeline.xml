@@ -6,14 +6,14 @@
   tools:context=".StreamTimelineFragment">
 
     <item
-      android:id="@+id/menu_add_favorite"
+      android:id="@+id/menu_show_holding_shots"
       android:icon="@drawable/ic_all_shots_stream"
       android:title="@string/menu_add_favorite"
       android:visible="false"
       app:showAsAction="always" />
 
     <item
-      android:id="@+id/menu_remove_favorite"
+      android:id="@+id/menu_show_all_shots"
       android:icon="@drawable/ic_holding_shots"
       android:title="@string/menu_remove_favorite"
       android:visible="false"
@@ -29,6 +29,7 @@
     android:id="@+id/menu_stream_add_favorite"
     android:orderInCategory="100"
     android:title="@string/stream_timeline_add_favorite"
+    android:visible="false"
     app:showAsAction="always" />
 
   <item
@@ -36,6 +37,6 @@
     android:orderInCategory="100"
     android:title="@string/stream_timeline_remove_favorite"
     android:visible="false"
-    app:showAsAction="never" />
+    app:showAsAction="always" />
 
 </menu>

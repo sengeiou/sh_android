@@ -65,6 +65,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void initialize(StreamTimelineView streamTimelineView, String streamId) {
         this.streamId = streamId;
         this.setView(streamTimelineView);
+        this.streamTimelineView.showHoldingShots();
         this.selectStream();
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
@@ -158,8 +159,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
         timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
-            @Override
-            public void onLoaded(Timeline timeline) {
+            @Override public void onLoaded(Timeline timeline) {
                 isLoadingOlderShots = false;
                 streamTimelineView.hideLoadingOldShots();
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -224,5 +224,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void onHoldingShotsClick() {
+        streamTimelineView.hideHoldingShots();
+        streamTimelineView.showAllStreamShots();
+    }
+
+    public void onAllStreamShotsClick() {
+        streamTimelineView.showHoldingShots();
+        streamTimelineView.hideAllStreamShots();
     }
 }

@@ -113,9 +113,10 @@ public class StreamTimelineFragment extends BaseFragment
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
+    private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder favoriteMenuItem = new MenuItemValueHolder();
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -176,13 +177,14 @@ public class StreamTimelineFragment extends BaseFragment
         watchersMenuItem = menu.findItem(R.id.menu_info);
         watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_add_favorite));
-        addToFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_holding_shots));
+        showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        favoriteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_all_shots));
+        showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove_favorite));
-        removeFromFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
 
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.watchers_badge_circle);
@@ -200,15 +202,17 @@ public class StreamTimelineFragment extends BaseFragment
             case R.id.menu_info:
                 watchNumberPresenter.onWatchNumberClick();
                 return true;
-            case R.id.menu_add_favorite:
-                favoriteStatusPresenter.addToFavorites();
+            case R.id.menu_show_holding_shots:
+                streamTimelinePresenter.onHoldingShotsClick();
                 return true;
-            case R.id.menu_remove_favorite:
-                favoriteStatusPresenter.removeFromFavorites();
+            case R.id.menu_show_all_shots:
+                streamTimelinePresenter.onAllStreamShotsClick();
                 return true;
             case R.id.menu_stream_add_favorite:
+                favoriteStatusPresenter.addToFavorites();
                 return true;
             case R.id.menu_stream_remove_favorite:
+                favoriteStatusPresenter.removeFromFavorites();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -495,6 +499,24 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showShotShared() {
         feedbackMessage.show(getView(), shotShared);
+    }
+
+    @Override public void hideHoldingShots() {
+        showHoldingShotsMenuItem.setVisible(false);
+    }
+
+    @Override public void showAllStreamShots() {
+        showAllShotsMenuItem.setVisible(true);
+        feedbackMessage.show(getView(), "Showing holding shots");
+    }
+
+    @Override public void showHoldingShots() {
+        showHoldingShotsMenuItem.setVisible(true);
+    }
+
+    @Override public void hideAllStreamShots() {
+        showAllShotsMenuItem.setVisible(false);
+        feedbackMessage.show(getView(), "Showing all shots");
     }
 
     @Override

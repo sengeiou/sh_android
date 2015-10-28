@@ -267,6 +267,36 @@ public class StreamTimelinePresenterTest {
         assertThat(annotationPresent).isTrue();
     }
 
+    @Test public void shouldShowHoldingShotsButtonWhenInitialize() throws Exception {
+        presenter.initialize(streamTimelineView, SELECTED_STREAM_ID);
+
+        verify(streamTimelineView).showHoldingShots();
+    }
+
+    @Test public void shouldHideHolingShotsButtonWhenItHasBeenClicked() throws Exception {
+        presenter.onHoldingShotsClick();
+
+        verify(streamTimelineView).hideHoldingShots();
+    }
+
+    @Test public void shouldShowAllShotsButtonWhenHoldingShotsButtonHasBeenClicked() throws Exception {
+        presenter.onHoldingShotsClick();
+
+        verify(streamTimelineView).showAllStreamShots();
+    }
+
+    @Test public void shouldHideAllShotsButtonWhenItHasBeenClicked() throws Exception {
+        presenter.onAllStreamShotsClick();
+
+        verify(streamTimelineView).hideAllStreamShots();
+    }
+
+    @Test public void shouldShowHoldingShotsButtonWhenAllShotsButtonHasBeenClicked() throws Exception {
+        presenter.onAllStreamShotsClick();
+
+        verify(streamTimelineView).showHoldingShots();
+    }
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
