@@ -40,6 +40,10 @@ public class ActivityApiEntityMapper {
         activityEntity.setModified(new Date(activityApiEntity.getModified()));
         activityEntity.setRevision(activityApiEntity.getRevision());
 
+        if (activityApiEntity.getStream() != null) {
+            activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());
+        }
+
         return activityEntity;
     }
 

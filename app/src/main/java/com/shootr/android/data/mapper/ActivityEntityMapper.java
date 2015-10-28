@@ -35,7 +35,6 @@ public class ActivityEntityMapper {
             eventInfo.setIdStream(activityEntity.getIdStream());
             eventInfo.setStreamTitle(activityEntity.getStreamTitle());
             eventInfo.setStreamShortTitle(activityEntity.getStreamShortTitle());
-            activity.setIdAuthorStream(eventInfo.getIdUser());
             activity.setStreamInfo(eventInfo);
         }
 
@@ -52,6 +51,8 @@ public class ActivityEntityMapper {
             checkNotNull(shot, "ActivityEntity has idShot but no ShotForMapping");
             activity.setShot(shot);
         }
+
+        activity.setIdAuthorStream(activityEntity.getIdStreamAuthor());
 
         return activity;
     }

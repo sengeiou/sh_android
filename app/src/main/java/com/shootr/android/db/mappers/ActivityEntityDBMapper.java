@@ -42,6 +42,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ActivityTable.COMMENT, activity.getComment());
         cv.put(DatabaseContract.ActivityTable.TYPE, activity.getType());
         cv.put(DatabaseContract.ActivityTable.ID_SHOT, activity.getIdShot());
+        cv.put(DatabaseContract.ActivityTable.ID_STREAM_AUTHOR, activity.getIdStreamAuthor());
         setSynchronizedtoContentValues(activity,cv);
         return cv;
     }
