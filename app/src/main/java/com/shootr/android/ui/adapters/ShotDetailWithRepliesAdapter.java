@@ -239,6 +239,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
         @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
         @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
@@ -285,6 +286,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (shotModel.hasVideo()) {
                 this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoTitle.setText(shotModel.getVideoTitle());
                 this.videoDuration.setText(shotModel.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -374,6 +376,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_text) public ClickableTextView text;
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
 
@@ -429,6 +432,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (shotModel.hasVideo()) {
                 this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoTitle.setText(shotModel.getVideoTitle());
                 this.videoDuration.setText(shotModel.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -480,6 +484,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_text) public ClickableTextView text;
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
@@ -528,6 +533,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (reply.hasVideo()) {
                 this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoTitle.setText(reply.getVideoTitle());
                 this.videoDuration.setText(reply.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
