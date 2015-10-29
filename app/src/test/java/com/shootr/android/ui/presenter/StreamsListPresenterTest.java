@@ -77,7 +77,7 @@ public class StreamsListPresenterTest {
     @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
         presenter.selectStream(selectedStreamModel());
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE, authorId);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE, STREAM_AUTHOR_ID);
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
@@ -218,6 +218,7 @@ public class StreamsListPresenterTest {
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setTitle(SELECTED_STREAM_TITLE);
         streamModel.setShortTitle(SELECTED_STREAM_TITLE);
+        streamModel.setAuthorId(STREAM_AUTHOR_ID);
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;

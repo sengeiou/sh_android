@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.presenter.interactorwrapper.StreamHoldingTimelineInteractorsWrapper;
 import com.shootr.android.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -46,6 +47,7 @@ public class StreamTimelinePresenterTest {
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
     private static final String SELECTED_STREAM_ID = "stream";
+    public static final String ID_STREAM = "ID_STREAM";
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -56,6 +58,7 @@ public class StreamTimelinePresenterTest {
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
+    @Mock StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -76,9 +79,11 @@ public class StreamTimelinePresenterTest {
 
     @Test
     public void shouldSelectStreamWhenInitialized() throws Exception {
-        presenter.initialize(streamTimelineView, idStream, SELECTED_STREAM_ID);
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
-        verify(selectStreamInteractor).selectStream(eq(SELECTED_STREAM_ID), anySelectCallback());
+        presenter.initialize(streamTimelineView, ID_STREAM, SELECTED_STREAM_ID);
+
+        verify(selectStreamInteractor).selectStream(eq(ID_STREAM), anySelectCallback());
     }
     //endregion
 
@@ -270,18 +275,22 @@ public class StreamTimelinePresenterTest {
     }
 
     @Test public void shouldShowHoldingShotsButtonWhenInitialize() throws Exception {
-        presenter.initialize(streamTimelineView, idStream, SELECTED_STREAM_ID);
+        presenter.initialize(streamTimelineView, ID_STREAM, SELECTED_STREAM_ID);
 
         verify(streamTimelineView).showHoldingShots();
     }
 
     @Test public void shouldHideHolingShotsButtonWhenItHasBeenClicked() throws Exception {
+        setupLoadHolderTimelineInteractorCallbacks(timelineWithShots());
+
         presenter.onHoldingShotsClick();
 
         verify(streamTimelineView).hideHoldingShots();
     }
 
     @Test public void shouldShowAllShotsButtonWhenHoldingShotsButtonHasBeenClicked() throws Exception {
+        setupLoadHolderTimelineInteractorCallbacks(timelineWithShots());
+
         presenter.onHoldingShotsClick();
 
         verify(streamTimelineView).showAllStreamShots();
@@ -373,6 +382,15 @@ public class StreamTimelinePresenterTest {
                 return null;
             }
         }).when(timelineInteractorWrapper).loadTimeline(anyString(), anyCallback());
+    }
+
+    private void setupLoadHolderTimelineInteractorCallbacks(final Timeline timeline) {
+        doAnswer(new Answer<Void>() {
+            @Override public Void answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[2]).onLoaded(timeline);
+                return null;
+            }
+        }).when(streamHoldingTimelineInteractorsWrapper).loadTimeline(anyString(), anyString(), anyCallback());
     }
 
     private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {

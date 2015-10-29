@@ -94,4 +94,20 @@ public class ShootrTimelineService {
         return remoteActivities;
     }
 
+    public Timeline refreshHoldingTimelineForStream(String idStream, String idUser) {
+        Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(idStream);
+
+        StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
+          .forStream(idStream) //
+          .forUser(idUser) //
+          .since(streamRefreshDateSince) //
+          .build();
+
+        List<Shot> newShots = remoteShotRepository.getUserShotsForStreamTimeline(streamTimelineParameters);
+        if (!newShots.isEmpty()) {
+            long lastShotDate = newShots.get(0).getPublishDate().getTime();
+            timelineSynchronizationRepository.setStreamTimelineRefreshDate(idStream, lastShotDate);
+        }
+        return buildSortedTimeline(newShots);
+    }
 }

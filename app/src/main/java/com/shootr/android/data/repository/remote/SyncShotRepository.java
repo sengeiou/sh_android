@@ -85,6 +85,7 @@ public class SyncShotRepository implements ShotRepository {
     }
 
     @Override public List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
+        //TODO REAL IMPLEMENTATION
         throw new IllegalArgumentException("not implemented yet");
     }
 }
