@@ -21,11 +21,6 @@ public class PreferenceModule {
         return new StringPreference(preferences, "session_token", null);
     }
 
-    @Provides @Singleton @LastVersionNotCompatible LongPreference provideLastVersionNotCompatible(
-      SharedPreferences preferences) {
-        return new LongPreference(preferences, "not_compatible_version", -1L);
-    }
-
     @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
