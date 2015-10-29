@@ -13,16 +13,24 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [0.4.1] - 2015-10-30
+## [0.5.0] - 2015-10-30
 
 ### Changed
 - Cuando se insertan listas en BDD se utilizan transactions siempre para agilizar la carga.
+- Ya no se guarda la ultima version incompatible en un longpreference.
+
+### Added
+- Custom Activity cuando se produce un crash.
+- Título en los videos.
 
 ### Fixed
 - Add Streams solo aparece en tus streams, no el el apartado streams de otro usuario.
 - ServerCommunicationException controlada en el interactor de Listing.
 - Eliminados los rastros del listing count en ProfileFragment.
-- ServerCommunicationException controlada en el interactor de Listinig.
+- ServerCommunicationException controlada en el interactor de Listing.
+- Watching number en StreamTimeline representa solo a los following en los streams.
+- Fixed NullPointer al clickar en un avatar sin imagen o sin que el profile haya cargado.
+- Fixed NullPointer al clickar en followers/following cuando no se ha cargado el perfil.
 
 ## [0.4.0] - 2015-10-23
 
