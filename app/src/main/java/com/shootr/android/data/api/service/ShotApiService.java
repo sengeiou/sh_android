@@ -58,4 +58,8 @@ public interface ShotApiService {
 
     @POST("/shot")
     ShotEntity postNewShot(@Body ShotEntity shotEntity) throws ApiException, IOException;
+
+    @GET("/shot/user/{idUser}/?includeLinks=false")
+    List<ShotApiEntity> getAllShotsFromUserInStream(@Path("idUser") String userId,
+      @Query("idStream") String idStream, @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 }

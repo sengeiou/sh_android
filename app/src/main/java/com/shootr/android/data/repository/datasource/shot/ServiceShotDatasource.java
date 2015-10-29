@@ -168,6 +168,12 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
-        throw new IllegalArgumentException("not implemented yet");
+        try {
+            List<ShotApiEntity> shots = shotApiService.getAllShotsFromUserInStream(timelineParameters.getUserId(),
+              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate());
+            return shotApiEntityMapper.transform(shots);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 }
