@@ -66,9 +66,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.streamTimelineView = streamTimelineView;
     }
 
+    protected void setIdAuthor(String idAuthor) {
+        this.idAuthor = idAuthor;
+    }
+
     public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor) {
         this.streamId = idStream;
-        this.idAuthor = idAuthor;
+        setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
         this.selectStream();
@@ -117,68 +121,137 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void refresh() {
         streamTimelineView.showLoading();
-        this.loadNewShots();
+        if (idAuthor != null) {
+            this.loadHolderNewShots();
+        } else {
+            this.loadNewShots();
+        }
     }
 
     public void showingLastShot(ShotModel lastShot) {
         if (!isLoadingOlderShots && mightHaveMoreShots) {
+            handleOlderShotsToLoad(lastShot);
+        }
+    }
+
+    private void handleOlderShotsToLoad(ShotModel lastShot) {
+        if (idAuthor != null) {
+            this.loadHolderOlderShots(lastShot.getBirth().getTime());
+        } else {
             this.loadOlderShots(lastShot.getBirth().getTime());
         }
     }
 
+    private void loadHolderNewShots() {
+        if (handleShotsRefresh()) return;
+        streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId,
+          idAuthor,
+          new Interactor.Callback<Timeline>() {
+              @Override public void onLoaded(Timeline timeline) {
+                  loadNewShotsInView(timeline);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showErrorLoadingNewShots();
+              }
+          });
+    }
+
     private void loadNewShots() {
+        if (handleShotsRefresh()) return;
+        timelineInteractorWrapper.refreshTimeline(streamId ,new Interactor.Callback<Timeline>() {
+            @Override
+            public void onLoaded(Timeline timeline) {
+                loadNewShotsInView(timeline);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                showErrorLoadingNewShots();
+            }
+        });
+    }
+
+    private void showErrorLoadingNewShots() {
+        streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+        streamTimelineView.hideLoading();
+        streamTimelineView.hideCheckingForShots();
+        isRefreshing = false;
+    }
+
+    private boolean handleShotsRefresh() {
         if (isRefreshing) {
-            return;
+            return true;
         }
         isRefreshing = true;
         if (isEmpty) {
             streamTimelineView.hideEmpty();
             streamTimelineView.showCheckingForShots();
         }
-        timelineInteractorWrapper.refreshTimeline(streamId ,new Interactor.Callback<Timeline>() {
-            @Override
-            public void onLoaded(Timeline timeline) {
-                boolean hasNewShots = !timeline.getShots().isEmpty();
-                if (hasNewShots) {
-                    loadTimeline();
-                }else if (isEmpty) {
-                    streamTimelineView.showEmpty();
-                }
-                streamTimelineView.hideLoading();
-                streamTimelineView.hideCheckingForShots();
-                isRefreshing = false;
+        return false;
+    }
+
+    private void loadNewShotsInView(Timeline timeline) {
+        boolean hasNewShots = !timeline.getShots().isEmpty();
+        if (hasNewShots) {
+            loadTimeline();
+        }else if (isEmpty) {
+            streamTimelineView.showEmpty();
+        }
+        streamTimelineView.hideLoading();
+        streamTimelineView.hideCheckingForShots();
+        isRefreshing = false;
+    }
+
+    private void loadHolderOlderShots(long lastShotInScreenDate) {
+        loadingOlderShots();
+        streamHoldingTimelineInteractorsWrapper.obtainOlderTimeline(lastShotInScreenDate,
+          idAuthor,
+          new Interactor.Callback<Timeline>() {
+              @Override public void onLoaded(Timeline timeline) {
+                  loadOlderShotsInView(timeline);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showErrorLoadingOlderShots();
+              }
+          });
+    }
+
+    private void loadOlderShots(long lastShotInScreenDate) {
+        loadingOlderShots();
+        timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
+            @Override public void onLoaded(Timeline timeline) {
+                loadOlderShotsInView(timeline);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-                streamTimelineView.hideLoading();
-                streamTimelineView.hideCheckingForShots();
-                isRefreshing = false;
+            @Override public void onError(ShootrException error) {
+                showErrorLoadingOlderShots();
             }
         });
     }
 
-    private void loadOlderShots(long lastShotInScreenDate) {
+    private void loadingOlderShots() {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
-        timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-                isLoadingOlderShots = false;
-                streamTimelineView.hideLoadingOldShots();
-                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                if (!shotModels.isEmpty()) {
-                    streamTimelineView.addOldShots(shotModels);
-                } else {
-                    mightHaveMoreShots = false;
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                streamTimelineView.hideLoadingOldShots();
-                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-            }
-        });
+    }
+
+    private void showErrorLoadingOlderShots() {
+        streamTimelineView.hideLoadingOldShots();
+        streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+    }
+
+    private void loadOlderShotsInView(Timeline timeline) {
+        isLoadingOlderShots = false;
+        streamTimelineView.hideLoadingOldShots();
+        List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+        if (!shotModels.isEmpty()) {
+            streamTimelineView.addOldShots(shotModels);
+        } else {
+            mightHaveMoreShots = false;
+        }
     }
 
     public void markNiceShot(String idShot) {

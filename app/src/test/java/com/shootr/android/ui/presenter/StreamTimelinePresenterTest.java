@@ -48,6 +48,7 @@ public class StreamTimelinePresenterTest {
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
     private static final String SELECTED_STREAM_ID = "stream";
     public static final String ID_STREAM = "ID_STREAM";
+    public static final String ID_AUTHOR = "idAuthor";
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -256,6 +257,33 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
 
         verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldObtainHolderOlderTimelineWhenShowingLastShot() throws Exception {
+        presenter.setIdAuthor(ID_AUTHOR);
+
+        presenter.showingLastShot(lastShotModel());
+
+        verify(streamHoldingTimelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
+        presenter.setIdAuthor(ID_AUTHOR);
+
+        presenter.showingLastShot(lastShotModel());
+        presenter.showingLastShot(lastShotModel());
+
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldObtainHolderOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {
+        setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
+        presenter.setIdAuthor(ID_AUTHOR);
+
+        presenter.showingLastShot(lastShotModel());
+        presenter.showingLastShot(lastShotModel());
+
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
     }
     //endregion
 

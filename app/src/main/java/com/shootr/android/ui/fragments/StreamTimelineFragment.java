@@ -179,10 +179,10 @@ public class StreamTimelineFragment extends BaseFragment
         watchersMenuItem = menu.findItem(R.id.menu_info);
         watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_holding_shots));
+        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
         showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_all_shots));
+        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
         showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
@@ -204,10 +204,10 @@ public class StreamTimelineFragment extends BaseFragment
             case R.id.menu_info:
                 watchNumberPresenter.onWatchNumberClick();
                 return true;
-            case R.id.menu_show_holding_shots:
+            case R.id.menu_showing_holding_shots:
                 streamTimelinePresenter.onHoldingShotsClick();
                 return true;
-            case R.id.menu_show_all_shots:
+            case R.id.menu_showing_all_shots:
                 streamTimelinePresenter.onAllStreamShotsClick();
                 return true;
             case R.id.menu_stream_add_favorite:
