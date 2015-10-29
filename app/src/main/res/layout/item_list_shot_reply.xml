@@ -91,6 +91,13 @@
         android:visibility="visible"
         tools:visibility="visible">
 
+        <TextView android:id="@+id/shot_video_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          android:textColor="@color/white"
+          tools:text="Titulo del video" />
+
         <ImageView android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
