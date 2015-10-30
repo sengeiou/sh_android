@@ -43,6 +43,7 @@ public class ShotViewHolder {
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_image)  ImageView image;
     @Bind(R.id.shot_video_frame) View videoFrame;
+    @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
@@ -170,6 +171,7 @@ public class ShotViewHolder {
     private void bindVideoInfo(final ShotModel shot) {
         if (shot.hasVideo()) {
             videoFrame.setVisibility(View.VISIBLE);
+            videoTitle.setText(shot.getVideoTitle());
             videoDuration.setText(shot.getVideoDuration());
             videoFrame.setOnClickListener(new View.OnClickListener() {
                 @Override

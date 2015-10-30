@@ -9,7 +9,6 @@ import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.mappers.StreamEntityDBMapper;
-import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -17,12 +16,10 @@ import javax.inject.Inject;
 public class StreamManager extends AbstractManager{
 
     private final StreamEntityDBMapper streamEntityMapper;
-    private final TimeUtils timeUtils;
 
-    @Inject public StreamManager(SQLiteOpenHelper openHelper, StreamEntityDBMapper streamEntityMapper, TimeUtils timeUtils){
+    @Inject public StreamManager(SQLiteOpenHelper openHelper, StreamEntityDBMapper streamEntityMapper){
         super(openHelper);
         this.streamEntityMapper = streamEntityMapper;
-        this.timeUtils = timeUtils;
     }
 
     public StreamEntity getStreamById(String streamId) {
@@ -70,13 +67,19 @@ public class StreamManager extends AbstractManager{
 
     public void saveStreams(List<StreamEntity> eventEntities) {
         SQLiteDatabase database = getWritableDatabase();
-        for (StreamEntity streamEntity : eventEntities) {
-            if (streamEntity.getDeleted() != null) {
-                deleteStream(streamEntity);
-            } else {
-                ContentValues contentValues = streamEntityMapper.toContentValues(streamEntity);
-                database.insertWithOnConflict(DatabaseContract.StreamTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        try {
+            database.beginTransaction();
+            for (StreamEntity streamEntity : eventEntities) {
+                if (streamEntity.getDeleted() != null) {
+                    deleteStream(streamEntity);
+                } else {
+                    ContentValues contentValues = streamEntityMapper.toContentValues(streamEntity);
+                    database.insertWithOnConflict(DatabaseContract.StreamTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
             }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
     }
 

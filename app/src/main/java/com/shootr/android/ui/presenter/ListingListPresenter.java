@@ -60,7 +60,16 @@ public class ListingListPresenter implements Presenter{
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
         this.isCurrentUser = isCurrentUser;
+        this.loadAddStreamVisibility();
         this.renderListing();
+    }
+
+    private void loadAddStreamVisibility() {
+        if (isCurrentUser) {
+            listingView.showAddStream();
+        } else {
+            listingView.hideAddStream();
+        }
     }
 
     private void renderListing() {
@@ -81,6 +90,10 @@ public class ListingListPresenter implements Presenter{
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<Listing>() {
             @Override public void onLoaded(Listing listing) {
                 handleStreamsInView(listing);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
             }
         }, profileIdUser);
     }

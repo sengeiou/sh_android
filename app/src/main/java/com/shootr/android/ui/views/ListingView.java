@@ -33,4 +33,8 @@ public interface ListingView extends LoadDataView {
     void askRemoveStreamConfirmation();
 
     void updateStreams();
+
+    void showAddStream();
+
+    void hideAddStream();
 }

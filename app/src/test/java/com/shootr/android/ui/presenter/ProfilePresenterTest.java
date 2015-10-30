@@ -37,7 +37,6 @@ import org.mockito.stubbing.Answer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -140,22 +139,6 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
         verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
-    }
-
-    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithIdUserAndUserHasStreams() {
-        setupUserById();
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView).showListingButtonWithCount(anyInt());
-    }
-
-    @Test public void shouldShowListingButtonWithCountWhenPresenterInitializedWithUsernameAndUserHasStreams() {
-        setupUserByUsername();
-
-        profilePresenter.initializeWithUsername(profileView, USERNAME);
-
-        verify(profileView).showListingButtonWithCount(anyInt());
     }
 
     @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
@@ -634,6 +617,32 @@ public class ProfilePresenterTest {
         verify(profileView).showLogoutButton();
     }
 
+    @Test public void shouldShowListing() throws Exception {
+        setupUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showListing();
+    }
+
+    @Test public void shouldShowAvatarPhotoIfNotCurrentUserAndHasPhoto() throws Exception {
+        setupUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView).openPhoto(anyString());
+    }
+
+    @Test public void shouldNotShowAvatarPhotoIfNotCurrentUserAndHasNotPhoto() throws Exception {
+        setupUserByIdWithoutPhoto();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.avatarClicked();
+
+        verify(profileView, never()).openPhoto(anyString());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -661,6 +670,16 @@ public class ProfilePresenterTest {
     }
 
     private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        user.setUsername(USERNAME);
+        user.setCreatedStreamsCount(1L);
+        user.setFavoritedStreamsCount(1L);
+        user.setPhoto("photo");
+        return user;
+    }
+
+    private User userWithoutPhoto() {
         User user = new User();
         user.setIdUser(ID_USER);
         user.setUsername(USERNAME);
@@ -700,6 +719,16 @@ public class ProfilePresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(user());
+                return null;
+            }
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupUserByIdWithoutPhoto() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(userWithoutPhoto());
                 return null;
             }
         }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());

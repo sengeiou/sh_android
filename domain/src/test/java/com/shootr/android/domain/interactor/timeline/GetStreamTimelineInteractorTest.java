@@ -50,7 +50,6 @@ public class GetStreamTimelineInteractorTest {
     @Mock StreamRepository streamRepository;
     @Mock SessionRepository sessionRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-    @Mock Interactor.ErrorCallback errorCallback;
 
     private GetStreamTimelineInteractor interactor;
 
@@ -72,7 +71,7 @@ public class GetStreamTimelineInteractorTest {
         setupWatchingStream();
         when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
-        interactor.loadStreamTimeline(STREAM_ID, spyCallback, errorCallback);
+        interactor.loadStreamTimeline(STREAM_ID, spyCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());

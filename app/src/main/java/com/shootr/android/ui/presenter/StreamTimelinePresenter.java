@@ -107,10 +107,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
                 loadNewShots();
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-            }
         });
     }
 

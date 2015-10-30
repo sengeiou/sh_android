@@ -23,8 +23,15 @@ public class SuggestedPeopleManager extends AbstractManager {
     }
 
     public void saveSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople) {
-        for (SuggestedPeopleEntity suggestedPeopleEntity : suggestedPeople) {
-            this.saveSuggestedPeopple(suggestedPeopleEntity);
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (SuggestedPeopleEntity suggestedPeopleEntity : suggestedPeople) {
+                this.saveSuggestedPeopple(suggestedPeopleEntity);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
     }
 

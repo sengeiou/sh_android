@@ -129,7 +129,7 @@ public class ProfilePresenter implements Presenter {
         setupMenuItemsVisibility();
         this.setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
-        loadProfileUserListing();
+        profileView.showListing();
         setRelationshipButtonStatus(user);
         if (isCurrentUser && user.getPhoto() == null) {
             profileView.showAddPhoto();
@@ -186,19 +186,6 @@ public class ProfilePresenter implements Presenter {
             profileView.showLogoutButton();
             profileView.showSupportButton();
             profileView.showChangePasswordButton();
-        }
-    }
-
-    private void loadProfileUserListing() {
-        streamsCount = userModel.getCreatedStreamsCount() + userModel.getFavoritedStreamsCount();
-        showUserListingCount();
-    }
-
-    private void showUserListingCount() {
-        if (streamsCount > 0L) {
-            profileView.showListingButtonWithCount(streamsCount.intValue());
-        } else {
-            profileView.showListingWithoutCount();
         }
     }
 
@@ -277,9 +264,9 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void avatarClicked() {
-        if (!isCurrentUser) {
+        if (userModel != null && !isCurrentUser && userModel.getPhoto()  != null) {
             profileView.openPhoto(userModel.getPhoto());
-        } else {
+        } else if (userModel != null && isCurrentUser) {
             boolean shouldShowRemovePhoto = userModel.getPhoto() != null;
             profileView.openEditPhotoMenu(shouldShowRemovePhoto);
         }
@@ -296,11 +283,15 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void followersButtonClicked() {
-        profileView.goToFollowersList(userModel.getIdUser());
+        if (userModel != null) {
+            profileView.goToFollowersList(userModel.getIdUser());
+        }
     }
 
     public void followingButtonClicked() {
-        profileView.goToFollowingList(userModel.getIdUser());
+        if (userModel != null) {
+            profileView.goToFollowingList(userModel.getIdUser());
+        }
     }
 
     public void allShotsClicked() {

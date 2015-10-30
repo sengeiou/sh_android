@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -21,7 +20,6 @@ public class GetStreamTimelineInteractor implements Interactor {
     private final ShotRepository localShotRepository;
     private String idStream;
     private Callback callback;
-    private ErrorCallback errorCallback;
 
     @Inject public GetStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -32,10 +30,9 @@ public class GetStreamTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadStreamTimeline(String idStream, Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadStreamTimeline(String idStream, Callback<Timeline> callback) {
         this.idStream = idStream;
         this.callback = callback;
-        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -80,14 +77,6 @@ public class GetStreamTimelineInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
             }
         });
     }

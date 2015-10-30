@@ -55,7 +55,7 @@ public class GetUserListingStreamsInteractorTest {
           localStreamSearchRepository,
           remoteStreamSearchRepository,
           localStreamRepository,
-          remoteStreamRepository, localFavoriteRepository, remoteFavoriteRepository, sessionRepository);
+          remoteStreamRepository, localFavoriteRepository);
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 
@@ -63,7 +63,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getHoldingStreams(), listingStreams());
@@ -75,7 +75,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getFavoritedStreams(), favoriteStreamResults());
@@ -85,7 +85,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.includesHolding(), true);
@@ -97,14 +97,14 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.includesFavorited(), true);
     }
 
     @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHoldingStreamsAreEmptyList() throws Exception {
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.includesHolding(), true);
@@ -114,40 +114,40 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.includesFavorited(), true);
     }
 
     @Test public void shouldLoadUserListingFromLocal() throws Exception {
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
         verify(localStreamSearchRepository).getStreamsListing(anyString());
     }
 
     @Test public void shouldLoadUserListingFromRemote() throws Exception {
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
         verify(remoteStreamSearchRepository).getStreamsListing(anyString());
     }
 
     @Test public void shouldLoadFavoritesFromLocal() throws Exception {
         when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
         verify(localStreamRepository).getStreamsByIds(anyList());
     }
 
     @Test public void shouldLoadFavoritesFromRemote() throws Exception {
         when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
         verify(remoteStreamRepository).getStreamsByIds(anyList());
     }
 
     @Test public void shouldReturnListingWithoutHoldingIfUserHaveNoHoldingStreams() throws Exception {
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getHoldingStreams(), Collections.emptyList());
@@ -157,7 +157,7 @@ public class GetUserListingStreamsInteractorTest {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 
-        interactor.loadUserListingStreams(spyCallback, ID_USER);
+        interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.getFavoritedStreams(), Collections.emptyList());
