@@ -31,6 +31,7 @@ Etiquetas para el changelog:
 - Watching number en StreamTimeline representa solo a los following en los streams.
 - Fixed NullPointer al clickar en un avatar sin imagen o sin que el profile haya cargado.
 - Fixed NullPointer al clickar en followers/following cuando no se ha cargado el perfil.
+- Se permiten titulos de streams con emojis unicamente.
 
 ## [0.4.0] - 2015-10-23
 
