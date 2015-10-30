@@ -74,7 +74,6 @@ public abstract class BaseActivity extends ActionBarActivity {
         bus.register(serverDownReceiver);
         bus.register(unauthorizedReceiver);
         bus.register(preconditionFailedReceiver);
-        versionUpdater.checkVersionCompatible();
     }
 
     @Override protected void onPause() {
