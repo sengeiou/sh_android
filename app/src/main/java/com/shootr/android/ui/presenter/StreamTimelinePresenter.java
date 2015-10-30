@@ -45,6 +45,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean hasBeenPaused = false;
     private boolean isEmpty = true;
     private String idAuthor;
+    private boolean showingHoldingShots;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -121,7 +122,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void refresh() {
         streamTimelineView.showLoading();
-        if (idAuthor != null) {
+        if (showingHoldingShots) {
             this.loadHolderNewShots();
         } else {
             this.loadNewShots();
@@ -135,7 +136,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void handleOlderShotsToLoad(ShotModel lastShot) {
-        if (idAuthor != null) {
+        if (showingHoldingShots) {
             this.loadHolderOlderShots(lastShot.getBirth().getTime());
         } else {
             this.loadOlderShots(lastShot.getBirth().getTime());
@@ -304,6 +305,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void onHoldingShotsClick() {
+        showingHolderShots(true);
         streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -319,15 +321,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
                 streamTimelineView.hideHoldingShots();
                 streamTimelineView.showAllStreamShots();
-                //loadNewShots();
             }
         });
     }
 
     public void onAllStreamShotsClick() {
+        showingHolderShots(false);
         loadTimeline();
         selectStream();
         streamTimelineView.showHoldingShots();
         streamTimelineView.hideAllStreamShots();
+    }
+
+    protected void showingHolderShots(boolean showingHoldingShots) {
+        this.showingHoldingShots = showingHoldingShots;
     }
 }

@@ -509,7 +509,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showAllStreamShots() {
         showAllShotsMenuItem.setVisible(true);
-        feedbackMessage.show(getView(), "Showing holding shots");
+        feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
     }
 
     @Override public void showHoldingShots() {
@@ -518,7 +518,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideAllStreamShots() {
         showAllShotsMenuItem.setVisible(false);
-        feedbackMessage.show(getView(), "Showing all shots");
     }
 
     @Override

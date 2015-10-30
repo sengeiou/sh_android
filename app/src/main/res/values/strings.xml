@@ -313,4 +313,5 @@
     <string name="error_restart_button">Restart</string>
     <string name="stream_timeline_add_favorite">Add to favorites</string>
     <string name="stream_timeline_remove_favorite">Remove from favorites</string>
+    <string name="showing_shots_by_holder">Showing shots by holder</string>
 </resources>

@@ -261,6 +261,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldObtainHolderOlderTimelineWhenShowingLastShot() throws Exception {
         presenter.setIdAuthor(ID_AUTHOR);
+        presenter.showingHolderShots(true);
 
         presenter.showingLastShot(lastShotModel());
 
@@ -269,6 +270,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
         presenter.setIdAuthor(ID_AUTHOR);
+        presenter.showingHolderShots(true);
 
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
@@ -279,6 +281,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldObtainHolderOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {
         setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
         presenter.setIdAuthor(ID_AUTHOR);
+        presenter.showingHolderShots(true);
 
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
