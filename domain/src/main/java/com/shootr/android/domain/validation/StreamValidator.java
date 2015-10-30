@@ -49,7 +49,7 @@ public class StreamValidator {
 
     private void validateTitleTooShort(Stream stream) {
         String title = stream.getTitle();
-        if (title == null || alphanumericLength(title) < TITLE_MINIMUN_LENGTH) {
+        if (title == null || title.length() < TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, FIELD_TITLE));
         }
@@ -78,7 +78,7 @@ public class StreamValidator {
 
     private void validateShortTitleTooShort(Stream stream) {
         String shortTitle = stream.getShortTitle();
-        if (shortTitle == null || alphanumericLength(shortTitle) < SHORT_TITLE_MINIMUN_LENGTH) {
+        if (shortTitle == null || shortTitle.length() < SHORT_TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_SHORT, FIELD_SHORT_TITLE));
         }
