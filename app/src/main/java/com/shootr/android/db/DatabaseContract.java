@@ -108,6 +108,21 @@ public class DatabaseContract {
         };
     }
 
+    public static final class BlockTable implements SyncColumns {
+
+        private BlockTable() {
+            /* no instances */
+        }
+
+        public static final String TABLE = "Block";
+        public static final String ID_USER = "idUser";
+        public static final String ID_BLOCKED_USER = "idBlockedUser";
+
+        public static final String[] PROJECTION = {
+          ID_USER, ID_BLOCKED_USER, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        };
+    }
+
     public static final class DeviceTable {
 
         private DeviceTable() {
