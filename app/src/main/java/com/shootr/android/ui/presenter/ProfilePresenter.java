@@ -46,7 +46,6 @@ public class ProfilePresenter implements Presenter {
     private ProfileView profileView;
     private String profileIdUser;
     private boolean isCurrentUser;
-    private Long streamsCount;
     private String username;
     private UserModel userModel;
     private boolean hasBeenPaused = false;
