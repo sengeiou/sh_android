@@ -39,14 +39,15 @@ public class GetBlockedIdUsersInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        loadLocalBlockedIdUsers();
-        loadRemoteBlockedIdUsers();
+        tryLoadingLocalUsersAndThenRemote();
     }
 
-    private void loadLocalBlockedIdUsers() {
+    private void tryLoadingLocalUsersAndThenRemote() {
         List<String> blockedIdUsers = localFollowRepository.getBlockedIdUsers();
-        if (blockedIdUsers != null) {
-            notifyResult(blockedIdUsers);
+        if (blockedIdUsers == null) {
+            loadRemoteBlockedIdUsers();
+        } else {
+            loadRemoteBlockedIdUsers();
         }
     }
 

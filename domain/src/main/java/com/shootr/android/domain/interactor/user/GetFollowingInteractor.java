@@ -37,14 +37,15 @@ public class GetFollowingInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalPeople();
-        obtainRemotePeople();
+        tryObtainingLocalPeople();
     }
 
-    private void obtainLocalPeople() {
+    private void tryObtainingLocalPeople() {
         List<User> userList = localUserRepository.getPeople();
         if (!userList.isEmpty()) {
             notifyResult(userList);
+        } else {
+            obtainRemotePeople();
         }
     }
 
