@@ -201,7 +201,7 @@ public class FindParticipantsTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(followInteractor).follow(anyString(), any(Interactor.CompletedCallback.class));
+        }).when(followInteractor).follow(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private List<User> participants() {

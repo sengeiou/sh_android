@@ -8,6 +8,7 @@ import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.remote.cache.UserCache;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
+import com.shootr.android.domain.exception.FollowingBlockedUserException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
@@ -39,9 +40,8 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     }
 
     @Override
-    public void follow(String idUser) {
+    public void follow(String idUser) throws FollowingBlockedUserException {
         FollowEntity followEntity = createFollow(idUser);
-
         try {
             remoteFollowDataSource.putFollow(followEntity);
             followEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
@@ -61,10 +61,18 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
             localFollowDataSource.removeFollow(idUser);
             userCache.invalidatePeople();
         } catch (ServerCommunicationException e) {
+            deleteFollow(idUser);
+        }
+    }
+
+    private void deleteFollow(String idUser) {
+        try {
             FollowEntity deletedFollow = createFollow(idUser);
             deletedFollow.setSynchronizedStatus(Synchronized.SYNC_DELETED);
             localFollowDataSource.putFollow(deletedFollow);
             syncTrigger.notifyNeedsSync(this);
+        } catch (FollowingBlockedUserException error) {
+            error.printStackTrace();
         }
     }
 
@@ -95,11 +103,19 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
                 remoteFollowDataSource.removeFollow(entity.getFollowedUser());
                 localFollowDataSource.removeFollow(entity.getFollowedUser());
             } else {
-                remoteFollowDataSource.putFollow(entity);
-                entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-                localFollowDataSource.putFollow(entity);
+                syncEntities(entity);
             }
             userCache.invalidatePeople();
+        }
+    }
+
+    private void syncEntities(FollowEntity entity) {
+        try {
+            remoteFollowDataSource.putFollow(entity);
+            entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+            localFollowDataSource.putFollow(entity);
+        } catch (FollowingBlockedUserException error) {
+            error.printStackTrace();
         }
     }
 

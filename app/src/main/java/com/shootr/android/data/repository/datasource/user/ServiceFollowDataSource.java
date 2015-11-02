@@ -1,9 +1,11 @@
 package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.exception.FollowingBlockedUserException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.io.IOException;
@@ -29,15 +31,21 @@ public class ServiceFollowDataSource implements FollowDataSource {
     }
 
     @Override
-    public FollowEntity putFollow(FollowEntity followEntity) {
+    public FollowEntity putFollow(FollowEntity followEntity) throws FollowingBlockedUserException {
         checkArgument(followEntity.getIdUser().equals(sessionRepository.getCurrentUserId()),
           "Only follows from the current user are allowed in service");
 
         try {
             userApiService.follow(followEntity.getFollowedUser());
             return followEntity;
-        } catch (IOException | ApiException e) {
-            throw new ServerCommunicationException(e);
+        } catch (ApiException apiException) {
+            if (ErrorInfo.FollowingBlockedUserException == apiException.getErrorInfo()) {
+                throw new FollowingBlockedUserException(apiException);
+            } else {
+                throw new ServerCommunicationException(apiException);
+            }
+        } catch (IOException networkError) {
+            throw new ServerCommunicationException(networkError);
         }
     }
 
@@ -53,8 +61,8 @@ public class ServiceFollowDataSource implements FollowDataSource {
     @Override public void block(BlockEntity block) {
         try {
             userApiService.block(block.getIdBlockedUser());
-        } catch (IOException | ApiException e) {
-            throw new ServerCommunicationException(e);
+        } catch (IOException | ApiException error) {
+            throw new ServerCommunicationException(error);
         }
     }
 

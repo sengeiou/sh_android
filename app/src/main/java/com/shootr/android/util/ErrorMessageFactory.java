@@ -12,6 +12,7 @@ import com.shootr.android.domain.exception.UserNotFoundException;
 import com.shootr.android.domain.service.ChangePasswordInvalidException;
 import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
+import com.shootr.android.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.android.domain.service.user.LoginException;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,6 +118,8 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_login_credentials_invalid);
         }else if(error instanceof ChangePasswordInvalidException) {
             return context.getString(R.string.error_message_invalid_change_password);
+        } else if(error instanceof CannotFollowBlockedUserException) {
+            return context.getString(R.string.error_following_user_blocked);
         } else {
             return getUnknownErrorMessage();
         }

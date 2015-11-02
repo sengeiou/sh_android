@@ -247,6 +247,10 @@ public class ProfilePresenter implements Presenter {
             @Override public void onCompleted() {
                 profileView.setFollowing(true);
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
         });
     }
 

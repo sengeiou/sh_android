@@ -22,6 +22,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
@@ -354,9 +355,12 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     public void followUser(final UserModel user){
         followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 onUserFollowUpdated(user.getIdUser(), true);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                feedbackMessage.show(getView(), R.string.error_following_user_blocked);
             }
         });
     }

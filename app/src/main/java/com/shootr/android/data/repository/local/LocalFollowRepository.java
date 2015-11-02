@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
+import com.shootr.android.domain.exception.FollowingBlockedUserException;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -25,7 +26,11 @@ public class LocalFollowRepository implements FollowRepository {
     @Override
     public void follow(String idUser) {
         FollowEntity followEntity = createFollow(idUser);
-        followDataSource.putFollow(followEntity);
+        try {
+            followDataSource.putFollow(followEntity);
+        } catch (FollowingBlockedUserException e) {
+            throw new IllegalArgumentException("This exception should not happen");
+        }
     }
 
     @Override
