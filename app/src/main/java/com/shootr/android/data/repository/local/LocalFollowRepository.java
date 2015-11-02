@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.local;
 
 import android.support.annotation.NonNull;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.domain.repository.FollowRepository;
@@ -30,6 +31,15 @@ public class LocalFollowRepository implements FollowRepository {
         followDataSource.removeFollow(idUser);
     }
 
+    @Override public void block(String idUser) {
+        BlockEntity blockEntity = createBlock(idUser);
+        followDataSource.block(blockEntity);
+    }
+
+    @Override public void unblock(String idUser) {
+        followDataSource.removeBlock(idUser);
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
@@ -39,5 +49,16 @@ public class LocalFollowRepository implements FollowRepository {
         followEntity.setBirth(now);
         followEntity.setModified(now);
         return followEntity;
+    }
+
+    @NonNull
+    protected BlockEntity createBlock(String idUser) {
+        BlockEntity blockEntity = new BlockEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBlockedUser(idUser);
+        Date now = new Date();
+        blockEntity.setBirth(now);
+        blockEntity.setModified(now);
+        return blockEntity;
     }
 }

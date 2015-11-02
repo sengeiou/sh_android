@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -44,6 +45,22 @@ public class ServiceFollowDataSource implements FollowDataSource {
     public void removeFollow(String idUser) {
         try {
             userApiService.unfollow(idUser);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void block(BlockEntity block) {
+        try {
+            userApiService.block(block.getIdBlockedUser());
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void removeBlock(String idUser) {
+        try {
+            userApiService.unblock(idUser);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

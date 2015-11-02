@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.DatabaseContract.BlockTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
+import com.shootr.android.db.mappers.BlockEntityDBMapper;
 import com.shootr.android.db.mappers.FollowEntityDBMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +20,19 @@ public class FollowManager extends AbstractManager{
 
 
     FollowEntityDBMapper followMapper;
+    BlockEntityDBMapper blockMapper;
     private static final String FOLLOW_TABLE = FollowTable.TABLE;
+    private static final String BLOCK_TABLE = BlockTable.TABLE;
     private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
+    private static final String ID_BLOCKED_USER = BlockTable.ID_BLOCKED_USER;
     private static final String ID_USER = FollowTable.ID_USER;
 
 
     @Inject
-    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper){
+    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockMapper){
         super(openHelper);
         this.followMapper = followMapper;
+        this.blockMapper = blockMapper;
     }
 
     /** Insert a Follow **/
@@ -129,5 +136,21 @@ public class FollowManager extends AbstractManager{
         }
         c.close();
         return followsToUpdate;
+    }
+
+    public void saveBlock(BlockEntity block) {
+        if(block != null){
+            ContentValues contentValues = blockMapper.toContentValues(block);
+            getWritableDatabase().insertWithOnConflict(BLOCK_TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
+        }
+    }
+
+    public long deleteBlock(String currentUserId, String idBlockedUser) {
+        String whereClause = ID_BLOCKED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{idBlockedUser, currentUserId};
+        return getWritableDatabase().delete(BLOCK_TABLE, whereClause, whereArgs);
     }
 }

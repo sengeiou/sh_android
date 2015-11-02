@@ -58,4 +58,10 @@ public interface UserApiService {
 
     @DELETE("/follow/{idUser}")
     Response unfollow(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @POST("/block/{idUser}")
+    Response block(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @DELETE("/block/{idUser}")
+    Response unblock(@Path("idUser") String idUser) throws IOException, ApiException;
 }

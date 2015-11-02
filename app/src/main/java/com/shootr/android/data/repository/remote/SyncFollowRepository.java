@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.remote;
 
 import android.support.annotation.NonNull;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
@@ -66,6 +67,15 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         }
     }
 
+    @Override public void block(String idUser) {
+        BlockEntity blockEntity = createBlock(idUser);
+        remoteFollowDataSource.block(blockEntity);
+    }
+
+    @Override public void unblock(String idUser) {
+        remoteFollowDataSource.removeBlock(idUser);
+    }
+
     @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
@@ -91,5 +101,16 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         followEntity.setBirth(now);
         followEntity.setModified(now);
         return followEntity;
+    }
+
+    @NonNull
+    protected BlockEntity createBlock(String idUser) {
+        BlockEntity blockEntity = new BlockEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBlockedUser(idUser);
+        Date now = new Date();
+        blockEntity.setBirth(now);
+        blockEntity.setModified(now);
+        return blockEntity;
     }
 }
