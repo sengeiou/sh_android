@@ -15,4 +15,14 @@ public interface ReportShotView {
     void notifyDeletedShot(ShotModel shotModel);
 
     void showError(String errorMessage);
+
+    void showContextMenuWithUnblock(ShotModel shotModel);
+
+    void showBlockUserAlert();
+
+    void showUserBlocked();
+
+    void showUserUnblocked();
+
+    void showBlockUserConfirmation();
 }

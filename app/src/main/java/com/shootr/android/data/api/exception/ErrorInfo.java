@@ -42,6 +42,8 @@ public enum ErrorInfo {
     PasswordMatchUserNameException(5006, "Password match userName", 400),
     StreamHasWatchersException(5007, "Stream has watchers you cant remove it" , 400),
 
+    FollowingBlockedUserException(5016, "Cannot follow users you blocked" , 400),
+
     ForbiddenRequestException(6001, "Forbidden request", 403);
 
     private int code;

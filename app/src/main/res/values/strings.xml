@@ -311,4 +311,13 @@
     <string name="error_message">Shootr encountered a problem and needs to close.</string>
     <string name="error_title">Ooops!</string>
     <string name="error_restart_button">Restart</string>
+    <string name="report_context_menu_unblock">Unblock User</string>
+    <string name="report_context_menu_block">Block User</string>
+    <string name="block_user_error">To block this user you need to unfollow first.</string>
+    <string name="user_blocked">User Blocked.</string>
+    <string name="user_unblocked">User Unblocked.</string>
+    <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
+    <string name="block_user_dialog_message">Block User?</string>
+    <string name="block_user_dialog_block">Block</string>
+    <string name="block_user_dialog_cancel">Cancel</string>
 </resources>
