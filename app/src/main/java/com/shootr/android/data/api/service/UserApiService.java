@@ -2,6 +2,7 @@ package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.entity.UserApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
@@ -64,4 +65,7 @@ public interface UserApiService {
 
     @DELETE("/block/{idUser}")
     Response unblock(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @GET("/block/")
+    List<BlockEntity> getBlockedIdUsers() throws IOException, ApiException;
 }

@@ -1,5 +1,7 @@
 package com.shootr.android.domain.repository;
 
+import java.util.List;
+
 public interface FollowRepository {
 
     void follow(String idUser);
@@ -9,4 +11,6 @@ public interface FollowRepository {
     void block(String idUser);
 
     void unblock(String idUser);
+
+    List<String> getBlockedIdUsers();
 }

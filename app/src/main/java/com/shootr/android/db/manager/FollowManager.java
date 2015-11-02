@@ -67,8 +67,6 @@ public class FollowManager extends AbstractManager{
         } finally {
             database.endTransaction();
         }
-
-
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
@@ -152,5 +150,32 @@ public class FollowManager extends AbstractManager{
         String whereClause = ID_BLOCKED_USER + "=? AND " + ID_USER + "=?";
         String[] whereArgs = new String[]{idBlockedUser, currentUserId};
         return getWritableDatabase().delete(BLOCK_TABLE, whereClause, whereArgs);
+    }
+
+    public void saveBlockedsFromServer(List<BlockEntity> blockeds) {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (BlockEntity block : blockeds) {
+                ContentValues contentValues = blockMapper.toContentValues(block);
+                database.insertWithOnConflict(BLOCK_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
+
+    public List<BlockEntity> getBlockeds() {
+        List<BlockEntity> blockeds = new ArrayList<>();
+        Cursor c = getReadableDatabase().query(BLOCK_TABLE, BlockTable.PROJECTION,null,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                blockeds.add(blockMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return blockeds;
     }
 }

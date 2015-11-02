@@ -13,6 +13,7 @@ import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -76,6 +77,16 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         remoteFollowDataSource.removeBlock(idUser);
     }
 
+    @Override public List<String> getBlockedIdUsers() {
+        List<BlockEntity> blockeds = remoteFollowDataSource.getBlockeds();
+        localFollowDataSource.putBlockeds(blockeds);
+        List<String> blockedIds = new ArrayList<>(blockeds.size());
+        for (BlockEntity blocked : blockeds) {
+            blockedIds.add(blocked.getIdBlockedUser());
+        }
+        return blockedIds;
+    }
+
     @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
@@ -108,9 +119,6 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
-        Date now = new Date();
-        blockEntity.setBirth(now);
-        blockEntity.setModified(now);
         return blockEntity;
     }
 }

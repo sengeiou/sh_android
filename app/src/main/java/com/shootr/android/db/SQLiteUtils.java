@@ -107,11 +107,6 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS " + BlockTable.TABLE + " ("
       + BlockTable.ID_USER + " TEXT NOT NULL,"
       + BlockTable.ID_BLOCKED_USER + " TEXT NOT NULL,"
-      + BlockTable.BIRTH + " DATETIME NOT NULL,"
-      + BlockTable.MODIFIED + " DATETIME NOT NULL,"
-      + BlockTable.DELETED + " DATETIME NULL,"
-      + BlockTable.REVISION + " INT NOT NULL,"
-      + BlockTable.SYNCHRONIZED + " CHAR(1) NULL,"
       + " PRIMARY KEY(" + BlockTable.ID_USER + "," + BlockTable.ID_BLOCKED_USER + "))";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("

@@ -41,6 +41,14 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.deleteBlock(sessionRepository.getCurrentUserId(), idUser);
     }
 
+    @Override public List<BlockEntity> getBlockeds() {
+        return followManager.getBlockeds();
+    }
+
+    @Override public void putBlockeds(List<BlockEntity> blockeds) {
+        followManager.saveBlockedsFromServer(blockeds);
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();

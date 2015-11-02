@@ -8,53 +8,60 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
+import java.util.List;
 import javax.inject.Inject;
 
-import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
-
-public class UnblockUserInteractor implements Interactor{
+public class GetBlockedIdUsersInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final FollowRepository localFollowRepository;
     private final FollowRepository remoteFollowRepository;
+    private final SessionRepository sessionRepository;
 
-    private String idUser;
-    private CompletedCallback callback;
+    private Callback<List<String>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public UnblockUserInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository,
-      @Remote FollowRepository remoteFollowRepository) {
+    @Inject public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
         this.remoteFollowRepository = remoteFollowRepository;
+        this.sessionRepository = sessionRepository;
     }
 
-    public void unblock(String idUser, CompletedCallback callback, ErrorCallback errorCallback) {
-        this.idUser = checkNotNull(idUser);
+    public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback){
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
+        loadLocalBlockedIdUsers();
+        loadRemoteBlockedIdUsers();
+    }
+
+    private void loadLocalBlockedIdUsers() {
+        List<String> blockedIdUsers = localFollowRepository.getBlockedIdUsers();
+        if (blockedIdUsers != null) {
+            notifyResult(blockedIdUsers);
+        }
+    }
+
+    private void loadRemoteBlockedIdUsers() {
         try {
-            remoteFollowRepository.unblock(idUser);
-            localFollowRepository.unblock(idUser);
-            notifyCompleted();
+            notifyResult(remoteFollowRepository.getBlockedIdUsers());
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
-    private void notifyCompleted() {
+    private void notifyResult(final List<String> user) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onCompleted();
+                callback.onLoaded(user);
             }
         });
     }
@@ -66,5 +73,4 @@ public class UnblockUserInteractor implements Interactor{
             }
         });
     }
-
 }

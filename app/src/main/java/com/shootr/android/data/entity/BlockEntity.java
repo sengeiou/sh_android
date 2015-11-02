@@ -1,6 +1,6 @@
 package com.shootr.android.data.entity;
 
-public class BlockEntity extends Synchronized {
+public class BlockEntity {
 
     private String idUser;
     private String idBlockedUser;

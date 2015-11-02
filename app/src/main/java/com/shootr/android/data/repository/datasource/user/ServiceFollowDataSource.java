@@ -66,6 +66,18 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
+    @Override public List<BlockEntity> getBlockeds() {
+        try {
+            return userApiService.getBlockedIdUsers();
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void putBlockeds(List<BlockEntity> blockeds) {
+        throw new IllegalStateException("Method not valid for service");
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not valid for service");

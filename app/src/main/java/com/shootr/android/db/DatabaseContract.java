@@ -119,8 +119,7 @@ public class DatabaseContract {
         public static final String ID_BLOCKED_USER = "idBlockedUser";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_BLOCKED_USER, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
-        };
+          ID_USER, ID_BLOCKED_USER };
     }
 
     public static final class DeviceTable {

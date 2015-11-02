@@ -7,7 +7,9 @@ import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.inject.Inject;
 
 public class LocalFollowRepository implements FollowRepository {
@@ -40,6 +42,15 @@ public class LocalFollowRepository implements FollowRepository {
         followDataSource.removeBlock(idUser);
     }
 
+    @Override public List<String> getBlockedIdUsers() {
+        List<BlockEntity> blockeds = followDataSource.getBlockeds();
+        List<String> blockedIds = new ArrayList<>();
+        for (BlockEntity blocked : blockeds) {
+            blockedIds.add(blocked.getIdBlockedUser());
+        }
+        return blockedIds;
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
@@ -56,9 +67,6 @@ public class LocalFollowRepository implements FollowRepository {
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
-        Date now = new Date();
-        blockEntity.setBirth(now);
-        blockEntity.setModified(now);
         return blockEntity;
     }
 }

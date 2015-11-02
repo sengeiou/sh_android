@@ -16,4 +16,8 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     void block(BlockEntity block);
 
     void removeBlock(String idUser);
+
+    List<BlockEntity> getBlockeds();
+
+    void putBlockeds(List<BlockEntity> blockeds);
 }

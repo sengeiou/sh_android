@@ -14,7 +14,6 @@ public class BlockEntityDBMapper extends GenericDBMapper {
         BlockEntity block = new BlockEntity();
         block.setIdUser(c.getString(c.getColumnIndex(ID_USER)));
         block.setIdBlockedUser(c.getString(c.getColumnIndex(ID_BLOCKED_USER)));
-        setSynchronizedfromCursor(c, block);
         return block;
     }
 
@@ -22,7 +21,6 @@ public class BlockEntityDBMapper extends GenericDBMapper {
         ContentValues cv = new ContentValues();
         cv.put(ID_USER, f.getIdUser());
         cv.put(ID_BLOCKED_USER, f.getIdBlockedUser());
-        setSynchronizedtoContentValues(f,cv);
         return cv;
     }
 
