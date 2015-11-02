@@ -49,6 +49,10 @@ public class ReportShotPresenter implements Presenter {
         this.reportShotView = reportShotView;
     }
 
+    protected void setIdUserToBlock(ShotModel shotModel) {
+        this.idUserToBlock = shotModel.getIdUser();
+    }
+
     public void initialize(ReportShotView reportShotView) {
         setView(reportShotView);
     }
@@ -96,6 +100,11 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
+    public void blockUserClicked(final ShotModel shotModel) {
+        setIdUserToBlock(shotModel);
+        reportShotView.showBlockUserConfirmation();
+    }
+
     public void blockUser(String idUser) {
         blockUserInteractor.block(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
@@ -118,11 +127,6 @@ public class ReportShotPresenter implements Presenter {
                 showErrorInView(error);
             }
         });
-    }
-
-    public void blockUserClicked(final ShotModel shotModel) {
-        this.idUserToBlock = shotModel.getIdUser();
-        reportShotView.showBlockUserConfirmation();
     }
 
     public void confirmBlock() {
