@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.DeleteShotInteractor;
@@ -14,6 +15,8 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.util.ErrorMessageFactory;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -49,10 +52,20 @@ public class ReportShotPresenterTest {
         presenter.setView(reportShotView);
     }
 
-    @Test public void shouldShowConfirmationWhenBlockUserClicked() throws Exception {
+    @Test public void shouldShowConfirmationWhenBlockUserClickedAndNotFollowing() throws Exception {
+        setupGetFollowingCallbacksNotFollowingUser();
+
         presenter.blockUserClicked(shotModel());
 
         verify(reportShotView).showBlockUserConfirmation();
+    }
+
+    @Test public void shouldShowAlertWhenBlockUserClickedAndFollowing() throws Exception {
+        setupGetFollowingCallbacksFollowingUser();
+
+        presenter.blockUserClicked(shotModel());
+
+        verify(reportShotView).showBlockFollowingUserAlert();
     }
 
     @Test public void shouldShowUserBlockedWhenConfirmsBlockUserAndCallbackCompleted() throws Exception {
@@ -69,6 +82,46 @@ public class ReportShotPresenterTest {
         presenter.blockUser(ID_USER);
 
         verify(reportShotView).showError(anyString());
+    }
+
+    private void setupGetFollowingCallbacksFollowingUser() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<User>> callback =
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[0];
+                callback.onLoaded(userFollowingList());
+                return null;
+            }
+        }).when(getFollowingInteractor).obtainPeople(any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupGetFollowingCallbacksNotFollowingUser() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<User>> callback =
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[0];
+                callback.onLoaded(userList());
+                return null;
+            }
+        }).when(getFollowingInteractor).obtainPeople(any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private List<User> userFollowingList() {
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        user.setIdUser(ID_USER);
+        users.add(user);
+        return users;
+    }
+
+    private List<User> userList() {
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        user.setIdUser("another_id");
+        users.add(user);
+        return users;
     }
 
     private void setupUserBlockedErrorCallback() {

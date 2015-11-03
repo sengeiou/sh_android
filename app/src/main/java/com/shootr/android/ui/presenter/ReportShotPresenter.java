@@ -102,7 +102,15 @@ public class ReportShotPresenter implements Presenter {
 
     public void blockUserClicked(final ShotModel shotModel) {
         setIdUserToBlock(shotModel);
-        reportShotView.showBlockUserConfirmation();
+        getFollowingInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                handleUserBlocking(users, idUserToBlock);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
     }
 
     public void blockUser(String idUser) {
@@ -124,21 +132,13 @@ public class ReportShotPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                showErrorInView(error);
+                reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
             }
         });
     }
 
     public void confirmBlock() {
-        getFollowingInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                handleUserBlocking(users, idUserToBlock);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
-        });
+        blockUser(idUserToBlock);
     }
 
     private void handleUserBlocking(List<User> users, String idUserToBlock) {
@@ -150,9 +150,9 @@ public class ReportShotPresenter implements Presenter {
             }
         }
         if (!following) {
-            blockUser(idUserToBlock);
+            reportShotView.showBlockUserConfirmation();
         } else {
-            reportShotView.showBlockUserAlert();
+            reportShotView.showBlockFollowingUserAlert();
         }
     }
 

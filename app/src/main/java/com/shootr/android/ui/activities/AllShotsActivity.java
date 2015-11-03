@@ -215,8 +215,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           }).show();
     }
 
-    @Override public void showBlockUserAlert() {
-        feedbackMessage.show(getView(), R.string.block_user_error);
+    @Override public void showBlockFollowingUserAlert() {
+        feedbackMessage.showLong(getView(), R.string.block_user_error);
     }
 
     @Override public void showUserBlocked() {
@@ -236,6 +236,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
           .create().show();
+    }
+
+    @Override public void showErrorLong(String messageForError) {
+        feedbackMessage.showLong(getView(), messageForError);
     }
 
     @Override public void hideLoading() {

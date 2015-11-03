@@ -18,11 +18,13 @@ public interface ReportShotView {
 
     void showContextMenuWithUnblock(ShotModel shotModel);
 
-    void showBlockUserAlert();
+    void showBlockFollowingUserAlert();
 
     void showUserBlocked();
 
     void showUserUnblocked();
 
     void showBlockUserConfirmation();
+
+    void showErrorLong(String messageForError);
 }

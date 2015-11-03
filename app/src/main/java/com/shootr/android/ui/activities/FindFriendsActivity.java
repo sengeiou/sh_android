@@ -360,7 +360,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                feedbackMessage.show(getView(), R.string.error_following_user_blocked);
+                feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
             }
         });
     }
