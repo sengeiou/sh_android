@@ -166,4 +166,18 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
+        try {
+            List<ShotApiEntity> shots = shotApiService.getAllShotsFromUserInStream(timelineParameters.getUserId(),
+              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate());
+            return shotApiEntityMapper.transform(shots);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void deleteShotsByIdStream(String idStream) {
+        throw new IllegalArgumentException("This method should not have remote implementation");
+    }
 }

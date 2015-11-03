@@ -17,6 +17,7 @@ public class ActivityEntity extends Synchronized {
     private String userPhoto;
     private String idShot;
     private Shot shotForMapping;
+    private String idStreamAuthor;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -113,5 +114,13 @@ public class ActivityEntity extends Synchronized {
 
     public void setIdTargetUser(String idTargetUser) {
         this.idTargetUser = idTargetUser;
+    }
+
+    public String getIdStreamAuthor() {
+        return idStreamAuthor;
+    }
+
+    public void setIdStreamAuthor(String idStreamAuthor) {
+        this.idStreamAuthor = idStreamAuthor;
     }
 }

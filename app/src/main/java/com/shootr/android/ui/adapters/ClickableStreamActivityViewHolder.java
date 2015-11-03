@@ -41,10 +41,10 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         replacePlaceholderWithStreamTitleSpan(spannableCheckinPattern,
           streamPlaceholder,
           streamTitle,
-          new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle()) {
+          new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(), activity.getIdStreamAuthor()) {
               @Override
-              public void onStreamClick(String streamId, String streamTitle) {
-                  onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle);
+              public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+                  onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
               }
           });
 

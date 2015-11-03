@@ -77,6 +77,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
+    public static final String EXTRA_ID_USER = "userId";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
     //region Fields
@@ -113,6 +114,8 @@ public class StreamTimelineFragment extends BaseFragment
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
+    private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
@@ -150,8 +153,9 @@ public class StreamTimelineFragment extends BaseFragment
         initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
-        initializePresenters(idStream);
+        initializePresenters(idStream, streamAuthorIdUser);
         analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_timeline));
     }
 
@@ -175,11 +179,14 @@ public class StreamTimelineFragment extends BaseFragment
         watchersMenuItem = menu.findItem(R.id.menu_info);
         watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_add_favorite));
-        addToFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
+        showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove_favorite));
-        removeFromFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
+        showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
 
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.watchers_badge_circle);
@@ -197,10 +204,16 @@ public class StreamTimelineFragment extends BaseFragment
             case R.id.menu_info:
                 watchNumberPresenter.onWatchNumberClick();
                 return true;
-            case R.id.menu_add_favorite:
+            case R.id.menu_showing_holding_shots:
+                streamTimelinePresenter.onHoldingShotsClick();
+                return true;
+            case R.id.menu_showing_all_shots:
+                streamTimelinePresenter.onAllStreamShotsClick();
+                return true;
+            case R.id.menu_stream_add_favorite:
                 favoriteStatusPresenter.addToFavorites();
                 return true;
-            case R.id.menu_remove_favorite:
+            case R.id.menu_stream_remove_favorite:
                 favoriteStatusPresenter.removeFromFavorites();
                 return true;
             default:
@@ -226,8 +239,8 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.pause();
     }
 
-    private void initializePresenters(String idStream) {
-        streamTimelinePresenter.initialize(this, idStream);
+    private void initializePresenters(String idStream, String streamAuthorIdUser) {
+        streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
@@ -441,6 +454,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -488,6 +502,23 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showShotShared() {
         feedbackMessage.show(getView(), shotShared);
+    }
+
+    @Override public void hideHoldingShots() {
+        showHoldingShotsMenuItem.setVisible(false);
+    }
+
+    @Override public void showAllStreamShots() {
+        showAllShotsMenuItem.setVisible(true);
+        feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
+    }
+
+    @Override public void showHoldingShots() {
+        showHoldingShotsMenuItem.setVisible(true);
+    }
+
+    @Override public void hideAllStreamShots() {
+        showAllShotsMenuItem.setVisible(false);
     }
 
     @Override

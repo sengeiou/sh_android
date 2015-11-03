@@ -152,8 +152,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void navigateToStreamTimeline(String idStream, String title) {
-        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
+    public void navigateToStreamTimeline(String idStream, String title, String authorId) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title, authorId));
     }
 
     @Override public void showStreamShared() {

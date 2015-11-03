@@ -65,11 +65,11 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void selectStream(StreamResultModel stream) {
         streamsListView.setCurrentWatchingStreamId(stream);
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle(), stream.getStreamModel().getAuthorId());
     }
 
-    private void selectStream(final String idStream, String streamTag) {
-        streamsListView.navigateToStreamTimeline(idStream, streamTag);
+    private void selectStream(final String idStream, String streamTag, String authorId) {
+        streamsListView.navigateToStreamTimeline(idStream, streamTag, authorId);
     }
 
     public void unwatchStream() {

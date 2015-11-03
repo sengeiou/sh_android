@@ -37,6 +37,8 @@ public class ActivityModelMapper {
 
         activityModel.setShot(shotModelMapper.transform(activity.getShot()));
 
+        activityModel.setIdStreamAuthor(activity.getIdAuthorStream());
+
         return activityModel;
     }
 
