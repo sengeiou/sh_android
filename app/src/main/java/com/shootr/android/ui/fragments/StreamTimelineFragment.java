@@ -454,6 +454,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

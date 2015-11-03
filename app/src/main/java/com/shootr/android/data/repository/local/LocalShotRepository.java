@@ -80,4 +80,8 @@ public class LocalShotRepository implements ShotRepository {
         List<ShotEntity> shotsForStream = localShotDataSource.getUserShotsForStreamTimeline(timelineParameters);
         return shotEntityMapper.transform(shotsForStream);
     }
+
+    @Override public void deleteShotsByStream(String idStream) {
+        localShotDataSource.deleteShotsByIdStream(idStream);
+    }
 }

@@ -178,4 +178,19 @@ public class ShotManager extends AbstractManager {
 
         return readShots(whereClause, whereArguments);
     }
+
+    public void deleteShotsByIdStream(String idStream) {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+
+            String where = ShotTable.ID_STREAM + "=?";
+            String[] whereArgs = new String[] { idStream };
+            getWritableDatabase().delete(SHOT_TABLE, where, whereArgs);
+
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
 }

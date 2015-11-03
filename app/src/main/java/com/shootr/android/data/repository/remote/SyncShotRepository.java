@@ -89,4 +89,8 @@ public class SyncShotRepository implements ShotRepository {
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }
+
+    @Override public void deleteShotsByStream(String idStream) {
+        throw new IllegalArgumentException("deleteShotsByStream not implemented in remote");
+    }
 }

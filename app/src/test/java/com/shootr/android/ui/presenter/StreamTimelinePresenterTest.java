@@ -5,10 +5,12 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -60,6 +62,8 @@ public class StreamTimelinePresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
     @Mock StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
+    @Mock DeleteLocalShotsByStream deleteLocalShotsByStream;
+    @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -71,7 +75,8 @@ public class StreamTimelinePresenterTest {
           streamHoldingTimelineInteractorsWrapper,
           selectStreamInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller);
+          unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller,
+          deleteLocalShotsByStream, reloadStreamTimelineInteractor);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }
@@ -328,12 +333,18 @@ public class StreamTimelinePresenterTest {
     }
 
     @Test public void shouldHideAllShotsButtonWhenItHasBeenClicked() throws Exception {
+        setupDeleteLocalShotsInteractorCallback();
+        setupReloadStreamTimelineInteractorCallback();
+
         presenter.onAllStreamShotsClick();
 
         verify(streamTimelineView).hideAllStreamShots();
     }
 
     @Test public void shouldShowHoldingShotsButtonWhenAllShotsButtonHasBeenClicked() throws Exception {
+        setupDeleteLocalShotsInteractorCallback();
+        setupReloadStreamTimelineInteractorCallback();
+
         presenter.onAllStreamShotsClick();
 
         verify(streamTimelineView).showHoldingShots();
@@ -441,6 +452,26 @@ public class StreamTimelinePresenterTest {
                 return null;
             }
         }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
+    }
+
+    private void setupDeleteLocalShotsInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(deleteLocalShotsByStream).deleteShot(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    private void setupReloadStreamTimelineInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[1]).onLoaded(timelineWithShots());
+                return null;
+            }
+        }).when(reloadStreamTimelineInteractor)
+          .loadStreamTimeline(anyString(), any(Interactor.Callback.class), anyErrorCallback());
     }
     //endregion
 }

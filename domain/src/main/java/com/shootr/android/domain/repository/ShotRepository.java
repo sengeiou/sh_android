@@ -32,4 +32,6 @@ public interface ShotRepository {
     void deleteShot(String idShot);
 
     List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
+
+    void deleteShotsByStream(String idStream);
 }

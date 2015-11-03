@@ -176,4 +176,8 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public void deleteShotsByIdStream(String idStream) {
+        throw new IllegalArgumentException("This method should not have remote implementation");
+    }
 }
