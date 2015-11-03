@@ -99,7 +99,15 @@ public class FindParticipantsPresenter implements Presenter {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
         });
+    }
+
+    private void showErrorInView(ShootrException error) {
+        findParticipantsView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     public void unfollowUser(final UserModel userModel) {

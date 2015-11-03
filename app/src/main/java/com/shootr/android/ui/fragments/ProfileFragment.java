@@ -745,10 +745,14 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showContextMenu(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.report(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).addAction(R.string.report_context_menu_block, new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.blockUserClicked(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
@@ -758,6 +762,46 @@ public class ProfileFragment extends BaseFragment
                   openDeleteShotConfirmation(shotModel);
               }
           }).show();
+    }
+
+    @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
+              @Override public void run() {
+                  openDeleteShotConfirmation(shotModel);
+              }
+          }).addAction(R.string.report_context_menu_unblock,
+          new Runnable() {
+              @Override public void run() {
+                  reportShotPresenter.unblockUser(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void showBlockFollowingUserAlert() {
+        feedbackMessage.showLong(getView(), R.string.block_user_error);
+    }
+
+    @Override public void showUserBlocked() {
+        feedbackMessage.show(getView(), R.string.user_blocked);
+    }
+
+    @Override public void showUserUnblocked() {
+        feedbackMessage.show(getView(), R.string.user_unblocked);
+    }
+
+    @Override public void showBlockUserConfirmation() {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBlock();
+              }
+          })
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
+          .create().show();
+    }
+
+    @Override public void showErrorLong(String messageForError) {
+        feedbackMessage.showLong(getView(), messageForError);
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

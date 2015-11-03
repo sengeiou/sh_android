@@ -1,5 +1,6 @@
 package com.shootr.android.db;
 
+import com.shootr.android.db.mappers.BlockEntityDBMapper;
 import com.shootr.android.db.mappers.DeviceEntityDBMapper;
 import com.shootr.android.db.mappers.FollowEntityDBMapper;
 import com.shootr.android.db.mappers.StreamEntityDBMapper;
@@ -46,6 +47,10 @@ public class MapperModule {
     @Provides
     StreamEntityDBMapper provideEntityMapper() {
         return new StreamEntityDBMapper();
+    }
+
+    @Provides BlockEntityDBMapper provideBlockMapper() {
+        return new BlockEntityDBMapper();
     }
 
 }

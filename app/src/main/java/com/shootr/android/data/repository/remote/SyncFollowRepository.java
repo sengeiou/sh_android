@@ -1,17 +1,20 @@
 package com.shootr.android.data.repository.remote;
 
 import android.support.annotation.NonNull;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.remote.cache.UserCache;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
+import com.shootr.android.domain.exception.FollowingBlockedUserException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -37,9 +40,8 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     }
 
     @Override
-    public void follow(String idUser) {
+    public void follow(String idUser) throws FollowingBlockedUserException {
         FollowEntity followEntity = createFollow(idUser);
-
         try {
             remoteFollowDataSource.putFollow(followEntity);
             followEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
@@ -59,11 +61,38 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
             localFollowDataSource.removeFollow(idUser);
             userCache.invalidatePeople();
         } catch (ServerCommunicationException e) {
+            deleteFollow(idUser);
+        }
+    }
+
+    private void deleteFollow(String idUser) {
+        try {
             FollowEntity deletedFollow = createFollow(idUser);
             deletedFollow.setSynchronizedStatus(Synchronized.SYNC_DELETED);
             localFollowDataSource.putFollow(deletedFollow);
             syncTrigger.notifyNeedsSync(this);
+        } catch (FollowingBlockedUserException error) {
+            error.printStackTrace();
         }
+    }
+
+    @Override public void block(String idUser) {
+        BlockEntity blockEntity = createBlock(idUser);
+        remoteFollowDataSource.block(blockEntity);
+    }
+
+    @Override public void unblock(String idUser) {
+        remoteFollowDataSource.removeBlock(idUser);
+    }
+
+    @Override public List<String> getBlockedIdUsers() {
+        List<BlockEntity> blockeds = remoteFollowDataSource.getBlockeds();
+        localFollowDataSource.putBlockeds(blockeds);
+        List<String> blockedIds = new ArrayList<>(blockeds.size());
+        for (BlockEntity blocked : blockeds) {
+            blockedIds.add(blocked.getIdBlockedUser());
+        }
+        return blockedIds;
     }
 
     @Override
@@ -74,11 +103,19 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
                 remoteFollowDataSource.removeFollow(entity.getFollowedUser());
                 localFollowDataSource.removeFollow(entity.getFollowedUser());
             } else {
-                remoteFollowDataSource.putFollow(entity);
-                entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-                localFollowDataSource.putFollow(entity);
+                syncEntities(entity);
             }
             userCache.invalidatePeople();
+        }
+    }
+
+    private void syncEntities(FollowEntity entity) {
+        try {
+            remoteFollowDataSource.putFollow(entity);
+            entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+            localFollowDataSource.putFollow(entity);
+        } catch (FollowingBlockedUserException error) {
+            error.printStackTrace();
         }
     }
 
@@ -91,5 +128,13 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         followEntity.setBirth(now);
         followEntity.setModified(now);
         return followEntity;
+    }
+
+    @NonNull
+    protected BlockEntity createBlock(String idUser) {
+        BlockEntity blockEntity = new BlockEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBlockedUser(idUser);
+        return blockEntity;
     }
 }

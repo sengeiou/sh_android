@@ -20,6 +20,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
@@ -168,9 +169,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void followUser(final UserModel user){
         followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 onFollowUpdated(user.getIdUser(), true);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
             }
         });
     }

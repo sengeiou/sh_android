@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.user;
 
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -30,6 +31,22 @@ public class DatabaseFollowDataSource implements FollowDataSource {
     @Override
     public void removeFollow(String idUser) {
         followManager.deleteFollow(idUser, sessionRepository.getCurrentUserId());
+    }
+
+    @Override public void block(BlockEntity block) {
+        followManager.saveBlock(block);
+    }
+
+    @Override public void removeBlock(String idUser) {
+        followManager.deleteBlock(sessionRepository.getCurrentUserId(), idUser);
+    }
+
+    @Override public List<BlockEntity> getBlockeds() {
+        return followManager.getBlockeds();
+    }
+
+    @Override public void putBlockeds(List<BlockEntity> blockeds) {
+        followManager.saveBlockedsFromServer(blockeds);
     }
 
     @Override

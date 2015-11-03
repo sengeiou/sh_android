@@ -1,12 +1,16 @@
 package com.shootr.android.data.repository.local;
 
 import android.support.annotation.NonNull;
+import com.shootr.android.data.entity.BlockEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
+import com.shootr.android.domain.exception.FollowingBlockedUserException;
 import com.shootr.android.domain.repository.FollowRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.inject.Inject;
 
 public class LocalFollowRepository implements FollowRepository {
@@ -22,12 +26,34 @@ public class LocalFollowRepository implements FollowRepository {
     @Override
     public void follow(String idUser) {
         FollowEntity followEntity = createFollow(idUser);
-        followDataSource.putFollow(followEntity);
+        try {
+            followDataSource.putFollow(followEntity);
+        } catch (FollowingBlockedUserException e) {
+            throw new IllegalArgumentException("This exception should not happen");
+        }
     }
 
     @Override
     public void unfollow(String idUser) {
         followDataSource.removeFollow(idUser);
+    }
+
+    @Override public void block(String idUser) {
+        BlockEntity blockEntity = createBlock(idUser);
+        followDataSource.block(blockEntity);
+    }
+
+    @Override public void unblock(String idUser) {
+        followDataSource.removeBlock(idUser);
+    }
+
+    @Override public List<String> getBlockedIdUsers() {
+        List<BlockEntity> blockeds = followDataSource.getBlockeds();
+        List<String> blockedIds = new ArrayList<>();
+        for (BlockEntity blocked : blockeds) {
+            blockedIds.add(blocked.getIdBlockedUser());
+        }
+        return blockedIds;
     }
 
     @NonNull
@@ -39,5 +65,13 @@ public class LocalFollowRepository implements FollowRepository {
         followEntity.setBirth(now);
         followEntity.setModified(now);
         return followEntity;
+    }
+
+    @NonNull
+    protected BlockEntity createBlock(String idUser) {
+        BlockEntity blockEntity = new BlockEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBlockedUser(idUser);
+        return blockEntity;
     }
 }

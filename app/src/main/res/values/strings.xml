@@ -314,4 +314,13 @@
     <string name="stream_timeline_add_favorite">Add to favorites</string>
     <string name="stream_timeline_remove_favorite">Remove from favorites</string>
     <string name="showing_shots_by_holder">Showing shots by holder</string>
+    <string name="report_context_menu_unblock">Unblock user</string>
+    <string name="report_context_menu_block">Block user</string>
+    <string name="block_user_error">To block this user you need to unfollow first.</string>
+    <string name="user_blocked">User blocked.</string>
+    <string name="user_unblocked">User unblocked.</string>
+    <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
+    <string name="block_user_dialog_message">Block user?</string>
+    <string name="block_user_dialog_block">Block</string>
+    <string name="block_user_dialog_cancel">Cancel</string>
 </resources>

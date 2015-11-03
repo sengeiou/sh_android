@@ -206,6 +206,42 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         feedbackMessage.show(getView(), messageForError);
     }
 
+    @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
+        getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_unblock,
+          new Runnable() {
+              @Override public void run() {
+                  reportShotPresenter.unblockUser(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void showBlockFollowingUserAlert() {
+        feedbackMessage.showLong(getView(), R.string.block_user_error);
+    }
+
+    @Override public void showUserBlocked() {
+        feedbackMessage.show(getView(), R.string.user_blocked);
+    }
+
+    @Override public void showUserUnblocked() {
+        feedbackMessage.show(getView(), R.string.user_unblocked);
+    }
+
+    @Override public void showBlockUserConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.block_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBlock();
+              }
+          })
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
+          .create().show();
+    }
+
+    @Override public void showErrorLong(String messageForError) {
+        feedbackMessage.showLong(getView(), messageForError);
+    }
+
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
     }
@@ -288,7 +324,11 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
               @Override public void run() {
                   reportShotPresenter.report(shotModel);
               }
-          }).show();
+          }).addAction(R.string.report_context_menu_block, new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.blockUserClicked(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shotModel) {

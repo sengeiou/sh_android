@@ -1,5 +1,6 @@
 package com.shootr.android.db;
 
+import com.shootr.android.db.DatabaseContract.BlockTable;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.ShotQueueTable;
@@ -102,6 +103,11 @@ public class SQLiteUtils {
             + SyncColumns.REVISION + " INT NOT NULL,"
             + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL,"
             + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + "))";
+
+    public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS " + BlockTable.TABLE + " ("
+      + BlockTable.ID_USER + " TEXT NOT NULL,"
+      + BlockTable.ID_BLOCKED_USER + " TEXT NOT NULL,"
+      + " PRIMARY KEY(" + BlockTable.ID_USER + "," + BlockTable.ID_BLOCKED_USER + "))";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
             + DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"
