@@ -1,7 +1,11 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -30,18 +34,21 @@ public class ProfileEditPresenter implements Presenter {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final InteractorHandler interactorHandler;
+    private final GetUserByIdInteractor getUserByIdInteractor;
 
     private UserModel currentUserModel;
     private boolean hasBeenPaused = false;
     private boolean discardConfirmEmailAlert = false;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler) {
+      ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler,
+      GetUserByIdInteractor getUserByIdInteractor) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.interactorHandler = interactorHandler;
+        this.getUserByIdInteractor = getUserByIdInteractor;
     }
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
@@ -52,9 +59,21 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void fillCurrentUserData() {
+        getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                loadProfileData();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                profileEditView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    private void loadProfileData() {
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         this.profileEditView.renderUserInfo(currentUserModel);
-        if(!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
+        if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
             profileEditView.showEmailNotConfirmedError();
         }
     }
