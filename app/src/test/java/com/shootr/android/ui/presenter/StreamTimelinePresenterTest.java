@@ -350,6 +350,21 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).showHoldingShots();
     }
 
+    @Test public void shouldShowLoadingWhenAllStreamShotsClicked() throws Exception {
+        presenter.onAllStreamShotsClick();
+
+        verify(streamTimelineView).showLoading();
+    }
+
+    @Test public void shouldHideLoadingWhenAllStreamShotsClickedAndallbackReturned() throws Exception {
+        setupDeleteLocalShotsInteractorCallback();
+        setupReloadStreamTimelineInteractorCallback();
+
+        presenter.onAllStreamShotsClick();
+
+        verify(streamTimelineView).hideLoading();
+    }
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);

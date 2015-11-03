@@ -355,6 +355,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void handleShotsChange() {
+        streamTimelineView.showLoading();
         deleteLocalShotsByStream.deleteShot(streamId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 reloadStreamTimelineInteractor.loadStreamTimeline(streamId, new Interactor.Callback<Timeline>() {
@@ -365,7 +366,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override public void onError(ShootrException error) {
-                        // TODO WUUUT? showErrorLoadingNewShots();
+                        showErrorLoadingNewShots();
                     }
                 });
             }
