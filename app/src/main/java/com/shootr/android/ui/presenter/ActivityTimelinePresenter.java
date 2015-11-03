@@ -78,7 +78,6 @@ public class ActivityTimelinePresenter implements Presenter {
         activityTimelineInteractorWrapper.loadTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
-                timelineView.hideLoading();
                 timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                 isEmpty = activityModels.isEmpty();
                 if (isEmpty) {
@@ -105,6 +104,7 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     private void loadNewActivities() {
+        timelineView.showLoading();
         if (isEmpty) {
             timelineView.hideEmpty();
             timelineView.showLoadingActivity();
