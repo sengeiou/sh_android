@@ -1,0 +1,12 @@
+package com.shootr.mobile.domain.utils;
+
+import java.util.Date;
+
+public interface TimeUtils {
+
+    long getCurrentTime();
+
+    void setCurrentTime(long timeMilliseconds);
+
+    Date getCurrentDate();
+}

@@ -150,7 +150,7 @@
     </FrameLayout>
 
     <!-- Follow buttons -->
-    <com.shootr.android.ui.widgets.FollowButton
+    <com.shootr.mobile.ui.widgets.FollowButton
       android:id="@+id/profile_follow_button"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

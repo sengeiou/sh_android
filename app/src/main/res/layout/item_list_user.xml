@@ -54,7 +54,7 @@
 
     </LinearLayout>
 
-    <com.shootr.android.ui.widgets.FollowButton
+    <com.shootr.mobile.ui.widgets.FollowButton
       android:id="@+id/user_follow_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

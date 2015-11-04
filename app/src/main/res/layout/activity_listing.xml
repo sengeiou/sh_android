@@ -22,7 +22,7 @@
     android:visibility="gone"
     tools:visibility="visible" />
 
-  <com.shootr.android.ui.widgets.PrimaryFloatingActionButton android:id="@+id/listing_add_stream"
+  <com.shootr.mobile.ui.widgets.PrimaryFloatingActionButton android:id="@+id/listing_add_stream"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|right"

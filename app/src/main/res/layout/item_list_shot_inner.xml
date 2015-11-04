@@ -32,7 +32,7 @@
       android:textColor="@color/gray_60"
       tools:text="22m" />
 
-    <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_text"
+    <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/shot_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_user_name"
@@ -52,7 +52,7 @@
       android:focusable="false"
       android:focusableInTouchMode="false">
 
-        <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_image"
+        <com.shootr.mobile.ui.widgets.ImageView169 android:id="@+id/shot_image"
           android:layout_width="match_parent"
           android:layout_height="@dimen/shot_item_image_height"
           android:layout_marginBottom="8dp"
@@ -95,7 +95,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <com.shootr.android.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
+    <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
       android:layout_width="@dimen/nice_button_size"
       android:layout_height="@dimen/nice_button_size"
       android:layout_alignParentRight="true"

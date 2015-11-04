@@ -19,7 +19,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
 
-            <com.shootr.android.ui.widgets.FloatLabelLayout
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="16dp"
@@ -39,9 +39,9 @@
                   android:nextFocusDown="@+id/profile_edit_username"
                   android:singleLine="true" />
 
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-            <com.shootr.android.ui.widgets.FloatLabelLayout
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="16dp"
@@ -61,9 +61,9 @@
                   android:nextFocusDown="@+id/profile_edit_website"
                   android:singleLine="true" />
 
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-            <com.shootr.android.ui.widgets.FloatLabelLayout
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="16dp"
@@ -83,9 +83,9 @@
                   android:nextFocusDown="@+id/profile_edit_bio"
                   android:singleLine="true" />
 
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-            <com.shootr.android.ui.widgets.FloatLabelLayout
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="16dp"
@@ -103,9 +103,9 @@
                   android:maxLength="150"
                   android:maxLines="4" />
 
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-            <com.shootr.android.ui.widgets.FloatLabelLayout
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout
               android:id="@+id/profile_edit_email_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                 android:clickable="true"
                 style="@android:style/Widget.EditText" />
 
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
         </LinearLayout>
     </ScrollView>
