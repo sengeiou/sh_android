@@ -53,11 +53,9 @@ public class ActivityTimelinePresenter implements Presenter {
     public void initialize(ActivityTimelineView timelineView) {
         this.setView(timelineView);
         this.loadTimeline();
-        this.clearActivityBadge();
         poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
-            @Override
-            public void run() {
-                loadNewActivities();
+            @Override public void run() {
+                loadNewActivities(badgeCount.get());
             }
         });
     }
@@ -87,14 +85,15 @@ public class ActivityTimelinePresenter implements Presenter {
                     timelineView.hideEmpty();
                     timelineView.showActivities();
                 }
-                loadNewActivities();
+                loadNewActivities(badgeCount.get());
+                clearActivityBadge();
             }
         });
     }
 
     public void refresh() {
         timelineView.showLoading();
-        this.loadNewActivities();
+        this.loadNewActivities(badgeCount.get());
     }
 
     public void showingLastActivity(ActivityModel lastActivity) {
@@ -103,8 +102,10 @@ public class ActivityTimelinePresenter implements Presenter {
         }
     }
 
-    private void loadNewActivities() {
-        timelineView.showLoading();
+    private void loadNewActivities(int badgeCount) {
+        if (badgeCount > 0) {
+            timelineView.showLoading();
+        }
         if (isEmpty) {
             timelineView.hideEmpty();
             timelineView.showLoadingActivity();
