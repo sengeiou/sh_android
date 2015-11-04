@@ -42,6 +42,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         this.mainScreenView = mainScreenView;
         this.loadCurrentUser();
         this.sendDeviceInfo();
+        this.updateActivityBadge();
     }
 
     private void sendDeviceInfo() {
