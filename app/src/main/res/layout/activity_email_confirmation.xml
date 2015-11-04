@@ -7,7 +7,7 @@
   android:paddingLeft="@dimen/activity_horizontal_margin"
   android:paddingRight="@dimen/activity_horizontal_margin">
 
-  <com.shootr.android.ui.widgets.FloatLabelLayout
+  <com.shootr.mobile.ui.widgets.FloatLabelLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -22,7 +22,7 @@
       android:maxLength="150"
       android:inputType="text|textEmailAddress" />
 
-  </com.shootr.android.ui.widgets.FloatLabelLayout>
+  </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
   <TextView android:id="@+id/email_confirmation_message"
     android:layout_width="wrap_content"

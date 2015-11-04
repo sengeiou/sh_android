@@ -12,7 +12,7 @@
       android:orientation="vertical"
       tools:context=".EmailLoginActivity">
 
-        <com.shootr.android.ui.widgets.FloatLabelLayout android:layout_width="match_parent"
+        <com.shootr.mobile.ui.widgets.FloatLabelLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp"
@@ -29,9 +29,9 @@
                 <requestFocus />
             </EditText>
 
-        </com.shootr.android.ui.widgets.FloatLabelLayout>
+        </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-        <com.shootr.android.ui.widgets.FloatLabelLayout android:layout_width="match_parent"
+        <com.shootr.mobile.ui.widgets.FloatLabelLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp"
@@ -47,7 +47,7 @@
               android:inputType="textPassword">
 
             </EditText>
-        </com.shootr.android.ui.widgets.FloatLabelLayout>
+        </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
         <FrameLayout android:id="@+id/email_login_button_container"
           android:layout_width="wrap_content"

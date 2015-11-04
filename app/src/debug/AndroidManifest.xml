@@ -1,29 +1,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  package="com.shootr.android">
+  package="com.shootr.mobile">
 
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
       tools:replace="android:name"
-      android:name=".ShootrDebugApplication"
+      android:name="com.shootr.mobile.ShootrDebugApplication"
       android:vmSafeMode="true">
 
         <activity android:name="com.github.pedrovgs.lynx.LynxActivity"/>
 
         <activity
-          android:name=".ui.ExternalIntentActivity"
+          android:name="com.shootr.mobile.ui.ExternalIntentActivity"
           >
             <intent-filter>
-                <action android:name="com.shootr.android.intent.EXTERNAL_INTENT"/>
+                <action android:name="com.shootr.mobile.intent.EXTERNAL_INTENT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <receiver android:name=".data.SyncBroadcastReceiver">
+        <receiver android:name="com.shootr.mobile.data.SyncBroadcastReceiver">
             <intent-filter >
-                <action android:name="com.shootr.android.ACTION_SYNC" />
+                <action android:name="com.shootr.mobile.ACTION_SYNC" />
             </intent-filter>
           </receiver>
     </application>

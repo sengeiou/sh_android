@@ -61,7 +61,7 @@
       tools:text="Event Title"
       tools:visibility="visible" />
 
-    <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_detail_text"
+    <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/shot_detail_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingLeft="16dp"
@@ -76,7 +76,7 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp">
 
-      <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_detail_image"
+      <com.shootr.mobile.ui.widgets.ImageView169 android:id="@+id/shot_detail_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -130,7 +130,7 @@
       android:paddingBottom="16dp"
       android:orientation="horizontal">
 
-        <com.shootr.android.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
+        <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
           style="@style/NiceButton"
           android:layout_width="@dimen/nice_button_size"
           android:layout_height="@dimen/nice_button_size" />
