@@ -21,9 +21,12 @@ import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import com.shootr.mobile.util.UIObserver;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
+import rx.Observable;
+import rx.Subscriber;
 
 public class ProfilePresenter implements Presenter {
 
@@ -125,27 +128,47 @@ public class ProfilePresenter implements Presenter {
 
     private void onProfileLoaded(User user) {
         this.isCurrentUser = user.isMe();
-        setupMenuItemsVisibility();
         this.setUserModel(userModelMapper.transform(user));
+
+        setupMenuItemsVisibility();
+        setupProfilePhoto(user);
+        setRelationshipButtonStatus(user);
+
         profileView.setUserInfo(userModel);
         profileView.showListing();
-        setRelationshipButtonStatus(user);
-        if (isCurrentUser && user.getPhoto() == null) {
-            profileView.showAddPhoto();
-        }
         profileView.setupAnalytics(isCurrentUser);
     }
 
-    private void setRelationshipButtonStatus(User user) {
-        if (isCurrentUser) {
-            profileView.showEditProfileButton();
-        } else {
-            if (!user.isFollowing()) {
-                profileView.showFollowButton();
-            } else {
-                profileView.showUnfollowButton();
+    private void setupProfilePhoto(final User user) {
+        Observable<Void> profilePhotoObservable = Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser && user.getPhoto() == null) {
+                    profileView.showAddPhoto();
+                }
+                subscriber.onCompleted();
             }
-        }
+        });
+        subscribeUIObserverToObservable(profilePhotoObservable);
+    }
+
+    private void setRelationshipButtonStatus(final User user) {
+        Observable<Void> relationshipButtonStatusObservable = Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser) {
+                    profileView.showEditProfileButton();
+                } else {
+                    if (!user.isFollowing()) {
+                        profileView.showFollowButton();
+                    } else {
+                        profileView.showUnfollowButton();
+                    }
+                }
+                subscriber.onCompleted();
+            }
+        });
+        subscribeUIObserverToObservable(relationshipButtonStatusObservable);
     }
 
     private void loadLatestShots(String idUser) {
@@ -181,11 +204,18 @@ public class ProfilePresenter implements Presenter {
     }
 
     protected void setupMenuItemsVisibility() {
-        if (isCurrentUser) {
-            profileView.showLogoutButton();
-            profileView.showSupportButton();
-            profileView.showChangePasswordButton();
-        }
+        Observable<Void> menuItemsVisibilityObservable = Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser) {
+                    profileView.showLogoutButton();
+                    profileView.showSupportButton();
+                    profileView.showChangePasswordButton();
+                }
+                subscriber.onCompleted();
+            }
+        });
+        subscribeUIObserverToObservable(menuItemsVisibilityObservable);
     }
 
     public void clickListing() {
@@ -341,6 +371,11 @@ public class ProfilePresenter implements Presenter {
         profileView.showError(errorMessageFactory.getMessageForError(error));
     }
 
+    private void subscribeUIObserverToObservable(Observable<Void> observable) {
+        observable.subscribe(new UIObserver<Void>() {
+        });
+    }
+
     @Override public void resume() {
         if (hasBeenPaused && userModel != null && !uploadingPhoto) {
             loadProfileUser();
@@ -351,4 +386,5 @@ public class ProfilePresenter implements Presenter {
     @Override public void pause() {
         hasBeenPaused = true;
     }
+
 }
