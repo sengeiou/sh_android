@@ -11,20 +11,28 @@ public class SnackbarFeedbackMessage implements FeedbackMessage {
     }
 
     @Override public void show(View view, String text) {
-        Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show();
+        if (view != null) {
+            Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override public void showLong(View view, String feedback) {
-        Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).show();
+        if (view != null) {
+            Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void show(View view, @StringRes int feedback) {
-        Snackbar.make(view, feedback, Snackbar.LENGTH_SHORT).show();
+        if (view != null) {
+            Snackbar.make(view, feedback, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void showLong(View view, @StringRes int feedback) {
-        Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).show();
+        if (view != null) {
+            Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).show();
+        }
     }
 }
