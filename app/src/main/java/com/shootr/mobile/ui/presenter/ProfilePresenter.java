@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -21,9 +22,12 @@ import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import com.shootr.mobile.util.UIObserver;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
+import rx.Observable;
+import rx.Subscriber;
 
 public class ProfilePresenter implements Presenter {
 
@@ -98,78 +102,32 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void loadProfileUser() {
-        if (profileIdUser != null) {
-            getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
-                @Override public void onLoaded(User user) {
-                    onProfileLoaded(user);
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    showErrorInView(error);
-                }
-            });
-        } else {
-            getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-                @Override public void onLoaded(User user) {
-                    profileIdUser = user.getIdUser();
-                    onProfileLoaded(user);
-                    loadLatestShots(userModel.getIdUser());
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    showErrorInView(error);
-                }
-            });
-        }
+        subscribeUIObserverToObservable(getLoadProfileObservable());
     }
 
     private void onProfileLoaded(User user) {
         this.isCurrentUser = user.isMe();
-        setupMenuItemsVisibility();
         this.setUserModel(userModelMapper.transform(user));
+
+        setupMenuItemsVisibility();
+        setupProfilePhoto(user);
+        setRelationshipButtonStatus(user);
+
         profileView.setUserInfo(userModel);
         profileView.showListing();
-        setRelationshipButtonStatus(user);
-        if (isCurrentUser && user.getPhoto() == null) {
-            profileView.showAddPhoto();
-        }
         profileView.setupAnalytics(isCurrentUser);
     }
 
-    private void setRelationshipButtonStatus(User user) {
-        if (isCurrentUser) {
-            profileView.showEditProfileButton();
-        } else {
-            if (!user.isFollowing()) {
-                profileView.showFollowButton();
-            } else {
-                profileView.showUnfollowButton();
-            }
-        }
+    private void setupProfilePhoto(final User user) {
+        subscribeUIObserverToObservable(getProfilePhotoObservable(user));
     }
 
-    private void loadLatestShots(String idUser) {
-        getLastShotsInteractor.loadLastShots(idUser, new Interactor.Callback<List<Shot>>() {
-            @Override public void onLoaded(List<Shot> shotList) {
-                if (!shotList.isEmpty()) {
-                    profileView.showLatestShots();
-                    profileView.hideLatestShotsEmpty();
-                    if (shotList.size() == ALL_SHOTS_VISIBILITY_TRESHOLD) {
-                        profileView.showAllShotsButton();
-                    } else {
-                        profileView.hideAllShotsButton();
-                    }
-                    profileView.renderLastShots(shotModelMapper.transform(getLimitedShotList(shotList)));
-                } else {
-                    profileView.hideLatestShots();
-                    profileView.showLatestShotsEmpty();
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
-        });
+    private void setRelationshipButtonStatus(final User user) {
+        subscribeUIObserverToObservable(getRelationshipButtonObservable(user));
+    }
+
+    private void loadLatestShots(final String idUser) {
+        subscribeUIObserverToObservable(getLatestShotsObservable(idUser));
     }
 
     private List<Shot> getLimitedShotList(List<Shot> shotList) {
@@ -181,11 +139,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     protected void setupMenuItemsVisibility() {
-        if (isCurrentUser) {
-            profileView.showLogoutButton();
-            profileView.showSupportButton();
-            profileView.showChangePasswordButton();
-        }
+        subscribeUIObserverToObservable(getMenuItemsVisibilityObservable());
     }
 
     public void clickListing() {
@@ -307,8 +261,7 @@ public class ProfilePresenter implements Presenter {
         uploadUserPhotoInteractor.uploadUserPhoto(changedPhotoFile, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 uploadingPhoto = false;
-                loadProfileUser();
-                loadLatestShots(userModel.getIdUser());
+                refreshProfile();
                 profileView.hideLoadingPhoto();
             }
         }, new Interactor.ErrorCallback() {
@@ -327,8 +280,7 @@ public class ProfilePresenter implements Presenter {
     public void removePhotoConfirmed() {
         removeUserPhotoInteractor.removeUserPhoto(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadProfileUser();
-                loadLatestShots(userModel.getIdUser());
+                refreshProfile();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -341,14 +293,127 @@ public class ProfilePresenter implements Presenter {
         profileView.showError(errorMessageFactory.getMessageForError(error));
     }
 
+    private void subscribeUIObserverToObservable(Observable<Void> observable) {
+        observable.subscribe(new UIObserver<Void>() {
+        });
+    }
+
+    private void refreshProfile() {
+        loadProfileUser();
+        loadLatestShots(userModel.getIdUser());
+    }
+
+    @NonNull private Observable<Void> getLoadProfileObservable() {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (profileIdUser != null) {
+                    getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+                        @Override public void onLoaded(User user) {
+                            onProfileLoaded(user);
+                        }
+                    }, new Interactor.ErrorCallback() {
+                        @Override public void onError(ShootrException error) {
+                            showErrorInView(error);
+                        }
+                    });
+                } else {
+                    getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+                        @Override public void onLoaded(User user) {
+                            profileIdUser = user.getIdUser();
+                            onProfileLoaded(user);
+                            loadLatestShots(userModel.getIdUser());
+                        }
+                    }, new Interactor.ErrorCallback() {
+                        @Override public void onError(ShootrException error) {
+                            showErrorInView(error);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @NonNull private Observable<Void> getProfilePhotoObservable(final User user) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser && user.getPhoto() == null) {
+                    profileView.showAddPhoto();
+                }
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    @NonNull private Observable<Void> getRelationshipButtonObservable(final User user) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser) {
+                    profileView.showEditProfileButton();
+                } else {
+                    if (!user.isFollowing()) {
+                        profileView.showFollowButton();
+                    } else {
+                        profileView.showUnfollowButton();
+                    }
+                }
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    @NonNull private Observable<Void> getLatestShotsObservable(final String idUser) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                getLastShotsInteractor.loadLastShots(idUser, new Interactor.Callback<List<Shot>>() {
+                    @Override public void onLoaded(List<Shot> shotList) {
+                        if (!shotList.isEmpty()) {
+                            profileView.showLatestShots();
+                            profileView.hideLatestShotsEmpty();
+                            if (shotList.size() == ALL_SHOTS_VISIBILITY_TRESHOLD) {
+                                profileView.showAllShotsButton();
+                            } else {
+                                profileView.hideAllShotsButton();
+                            }
+                            profileView.renderLastShots(shotModelMapper.transform(getLimitedShotList(shotList)));
+                        } else {
+                            profileView.hideLatestShots();
+                            profileView.showLatestShotsEmpty();
+                        }
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
+                        showErrorInView(error);
+                    }
+                });
+            }
+        });
+    }
+
+    @NonNull private Observable<Void> getMenuItemsVisibilityObservable() {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                if (isCurrentUser) {
+                    profileView.showLogoutButton();
+                    profileView.showSupportButton();
+                    profileView.showChangePasswordButton();
+                }
+                subscriber.onCompleted();
+            }
+        });
+    }
+
     @Override public void resume() {
         if (hasBeenPaused && userModel != null && !uploadingPhoto) {
-            loadProfileUser();
-            loadLatestShots(userModel.getIdUser());
+            refreshProfile();
         }
     }
 
     @Override public void pause() {
         hasBeenPaused = true;
     }
+
 }

@@ -50,6 +50,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Bind(R.id.streams_loading) View loadingView;
     @BindString(R.string.added_to_favorites) String addedToFavorites;
     @BindString(R.string.shared_stream_notification) String sharedStream;
+    @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
 
     @Inject StreamsListPresenter presenter;
     @Inject ImageLoader imageLoader;
@@ -75,7 +76,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         setHasOptionsMenu(true);
         initializePresenter();
         initializeViews(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_stream_list));
+        analyticsTool.analyticsStart(getContext(), analyticsScreenStreamList);
     }
 
     @Override

@@ -70,6 +70,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(com.shootr.mobile.R.id.loading_progress) View progressView;
 
     @BindString(com.shootr.mobile.R.string.shared_stream_notification) String streamNotification;
+    @BindString(R.string.analytics_screen_stream_detail) String analyticsScreenStreamDetail;
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
@@ -94,7 +95,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        analyticsTool.analyticsStart(getBaseContext(), getString(R.string.analytics_screen_stream_detail));
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamDetail);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
