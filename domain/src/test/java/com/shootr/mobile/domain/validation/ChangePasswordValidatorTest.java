@@ -16,13 +16,12 @@ public class ChangePasswordValidatorTest {
     public static final String NEW_PASSWORD = "new_password";
     public static final String NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS = "new_password_with_more_than_20_characters";
     public static final String NEW_PASSWORD_WITH_LESS_5_CHARACTERS = "12345";
-    private com.shootr.mobile.domain.validation.ChangePasswordValidator validator;
+    private ChangePasswordValidator validator;
     private List<FieldValidationError> errors;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        validator = new com.shootr.mobile.domain.validation.ChangePasswordValidator();
+        validator = new ChangePasswordValidator();
     }
 
     @Test public void shouldReturnPasswordEqualsCurrentPasswordIfPasswordAndNewPasswordAreEquals() {
@@ -69,60 +68,64 @@ public class ChangePasswordValidatorTest {
 
     @Test public void shouldReturnNewPasswordHasMoreThan20Characters() {
         errors = validator.validate(PASSWORD,
-          NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS, NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS, USERNAME);
+          NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS,
+          NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS,
+          USERNAME);
 
         assertThat(errors).contains(newPasswordWithMoreThan20Characters());
     }
 
     @Test public void shouldReturnNewPasswordHasLessThan6Characters() {
-        errors = validator.validate(PASSWORD, NEW_PASSWORD_WITH_LESS_5_CHARACTERS, NEW_PASSWORD_WITH_LESS_5_CHARACTERS, USERNAME);
+        errors = validator.validate(PASSWORD,
+          NEW_PASSWORD_WITH_LESS_5_CHARACTERS,
+          NEW_PASSWORD_WITH_LESS_5_CHARACTERS,
+          USERNAME);
 
         assertThat(errors).contains(newPasswordWithLessThan6Characters());
     }
 
     private FieldValidationError newPasswordEqualsPassword() {
         return new FieldValidationError(ShootrError.ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
     }
 
     private FieldValidationError newPasswordDifferentNewPasswordAgain() {
         return new FieldValidationError(ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
     }
 
     private FieldValidationError newPasswordEqualsUsername() {
         return new FieldValidationError(ShootrError.ERROR_CODE_NEW_PASSWORD_EQUALS_USERNAME,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
     }
 
     private FieldValidationError currentPasswordIsNull() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_CURRENT_PASSWORD);
+          ChangePasswordValidator.FIELD_CURRENT_PASSWORD);
     }
 
     private FieldValidationError newPasswordIsNull() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD);
     }
 
     private FieldValidationError newPasswordAgainIsNull() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN);
     }
 
     private FieldValidationError newPasswordWithInvalidCharacters() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD);
     }
 
     private FieldValidationError newPasswordWithMoreThan20Characters() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD);
     }
 
     private FieldValidationError newPasswordWithLessThan6Characters() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT,
-          com.shootr.mobile.domain.validation.ChangePasswordValidator.FIELD_NEW_PASSWORD);
+          ChangePasswordValidator.FIELD_NEW_PASSWORD);
     }
-
 }

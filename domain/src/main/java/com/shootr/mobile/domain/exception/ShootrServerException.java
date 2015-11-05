@@ -2,7 +2,7 @@ package com.shootr.mobile.domain.exception;
 
 import java.io.IOException;
 
-public class ShootrServerException  extends IOException{
+public class ShootrServerException extends IOException {
 
     private ShootrError shootrError;
 
@@ -17,5 +17,4 @@ public class ShootrServerException  extends IOException{
     @Override public String getMessage() {
         return shootrError.getErrorCode() + ": " + shootrError.getMessage();
     }
-
 }

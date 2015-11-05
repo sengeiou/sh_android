@@ -17,14 +17,15 @@ public class GetFavoriteStatusInteractor implements Interactor {
     private Callback<Boolean> callback;
     private String streamId;
 
-    @Inject public GetFavoriteStatusInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository) {
+    @Inject
+    public GetFavoriteStatusInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FavoriteRepository localFavoriteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
     }
 
-    public void loadFavoriteStatus(String streamId, Interactor.Callback<Boolean> callback) {
+    public void loadFavoriteStatus(String streamId, Callback<Boolean> callback) {
         this.callback = callback;
         this.streamId = streamId;
         interactorHandler.execute(this);
@@ -40,9 +41,9 @@ public class GetFavoriteStatusInteractor implements Interactor {
     }
 
     private void checkFavoriteStreamStatus(Favorite favoriteStatus) {
-        if(favoriteStatus == null){
+        if (favoriteStatus == null) {
             notifyLoaded(false);
-        }else{
+        } else {
             notifyLoaded(true);
         }
     }

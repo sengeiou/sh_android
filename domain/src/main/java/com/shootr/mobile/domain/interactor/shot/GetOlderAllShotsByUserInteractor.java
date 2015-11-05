@@ -1,32 +1,36 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 public class GetOlderAllShotsByUserInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    private final ShotRepository remoteShotRepository;
 
     private String userId;
     private Long currentOldestDate;
-    private Callback<List<com.shootr.mobile.domain.Shot>> callback;
+    private Callback<List<Shot>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetOlderAllShotsByUserInteractor(
-      com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @com.shootr.mobile.domain.repository.Remote
-    com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository) {
+    @Inject public GetOlderAllShotsByUserInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadAllShots(String userId, long currentOldestDate, Callback<List<com.shootr.mobile.domain.Shot>> callback, ErrorCallback errorCallback) {
+    public void loadAllShots(String userId, long currentOldestDate, Callback<List<Shot>> callback,
+      ErrorCallback errorCallback) {
         this.userId = userId;
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
@@ -36,28 +40,27 @@ public class GetOlderAllShotsByUserInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            List<com.shootr.mobile.domain.Shot> remoteShots = remoteShotRepository.getAllShotsFromUserAndDate(userId, currentOldestDate);
+            List<Shot> remoteShots = remoteShotRepository.getAllShotsFromUserAndDate(userId, currentOldestDate);
             notifyLoaded(sortShotsByPublishDate(remoteShots));
-        } catch (com.shootr.mobile.domain.exception.ShootrException error) {
+        } catch (ShootrException error) {
             notifyError(error);
         }
     }
 
-    private List<com.shootr.mobile.domain.Shot> sortShotsByPublishDate(List<com.shootr.mobile.domain.Shot> remoteShots) {
-        Collections.sort(remoteShots, new com.shootr.mobile.domain.Shot.NewerAboveComparator());
+    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
+        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
     }
 
-    private void notifyLoaded(final List<com.shootr.mobile.domain.Shot> result) {
+    private void notifyLoaded(final List<Shot> result) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(result);
             }
         });
     }
 
-    protected void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    protected void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);

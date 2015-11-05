@@ -1,11 +1,21 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,32 +24,28 @@ public class StreamsListInteractor implements Interactor {
 
     private static final Long REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS = 30L * 1000L;
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.StreamSearchRepository remoteStreamSearchRepository;
-    private final com.shootr.mobile.domain.repository.StreamSearchRepository localStreamSearchRepository;
-    private final com.shootr.mobile.domain.repository.StreamListSynchronizationRepository
-      streamListSynchronizationRepository;
-    private final com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
+    private final StreamSearchRepository remoteStreamSearchRepository;
+    private final StreamSearchRepository localStreamSearchRepository;
+    private final StreamListSynchronizationRepository streamListSynchronizationRepository;
+    private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
-    private final com.shootr.mobile.domain.utils.LocaleProvider localeProvider;
-    private final com.shootr.mobile.domain.repository.WatchersRepository watchersRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
+    private final LocaleProvider localeProvider;
+    private final WatchersRepository watchersRepository;
+    private final StreamRepository localStreamRepository;
 
-    private Callback<com.shootr.mobile.domain.StreamSearchResultList> callback;
+    private Callback<StreamSearchResultList> callback;
     private ErrorCallback errorCallback;
 
-    @Inject
-    public StreamsListInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.StreamSearchRepository remoteStreamSearchRepository,
-      @Local com.shootr.mobile.domain.repository.StreamSearchRepository localStreamSearchRepository,
-      com.shootr.mobile.domain.repository.StreamListSynchronizationRepository streamListSynchronizationRepository,
-      @Local com.shootr.mobile.domain.repository.StreamRepository localStreamRepository, @Local
-    com.shootr.mobile.domain.repository.WatchersRepository watchersRepository,
-      com.shootr.mobile.domain.repository.SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils,
-      com.shootr.mobile.domain.utils.LocaleProvider localeProvider) {
+    @Inject public StreamsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote StreamSearchRepository remoteStreamSearchRepository,
+      @Local StreamSearchRepository localStreamSearchRepository,
+      StreamListSynchronizationRepository streamListSynchronizationRepository,
+      @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteStreamSearchRepository = remoteStreamSearchRepository;
@@ -53,15 +59,15 @@ public class StreamsListInteractor implements Interactor {
         this.localStreamRepository = localStreamRepository;
     }
 
-    public void loadStreams(Callback<com.shootr.mobile.domain.StreamSearchResultList> callback, ErrorCallback errorCallback) {
+    public void loadStreams(Callback<StreamSearchResultList> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
-        List<StreamSearchResult> localStreams = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+    @Override public void execute() throws Exception {
+        List<StreamSearchResult> localStreams =
+          localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(localStreams);
 
         Long currentTime = timeUtils.getCurrentTime();
@@ -69,14 +75,15 @@ public class StreamsListInteractor implements Interactor {
             try {
                 refreshStreams();
                 streamListSynchronizationRepository.setStreamsRefreshDate(currentTime);
-            } catch (com.shootr.mobile.domain.exception.ShootrException error) {
+            } catch (ShootrException error) {
                 notifyError(error);
             }
         }
     }
 
     protected void refreshStreams() {
-        List<StreamSearchResult> remoteStreams = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+        List<StreamSearchResult> remoteStreams =
+          remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(remoteStreams);
         localStreamSearchRepository.deleteDefaultStreams();
         localStreamSearchRepository.putDefaultStreams(remoteStreams);
@@ -90,11 +97,10 @@ public class StreamsListInteractor implements Interactor {
 
     //region Result
     private void notifyLoaded(final List<StreamSearchResult> results) {
-        final com.shootr.mobile.domain.StreamSearchResultList searchResultList =
-          new com.shootr.mobile.domain.StreamSearchResultList(results, getWatchingStreamsWithWatchNumber());
+        final StreamSearchResultList searchResultList =
+          new StreamSearchResultList(results, getWatchingStreamsWithWatchNumber());
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(searchResultList);
             }
         });
@@ -115,10 +121,9 @@ public class StreamsListInteractor implements Interactor {
         }
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service;
 
-public class EmailInUseException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class EmailInUseException extends ShootrException {
 
     public EmailInUseException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class EmailInUseException extends com.shootr.mobile.domain.exception.Shoo
     public EmailInUseException(Throwable cause) {
         super(cause);
     }
-
 }

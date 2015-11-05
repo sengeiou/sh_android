@@ -10,7 +10,6 @@ import org.threeten.bp.temporal.Temporal;
 
 public class StreamJoinDateFormatter {
 
-
     private final DateRangeTextProvider dateRangeTextProvider;
     private final TimeUtils timeUtils;
 
@@ -28,7 +27,7 @@ public class StreamJoinDateFormatter {
     private String formatRelativeJoinStreamDate(Instant joinDate, Instant now) {
         if (isPast(joinDate, now)) {
             return formatPastDate(joinDate, now);
-        }else{
+        } else {
             return formatFutureDate();
         }
     }
@@ -40,11 +39,11 @@ public class StreamJoinDateFormatter {
     private String formatPastDate(Instant date, Instant now) {
         if (differsLessThanOneMinute(date, now)) {
             return dateRangeTextProvider.formatJustNow();
-        }else if (differsLessThan60Minutes(date, now)) {
+        } else if (differsLessThan60Minutes(date, now)) {
             return dateRangeTextProvider.formatMinutesAgo(getMinutesBetween(date, now));
-        }else if (differsLessThan24Hours(date, now)) {
+        } else if (differsLessThan24Hours(date, now)) {
             return dateRangeTextProvider.formatHoursAgo(getHoursBetween(date, now));
-        }else if (differsOneWeekOrLess(date, now)) {
+        } else if (differsOneWeekOrLess(date, now)) {
             return dateRangeTextProvider.formatDaysAgo(getDaysBetween(date, now));
         } else {
             return dateRangeTextProvider.formatLongTime();

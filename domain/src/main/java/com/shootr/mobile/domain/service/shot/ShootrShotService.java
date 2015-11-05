@@ -1,6 +1,10 @@
 package com.shootr.mobile.domain.service.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.repository.PhotoService;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
@@ -9,13 +13,12 @@ import javax.inject.Inject;
 public class ShootrShotService {
 
     private final ImageResizer imageResizer;
-    private final com.shootr.mobile.domain.repository.PhotoService photoService;
+    private final PhotoService photoService;
     private final ShotGateway shotGateway;
-    private final com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    private final ShotRepository remoteShotRepository;
 
-    @Inject public ShootrShotService(ImageResizer imageResizer, com.shootr.mobile.domain.repository.PhotoService photoService, ShotGateway shotGateway,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository) {
+    @Inject public ShootrShotService(ImageResizer imageResizer, PhotoService photoService, ShotGateway shotGateway,
+      @Remote ShotRepository remoteShotRepository) {
         this.imageResizer = imageResizer;
         this.photoService = photoService;
         this.shotGateway = shotGateway;
@@ -27,7 +30,7 @@ public class ShootrShotService {
             File resizedImageFile = getResizedImage(imageFile);
             return uploadPhoto(resizedImageFile);
         } catch (IOException e) {
-            throw new com.shootr.mobile.domain.exception.ServerCommunicationException(e);
+            throw new ServerCommunicationException(e);
         }
     }
 

@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
@@ -29,10 +30,11 @@ public class SelectStreamInteractor implements Interactor {
     private String idSelectedStream;
     private Callback<StreamSearchResult> callback;
 
-    @Inject public SelectStreamInteractor(final InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository, @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository,
-      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
+    @Inject
+    public SelectStreamInteractor(final InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local StreamRepository localStreamRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;
@@ -68,7 +70,8 @@ public class SelectStreamInteractor implements Interactor {
     private Stream getSelectedStream() {
         Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream);
         if (selectedStream == null) {
-            throw new RuntimeException(String.format("Stream with id %s not found in local repository", idSelectedStream));
+            throw new RuntimeException(String.format("Stream with id %s not found in local repository",
+              idSelectedStream));
         }
         return selectedStream;
     }
@@ -94,6 +97,7 @@ public class SelectStreamInteractor implements Interactor {
         streamSearchResult.setWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
         return streamSearchResult;
     }
+
     private void notifyLoaded(final Stream selectedStream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {

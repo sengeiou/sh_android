@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service.user;
 
-public class AccountCreationException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class AccountCreationException extends ShootrException {
 
     public AccountCreationException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class AccountCreationException extends com.shootr.mobile.domain.exception
     public AccountCreationException(Throwable cause) {
         super(cause);
     }
-
 }

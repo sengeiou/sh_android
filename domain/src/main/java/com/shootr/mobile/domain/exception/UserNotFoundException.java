@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.exception;
 
-public class UserNotFoundException extends ShootrException{
+public class UserNotFoundException extends ShootrException {
 
     private String username;
 

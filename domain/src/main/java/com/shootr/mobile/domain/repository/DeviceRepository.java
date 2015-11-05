@@ -1,8 +1,10 @@
 package com.shootr.mobile.domain.repository;
 
+import com.shootr.mobile.domain.Device;
+
 public interface DeviceRepository {
 
-    com.shootr.mobile.domain.Device getCurrentDevice();
+    Device getCurrentDevice();
 
-    com.shootr.mobile.domain.Device putDevice(com.shootr.mobile.domain.Device device);
+    Device putDevice(Device device);
 }

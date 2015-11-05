@@ -22,25 +22,22 @@ import static org.mockito.Mockito.when;
 public class RefreshStreamTimelineInteractorTest {
 
     public static final String ID_STREAM = "idStream";
-    private RefreshStreamTimelineInteractor interactor;
-
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
+    private RefreshStreamTimelineInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.interactor = new RefreshStreamTimelineInteractor(interactorHandler, postExecutionThread,
-                shootrTimelineService);
+        this.interactor =
+          new RefreshStreamTimelineInteractor(interactorHandler, postExecutionThread, shootrTimelineService);
     }
 
-    @Test
-    public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream() throws Exception {
+    @Test public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream() throws Exception {
         when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM)).thenReturn(timelineForStream());
 
         interactor.refreshStreamTimeline(ID_STREAM, spyCallback, errorCallback);
@@ -62,5 +59,4 @@ public class RefreshStreamTimelineInteractorTest {
             timelinesReturned.add(timeline);
         }
     }
-
 }

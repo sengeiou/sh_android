@@ -1,6 +1,10 @@
 package com.shootr.mobile.domain.service.user;
 
+import com.shootr.mobile.domain.LoginResult;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.repository.DatabaseUtils;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,17 +25,17 @@ public class ShootrUserServiceLoginTest {
 
     private static final String PASSWORD_STUB = "password";
     @Mock UserRepository localUserRepository;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
+    @Mock SessionRepository sessionRepository;
     @Mock CheckinGateway checkinGateway;
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
     @Mock ConfirmEmailGateway confirmEmailGateway;
-    @Mock com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock ChangePasswordGateway changePasswordGateway;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
-    @Mock com.shootr.mobile.domain.repository.DatabaseUtils databaseUtils;
+    @Mock DatabaseUtils databaseUtils;
 
     private ShootrUserService shootrUserService;
 
@@ -60,7 +64,7 @@ public class ShootrUserServiceLoginTest {
     }
 
     @Test public void shouldDownloadStreamIfUserHasStreamsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithStream());
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithStream());
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
 
@@ -68,13 +72,13 @@ public class ShootrUserServiceLoginTest {
     }
 
     @Test public void shouldNotDownloadAnyStreamIfUserHasNotStreamsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutStream());
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteStreamRepository, never()).getStreamById(anyString());
     }
 
     @Test public void shouldDownloadPeopleIfUserHasStreamsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithStream());
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
     }
@@ -85,9 +89,9 @@ public class ShootrUserServiceLoginTest {
         verify(remoteUserRepository).getPeople();
     }
 
-    private com.shootr.mobile.domain.LoginResult loginResultWithoutStream() {
+    private LoginResult loginResultWithoutStream() {
         User user = currentUserWithoutStreams();
-        return new com.shootr.mobile.domain.LoginResult(user,SESSION_TOKEN_STUB);
+        return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
     private User currentUserWithoutStreams() {
@@ -96,14 +100,14 @@ public class ShootrUserServiceLoginTest {
         return user;
     }
 
-    private com.shootr.mobile.domain.LoginResult loginResultWithStream() {
+    private LoginResult loginResultWithStream() {
         User user = currentUser();
         user.setIdWatchingStream(String.valueOf(WATCHING_STREAM_ID));
-        return new com.shootr.mobile.domain.LoginResult(user, SESSION_TOKEN_STUB);
+        return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
-    private com.shootr.mobile.domain.LoginResult loginResultCorrect() {
-        return new com.shootr.mobile.domain.LoginResult(currentUser(), SESSION_TOKEN_STUB);
+    private LoginResult loginResultCorrect() {
+        return new LoginResult(currentUser(), SESSION_TOKEN_STUB);
     }
 
     private User currentUser() {

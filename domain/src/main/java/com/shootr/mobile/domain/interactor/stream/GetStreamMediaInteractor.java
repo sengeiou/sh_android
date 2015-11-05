@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
@@ -32,8 +33,8 @@ public class GetStreamMediaInteractor implements Interactor {
 
     @Inject
     public GetStreamMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
       SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -53,7 +54,7 @@ public class GetStreamMediaInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        try{
+        try {
             getMediaFromLocal();
             getMediaFromRemote();
         } catch (ServerCommunicationException error) {
@@ -75,7 +76,8 @@ public class GetStreamMediaInteractor implements Interactor {
         notifyLoaded(shots);
     }
 
-    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository, Long maxTimestamp) {
+    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository,
+      Long maxTimestamp) {
         return shotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
     }
 
@@ -98,11 +100,9 @@ public class GetStreamMediaInteractor implements Interactor {
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });
     }
-
 }

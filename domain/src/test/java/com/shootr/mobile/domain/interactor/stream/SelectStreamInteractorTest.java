@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -7,7 +8,9 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -33,33 +36,33 @@ public class SelectStreamInteractorTest {
     private static final String NEW_STREAM_TITLE = "newTitle";
 
     @Mock TestInteractorHandler interactorHandler;
-    @Mock com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
+    @Mock StreamRepository localStreamRepository;
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock Interactor.Callback<StreamSearchResult> dummyCallback;
     @Mock TimeUtils timeUtils;
-    @Mock com.shootr.mobile.domain.repository.WatchersRepository localWatchersRepository;
+    @Mock WatchersRepository localWatchersRepository;
 
     private SelectStreamInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectStreamInteractor(interactorHandler,
-          postExecutionThread, localStreamRepository, localUserRepository,
+          postExecutionThread,
+          localStreamRepository,
+          localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
           sessionRepository,
           timeUtils);
     }
 
-    @Test
-    public void shouldSetNewStreamIdInSessionRepository() throws Exception {
+    @Test public void shouldSetNewStreamIdInSessionRepository() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
@@ -68,8 +71,7 @@ public class SelectStreamInteractorTest {
         verify(sessionRepository).setCurrentUser(currentUserWatchingNewStream());
     }
 
-    @Test
-    public void shouldSetNewStreamIdInLocalRepository() throws Exception {
+    @Test public void shouldSetNewStreamIdInLocalRepository() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
@@ -78,8 +80,7 @@ public class SelectStreamInteractorTest {
         verify(localUserRepository).updateWatch(currentUserWatchingNewStream());
     }
 
-    @Test
-    public void shouldSetNewStreamIdInRemoteRepository() throws Exception {
+    @Test public void shouldSetNewStreamIdInRemoteRepository() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
@@ -88,13 +89,11 @@ public class SelectStreamInteractorTest {
         verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
     }
 
-    @Test @Ignore
-    public void selectedStreamSavedInLocalIfNotExists() throws Exception {
+    @Test @Ignore public void selectedStreamSavedInLocalIfNotExists() throws Exception {
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
     }
 
-    @Test
-    public void selectingCurrentStreamDoesNotifyUi() throws Exception {
+    @Test public void selectingCurrentStreamDoesNotifyUi() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
@@ -111,11 +110,9 @@ public class SelectStreamInteractorTest {
 
         verify(localUserRepository, never()).updateWatch(any(User.class));
         verify(remoteUserRepository, never()).updateWatch(any(User.class));
-
     }
 
-    @Test
-    public void shouldNotifyCallbackBeforeSettingWatchInRemoteRepository() throws Exception {
+    @Test public void shouldNotifyCallbackBeforeSettingWatchInRemoteRepository() throws Exception {
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
@@ -125,20 +122,18 @@ public class SelectStreamInteractorTest {
         inOrder.verify(remoteUserRepository).updateWatch(any(User.class));
     }
 
-    @Test
-    public void shouldSetStreamIdWhenUpdateWatchWithStreamInfo() throws Exception {
+    @Test public void shouldSetStreamIdWhenUpdateWatchWithStreamInfo() throws Exception {
         User userWithOldStream = currentUserWatchingOldStream();
-        com.shootr.mobile.domain.Stream selectedStream = newStream();
+        Stream selectedStream = newStream();
 
         User updatedUser = interactor.updateUserWithStreamInfo(userWithOldStream, selectedStream);
 
         assertThat(updatedUser).hasWatchingStreamId(NEW_STREAM_ID);
     }
 
-    @Test
-    public void should_setStreamTitle_when_updateWatchWithStreamInfo() throws Exception {
+    @Test public void should_setStreamTitle_when_updateWatchWithStreamInfo() throws Exception {
         User userWithOldStream = currentUserWatchingOldStream();
-        com.shootr.mobile.domain.Stream selectedStream = newStream();
+        Stream selectedStream = newStream();
 
         User updatedUser = interactor.updateUserWithStreamInfo(userWithOldStream, selectedStream);
 
@@ -165,15 +160,15 @@ public class SelectStreamInteractorTest {
     //endregion
 
     //region Stub data
-    private com.shootr.mobile.domain.Stream newStream() {
-        com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    private Stream newStream() {
+        Stream stream = new Stream();
         stream.setId(NEW_STREAM_ID);
         stream.setTitle(NEW_STREAM_TITLE);
         return stream;
     }
 
-    private com.shootr.mobile.domain.Stream oldStream() {
-        com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    private Stream oldStream() {
+        Stream stream = new Stream();
         stream.setId(OLD_STREAM_ID);
         stream.setTitle(OLD_STREAM_TITLE);
         return stream;

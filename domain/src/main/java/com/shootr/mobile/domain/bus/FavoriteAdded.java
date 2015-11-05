@@ -5,11 +5,9 @@ public interface FavoriteAdded {
     interface Receiver {
 
         void onFavoriteAdded(Event event);
-
     }
 
     class Event {
 
     }
-
 }

@@ -6,9 +6,12 @@ import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,25 +36,26 @@ public class GetUserListingStreamsInteractorTest {
     public static final String ID_STREAM = "idStream";
     @Mock StreamSearchRepository localStreamSearchRepository;
     @Mock StreamSearchRepository remoteStreamSearchRepository;
-    @Mock com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
-    @Mock com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
+    @Mock StreamRepository localStreamRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Interactor.ErrorCallback errorCallback;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
+    @Mock SessionRepository sessionRepository;
     @Mock FavoriteRepository localFavoriteRepository;
     @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
     private GetUserListingStreamsInteractor interactor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         interactor = new GetUserListingStreamsInteractor(interactorHandler,
           postExecutionThread,
           localStreamSearchRepository,
           remoteStreamSearchRepository,
           localStreamRepository,
-          remoteStreamRepository, localFavoriteRepository);
+          remoteStreamRepository,
+          localFavoriteRepository);
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 

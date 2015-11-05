@@ -1,8 +1,12 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -19,15 +23,14 @@ public class MarkNiceShotInteractorTest {
 
     private static final String SHOT_ID = "shot_id";
 
-    @Mock com.shootr.mobile.domain.repository.NiceShotRepository niceShotRepository;
-    @Mock com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
-    @Mock com.shootr.mobile.domain.repository.NiceShotRepository remoteNiceShotRepository;
+    @Mock NiceShotRepository niceShotRepository;
+    @Mock ShotRepository localShotRepository;
+    @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
 
     private MarkNiceShotInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
@@ -37,8 +40,7 @@ public class MarkNiceShotInteractorTest {
           remoteNiceShotRepository);
     }
 
-    @Test
-    public void shouldNotifyCallbackAfterSendingToServer() throws Exception {
+    @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {
         interactor.markNiceShot(SHOT_ID, callback);
 
         InOrder inOrder = inOrder(callback, remoteNiceShotRepository);
@@ -46,31 +48,27 @@ public class MarkNiceShotInteractorTest {
         inOrder.verify(callback).onCompleted();
     }
 
-    @Test
-    public void shouldNotifyCallbackWhenServiceFails() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
+    @Test public void shouldNotifyCallbackWhenServiceFails() throws Exception {
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
         verify(callback).onCompleted();
     }
 
-    @Test
-    public void shouldUnmarkNiceWhenServerFails() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
+    @Test public void shouldUnmarkNiceWhenServerFails() throws Exception {
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
         verify(niceShotRepository).unmark(SHOT_ID);
     }
 
-    @Test
-    public void shouldNotSendToServiceWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.NiceAlreadyMarkedException()).when(niceShotRepository).mark(anyString());
+    @Test public void shouldNotSendToServiceWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
+        doThrow(new NiceAlreadyMarkedException()).when(niceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
         verify(remoteNiceShotRepository, never()).mark(anyString());
-
     }
 }

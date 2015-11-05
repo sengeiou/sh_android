@@ -16,6 +16,10 @@ public class StreamInfo {
 
     private Boolean isDataComplete;
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public Boolean hasMoreParticipants() {
         return hasMoreParticipants;
     }
@@ -46,10 +50,6 @@ public class StreamInfo {
 
     public void setStream(Stream stream) {
         this.stream = stream;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public User getCurrentUserWatching() {
@@ -113,6 +113,5 @@ public class StreamInfo {
         public StreamInfo build() {
             return streamInfo;
         }
-
     }
 }

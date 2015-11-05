@@ -1,6 +1,10 @@
 package com.shootr.mobile.domain.interactor;
 
+import com.shootr.mobile.domain.exception.ShootrException;
+
 public interface Interactor {
+
+    void execute() throws Exception;
 
     interface Callback<Result> {
 
@@ -9,13 +13,11 @@ public interface Interactor {
 
     interface ErrorCallback {
 
-        void onError(com.shootr.mobile.domain.exception.ShootrException error);
+        void onError(ShootrException error);
     }
 
     interface CompletedCallback {
 
         void onCompleted();
     }
-
-    void execute() throws Exception;
 }

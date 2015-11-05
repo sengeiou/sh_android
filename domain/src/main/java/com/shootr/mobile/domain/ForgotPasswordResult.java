@@ -65,8 +65,7 @@ public class ForgotPasswordResult {
         return result;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "ForgotPasswordResult{" +
           "idUser='" + idUser + '\'' +
           ", userName='" + userName + '\'' +

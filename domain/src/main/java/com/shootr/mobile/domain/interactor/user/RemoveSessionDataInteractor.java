@@ -4,19 +4,21 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
 public class RemoveSessionDataInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    private final ShootrUserService shootrUserService;
 
     private ErrorCallback errorCallback;
     private CompletedCallback completedCallback;
 
-    @Inject public RemoveSessionDataInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService) {
+    @Inject
+    public RemoveSessionDataInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      ShootrUserService shootrUserService) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
@@ -35,7 +37,6 @@ public class RemoveSessionDataInteractor implements Interactor {
         } catch (ShootrException shootrException) {
             handleServerError(shootrException);
         }
-
     }
 
     private void notifyLoaded() {

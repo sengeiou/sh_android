@@ -13,16 +13,13 @@ import static org.mockito.Mockito.when;
 
 public class StreamJoinDateFormatterTest {
 
-    public static final long RAFA_JOINED =      1440276758493L; // 22:52
-    public static final long SCREENSHOT_DATE =  1440279000000L; // 23:30 //diff=38min
-
-    private StreamJoinDateFormatter formatter;
-
+    public static final long RAFA_JOINED = 1440276758493L; // 22:52
+    public static final long SCREENSHOT_DATE = 1440279000000L; // 23:30 //diff=38min
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
+    private StreamJoinDateFormatter formatter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         formatter = new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils);
     }
@@ -32,8 +29,7 @@ public class StreamJoinDateFormatterTest {
      * data captured one night between different platforms in a real life test.
      * We keep it in memory of that tragic night. And to ensure that it doesn't get fucked up again.
      */
-    @Test
-    public void shouldFormat38MinutesAgoWhenDateIs38MinutesAgoDifferentHour() throws Exception {
+    @Test public void shouldFormat38MinutesAgoWhenDateIs38MinutesAgoDifferentHour() throws Exception {
         setNow(SCREENSHOT_DATE);
 
         formatter.format(RAFA_JOINED);
@@ -42,8 +38,7 @@ public class StreamJoinDateFormatterTest {
     }
 
     //region Just now
-    @Test
-    public void shouldFormatJustNowWhenDateIsFuture() throws Exception {
+    @Test public void shouldFormatJustNowWhenDateIsFuture() throws Exception {
         long now = time(22, 0);
         long future = time(22, 30);
         setNow(now);
@@ -53,8 +48,7 @@ public class StreamJoinDateFormatterTest {
         verify(dateRangeTextProvider).formatJustNow();
     }
 
-    @Test
-    public void shouldFormatJustNowWhenDateIsNow() throws Exception {
+    @Test public void shouldFormatJustNowWhenDateIsNow() throws Exception {
         long now = time(22, 0);
         setNow(now);
 
@@ -63,8 +57,7 @@ public class StreamJoinDateFormatterTest {
         verify(dateRangeTextProvider).formatJustNow();
     }
 
-    @Test
-    public void shouldFormatJustNowWhenDateIs59SecondsAgo() throws Exception {
+    @Test public void shouldFormatJustNowWhenDateIs59SecondsAgo() throws Exception {
         long now = time(22, 0, 59);
         long date = time(22, 0, 0);
         setNow(now);
@@ -76,8 +69,7 @@ public class StreamJoinDateFormatterTest {
     //endregion
 
     //region Minutes
-    @Test
-    public void shouldFormat1MinutesAgoWhenDateIs60SecondsAgo() throws Exception {
+    @Test public void shouldFormat1MinutesAgoWhenDateIs60SecondsAgo() throws Exception {
         long now = time(22, 1, 0);
         long date = time(22, 0, 0);
         setNow(now);
@@ -87,8 +79,7 @@ public class StreamJoinDateFormatterTest {
         verify(dateRangeTextProvider).formatMinutesAgo(1);
     }
 
-    @Test
-    public void shouldFormat59MinutesWhenDateIs59MinutesAgo() throws Exception {
+    @Test public void shouldFormat59MinutesWhenDateIs59MinutesAgo() throws Exception {
         long now = time(22, 59);
         long date = time(22, 0);
         setNow(now);
@@ -100,8 +91,7 @@ public class StreamJoinDateFormatterTest {
     //endregion
 
     //region Days
-    @Test
-    public void shouldFormat1DayAgoWhenDateIs24HoursAgo() throws Exception {
+    @Test public void shouldFormat1DayAgoWhenDateIs24HoursAgo() throws Exception {
         long now = date(2, 1, 2015) + time(12, 30);
         long date = date(1, 1, 2015) + time(12, 30);
         setNow(now);
@@ -111,8 +101,7 @@ public class StreamJoinDateFormatterTest {
         verify(dateRangeTextProvider).formatDaysAgo(1);
     }
 
-    @Test
-    public void shouldFormat7DaysAgoWhenDateIs7DaysAgo() throws Exception {
+    @Test public void shouldFormat7DaysAgoWhenDateIs7DaysAgo() throws Exception {
         long now = date(10, 1, 1992);
         long date = date(3, 1, 1992);
         setNow(now);
@@ -123,8 +112,7 @@ public class StreamJoinDateFormatterTest {
     }
     //endregion
 
-    @Test
-    public void shouldFormatLongTimeWhenDateIs8DaysAgo() throws Exception {
+    @Test public void shouldFormatLongTimeWhenDateIs8DaysAgo() throws Exception {
         long now = date(9, 1, 2015);
         long date = date(1, 1, 2015);
         setNow(now);
@@ -137,12 +125,12 @@ public class StreamJoinDateFormatterTest {
     //region Date constructors
     private long date(int day, int month, int year) {
         LocalDateTime datetime = LocalDateTime.of(year, month, day, 0, 0, 0);
-        return datetime.toEpochSecond(ZoneOffset.UTC)*1000;
+        return datetime.toEpochSecond(ZoneOffset.UTC) * 1000;
     }
 
     private long time(int hour, int minutes, int seconds) {
         LocalDateTime datetime = LocalDateTime.of(1970, 1, 1, hour, minutes, seconds);
-        return datetime.toEpochSecond(ZoneOffset.UTC)*1000;
+        return datetime.toEpochSecond(ZoneOffset.UTC) * 1000;
     }
 
     private long time(int hour, int minutes) {

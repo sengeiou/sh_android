@@ -1,25 +1,34 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrError;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.ShootrValidationException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
 public class StreamSearchInteractor implements com.shootr.mobile.domain.interactor.Interactor {
 
     public static final int MIN_SEARCH_LENGTH = 3;
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
-    private final com.shootr.mobile.domain.repository.StreamSearchRepository streamSearchRepository;
-    private final com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.utils.LocaleProvider localeProvider;
+    private final InteractorHandler interactorHandler;
+    private final StreamSearchRepository streamSearchRepository;
+    private final PostExecutionThread postExecutionThread;
+    private final LocaleProvider localeProvider;
 
     private String query;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject
-    public StreamSearchInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.StreamSearchRepository streamSearchRepository, com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread,
-      com.shootr.mobile.domain.utils.LocaleProvider localeProvider) {
+    @Inject public StreamSearchInteractor(InteractorHandler interactorHandler,
+      @Remote StreamSearchRepository streamSearchRepository, PostExecutionThread postExecutionThread,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.streamSearchRepository = streamSearchRepository;
         this.postExecutionThread = postExecutionThread;
@@ -38,7 +47,7 @@ public class StreamSearchInteractor implements com.shootr.mobile.domain.interact
         if (validateSearchQuery()) {
             try {
                 performSearch();
-            } catch (com.shootr.mobile.domain.exception.ServerCommunicationException networkError) {
+            } catch (ServerCommunicationException networkError) {
                 notifyError(networkError);
             }
         }
@@ -50,22 +59,21 @@ public class StreamSearchInteractor implements com.shootr.mobile.domain.interact
 
     private boolean validateSearchQuery() {
         if (query == null || query.length() < MIN_SEARCH_LENGTH) {
-            notifyError(new com.shootr.mobile.domain.exception.ShootrValidationException(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
+            notifyError(new ShootrValidationException(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
             return false;
         }
         return true;
     }
 
     private void performSearch() {
-        List<com.shootr.mobile.domain.StreamSearchResult> streams = streamSearchRepository.getStreams(query, localeProvider.getLocale());
+        List<StreamSearchResult> streams = streamSearchRepository.getStreams(query, localeProvider.getLocale());
 
-        com.shootr.mobile.domain.StreamSearchResultList
-          streamSearchResultList = new com.shootr.mobile.domain.StreamSearchResultList(streams);
+        StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 
         notifySearchResultsSuccessful(streamSearchResultList);
     }
 
-    private void notifySearchResultsSuccessful(final com.shootr.mobile.domain.StreamSearchResultList streams) {
+    private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(streams);
@@ -73,7 +81,7 @@ public class StreamSearchInteractor implements com.shootr.mobile.domain.interact
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
@@ -83,6 +91,6 @@ public class StreamSearchInteractor implements com.shootr.mobile.domain.interact
 
     public interface Callback {
 
-        void onLoaded(com.shootr.mobile.domain.StreamSearchResultList results);
+        void onLoaded(StreamSearchResultList results);
     }
 }

@@ -1,9 +1,12 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
 import org.junit.Before;
@@ -23,21 +26,18 @@ import static org.mockito.Mockito.when;
 public class GetUserByIdInteractorTest {
 
     public static final String ID_USER = "idUser";
-    private GetUserByIdInteractor interactor;
-
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock Interactor.Callback<User> callback;
     @Mock Interactor.ErrorCallback errorCallback;
+    private GetUserByIdInteractor interactor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetUserByIdInteractor(interactorHandler,
-          postExecutionThread,
-          localUserRepository,
-          remoteUserRepository);
+        interactor =
+          new GetUserByIdInteractor(interactorHandler, postExecutionThread, localUserRepository, remoteUserRepository);
     }
 
     @Test public void shouldLoadUserFromLocalRepository() throws Exception {
@@ -78,11 +78,11 @@ public class GetUserByIdInteractorTest {
     }
 
     @Test public void shouldCallbackErrorIfRemoteRepositoryFailsWithException() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ServerCommunicationException(null)).when(remoteUserRepository).getUserById(anyString());
+        doThrow(new ServerCommunicationException(null)).when(remoteUserRepository).getUserById(anyString());
 
         interactor.loadUserById(anyString(), callback, errorCallback);
 
-        verify(errorCallback).onError(any(com.shootr.mobile.domain.exception.ShootrException.class));
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     private User user() {

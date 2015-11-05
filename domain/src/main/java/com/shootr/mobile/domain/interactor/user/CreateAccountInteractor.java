@@ -1,15 +1,25 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrError;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import com.shootr.mobile.domain.validation.CreateUserValidator;
+import com.shootr.mobile.domain.validation.FieldValidationError;
 import java.util.List;
 import javax.inject.Inject;
 
 public class CreateAccountInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
-    private final com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
+    private final ShootrUserService shootrUserService;
 
     private String email;
     private String username;
@@ -17,8 +27,8 @@ public class CreateAccountInteractor implements Interactor {
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public CreateAccountInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler, com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread,
-      com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService) {
+    @Inject public CreateAccountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      ShootrUserService shootrUserService) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
@@ -39,29 +49,28 @@ public class CreateAccountInteractor implements Interactor {
             try {
                 shootrUserService.createAccount(username, email, password);
                 notifyLoaded();
-            } catch (com.shootr.mobile.domain.exception.EmailAlreadyExistsException e) {
-                handleServerError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);
-            } catch (com.shootr.mobile.domain.exception.UsernameAlreadyExistsException e) {
-                handleServerError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE,
+            } catch (EmailAlreadyExistsException e) {
+                handleServerError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);
+            } catch (UsernameAlreadyExistsException e) {
+                handleServerError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE,
                   CreateUserValidator.FIELD_USERNAME);
-            } catch (com.shootr.mobile.domain.exception.ServerCommunicationException communicationError) {
+            } catch (ServerCommunicationException communicationError) {
                 notifyError(communicationError);
             }
         }
     }
 
     protected void handleServerError(String errorCode, int field) {
-        com.shootr.mobile.domain.validation.FieldValidationError fieldValidationError =
-          new com.shootr.mobile.domain.validation.FieldValidationError(errorCode, field);
-        notifyError(new com.shootr.mobile.domain.exception.DomainValidationException(fieldValidationError));
+        FieldValidationError fieldValidationError = new FieldValidationError(errorCode, field);
+        notifyError(new DomainValidationException(fieldValidationError));
     }
 
     private boolean validateInput() {
-        List<com.shootr.mobile.domain.validation.FieldValidationError> validationErrors = new CreateUserValidator().validate(email, username, password);
+        List<FieldValidationError> validationErrors = new CreateUserValidator().validate(email, username, password);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
-            notifyError(new com.shootr.mobile.domain.exception.DomainValidationException(validationErrors));
+            notifyError(new DomainValidationException(validationErrors));
             return false;
         }
     }
@@ -74,7 +83,7 @@ public class CreateAccountInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);

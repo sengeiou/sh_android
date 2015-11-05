@@ -5,5 +5,4 @@ public class ImageResizingException extends ShootrException {
     public ImageResizingException(Throwable cause) {
         super(cause);
     }
-
 }

@@ -12,6 +12,10 @@ public class StreamTimelineParameters extends TimelineParameters {
         /* private constructor, use builder */
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public String getStreamId() {
         return streamId;
     }
@@ -22,10 +26,6 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     public String getUserId() {
         return userId;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

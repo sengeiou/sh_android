@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import javax.inject.Inject;
@@ -24,7 +25,7 @@ public class UnwatchStreamInteractor implements Interactor {
 
     @Inject public UnwatchStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository, BusPublisher busPublisher) {
+      @Remote UserRepository remoteUserRepository, BusPublisher busPublisher) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;

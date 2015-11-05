@@ -1,9 +1,23 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
+import com.shootr.mobile.domain.utils.TimeUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,28 +44,31 @@ public class StreamsListInteractorTest {
     private static final Long SECONDS_AGO_29 = NOW - (29L * 1000);
     private static final String ID_CURRENT_USER = "current_user";
 
-    @Mock com.shootr.mobile.domain.repository.StreamSearchRepository remoteStreamSearchRepository;
-    @Mock com.shootr.mobile.domain.repository.StreamSearchRepository localStreamSearchRepository;
-    @Mock com.shootr.mobile.domain.repository.StreamListSynchronizationRepository streamListSynchronizationRepository;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    @Mock com.shootr.mobile.domain.repository.UserRepository localUserRepository;
-    @Mock com.shootr.mobile.domain.utils.TimeUtils timeUtils;
+    @Mock StreamSearchRepository remoteStreamSearchRepository;
+    @Mock StreamSearchRepository localStreamSearchRepository;
+    @Mock StreamListSynchronizationRepository streamListSynchronizationRepository;
+    @Mock SessionRepository sessionRepository;
+    @Mock UserRepository localUserRepository;
+    @Mock TimeUtils timeUtils;
     @Spy SpyCallback<StreamSearchResultList> spyCallback = new SpyCallback<>();
-    @Mock com.shootr.mobile.domain.interactor.Interactor.ErrorCallback dummyErrorCallback;
-    @Mock com.shootr.mobile.domain.utils.LocaleProvider localeProvider;
-    @Mock com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
-    @Mock com.shootr.mobile.domain.repository.WatchersRepository watchersRepository;
+    @Mock Interactor.ErrorCallback dummyErrorCallback;
+    @Mock LocaleProvider localeProvider;
+    @Mock StreamRepository localStreamRepository;
+    @Mock WatchersRepository watchersRepository;
 
     private StreamsListInteractor interactor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
-        com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         interactor = new StreamsListInteractor(interactorHandler,
-          postExecutionThread, remoteStreamSearchRepository, localStreamSearchRepository,
-          streamListSynchronizationRepository, localStreamRepository,
+          postExecutionThread,
+          remoteStreamSearchRepository,
+          localStreamSearchRepository,
+          streamListSynchronizationRepository,
+          localStreamRepository,
           watchersRepository,
           sessionRepository,
           localUserRepository,
@@ -67,7 +84,7 @@ public class StreamsListInteractorTest {
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
-        verify(spyCallback).onLoaded(any(com.shootr.mobile.domain.StreamSearchResultList.class));
+        verify(spyCallback).onLoaded(any(StreamSearchResultList.class));
         assertThat(spyCallback.firstResult().getStreamSearchResults()).hasSize(2);
     }
 
@@ -152,7 +169,9 @@ public class StreamsListInteractorTest {
 
     @Test public void shouldNotifyErrorCallbackWhenRefreshRemoteFails() throws Exception {
         setupNeedsRefresh();
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new com.shootr.mobile.domain.exception.ShootrException("test exception") {});
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new com.shootr.mobile.domain.exception.ShootrException(
+          "test exception") {
+        });
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
@@ -169,25 +188,25 @@ public class StreamsListInteractorTest {
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(NOW);
     }
 
-    private List<com.shootr.mobile.domain.StreamSearchResult> twoStreamResults() {
+    private List<StreamSearchResult> twoStreamResults() {
         return Arrays.asList(streamResult(), streamResult());
     }
 
-    private com.shootr.mobile.domain.StreamSearchResultList twoStreamResultList() {
-        return new com.shootr.mobile.domain.StreamSearchResultList(twoStreamResults());
+    private StreamSearchResultList twoStreamResultList() {
+        return new StreamSearchResultList(twoStreamResults());
     }
 
-    private List<com.shootr.mobile.domain.StreamSearchResult> emptyResults() {
+    private List<StreamSearchResult> emptyResults() {
         return Collections.emptyList();
     }
 
-    private com.shootr.mobile.domain.StreamSearchResultList emptyResultList() {
-        return new com.shootr.mobile.domain.StreamSearchResultList(emptyResults());
+    private StreamSearchResultList emptyResultList() {
+        return new StreamSearchResultList(emptyResults());
     }
 
-    private com.shootr.mobile.domain.StreamSearchResult streamResult() {
-        com.shootr.mobile.domain.StreamSearchResult result = new com.shootr.mobile.domain.StreamSearchResult();
-        result.setStream(new com.shootr.mobile.domain.Stream());
+    private StreamSearchResult streamResult() {
+        StreamSearchResult result = new StreamSearchResult();
+        result.setStream(new Stream());
         return result;
     }
 
@@ -196,7 +215,7 @@ public class StreamsListInteractorTest {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUser());
     }
 
-    private com.shootr.mobile.domain.User currentUser() {
-        return new com.shootr.mobile.domain.User();
+    private User currentUser() {
+        return new User();
     }
 }

@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service;
 
-public class InsufficientAuthenticationException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class InsufficientAuthenticationException extends ShootrException {
 
     public InsufficientAuthenticationException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class InsufficientAuthenticationException extends com.shootr.mobile.domai
     public InsufficientAuthenticationException(Throwable cause) {
         super(cause);
     }
-
 }

@@ -1,21 +1,23 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import javax.inject.Inject;
 
 public class ShareShotInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    private final ShotRepository remoteShotRepository;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private String idShot;
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
-    @Inject public ShareShotInteractor(@com.shootr.mobile.domain.repository.Remote
-    com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository, InteractorHandler interactorHandler,
+    @Inject public ShareShotInteractor(@Remote ShotRepository remoteShotRepository, InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread) {
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
@@ -33,7 +35,7 @@ public class ShareShotInteractor implements Interactor {
         try {
             remoteShotRepository.shareShot(idShot);
             notifyCompleted();
-        } catch (com.shootr.mobile.domain.exception.ShootrException error) {
+        } catch (ShootrException error) {
             notifyError(error);
         }
     }
@@ -46,10 +48,9 @@ public class ShareShotInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

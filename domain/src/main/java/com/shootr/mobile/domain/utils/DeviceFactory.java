@@ -1,8 +1,10 @@
 package com.shootr.mobile.domain.utils;
 
+import com.shootr.mobile.domain.Device;
+
 public interface DeviceFactory {
 
-    com.shootr.mobile.domain.Device createDevice();
+    Device createDevice();
 
-    com.shootr.mobile.domain.Device updateDevice(com.shootr.mobile.domain.Device device);
+    Device updateDevice(Device device);
 }

@@ -7,16 +7,16 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public List<String> getIncludedTypes() {
         return includedTypes;
     }
 
-    public void excludeHiddenTypes(){
+    public void excludeHiddenTypes() {
         this.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

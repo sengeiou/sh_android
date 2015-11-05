@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +24,16 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private Callback<List<SuggestedPeople>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository) {
+    @Inject
+    public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback){
+    public void loadSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -66,8 +66,9 @@ public class GetSuggestedPeopleInteractor implements Interactor {
         List<User> people = localUserRepository.getPeople();
         List<SuggestedPeople> notFollowed = new ArrayList<>();
         for (SuggestedPeople suggestion : suggestions) {
-            if(!people.contains(suggestion.getUser()) && !notFollowed.contains(suggestion))
+            if (!people.contains(suggestion.getUser()) && !notFollowed.contains(suggestion)) {
                 notFollowed.add(suggestion);
+            }
         }
         return notFollowed;
     }
@@ -87,5 +88,4 @@ public class GetSuggestedPeopleInteractor implements Interactor {
             }
         });
     }
-
 }

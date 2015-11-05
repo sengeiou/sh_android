@@ -31,6 +31,5 @@ public class SecurityUtils {
         } catch (java.security.NoSuchAlgorithmException e) {
             return null;
         }
-
     }
 }

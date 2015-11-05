@@ -7,20 +7,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StreamValidatorTest {
 
-
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
     }
 
-    @Test
-    public void testSpacesAreNotRemoved() {
+    @Test public void testSpacesAreNotRemoved() {
         String spaceString = " ";
         String filteredString = filter(spaceString);
         assertThat(filteredString).isEqualTo(spaceString);
     }
 
-    @Test
-    public void testAlphanumericCharactersAreNotRemoved() {
+    @Test public void testAlphanumericCharactersAreNotRemoved() {
         String alphanumeric = "qwertyuiopasdfghjklñzxcvbnm1234567890";
         String upperAlphanumeric = alphanumeric.toUpperCase();
 
@@ -31,8 +27,7 @@ public class StreamValidatorTest {
         assertThat(filteredUpper).isEqualTo(upperAlphanumeric);
     }
 
-    @Test
-    public void testPunctuationCharacteresNotRemoved() {
+    @Test public void testPunctuationCharacteresNotRemoved() {
         String punctuation = "-.,:;!?¡¿@_*+/%$·\"&(){}[]^ç\\|";
         String filter = filter(punctuation);
         assertThat(filter).isEqualTo(punctuation);

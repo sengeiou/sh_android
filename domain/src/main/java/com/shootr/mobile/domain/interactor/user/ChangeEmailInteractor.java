@@ -1,7 +1,10 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.EmailAlreadyConfirmedException;
+import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -40,9 +43,9 @@ public class ChangeEmailInteractor implements Interactor {
             notifyLoaded();
         } catch (ServerCommunicationException error) {
             notifyError(error);
-        } catch (com.shootr.mobile.domain.exception.EmailAlreadyExistsException error) {
+        } catch (EmailAlreadyExistsException error) {
             notifyError(new EmailInUseException(error));
-        } catch (com.shootr.mobile.domain.exception.UnauthorizedRequestException error) {
+        } catch (UnauthorizedRequestException error) {
             notifyError(new InsufficientAuthenticationException(error));
         } catch (EmailAlreadyConfirmedException error) {
             notifyError(new EmailIsAuthenticatedException(error));
@@ -59,7 +62,7 @@ public class ChangeEmailInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);

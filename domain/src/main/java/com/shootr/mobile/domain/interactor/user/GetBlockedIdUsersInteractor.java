@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,8 +23,10 @@ public class GetBlockedIdUsersInteractor implements Interactor {
     private Callback<List<String>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository, @com.shootr.mobile.domain.repository.Remote FollowRepository remoteFollowRepository, SessionRepository sessionRepository) {
+    @Inject
+    public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
@@ -31,7 +34,7 @@ public class GetBlockedIdUsersInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback){
+    public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);

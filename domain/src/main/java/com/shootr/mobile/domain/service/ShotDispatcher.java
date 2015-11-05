@@ -4,8 +4,12 @@ import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotFailed;
+import com.shootr.mobile.domain.bus.ShotQueued;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import com.shootr.mobile.domain.utils.Patterns;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,18 +22,17 @@ import java.util.regex.Matcher;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class ShotDispatcher implements ShotSender {
+@Singleton public class ShotDispatcher implements ShotSender {
 
     private final ShotQueueRepository shotQueueRepository;
-    private final com.shootr.mobile.domain.service.shot.ShootrShotService shootrShotService;
+    private final ShootrShotService shootrShotService;
     private final BusPublisher busPublisher;
     private final ShotQueueListener shotQueueListener;
     private final File queuedImagesDir;
 
     private boolean isDispatching;
 
-    @Inject public ShotDispatcher(ShotQueueRepository shotQueueRepository, com.shootr.mobile.domain.service.shot.ShootrShotService shootrShotService,
+    @Inject public ShotDispatcher(ShotQueueRepository shotQueueRepository, ShootrShotService shootrShotService,
       BusPublisher busPublisher, ShotQueueListener shotQueueListener, @TemporaryFilesDir File externalFilesDir) {
         this.shotQueueRepository = shotQueueRepository;
         this.shootrShotService = shootrShotService;
@@ -83,7 +86,7 @@ public class ShotDispatcher implements ShotSender {
 
     private void copyImage(QueuedShot shot, File sourceImage, File targetImage) {
         InputStream in = null;
-        OutputStream out=null;
+        OutputStream out = null;
         try {
             if (!targetImage.exists()) {
                 targetImage.createNewFile();
@@ -97,7 +100,7 @@ public class ShotDispatcher implements ShotSender {
             }
         } catch (IOException e) {
             notifyShotSendingFailed(shot, e);
-        }finally {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
@@ -147,10 +150,10 @@ public class ShotDispatcher implements ShotSender {
             queuedShot.setShot(shotSent);
             notifyShotSent(queuedShot);
             clearShotFromQueue(queuedShot);
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException e) {
+        } catch (ServerCommunicationException e) {
             persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
-        } catch (com.shootr.mobile.domain.exception.ShotNotFoundException e) {
+        } catch (ShotNotFoundException e) {
             clearShotFromQueue(queuedShot);
             notifyShotSendingHasDeletedParent(queuedShot, e);
         }
@@ -184,7 +187,7 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void notifyShotQueued(QueuedShot queuedShot) {
-        busPublisher.post(new com.shootr.mobile.domain.bus.ShotQueued.Event(queuedShot));
+        busPublisher.post(new ShotQueued.Event(queuedShot));
         shotQueueListener.onQueueShot(queuedShot);
     }
 

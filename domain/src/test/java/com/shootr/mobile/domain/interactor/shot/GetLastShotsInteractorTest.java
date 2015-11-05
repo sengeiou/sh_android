@@ -1,8 +1,11 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -24,16 +27,15 @@ public class GetLastShotsInteractorTest {
     private static final String ID_NOT_FOLLOWING = "not_following";
 
     @Mock UserRepository localUserRepository;
-    @Mock com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
-    @Mock com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
-    @Mock Interactor.Callback<List<com.shootr.mobile.domain.Shot>> callback;
+    @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
+    @Mock Interactor.Callback<List<Shot>> callback;
     @Mock Interactor.ErrorCallback errorCallback;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
+    @Mock SessionRepository sessionRepository;
 
     private GetLastShotsInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         interactor = new GetLastShotsInteractor(new TestInteractorHandler(),
           new TestPostExecutionThread(),
@@ -47,9 +49,8 @@ public class GetLastShotsInteractorTest {
         when(localUserRepository.isFollowing(ID_NOT_FOLLOWING)).thenReturn(false);
     }
 
-    @Test
-    public void shouldPutRemoteShotsInLocalWhenCurrentUser() throws Exception {
-        List<com.shootr.mobile.domain.Shot> remoteShots = shotList();
+    @Test public void shouldPutRemoteShotsInLocalWhenCurrentUser() throws Exception {
+        List<Shot> remoteShots = shotList();
         when(remoteShotRepository.getShotsFromUser(eq(ID_CURRENT_USER), anyInt())).thenReturn(remoteShots);
 
         interactor.loadLastShots(ID_CURRENT_USER, callback, errorCallback);
@@ -57,9 +58,8 @@ public class GetLastShotsInteractorTest {
         verify(localShotRepository).putShots(remoteShots);
     }
 
-    @Test
-    public void shouldPutRemoteShotsInLocalWhenFollowing() throws Exception {
-        List<com.shootr.mobile.domain.Shot> remoteShots = shotList();
+    @Test public void shouldPutRemoteShotsInLocalWhenFollowing() throws Exception {
+        List<Shot> remoteShots = shotList();
         when(remoteShotRepository.getShotsFromUser(eq(ID_FOLLOWING), anyInt())).thenReturn(remoteShots);
 
         interactor.loadLastShots(ID_FOLLOWING, callback, errorCallback);
@@ -67,9 +67,8 @@ public class GetLastShotsInteractorTest {
         verify(localShotRepository).putShots(remoteShots);
     }
 
-    @Test
-    public void shouldNotPutRemoteShotsInLocalWhenNotFollowing() throws Exception {
-        List<com.shootr.mobile.domain.Shot> remoteShots = shotList();
+    @Test public void shouldNotPutRemoteShotsInLocalWhenNotFollowing() throws Exception {
+        List<Shot> remoteShots = shotList();
         when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt())).thenReturn(remoteShots);
 
         interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
@@ -77,12 +76,12 @@ public class GetLastShotsInteractorTest {
         verify(localShotRepository, never()).putShots(remoteShots);
     }
 
-    private List<com.shootr.mobile.domain.Shot> shotList() {
+    private List<Shot> shotList() {
         return Collections.singletonList(shot());
     }
 
-    private com.shootr.mobile.domain.Shot shot() {
-        com.shootr.mobile.domain.Shot shot = new com.shootr.mobile.domain.Shot();
+    private Shot shot() {
+        Shot shot = new Shot();
         shot.setIdShot("shot");
         return shot;
     }

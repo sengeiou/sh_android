@@ -4,19 +4,19 @@ import com.shootr.mobile.domain.User;
 
 public interface SessionRepository {
 
-    public User getCurrentUser();
+    User getCurrentUser();
 
-    public void setCurrentUser(User currentUser);
+    void setCurrentUser(User currentUser);
 
-    public String getSessionToken();
+    String getSessionToken();
 
-    public void setSessionToken(String sessionToken);
+    void setSessionToken(String sessionToken);
 
-    public String getCurrentUserId();
+    String getCurrentUserId();
 
-    public void setCurrentUserId(String currentUserId);
+    void setCurrentUserId(String currentUserId);
 
-    public void createSession(String userId, String sessionToken, User loggedInUser);
+    void createSession(String userId, String sessionToken, User loggedInUser);
 
-    public void destroySession();
+    void destroySession();
 }

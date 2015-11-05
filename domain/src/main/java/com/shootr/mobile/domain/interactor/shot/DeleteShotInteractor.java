@@ -1,16 +1,19 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import javax.inject.Inject;
 
 public class DeleteShotInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
-    private final com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    private final ShotRepository localShotRepository;
+    private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
     private final PostExecutionThread postExecutionThread;
     private final InteractorHandler interactorHandler;
@@ -18,10 +21,10 @@ public class DeleteShotInteractor implements Interactor {
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
-    @Inject public DeleteShotInteractor(@Local
-    com.shootr.mobile.domain.repository.ShotRepository localShotRepository, @com.shootr.mobile.domain.repository.Remote
-    com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository,
-      @Local ActivityRepository localActivityRepository, PostExecutionThread postExecutionThread, InteractorHandler interactorHandler) {
+    @Inject
+    public DeleteShotInteractor(@Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
+      @Local ActivityRepository localActivityRepository, PostExecutionThread postExecutionThread,
+      InteractorHandler interactorHandler) {
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
@@ -42,7 +45,7 @@ public class DeleteShotInteractor implements Interactor {
             remoteShotRepository.deleteShot(idShot);
             localActivityRepository.deleteActivitiesWithShot(idShot);
             notifyLoaded();
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException networkError) {
+        } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
         }
     }

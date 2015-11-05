@@ -35,16 +35,14 @@ public class GetAllParticipantsInteractorTest {
 
     private GetAllParticipantsInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         interactor = new GetAllParticipantsInteractor(interactorHandler, remoteUserRepository, postExecutionThread);
     }
 
-    @Test
-    public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenNotPaginating() {
+    @Test public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenNotPaginating() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
         when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 
@@ -53,8 +51,7 @@ public class GetAllParticipantsInteractorTest {
         verify(callback).onLoaded(participantsAndMyFollowingsInStream());
     }
 
-    @Test
-    public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenPaginating() {
+    @Test public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenPaginating() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
         when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 
@@ -63,8 +60,7 @@ public class GetAllParticipantsInteractorTest {
         verify(callback).onLoaded(participantsAndMyFollowingsInStream());
     }
 
-    @Test
-    public void shouldHaveUsersOrderedByJoinStreamDateWhenAllParticipantsLoaded() {
+    @Test public void shouldHaveUsersOrderedByJoinStreamDateWhenAllParticipantsLoaded() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
         when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 

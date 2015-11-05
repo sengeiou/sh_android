@@ -1,7 +1,11 @@
 package com.shootr.mobile.domain.service;
 
 import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.ShotSent;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,42 +36,41 @@ public class ShotDispatcherTest {
 
     @Mock BusPublisher busPublisher;
     @Mock ShotQueueListener shotQueueListener;
-    @Mock com.shootr.mobile.domain.service.shot.ShootrShotService shootrShotService;
+    @Mock ShootrShotService shootrShotService;
     @Spy ShotQueueRepository shotQueueRepository = new StubShotQueueRepository();
 
     private ShotDispatcher shotDispatcher;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotDispatcher = new ShotDispatcher(shotQueueRepository, shootrShotService, busPublisher, shotQueueListener, EXTERNAL_FILES_STUB);
+        shotDispatcher = new ShotDispatcher(shotQueueRepository,
+          shootrShotService,
+          busPublisher,
+          shotQueueListener,
+          EXTERNAL_FILES_STUB);
     }
 
-    @Test
-    public void shouldPutOneShotInRepositoryWhenOneShotSent() throws Exception {
+    @Test public void shouldPutOneShotInRepositoryWhenOneShotSent() throws Exception {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        verify(shootrShotService, times(1)).sendShot(any(com.shootr.mobile.domain.Shot.class));
+        verify(shootrShotService, times(1)).sendShot(any(Shot.class));
     }
 
-    @Test
-    public void shouldSendTwoShotsThroughServiceWhenTwoShotsSentSequentially() throws Exception {
+    @Test public void shouldSendTwoShotsThroughServiceWhenTwoShotsSentSequentially() throws Exception {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        verify(shootrShotService, times(2)).sendShot(any(com.shootr.mobile.domain.Shot.class));
+        verify(shootrShotService, times(2)).sendShot(any(Shot.class));
     }
 
-    @Test
-    public void shouldRemoveFromQueueWhenShotSent() throws Exception {
+    @Test public void shouldRemoveFromQueueWhenShotSent() throws Exception {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         verify(shotQueueRepository, times(1)).remove(any(QueuedShot.class));
     }
 
-    @Test
-    public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(com.shootr.mobile.domain.Shot.class))).thenThrow(serverCommunicationException());
+    @Test public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
@@ -77,42 +80,37 @@ public class ShotDispatcherTest {
         assertThat(queuedShot.isFailed()).isTrue();
     }
 
-    @Test
-    public void shouldPostANotNullToBusWhenShotSent() throws Exception {
-        when(shootrShotService.sendShot(any(com.shootr.mobile.domain.Shot.class))).thenReturn(shot());
+    @Test public void shouldPostANotNullToBusWhenShotSent() throws Exception {
+        when(shootrShotService.sendShot(any(Shot.class))).thenReturn(shot());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        ArgumentCaptor<com.shootr.mobile.domain.bus.ShotSent.Event> streamArgumentCaptor = ArgumentCaptor.forClass(com.shootr.mobile.domain.bus.ShotSent.Event.class);
+        ArgumentCaptor<ShotSent.Event> streamArgumentCaptor = ArgumentCaptor.forClass(ShotSent.Event.class);
         verify(busPublisher, atLeastOnce()).post(streamArgumentCaptor.capture());
-        com.shootr.mobile.domain.bus.ShotSent.Event event = streamArgumentCaptor.getValue();
+        ShotSent.Event event = streamArgumentCaptor.getValue();
 
         assertThat(event.getShot()).isNotNull();
     }
 
-    @Test
-    public void shouldNotifyListenerOnlyOnceWhenSendingShot() throws Exception {
+    @Test public void shouldNotifyListenerOnlyOnceWhenSendingShot() throws Exception {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onSendingShot(any(QueuedShot.class));
     }
 
-    @Test
-    public void shouldNotifyListenerWhenShotSent() throws Exception {
+    @Test public void shouldNotifyListenerWhenShotSent() throws Exception {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onShotSent(any(QueuedShot.class));
     }
 
-    @Test
-    public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(com.shootr.mobile.domain.Shot.class))).thenThrow(serverCommunicationException());
+    @Test public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class), any(Exception.class));
     }
 
-    @Test
-    public void shouldNotCreateNewQueuedShotIfShotHasIdQueue() throws Exception {
+    @Test public void shouldNotCreateNewQueuedShotIfShotHasIdQueue() throws Exception {
         shotDispatcher.sendShot(shotInQueue(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<QueuedShot> captor = ArgumentCaptor.forClass(QueuedShot.class);
@@ -121,18 +119,18 @@ public class ShotDispatcherTest {
         assertThat(persistedQueuedShot).hasIdQueue(QUEUED_ID);
     }
 
-    private com.shootr.mobile.domain.exception.ServerCommunicationException serverCommunicationException() {
-        return new com.shootr.mobile.domain.exception.ServerCommunicationException(new Throwable());
+    private ServerCommunicationException serverCommunicationException() {
+        return new ServerCommunicationException(new Throwable());
     }
 
-    private com.shootr.mobile.domain.Shot shot() {
-        com.shootr.mobile.domain.Shot shot = new com.shootr.mobile.domain.Shot();
+    private Shot shot() {
+        Shot shot = new Shot();
         shot.setComment(COMMENT_STUB);
         return shot;
     }
 
-    private com.shootr.mobile.domain.Shot shotInQueue() {
-        com.shootr.mobile.domain.Shot shot = shot();
+    private Shot shotInQueue() {
+        Shot shot = shot();
         shot.setIdQueue(QUEUED_ID);
         return shot;
     }
@@ -196,6 +194,5 @@ public class ShotDispatcherTest {
         @Override public QueuedShot getShotQueue(Long queuedShotId) {
             return new QueuedShot(shot());
         }
-
     }
 }

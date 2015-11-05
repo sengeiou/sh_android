@@ -6,7 +6,10 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -21,26 +24,25 @@ import static org.mockito.Mockito.when;
 public class RefreshActivityTimelineInteractorTest {
 
     public static final String ID_WATCHING_STREAM = "idWatchingStream";
-    private RefreshActivityTimelineInteractor interactor;
-
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
-    @Mock com.shootr.mobile.domain.service.shot.ShootrTimelineService shootrTimelineService;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
+    @Mock ShootrTimelineService shootrTimelineService;
+    @Mock SessionRepository sessionRepository;
+    private RefreshActivityTimelineInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.interactor = new RefreshActivityTimelineInteractor(interactorHandler, postExecutionThread,
-                shootrTimelineService, sessionRepository);
+        this.interactor = new RefreshActivityTimelineInteractor(interactorHandler,
+          postExecutionThread,
+          shootrTimelineService,
+          sessionRepository);
     }
 
-    @Test
-    public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
+    @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity()).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUser()).thenReturn(user());
         interactor.refreshActivityTimeline(spyCallback, errorCallback);
@@ -68,5 +70,4 @@ public class RefreshActivityTimelineInteractorTest {
             timelinesReturned.add(timeline);
         }
     }
-
 }

@@ -1,10 +1,14 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Collections;
 import java.util.List;
@@ -20,15 +24,16 @@ public class ReloadStreamTimelineInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public ReloadStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @com.shootr.mobile.domain.repository.Remote ShotRepository remoteShotRepository) {
+    @Inject
+    public ReloadStreamTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote ShotRepository remoteShotRepository) {
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
     }
     //endregion
 
-    public void loadStreamTimeline(String idStream, Callback<com.shootr.mobile.domain.Timeline> callback, ErrorCallback errorCallback) {
+    public void loadStreamTimeline(String idStream, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -45,14 +50,12 @@ public class ReloadStreamTimelineInteractor implements Interactor {
         }
     }
 
-    private List<Shot> loadRemoteShots(com.shootr.mobile.domain.StreamTimelineParameters timelineParameters) {
+    private List<Shot> loadRemoteShots(StreamTimelineParameters timelineParameters) {
         return remoteShotRepository.getShotsForStreamTimeline(timelineParameters);
     }
 
-    private com.shootr.mobile.domain.StreamTimelineParameters buildParameters() {
-        return com.shootr.mobile.domain.StreamTimelineParameters.builder()
-          .forStream(idStream)
-          .build();
+    private StreamTimelineParameters buildParameters() {
+        return StreamTimelineParameters.builder().forStream(idStream).build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
@@ -62,17 +65,17 @@ public class ReloadStreamTimelineInteractor implements Interactor {
 
     //region Result
     private void notifyTimelineFromShots(List<Shot> shots) {
-        com.shootr.mobile.domain.Timeline timeline = buildTimeline(shots);
+        Timeline timeline = buildTimeline(shots);
         notifyLoaded(timeline);
     }
 
-    private com.shootr.mobile.domain.Timeline buildTimeline(List<Shot> shots) {
-        com.shootr.mobile.domain.Timeline timeline = new com.shootr.mobile.domain.Timeline();
+    private Timeline buildTimeline(List<Shot> shots) {
+        Timeline timeline = new Timeline();
         timeline.setShots(shots);
         return timeline;
     }
 
-    private void notifyLoaded(final com.shootr.mobile.domain.Timeline timeline) {
+    private void notifyLoaded(final Timeline timeline) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);
@@ -80,7 +83,7 @@ public class ReloadStreamTimelineInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
@@ -88,5 +91,4 @@ public class ReloadStreamTimelineInteractor implements Interactor {
         });
     }
     //endregion
-
 }

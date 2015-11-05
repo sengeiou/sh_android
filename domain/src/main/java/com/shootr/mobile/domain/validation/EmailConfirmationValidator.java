@@ -27,7 +27,8 @@ public class EmailConfirmationValidator {
 
     private void validateEmailIsNotNull(String email) {
         if (email == null) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL, CreateUserValidator.FIELD_EMAIL);
+            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL,
+              CreateUserValidator.FIELD_EMAIL);
         }
     }
 
@@ -36,7 +37,8 @@ public class EmailConfirmationValidator {
             Pattern emailPattern = Pattern.compile(CreateUserValidator.EMAIL_PATTERN);
             boolean hasEmailFormat = emailPattern.matcher(email).matches();
             if (!hasEmailFormat) {
-                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT, CreateUserValidator.FIELD_EMAIL);
+                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
+                  CreateUserValidator.FIELD_EMAIL);
             }
         }
     }
@@ -45,5 +47,4 @@ public class EmailConfirmationValidator {
     private void addError(String code, int field) {
         fieldValidationErrors.add(new FieldValidationError(code, field));
     }
-
 }

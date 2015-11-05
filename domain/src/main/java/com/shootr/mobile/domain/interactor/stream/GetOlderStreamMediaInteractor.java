@@ -1,6 +1,15 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,25 +17,22 @@ import javax.inject.Inject;
 
 public class GetOlderStreamMediaInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
-    private final com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
+    private final ShotRepository remoteShotRepository;
     private final UserRepository remoteUserRepository;
-    private final com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    private Interactor.ErrorCallback errorCallback;
+    private final SessionRepository sessionRepository;
+    private ErrorCallback errorCallback;
 
     private String idStream;
-    private Interactor.Callback<List<com.shootr.mobile.domain.Shot>> callback;
+    private Interactor.Callback<List<Shot>> callback;
     private String currentidUser;
     private Long maxTimestamp;
 
     @Inject
-    public GetOlderStreamMediaInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler,
-      com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository,
-      com.shootr.mobile.domain.repository.SessionRepository sessionRepository) {
+    public GetOlderStreamMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote ShotRepository remoteShotRepository, @Remote UserRepository remoteUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteShotRepository = remoteShotRepository;
@@ -34,7 +40,8 @@ public class GetOlderStreamMediaInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getOlderStreamMedia(String idStream, Long maxTimestamp, Interactor.Callback<List<com.shootr.mobile.domain.Shot>> callback, Interactor.ErrorCallback errorCallback) {
+    public void getOlderStreamMedia(String idStream, Long maxTimestamp, Callback<List<Shot>> callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.maxTimestamp = maxTimestamp;
         this.callback = callback;
@@ -44,30 +51,30 @@ public class GetOlderStreamMediaInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        try{
+        try {
             getMediaFromRemote();
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException error) {
+        } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
     private void getMediaFromRemote() {
-        List<com.shootr.mobile.domain.User> people = remoteUserRepository.getPeople();
+        List<User> people = remoteUserRepository.getPeople();
         List<String> peopleIds = getPeopleInStream(people);
-        List<com.shootr.mobile.domain.Shot> shots = remoteShotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
+        List<Shot> shots = remoteShotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
         notifyLoaded(shots);
     }
 
-    private List<String> getPeopleInStream(List<com.shootr.mobile.domain.User> people) {
+    private List<String> getPeopleInStream(List<User> people) {
         List<String> peopleIds = new ArrayList<>();
-        for (com.shootr.mobile.domain.User user : people) {
+        for (User user : people) {
             peopleIds.add(user.getIdUser());
         }
         peopleIds.add(currentidUser);
         return peopleIds;
     }
 
-    private void notifyLoaded(final List<com.shootr.mobile.domain.Shot> shots) {
+    private void notifyLoaded(final List<Shot> shots) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(shots);
@@ -75,10 +82,9 @@ public class GetOlderStreamMediaInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

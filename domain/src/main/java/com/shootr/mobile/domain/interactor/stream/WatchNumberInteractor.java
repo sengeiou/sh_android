@@ -1,10 +1,12 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +15,18 @@ import javax.inject.Inject;
 /**
  * Gives the number of people watching the stream the current user has visible.
  */
-public class WatchNumberInteractor implements Interactor{
+public class WatchNumberInteractor implements Interactor {
 
     public static final int NO_STREAM = -1;
-    private String idStream;
-    private Callback callback;
-
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
+    private String idStream;
+    private Callback callback;
 
-    @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository) {
+    @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
@@ -67,7 +66,7 @@ public class WatchNumberInteractor implements Interactor{
     private List<User> getRemotePeopleOrFallbackToLocal() {
         try {
             return remoteUserRepository.getPeople();
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException networkError) {
+        } catch (ServerCommunicationException networkError) {
             return localUserRepository.getPeople();
         }
     }
@@ -75,6 +74,5 @@ public class WatchNumberInteractor implements Interactor{
     public interface Callback {
 
         void onLoaded(Integer count);
-
     }
 }

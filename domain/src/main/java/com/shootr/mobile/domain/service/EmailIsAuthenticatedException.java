@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service;
 
-public class EmailIsAuthenticatedException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class EmailIsAuthenticatedException extends ShootrException {
 
     public EmailIsAuthenticatedException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class EmailIsAuthenticatedException extends com.shootr.mobile.domain.exce
     public EmailIsAuthenticatedException(Throwable cause) {
         super(cause);
     }
-
 }

@@ -1,22 +1,23 @@
 package com.shootr.mobile.domain.bus;
 
+import com.shootr.mobile.domain.Shot;
+
 public interface ShotFailed {
 
     interface Receiver {
 
         void onShotFailed(Event event);
-
     }
 
     class Event {
 
-        private com.shootr.mobile.domain.Shot shot;
+        private Shot shot;
 
-        public Event(com.shootr.mobile.domain.Shot shot) {
+        public Event(Shot shot) {
             this.shot = shot;
         }
 
-        public com.shootr.mobile.domain.Shot getShot() {
+        public Shot getShot() {
             return shot;
         }
 
@@ -26,5 +27,4 @@ public interface ShotFailed {
               '}';
         }
     }
-
 }

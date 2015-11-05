@@ -14,8 +14,7 @@ public class Timeline {
         this.shots = shots;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Timeline)) return false;
 
@@ -24,13 +23,11 @@ public class Timeline {
         return !(shots != null ? !shots.equals(timeline.shots) : timeline.shots != null);
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return shots != null ? shots.hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "Timeline{" +
           "shots=" + shots +
           '}';

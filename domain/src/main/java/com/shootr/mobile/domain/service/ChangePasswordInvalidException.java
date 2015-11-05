@@ -11,5 +11,4 @@ public class ChangePasswordInvalidException extends ShootrException {
     public ChangePasswordInvalidException(Throwable cause) {
         super(cause);
     }
-
 }

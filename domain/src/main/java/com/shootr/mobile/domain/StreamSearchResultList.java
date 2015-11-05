@@ -11,7 +11,8 @@ public class StreamSearchResultList {
         this.streamSearchResults = streamSearchResults;
     }
 
-    public StreamSearchResultList(List<StreamSearchResult> streamSearchResults, StreamSearchResult currentWatchingStream) {
+    public StreamSearchResultList(List<StreamSearchResult> streamSearchResults,
+      StreamSearchResult currentWatchingStream) {
         this.streamSearchResults = streamSearchResults;
         this.currentWatchingStream = currentWatchingStream;
     }
@@ -32,8 +33,7 @@ public class StreamSearchResultList {
         this.currentWatchingStream = currentWatchingStream;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StreamSearchResultList)) return false;
 
@@ -48,15 +48,13 @@ public class StreamSearchResultList {
         return true;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = streamSearchResults.hashCode();
         result = 31 * result + (currentWatchingStream != null ? currentWatchingStream.hashCode() : 0);
         return result;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "StreamSearchResultList{" +
           "streamSearchResults=" + streamSearchResults +
           ", currentWatchingStream=" + currentWatchingStream +
