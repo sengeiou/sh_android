@@ -43,6 +43,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
     @BindString(R.string.shared_stream_notification) String sharedStream;
+    @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
 
     private FavoriteStreamsAdapter adapter;
 
@@ -69,7 +70,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_favorites));
+        analyticsTool.analyticsStart(getContext(), analyticsScreenFavorites);
         initializePresenter();
         initializeViews();
     }

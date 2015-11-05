@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
@@ -105,6 +106,8 @@ public class StreamTimelineFragment extends BaseFragment
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
     @BindString(com.shootr.mobile.R.string.shot_shared_message) String shotShared;
 
+    @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
+
     private TimelineAdapter adapter;
 
     private PhotoPickerController photoPickerController;
@@ -155,7 +158,7 @@ public class StreamTimelineFragment extends BaseFragment
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         initializePresenters(idStream, streamAuthorIdUser);
-        analyticsTool.analyticsStart(getContext(), getActivity().getString(com.shootr.mobile.R.string.analytics_screen_stream_timeline));
+        analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
 
     @Override

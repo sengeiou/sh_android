@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -49,6 +50,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
     @Bind(com.shootr.mobile.R.id.timeline_loading_activity) TextView loadingActivityView;
 
+    @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
+
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
     @Inject FeedbackMessage feedbackMessage;
@@ -79,7 +82,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_activity));
+        analyticsTool.analyticsStart(getContext(), analyticsScreenActivity);
         initializeViews();
         initializePresenter();
     }

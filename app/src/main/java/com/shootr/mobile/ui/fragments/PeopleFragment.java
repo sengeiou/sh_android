@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -52,6 +53,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
 
+    @BindString(R.string.analytics_screen_friends) String analyticsScreenFriends;
+
     private FriendsAdapter peopleAdapter;
     private UserListAdapter suggestedPeopleAdapter;
 
@@ -67,7 +70,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_friends));
+        analyticsTool.analyticsStart(getContext(), analyticsScreenFriends);
         presenter.setView(this);
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);

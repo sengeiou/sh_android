@@ -117,6 +117,8 @@ public class ProfileFragment extends BaseFragment
     @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
+    @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
 
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
@@ -695,9 +697,9 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void setupAnalytics(boolean isCurrentUser) {
         if (isCurrentUser) {
-            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_me));
+            analyticsTool.analyticsStart(getContext(), analyticsScreenMe);
         } else {
-            analyticsTool.analyticsStart(getContext(), getActivity().getString(R.string.analytics_screen_userProfile));
+            analyticsTool.analyticsStart(getContext(), analyticsScreenUserProfile);
         }
     }
 
