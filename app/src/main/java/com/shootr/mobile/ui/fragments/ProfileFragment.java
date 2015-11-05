@@ -767,11 +767,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
-            @Override public void run() {
-                openDeleteShotConfirmation(shotModel);
-            }
-        }).addAction(R.string.report_context_menu_unblock, new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
               }
