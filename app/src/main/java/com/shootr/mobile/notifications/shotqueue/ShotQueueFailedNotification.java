@@ -16,18 +16,24 @@ public class ShotQueueFailedNotification extends CommonNotification {
     private final QueuedShot shot;
     private String titleText;
     private String subtitleTextPattern;
+    private String subtitleTextPatternWithoutComment;
 
     public ShotQueueFailedNotification(Context context, NotificationBuilderFactory builderFactory, QueuedShot shot) {
         super(context, builderFactory);
         this.shot = shot;
         this.titleText = context.getResources().getString(com.shootr.mobile.R.string.notification_shot_failed);
         this.subtitleTextPattern = context.getResources().getString(R.string.notification_shot_failed_subtitle_pattern);
+        this.subtitleTextPatternWithoutComment = context.getResources().getString(R.string.notification_shot_failed_subtitle_pattern_no_comment);
     }
 
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
         builder.setContentTitle(titleText);
-        builder.setContentText(String.format(subtitleTextPattern, shot.getShot().getComment()));
+        if (shot.getShot().getComment() != null) {
+            builder.setContentText(String.format(subtitleTextPattern, shot.getShot().getComment()));
+        } else {
+            builder.setContentText(subtitleTextPatternWithoutComment);
+        }
         builder.setSound(null);
         PendingIntent draftsPendingIntent = getOpenIntent();
         builder.setContentIntent(draftsPendingIntent);
