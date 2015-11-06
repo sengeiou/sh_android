@@ -127,6 +127,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                   @Override public void onLoaded(Timeline timeline) {
                       showShotsInView(timeline);
                   }
+              }, new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      showErrorLoadingNewShots();
+                  }
               });
         }
     }
@@ -330,6 +334,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void onHoldingShotsClick() {
         showingHolderShots(true);
+        streamTimelineView.showLoading();
         streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -345,6 +350,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
                 streamTimelineView.hideHoldingShots();
                 streamTimelineView.showAllStreamShots();
+                streamTimelineView.hideLoading();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorLoadingNewShots();
             }
         });
     }
