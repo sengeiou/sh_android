@@ -203,10 +203,10 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).addNewShots(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldShowLoadingWhenRefreshTimeline() throws Exception {
+    @Test public void shouldNotShowLoadingWhenRefreshTimeline() throws Exception {
         presenter.refresh();
 
-        verify(streamTimelineView, times(1)).showLoading();
+        verify(streamTimelineView, never()).showLoading();
     }
 
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
