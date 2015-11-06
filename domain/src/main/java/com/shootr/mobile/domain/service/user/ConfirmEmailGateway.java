@@ -10,6 +10,5 @@ public interface ConfirmEmailGateway {
     void confirmEmail() throws InvalidEmailConfirmationException;
 
     void changeEmail(String email)
-      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException,
-      UnauthorizedRequestException;
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException;
 }

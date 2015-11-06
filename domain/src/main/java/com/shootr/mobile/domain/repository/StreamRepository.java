@@ -1,16 +1,17 @@
 package com.shootr.mobile.domain.repository;
 
+import com.shootr.mobile.domain.Stream;
 import java.util.List;
 
 public interface StreamRepository {
 
-    com.shootr.mobile.domain.Stream getStreamById(String idStream);
+    Stream getStreamById(String idStream);
 
-    List<com.shootr.mobile.domain.Stream> getStreamsByIds(List<String> streamIds);
+    List<Stream> getStreamsByIds(List<String> streamIds);
 
-    com.shootr.mobile.domain.Stream putStream(com.shootr.mobile.domain.Stream stream);
+    Stream putStream(Stream stream);
 
-    com.shootr.mobile.domain.Stream putStream(com.shootr.mobile.domain.Stream stream, boolean notify);
+    Stream putStream(Stream stream, boolean notify);
 
     void shareStream(String idStream);
 
@@ -18,7 +19,7 @@ public interface StreamRepository {
 
     void restoreStream(String idStream);
 
-    com.shootr.mobile.domain.Stream getBlogStream(String country, String language);
+    Stream getBlogStream(String country, String language);
 
-    com.shootr.mobile.domain.Stream getHelpStream(String country, String language);
+    Stream getHelpStream(String country, String language);
 }

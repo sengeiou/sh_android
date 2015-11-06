@@ -21,8 +21,8 @@ public class GetStreamTimelineInteractor implements Interactor {
     private String idStream;
     private Callback callback;
 
-    @Inject public GetStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
+    @Inject
+    public GetStreamTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local ShotRepository localShotRepository) {
         this.localShotRepository = localShotRepository;
         this.interactorHandler = interactorHandler;
@@ -51,9 +51,7 @@ public class GetStreamTimelineInteractor implements Interactor {
     }
 
     private StreamTimelineParameters buildParameters() {
-        return StreamTimelineParameters.builder()
-          .forStream(idStream)
-          .build();
+        return StreamTimelineParameters.builder().forStream(idStream).build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {

@@ -18,15 +18,12 @@ import static org.mockito.Mockito.when;
 public class RemoveFromFavoritesInteractorTest {
 
     private static final String ID_STREAM_FAVORITE = "stream";
-
-    private RemoveFromFavoritesInteractor interactor;
-
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Interactor.CompletedCallback callback;
+    private RemoveFromFavoritesInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         interactor = new RemoveFromFavoritesInteractor(new TestInteractorHandler(),
           new TestPostExecutionThread(),
@@ -34,8 +31,7 @@ public class RemoveFromFavoritesInteractorTest {
           remoteFavoriteRepository);
     }
 
-    @Test
-    public void shouldRemoveFavoriteFromLocalRepository() throws Exception {
+    @Test public void shouldRemoveFavoriteFromLocalRepository() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
@@ -43,8 +39,7 @@ public class RemoveFromFavoritesInteractorTest {
         verify(localFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
-    @Test
-    public void shouldRemoveFavoriteFromRemoteRepository() throws Exception {
+    @Test public void shouldRemoveFavoriteFromRemoteRepository() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
@@ -52,8 +47,7 @@ public class RemoveFromFavoritesInteractorTest {
         verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
-    @Test
-    public void shouldCallbackCompletedBeforeRemovingFavoriteFromRemote() throws Exception {
+    @Test public void shouldCallbackCompletedBeforeRemovingFavoriteFromRemote() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
@@ -63,8 +57,7 @@ public class RemoveFromFavoritesInteractorTest {
         inOrder.verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
-    @Test
-    public void shouldRemoveFavoriteFromLocalBeforeCallbackCompleted() throws Exception {
+    @Test public void shouldRemoveFavoriteFromLocalBeforeCallbackCompleted() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);

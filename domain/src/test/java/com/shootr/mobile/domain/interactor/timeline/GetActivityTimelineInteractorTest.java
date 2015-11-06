@@ -2,11 +2,19 @@ package com.shootr.mobile.domain.interactor.timeline;
 
 import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.domain.ActivityTimeline;
+import com.shootr.mobile.domain.ActivityTimelineParameters;
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.ActivityRepository;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,34 +41,31 @@ public class GetActivityTimelineInteractorTest {
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
 
-    @Mock com.shootr.mobile.domain.repository.ActivityRepository localActivityRepository;
+    @Mock ActivityRepository localActivityRepository;
     @Mock UserRepository localUserRepository;
-    @Spy com.shootr.mobile.domain.interactor.SpyCallback<ActivityTimeline>
-      spyCallback = new com.shootr.mobile.domain.interactor.SpyCallback<>();
-    @Mock com.shootr.mobile.domain.repository.StreamRepository streamRepository;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    @Mock com.shootr.mobile.domain.repository.TimelineSynchronizationRepository timelineSynchronizationRepository;
+    @Spy com.shootr.mobile.domain.interactor.SpyCallback<ActivityTimeline> spyCallback =
+      new com.shootr.mobile.domain.interactor.SpyCallback<>();
+    @Mock StreamRepository streamRepository;
+    @Mock SessionRepository sessionRepository;
+    @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
 
     private GetActivityTimelineInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         when(localUserRepository.getPeople()).thenReturn(people());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetActivityTimelineInteractor(interactorHandler,
-                postExecutionThread, localActivityRepository);
+        interactor = new GetActivityTimelineInteractor(interactorHandler, postExecutionThread, localActivityRepository);
     }
 
-    @Test
-    public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
+    @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingStream();
-        when(localActivityRepository.getActivityTimeline(any(com.shootr.mobile.domain.ActivityTimelineParameters.class))).thenReturn(
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
         interactor.loadActivityTimeline(spyCallback);
@@ -69,9 +74,8 @@ public class GetActivityTimelineInteractorTest {
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
     }
 
-    @Test
-    public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching() throws Exception {
-        when(localActivityRepository.getActivityTimeline(any(com.shootr.mobile.domain.ActivityTimelineParameters.class))).thenReturn(
+    @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching() throws Exception {
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
         interactor.loadActivityTimeline(spyCallback);
@@ -107,18 +111,18 @@ public class GetActivityTimelineInteractorTest {
         return Arrays.asList(new User());
     }
 
-    private com.shootr.mobile.domain.Stream watchingStream() {
-        com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    private Stream watchingStream() {
+        Stream stream = new Stream();
         stream.setId(WATCHING_STREAM_ID);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
 
-    static class SpyCallback implements Interactor.Callback<com.shootr.mobile.domain.Timeline> {
+    static class SpyCallback implements Interactor.Callback<Timeline> {
 
-        public List<com.shootr.mobile.domain.Timeline> timelinesReturned = new ArrayList<>();
+        public List<Timeline> timelinesReturned = new ArrayList<>();
 
-        @Override public void onLoaded(com.shootr.mobile.domain.Timeline timeline) {
+        @Override public void onLoaded(Timeline timeline) {
             timelinesReturned.add(timeline);
         }
     }

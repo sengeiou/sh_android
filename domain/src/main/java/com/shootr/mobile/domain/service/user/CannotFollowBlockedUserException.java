@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service.user;
 
-public class CannotFollowBlockedUserException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class CannotFollowBlockedUserException extends ShootrException {
 
     public CannotFollowBlockedUserException(String message) {
         super(message);

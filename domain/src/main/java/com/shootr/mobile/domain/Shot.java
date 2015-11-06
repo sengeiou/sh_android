@@ -167,6 +167,72 @@ public class Shot {
         this.isMarkedAsNice = isMarkedAsNice;
     }
 
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shot)) return false;
+
+        Shot shot = (Shot) o;
+
+        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
+        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
+        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
+        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
+        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) return false;
+        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
+        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
+        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) return false;
+        if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
+          : shot.parentShotUserId != null) {
+            return false;
+        }
+        if (parentShotUsername != null ? !parentShotUsername.equals(shot.parentShotUsername)
+          : shot.parentShotUsername != null) {
+            return false;
+        }
+        if (videoUrl != null ? !videoUrl.equals(shot.videoUrl) : shot.videoUrl != null) return false;
+        if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
+        if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
+        if (niceCount != null ? !niceCount.equals(shot.niceCount) : shot.niceCount != null) return false;
+        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shot.isMarkedAsNice) : shot.isMarkedAsNice != null) {
+            return false;
+        }
+        return !(metadata != null ? !metadata.equals(shot.metadata) : shot.metadata != null);
+    }
+
+    @Override public int hashCode() {
+        int result = idShot != null ? idShot.hashCode() : 0;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
+        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
+        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
+        result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);
+        result = 31 * result + (parentShotUserId != null ? parentShotUserId.hashCode() : 0);
+        result = 31 * result + (parentShotUsername != null ? parentShotUsername.hashCode() : 0);
+        result = 31 * result + (videoUrl != null ? videoUrl.hashCode() : 0);
+        result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
+        result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
+        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        return result;
+    }
+
+    @Override public String toString() {
+        return "Shot{" +
+          "idShot=" + idShot +
+          ", comment='" + comment + '\'' +
+          ", image='" + image + '\'' +
+          ", niceCount='" + niceCount + '\'' +
+          ", publishDate=" + publishDate +
+          '}';
+    }
+
     public static class ShotStreamInfo {
 
         private String idStream;
@@ -197,8 +263,7 @@ public class Shot {
             this.idStream = idStream;
         }
 
-        @Override
-        public boolean equals(Object o) {
+        @Override public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof ShotStreamInfo)) return false;
 
@@ -209,8 +274,7 @@ public class Shot {
             return true;
         }
 
-        @Override
-        public int hashCode() {
+        @Override public int hashCode() {
             return idStream != null ? idStream.hashCode() : 0;
         }
 
@@ -252,8 +316,7 @@ public class Shot {
             this.idUser = idUser;
         }
 
-        @Override
-        public boolean equals(Object o) {
+        @Override public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof ShotUserInfo)) return false;
 
@@ -264,8 +327,7 @@ public class Shot {
             return true;
         }
 
-        @Override
-        public int hashCode() {
+        @Override public int hashCode() {
             return idUser.hashCode();
         }
 
@@ -290,72 +352,4 @@ public class Shot {
             return s1.getPublishDate().compareTo(s2.getPublishDate());
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Shot)) return false;
-
-        Shot shot = (Shot) o;
-
-        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
-        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
-        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
-        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
-        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) return false;
-        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
-        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
-        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) return false;
-        if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
-          : shot.parentShotUserId != null) {
-            return false;
-        }
-        if (parentShotUsername != null ? !parentShotUsername.equals(shot.parentShotUsername)
-          : shot.parentShotUsername != null) {
-            return false;
-        }
-        if (videoUrl != null ? !videoUrl.equals(shot.videoUrl) : shot.videoUrl != null) return false;
-        if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
-        if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null)
-            return false;
-        if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
-        if (niceCount != null ? !niceCount.equals(shot.niceCount) : shot.niceCount != null) return false;
-        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shot.isMarkedAsNice) : shot.isMarkedAsNice != null) {
-            return false;
-        }
-        return !(metadata != null ? !metadata.equals(shot.metadata) : shot.metadata != null);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = idShot != null ? idShot.hashCode() : 0;
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
-        result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
-        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
-        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
-        result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);
-        result = 31 * result + (parentShotUserId != null ? parentShotUserId.hashCode() : 0);
-        result = 31 * result + (parentShotUsername != null ? parentShotUsername.hashCode() : 0);
-        result = 31 * result + (videoUrl != null ? videoUrl.hashCode() : 0);
-        result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
-        result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
-        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
-        return result;
-    }
-
-    @Override public String toString() {
-        return "Shot{" +
-          "idShot=" + idShot +
-          ", comment='" + comment + '\'' +
-          ", image='" + image + '\'' +
-          ", niceCount='" + niceCount + '\'' +
-          ", publishDate=" + publishDate +
-          '}';
-    }
-
 }

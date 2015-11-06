@@ -1,16 +1,18 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-public class UnblockUserInteractor implements Interactor{
+public class UnblockUserInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -21,10 +23,8 @@ public class UnblockUserInteractor implements Interactor{
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public UnblockUserInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository,
-      @com.shootr.mobile.domain.repository.Remote FollowRepository remoteFollowRepository) {
+    @Inject public UnblockUserInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
@@ -38,8 +38,7 @@ public class UnblockUserInteractor implements Interactor{
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
         try {
             remoteFollowRepository.unblock(idUser);
             localFollowRepository.unblock(idUser);
@@ -57,12 +56,11 @@ public class UnblockUserInteractor implements Interactor{
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
             }
         });
     }
-
 }

@@ -48,8 +48,7 @@ public class QueuedShot {
         this.imageFile = imageFile;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof QueuedShot)) return false;
 
@@ -61,8 +60,7 @@ public class QueuedShot {
         return true;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = idQueue != null ? idQueue.hashCode() : 0;
         result = 31 * result + shot.hashCode();
         return result;

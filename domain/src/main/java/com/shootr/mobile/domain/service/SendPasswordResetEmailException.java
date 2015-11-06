@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service;
 
-public class SendPasswordResetEmailException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class SendPasswordResetEmailException extends ShootrException {
 
     public SendPasswordResetEmailException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class SendPasswordResetEmailException extends com.shootr.mobile.domain.ex
     public SendPasswordResetEmailException(Throwable cause) {
         super(cause);
     }
-
 }

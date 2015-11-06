@@ -51,6 +51,7 @@ public class Favorite {
     }
 
     public static class AscendingOrderComparator implements Comparator<Favorite> {
+
         @Override public int compare(Favorite favorite, Favorite anotherFavorite) {
             return favorite.getOrder().compareTo(anotherFavorite.getOrder());
         }

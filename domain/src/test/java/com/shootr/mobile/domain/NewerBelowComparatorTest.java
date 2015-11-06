@@ -14,8 +14,7 @@ public class NewerBelowComparatorTest {
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
 
-    @Test
-    public void shouldNotBeEqualTwoShotsWithDifferentDates() throws Exception {
+    @Test public void shouldNotBeEqualTwoShotsWithDifferentDates() throws Exception {
         Shot shot1 = new Shot();
         shot1.setPublishDate(new Date(DATE_OLDER));
         Shot shot2 = new Shot();
@@ -24,8 +23,7 @@ public class NewerBelowComparatorTest {
         assertThat(shot1).isNotEqualTo(shot2);
     }
 
-    @Test
-    public void shouldOrderListInAscendingDateOrder() throws Exception {
+    @Test public void shouldOrderListInAscendingDateOrder() throws Exception {
         List<Shot> unorderedShotList = unorderedShots();
 
         Collections.sort(unorderedShotList, new Shot.NewerBelowComparator());
@@ -34,7 +32,7 @@ public class NewerBelowComparatorTest {
     }
 
     private Shot[] orderedShotSequenceWithNewerLast() {
-        return new Shot[]{shotWithDate(DATE_OLDER), shotWithDate(DATE_MIDDLE), shotWithDate(DATE_NEWER),};
+        return new Shot[] { shotWithDate(DATE_OLDER), shotWithDate(DATE_MIDDLE), shotWithDate(DATE_NEWER), };
     }
 
     private List<Shot> unorderedShots() {

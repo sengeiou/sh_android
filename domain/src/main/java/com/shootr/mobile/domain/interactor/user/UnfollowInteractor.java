@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -19,10 +20,8 @@ public class UnfollowInteractor implements Interactor {
     private String idUser;
     private CompletedCallback callback;
 
-    @Inject public UnfollowInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository,
-      @com.shootr.mobile.domain.repository.Remote FollowRepository remoteFollowRepository) {
+    @Inject public UnfollowInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
@@ -35,8 +34,7 @@ public class UnfollowInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
         localFollowRepository.unfollow(idUser);
         notifyCompleted();
         remoteFollowRepository.unfollow(idUser);
@@ -44,8 +42,7 @@ public class UnfollowInteractor implements Interactor {
 
     private void notifyCompleted() {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onCompleted();
             }
         });

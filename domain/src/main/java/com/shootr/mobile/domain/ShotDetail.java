@@ -31,5 +31,4 @@ public class ShotDetail {
     public void setReplies(List<Shot> replies) {
         this.replies = replies;
     }
-
 }

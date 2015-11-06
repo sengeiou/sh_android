@@ -6,11 +6,14 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.InvalidEmailConfirmationException;
+import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
 import com.shootr.mobile.domain.exception.InvalidPasswordException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
+import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
@@ -22,21 +25,22 @@ public class ShootrUserService {
     private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
     private final CheckinGateway checkinGateway;
-    private final com.shootr.mobile.domain.service.user.CreateAccountGateway createAccountGateway;
-    private final com.shootr.mobile.domain.service.user.LoginGateway loginGateway;
-    private final com.shootr.mobile.domain.service.user.ResetPasswordGateway resetPasswordGateway;
+    private final CreateAccountGateway createAccountGateway;
+    private final LoginGateway loginGateway;
+    private final ResetPasswordGateway resetPasswordGateway;
     private final ConfirmEmailGateway confirmEmailGateway;
     private final StreamRepository remoteStreamRepository;
-    private final com.shootr.mobile.domain.service.user.ChangePasswordGateway changePasswordGateway;
+    private final ChangePasswordGateway changePasswordGateway;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
-      CheckinGateway checkinGateway, com.shootr.mobile.domain.service.user.CreateAccountGateway createAccountGateway, com.shootr.mobile.domain.service.user.LoginGateway loginGateway,
-      com.shootr.mobile.domain.service.user.ResetPasswordGateway resetPasswordGateway, com.shootr.mobile.domain.service.user.ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway, @com.shootr.mobile.domain.repository.Remote
-    StreamRepository remoteStreamRepository,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils) {
+      CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
+      ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway,
+      ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
+      DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
@@ -56,7 +60,7 @@ public class ShootrUserService {
     }
 
     public void createAccount(String username, String email, String password)
-      throws EmailAlreadyExistsException, com.shootr.mobile.domain.exception.UsernameAlreadyExistsException {
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
         LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
         retrievePostLoginInformation(loginResult);
     }
@@ -66,7 +70,7 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public Boolean performFacebookLogin(String facebookToken) throws InvalidLoginException{
+    public Boolean performFacebookLogin(String facebookToken) throws InvalidLoginException {
         LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
         retrievePostLoginInformation(loginResult);
         return loginResult.isNewUser();
@@ -90,7 +94,7 @@ public class ShootrUserService {
     }
 
     public ForgotPasswordResult performResetPassword(String usernameOrEmail)
-      throws com.shootr.mobile.domain.exception.InvalidForgotPasswordException, IOException {
+      throws InvalidForgotPasswordException, IOException {
         return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 

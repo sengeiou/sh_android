@@ -18,21 +18,21 @@ public class ShootrUserServiceCheckinTest {
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock CheckinGateway checkinGateway;
-    @Mock com.shootr.mobile.domain.service.user.CreateAccountGateway createAccountGateway;
-    @Mock com.shootr.mobile.domain.service.user.LoginGateway loginGateway;
-    @Mock com.shootr.mobile.domain.service.user.ResetPasswordGateway resetPasswordGateway;
+    @Mock CreateAccountGateway createAccountGateway;
+    @Mock LoginGateway loginGateway;
+    @Mock ResetPasswordGateway resetPasswordGateway;
     @Mock ConfirmEmailGateway confirmEmailGateway;
     @Mock StreamRepository remoteStreamRepository;
-    @Mock com.shootr.mobile.domain.service.user.ChangePasswordGateway changePasswordGateway;
+    @Mock ChangePasswordGateway changePasswordGateway;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
 
-    private com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    private ShootrUserService shootrUserService;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrUserService = new com.shootr.mobile.domain.service.user.ShootrUserService(localUserRepository,
+        shootrUserService = new ShootrUserService(localUserRepository,
           sessionRepository,
           checkinGateway,
           createAccountGateway,

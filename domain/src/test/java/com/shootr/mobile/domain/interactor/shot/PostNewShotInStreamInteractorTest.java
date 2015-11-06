@@ -1,10 +1,13 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,26 +24,26 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
 
     private static final String WATCHING_STREAM_ID = "1L";
 
-    @Mock com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
+    @Mock StreamRepository localStreamRepository;
 
     private PostNewShotInStreamInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
-        interactor =
-          new PostNewShotInStreamInteractor(postExecutionThread, interactorHandler, sessionRepository,
-            localStreamRepository, shotSender);
+        InteractorHandler interactorHandler = new TestInteractorHandler();
+        interactor = new PostNewShotInStreamInteractor(postExecutionThread,
+          interactorHandler,
+          sessionRepository,
+          localStreamRepository,
+          shotSender);
     }
 
-    @Override protected com.shootr.mobile.domain.interactor.shot.PostNewShotInteractor getInteractorForCommonTests() {
+    @Override protected PostNewShotInteractor getInteractorForCommonTests() {
         return interactor;
     }
 
-    @Test
-    public void shouldSendShotWithWatchingStreamInfoWhenThereIsWatchingStream() throws Exception {
+    @Test public void shouldSendShotWithWatchingStreamInfoWhenThereIsWatchingStream() throws Exception {
         setupCurrentUserSession();
         setupWatchingStream();
 
@@ -53,8 +56,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         assertStreamInfoIsFromStream(streamInfo, watchingStream());
     }
 
-    @Test
-    public void shouldSendShotWithoutStreamInfoWhenNoStreamWatching() throws Exception {
+    @Test public void shouldSendShotWithoutStreamInfoWhenNoStreamWatching() throws Exception {
         setupCurrentUserSession();
 
         interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
@@ -71,8 +73,8 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         when(localStreamRepository.getStreamById(WATCHING_STREAM_ID)).thenReturn(watchingStream());
     }
 
-    private com.shootr.mobile.domain.Stream watchingStream() {
-        com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    private Stream watchingStream() {
+        Stream stream = new Stream();
         stream.setId(String.valueOf(WATCHING_STREAM_ID));
         stream.setTitle(STREAM_TITLE_STUB);
         stream.setShortTitle(STREAM_SHORT_TITLE_STUB);

@@ -2,13 +2,14 @@ package com.shootr.mobile.domain.repository;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.StreamTimelineParameters;
 import java.util.List;
 
 public interface ShotRepository {
 
     Shot putShot(Shot shot);
 
-    List<Shot> getShotsForStreamTimeline(com.shootr.mobile.domain.StreamTimelineParameters parameters);
+    List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
     Shot getShot(String shotId);
 
@@ -30,7 +31,7 @@ public interface ShotRepository {
 
     void deleteShot(String idShot);
 
-    List<Shot> getUserShotsForStreamTimeline(com.shootr.mobile.domain.StreamTimelineParameters timelineParameters);
+    List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
 
     void deleteShotsByStream(String idStream);
 }

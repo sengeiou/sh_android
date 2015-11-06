@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class AddToFavoritesInteractor implements Interactor {
     private String idStream;
 
     @Inject public AddToFavoritesInteractor(@Local FavoriteRepository localFavoriteRepository,
-      @com.shootr.mobile.domain.repository.Remote FavoriteRepository remoteFavoriteRepository, InteractorHandler interactorHandler,
+      @Remote FavoriteRepository remoteFavoriteRepository, InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository, BusPublisher busPublisher) {
         this.localFavoriteRepository = localFavoriteRepository;
         this.interactorHandler = interactorHandler;
@@ -41,7 +42,7 @@ public class AddToFavoritesInteractor implements Interactor {
         this.busPublisher = busPublisher;
     }
 
-    public void addToFavorites(String idStream, Interactor.CompletedCallback callback, ErrorCallback errorCallback) {
+    public void addToFavorites(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         this.idStream = idStream;
@@ -69,9 +70,9 @@ public class AddToFavoritesInteractor implements Interactor {
 
     private int getNextOrder() {
         Favorite lastLocalFavorite = getLastLocalFavorite();
-        if(lastLocalFavorite != null){
+        if (lastLocalFavorite != null) {
             return lastLocalFavorite.getOrder() + 1;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -79,17 +80,16 @@ public class AddToFavoritesInteractor implements Interactor {
     private Favorite getLastLocalFavorite() {
         List<Favorite> favorites = localFavoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
         Collections.sort(favorites, new Favorite.AscendingOrderComparator());
-        if(!favorites.isEmpty()){
+        if (!favorites.isEmpty()) {
             return favorites.get(favorites.size() - 1);
-        }else{
+        } else {
             return null;
         }
     }
 
     protected void notifyLoaded() {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onCompleted();
             }
         });
@@ -106,5 +106,4 @@ public class AddToFavoritesInteractor implements Interactor {
     protected void notifyAdditionToBus() {
         busPublisher.post(new FavoriteAdded.Event());
     }
-
 }

@@ -1,9 +1,11 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestBase{
+public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestBase {
 
     private static final String PARENT_SHOT_ID = "1L";
     private static final Long PARENT_STREAM_ID = 2L;
@@ -22,8 +24,8 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     private static final Long PARENT_SHOT_USER_ID = 3L;
     private static final String PARENT_SHOT_USERNAME = "parent username";
 
-    @Mock com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
-    @Mock com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
 
     private PostNewShotAsReplyInteractor interactor;
 
@@ -34,10 +36,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         interactor = new PostNewShotAsReplyInteractor(postExecutionThread,
           interactorHandler,
           sessionRepository,
-          shotSender, localShotRepository, remoteShotRepository);
+          shotSender,
+          localShotRepository,
+          remoteShotRepository);
     }
 
-    @Override protected com.shootr.mobile.domain.interactor.shot.PostNewShotInteractor getInteractorForCommonTests() {
+    @Override protected PostNewShotInteractor getInteractorForCommonTests() {
         setupParentShot();
         return interactor;
     }
@@ -47,11 +51,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         setupParentShot();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
-          IMAGE_STUB, PARENT_SHOT_ID,
+          IMAGE_STUB,
+          PARENT_SHOT_ID,
           new DummyCallback(),
           new DummyErrorCallback());
 
-        com.shootr.mobile.domain.Shot sentShot = captureSentShot();
+        Shot sentShot = captureSentShot();
         assertThat(sentShot.getStreamInfo()).isEqualTo(parentStreamInfo());
     }
 
@@ -60,11 +65,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         setupParentShot();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
-          IMAGE_STUB, PARENT_SHOT_ID,
+          IMAGE_STUB,
+          PARENT_SHOT_ID,
           new DummyCallback(),
           new DummyErrorCallback());
 
-        com.shootr.mobile.domain.Shot sentShot = captureSentShot();
+        Shot sentShot = captureSentShot();
         assertThat(sentShot.getParentShotId()).isEqualTo(PARENT_SHOT_ID);
     }
 
@@ -73,11 +79,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         setupParentShotFromRemote();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
-          IMAGE_STUB, PARENT_SHOT_ID,
+          IMAGE_STUB,
+          PARENT_SHOT_ID,
           new DummyCallback(),
           new DummyErrorCallback());
 
-        com.shootr.mobile.domain.Shot sentShot = captureSentShot();
+        Shot sentShot = captureSentShot();
         assertThat(sentShot.getParentShotId()).isEqualTo(PARENT_SHOT_ID);
     }
 
@@ -91,7 +98,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
           new DummyCallback(),
           new DummyErrorCallback());
 
-        com.shootr.mobile.domain.Shot sentShot = captureSentShot();
+        Shot sentShot = captureSentShot();
         assertThat(sentShot.getParentShotUserId()).isEqualTo(String.valueOf(PARENT_SHOT_USER_ID));
     }
 
@@ -100,16 +107,17 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         setupParentShot();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
-          IMAGE_STUB, PARENT_SHOT_ID,
+          IMAGE_STUB,
+          PARENT_SHOT_ID,
           new DummyCallback(),
           new DummyErrorCallback());
 
-        com.shootr.mobile.domain.Shot sentShot = captureSentShot();
+        Shot sentShot = captureSentShot();
         assertThat(sentShot.getParentShotUsername()).isEqualTo(PARENT_SHOT_USERNAME);
     }
 
-    private com.shootr.mobile.domain.Shot.ShotStreamInfo parentStreamInfo() {
-        com.shootr.mobile.domain.Shot.ShotStreamInfo shotStreamInfo = new com.shootr.mobile.domain.Shot.ShotStreamInfo();
+    private Shot.ShotStreamInfo parentStreamInfo() {
+        Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
         shotStreamInfo.setIdStream(String.valueOf(PARENT_STREAM_ID));
         shotStreamInfo.setStreamTitle(PARENT_STREAM_TITLE);
         shotStreamInfo.setStreamShortTitle(PARENT_STREAM_SHORT_TITLE);
@@ -125,8 +133,8 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         when(remoteShotRepository.getShot(anyString())).thenReturn(parentShot());
     }
 
-    private com.shootr.mobile.domain.Shot parentShot() {
-        com.shootr.mobile.domain.Shot shot = new com.shootr.mobile.domain.Shot();
+    private Shot parentShot() {
+        Shot shot = new Shot();
         shot.setIdShot(PARENT_SHOT_ID);
         shot.setStreamInfo(parentStreamInfo());
         shot.setUserInfo(parentUserInfo());
@@ -134,8 +142,8 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         return shot;
     }
 
-    private com.shootr.mobile.domain.Shot.ShotUserInfo parentUserInfo() {
-        com.shootr.mobile.domain.Shot.ShotUserInfo shotUserInfo = new com.shootr.mobile.domain.Shot.ShotUserInfo();
+    private Shot.ShotUserInfo parentUserInfo() {
+        Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
         shotUserInfo.setIdUser(String.valueOf(PARENT_SHOT_USER_ID));
         shotUserInfo.setUsername(PARENT_SHOT_USERNAME);
         return shotUserInfo;

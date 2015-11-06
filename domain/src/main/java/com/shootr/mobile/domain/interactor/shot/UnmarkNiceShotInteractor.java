@@ -1,11 +1,13 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.Remote;
 import javax.inject.Inject;
 
 public class UnmarkNiceShotInteractor implements Interactor {
@@ -18,10 +20,9 @@ public class UnmarkNiceShotInteractor implements Interactor {
     private String idShot;
     private CompletedCallback completedCallback;
 
-    @Inject public UnmarkNiceShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local NiceShotRepository localNiceShotRepository,
-      @com.shootr.mobile.domain.repository.Remote NiceShotRepository remoteNiceShotRepository) {
+    @Inject
+    public UnmarkNiceShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local NiceShotRepository localNiceShotRepository, @Remote NiceShotRepository remoteNiceShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localNiceShotRepository = localNiceShotRepository;
@@ -54,20 +55,19 @@ public class UnmarkNiceShotInteractor implements Interactor {
         } catch (com.shootr.mobile.domain.exception.ShootrException | NiceNotMarkedException e) {
             try {
                 redoNiceInLocal();
-            } catch (com.shootr.mobile.domain.exception.NiceAlreadyMarkedException error) {
+            } catch (NiceAlreadyMarkedException error) {
                 /* swallow */
             }
         }
     }
 
-    private void redoNiceInLocal() throws com.shootr.mobile.domain.exception.NiceAlreadyMarkedException {
+    private void redoNiceInLocal() throws NiceAlreadyMarkedException {
         localNiceShotRepository.mark(idShot);
     }
 
     protected void notifyCompleted() {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 completedCallback.onCompleted();
             }
         });

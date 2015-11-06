@@ -36,7 +36,6 @@ public class LogoutInteractor implements Interactor {
         } catch (ShootrException shootrException) {
             handleServerError(shootrException);
         }
-
     }
 
     private void notifyLoaded() {

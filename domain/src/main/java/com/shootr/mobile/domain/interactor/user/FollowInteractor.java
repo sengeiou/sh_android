@@ -1,18 +1,24 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class FollowInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final FollowRepository localFollowRepository;
     private final FollowRepository remoteFollowRepository;
@@ -23,12 +29,9 @@ public class FollowInteractor implements Interactor {
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public FollowInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository,
-      @com.shootr.mobile.domain.repository.Remote FollowRepository remoteFollowRepository,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository) {
+    @Inject public FollowInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
@@ -44,15 +47,14 @@ public class FollowInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
         try {
             remoteFollowRepository.follow(idUser);
             localFollowRepository.follow(idUser);
             notifyCompleted();
             ensureUserExistInLocal();
-        } catch (com.shootr.mobile.domain.exception.FollowingBlockedUserException error) {
-            notifyError(new com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException(error));
+        } catch (FollowingBlockedUserException error) {
+            notifyError(new CannotFollowBlockedUserException(error));
         }
     }
 
@@ -62,24 +64,22 @@ public class FollowInteractor implements Interactor {
                 User user = remoteUserRepository.getUserById(idUser);
                 localUserRepository.putUser(user);
             }
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException e) {
+        } catch (ServerCommunicationException e) {
             /* bad luck: will have unconsistent data for a short period of time */
         }
     }
 
     private void notifyCompleted() {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onCompleted();
             }
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

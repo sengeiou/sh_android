@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.validation;
 
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,33 +25,33 @@ public class StreamValidator {
         fieldValidationErrors = new ArrayList<>();
     }
 
-    public List<FieldValidationError> validate(com.shootr.mobile.domain.Stream stream) {
+    public List<FieldValidationError> validate(Stream stream) {
         validateTitle(stream);
         validateShortTitle(stream);
         validateDescription(stream);
         return fieldValidationErrors;
     }
 
-    private void validateDescription(com.shootr.mobile.domain.Stream stream) {
+    private void validateDescription(Stream stream) {
         validateDescriptionTooLong(stream);
     }
 
-    private void validateShortTitle(com.shootr.mobile.domain.Stream stream) {
+    private void validateShortTitle(Stream stream) {
         validateShortTitleTooShort(stream);
         validateShortTitleTooLong(stream);
     }
 
     //region Title
-    private void validateTitle(com.shootr.mobile.domain.Stream stream) {
+    private void validateTitle(Stream stream) {
         validateTitleTooShort(stream);
         validateTitleTooLong(stream);
     }
 
-    private void validateTitleTooShort(com.shootr.mobile.domain.Stream stream) {
+    private void validateTitleTooShort(Stream stream) {
         String title = stream.getTitle();
         if (title == null || title.length() < TITLE_MINIMUN_LENGTH) {
-            fieldValidationErrors.add(
-              new FieldValidationError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, FIELD_TITLE));
+            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT,
+              FIELD_TITLE));
         }
     }
 
@@ -57,38 +59,38 @@ public class StreamValidator {
         return title.replaceAll(ALPHANUMERIC_REGEX, "").length();
     }
 
-    private void validateTitleTooLong(com.shootr.mobile.domain.Stream stream) {
+    private void validateTitleTooLong(Stream stream) {
         if (stream.getTitle() != null && alphanumericLength(stream.getTitle()) > TITLE_MAXIMUN_LENGTH) {
-            fieldValidationErrors.add(
-              new FieldValidationError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, FIELD_TITLE));
+            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG,
+              FIELD_TITLE));
         }
     }
 
     //endregion
 
     //region Short Title
-    private void validateShortTitleTooLong(com.shootr.mobile.domain.Stream stream) {
+    private void validateShortTitleTooLong(Stream stream) {
         if (stream.getShortTitle() != null && alphanumericLength(stream.getShortTitle()) > SHORT_TITLE_MAXIMUM_LENGTH) {
-            fieldValidationErrors.add(
-              new FieldValidationError(com.shootr.mobile.domain.exception.ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_LONG, FIELD_SHORT_TITLE));
+            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_LONG,
+              FIELD_SHORT_TITLE));
         }
     }
 
-    private void validateShortTitleTooShort(com.shootr.mobile.domain.Stream stream) {
+    private void validateShortTitleTooShort(Stream stream) {
         String shortTitle = stream.getShortTitle();
         if (shortTitle == null || shortTitle.length() < SHORT_TITLE_MINIMUN_LENGTH) {
-            fieldValidationErrors.add(
-              new FieldValidationError(com.shootr.mobile.domain.exception.ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_SHORT, FIELD_SHORT_TITLE));
+            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_SUBCODE_SHORT_TITLE_TOO_SHORT,
+              FIELD_SHORT_TITLE));
         }
     }
 
     //endregion
 
-    private void validateDescriptionTooLong(com.shootr.mobile.domain.Stream stream) {
-        if (stream.getDescription() != null && alphanumericLength(stream.getDescription()) > DESCRIPTION_MAXIMUM_LENGTH) {
-            fieldValidationErrors.add(
-              new FieldValidationError(com.shootr.mobile.domain.exception.ShootrError.ERROR_SUBCODE_DESCRIPTION_TOO_LONG, FIELD_DESCRIPTION));
+    private void validateDescriptionTooLong(Stream stream) {
+        if (stream.getDescription() != null
+          && alphanumericLength(stream.getDescription()) > DESCRIPTION_MAXIMUM_LENGTH) {
+            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_SUBCODE_DESCRIPTION_TOO_LONG,
+              FIELD_DESCRIPTION));
         }
     }
-
 }

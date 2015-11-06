@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,14 +28,14 @@ public class GetAllParticipantsInteractor implements Interactor {
     private Boolean isPaginating;
 
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
-      @com.shootr.mobile.domain.repository.Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainAllParticipants(String idStream, Long timestamp, Boolean isPaginating, Callback<List<User>> callback,
-      ErrorCallback errorCallback) {
+    public void obtainAllParticipants(String idStream, Long timestamp, Boolean isPaginating,
+      Callback<List<User>> callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.timestamp = timestamp;
         this.isPaginating = isPaginating;
@@ -90,8 +91,7 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private void notifyLoaded(final List<User> results) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(results);
             }
         });
@@ -99,8 +99,7 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

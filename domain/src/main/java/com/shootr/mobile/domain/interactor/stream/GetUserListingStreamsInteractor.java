@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.Listing;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -9,6 +10,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +23,8 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final StreamSearchRepository localStreamSearchRepository;
     private final StreamSearchRepository remoteStreamSearchRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
     private final FavoriteRepository remoteFavoriteRepository;
 
     private String idUser;
@@ -32,11 +35,8 @@ public class GetUserListingStreamsInteractor implements Interactor {
     @Inject
     public GetUserListingStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local StreamSearchRepository localStreamSearchRepository,
-      @com.shootr.mobile.domain.repository.Remote StreamSearchRepository remoteStreamSearchRepository, @Local
-    com.shootr.mobile.domain.repository.StreamRepository localStreamRepository,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository, @com.shootr.mobile.domain.repository.Remote
-    FavoriteRepository remoteFavoriteRepository) {
+      @Remote StreamSearchRepository remoteStreamSearchRepository, @Local StreamRepository localStreamRepository,
+      @Remote StreamRepository remoteStreamRepository, @Remote FavoriteRepository remoteFavoriteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamSearchRepository = localStreamSearchRepository;
@@ -73,7 +73,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private void loadUserListingStreamsFromRemote() {
         try {
             loadRemoteFavoriteIds();
-            List<com.shootr.mobile.domain.Stream> favoriteStreams = remoteStreamRepository.getStreamsByIds(favoriteIds);
+            List<Stream> favoriteStreams = remoteStreamRepository.getStreamsByIds(favoriteIds);
             List<StreamSearchResult> holdingStreamResults =
               loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
 
@@ -87,7 +87,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     private void loadUserListingStreamsFromLocal() {
         loadRemoteFavoriteIds();
-        List<com.shootr.mobile.domain.Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
+        List<Stream> favoriteStreams = localStreamRepository.getStreamsByIds(favoriteIds);
         List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(localStreamSearchRepository);
         Listing listing = getListing(favoriteStreams, holdingStreamResults);
@@ -95,17 +95,14 @@ public class GetUserListingStreamsInteractor implements Interactor {
         notifyLoaded(listing);
     }
 
-    private Listing getListing(List<com.shootr.mobile.domain.Stream> favoriteStreams, List<StreamSearchResult> streamSearchResults) {
+    private Listing getListing(List<Stream> favoriteStreams, List<StreamSearchResult> streamSearchResults) {
         List<StreamSearchResult> favoriteStreamResults = getFavoriteStreamSearchResults(favoriteStreams);
-        return Listing.builder()
-          .holdingStreams(streamSearchResults)
-          .favoritedStreams(favoriteStreamResults)
-          .build();
+        return Listing.builder().holdingStreams(streamSearchResults).favoritedStreams(favoriteStreamResults).build();
     }
 
-    private List<StreamSearchResult> getFavoriteStreamSearchResults(List<com.shootr.mobile.domain.Stream> favoriteStreams) {
+    private List<StreamSearchResult> getFavoriteStreamSearchResults(List<Stream> favoriteStreams) {
         List<StreamSearchResult> favoriteStreamResults = new ArrayList<>(favoriteStreams.size());
-        for (com.shootr.mobile.domain.Stream favoriteStream : favoriteStreams) {
+        for (Stream favoriteStream : favoriteStreams) {
             StreamSearchResult streamSearchResult = new StreamSearchResult();
             streamSearchResult.setStream(favoriteStream);
             favoriteStreamResults.add(streamSearchResult);
@@ -139,8 +136,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

@@ -50,7 +50,7 @@ public class GetFollowingInteractor implements Interactor {
     }
 
     private void obtainRemotePeople() {
-        try{
+        try {
             List<User> userList = remoteUserRepository.getPeople();
             notifyResult(userList);
         } catch (ServerCommunicationException networkError) {

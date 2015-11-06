@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -77,11 +78,12 @@ public class GetUserByUsernameInteractorTest {
     }
 
     @Test public void shouldCallbackErrorIfRemoteRepositoryFails() throws Exception {
-        when(remoteUserRepository.getUserByUsername(anyString())).thenThrow(new com.shootr.mobile.domain.exception.ShootrException() {});
+        when(remoteUserRepository.getUserByUsername(anyString())).thenThrow(new ShootrException() {
+        });
 
         interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
 
-        verify(errorCallback).onError(any(com.shootr.mobile.domain.exception.ShootrException.class));
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     private User remoteUser() {

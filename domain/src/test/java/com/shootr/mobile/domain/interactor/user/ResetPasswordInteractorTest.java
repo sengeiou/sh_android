@@ -1,9 +1,13 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.ForgotPasswordResult;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,32 +22,30 @@ import static org.mockito.Mockito.verify;
 public class ResetPasswordInteractorTest {
 
     public static final String FAKE_USERNAME_STUB = "fake_username";
-    private ResetPasswordInteractor interactor;
-    @Mock com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    @Mock ShootrUserService shootrUserService;
     @Mock Interactor.ErrorCallback errorCallback;
-    @Mock Interactor.Callback<com.shootr.mobile.domain.ForgotPasswordResult> completedCallback;
-    @Mock com.shootr.mobile.domain.ForgotPasswordResult forgotPasswordResult;
+    @Mock Interactor.Callback<ForgotPasswordResult> completedCallback;
+    @Mock ForgotPasswordResult forgotPasswordResult;
+    private ResetPasswordInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         interactor = new ResetPasswordInteractor(interactorHandler, postExecutionThread, shootrUserService);
     }
 
-    @Test
-    public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult() throws Exception {
+    @Test public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult() throws Exception {
         doReturn(forgotPasswordResult).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
-        verify(completedCallback).onLoaded(any(com.shootr.mobile.domain.ForgotPasswordResult.class));
+        verify(completedCallback).onLoaded(any(ForgotPasswordResult.class));
     }
 
-    @Test
-    public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ShootrException(){}).when(shootrUserService).performResetPassword(anyString());
+    @Test public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials() throws Exception {
+        doThrow(new ShootrException() {
+        }).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
-        verify(errorCallback).onError(any(com.shootr.mobile.domain.exception.ShootrException.class));
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 }

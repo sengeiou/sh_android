@@ -1,9 +1,12 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -19,15 +22,16 @@ public class FindParticipantsInteractor implements Interactor {
     private String idStream;
     private String query;
 
-    @Inject public FindParticipantsInteractor(InteractorHandler interactorHandler, @com.shootr.mobile.domain.repository.Remote
-    UserRepository remoteUserRepository,
+    @Inject
+    public FindParticipantsInteractor(InteractorHandler interactorHandler, @Remote UserRepository remoteUserRepository,
       PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainAllParticipants(String idStream, String query, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainAllParticipants(String idStream, String query, Callback<List<User>> callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.query = query;
         this.callback = callback;
@@ -38,7 +42,7 @@ public class FindParticipantsInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             notifyLoaded(remoteUserRepository.findParticipants(idStream, query));
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException error) {
+        } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
@@ -51,10 +55,9 @@ public class FindParticipantsInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

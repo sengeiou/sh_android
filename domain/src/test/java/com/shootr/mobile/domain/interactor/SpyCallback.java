@@ -3,7 +3,7 @@ package com.shootr.mobile.domain.interactor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpyCallback<Result> implements com.shootr.mobile.domain.interactor.Interactor.Callback<Result> {
+public class SpyCallback<Result> implements Interactor.Callback<Result> {
 
     private List<Result> results = new ArrayList<>();
     private Result lastResult;

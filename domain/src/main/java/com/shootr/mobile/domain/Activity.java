@@ -144,13 +144,18 @@ public class Activity {
         if (idUser != null ? !idUser.equals(activity.idUser) : activity.idUser != null) return false;
         if (username != null ? !username.equals(activity.username) : activity.username != null) return false;
         if (idStream != null ? !idStream.equals(activity.idStream) : activity.idStream != null) return false;
-        if (streamTitle != null ? !streamTitle.equals(activity.streamTitle) : activity.streamTitle != null) return false;
-        if (
-          streamShortTitle != null ? !streamShortTitle.equals(activity.streamShortTitle) : activity.streamShortTitle != null) return false;
+        if (streamTitle != null ? !streamTitle.equals(activity.streamTitle) : activity.streamTitle != null) {
+            return false;
+        }
+        if (streamShortTitle != null ? !streamShortTitle.equals(activity.streamShortTitle)
+          : activity.streamShortTitle != null) {
+            return false;
+        }
         if (comment != null ? !comment.equals(activity.comment) : activity.comment != null) return false;
         if (type != null ? !type.equals(activity.type) : activity.type != null) return false;
-        if (publishDate != null ? !publishDate.equals(activity.publishDate) : activity.publishDate != null)
+        if (publishDate != null ? !publishDate.equals(activity.publishDate) : activity.publishDate != null) {
             return false;
+        }
         if (userInfo != null ? !userInfo.equals(activity.userInfo) : activity.userInfo != null) return false;
         return !(streamInfo != null ? !streamInfo.equals(activity.streamInfo) : activity.streamInfo != null);
     }
@@ -216,8 +221,7 @@ public class Activity {
             this.idUser = idUser;
         }
 
-        @Override
-        public boolean equals(Object o) {
+        @Override public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof ActivityUserInfo)) return false;
 
@@ -228,8 +232,7 @@ public class Activity {
             return true;
         }
 
-        @Override
-        public int hashCode() {
+        @Override public int hashCode() {
             return idUser.hashCode();
         }
 
@@ -272,8 +275,7 @@ public class Activity {
             this.idStream = idStream;
         }
 
-        @Override
-        public boolean equals(Object o) {
+        @Override public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof ActivityStreamInfo)) return false;
 
@@ -284,8 +286,7 @@ public class Activity {
             return true;
         }
 
-        @Override
-        public int hashCode() {
+        @Override public int hashCode() {
             return idStream != null ? idStream.hashCode() : 0;
         }
 

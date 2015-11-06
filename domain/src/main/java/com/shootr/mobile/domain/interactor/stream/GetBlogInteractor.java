@@ -1,43 +1,50 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 
 public class GetBlogInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
-    private final com.shootr.mobile.domain.utils.LocaleProvider localeProvider;
+    private final StreamRepository remoteStreamRepository;
+    private final LocaleProvider localeProvider;
 
-    private Callback<com.shootr.mobile.domain.Stream> callback;
+    private Callback<Stream> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetBlogInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository, com.shootr.mobile.domain.utils.LocaleProvider localeProvider) {
+    @Inject public GetBlogInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote StreamRepository remoteStreamRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteStreamRepository = remoteStreamRepository;
         this.localeProvider = localeProvider;
     }
 
-    public void obtainBlogStream(Callback<com.shootr.mobile.domain.Stream> callback, ErrorCallback errorCallback) {
+    public void obtainBlogStream(Callback<Stream> callback, ErrorCallback errorCallback) {
         this.callback = callback;
-        this.errorCallback= errorCallback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(remoteStreamRepository.getBlogStream(localeProvider.getCountry(), localeProvider.getLanguage()));
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException error) {
+            notifyLoaded(remoteStreamRepository.getBlogStream(localeProvider.getCountry(),
+              localeProvider.getLanguage()));
+        } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
-    private void notifyLoaded(final com.shootr.mobile.domain.Stream stream) {
+    private void notifyLoaded(final Stream stream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(stream);
@@ -45,7 +52,7 @@ public class GetBlogInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);

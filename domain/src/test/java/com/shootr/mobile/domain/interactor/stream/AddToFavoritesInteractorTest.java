@@ -1,8 +1,15 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,94 +30,88 @@ public class AddToFavoritesInteractorTest {
 
     public static final String ID_STREAM = "id_stream";
     public static final String USER_ID = "userId";
-    @Mock com.shootr.mobile.domain.interactor.Interactor.CompletedCallback callback;
-    @Mock com.shootr.mobile.domain.interactor.Interactor.ErrorCallback errorCallback;
-    @Mock com.shootr.mobile.domain.repository.FavoriteRepository localFavoriteRepository;
-    @Mock com.shootr.mobile.domain.repository.FavoriteRepository remoteFavoriteRepository;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    @Mock com.shootr.mobile.domain.Favorite favorite;
-    @Mock com.shootr.mobile.domain.bus.BusPublisher busPublisher;
+    @Mock Interactor.CompletedCallback callback;
+    @Mock Interactor.ErrorCallback errorCallback;
+    @Mock FavoriteRepository localFavoriteRepository;
+    @Mock FavoriteRepository remoteFavoriteRepository;
+    @Mock SessionRepository sessionRepository;
+    @Mock Favorite favorite;
+    @Mock BusPublisher busPublisher;
 
     private AddToFavoritesInteractor addToFavoritesInteractor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
-        com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
-          interactorHandler, postExecutionThread,
+        InteractorHandler interactorHandler = new TestInteractorHandler();
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository,
+          remoteFavoriteRepository,
+          interactorHandler,
+          postExecutionThread,
           sessionRepository,
           busPublisher);
     }
 
-    @Test
-    public void shouldCallCompletedCallbackWhenAddToFavorites(){
+    @Test public void shouldCallCompletedCallbackWhenAddToFavorites() {
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(callback).onCompleted();
     }
 
-    @Test
-    public void shouldAddFavoriteToLocal() throws StreamAlreadyInFavoritesException {
+    @Test public void shouldAddFavoriteToLocal() throws StreamAlreadyInFavoritesException {
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(localFavoriteRepository).putFavorite(any(com.shootr.mobile.domain.Favorite.class));
+        verify(localFavoriteRepository).putFavorite(any(Favorite.class));
     }
 
-    @Test
-    public void shouldAddFavoriteToRemote() throws StreamAlreadyInFavoritesException {
+    @Test public void shouldAddFavoriteToRemote() throws StreamAlreadyInFavoritesException {
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(remoteFavoriteRepository).putFavorite(any(com.shootr.mobile.domain.Favorite.class));
+        verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
     }
 
-    @Test
-    public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
+    @Test public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
       throws StreamAlreadyInFavoritesException {
         when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavorites());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
 
-    @Test
-    public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
+    @Test public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
       throws StreamAlreadyInFavoritesException {
         when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavoritesReversed());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
     }
 
-    @Test
-    public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty()
+    @Test public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty()
       throws StreamAlreadyInFavoritesException {
         when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(empty());
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
     }
 
-    @Test
-    public void shouldNotifyCompletedBeforePutFavoriteInRemote() throws StreamAlreadyInFavoritesException {
+    @Test public void shouldNotifyCompletedBeforePutFavoriteInRemote() throws StreamAlreadyInFavoritesException {
         addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
 
         InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
         inOrder.verify(callback).onCompleted();
-        inOrder.verify(remoteFavoriteRepository).putFavorite(any(com.shootr.mobile.domain.Favorite.class));
+        inOrder.verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
     }
 
-    private List<com.shootr.mobile.domain.Favorite> empty() {
+    private List<Favorite> empty() {
         return new ArrayList<>();
     }
 
-    private List<com.shootr.mobile.domain.Favorite> twoFavoritesReversed() {
-        List<com.shootr.mobile.domain.Favorite> twoFavorites = twoFavorites();
+    private List<Favorite> twoFavoritesReversed() {
+        List<Favorite> twoFavorites = twoFavorites();
         Collections.reverse(twoFavorites);
         return twoFavorites;
     }
 
-    private List<com.shootr.mobile.domain.Favorite> twoFavorites() {
+    private List<Favorite> twoFavorites() {
         return Arrays.asList(favoriteWithOrder(0), favoriteWithOrder(1));
     }
 
-    private com.shootr.mobile.domain.Favorite favoriteWithOrder(int order) {
-        com.shootr.mobile.domain.Favorite favorite = new com.shootr.mobile.domain.Favorite();
+    private Favorite favoriteWithOrder(int order) {
+        Favorite favorite = new Favorite();
         favorite.setOrder(order);
         favorite.setIdStream(ID_STREAM);
         return favorite;

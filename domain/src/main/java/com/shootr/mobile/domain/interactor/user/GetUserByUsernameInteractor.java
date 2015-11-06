@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import javax.inject.Inject;
 
@@ -21,8 +22,7 @@ public class GetUserByUsernameInteractor implements Interactor {
     private String username;
 
     @Inject
-    public GetUserByUsernameInteractor(InteractorHandler interactorHandler, @com.shootr.mobile.domain.repository.Remote
-    UserRepository remoteUserRepository,
+    public GetUserByUsernameInteractor(InteractorHandler interactorHandler, @Remote UserRepository remoteUserRepository,
       @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;

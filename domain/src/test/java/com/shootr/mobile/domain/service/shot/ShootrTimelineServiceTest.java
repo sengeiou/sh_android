@@ -33,19 +33,16 @@ import static org.mockito.Mockito.when;
 
 public class ShootrTimelineServiceTest {
 
+    public static final String USER_ID = "user_id";
+    public static final String ID_STREAM = "idStream";
     private static final Long DATE_OLDER = 1L;
     private static final Long DATE_MIDDLE = 2L;
     private static final Long DATE_NEWER = 3L;
-
     private static final String WATCHING_STREAM_ID = "idStream";
     private static final Long WATCHING_STREAM_REFRESH_DATE = 1000L;
-
     private static final String STREAM_SHOT_ID = "stream_shot";
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
-    public static final String USER_ID = "user_id";
-    public static final String ID_STREAM = "idStream";
-
     @Mock ShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
@@ -54,8 +51,7 @@ public class ShootrTimelineServiceTest {
 
     private ShootrTimelineService shootrTimelineService;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrTimelineService = new ShootrTimelineService(remoteShotRepository,
           localActivityRepository,
@@ -63,8 +59,7 @@ public class ShootrTimelineServiceTest {
           timelineSynchronizationRepository);
     }
 
-    @Test
-    public void shouldReturnStreamTimelineWhenRefreshStreamTimeline() throws Exception {
+    @Test public void shouldReturnStreamTimelineWhenRefreshStreamTimeline() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(
           streamShotListWithMultipleShots());
 
@@ -73,8 +68,7 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getShots()).isEqualTo(streamShotListWithMultipleShots());
     }
 
-    @Test
-    public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
+    @Test public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
         ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
@@ -82,8 +76,8 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
-    @Test
-    public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
+    @Test public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyStream()
+      throws Exception {
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
 
@@ -92,8 +86,7 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
-    @Test
-    public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
+    @Test public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
 
         shootrTimelineService.refreshTimelinesForActivity();
@@ -101,8 +94,7 @@ public class ShootrTimelineServiceTest {
         verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyStreamParameters());
     }
 
-    @Test
-    public void shouldRequestTimelineWithStreamIdWhenWatchingStream() throws Exception {
+    @Test public void shouldRequestTimelineWithStreamIdWhenWatchingStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
         shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
@@ -110,8 +102,7 @@ public class ShootrTimelineServiceTest {
         assertThat(captureTimelineParameters()).hasStreamId(ID_STREAM);
     }
 
-    @Test
-    public void shouldRequestTimelinehWithStreamRefreshDateWhenWatchingStream() throws Exception {
+    @Test public void shouldRequestTimelinehWithStreamRefreshDateWhenWatchingStream() throws Exception {
         when(timelineSynchronizationRepository.getStreamTimelineRefreshDate(WATCHING_STREAM_ID)).thenReturn(
           WATCHING_STREAM_REFRESH_DATE);
 
@@ -120,8 +111,7 @@ public class ShootrTimelineServiceTest {
         assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_STREAM_REFRESH_DATE);
     }
 
-    @Test
-    public void shouldSetTimelineRefreshDateWhenRemoteShotsReturned() throws Exception {
+    @Test public void shouldSetTimelineRefreshDateWhenRemoteShotsReturned() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Arrays.asList(
           shotWithDate(2L),
           shotWithDate(1L)));
@@ -131,8 +121,7 @@ public class ShootrTimelineServiceTest {
         verify(timelineSynchronizationRepository).setStreamTimelineRefreshDate(WATCHING_STREAM_ID, 2L);
     }
 
-    @Test
-    public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
+    @Test public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
 
         shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
@@ -140,8 +129,7 @@ public class ShootrTimelineServiceTest {
         verify(timelineSynchronizationRepository, never()).setStreamTimelineRefreshDate(anyString(), anyLong());
     }
 
-    @Test
-    public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingStream() throws Exception {
+    @Test public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
 
         Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
@@ -149,24 +137,24 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
-    @Test
-    public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity(){
+    @Test public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity() {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
+          ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(allActivityTypes());
     }
 
-    @Test
-    public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity(){
+    @Test public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity() {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
+          ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
     }
@@ -215,14 +203,14 @@ public class ShootrTimelineServiceTest {
         return Collections.singletonList(streamShot());
     }
 
-    private List<Shot> streamShotListWithMultipleShots(){
+    private List<Shot> streamShotListWithMultipleShots() {
         List<Shot> shots = new ArrayList<>();
         shots.add(streamShot());
         shots.add(streamShot());
         return shots;
     }
 
-    private List<Activity> activitiesList(){
+    private List<Activity> activitiesList() {
         List<Activity> shots = new ArrayList<>();
         shots.add(activity());
         shots.add(activity());

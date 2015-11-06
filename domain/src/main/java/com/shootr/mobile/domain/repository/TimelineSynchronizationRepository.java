@@ -7,5 +7,4 @@ public interface TimelineSynchronizationRepository {
     void setStreamTimelineRefreshDate(String streamId, Long refreshDate);
 
     Long getActivityTimelineRefreshDate();
-
 }

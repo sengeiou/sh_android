@@ -133,8 +133,7 @@ public class Stream {
         return result;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "Stream{" +
           "id=" + id +
           ", title='" + title + '\'' +
@@ -168,8 +167,7 @@ public class Stream {
             }
         }
 
-        @Override
-        public int compare(Stream stream1, Stream stream2) {
+        @Override public int compare(Stream stream1, Stream stream2) {
             return rank(stream1) - rank(stream2);
         }
 
@@ -185,8 +183,7 @@ public class Stream {
 
     public static class StreamNameComparator implements Comparator<Stream> {
 
-        @Override
-        public int compare(Stream left, Stream right) {
+        @Override public int compare(Stream left, Stream right) {
             return left.getTitle().compareTo(right.getTitle());
         }
     }

@@ -21,9 +21,8 @@ public class PerformFacebookLoginInteractor implements Interactor {
     private ErrorCallback errorCallback;
     private Callback<Boolean> callback;
 
-
-    @Inject public PerformFacebookLoginInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
+    @Inject
+    public PerformFacebookLoginInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       ShootrUserService shootrUserService) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -40,9 +39,9 @@ public class PerformFacebookLoginInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             notifyLoaded(shootrUserService.performFacebookLogin(facebookToken));
-        } catch (InvalidLoginException loginError){
+        } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
-        } catch (ShootrException unknownException){
+        } catch (ShootrException unknownException) {
             notifyError(unknownException);
         }
     }

@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.service;
 
-public class StreamIsAlreadyInFavoritesException extends com.shootr.mobile.domain.exception.ShootrException {
+import com.shootr.mobile.domain.exception.ShootrException;
+
+public class StreamIsAlreadyInFavoritesException extends ShootrException {
 
     public StreamIsAlreadyInFavoritesException(String message) {
         super(message);
@@ -9,5 +11,4 @@ public class StreamIsAlreadyInFavoritesException extends com.shootr.mobile.domai
     public StreamIsAlreadyInFavoritesException(Throwable cause) {
         super(cause);
     }
-
 }

@@ -1,30 +1,40 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ImageResizingException;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.PhotoService;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
 
 public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.interactor.Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
-    private final com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread;
+    private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
 
-    private final com.shootr.mobile.domain.repository.PhotoService photoService;
-    private final com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    private final com.shootr.mobile.domain.repository.UserRepository localUserRepository;
-    private final com.shootr.mobile.domain.repository.UserRepository remoteUserRepository;
-    private final com.shootr.mobile.domain.utils.ImageResizer imageResizer;
+    private final PhotoService photoService;
+    private final SessionRepository sessionRepository;
+    private final UserRepository localUserRepository;
+    private final UserRepository remoteUserRepository;
+    private final ImageResizer imageResizer;
 
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
     private File photo;
 
     @Inject
-    public UploadUserPhotoInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler, com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread,
-      com.shootr.mobile.domain.repository.PhotoService photoService, com.shootr.mobile.domain.repository.SessionRepository sessionRepository, @com.shootr.mobile.domain.repository.Local
-    com.shootr.mobile.domain.repository.UserRepository localUserRepository,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.UserRepository remoteUserRepository, com.shootr.mobile.domain.utils.ImageResizer imageResizer) {
+    public UploadUserPhotoInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      PhotoService photoService, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository, ImageResizer imageResizer) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.photoService = photoService;
@@ -46,22 +56,22 @@ public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.inter
             File imageFile = getResizedImage(photo);
             String photoUrl = uploadPhoto(imageFile);
             updateUserWithPhoto(photoUrl);
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException error) {
+        } catch (ServerCommunicationException error) {
             notifyError(error);
         } catch (IOException error) {
-            notifyError(new com.shootr.mobile.domain.exception.ImageResizingException(error));
+            notifyError(new ImageResizingException(error));
         }
     }
 
     private void updateUserWithPhoto(String photoUrl) {
-        com.shootr.mobile.domain.User user = getUserWithPhoto(photoUrl);
+        User user = getUserWithPhoto(photoUrl);
         remoteUserRepository.putUser(user);
         localUserRepository.putUser(user);
         notifyLoaded();
     }
 
-    private com.shootr.mobile.domain.User getUserWithPhoto(String photoUrl) {
-        com.shootr.mobile.domain.User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+    private User getUserWithPhoto(String photoUrl) {
+        User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         user.setPhoto(photoUrl);
         return user;
     }
@@ -82,7 +92,7 @@ public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.inter
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);

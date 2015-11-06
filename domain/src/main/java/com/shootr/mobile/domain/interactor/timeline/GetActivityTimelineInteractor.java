@@ -20,9 +20,9 @@ public class GetActivityTimelineInteractor implements Interactor {
     private final ActivityRepository localActivityRepository;
     private Callback callback;
 
-    @Inject public GetActivityTimelineInteractor(InteractorHandler interactorHandler,
-                                                 PostExecutionThread postExecutionThread,
-                                                 @Local ActivityRepository localActivityRepository) {
+    @Inject
+    public GetActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local ActivityRepository localActivityRepository) {
         this.localActivityRepository = localActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -49,8 +49,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     private ActivityTimelineParameters buildParameters() {
-        return ActivityTimelineParameters.builder()
-          .build();
+        return ActivityTimelineParameters.builder().build();
     }
 
     private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {

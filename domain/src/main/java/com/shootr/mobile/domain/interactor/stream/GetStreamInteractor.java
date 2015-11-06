@@ -1,23 +1,26 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import javax.inject.Inject;
 
 public class GetStreamInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
 
     private String idStream;
     private Callback callback;
 
-    @Inject public GetStreamInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local com.shootr.mobile.domain.repository.StreamRepository localStreamRepository, @com.shootr.mobile.domain.repository.Remote
-    com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository) {
+    @Inject public GetStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;
@@ -31,20 +34,20 @@ public class GetStreamInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        com.shootr.mobile.domain.Stream localStream = localStreamRepository.getStreamById(idStream);
+        Stream localStream = localStreamRepository.getStreamById(idStream);
         if (localStream != null) {
             notifyLoaded(localStream);
         } else {
-            com.shootr.mobile.domain.Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
+            Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
             if (remoteStream != null) {
                 notifyLoaded(remoteStream);
             } else {
-              //TODO notify error...
+                //TODO notify error...
             }
         }
     }
 
-    private void notifyLoaded(final com.shootr.mobile.domain.Stream stream) {
+    private void notifyLoaded(final Stream stream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(stream);
@@ -54,7 +57,6 @@ public class GetStreamInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(com.shootr.mobile.domain.Stream stream);
-
+        void onLoaded(Stream stream);
     }
 }

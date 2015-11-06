@@ -1,8 +1,14 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.PhotoService;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
@@ -10,22 +16,22 @@ import javax.inject.Inject;
 
 public class ChangeStreamPhotoInteractor implements Interactor {
 
-    private final com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler;
+    private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ImageResizer imageResizer;
-    private final com.shootr.mobile.domain.repository.PhotoService photoService; //TODO does this need to be a repository? It's a bit special, I think
-    private final com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
+    private final PhotoService photoService; //TODO does this need to be a repository? It's a bit special, I think
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
 
     private String idStream;
     private File photoFile;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public ChangeStreamPhotoInteractor(com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ImageResizer imageResizer, com.shootr.mobile.domain.repository.PhotoService photoService,
-      @Local com.shootr.mobile.domain.repository.StreamRepository localStreamRepository, @com.shootr.mobile.domain.repository.Remote
-    com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository) {
+    @Inject
+    public ChangeStreamPhotoInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      ImageResizer imageResizer, PhotoService photoService, @Local StreamRepository localStreamRepository,
+      @com.shootr.mobile.domain.repository.Remote StreamRepository remoteStreamRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.imageResizer = imageResizer;
@@ -46,18 +52,18 @@ public class ChangeStreamPhotoInteractor implements Interactor {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
             String imageUrl = photoService.uploadStreamImageAndGetUrl(resizedImageFile, idStream);
-            com.shootr.mobile.domain.Stream stream = localStreamRepository.getStreamById(idStream);
+            Stream stream = localStreamRepository.getStreamById(idStream);
             stream.setPicture(imageUrl);
-            com.shootr.mobile.domain.Stream remoteStream = remoteStreamRepository.putStream(stream);
+            Stream remoteStream = remoteStreamRepository.putStream(stream);
             notifyLoaded(remoteStream);
         } catch (IOException e) {
-            notifyError(new com.shootr.mobile.domain.exception.ServerCommunicationException(e));
-        } catch (com.shootr.mobile.domain.exception.ServerCommunicationException e) {
+            notifyError(new ServerCommunicationException(e));
+        } catch (ServerCommunicationException e) {
             notifyError(e);
         }
     }
 
-    private void notifyLoaded(final com.shootr.mobile.domain.Stream remoteStream) {
+    private void notifyLoaded(final Stream remoteStream) {
         postExecutionThread.post(new Runnable() {
             public void run() {
                 callback.onLoaded(remoteStream);
@@ -65,7 +71,7 @@ public class ChangeStreamPhotoInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException e) {
+    private void notifyError(final ShootrException e) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(e);
@@ -75,7 +81,6 @@ public class ChangeStreamPhotoInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(com.shootr.mobile.domain.Stream stream);
-
+        void onLoaded(Stream stream);
     }
 }

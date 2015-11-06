@@ -14,13 +14,11 @@ public class TestInteractorHandler implements InteractorHandler {
         /* no-op */
     }
 
-    @Override
-    public void stopInteractors() {
+    @Override public void stopInteractors() {
         /* no-op */
     }
 
-    @Override
-    public void executeUnique(Runnable clearDBRunnable) {
+    @Override public void executeUnique(Runnable clearDBRunnable) {
         /* no-op */
     }
 }

@@ -22,20 +22,17 @@ import static org.mockito.Mockito.when;
 
 public class GetPeopleInteractorTest {
 
-    private GetPeopleInteractor getPeopleInteractor;
-
     @Spy TestInteractorHandler interactorHandler = new TestInteractorHandler();
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
+    private GetPeopleInteractor getPeopleInteractor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         getPeopleInteractor = new GetPeopleInteractor(interactorHandler, remoteUserRepository, localUserRepository);
     }
 
-    @Test
-    public void resultsAreSortedByUsername() throws Exception {
+    @Test public void resultsAreSortedByUsername() throws Exception {
         setupRepositoryReturnsUserList();
 
         getPeopleInteractor.obtainPeople();
@@ -46,8 +43,7 @@ public class GetPeopleInteractorTest {
         assertThat(argumentCaptor.getValue().getUsers()).isSortedAccordingTo(new TestUsernameComparator());
     }
 
-    @Test
-    public void shouldCallbackOnceWhenNoPeopleReturned() throws Exception {
+    @Test public void shouldCallbackOnceWhenNoPeopleReturned() throws Exception {
         when(localUserRepository.getPeople()).thenReturn(emptyUserList());
         when(remoteUserRepository.getPeople()).thenReturn(emptyUserList());
 

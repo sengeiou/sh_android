@@ -14,6 +14,10 @@ public class Listing {
         /* private constructor */
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public List<StreamSearchResult> getHoldingStreams() {
         return holdingStreams;
     }
@@ -28,10 +32,6 @@ public class Listing {
 
     public Boolean includesFavorited() {
         return includeFavorited;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

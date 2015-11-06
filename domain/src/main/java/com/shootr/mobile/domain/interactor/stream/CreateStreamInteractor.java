@@ -1,11 +1,20 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.ShootrError;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.ShootrServerException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+import com.shootr.mobile.domain.validation.FieldValidationError;
+import com.shootr.mobile.domain.validation.StreamValidator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -13,9 +22,9 @@ public class CreateStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository;
-    private final com.shootr.mobile.domain.repository.StreamRepository localStreamRepository;
+    private final SessionRepository sessionRepository;
+    private final StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
     private final LocaleProvider localeProvider;
 
     private String idStream;
@@ -26,13 +35,9 @@ public class CreateStreamInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      com.shootr.mobile.domain.repository.SessionRepository sessionRepository,
-      @com.shootr.mobile.domain.repository.Remote
-      com.shootr.mobile.domain.repository.StreamRepository remoteStreamRepository,
-      @Local com.shootr.mobile.domain.repository.StreamRepository localStreamRepository,
-      LocaleProvider localeProvider) {
+    @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
+      @Local StreamRepository localStreamRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
@@ -54,21 +59,21 @@ public class CreateStreamInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        com.shootr.mobile.domain.Stream stream = streamFromParameters();
+        Stream stream = streamFromParameters();
         if (validateStream(stream)) {
             try {
-                com.shootr.mobile.domain.Stream savedStream = sendStreamToServer(stream, notifyCreation);
+                Stream savedStream = sendStreamToServer(stream, notifyCreation);
                 notifyLoaded(savedStream);
-            } catch (com.shootr.mobile.domain.exception.ShootrException e) {
+            } catch (ShootrException e) {
                 handleServerError(e);
             }
         }
     }
 
-    private com.shootr.mobile.domain.Stream streamFromParameters() {
-        com.shootr.mobile.domain.Stream stream;
+    private Stream streamFromParameters() {
+        Stream stream;
         if (isNewStream()) {
-            stream = new com.shootr.mobile.domain.Stream();
+            stream = new Stream();
             stream.setCountry(localeProvider.getCountry());
         } else {
             stream = localStreamRepository.getStreamById(idStream);
@@ -87,13 +92,13 @@ public class CreateStreamInteractor implements Interactor {
         return idStream == null;
     }
 
-    private com.shootr.mobile.domain.Stream sendStreamToServer(com.shootr.mobile.domain.Stream stream, boolean notify) {
+    private Stream sendStreamToServer(Stream stream, boolean notify) {
         return remoteStreamRepository.putStream(stream, notify);
     }
 
     //region Validation
-    private boolean validateStream(com.shootr.mobile.domain.Stream stream) {
-        List<com.shootr.mobile.domain.validation.FieldValidationError> validationErrors = new com.shootr.mobile.domain.validation.StreamValidator().validate(stream);
+    private boolean validateStream(Stream stream) {
+        List<FieldValidationError> validationErrors = new StreamValidator().validate(stream);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
@@ -110,12 +115,11 @@ public class CreateStreamInteractor implements Interactor {
         }
     }
 
-    private void handleServerError(com.shootr.mobile.domain.exception.ShootrException e) {
-        if (e.getCause() instanceof com.shootr.mobile.domain.exception.ShootrServerException) {
-            com.shootr.mobile.domain.exception.ShootrServerException
-              serverException = (com.shootr.mobile.domain.exception.ShootrServerException) e.getCause();
+    private void handleServerError(ShootrException e) {
+        if (e.getCause() instanceof ShootrServerException) {
+            ShootrServerException serverException = (ShootrServerException) e.getCause();
             String errorCode = serverException.getShootrError().getErrorCode();
-            com.shootr.mobile.domain.validation.FieldValidationError validationError = validationErrorFromCode(errorCode);
+            FieldValidationError validationError = validationErrorFromCode(errorCode);
             if (validationError != null) {
                 notifyError(new DomainValidationException(validationError));
                 return;
@@ -124,10 +128,10 @@ public class CreateStreamInteractor implements Interactor {
         notifyError(e);
     }
 
-    private com.shootr.mobile.domain.validation.FieldValidationError validationErrorFromCode(String errorCode) {
+    private FieldValidationError validationErrorFromCode(String errorCode) {
         int field = fieldFromErrorCode(errorCode);
         if (field != 0) {
-            return new com.shootr.mobile.domain.validation.FieldValidationError(errorCode, field);
+            return new FieldValidationError(errorCode, field);
         } else {
             return null;
         }
@@ -135,15 +139,15 @@ public class CreateStreamInteractor implements Interactor {
 
     private int fieldFromErrorCode(String errorCode) {
         switch (errorCode) {
-            case com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT:
-            case com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG:
-                return com.shootr.mobile.domain.validation.StreamValidator.FIELD_TITLE;
+            case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT:
+            case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG:
+                return StreamValidator.FIELD_TITLE;
         }
         return 0;
     }
     //endregion
 
-    private void notifyLoaded(final com.shootr.mobile.domain.Stream stream) {
+    private void notifyLoaded(final Stream stream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(stream);
@@ -151,7 +155,7 @@ public class CreateStreamInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final com.shootr.mobile.domain.exception.ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
@@ -160,6 +164,7 @@ public class CreateStreamInteractor implements Interactor {
     }
 
     public interface Callback {
-        void onLoaded(com.shootr.mobile.domain.Stream stream);
+
+        void onLoaded(Stream stream);
     }
 }

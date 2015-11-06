@@ -1,8 +1,19 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
+import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,52 +44,50 @@ public class GetStreamTimelineInteractorTest {
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
 
-    @Mock com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
+    @Mock ShotRepository localShotRepository;
     @Mock UserRepository localUserRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
-    @Mock com.shootr.mobile.domain.repository.StreamRepository streamRepository;
-    @Mock com.shootr.mobile.domain.repository.SessionRepository sessionRepository;
-    @Mock com.shootr.mobile.domain.repository.TimelineSynchronizationRepository timelineSynchronizationRepository;
+    @Mock StreamRepository streamRepository;
+    @Mock SessionRepository sessionRepository;
+    @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     private GetStreamTimelineInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
-        com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         when(localUserRepository.getPeople()).thenReturn(people());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetStreamTimelineInteractor(interactorHandler,
-          postExecutionThread, localShotRepository);
+        interactor = new GetStreamTimelineInteractor(interactorHandler, postExecutionThread, localShotRepository);
     }
 
-    @Test
-    public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
+    @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingStream();
-        when(localShotRepository.getShotsForStreamTimeline(any(com.shootr.mobile.domain.StreamTimelineParameters.class))).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(
+          unorderedShots());
 
         interactor.loadStreamTimeline(STREAM_ID, spyCallback);
-        List<com.shootr.mobile.domain.Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new com.shootr.mobile.domain.Shot.NewerAboveComparator());
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
-    private com.shootr.mobile.domain.User currentUserWatching() {
-        com.shootr.mobile.domain.User user = new com.shootr.mobile.domain.User();
+    private User currentUserWatching() {
+        User user = new User();
         user.setIdUser(ID_CURRENT_USER);
         user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 
-    private List<com.shootr.mobile.domain.Shot> unorderedShots() {
+    private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
 
-    private com.shootr.mobile.domain.Shot shotWithDate(Long date) {
-        com.shootr.mobile.domain.Shot shot = new com.shootr.mobile.domain.Shot();
+    private Shot shotWithDate(Long date) {
+        Shot shot = new Shot();
         shot.setPublishDate(new Date(date));
         return shot;
     }
@@ -90,12 +99,12 @@ public class GetStreamTimelineInteractorTest {
 
     //region Stubs
 
-    private List<com.shootr.mobile.domain.User> people() {
-        return Arrays.asList(new com.shootr.mobile.domain.User());
+    private List<User> people() {
+        return Arrays.asList(new User());
     }
 
-    private com.shootr.mobile.domain.Stream watchingStream() {
-        com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    private Stream watchingStream() {
+        Stream stream = new Stream();
         stream.setId(WATCHING_STREAM_ID);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
@@ -104,11 +113,11 @@ public class GetStreamTimelineInteractorTest {
     //endregion
 
     //region Spies
-    static class SpyCallback implements Interactor.Callback<com.shootr.mobile.domain.Timeline> {
+    static class SpyCallback implements Interactor.Callback<Timeline> {
 
-        public List<com.shootr.mobile.domain.Timeline> timelinesReturned = new ArrayList<>();
+        public List<Timeline> timelinesReturned = new ArrayList<>();
 
-        @Override public void onLoaded(com.shootr.mobile.domain.Timeline timeline) {
+        @Override public void onLoaded(Timeline timeline) {
             timelinesReturned.add(timeline);
         }
     }

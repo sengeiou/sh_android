@@ -34,8 +34,7 @@ public abstract class PostNewShotInteractorTestBase {
 
     protected abstract PostNewShotInteractor getInteractorForCommonTests();
 
-    @Test
-    public void shouldSendShotWithCurrentUserInfo() throws Exception {
+    @Test public void shouldSendShotWithCurrentUserInfo() throws Exception {
         setupCurrentUserSession();
 
         getInteractorForCommonTests().postNewShot(COMMENT_STUB,
@@ -50,8 +49,7 @@ public abstract class PostNewShotInteractorTestBase {
         assertUserInfoIsFromUser(userInfo, currentUser());
     }
 
-    @Test
-    public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
+    @Test public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
         setupCurrentUserSession();
 
         getInteractorForCommonTests().postNewShot(COMMENT_EMPTY,
@@ -65,8 +63,7 @@ public abstract class PostNewShotInteractorTestBase {
         assertThat(publishedShot.getComment()).isNull();
     }
 
-    @Test
-    public void shouldSendShotThroughDispatcher() throws Exception {
+    @Test public void shouldSendShotThroughDispatcher() throws Exception {
         setupCurrentUserSession();
 
         getInteractorForCommonTests().postNewShot(COMMENT_STUB,
@@ -76,7 +73,6 @@ public abstract class PostNewShotInteractorTestBase {
 
         verify(shotSender, times(1)).sendShot(any(Shot.class), any(File.class));
     }
-
 
     //region Assertion
     private void assertUserInfoIsFromUser(Shot.ShotUserInfo userInfo, User user) {

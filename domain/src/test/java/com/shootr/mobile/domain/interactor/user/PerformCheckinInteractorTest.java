@@ -1,7 +1,13 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,16 +24,16 @@ public class PerformCheckinInteractorTest {
 
     private static final String ANY_STREAM_ID = "any_stream_id";
 
-    @Mock com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
-    @Mock com.shootr.mobile.domain.interactor.Interactor.CompletedCallback completedCallback;
-    @Mock com.shootr.mobile.domain.interactor.Interactor.ErrorCallback errorCallback;
+    @Mock ShootrUserService shootrUserService;
+    @Mock Interactor.CompletedCallback completedCallback;
+    @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckinInteractor interactor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        com.shootr.mobile.domain.interactor.InteractorHandler interactorHandler = new TestInteractorHandler();
-        com.shootr.mobile.domain.executor.PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+        InteractorHandler interactorHandler = new TestInteractorHandler();
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         interactor = new PerformCheckinInteractor(interactorHandler, postExecutionThread, shootrUserService);
     }
 
@@ -40,15 +46,15 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldCallbackErrorIfServiceFailsWithServerCommunicationException() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
+        doThrow(new ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 
-        verify(errorCallback).onError(any(com.shootr.mobile.domain.exception.ShootrException.class));
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithServerCommunicationException() throws Exception {
-        doThrow(new com.shootr.mobile.domain.exception.ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
+        doThrow(new ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 

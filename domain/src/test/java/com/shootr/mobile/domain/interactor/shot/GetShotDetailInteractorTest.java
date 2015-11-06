@@ -1,10 +1,12 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -25,8 +27,8 @@ public class GetShotDetailInteractorTest {
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
 
-    @Mock com.shootr.mobile.domain.repository.ShotRepository localShotRepository;
-    @Mock com.shootr.mobile.domain.repository.ShotRepository remoteShotRepository;
+    @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
     @Spy SpyCallback<ShotDetail> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback errorCallback;
 
@@ -46,8 +48,8 @@ public class GetShotDetailInteractorTest {
 
         interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
-        List<com.shootr.mobile.domain.Shot> localReplies = spyCallback.firstResult().getReplies();
-        assertThat(localReplies).isSortedAccordingTo(new com.shootr.mobile.domain.Shot.NewerBelowComparator());
+        List<Shot> localReplies = spyCallback.firstResult().getReplies();
+        assertThat(localReplies).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
 
     @Test public void shouldCallbackRemoteRepliesInOrderNewerBelow() throws Exception {
@@ -55,27 +57,28 @@ public class GetShotDetailInteractorTest {
 
         interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
-        List<com.shootr.mobile.domain.Shot> remoteReplies = spyCallback.lastResult().getReplies();
-        assertThat(remoteReplies).isSortedAccordingTo(new com.shootr.mobile.domain.Shot.NewerBelowComparator());
+        List<Shot> remoteReplies = spyCallback.lastResult().getReplies();
+        assertThat(remoteReplies).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
 
     private ShotDetail unorderedReplies() {
-        List<com.shootr.mobile.domain.Shot> replies = Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
+        List<Shot> replies =
+          Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
         ShotDetail shotDetail = new ShotDetail();
         shotDetail.setReplies(replies);
         return shotDetail;
     }
 
-    private com.shootr.mobile.domain.Shot shotWithDate(Long date) {
-        com.shootr.mobile.domain.Shot shot = new com.shootr.mobile.domain.Shot();
+    private Shot shotWithDate(Long date) {
+        Shot shot = new Shot();
         shot.setPublishDate(new Date(date));
         return shot;
     }
 
     private ShotDetail emptyShotDetail() {
         ShotDetail shotDetail = new ShotDetail();
-        shotDetail.setShot(new com.shootr.mobile.domain.Shot());
-        shotDetail.setReplies(Collections.<com.shootr.mobile.domain.Shot>emptyList());
+        shotDetail.setShot(new Shot());
+        shotDetail.setReplies(Collections.<Shot>emptyList());
         shotDetail.setParentShot(null);
         return shotDetail;
     }

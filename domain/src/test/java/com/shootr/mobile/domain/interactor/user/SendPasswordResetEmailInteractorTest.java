@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -20,15 +21,12 @@ import static org.mockito.Mockito.verify;
 public class SendPasswordResetEmailInteractorTest {
 
     public static final String FAKE_USER_ID = "fake_user_id";
-
-    private SendPasswordResetEmailInteractor interactor;
-
-    @Mock com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    @Mock ShootrUserService shootrUserService;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock Interactor.CompletedCallback completedCallback;
+    private SendPasswordResetEmailInteractor interactor;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
@@ -36,18 +34,16 @@ public class SendPasswordResetEmailInteractorTest {
         interactor = new SendPasswordResetEmailInteractor(interactorHandler, postExecutionThread, shootrUserService);
     }
 
-    @Test
-    public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws Exception {
+    @Test public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws Exception {
         doNothing().when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();
     }
 
-    @Test
-    public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws Exception {
-        doThrow(new ShootrException(){}).when(shootrUserService).sendPasswordResetEmail(anyString());
+    @Test public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws Exception {
+        doThrow(new ShootrException() {
+        }).when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
-
 }
