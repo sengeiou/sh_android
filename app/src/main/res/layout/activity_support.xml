@@ -3,7 +3,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context="com.shootr.android.ui.activities.SupportActivity">
+  tools:context="com.shootr.mobile.ui.activities.SupportActivity">
 
     <TextView android:id="@+id/support_blog_text"
       android:layout_width="match_parent"

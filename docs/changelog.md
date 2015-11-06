@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [0.6.0] - 2015-11-06
+
+### Changed
+- Package renombrado a com.shootr.mobile para poder subirla a otra store.
+- Se muestra spinner si hay nuevas activities.
+- Mejorado el mensaje "Draft Saved".
+
+### Added
+- Bloqueo de usuario.
+- En el timeline de un stream se puede alternar entre ver shots del holder y ver todos los shots del stream.
+- RxJava en Profile para agilizar el mostrado de información en la UI.
+
+### Fixed
+- En Edit Profile se carga el user de local en vez de usar el user de session.
+- Bugs en Profile.
+
 ## [0.5.0] - 2015-10-30
 
 ### Changed
