@@ -324,4 +324,6 @@
     <string name="block_user_dialog_message">Block user?</string>
     <string name="block_user_dialog_block">Block</string>
     <string name="block_user_dialog_cancel">Cancel</string>
+    <string name="menu_holding_shots">Show holding shots</string>
+    <string name="menu_all_shots">Show all shots</string>
 </resources>
