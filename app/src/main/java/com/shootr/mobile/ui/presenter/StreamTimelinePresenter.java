@@ -151,7 +151,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void refresh() {
-        streamTimelineView.showLoading();
         if (showingHoldingShots) {
             this.loadHolderNewShots();
         } else {
