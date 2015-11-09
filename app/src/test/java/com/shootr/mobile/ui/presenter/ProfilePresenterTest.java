@@ -110,7 +110,7 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldSetUserInfoWhenUserHasBeenInitializedWithUserId() throws Exception {
-        setupUserById();
+        setupUnverifiedUserById();
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
@@ -618,7 +618,7 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldShowListing() throws Exception {
-        setupUserById();
+        setupUnverifiedUserById();
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
@@ -641,6 +641,22 @@ public class ProfilePresenterTest {
         profilePresenter.avatarClicked();
 
         verify(profileView, never()).openPhoto(anyString());
+    }
+
+    @Test public void shouldShowVerifiedUserIfUserVerifiedWhenProfileInitialized() throws Exception {
+        setupVerifiedUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showVerifiedUser();
+    }
+
+    @Test public void shouldHideVerifiedUserIfUserNotVerifiedWhenProfileInitialized() throws Exception {
+        setupUnverifiedUserById();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).hideVerifiedUser();
     }
 
     private void setupLogoutInteractorCompletedCallback() {
@@ -679,6 +695,28 @@ public class ProfilePresenterTest {
         return user;
     }
 
+    private User verifiedUser() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        user.setUsername(USERNAME);
+        user.setCreatedStreamsCount(1L);
+        user.setFavoritedStreamsCount(1L);
+        user.setVerifiedUser(true);
+        user.setPhoto("photo");
+        return user;
+    }
+
+    private User unverifiedUser() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        user.setUsername(USERNAME);
+        user.setCreatedStreamsCount(1L);
+        user.setFavoritedStreamsCount(1L);
+        user.setVerifiedUser(false);
+        user.setPhoto("photo");
+        return user;
+    }
+
     private User userWithoutPhoto() {
         User user = new User();
         user.setIdUser(ID_USER);
@@ -692,7 +730,7 @@ public class ProfilePresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(user());
+                callback.onLoaded(unverifiedUser());
                 return null;
             }
         }).when(getUserByUsernameInteractor).searchUserByUsername(anyString(), anyCallback(), anyErrorCallback());
@@ -729,6 +767,26 @@ public class ProfilePresenterTest {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(userWithoutPhoto());
+                return null;
+            }
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupVerifiedUserById() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(verifiedUser());
+                return null;
+            }
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupUnverifiedUserById() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(unverifiedUser());
                 return null;
             }
         }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
