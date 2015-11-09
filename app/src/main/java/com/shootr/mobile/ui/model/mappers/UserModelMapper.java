@@ -30,6 +30,7 @@ public class UserModelMapper {
         userModel.setWebsite(user.getWebsite());
         userModel.setEmail(user.getEmail());
         userModel.setEmailConfirmed(user.isEmailConfirmed());
+        userModel.setVerifiedUser(user.isVerifiedUser());
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
