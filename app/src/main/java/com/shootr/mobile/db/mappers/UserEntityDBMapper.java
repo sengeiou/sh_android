@@ -39,6 +39,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
         contentValues.put(UserTable.NAME_NORMALIZED, normalizedText(entity.getName()));
         contentValues.put(UserTable.EMAIL_NORMALIZED, normalizedText(entity.getEmail()));
         contentValues.put(UserTable.EMAIL_CONFIRMED, entity.getEmailConfirmed());
+        contentValues.put(UserTable.USER_VERIFIED, entity.getVerifiedUser());
         contentValues.put(UserTable.USER_NAME_NORMALIZED, normalizedText(entity.getUserName()));
         contentValues.put(UserTable.ID_WATCHING_STREAM, entity.getIdWatchingStream());
         contentValues.put(UserTable.WATCHING_STREAM_TITLE, entity.getWatchingStreamTitle());
@@ -56,6 +57,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
         entity.setName(cursor.getString(cursor.getColumnIndex(UserTable.NAME)));
         entity.setEmail(cursor.getString(cursor.getColumnIndex(UserTable.EMAIL)));
         entity.setEmailConfirmed(cursor.getInt(cursor.getColumnIndex(UserTable.EMAIL_CONFIRMED)));
+        entity.setVerifiedUser(cursor.getInt(cursor.getColumnIndex(UserTable.USER_VERIFIED)));
         entity.setPhoto(cursor.getString(cursor.getColumnIndex(UserTable.PHOTO)));
         entity.setNumFollowers(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWERS)));
         entity.setNumFollowings(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
