@@ -61,9 +61,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
-        initializeViews();
         setupActionbar(idStreamToEdit);
 
         if (savedInstanceState != null) {
@@ -73,6 +73,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             titleView.setText(editedTitle);
             shortTitleView.setText(editedShortTitle);
         }
+        initializeViews();
     }
 
     @Override protected void initializePresenter() {
@@ -88,7 +89,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     private void initializeViews() {
-        ButterKnife.bind(this);
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 presenter.titleTextChanged(s.toString());
