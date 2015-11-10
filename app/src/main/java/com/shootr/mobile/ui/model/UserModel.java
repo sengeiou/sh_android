@@ -21,6 +21,7 @@ public class UserModel implements Serializable, Cloneable {
     private Long joinStreamTimestamp;
     private String email;
     private Boolean emailConfirmed;
+    private Boolean verifiedUser;
     private Long createdStreamsCount;
     private Long favoritedStreamsCount;
 
@@ -183,5 +184,13 @@ public class UserModel implements Serializable, Cloneable {
 
     public void setJoinStreamDate(String joinStreamDate) {
         this.joinStreamDate = joinStreamDate;
+    }
+
+    public Boolean isVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Boolean verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }
