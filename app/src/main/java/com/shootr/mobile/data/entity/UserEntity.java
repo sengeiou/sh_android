@@ -10,6 +10,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String userName;
     private String email;
     private Integer emailConfirmed;
+    private Integer verifiedUser;
     private String name;
     private String photo;
     private Long points;
@@ -213,5 +214,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setWatchSynchronizedStatus(String watchSynchronizedStatus) {
         this.watchSynchronizedStatus = watchSynchronizedStatus;
+    }
+
+    public Integer getVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Integer verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }

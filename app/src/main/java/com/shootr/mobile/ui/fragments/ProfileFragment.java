@@ -116,6 +116,8 @@ public class ProfileFragment extends BaseFragment
 
     @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
+    @Bind(R.id.profile_user_verified) ImageView userVerified;
+
     @BindString(R.string.report_base_url) String reportBaseUrl;
     @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
     @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
@@ -701,6 +703,14 @@ public class ProfileFragment extends BaseFragment
         } else {
             analyticsTool.analyticsStart(getContext(), analyticsScreenUserProfile);
         }
+    }
+
+    @Override public void showVerifiedUser() {
+        userVerified.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideVerifiedUser() {
+        userVerified.setVisibility(View.GONE);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

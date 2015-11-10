@@ -30,12 +30,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 0
-def versionMinor = 6
+def versionMinor = 7
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 16
+def databaseVersion = 17
 
 android {
     compileSdkVersion 23

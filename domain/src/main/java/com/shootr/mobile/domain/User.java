@@ -9,6 +9,7 @@ public class User {
     private String name;
     private String email;
     private Boolean emailConfirmed;
+    private Boolean verifiedUser;
     private String photo;
     private Long numFollowings;
     private Long numFollowers;
@@ -210,6 +211,14 @@ public class User {
 
     public void setMetadata(EntityMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    public Boolean isVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Boolean verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 
     public static class UsernameComparator implements Comparator<User> {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,13 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.DraftItemView;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.Truss;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +55,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         ShotModel shotModel = draftModel.getShotModel();
 
         holder.name.setText(shotModel.getUsername());
-        holder.text.setText(shotModel.getComment());
+        holder.text.setText(getShotCommentWithStream(shotModel, holder));
         holder.text.addLinks();
         imageLoader.loadProfilePhoto(shotModel.getPhoto(), holder.avatar);
         bindShotImageIfPresent(holder, draftModel);
@@ -67,6 +70,23 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             holder.draftItemView.expand(false);
         } else {
             holder.draftItemView.collapse(false);
+        }
+    }
+
+    private CharSequence getShotCommentWithStream(ShotModel shot, DraftViewHolder holder) {
+        if (shot.getComment() == null) {
+            return new Truss()
+              .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(), R.style.InlineDescriptionAppearance))
+              .append(shot.getStreamShortTitle())
+              .popSpan()
+              .build();
+        } else {
+            return new Truss().append(shot.getComment())
+              .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(), R.style.InlineDescriptionAppearance))
+              .append(" ")
+              .append(shot.getStreamShortTitle())
+              .popSpan()
+              .build();
         }
     }
 

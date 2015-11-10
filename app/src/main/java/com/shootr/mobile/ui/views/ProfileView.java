@@ -77,4 +77,8 @@ public interface ProfileView {
     void showRemovePhotoConfirmation();
 
     void setupAnalytics(boolean isCurrentUser);
+
+    void showVerifiedUser();
+
+    void hideVerifiedUser();
 }

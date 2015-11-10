@@ -42,6 +42,7 @@ public class DatabaseContract {
         public static final String USER_NAME_NORMALIZED = "userNameNormalized";
         public static final String EMAIL_NORMALIZED = "emailNormalized";
         public static final String EMAIL_CONFIRMED = "emailConfirmed";
+        public static final String USER_VERIFIED = "userVerified";
         public static final String ID_WATCHING_STREAM = "idWatchingStream";
         public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
         public static final String JOIN_STREAM_DATE = "joinStreamDate";
@@ -50,7 +51,7 @@ public class DatabaseContract {
         public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
 
         public static final String[] PROJECTION = {
-          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
           WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
@@ -260,7 +261,7 @@ public class DatabaseContract {
         public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
 
         public static final String[] PROJECTION = {
-          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, NAME, PHOTO, NUM_FOLLOWERS,
+          ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
           WATCHING_SYNCHRONIZED,
           BIRTH, RELEVANCE, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT, MODIFIED, DELETED, REVISION, SYNCHRONIZED

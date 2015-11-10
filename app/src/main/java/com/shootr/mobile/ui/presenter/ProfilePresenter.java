@@ -108,14 +108,21 @@ public class ProfilePresenter implements Presenter {
     private void onProfileLoaded(User user) {
         this.isCurrentUser = user.isMe();
         this.setUserModel(userModelMapper.transform(user));
-
         setupMenuItemsVisibility();
         setupProfilePhoto(user);
         setRelationshipButtonStatus(user);
-
+        setupVerifiedUserIcon();
         profileView.setUserInfo(userModel);
         profileView.showListing();
         profileView.setupAnalytics(isCurrentUser);
+    }
+
+    private void setupVerifiedUserIcon() {
+        if (userModel.isVerifiedUser()) {
+            profileView.showVerifiedUser();
+        } else {
+            profileView.hideVerifiedUser();
+        }
     }
 
     private void setupProfilePhoto(final User user) {
