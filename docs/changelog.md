@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [0.7.0] - 2015-11-10
+
+### Changed
+- Logs de Crashlytics
+
+### Added
+- Cuentas verificadas
+
+### Fixed
+- Bugs de UI.
+
+## [Unreleased]
+
 ## [0.6.0] - 2015-11-06
 
 ### Changed
