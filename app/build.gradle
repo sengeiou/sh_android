@@ -64,6 +64,8 @@ android {
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "GIT_BRANCH", "\"${gitBranch}\""
         buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -194,6 +196,11 @@ dependencies {
     compile 'com.sloydev.quitnowcache:quitnow-cache:1.2' //TODO use original when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
 
     compile 'io.reactivex:rxjava:1.0.10'
+
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
 
 }
 
