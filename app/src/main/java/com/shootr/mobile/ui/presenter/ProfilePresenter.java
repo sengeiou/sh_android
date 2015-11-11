@@ -218,6 +218,7 @@ public class ProfilePresenter implements Presenter {
         followInteractor.follow(profileIdUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 profileView.setFollowing(true);
+                updateFollowingsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -234,6 +235,20 @@ public class ProfilePresenter implements Presenter {
         unfollowInteractor.unfollow(profileIdUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 profileView.setFollowing(false);
+                updateFollowingsInfo();
+            }
+        });
+    }
+
+    public void updateFollowingsInfo() {
+        getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                setUserModel(userModelMapper.transform(user));
+                profileView.setUserInfo(userModel);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
             }
         });
     }

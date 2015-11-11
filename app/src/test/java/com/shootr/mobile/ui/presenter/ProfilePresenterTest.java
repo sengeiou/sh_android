@@ -683,6 +683,46 @@ public class ProfilePresenterTest {
         verify(profileView).showStreamsCount();
     }
 
+    @Test public void shouldUpdateFollowingInfoWhenFollowUser() throws Exception {
+        setupUserById();
+        setupFollowCallback();
+
+        profilePresenter.follow();
+
+        verify(profileView).setUserInfo(any(UserModel.class));
+    }
+
+    @Test public void shouldUpdateFollowingInfoWhenUnfollowUser() throws Exception {
+        setupUserById();
+        setupUnfollowCallback();
+
+        profilePresenter.confirmUnfollow();
+
+        verify(profileView).setUserInfo(any(UserModel.class));
+    }
+
+    public void setupFollowCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(followInteractor).follow(anyString(), anyCompletedCallback(), anyErrorCallback());
+    }
+
+    public void setupUnfollowCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(unfollowInteractor).unfollow(anyString(), anyCompletedCallback());
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
