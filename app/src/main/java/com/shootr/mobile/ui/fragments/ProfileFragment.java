@@ -101,6 +101,7 @@ public class ProfileFragment extends BaseFragment
     @Bind(R.id.profile_listing_container) View listingContainerView;
 
     @Bind(R.id.profile_open_stream_container) View openStreamContainerView;
+    @Bind(R.id.profile_streams_number) TextView streamsCountView;
 
     @Bind(R.id.profile_marks_followers) TextView followersTextView;
     @Bind(R.id.profile_marks_following) TextView followingTextView;
@@ -711,6 +712,18 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void hideVerifiedUser() {
         userVerified.setVisibility(View.GONE);
+    }
+
+    @Override public void showStreamsCount() {
+        streamsCountView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void setStreamsCount(Integer streamCount) {
+        streamsCountView.setText(String.valueOf(streamCount));
+    }
+
+    @Override public void hideStreamsCount() {
+        streamsCountView.setVisibility(View.GONE);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

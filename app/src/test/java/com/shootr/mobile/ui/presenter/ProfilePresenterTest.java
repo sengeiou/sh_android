@@ -659,6 +659,30 @@ public class ProfilePresenterTest {
         verify(profileView).hideVerifiedUser();
     }
 
+    @Test public void shouldShowStreamsCountIfUserHasFavoritedStreams() throws Exception {
+        setupUserWithStreams(0, 1);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showStreamsCount();
+    }
+
+    @Test public void shouldShowStreamsCountIfUserHasCreatedStreams() throws Exception {
+        setupUserWithStreams(1,0);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showStreamsCount();
+    }
+
+    @Test public void shouldShowStreamsCountIfUserHasCreatedAndFavoritedStreams() throws Exception {
+        setupUserWithStreams(1,1);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showStreamsCount();
+    }
+
     private void setupLogoutInteractorCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -792,6 +816,16 @@ public class ProfilePresenterTest {
         }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
     }
 
+    private void setupUserWithStreams(final Integer createdStreams, final Integer favoritedStreams) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(userWithCounts(createdStreams, favoritedStreams));
+                return null;
+            }
+        }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
     private List<Shot> shotList(int numberOfShots) {
         List<Shot> shots = new ArrayList<>();
         for (int i = 0; i < numberOfShots; i++) {
@@ -814,7 +848,7 @@ public class ProfilePresenterTest {
     }
 
     private User userWithCounts(int createdCount, int favoritedCount) {
-        User user = user();
+        User user = verifiedUser();
         user.setCreatedStreamsCount((long) createdCount);
         user.setFavoritedStreamsCount((long) favoritedCount);
         return user;
