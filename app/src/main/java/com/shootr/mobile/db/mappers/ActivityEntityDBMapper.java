@@ -25,6 +25,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         activity.setComment(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.COMMENT)));
         activity.setType(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TYPE)));
         activity.setIdShot(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_SHOT)));
+        activity.setIdStreamAuthor(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_STREAM_AUTHOR)));
         setSynchronizedfromCursor(c, activity);
         return activity;
     }
