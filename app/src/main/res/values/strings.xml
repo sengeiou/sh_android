@@ -191,7 +191,7 @@
     <string name="activity_find_streams_title">Find streams</string>
     <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
     <string name="whale_title_default">We\'ll be back</string>
-    <string name="profile_logout">Logout</string>
+    <string name="profile_logout">Sign out</string>
     <string name="sign_out_message">Signing out…</string>
     <string name="update_warning_button">Update now</string>
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
