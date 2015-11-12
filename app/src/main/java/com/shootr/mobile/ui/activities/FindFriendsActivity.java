@@ -209,8 +209,21 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         setLoading(true);
         setEmpty(false);
         clearResults();
-        makeLocalSearch();
-        makeNewRemoteSearch();
+        if (isAlphaNumeric(currentSearchQuery)) {
+            makeLocalSearch();
+            makeNewRemoteSearch();
+        } else {
+            setLoading(false);
+            setEmpty(true);
+        }
+    }
+
+    private boolean isAlphaNumeric(String s){
+        String pattern= "^[a-zA-Z0-9]*$";
+        if(s.matches(pattern)){
+            return true;
+        }
+        return false;
     }
 
     public void makeLocalSearch() {
