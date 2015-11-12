@@ -57,6 +57,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
     private static final String EXTRA_SEARCH_PAGE = "currentPage";
+    public static final String USERNAME_PATTERN = "^([_A-Za-z0-9])*$";
 
     @Inject ImageLoader imageLoader;
     @Inject InteractorHandler interactorHandler;
@@ -218,12 +219,8 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         }
     }
 
-    private boolean isAlphaNumeric(String s){
-        String pattern= "^[a-zA-Z0-9]*$";
-        if(s.matches(pattern)){
-            return true;
-        }
-        return false;
+    private boolean isAlphaNumeric(String characters){
+        return characters.matches(USERNAME_PATTERN);
     }
 
     public void makeLocalSearch() {

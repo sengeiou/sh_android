@@ -194,7 +194,7 @@
     <string name="profile_logout">Sign out</string>
     <string name="sign_out_message">Signing out…</string>
     <string name="update_warning_button">Update now</string>
-    <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
+    <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
     <string name="activity_edit_profile_email_hint">Email</string>
     <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
     <string name="email_confirmation_title">Confirm Your Email</string>
@@ -218,7 +218,7 @@
     <string name="profile_all_shots">All shots</string>
     <string name="title_activity_all_shots">All shots</string>
     <string name="new_stream_description_label">Description</string>
-    <string name="invite_friends_message">Hey, let\'s use Shootr: https://shootr.com/app</string>
+    <string name="invite_friends_message">Hey, let\'s use Shootr: https://shootr.com/</string>
     <string name="invite_friends_title">Invite friends</string>
     <string name="invite_friends_button">Invite friends</string>
     <string name="suggested_people_section_title">Who to follow</string>
