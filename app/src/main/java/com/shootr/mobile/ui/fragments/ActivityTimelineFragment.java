@@ -175,7 +175,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void checkIfEndOfListVisible() {
         int lastItemPosition = activityList.getAdapter().getItemCount() - 1;
         int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
-        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 1) {
             timelinePresenter.showingLastActivity(adapter.getLastActivity());
         }
     }
