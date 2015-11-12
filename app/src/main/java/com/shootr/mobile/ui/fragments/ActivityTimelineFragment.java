@@ -165,7 +165,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         activityList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                //TODO: fix that ñapa. It can't be good enough to check this shit
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && activityList != null) {
                     checkIfEndOfListVisible();
                 }
             }
