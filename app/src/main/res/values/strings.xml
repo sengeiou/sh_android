@@ -129,20 +129,6 @@
 
     <string name="user_not_found">User not found</string>
 
-    <string name="starting_in">Starting in&#160;</string>
-    <string name="space_and_minutes">&#160;min</string>
-    <string name="started">Started&#160;</string>
-    <string name="min_ago">&#160;min ago</string>
-    <string name="starting_now">Starting now</string>
-    <string name="an_hour">1 hour</string>
-    <string name="space_and_hours">&#160;hours</string>
-    <string name="yesterday_at">Yesterday&#160;</string>
-    <string name="days_ago">&#160;days ago</string>
-    <string name="an_hour_ago">1 hour ago</string>
-    <string name="hours_ago">&#160;hours ago</string>
-    <string name="today_at">Today&#160;</string>
-    <string name="tomorrow_at">Tomorrow&#160;</string>
-
     <string name="title_activity_reset_password">Reset Password</string>
 
     <plurals name="listing_favorites">
@@ -179,7 +165,6 @@
     <string name="title_activity_listing">Streams</string>
     <string name="activity_timeline_empty_title">No Activity</string>
     <string name="favorites_emtpy">No Favorites</string>
-    <string name="menu_add_favorite">Add to Favorites</string>
     <string name="menu_remove_favorite">Remove from Favorites</string>
     <string name="added_to_favorites">Added to Favorites</string>
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
@@ -240,7 +225,6 @@
     <string name="change_password_logout_message">Password changed. Must sign in again…</string>
     <string name="error_stream_already_favorites">Already in favorites</string>
     <string name="add_to_favorites_menu_title">Add to Favorites</string>
-    <string name="profile_open_stream">Open stream…</string>
     <string name="include_listing_empty">No streams</string>
     <string name="alert_report_confirmed_email_message"><![CDATA[Go to Account > Edit Profile and confirm your email.]]></string>
     <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
