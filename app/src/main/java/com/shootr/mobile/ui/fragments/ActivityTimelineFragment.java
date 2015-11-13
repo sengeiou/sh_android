@@ -135,8 +135,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
           }, //
           new OnStreamTitleClickListener() {
               @Override
-              public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
-                  openStream(streamId, streamTitle, authorId);
+              public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
+                  openStream(streamId, streamShortTitle, authorId);
               }
           }, //
           new OnShotClick() {
@@ -165,7 +165,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         activityList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                //TODO: fix that ñapa. It can't be good enough to check this shit
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && activityList != null) {
                     checkIfEndOfListVisible();
                 }
             }
@@ -175,7 +176,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void checkIfEndOfListVisible() {
         int lastItemPosition = activityList.getAdapter().getItemCount() - 1;
         int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
-        if (lastItemPosition == lastVisiblePosition) {
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 1) {
             timelinePresenter.showingLastActivity(adapter.getLastActivity());
         }
     }
@@ -186,8 +187,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         startActivity(profileIntent);
     }
 
-    protected void openStream(String idStream, String streamTitle, String authorId) {
-        Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle, authorId);
+    protected void openStream(String idStream, String streamShortTitle, String authorId) {
+        Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamShortTitle, authorId);
         startActivity(streamIntent);
     }
 

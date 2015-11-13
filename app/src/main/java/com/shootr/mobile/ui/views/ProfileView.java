@@ -81,4 +81,10 @@ public interface ProfileView {
     void showVerifiedUser();
 
     void hideVerifiedUser();
+
+    void showStreamsCount();
+
+    void setStreamsCount(Integer streams);
+
+    void hideStreamsCount();
 }

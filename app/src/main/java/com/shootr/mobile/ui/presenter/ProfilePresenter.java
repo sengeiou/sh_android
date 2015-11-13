@@ -114,7 +114,18 @@ public class ProfilePresenter implements Presenter {
         setupVerifiedUserIcon();
         profileView.setUserInfo(userModel);
         profileView.showListing();
+        renderStreamsNumber();
         profileView.setupAnalytics(isCurrentUser);
+    }
+
+    private void renderStreamsNumber() {
+        Integer streamsCount = userModel.getFavoritedStreamsCount().intValue() + userModel.getCreatedStreamsCount().intValue();
+        if (streamsCount > 0) {
+            profileView.showStreamsCount();
+            profileView.setStreamsCount(streamsCount);
+        } else {
+            profileView.hideStreamsCount();
+        }
     }
 
     private void setupVerifiedUserIcon() {
@@ -207,6 +218,7 @@ public class ProfilePresenter implements Presenter {
         followInteractor.follow(profileIdUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 profileView.setFollowing(true);
+                updateFollowingsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -223,6 +235,20 @@ public class ProfilePresenter implements Presenter {
         unfollowInteractor.unfollow(profileIdUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 profileView.setFollowing(false);
+                updateFollowingsInfo();
+            }
+        });
+    }
+
+    public void updateFollowingsInfo() {
+        getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                setUserModel(userModelMapper.transform(user));
+                profileView.setUserInfo(userModel);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
             }
         });
     }
