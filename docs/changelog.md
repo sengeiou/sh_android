@@ -13,6 +13,15 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.0.0] - 2015-11-14
+
+### Changed
+- Cuenta de streams en el perfil de un usuario.
+
+### Fixed
+- Bugs.
+- Performance cleaning.
+
 ## [0.7.0] - 2015-11-10
 
 ### Changed
@@ -23,8 +32,6 @@ Etiquetas para el changelog:
 
 ### Fixed
 - Bugs de UI.
-
-## [Unreleased]
 
 ## [0.6.0] - 2015-11-06
 
