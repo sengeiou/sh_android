@@ -90,7 +90,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.initialize(streamTimelineView, ID_STREAM, SELECTED_STREAM_ID);
 
-        verify(selectStreamInteractor).selectStream(eq(ID_STREAM), anySelectCallback());
+        verify(selectStreamInteractor).selectStream(eq(ID_STREAM), anySelectCallback(), anyErrorCallback());
     }
     //endregion
 
@@ -467,7 +467,7 @@ public class StreamTimelinePresenterTest {
                 callback.onLoaded(streamResult());
                 return null;
             }
-        }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
+        }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class), anyErrorCallback());
     }
 
     private void setupDeleteLocalShotsInteractorCallback() {

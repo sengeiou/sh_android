@@ -130,7 +130,7 @@ public class AllParticipantsPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
+        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     @Test

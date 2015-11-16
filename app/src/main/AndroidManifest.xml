@@ -144,6 +144,7 @@
                 <action android:name="com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.mobile.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.mobile.ACTION_OPEN_PROFILE" />
+                <action android:name="com.shootr.mobile.ACTION_OPEN_STREAM" />
                 <action android:name="com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION" />
                 <action android:name="com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION" />
 
