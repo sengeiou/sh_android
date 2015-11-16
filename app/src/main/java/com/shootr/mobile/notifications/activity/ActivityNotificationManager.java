@@ -2,7 +2,8 @@ package com.shootr.mobile.notifications.activity;
 
 import android.app.Application;
 import android.content.Context;
-import com.shootr.mobile.domain.interactor.shot.GetShotByIdInteractor;
+import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
@@ -25,18 +26,18 @@ public class ActivityNotificationManager {
     private final NotificationBuilderFactory notificationBuilderFactory;
     private final ImageLoader imageLoader;
     private final List<SingleActivityNotification> activeNotifications = new ArrayList<>();
-    private final GetShotByIdInteractor getShotByIdInteractor;
+    private final ShotRepository remoteShotRepository;
     private final ShotModelMapper shotModelMapper;
 
     @Inject
     public ActivityNotificationManager(Application context, AndroidNotificationManager androidNotificationManager,
       NotificationBuilderFactory notificationBuilderFactory, ImageLoader imageLoader,
-      GetShotByIdInteractor getShotByIdInteractor, ShotModelMapper shotModelMapper) {
+      @Remote ShotRepository remoteShotRepository, ShotModelMapper shotModelMapper) {
         this.context = context;
         this.androidNotificationManager = androidNotificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;
         this.imageLoader = imageLoader;
-        this.getShotByIdInteractor = getShotByIdInteractor;
+        this.remoteShotRepository = remoteShotRepository;
         this.shotModelMapper = shotModelMapper;
     }
 
@@ -68,6 +69,16 @@ public class ActivityNotificationManager {
       String idStreamHolder, String shortTitle) {
         StreamActivityNotification notification =
           new StreamActivityNotification(context, notificationBuilderFactory, imageLoader, notificationValues, idStream, idStreamHolder, shortTitle);
+        showNotification(notification);
+    }
+
+    public void sendOpenShotDetailNotification(final PushNotification.NotificationValues notificationValues, String idShot) {
+        ShotActivityNotification notification = new ShotActivityNotification(context,
+          notificationBuilderFactory,
+          imageLoader,
+          notificationValues,
+          idShot,
+          remoteShotRepository, shotModelMapper);
         showNotification(notification);
     }
 

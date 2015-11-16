@@ -112,16 +112,11 @@ public class GCMIntentService extends IntentService {
     private void receivedActivity(PushNotification push) throws JSONException {
         String activityType = checkNotNull(push.getParameters().getActivityType());
         switch (activityType) {
-            case ActivityType.SHARE_SHOT:
-            case ActivityType.MENTION:
-            case ActivityType.NICE_SHOT:
-            case ActivityType.STREAM_FAVORITED:
-                activityNotificationManager.sendGenericActivityNotification(push.getNotificationValues());
-                break;
             case ActivityType.START_FOLLOW:
                 String idUser = push.getParameters().getIdUser();
                 activityNotificationManager.sendFollowNotification(push.getNotificationValues(), checkNotNull(idUser));
                 break;
+            case ActivityType.STREAM_FAVORITED:
             case ActivityType.STARTED_SHOOTING:
             case ActivityType.CHECKIN:
             case ActivityType.SHARE_STREAM:
@@ -131,6 +126,13 @@ public class GCMIntentService extends IntentService {
                 String idStreamHolder = push.getParameters().getIdStreamHolder();
                 activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
                   checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(shortTitle));
+                break;
+            case ActivityType.NICE_SHOT:
+            case ActivityType.SHARE_SHOT:
+            case ActivityType.MENTION:
+                String idShot = push.getParameters().getIdShot();
+                activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
+                  checkNotNull(idShot));
                 break;
             default:
                 Timber.w("Received unknown activity type: %s", activityType);
