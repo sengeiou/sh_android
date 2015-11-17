@@ -37,7 +37,7 @@
     <string name="menu_search_friends">Find friends</string>
 
     <!-- Errors -->
-    <string name="communication_error">Communication error</string>
+    <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
 
     <!-- TimeUtils -->
     <string name="minutes">m</string>
