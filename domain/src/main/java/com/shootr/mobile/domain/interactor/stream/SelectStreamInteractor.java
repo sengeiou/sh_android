@@ -3,6 +3,8 @@ package com.shootr.mobile.domain.interactor.stream;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -21,6 +23,7 @@ public class SelectStreamInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final WatchersRepository localWatchersRepository;
@@ -29,15 +32,16 @@ public class SelectStreamInteractor implements Interactor {
 
     private String idSelectedStream;
     private Callback<StreamSearchResult> callback;
+    private ErrorCallback errorCallback;
 
     @Inject
     public SelectStreamInteractor(final InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local StreamRepository localStreamRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
-      SessionRepository sessionRepository, TimeUtils timeUtils) {
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localWatchersRepository = localWatchersRepository;
@@ -46,9 +50,10 @@ public class SelectStreamInteractor implements Interactor {
     }
     //endregion
 
-    public void selectStream(String idStream, Callback<StreamSearchResult> callback) {
+    public void selectStream(String idStream, Callback<StreamSearchResult> callback, ErrorCallback errorCallback) {
         this.idSelectedStream = idStream;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -70,8 +75,11 @@ public class SelectStreamInteractor implements Interactor {
     private Stream getSelectedStream() {
         Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream);
         if (selectedStream == null) {
-            throw new RuntimeException(String.format("Stream with id %s not found in local repository",
-              idSelectedStream));
+            try {
+                selectedStream = remoteStreamRepository.getStreamById(idSelectedStream);
+            } catch (ServerCommunicationException error) {
+                notifyError(error);
+            }
         }
         return selectedStream;
     }
@@ -102,6 +110,14 @@ public class SelectStreamInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(attachWatchNumber(selectedStream));
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

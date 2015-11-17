@@ -37,10 +37,12 @@ public class SelectStreamInteractorTest {
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock StreamRepository localStreamRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock Interactor.Callback<StreamSearchResult> dummyCallback;
+    @Mock Interactor.ErrorCallback errorCallback;
     @Mock TimeUtils timeUtils;
     @Mock WatchersRepository localWatchersRepository;
 
@@ -54,8 +56,7 @@ public class SelectStreamInteractorTest {
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectStreamInteractor(interactorHandler,
           postExecutionThread,
-          localStreamRepository,
-          localUserRepository,
+          localStreamRepository, remoteStreamRepository, localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
           sessionRepository,
@@ -66,7 +67,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
         verify(sessionRepository).setCurrentUser(currentUserWatchingNewStream());
     }
@@ -75,7 +76,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
         verify(localUserRepository).updateWatch(currentUserWatchingNewStream());
     }
@@ -84,7 +85,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
         verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
     }
@@ -97,7 +98,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
-        interactor.selectStream(OLD_STREAM_ID, dummyCallback);
+        interactor.selectStream(OLD_STREAM_ID, dummyCallback, errorCallback);
 
         verify(dummyCallback).onLoaded(anyStream());
     }
@@ -106,7 +107,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
-        interactor.selectStream(OLD_STREAM_ID, dummyCallback);
+        interactor.selectStream(OLD_STREAM_ID, dummyCallback, errorCallback);
 
         verify(localUserRepository, never()).updateWatch(any(User.class));
         verify(remoteUserRepository, never()).updateWatch(any(User.class));
@@ -116,7 +117,7 @@ public class SelectStreamInteractorTest {
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
-        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
         inOrder.verify(dummyCallback).onLoaded(anyStream());
         inOrder.verify(remoteUserRepository).updateWatch(any(User.class));

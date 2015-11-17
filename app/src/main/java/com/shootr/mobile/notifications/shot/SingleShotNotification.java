@@ -10,7 +10,7 @@ import com.shootr.mobile.util.ImageLoader;
 import java.io.IOException;
 import timber.log.Timber;
 
-public class SingleShotNotification extends AbstractShotNotification {
+public class SingleShotNotification extends AbstractSingleShotNotification {
 
     private ShotModel shot;
     private ImageLoader imageLoader;
@@ -18,7 +18,7 @@ public class SingleShotNotification extends AbstractShotNotification {
 
     public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, ImageLoader imageLoader,
       ShotModel shot) {
-        super(context, builderFactory);
+        super(context, builderFactory, shot);
         this.shot = shot;
         this.imageLoader = imageLoader;
     }

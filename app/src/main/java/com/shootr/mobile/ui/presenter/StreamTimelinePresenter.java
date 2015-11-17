@@ -110,6 +110,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
+            }
         });
     }
 

@@ -44,6 +44,7 @@ import timber.log.Timber;
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
 
     public static final String EXTRA_SHOT = "shot";
+    public static final String EXTRA_ID_SHOT = "idShot";
 
     @Bind(com.shootr.mobile.R.id.shot_detail_list) RecyclerView detailList;
     @Bind(com.shootr.mobile.R.id.detail_new_shot_bar) View newShotBar;
