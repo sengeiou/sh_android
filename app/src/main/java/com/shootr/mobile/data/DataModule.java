@@ -58,6 +58,7 @@ import com.shootr.mobile.util.ResourcesLocaleProvider;
 import com.shootr.mobile.util.SnackbarFeedbackMessage;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.Version;
+import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -111,6 +112,8 @@ import static android.content.Context.MODE_PRIVATE;
     TimeFormatter.class,
 
     BitmapImageResizer.class,
+
+    WritePermissionManager.class,
 
   },
   includes = {
@@ -201,6 +204,10 @@ public class DataModule {
 
     @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
         return new GoogleAnalyticsTool();
+    }
+
+    @Provides @Singleton WritePermissionManager provideWritePermissionManager() {
+        return new WritePermissionManager();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
