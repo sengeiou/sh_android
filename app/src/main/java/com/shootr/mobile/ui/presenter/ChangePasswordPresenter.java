@@ -81,7 +81,7 @@ public class ChangePasswordPresenter implements Presenter {
     private boolean validateFieldOrShowError(String currentPassword, String newPassword, String newPasswordAgain) {
         List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword, newPassword, newPasswordAgain, sessionRepository.getCurrentUser().getUsername());
         showValidationErrors(errors);
-        return errors.size() == 0;
+        return errors.isEmpty();
     }
 
     private void showValidationErrors(List<FieldValidationError> errors) {
