@@ -29,8 +29,6 @@ import javax.inject.Inject;
 
 public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
 
-    private static final int PRIORITY = 8;
-
     private SessionRepository sessionRepository;
     private UserManager userManager;
     private TimeUtils timeUtils;

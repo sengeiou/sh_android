@@ -21,7 +21,6 @@ import javax.inject.Inject;
 
 public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
 
-    private static final int PRIORITY = 5;
     public static final int FOLLOWING = 1;
     public static final int FOLLOWERS = 0;
 
