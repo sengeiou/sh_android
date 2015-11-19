@@ -39,16 +39,21 @@ public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
         try {
             this.authApiService.changeEmail(changeEmailApiEntity);
         }catch (ApiException error) {
-            if (ErrorInfo.EmailAlreadyExistsException == error.getErrorInfo()) {
-                throw new EmailAlreadyExistsException(error);
-            } else if(ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
-                throw new EmailAlreadyConfirmedException(error);
-            } else if(ErrorInfo.InsufficientAuthenticationException == error.getErrorInfo()) {
-                throw new UnauthorizedRequestException(error);
-            } else {
-                throw new ServerCommunicationException(error);
-            }
+            captureApiException(error);
         } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
+    public void captureApiException(ApiException error)
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
+        if (ErrorInfo.EmailAlreadyExistsException == error.getErrorInfo()) {
+            throw new EmailAlreadyExistsException(error);
+        } else if(ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
+            throw new EmailAlreadyConfirmedException(error);
+        } else if(ErrorInfo.InsufficientAuthenticationException == error.getErrorInfo()) {
+            throw new UnauthorizedRequestException(error);
+        } else {
             throw new ServerCommunicationException(error);
         }
     }
