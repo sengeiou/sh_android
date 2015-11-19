@@ -54,8 +54,8 @@ public class SuggestedPeoplePresenter implements Presenter {
             @Override
             public void onLoaded(List<SuggestedPeople> suggestedPeoples) {
                 List<UserModel> users = new ArrayList<>();
-                for (SuggestedPeople suggestedPeople : suggestedPeoples) {
-                    users.add(userModelMapper.transform(suggestedPeople.getUser()));
+                for (SuggestedPeople suggested : suggestedPeoples) {
+                    users.add(userModelMapper.transform(suggested.getUser()));
                 }
                 suggestedPeopleView.renderSuggestedPeopleList(users);
                 suggestedPeople = users;

@@ -47,8 +47,8 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override protected void initializePresenter() {
-        String email = getIntent().getStringExtra(ProfileEditActivity.EXTRA_USER_EMAIL);
-        presenter.initialize(this, email);
+        String userEmail = getIntent().getStringExtra(ProfileEditActivity.EXTRA_USER_EMAIL);
+        presenter.initialize(this, userEmail);
     }
     //endregion
 

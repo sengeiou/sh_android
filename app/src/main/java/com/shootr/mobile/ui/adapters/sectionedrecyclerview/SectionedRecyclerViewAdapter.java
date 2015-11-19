@@ -49,13 +49,13 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
     }
 
     private int countItems() {
-        int count = 0;
+        int items = 0;
         int sections = getSectionCount();
 
         for(int i = 0; i < sections; i++){
-            count += 1 + getItemCountForSection(i);
+            items += 1 + getItemCountForSection(i);
         }
-        return count;
+        return items;
     }
 
     private void precomputeIndices(){
