@@ -113,30 +113,41 @@ public class GCMIntentService extends IntentService {
         String activityType = checkNotNull(push.getParameters().getActivityType());
         switch (activityType) {
             case ActivityType.START_FOLLOW:
-                String idUser = push.getParameters().getIdUser();
-                activityNotificationManager.sendFollowNotification(push.getNotificationValues(), checkNotNull(idUser));
+                setupGoToProfileNotification(push);
                 break;
             case ActivityType.STREAM_FAVORITED:
             case ActivityType.STARTED_SHOOTING:
             case ActivityType.CHECKIN:
             case ActivityType.SHARE_STREAM:
             case ActivityType.OPENED_STREAM:
-                String idStream = push.getParameters().getIdStream();
-                String shortTitle = push.getParameters().getShortTitle();
-                String idStreamHolder = push.getParameters().getIdStreamHolder();
-                activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
-                  checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(shortTitle));
+                setupGoToStreamTimelineNotification(push);
                 break;
             case ActivityType.NICE_SHOT:
             case ActivityType.SHARE_SHOT:
             case ActivityType.MENTION:
-                String idShot = push.getParameters().getIdShot();
-                activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
-                  checkNotNull(idShot));
+                setupGoToShotDetailNotification(push);
                 break;
             default:
                 Timber.w("Received unknown activity type: %s", activityType);
         }
+    }
+
+    private void setupGoToProfileNotification(PushNotification push) {
+        String idUser = push.getParameters().getIdUser();
+        activityNotificationManager.sendFollowNotification(push.getNotificationValues(), checkNotNull(idUser));
+    }
+
+    private void setupGoToStreamTimelineNotification(PushNotification push) {
+        String idStream = push.getParameters().getIdStream();
+        String shortTitle = push.getParameters().getShortTitle();
+        String idStreamHolder = push.getParameters().getIdStreamHolder();
+        activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
+          checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(shortTitle));
+    }
+
+    private void setupGoToShotDetailNotification(PushNotification push) {
+        String idShot = push.getParameters().getIdShot();
+        activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(), checkNotNull(idShot));
     }
 
     private void receivedUnknown(PushNotification pushNotification) {

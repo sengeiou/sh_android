@@ -37,41 +37,59 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 shotNotificationManager.clearShotNotifications();
                 break;
             case ACTION_OPEN_SHOT_NOTIFICATION:
-                context.startActivity(new Intent(context,
-                  MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                shotNotificationManager.clearShotNotifications();
+                openShot(context);
                 break;
             case ACTION_OPEN_ACTIVITY_NOTIFICATION:
-                context.startActivity(new Intent(context,
-                  MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                activityNotificationManager.clearActivityNotifications();
+                startActivityFromIntent(context,
+                  new Intent(context, MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
                 activityNotificationManager.clearActivityNotifications();
                 break;
             case ACTION_OPEN_PROFILE:
-                String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
-                context.startActivity(ProfileContainerActivity.getIntent(context, idUser)
-                  .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                activityNotificationManager.clearActivityNotifications();
+                openProfile(context, intent);
                 break;
             case ACTION_OPEN_STREAM:
-                String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
-                String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
-                String shortTitle = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE);
-                context.startActivity(StreamTimelineActivity.newIntent(context, idStream, shortTitle, idStreamHolder)
-                  .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                activityNotificationManager.clearActivityNotifications();
+                openStream(context, intent);
                 break;
             case ACTION_OPEN_SHOT_DETAIL:
-                ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
-                context.startActivity(ShotDetailActivity.getIntentForActivity(context, shotModel)
-                  .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                activityNotificationManager.clearActivityNotifications();
+                openShotDetail(context, intent);
                 break;
             default:
                 throw new IllegalStateException("Action \"" + action + "\" not handled in " + this.getClass()
                   .getSimpleName());
         }
+    }
+
+    public void openShot(Context context) {
+        context.startActivity(new Intent(context,
+          MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        shotNotificationManager.clearShotNotifications();
+    }
+
+    public void openProfile(Context context, Intent intent) {
+        String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
+        startActivityFromIntent(context,
+          ProfileContainerActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public void openStream(Context context, Intent intent) {
+        String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
+        String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
+        String shortTitle = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE);
+        startActivityFromIntent(context,
+          StreamTimelineActivity.newIntent(context, idStream, shortTitle, idStreamHolder)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public void openShotDetail(Context context, Intent intent) {
+        ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
+        startActivityFromIntent(context,
+          ShotDetailActivity.getIntentForActivity(context, shotModel).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public void startActivityFromIntent(Context context, Intent intent) {
+        context.startActivity(intent);
+        activityNotificationManager.clearActivityNotifications();
     }
 }
