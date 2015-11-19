@@ -144,8 +144,8 @@ public class ShotViewHolder {
     }
 
     private void bindElapsedTime(ShotModel shot) {
-        long timestamp = shot.getBirth().getTime();
-        this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), timestamp));
+        long shotTimestamp = shot.getBirth().getTime();
+        this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), shotTimestamp));
     }
 
     private void bindUserPhoto(final ShotModel shot) {

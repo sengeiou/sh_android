@@ -306,9 +306,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         public void setupNiceButton(final ShotModel shotModel) {
-            Integer niceCount = shotModel.getNiceCount();
-            if (niceCount > 0) {
-                setNiceCount(niceCount);
+            Integer nicesCount = shotModel.getNiceCount();
+            if (nicesCount > 0) {
+                setNiceCount(nicesCount);
             } else {
                 this.niceCount.setVisibility(View.GONE);
             }

@@ -70,8 +70,8 @@ public class DatabaseVersionUtils implements DatabaseUtils{
     }
 
     private boolean needsToClearData() {
-        int lastDatabaseVersion = this.lastDatabaseVersion.get();
+        int lastVersion = this.lastDatabaseVersion.get();
         int currentDatabaseVersion = currentVersion.getDatabaseVersion();
-        return lastDatabaseVersion < currentDatabaseVersion;
+        return lastVersion < currentDatabaseVersion;
     }
 }
