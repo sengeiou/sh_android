@@ -112,7 +112,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                /* no-op */
             }
         });
     }

@@ -135,7 +135,7 @@ public class AllParticipantsPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                /* no-op */
             }
         });
     }
