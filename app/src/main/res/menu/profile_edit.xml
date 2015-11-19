@@ -5,6 +5,6 @@
     <item
       android:id="@+id/menu_done"
       android:icon="@drawable/ic_action_done_enabled"
-      android:title="Done"
+      android:title="@string/profile_edit_done_button"
       app:showAsAction="always" />
 </menu>

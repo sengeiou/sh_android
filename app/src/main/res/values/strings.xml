@@ -310,4 +310,12 @@
     <string name="block_user_dialog_cancel">Cancel</string>
     <string name="menu_holding_shots">Show holding shots</string>
     <string name="menu_all_shots">Show all shots</string>
+    <string name="shoot_all_button">Shoot all</string>
+    <string name="empty_followings">-</string>
+    <string name="following_followers_separator">|</string>
+    <string name="intro_create_title">Create</string>
+    <string name="intro_shootr">Shootr</string>
+    <string name="intro_streams">Streams</string>
+    <string name="main_activity_title">Activity</string>
+    <string name="profile_edit_done_button">Done</string>
 </resources>

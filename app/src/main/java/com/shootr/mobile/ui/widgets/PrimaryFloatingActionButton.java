@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
@@ -21,6 +22,7 @@ public class PrimaryFloatingActionButton extends FloatingActionButton {
         init();
     }
 
+    @SuppressLint("NewApi")
     private void init() {
         setBackgroundTintList(getResources().getColorStateList(com.shootr.mobile.R.color.primary));
     }
