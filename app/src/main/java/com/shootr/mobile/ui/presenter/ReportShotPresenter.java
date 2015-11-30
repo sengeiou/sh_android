@@ -146,6 +146,18 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
+    public void unblockUserClicked(UserModel userModel) {
+        unblockUserInteractor.unblock(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                reportShotView.showUserUnblocked();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
     public void confirmBlock() {
         blockUser(idUserToBlock);
     }

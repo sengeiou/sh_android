@@ -91,4 +91,8 @@ public interface ProfileView {
     void showBlockUserButton();
 
     void blockUser(UserModel userModel);
+
+    void showUnblockUserButton();
+
+    void unblockUser(UserModel userModel);
 }

@@ -29,4 +29,11 @@
       android:title="@string/report_context_menu_block"
       android:visible="false"
       app:showAsAction="never" />
+
+    <item
+      android:id="@+id/menu_profile_unblock_user"
+      android:orderInCategory="100"
+      android:title="@string/report_context_menu_unblock"
+      android:visible="false"
+      app:showAsAction="never" />
 </menu>
