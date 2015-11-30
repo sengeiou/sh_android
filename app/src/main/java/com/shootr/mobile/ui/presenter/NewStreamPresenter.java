@@ -200,6 +200,10 @@ public class NewStreamPresenter implements Presenter {
             @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
         });
     }
 

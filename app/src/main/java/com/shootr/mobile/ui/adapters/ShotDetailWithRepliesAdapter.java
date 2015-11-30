@@ -252,86 +252,126 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void bindView(final ShotModel shotModel) {
             username.setText(getUsernameTitle(shotModel));
             timestamp.setText(getTimestampForDate(shotModel.getBirth()));
-            String comment = shotModel.getComment();
-            if (comment != null) {
-                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                  onUsernameClickListener);
-                shotText.setText(spannedComment);
-                shotText.addLinks();
-            } else {
-                shotText.setVisibility(View.GONE);
-            }
+            setupComment(shotModel);
             showStreamTitle(shotModel);
+            setupAvatar(shotModel);
+            setupImage(shotModel);
+            setupVideo(shotModel);
+            setupReply(shotModel);
+            setupNiceButton(shotModel);
+        }
 
-            imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
-            avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    avatarClickListener.onClick(shotModel.getIdUser());
-                }
-            });
-
-            String imageUrl = shotModel.getImage();
-            if (imageUrl != null) {
-                imageLoader.loadTimelineImage(imageUrl, shotImage);
-                shotImage.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        imageClickListener.onClick(shotModel);
-                    }
-                });
+        public void setupReply(ShotModel shotModel) {
+            if (shotModel.isReply()) {
+                setReply();
             } else {
-                shotImage.setVisibility(View.GONE);
+                parentToggleButton.setVisibility(View.GONE);
             }
+        }
 
+        public void setupVideo(ShotModel shotModel) {
             if (shotModel.hasVideo()) {
-                this.videoFrame.setVisibility(View.VISIBLE);
-                this.videoTitle.setText(shotModel.getVideoTitle());
-                this.videoDuration.setText(shotModel.getVideoDuration());
-                this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        videoClickListener.onVideoClick(shotModel.getVideoUrl());
-                    }
-                });
+                setVideo(shotModel);
             } else {
                 this.videoFrame.setVisibility(View.GONE);
                 this.videoFrame.setOnClickListener(null);
             }
+        }
 
-            if (shotModel.isReply()) {
-                parentToggleButton.setVisibility(View.VISIBLE);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        if (isShowingParent()) {
-                            hideParent();
-                            parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_down_24_gray50);
-                        } else {
-                            showParent();
-                            parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_up_24_gray50);
-                        }
-                    }
-                });
+        public void setupImage(ShotModel shotModel) {
+            String imageUrl = shotModel.getImage();
+            if (imageUrl != null) {
+                setImage(shotModel, imageUrl);
             } else {
-                parentToggleButton.setVisibility(View.GONE);
+                shotImage.setVisibility(View.GONE);
             }
+        }
 
-            Integer niceCount = shotModel.getNiceCount();
-            if (niceCount > 0) {
-                this.niceCount.setVisibility(View.VISIBLE);
-                this.niceCount.setText(context.getResources()
-                  .getQuantityString(com.shootr.mobile.R.plurals.nice_count_pattern, niceCount, niceCount));
+        public void setupComment(ShotModel shotModel) {
+            String comment = shotModel.getComment();
+            if (comment != null) {
+                setComment(comment);
+            } else {
+                shotText.setVisibility(View.GONE);
+            }
+        }
+
+        public void setupAvatar(final ShotModel shotModel) {
+            imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    avatarClickListener.onClick(shotModel.getIdUser());
+                }
+            });
+        }
+
+        public void setupNiceButton(final ShotModel shotModel) {
+            Integer nicesCount = shotModel.getNiceCount();
+            if (nicesCount > 0) {
+                setNiceCount(nicesCount);
             } else {
                 this.niceCount.setVisibility(View.GONE);
             }
+            setNiceButton(shotModel);
+        }
 
+        public void setNiceButton(final ShotModel shotModel) {
             niceButton.setChecked(shotModel.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
                         onNiceShotListener.markNice(shotModel.getIdShot());
+                    }
+                }
+            });
+        }
+
+        public void setNiceCount(Integer niceCount) {
+            this.niceCount.setVisibility(View.VISIBLE);
+            this.niceCount.setText(context.getResources()
+              .getQuantityString(com.shootr.mobile.R.plurals.nice_count_pattern, niceCount, niceCount));
+        }
+
+        public void setComment(String comment) {
+            CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+              onUsernameClickListener);
+            shotText.setText(spannedComment);
+            shotText.addLinks();
+        }
+
+        public void setImage(final ShotModel shotModel, String imageUrl) {
+            imageLoader.loadTimelineImage(imageUrl, shotImage);
+            shotImage.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    imageClickListener.onClick(shotModel);
+                }
+            });
+        }
+
+        public void setVideo(final ShotModel shotModel) {
+            this.videoFrame.setVisibility(View.VISIBLE);
+            this.videoTitle.setText(shotModel.getVideoTitle());
+            this.videoDuration.setText(shotModel.getVideoDuration());
+            this.videoFrame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoClickListener.onVideoClick(shotModel.getVideoUrl());
+                }
+            });
+        }
+
+        public void setReply() {
+            parentToggleButton.setVisibility(View.VISIBLE);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (isShowingParent()) {
+                        hideParent();
+                        parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_down_24_gray50);
+                    } else {
+                        showParent();
+                        parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_up_24_gray50);
                     }
                 }
             });

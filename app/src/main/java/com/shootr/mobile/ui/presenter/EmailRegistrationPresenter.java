@@ -164,7 +164,7 @@ public class EmailRegistrationPresenter implements Presenter {
             }
         }
         showValidationErrors(fieldErrors);
-        return fieldErrors.size() == 0;
+        return fieldErrors.isEmpty();
     }
 
     private void showViewLoading() {

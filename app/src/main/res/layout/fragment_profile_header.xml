@@ -49,7 +49,7 @@
           android:clickable="true"
           android:paddingLeft="8dp"
           android:paddingRight="4dp"
-          android:text="-"
+          android:text="@string/empty_followings"
           tools:text="749" />
 
         <TextView
@@ -68,7 +68,7 @@
           android:layout_gravity="center"
           android:layout_marginLeft="8dp"
           android:gravity="center"
-          android:text="|" />
+          android:text="@string/following_followers_separator" />
 
         <TextView
           android:id="@+id/profile_marks_followers"
@@ -79,7 +79,7 @@
           android:clickable="true"
           android:paddingLeft="8dp"
           android:paddingRight="4dp"
-          android:text="-"
+          android:text="@string/empty_followings"
           tools:text="23" />
 
         <TextView

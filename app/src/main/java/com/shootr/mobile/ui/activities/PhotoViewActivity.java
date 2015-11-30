@@ -1,20 +1,15 @@
 package com.shootr.mobile.ui.activities;
 
-import android.Manifest;
 import android.animation.TimeInterpolator;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +21,7 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import javax.inject.Inject;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -38,13 +34,13 @@ public class PhotoViewActivity extends BaseActivity {
     private static final String EXTRA_IMAGE_URL = "image";
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
-    public static final int WRITE_PERMISSION_REQUEST = 1;
 
     @Bind(com.shootr.mobile.R.id.photo) ImageView imageView;
     @Bind(com.shootr.mobile.R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject WritePermissionManager writePermissionManager;
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
@@ -69,6 +65,8 @@ public class PhotoViewActivity extends BaseActivity {
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setupActionBar();
+
+        writePermissionManager.init(this);
 
         attacher = new PhotoViewAttacher(imageView);
         attacher.setZoomable(false);
@@ -150,10 +148,10 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     private void saveImage() {
-        if (hasWritePermission()) {
+        if (writePermissionManager.hasWritePermission()) {
             performImageDownload();
         } else {
-            requestWritePermissionToUser();
+            writePermissionManager.requestWritePermissionToUser();
         }
     }
 
@@ -175,37 +173,11 @@ public class PhotoViewActivity extends BaseActivity {
         downloadManager.enqueue(request);
     }
 
-    private boolean hasWritePermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestWritePermissionToUser() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(this).setMessage(com.shootr.mobile.R.string.download_photo_permission_explaination)
-              .setPositiveButton(com.shootr.mobile.R.string.ok, new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                      requestWritePermission();
-                  }
-              })
-              .setNegativeButton(com.shootr.mobile.R.string.cancel, null)
-              .show();
-        } else {
-            requestWritePermission();
-        }
-    }
-
-    protected void requestWritePermission() {
-        ActivityCompat.requestPermissions(this,
-          new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-          WRITE_PERMISSION_REQUEST);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
       @NonNull String[] permissions,
       @NonNull int[] grantResults) {
-        if (requestCode == WRITE_PERMISSION_REQUEST) {
+        if (requestCode == writePermissionManager.getWritePermissionRequest()) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 performImageDownload();
             } else {
