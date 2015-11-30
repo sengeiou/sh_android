@@ -569,6 +569,14 @@ public class ProfileFragment extends BaseFragment
         unblockUserMenuItem.setVisible(true);
     }
 
+    public void hideBlockUserButton() {
+        blockUserMenuItem.setVisible(false);
+    }
+
+    public void hideUnblockUserButton() {
+        unblockUserMenuItem.setVisible(false);
+    }
+
     @Override public void unblockUser(UserModel userModel) {
         reportShotPresenter.unblockUserClicked(userModel);
     }
@@ -829,10 +837,14 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserBlocked() {
         feedbackMessage.show(getView(), R.string.user_blocked);
+        showUnblockUserButton();
+        hideBlockUserButton();
     }
 
     @Override public void showUserUnblocked() {
         feedbackMessage.show(getView(), R.string.user_unblocked);
+        showBlockUserButton();
+        hideUnblockUserButton();
     }
 
     @Override public void showBlockUserConfirmation() {
