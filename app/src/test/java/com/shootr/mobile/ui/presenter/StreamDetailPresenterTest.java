@@ -122,7 +122,7 @@ public class StreamDetailPresenterTest {
           .watchers(moreThan50watchers())
           .currentUserWatching(new User())
           .numberOfFollowing(NO_WATCHERS)
-          .hasMoreParticipants(false)
+          .hasMoreParticipants(true)
           .isDataComplete(true)
           .build();
     }
