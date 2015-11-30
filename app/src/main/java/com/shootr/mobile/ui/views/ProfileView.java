@@ -87,4 +87,6 @@ public interface ProfileView {
     void setStreamsCount(Integer streams);
 
     void hideStreamsCount();
+
+    void showBlockUserButton();
 }

@@ -22,4 +22,11 @@
       android:title="@string/profile_logout"
       android:visible="false"
       app:showAsAction="never" />
+
+    <item
+      android:id="@+id/menu_profile_block_user"
+      android:orderInCategory="100"
+      android:title="@string/report_context_menu_block"
+      android:visible="false"
+      app:showAsAction="never" />
 </menu>

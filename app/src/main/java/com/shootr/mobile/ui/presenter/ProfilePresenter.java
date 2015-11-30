@@ -433,6 +433,8 @@ public class ProfilePresenter implements Presenter {
                     profileView.showLogoutButton();
                     profileView.showSupportButton();
                     profileView.showChangePasswordButton();
+                } else {
+                    profileView.showBlockUserButton();
                 }
                 subscriber.onCompleted();
             }
