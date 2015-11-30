@@ -49,8 +49,8 @@ public class ReportShotPresenter implements Presenter {
         this.reportShotView = reportShotView;
     }
 
-    protected void setIdUserToBlock(ShotModel shotModel) {
-        this.idUserToBlock = shotModel.getIdUser();
+    protected void setIdUserToBlock(String idUser) {
+        this.idUserToBlock = idUser;
     }
 
     public void initialize(ReportShotView reportShotView) {
@@ -100,8 +100,17 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
-    public void blockUserClicked(final ShotModel shotModel) {
-        setIdUserToBlock(shotModel);
+    public void blockUserClicked(ShotModel shotModel) {
+        setIdUserToBlock(shotModel.getIdUser());
+        checkIfUserCanBeBlocked();
+    }
+
+    public void blockUserClicked(UserModel userModel) {
+        setIdUserToBlock(userModel.getIdUser());
+        checkIfUserCanBeBlocked();
+    }
+
+    public void checkIfUserCanBeBlocked() {
         getFollowingInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 handleUserBlocking(users, idUserToBlock);

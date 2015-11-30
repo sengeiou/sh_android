@@ -441,6 +441,10 @@ public class ProfilePresenter implements Presenter {
         });
     }
 
+    public void blockUserClicked() {
+        profileView.blockUser(userModel);
+    }
+
     @Override public void resume() {
         if (hasBeenPaused && userModel != null && !uploadingPhoto) {
             refreshProfile();
@@ -450,5 +454,4 @@ public class ProfilePresenter implements Presenter {
     @Override public void pause() {
         hasBeenPaused = true;
     }
-
 }

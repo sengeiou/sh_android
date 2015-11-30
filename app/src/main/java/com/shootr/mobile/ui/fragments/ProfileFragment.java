@@ -279,7 +279,7 @@ public class ProfileFragment extends BaseFragment
                 startActivity(new Intent(this.getActivity(), SupportActivity.class));
                 return true;
             case R.id.menu_profile_block_user:
-                //TODO call presenter
+                profilePresenter.blockUserClicked();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -558,6 +558,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showBlockUserButton() {
         blockUserMenuItem.setVisible(true);
+    }
+
+    @Override public void blockUser(UserModel userModel) {
+        reportShotPresenter.blockUserClicked(userModel);
     }
 
     @Override public void showOpenStream() {
