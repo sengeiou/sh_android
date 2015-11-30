@@ -34,6 +34,7 @@ public class StreamEntityMapper {
             stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
         }
         stream.setTotalFavorites(streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
+        stream.setTotalWatchers(streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
         return stream;
     }
 
@@ -65,5 +66,6 @@ public class StreamEntityMapper {
         entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFavorites()));
+        entityTemplate.setTotalWatchers(Long.valueOf(stream.getTotalWatchers()));
     }
 }

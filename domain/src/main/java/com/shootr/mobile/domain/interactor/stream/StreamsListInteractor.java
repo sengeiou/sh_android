@@ -114,7 +114,7 @@ public class StreamsListInteractor implements Interactor {
             Integer watchers = watchersRepository.getWatchers(idWatchingStream);
             StreamSearchResult streamSearchResult = new StreamSearchResult();
             streamSearchResult.setStream(stream);
-            streamSearchResult.setWatchersNumber(watchers);
+            streamSearchResult.setFollowingWatchersNumber(watchers);
             return streamSearchResult;
         } else {
             return null;

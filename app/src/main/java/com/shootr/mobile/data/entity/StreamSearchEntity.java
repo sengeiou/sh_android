@@ -2,13 +2,13 @@ package com.shootr.mobile.data.entity;
 
 public class StreamSearchEntity extends StreamEntity {
 
-    private int totalWatchers;
+    private int totalFollowingWatchers;
 
-    public int getTotalWatchers() {
-        return totalWatchers;
+    public int getTotalFollowingWatchers() {
+        return totalFollowingWatchers;
     }
 
-    public void setTotalWatchers(int totalWatchers) {
-        this.totalWatchers = totalWatchers;
+    public void setTotalFollowingWatchers(int totalWatchers) {
+        this.totalFollowingWatchers = totalWatchers;
     }
 }

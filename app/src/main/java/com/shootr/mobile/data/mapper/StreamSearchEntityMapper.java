@@ -21,7 +21,7 @@ public class StreamSearchEntityMapper {
 
         StreamSearchResult streamSearchResult = new StreamSearchResult();
         streamSearchResult.setStream(stream);
-        streamSearchResult.setWatchersNumber(streamSearchEntity.getTotalWatchers());
+        streamSearchResult.setFollowingWatchersNumber(streamSearchEntity.getTotalFollowingWatchers());
 
         return streamSearchResult;
     }
@@ -40,7 +40,7 @@ public class StreamSearchEntityMapper {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         streamEntityMapper.transformToTemplate(stream, streamSearchEntity);
 
-        streamSearchEntity.setTotalWatchers(streamSearchResult.getWatchersNumber());
+        streamSearchEntity.setTotalFollowingWatchers(streamSearchResult.getFollowingWatchersNumber());
 
         streamSearchEntity.setBirth(new Date());
         streamSearchEntity.setModified(new Date());

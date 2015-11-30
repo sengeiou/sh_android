@@ -26,6 +26,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT, streamEntity.getMediaCountByRelatedUsers());
         contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
         contentValues.put(DatabaseContract.StreamTable.TOTAL_FAVORITES, streamEntity.getTotalFavorites());
+        contentValues.put(DatabaseContract.StreamTable.TOTAL_WATCHERS, streamEntity.getTotalWatchers());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -47,13 +48,14 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setMediaCountByRelatedUsers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
         streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
         streamEntity.setTotalFavorites(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FAVORITES)));
+        streamEntity.setTotalWatchers(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_WATCHERS)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 
     public StreamSearchEntity fromSearchCursor(Cursor cursor) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(cursor, streamSearchEntity);
-        streamSearchEntity.setTotalWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
+        streamSearchEntity.setTotalFollowingWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
         return streamSearchEntity;
     }
 
