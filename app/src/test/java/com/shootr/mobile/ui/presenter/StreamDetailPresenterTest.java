@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
+import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -54,12 +55,13 @@ public class StreamDetailPresenterTest {
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
     @Mock StreamDetailView streamDetailView;
+    @Mock SelectStreamInteractor selectStreamInteractor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         UserModelMapper userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor, shareStreamInteractor, followInteractor, unfollowInteractor, streamModelMapper, userModelMapper, errorMessageFactory);
+        presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor, shareStreamInteractor, followInteractor, unfollowInteractor, selectStreamInteractor, streamModelMapper, userModelMapper, errorMessageFactory);
         presenter.setView(streamDetailView);
     }
 
