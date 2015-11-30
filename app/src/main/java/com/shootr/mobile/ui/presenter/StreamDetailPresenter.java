@@ -126,13 +126,11 @@ public class StreamDetailPresenter implements Presenter {
 
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(StreamInfo streamInfo) {
+            @Override public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -176,11 +174,20 @@ public class StreamDetailPresenter implements Presenter {
     private void renderWatchersList(StreamInfo streamInfo) {
         if (participantsShown.isEmpty() || streamInfo.isDataComplete()) {
             List<User> watchers = streamInfo.getWatchers();
+            renderTotalWatchersCount(watchers.size());
             participantsShown = userModelMapper.transform(watchers);
             streamDetailView.setWatchers(participantsShown);
             if (streamInfo.hasMoreParticipants()) {
                 streamDetailView.showAllParticipantsButton();
             }
+        }
+    }
+
+    private void renderTotalWatchersCount(Integer size) {
+        if (size > 50) {
+            streamDetailView.setTotalWatchers(streamModel.getTotalWatchers());
+        } else {
+            streamDetailView.setTotalWatchers(size);
         }
     }
 

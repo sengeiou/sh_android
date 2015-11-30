@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
+import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
@@ -75,6 +76,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public void setTotalWatchers(Context context,Integer totalWatchers) {
+        if (separatorViewHolder != null) {
+            separatorViewHolder.render(context.getResources()
+              .getQuantityString(R.plurals.total_watchers_pattern, totalWatchers, totalWatchers));
+        }
+    }
+
     public void setDescription(String description) {
         this.description = description;
         if (descriptionViewHolder != null) {
@@ -136,7 +144,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_PARTICIPANTS_TITLE:
                 v = inflater.inflate(R.layout.include_stream_detail_separator, parent, false);
                 separatorViewHolder = new SeparatorViewHolder(v, android.R.id.text1);
-                separatorViewHolder.render("PAJO MIERDA");
                 return separatorViewHolder;
             case TYPE_PARTICIPANT:
                 v = inflater.inflate(com.shootr.mobile.R.layout.item_list_stream_watcher, parent, false);
