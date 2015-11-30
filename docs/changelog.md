@@ -13,6 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.0.1] - 2015-11-24
+
+### Changed
+- Mejorada la petición de permisos al usuario.
+- Redirección desde las notificaciones al stream o shot.
+- Mejorado feedback al usuario.
+
 ## [1.0.0] - 2015-11-14
 
 ### Changed
