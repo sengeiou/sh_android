@@ -318,4 +318,12 @@
     <string name="intro_streams">Streams</string>
     <string name="main_activity_title">Activity</string>
     <string name="profile_edit_done_button">Done</string>
+    <plurals name="total_watchers_pattern">
+        <item quantity="one">
+            %d participant
+        </item>
+        <item quantity="other">
+            %d participants
+        </item>
+    </plurals>
 </resources>

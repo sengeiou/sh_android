@@ -80,6 +80,8 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
+      <include layout="@layout/include_stream_detail_separator" />
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView android:id="@+id/list"

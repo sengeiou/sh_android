@@ -453,6 +453,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         startActivity(AllParticipantsActivity.newIntent(this, idStream));
     }
 
+    @Override public void setTotalWatchers(Integer totalWatchers) {
+        adapter.setTotalWatchers(this, totalWatchers);
+    }
+
     @Override
     public void showLoading() {
         progressView.setVisibility(View.VISIBLE);

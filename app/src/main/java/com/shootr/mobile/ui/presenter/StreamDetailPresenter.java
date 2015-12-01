@@ -3,11 +3,13 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamInfo;
+import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
+import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -33,6 +35,7 @@ public class StreamDetailPresenter implements Presenter {
     private final ShareStreamInteractor shareStreamInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
+    private final SelectStreamInteractor selectStreamInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -50,13 +53,15 @@ public class StreamDetailPresenter implements Presenter {
     @Inject
     public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
+      SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
+        this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -126,13 +131,11 @@ public class StreamDetailPresenter implements Presenter {
 
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(StreamInfo streamInfo) {
+            @Override public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -179,7 +182,10 @@ public class StreamDetailPresenter implements Presenter {
             participantsShown = userModelMapper.transform(watchers);
             streamDetailView.setWatchers(participantsShown);
             if (streamInfo.hasMoreParticipants()) {
+                streamDetailView.setTotalWatchers(streamModel.getTotalWatchers());
                 streamDetailView.showAllParticipantsButton();
+            } else {
+                streamDetailView.setTotalWatchers(watchers.size());
             }
         }
     }
@@ -229,18 +235,6 @@ public class StreamDetailPresenter implements Presenter {
 
     private void showImageUploadError() {
         streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
-    }
-
-    @Override
-    public void resume() {
-        if (hasBeenPaused) {
-            getStreamInfo();
-        }
-    }
-
-    @Override
-    public void pause() {
-        hasBeenPaused = true;
     }
 
     public void clickMedia() {
@@ -302,5 +296,30 @@ public class StreamDetailPresenter implements Presenter {
 
     public void clickAllParticipants() {
         streamDetailView.goToAllParticipants(idStream);
+    }
+
+    public void selectStream() {
+        selectStreamInteractor.selectStream(streamModel.getIdStream(), new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                /* no-op */
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
+    }
+
+    @Override
+    public void resume() {
+        if (hasBeenPaused) {
+            selectStream();
+            getStreamInfo();
+        }
+    }
+
+    @Override
+    public void pause() {
+        hasBeenPaused = true;
     }
 }

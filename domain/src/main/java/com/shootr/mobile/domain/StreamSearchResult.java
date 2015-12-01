@@ -3,21 +3,21 @@ package com.shootr.mobile.domain;
 public class StreamSearchResult {
 
     private Stream stream;
-    private int watchersNumber;
+    private int followingWatchersNumber;
     private boolean isWatching;
     private int favoritesNumber;
 
     public StreamSearchResult() {
     }
 
-    public StreamSearchResult(Stream stream, int watchersNumber) {
+    public StreamSearchResult(Stream stream, int followingWatchersNumber) {
         this.stream = stream;
-        this.watchersNumber = watchersNumber;
+        this.followingWatchersNumber = followingWatchersNumber;
     }
 
-    public StreamSearchResult(Stream stream, Integer watchersNumber) {
+    public StreamSearchResult(Stream stream, Integer followingWatchersNumber) {
         this.stream = stream;
-        this.watchersNumber = watchersNumber != null ? watchersNumber : 0;
+        this.followingWatchersNumber = followingWatchersNumber != null ? followingWatchersNumber : 0;
     }
 
     public Stream getStream() {
@@ -28,12 +28,12 @@ public class StreamSearchResult {
         this.stream = stream;
     }
 
-    public int getWatchersNumber() {
-        return watchersNumber;
+    public int getFollowingWatchersNumber() {
+        return followingWatchersNumber;
     }
 
-    public void setWatchersNumber(int watchersNumber) {
-        this.watchersNumber = watchersNumber;
+    public void setFollowingWatchersNumber(int followingWatchersNumber) {
+        this.followingWatchersNumber = followingWatchersNumber;
     }
 
     @Override public boolean equals(Object o) {
@@ -42,20 +42,20 @@ public class StreamSearchResult {
 
         StreamSearchResult that = (StreamSearchResult) o;
 
-        if (watchersNumber != that.watchersNumber) return false;
+        if (followingWatchersNumber != that.followingWatchersNumber) return false;
         return stream.equals(that.stream);
     }
 
     @Override public int hashCode() {
         int result = stream.hashCode();
-        result = 31 * result + watchersNumber;
+        result = 31 * result + followingWatchersNumber;
         return result;
     }
 
     @Override public String toString() {
         return "StreamSearchResult{" +
           "stream=" + stream +
-          ", watchersNumber=" + watchersNumber +
+          ", followingWatchersNumber=" + followingWatchersNumber +
           '}';
     }
 

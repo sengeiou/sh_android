@@ -102,7 +102,7 @@ public class SelectStreamInteractor implements Interactor {
     private StreamSearchResult attachWatchNumber(Stream stream) {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
         streamSearchResult.setStream(stream);
-        streamSearchResult.setWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
+        streamSearchResult.setFollowingWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
         return streamSearchResult;
     }
 
