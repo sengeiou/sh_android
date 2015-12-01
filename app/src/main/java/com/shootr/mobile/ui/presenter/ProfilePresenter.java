@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -46,6 +47,7 @@ public class ProfilePresenter implements Presenter {
     private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
     private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
     private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+    private final SessionRepository sessionRepository;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final ShotModelMapper shotModelMapper;
@@ -63,7 +65,8 @@ public class ProfilePresenter implements Presenter {
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
-      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
+      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
+      ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
@@ -76,6 +79,7 @@ public class ProfilePresenter implements Presenter {
         this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
         this.removeUserPhotoInteractor = removeUserPhotoInteractor;
         this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
+        this.sessionRepository = sessionRepository;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
@@ -464,6 +468,10 @@ public class ProfilePresenter implements Presenter {
 
     public void unblockUserClicked() {
         profileView.unblockUser(userModel);
+    }
+
+    public void reportUserClicked() {
+        profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
     }
 
     @Override public void resume() {

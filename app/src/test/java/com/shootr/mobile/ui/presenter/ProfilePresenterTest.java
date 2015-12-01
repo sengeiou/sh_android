@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -73,6 +74,7 @@ public class ProfilePresenterTest {
     @Mock UploadUserPhotoInteractor uploadUserPhotoInteractor;
     @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
     @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+    @Mock SessionRepository sessionRepository;
 
     @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -93,7 +95,7 @@ public class ProfilePresenterTest {
           unfollowInteractor,
           getLastShotsInteractor,
           uploadUserPhotoInteractor,
-          removeUserPhotoInteractor, getBlockedIdUsersInteractor, errorMessageFactory,
+          removeUserPhotoInteractor, getBlockedIdUsersInteractor, sessionRepository, errorMessageFactory,
           userModelMapper,
           shotModelMapper);
         profilePresenter.setView(profileView);

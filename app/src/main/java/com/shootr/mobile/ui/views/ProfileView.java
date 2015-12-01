@@ -97,4 +97,6 @@ public interface ProfileView {
     void unblockUser(UserModel userModel);
 
     void showReportUserButton();
+
+    void goToReportEmail(String currentUserId, String idUser);
 }

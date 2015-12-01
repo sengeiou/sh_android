@@ -288,6 +288,9 @@ public class ProfileFragment extends BaseFragment
             case R.id.menu_profile_unblock_user:
                 profilePresenter.unblockUserClicked();
                 return true;
+            case R.id.menu_profile_report_user:
+                profilePresenter.reportUserClicked();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -585,6 +588,11 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showReportUserButton() {
         reportUserMenuItem.setVisible(true);
+    }
+
+    @Override public void goToReportEmail(String currentUserId, String idUser) {
+        Intent reportEmailIntent = intentFactory.reportEmailIntent(getActivity(), currentUserId, idUser);
+        Intents.maybeStartActivity(getActivity(), reportEmailIntent);
     }
 
     @Override public void blockUser(UserModel userModel) {
