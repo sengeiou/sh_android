@@ -144,6 +144,8 @@ public class ProfileFragment extends BaseFragment
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder unblockUserMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
 
     //region Construction
@@ -263,6 +265,8 @@ public class ProfileFragment extends BaseFragment
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
         supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
         changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
+        blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
+        unblockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_unblock_user));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -275,6 +279,12 @@ public class ProfileFragment extends BaseFragment
                 return true;
             case R.id.menu_profile_support:
                 startActivity(new Intent(this.getActivity(), SupportActivity.class));
+                return true;
+            case R.id.menu_profile_block_user:
+                profilePresenter.blockUserClicked();
+                return true;
+            case R.id.menu_profile_unblock_user:
+                profilePresenter.unblockUserClicked();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -551,6 +561,30 @@ public class ProfileFragment extends BaseFragment
         changePasswordMenuItem.setVisible(true);
     }
 
+    @Override public void showBlockUserButton() {
+        blockUserMenuItem.setVisible(true);
+    }
+
+    @Override public void showUnblockUserButton() {
+        unblockUserMenuItem.setVisible(true);
+    }
+
+    public void hideBlockUserButton() {
+        blockUserMenuItem.setVisible(false);
+    }
+
+    public void hideUnblockUserButton() {
+        unblockUserMenuItem.setVisible(false);
+    }
+
+    @Override public void unblockUser(UserModel userModel) {
+        reportShotPresenter.unblockUserClicked(userModel);
+    }
+
+    @Override public void blockUser(UserModel userModel) {
+        reportShotPresenter.blockUserClicked(userModel);
+    }
+
     @Override public void showOpenStream() {
         listingContainerView.setVisibility(View.GONE);
         openStreamContainerView.setVisibility(View.VISIBLE);
@@ -803,10 +837,14 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserBlocked() {
         feedbackMessage.show(getView(), R.string.user_blocked);
+        showUnblockUserButton();
+        hideBlockUserButton();
     }
 
     @Override public void showUserUnblocked() {
         feedbackMessage.show(getView(), R.string.user_unblocked);
+        showBlockUserButton();
+        hideUnblockUserButton();
     }
 
     @Override public void showBlockUserConfirmation() {

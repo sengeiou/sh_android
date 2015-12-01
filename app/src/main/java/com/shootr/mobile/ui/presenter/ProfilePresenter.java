@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
@@ -44,6 +45,7 @@ public class ProfilePresenter implements Presenter {
     private final GetLastShotsInteractor getLastShotsInteractor;
     private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
     private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
+    private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final ShotModelMapper shotModelMapper;
@@ -60,7 +62,8 @@ public class ProfilePresenter implements Presenter {
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
-      RemoveUserPhotoInteractor removeUserPhotoInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
+      RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
+      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
@@ -72,6 +75,7 @@ public class ProfilePresenter implements Presenter {
         this.getLastShotsInteractor = getLastShotsInteractor;
         this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
         this.removeUserPhotoInteractor = removeUserPhotoInteractor;
+        this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
@@ -433,10 +437,32 @@ public class ProfilePresenter implements Presenter {
                     profileView.showLogoutButton();
                     profileView.showSupportButton();
                     profileView.showChangePasswordButton();
+                } else {
+                    getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
+                        @Override public void onLoaded(List<String> blockedIds) {
+                            if (blockedIds.contains(userModel.getIdUser())) {
+                                profileView.showUnblockUserButton();
+                            } else {
+                                profileView.showBlockUserButton();
+                            }
+                        }
+                    }, new Interactor.ErrorCallback() {
+                        @Override public void onError(ShootrException error) {
+                            showErrorInView(error);
+                        }
+                    });
                 }
                 subscriber.onCompleted();
             }
         });
+    }
+
+    public void blockUserClicked() {
+        profileView.blockUser(userModel);
+    }
+
+    public void unblockUserClicked() {
+        profileView.unblockUser(userModel);
     }
 
     @Override public void resume() {
@@ -448,5 +474,4 @@ public class ProfilePresenter implements Presenter {
     @Override public void pause() {
         hasBeenPaused = true;
     }
-
 }

@@ -49,8 +49,8 @@ public class ReportShotPresenter implements Presenter {
         this.reportShotView = reportShotView;
     }
 
-    protected void setIdUserToBlock(ShotModel shotModel) {
-        this.idUserToBlock = shotModel.getIdUser();
+    protected void setIdUserToBlock(String idUser) {
+        this.idUserToBlock = idUser;
     }
 
     public void initialize(ReportShotView reportShotView) {
@@ -100,8 +100,17 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
-    public void blockUserClicked(final ShotModel shotModel) {
-        setIdUserToBlock(shotModel);
+    public void blockUserClicked(ShotModel shotModel) {
+        setIdUserToBlock(shotModel.getIdUser());
+        checkIfUserCanBeBlocked();
+    }
+
+    public void blockUserClicked(UserModel userModel) {
+        setIdUserToBlock(userModel.getIdUser());
+        checkIfUserCanBeBlocked();
+    }
+
+    public void checkIfUserCanBeBlocked() {
         getFollowingInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 handleUserBlocking(users, idUserToBlock);
@@ -127,6 +136,18 @@ public class ReportShotPresenter implements Presenter {
 
     public void unblockUser(ShotModel shotModel) {
         unblockUserInteractor.unblock(shotModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                reportShotView.showUserUnblocked();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void unblockUserClicked(UserModel userModel) {
+        unblockUserInteractor.unblock(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 reportShotView.showUserUnblocked();
             }
