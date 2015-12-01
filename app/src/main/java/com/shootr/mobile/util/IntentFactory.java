@@ -76,19 +76,21 @@ public interface IntentFactory {
     }
 
     @Override public Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId) {
-      String[] adress = new String[1];
-      adress[0] = launchActivity.getString(R.string.feedback_email_address);
+      String adress = launchActivity.getString(R.string.feedback_email_address);
       String subjectPattern = launchActivity.getString(R.string.report_user_subject);
       String subject = String.format(subjectPattern, currentUserId, reportedUserId);
       String defaultMessage = launchActivity.getString(R.string.report_user_default_message);
 
-      return ShareCompat.IntentBuilder.from(launchActivity)
-        .setType("text/plain")
-        .setEmailTo(adress)
-        .setSubject(subject)
-        .setText(defaultMessage)
-        .setChooserTitle(R.string.report_context_menu_report)
-        .createChooserIntent();
+      Intent intent = new Intent(Intent.ACTION_SENDTO);
+      intent.setType("text/plain");
+      String uriText = "mailto:" + Uri.encode(adress) +
+        "?subject=" + Uri.encode(subject) +
+        "&body=" + Uri.encode(defaultMessage);
+      Uri uri = Uri.parse(uriText);
+      intent.setData(uri);
+      Intent.createChooser(intent, launchActivity.getString(R.string.report_context_menu_report));
+
+      return intent;
     }
   };
 }
