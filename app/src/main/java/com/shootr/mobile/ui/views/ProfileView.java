@@ -95,4 +95,6 @@ public interface ProfileView {
     void showUnblockUserButton();
 
     void unblockUser(UserModel userModel);
+
+    void showReportUserButton();
 }

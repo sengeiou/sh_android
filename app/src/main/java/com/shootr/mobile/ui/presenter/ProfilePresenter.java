@@ -438,6 +438,7 @@ public class ProfilePresenter implements Presenter {
                     profileView.showSupportButton();
                     profileView.showChangePasswordButton();
                 } else {
+                    profileView.showReportUserButton();
                     getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
                         @Override public void onLoaded(List<String> blockedIds) {
                             if (blockedIds.contains(userModel.getIdUser())) {

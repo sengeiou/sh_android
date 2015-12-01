@@ -146,6 +146,7 @@ public class ProfileFragment extends BaseFragment
     private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder unblockUserMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
 
     //region Construction
@@ -267,6 +268,7 @@ public class ProfileFragment extends BaseFragment
         changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
         blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
         unblockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_unblock_user));
+        reportUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_report_user));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -579,6 +581,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void unblockUser(UserModel userModel) {
         reportShotPresenter.unblockUserClicked(userModel);
+    }
+
+    @Override public void showReportUserButton() {
+        reportUserMenuItem.setVisible(true);
     }
 
     @Override public void blockUser(UserModel userModel) {

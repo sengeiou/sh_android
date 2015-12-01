@@ -329,15 +329,32 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldShowBlockButtonWhenUserIsNotCurrentUserAndInitializedByUsername() {
-        User user = user();
-        user.setMe(false);
-        setupUserIdInteractorCallbacks(user);
+        setupUserByUsername();
+        setupBlockedIdUsersIdInteractorCallbacks();
 
         profilePresenter.initializeWithUsername(profileView, USERNAME);
 
-        verify(profileView, never()).showBlockUserButton();
+        verify(profileView).showBlockUserButton();
     }
 
+    @Test public void shouldShowReportButtonWhenUserIsNotCurrentUserAndInitializedByUsername() {
+        setupUserByUsername();
+
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        verify(profileView).showReportUserButton();
+    }
+
+    @Test public void shouldShowReportButtonWhenUserIsNotCurrentUserAndInitializedById() {
+        User user = user();
+        user.setMe(false);
+        setupUserIdInteractorCallbacks(user);
+        setupBlockedIdUsersIdInteractorCallbacks();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showReportUserButton();
+    }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
         profilePresenter.streamCreated(SELECTED_STREAM_ID);
@@ -811,6 +828,7 @@ public class ProfilePresenterTest {
         user.setCreatedStreamsCount(1L);
         user.setFavoritedStreamsCount(1L);
         user.setVerifiedUser(false);
+        user.setMe(false);
         user.setPhoto("photo");
         return user;
     }
