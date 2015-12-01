@@ -731,7 +731,8 @@ public class StreamTimelineFragment extends BaseFragment
     @OnItemLongClick(com.shootr.mobile.R.id.timeline_shot_list)
     public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
-        reportShotPresenter.onShotLongPressed(shot);
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+        reportShotPresenter.onShotLongPressed(shot, streamAuthorIdUser);
         return true;
     }
 

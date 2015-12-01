@@ -67,24 +67,43 @@ public class ReportShotPresenter implements Presenter {
     }
 
     public void onShotLongPressed(final ShotModel shotModel) {
-        if (sessionRepository.getCurrentUserId().equals(shotModel.getIdUser())) {
+        if (currentUserIsShotAuthor(shotModel)) {
             reportShotView.showHolderContextMenu(shotModel);
         } else {
-            getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
-                @Override public void onLoaded(List<String> blockedIds) {
-                    if (blockedIds.contains(shotModel.getIdUser())) {
-                        reportShotView.showContextMenuWithUnblock(shotModel);
-                    } else {
-                        reportShotView.showContextMenu(shotModel);
-                    }
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    showErrorInView(error);
-                }
-            });
+            handleBlockContextMenu(shotModel);
         }
+    }
 
+    public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
+        if (currentUserIsStreamHolder(streamAuthorIdUser)) {
+            reportShotView.showHolderContextMenu(shot);
+        } else {
+            onShotLongPressed(shot);
+        }
+    }
+
+    public boolean currentUserIsShotAuthor(ShotModel shotModel) {
+        return sessionRepository.getCurrentUserId().equals(shotModel.getIdUser());
+    }
+
+    public boolean currentUserIsStreamHolder(String streamAuthorIdUser) {
+        return sessionRepository.getCurrentUserId().equals(streamAuthorIdUser);
+    }
+
+    public void handleBlockContextMenu(final ShotModel shotModel) {
+        getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(List<String> blockedIds) {
+                if (blockedIds.contains(shotModel.getIdUser())) {
+                    reportShotView.showContextMenuWithUnblock(shotModel);
+                } else {
+                    reportShotView.showContextMenu(shotModel);
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
     }
 
     public void deleteShot(final ShotModel shotModel) {
