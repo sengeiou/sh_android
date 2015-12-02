@@ -62,7 +62,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     public ContentValues toSearchContentValues(StreamSearchEntity entity) {
         ContentValues contentValues = new ContentValues();
         fillContentValues(entity, contentValues);
-        contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getTotalWatchers());
+        contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getTotalFollowingWatchers());
         return contentValues;
     }
 
