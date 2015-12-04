@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,7 +45,6 @@ import timber.log.Timber;
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
 
     public static final String EXTRA_SHOT = "shot";
-    public static final String EXTRA_ID_SHOT = "idShot";
 
     @Bind(com.shootr.mobile.R.id.shot_detail_list) RecyclerView detailList;
     @Bind(com.shootr.mobile.R.id.detail_new_shot_bar) View newShotBar;
@@ -116,7 +116,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            handleBackIntent();
             return true;
         }else if (item.getItemId() == com.shootr.mobile.R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
@@ -125,6 +125,19 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void handleBackIntent() {
+        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if(taskList.get(0).numActivities == 1 &&
+          taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            Intent intent = new Intent(this, MainTabbedActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            finish();
+        }
     }
 
     private void openContextualMenu(final ShotModel shotModel) {

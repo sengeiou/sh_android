@@ -1,52 +1,56 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
-    <TextView android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:paddingTop="240dp"
-      android:text="@string/welcome_shootr_title"
-      android:textColor="@color/black"
-      android:textSize="22sp" />
-
-    <TextView android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:paddingTop="16dp"
-      android:gravity="center"
-      android:textColor="@color/gray_50"
-      android:text="@string/welcome_friends_text"
-      android:textSize="14sp" />
-
-  <FrameLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="140dp"
-    android:animateLayoutChanges="true" >
-
-    <TextView android:id="@+id/button_get_started"
-      style="@style/WelcomeButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:background="?selectableItemBackground"
-      android:layout_marginLeft="@dimen/keyline_2"
-      android:layout_marginRight="@dimen/keyline_2"
-      android:paddingLeft="8dp"
-      android:paddingRight="8dp"
-      android:paddingTop="16dp"
-      android:paddingBottom="16dp"
-      android:text="@string/welcome_get_started_button"
-      android:textSize="14sp" />
-
-    <ProgressBar android:id="@+id/get_started_progress"
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:visibility="gone"
-      tools:visibility="visible" />
+      android:orientation="vertical">
 
-  </FrameLayout>
-</LinearLayout>
+        <TextView android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:paddingTop="240dp"
+          android:text="@string/welcome_shootr_title"
+          android:textColor="@color/black"
+          android:textSize="22sp" />
+
+        <TextView android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:paddingTop="16dp"
+          android:text="@string/welcome_friends_text"
+          android:textColor="@color/gray_50"
+          android:textSize="14sp" />
+
+        <FrameLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:animateLayoutChanges="true"
+          android:paddingTop="140dp">
+
+            <TextView android:id="@+id/button_get_started"
+              style="@style/WelcomeButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginLeft="@dimen/keyline_2"
+              android:layout_marginRight="@dimen/keyline_2"
+              android:background="?selectableItemBackground"
+              android:paddingBottom="16dp"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp"
+              android:paddingTop="16dp"
+              android:text="@string/welcome_get_started_button"
+              android:textSize="14sp" />
+
+            <ProgressBar android:id="@+id/get_started_progress"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:visibility="gone"
+              tools:visibility="visible" />
+
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
