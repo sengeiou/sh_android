@@ -74,6 +74,7 @@
                       android:layout_height="wrap_content"
                       android:textColor="#80ffffff"
                       android:textSize="15sp"
+                      android:paddingBottom="24dp"
                       tools:text="following 3" />
                 </LinearLayout>
             </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>
