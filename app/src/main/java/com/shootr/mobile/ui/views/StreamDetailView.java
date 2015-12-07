@@ -55,5 +55,4 @@ public interface StreamDetailView extends DataTransferView {
 
     void goToAllParticipants(String idStream);
 
-    void setTotalWatchers(Integer totalWatchers);
 }

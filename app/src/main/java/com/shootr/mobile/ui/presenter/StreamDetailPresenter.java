@@ -218,9 +218,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     private void renderFollowingNumber(Integer numberOfFollowing) {
-        if (numberOfFollowing > 0) {
-            streamDetailView.setFollowingNumber(numberOfFollowing, totalWatchers);
-        }
+        streamDetailView.setFollowingNumber(numberOfFollowing, totalWatchers);
     }
     //endregion
 
