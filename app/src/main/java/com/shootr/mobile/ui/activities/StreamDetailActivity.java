@@ -429,12 +429,18 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override
-    public void setFollowingNumber(Integer numberOfFollowing) {
+    public void setFollowingNumber(Integer numberOfFollowing, Integer totalWatchers) {
         if (numberOfFollowing == 0) {
-            streamSubtitle.setVisibility(View.GONE);
+            streamSubtitle.setVisibility(View.VISIBLE);
+            streamSubtitle.setText(getResources()
+              .getQuantityString(R.plurals.total_watchers_pattern, totalWatchers, totalWatchers));
         } else {
             streamSubtitle.setVisibility(View.VISIBLE);
-            streamSubtitle.setText(getString(R.string.stream_participants_following_number, numberOfFollowing));
+            String followings = getString(R.string.stream_participants_following_number, numberOfFollowing);
+            String participants = getResources().getQuantityString(R.plurals.total_watchers_pattern_with_followings,
+              totalWatchers,
+              totalWatchers);
+            streamSubtitle.setText(getString(R.string.stream_detail_subtitle_pattern, followings, participants));
         }
     }
 
@@ -451,10 +457,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void goToAllParticipants(String idStream) {
         startActivity(AllParticipantsActivity.newIntent(this, idStream));
-    }
-
-    @Override public void setTotalWatchers(Integer totalWatchers) {
-        adapter.setTotalWatchers(this, totalWatchers);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
-import android.content.Context;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -47,7 +44,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ActionViewHolder authorViewHolder;
     private ActionViewHolder mediaViewHolder;
     private AllParticipantsViewHolder allParticipantsViewHolder;
-    private SeparatorViewHolder separatorViewHolder;
 
     private List<UserModel> participants = Collections.emptyList();
     private TextViewHolder descriptionViewHolder;
@@ -73,13 +69,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.authorName = authorName;
         if (authorViewHolder != null) {
             authorViewHolder.name.setText(authorName);
-        }
-    }
-
-    public void setTotalWatchers(Context context,Integer totalWatchers) {
-        if (separatorViewHolder != null) {
-            separatorViewHolder.render(context.getResources()
-              .getQuantityString(R.plurals.total_watchers_pattern, totalWatchers, totalWatchers));
         }
     }
 
@@ -142,9 +131,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
                 return mediaViewHolder;
             case TYPE_PARTICIPANTS_TITLE:
-                v = inflater.inflate(R.layout.include_stream_detail_separator, parent, false);
-                separatorViewHolder = new SeparatorViewHolder(v, android.R.id.text1);
-                return separatorViewHolder;
+                v = inflater.inflate(com.shootr.mobile.R.layout.item_card_title_separator, parent, false);
+                return new SeparatorViewHolder(v);
             case TYPE_PARTICIPANT:
                 v = inflater.inflate(com.shootr.mobile.R.layout.item_list_stream_watcher, parent, false);
                 return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener, keepFollowButtonIds);
@@ -248,17 +236,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class SeparatorViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView titleText;
-
-        public SeparatorViewHolder(View itemView, @IdRes int titleID) {
+        public SeparatorViewHolder(View itemView) {
             super(itemView);
-            titleText = (TextView) itemView.findViewById(titleID);
         }
-
-        public void render(String title){
-            titleText.setText(title);
-        }
-
     }
 
     public static class WatcherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

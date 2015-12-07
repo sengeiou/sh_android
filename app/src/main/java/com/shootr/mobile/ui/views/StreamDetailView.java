@@ -47,7 +47,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void showAllParticipantsButton();
 
-    void setFollowingNumber(Integer numberOfFollowing);
+    void setFollowingNumber(Integer numberOfFollowing, Integer totalWatchers);
 
     void showStreamShared();
 
@@ -55,5 +55,4 @@ public interface StreamDetailView extends DataTransferView {
 
     void goToAllParticipants(String idStream);
 
-    void setTotalWatchers(Integer totalWatchers);
 }

@@ -72,6 +72,7 @@
                     <TextView android:id="@+id/subtitle"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
+                      android:singleLine="true"
                       android:textColor="#80ffffff"
                       android:textSize="15sp"
                       tools:text="following 3" />
@@ -79,8 +80,6 @@
             </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
-      <include layout="@layout/include_stream_detail_separator" />
 
     </android.support.design.widget.AppBarLayout>
 

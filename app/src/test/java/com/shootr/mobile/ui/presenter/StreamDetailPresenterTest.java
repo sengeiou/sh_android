@@ -70,7 +70,7 @@ public class StreamDetailPresenterTest {
 
         presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).setTotalWatchers(anyInt());
+        verify(streamDetailView).setFollowingNumber(anyInt(), anyInt());
     }
 
     @Test public void shouldShowTotalWatchersFromParticipantsListIfLessThan50() throws Exception {
@@ -78,7 +78,7 @@ public class StreamDetailPresenterTest {
 
         presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).setTotalWatchers(THREE_WATCHERS);
+        verify(streamDetailView).setFollowingNumber(0, THREE_WATCHERS);
     }
 
     @Test public void shouldShowTotalWatchersFromStreamInfoIfMoreThan50() throws Exception {
@@ -86,7 +86,7 @@ public class StreamDetailPresenterTest {
 
         presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).setTotalWatchers(FIFTY_PLUS_WATCHERS);
+        verify(streamDetailView).setFollowingNumber(0, FIFTY_PLUS_WATCHERS);
     }
 
 
