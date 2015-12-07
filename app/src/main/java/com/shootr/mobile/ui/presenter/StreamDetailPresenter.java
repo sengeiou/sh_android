@@ -49,6 +49,7 @@ public class StreamDetailPresenter implements Presenter {
     private Integer streamMediaCount;
     private List<UserModel> participantsShown = Collections.emptyList();
     private boolean hasBeenPaused = false;
+    private Integer totalWatchers;
 
     @Inject
     public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
@@ -182,10 +183,12 @@ public class StreamDetailPresenter implements Presenter {
             participantsShown = userModelMapper.transform(watchers);
             streamDetailView.setWatchers(participantsShown);
             if (streamInfo.hasMoreParticipants()) {
-                streamDetailView.setTotalWatchers(streamModel.getTotalWatchers());
+                this.totalWatchers = streamModel.getTotalWatchers();
+                streamDetailView.setTotalWatchers(totalWatchers);
                 streamDetailView.showAllParticipantsButton();
             } else {
-                streamDetailView.setTotalWatchers(watchers.size());
+                this.totalWatchers = watchers.size();
+                streamDetailView.setTotalWatchers(totalWatchers);
             }
         }
     }
