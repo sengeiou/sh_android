@@ -184,11 +184,9 @@ public class StreamDetailPresenter implements Presenter {
             streamDetailView.setWatchers(participantsShown);
             if (streamInfo.hasMoreParticipants()) {
                 this.totalWatchers = streamModel.getTotalWatchers();
-                streamDetailView.setTotalWatchers(totalWatchers);
                 streamDetailView.showAllParticipantsButton();
             } else {
                 this.totalWatchers = watchers.size();
-                streamDetailView.setTotalWatchers(totalWatchers);
             }
         }
     }
@@ -221,7 +219,7 @@ public class StreamDetailPresenter implements Presenter {
 
     private void renderFollowingNumber(Integer numberOfFollowing) {
         if (numberOfFollowing > 0) {
-            streamDetailView.setFollowingNumber(numberOfFollowing);
+            streamDetailView.setFollowingNumber(numberOfFollowing, totalWatchers);
         }
     }
     //endregion
