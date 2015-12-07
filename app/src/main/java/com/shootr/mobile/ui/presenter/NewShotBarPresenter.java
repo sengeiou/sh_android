@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.bus.ShotFailed;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
@@ -46,12 +47,15 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     private void checkReadOnlyStatus() {
         getStreamIsReadOnlyInteractor.isStreamReadOnly(idStreamForShot, new Interactor.Callback<Boolean>() {
-            @Override
-            public void onLoaded(Boolean isReadOnly) {
+            @Override public void onLoaded(Boolean isReadOnly) {
                 isStreamReadOnly = isReadOnly;
                 if (isStreamReadOnly) {
                     showReadOnlyError();
                 }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showReadOnlyError();
             }
         });
     }
