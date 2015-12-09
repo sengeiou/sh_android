@@ -167,7 +167,7 @@ public class StreamDetailPresenter implements Presenter {
     public void photoClick() {
         if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
             editStreamPhoto();
-        } else {
+        } else if (streamModel.getPicture() != null) {
             zoomPhoto();
         }
     }

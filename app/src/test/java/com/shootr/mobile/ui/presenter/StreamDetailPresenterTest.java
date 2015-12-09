@@ -31,7 +31,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class StreamDetailPresenterTest {
 
@@ -43,6 +45,7 @@ public class StreamDetailPresenterTest {
     public static final int THREE_WATCHERS = 3;
     public static final String ID_STREAM = "id_stream";
     public static final int NO_WATCHERS = 0;
+    public static final String PICTURE_URL = "picture_url";
 
     private StreamDetailPresenter presenter;
     @Mock GetStreamInfoInteractor streamInfoInteractor;
@@ -89,6 +92,86 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).setFollowingNumber(0, FIFTY_PLUS_WATCHERS);
     }
 
+    @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoIsNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView).showPhotoPicker();
+    }
+
+    @Test public void shouldNotOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallbackWithPhoto();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView, never()).showPhotoPicker();
+    }
+
+    @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView, never()).showPhotoPicker();
+    }
+
+    @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallbackWithPhoto();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView, never()).showPhotoPicker();
+    }
+
+    @Test public void shouldZoomPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallbackWithPhoto();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView).zoomPhoto(PICTURE_URL);
+    }
+
+    @Test public void shouldZoomPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallbackWithPhoto();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView).zoomPhoto(PICTURE_URL);
+
+    }
+
+    @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
+    }
+
+    @Test public void shouldNotZoomPhotoIfIAmAuthorAndPhotoNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+        presenter.photoClick();
+
+        verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
+    }
 
     public void setupStreamInfoCallback() {
         doAnswer(new Answer() {
@@ -96,6 +179,19 @@ public class StreamDetailPresenterTest {
                 GetStreamInfoInteractor.Callback callback =
                   (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(streamInfoWith3Participants());
+                return null;
+            }
+        }).when(streamInfoInteractor).obtainStreamInfo(anyString(),
+          (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    public void setupStreamInfoCallbackWithPhoto() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetStreamInfoInteractor.Callback callback =
+                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(streamInfoWithPhoto());
                 return null;
             }
         }).when(streamInfoInteractor).obtainStreamInfo(anyString(),
@@ -138,6 +234,17 @@ public class StreamDetailPresenterTest {
           .build();
     }
 
+    private StreamInfo streamInfoWithPhoto() {
+        return StreamInfo.builder()
+          .stream(streamWithPhoto())
+          .watchers(watchers())
+          .currentUserWatching(new User())
+          .numberOfFollowing(NO_WATCHERS)
+          .hasMoreParticipants(false)
+          .isDataComplete(true)
+          .build();
+    }
+
     private List<User> watchers() {
         List<User> participants = new ArrayList<>();
         participants.add(user());
@@ -166,6 +273,16 @@ public class StreamDetailPresenterTest {
         stream.setTitle(SELECTED_STREAM_TITLE);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         stream.setTotalWatchers(NO_WATCHERS);
+        return stream;
+    }
+
+    private Stream streamWithPhoto() {
+        Stream stream = new Stream();
+        stream.setId(SELECTED_STREAM_ID);
+        stream.setTitle(SELECTED_STREAM_TITLE);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
+        stream.setTotalWatchers(NO_WATCHERS);
+        stream.setPicture(PICTURE_URL);
         return stream;
     }
 
