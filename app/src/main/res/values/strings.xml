@@ -98,6 +98,7 @@
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
     <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
+    <string name="notification_shot_has_stream_removed_subtitle">Stream you tried to shot has been removed</string>
     <string name="activity_drafts_title">Drafts</string>
     <string name="drafts_empty">No Drafts</string>
     <string name="drawer_friends_title">Friends</string>
