@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.mobile.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,7 +23,13 @@ public class UserCache {
     public List<User> getPeople() {
         List<User> people = userCache.get(GET_PEOPLE);
         Timber.d("getPeople cache %s", people != null ? "valid" : "invalid");
-        return people;
+        if (people != null) {
+            List<User> cachedPeople = new ArrayList<>(people.size());
+            cachedPeople.addAll(people);
+            return cachedPeople;
+        } else {
+            return null;
+        }
     }
 
     public void invalidatePeople() {
