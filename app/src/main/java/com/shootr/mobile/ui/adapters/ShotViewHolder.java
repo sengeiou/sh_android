@@ -47,6 +47,7 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
+    @Bind(R.id.nices_container) View niceContainer;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -186,10 +187,13 @@ public class ShotViewHolder {
 
     private void bindNiceInfo(final ShotModel shot) {
         boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
-        int marginTop = moveNiceButtonUp ? niceMarginNormal : niceMarginNormal;
+        int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
 
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
         lp.setMargins(0, marginTop, 0, 0);
+
+        ViewGroup.MarginLayoutParams lpNiceCountContainer = (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
+        lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin, marginTop, lpNiceCountContainer.rightMargin, lpNiceCountContainer.bottomMargin);
 
         niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
@@ -213,8 +217,7 @@ public class ShotViewHolder {
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount.setVisibility(View.VISIBLE);
-        this.niceCount.setText(view.getResources()
-          .getQuantityString(com.shootr.mobile.R.plurals.nice_count_pattern, niceCount, niceCount));
+        this.niceCount.setText(String.valueOf(niceCount));
     }
 
     private boolean hasLongComment(ShotModel shot) {

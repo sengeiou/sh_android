@@ -100,9 +100,9 @@
     android:layout_height="@dimen/nice_button_size"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
+    android:layout_below="@+id/shot_media_content"
     android:layout_marginRight="44dp"
     android:layout_marginTop="@dimen/nice_button_margin_top_normal"
-    android:layout_below="@+id/shot_media_content"
     android:layout_toLeftOf="@+id/shot_nice_button"
     android:orientation="horizontal">
 
@@ -111,8 +111,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
       android:textColor="@color/gray_60"
-      android:textSize="14sp"
-      tools:text="8 nices" />
+      android:textSize="12sp"
+      tools:text="8" />
 
   </LinearLayout>
 
@@ -120,9 +120,9 @@
     style="@style/NiceButton"
     android:layout_width="@dimen/nice_button_size"
     android:layout_height="@dimen/nice_button_size"
-    android:layout_marginTop="@dimen/nice_button_margin_top_normal"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:layout_below="@+id/shot_media_content"/>
+    android:layout_below="@+id/shot_media_content"
+    android:layout_marginTop="@dimen/nice_button_margin_top_normal" />
 
 </RelativeLayout>
