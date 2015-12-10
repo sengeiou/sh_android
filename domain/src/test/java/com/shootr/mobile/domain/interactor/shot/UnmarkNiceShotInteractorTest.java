@@ -2,7 +2,6 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotType;
-import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -35,6 +34,7 @@ public class UnmarkNiceShotInteractorTest {
 
     @Mock NiceShotRepository niceShotRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
     @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
 
@@ -47,7 +47,7 @@ public class UnmarkNiceShotInteractorTest {
         interactor = new UnmarkNiceShotInteractor(interactorHandler,
           postExecutionThread,
           niceShotRepository,
-          remoteNiceShotRepository, localShotRepository);
+          remoteNiceShotRepository, localShotRepository, remoteShotRepository);
     }
 
     @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {

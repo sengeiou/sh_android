@@ -34,6 +34,7 @@ public class MarkNiceShotInteractorTest {
 
     @Mock NiceShotRepository niceShotRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
     @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
 
@@ -46,7 +47,7 @@ public class MarkNiceShotInteractorTest {
         interactor = new MarkNiceShotInteractor(interactorHandler,
           postExecutionThread,
           niceShotRepository,
-          remoteNiceShotRepository, localShotRepository);
+          remoteNiceShotRepository, localShotRepository, remoteShotRepository);
     }
 
     @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {

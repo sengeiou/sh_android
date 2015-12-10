@@ -19,6 +19,7 @@ public class UnmarkNiceShotInteractor implements Interactor {
     private final NiceShotRepository localNiceShotRepository;
     private final NiceShotRepository remoteNiceShotRepository;
     private final ShotRepository localShotRepository;
+    private final ShotRepository remoteShotRepository;
 
     private String idShot;
     private CompletedCallback completedCallback;
@@ -26,12 +27,13 @@ public class UnmarkNiceShotInteractor implements Interactor {
     @Inject
     public UnmarkNiceShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local NiceShotRepository localNiceShotRepository, @Remote NiceShotRepository remoteNiceShotRepository,
-      @Local ShotRepository localShotRepository) {
+      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localNiceShotRepository = localNiceShotRepository;
         this.remoteNiceShotRepository = remoteNiceShotRepository;
         this.localShotRepository = localShotRepository;
+        this.remoteShotRepository = remoteShotRepository;
     }
 
     public void unmarkNiceShot(String idShot, CompletedCallback completedCallback) {
@@ -52,9 +54,17 @@ public class UnmarkNiceShotInteractor implements Interactor {
 
     private void unmarkNiceInLocal() throws NiceNotMarkedException {
         localNiceShotRepository.unmark(idShot);
-        Shot shot = localShotRepository.getShot(idShot);
+        Shot shot = getShotFromLocalIfExists();
         shot.setNiceCount(shot.getNiceCount() - 1);
         localShotRepository.putShot(shot);
+    }
+
+    private Shot getShotFromLocalIfExists() {
+        Shot shot = localShotRepository.getShot(idShot);
+        if (shot == null) {
+            shot = remoteShotRepository.getShot(idShot);
+        }
+        return shot;
     }
 
     protected void sendUndoNiceToRemote() {
