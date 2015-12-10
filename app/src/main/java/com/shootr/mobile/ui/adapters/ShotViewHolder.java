@@ -195,6 +195,13 @@ public class ShotViewHolder {
         ViewGroup.MarginLayoutParams lpNiceCountContainer = (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
         lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin, marginTop, lpNiceCountContainer.rightMargin, lpNiceCountContainer.bottomMargin);
 
+        Integer nicesCount = shot.getNiceCount();
+        if (nicesCount > 0) {
+            setNiceCount(nicesCount);
+        } else {
+            this.niceCount.setVisibility(View.GONE);
+        }
+
         niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,13 +213,6 @@ public class ShotViewHolder {
                 }
             }
         });
-
-        Integer nicesCount = shot.getNiceCount();
-        if (nicesCount > 0) {
-            setNiceCount(nicesCount);
-        } else {
-            this.niceCount.setVisibility(View.GONE);
-        }
     }
 
     public void setNiceCount(Integer niceCount) {
