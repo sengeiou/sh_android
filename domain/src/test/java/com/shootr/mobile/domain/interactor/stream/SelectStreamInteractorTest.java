@@ -90,10 +90,6 @@ public class SelectStreamInteractorTest {
         verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
     }
 
-    @Test @Ignore public void selectedStreamSavedInLocalIfNotExists() throws Exception {
-        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
-    }
-
     @Test public void selectingCurrentStreamDoesNotifyUi() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
