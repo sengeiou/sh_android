@@ -68,4 +68,7 @@ public interface UserApiService {
 
     @GET("/block/")
     List<BlockEntity> getBlockedIdUsers() throws IOException, ApiException;
+
+    @POST("/ban/{idUser}")
+    Response ban(@Path("idUser") String idBannedUser) throws IOException, ApiException;
 }

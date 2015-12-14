@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.local;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
@@ -56,6 +57,11 @@ public class LocalFollowRepository implements FollowRepository {
         return blockedIds;
     }
 
+    @Override public void ban(String idUser) {
+        BanEntity banEntity = createBan(idUser);
+        followDataSource.ban(banEntity);
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
@@ -72,6 +78,14 @@ public class LocalFollowRepository implements FollowRepository {
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
+        return blockEntity;
+    }
+
+    @NonNull
+    protected BanEntity createBan(String idUser) {
+        BanEntity blockEntity = new BanEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBannedUser(idUser);
         return blockEntity;
     }
 }

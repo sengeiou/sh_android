@@ -123,6 +123,20 @@ public class DatabaseContract {
           ID_USER, ID_BLOCKED_USER };
     }
 
+    public static final class BanTable implements SyncColumns {
+
+        private BanTable() {
+            /* no instances */
+        }
+
+        public static final String TABLE = "Ban";
+        public static final String ID_USER = "idUser";
+        public static final String ID_BANNED_USER = "idBannedUser";
+
+        public static final String[] PROJECTION = {
+          ID_USER, ID_BANNED_USER };
+    }
+
     public static final class DeviceTable {
 
         private DeviceTable() {
