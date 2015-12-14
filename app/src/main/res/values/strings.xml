@@ -261,6 +261,7 @@
     <string name="report_context_menu_block">Block user</string>
     <string name="block_user_error">To block this user you need to unfollow first.</string>
     <string name="user_blocked">User blocked.</string>
+    <string name="user_banned">User banned.</string>
     <string name="user_unblocked">User unblocked.</string>
     <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
     <string name="block_user_dialog_message">Block user?</string>

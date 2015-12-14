@@ -242,6 +242,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         feedbackMessage.showLong(getView(), messageForError);
     }
 
+    @Override public void showUserBanned() {
+        /* no-op */
+    }
+
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
     }

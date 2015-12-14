@@ -595,11 +595,11 @@ public class ProfileFragment extends BaseFragment
         Intents.maybeStartActivity(getActivity(), reportEmailIntent);
     }
 
-    @Override public void showBanUserConfirmation(UserModel userModel) {
+    @Override public void showBanUserConfirmation(final UserModel userModel) {
         new AlertDialog.Builder(getActivity()).setMessage(R.string.ban_user_dialog_message)
           .setPositiveButton(getString(R.string.block_user_dialog_ban), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  reportShotPresenter.confirmBan();
+                  reportShotPresenter.confirmBan(userModel);
               }
           })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
@@ -898,6 +898,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showErrorLong(String messageForError) {
         feedbackMessage.showLong(getView(), messageForError);
+    }
+
+    @Override public void showUserBanned() {
+        feedbackMessage.show(getView(), R.string.user_banned);
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

@@ -27,4 +27,6 @@ public interface ReportShotView {
     void showBlockUserConfirmation();
 
     void showErrorLong(String messageForError);
+
+    void showUserBanned();
 }
