@@ -99,4 +99,6 @@ public interface ProfileView {
     void showReportUserButton();
 
     void goToReportEmail(String currentUserId, String idUser);
+
+    void showBanUserConfirmation(UserModel userModel);
 }

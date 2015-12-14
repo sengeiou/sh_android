@@ -200,9 +200,14 @@ public class ReportShotPresenter implements Presenter {
         reportShotView.showError(errorMessageFactory.getMessageForError(error));
     }
 
+    public void confirmBan() {
+        //TODO BAN USER INTERACTOR
+    }
+
     @Override public void resume() {
         /* no-op */
     }
+
 
     @Override public void pause() {
         /* no-op */

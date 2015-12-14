@@ -283,7 +283,7 @@ public class ProfileFragment extends BaseFragment
                 startActivity(new Intent(this.getActivity(), SupportActivity.class));
                 return true;
             case R.id.menu_profile_block_user:
-                profilePresenter.blockUserClicked();
+                showBlockUserMenu();
                 return true;
             case R.id.menu_profile_unblock_user:
                 profilePresenter.unblockUserClicked();
@@ -595,6 +595,17 @@ public class ProfileFragment extends BaseFragment
         Intents.maybeStartActivity(getActivity(), reportEmailIntent);
     }
 
+    @Override public void showBanUserConfirmation(UserModel userModel) {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.ban_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_ban), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBan();
+              }
+          })
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
+          .create().show();
+    }
+
     @Override public void blockUser(UserModel userModel) {
         reportShotPresenter.blockUserClicked(userModel);
     }
@@ -814,6 +825,19 @@ public class ProfileFragment extends BaseFragment
           .setPositiveButton(getString(R.string.alert_report_confirmed_email_ok), null);
 
         builder.create().show();
+    }
+
+    public void showBlockUserMenu() {
+        new CustomContextMenu.Builder(getActivity()).addAction("Ignore User",
+          new Runnable() {
+              @Override public void run() {
+                  profilePresenter.blockUserClicked();
+              }
+          }).addAction("Cannot Shoot on My Streams", new Runnable() {
+            @Override public void run() {
+                profilePresenter.banUserClicked();
+            }
+        }).show();
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {

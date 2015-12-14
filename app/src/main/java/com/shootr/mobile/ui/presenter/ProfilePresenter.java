@@ -474,6 +474,10 @@ public class ProfilePresenter implements Presenter {
         profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
     }
 
+    public void banUserClicked() {
+        profileView.showBanUserConfirmation(userModel);
+    }
+
     @Override public void resume() {
         if (hasBeenPaused && userModel != null && !uploadingPhoto) {
             refreshProfile();

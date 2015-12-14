@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="title_activity_registration_email">Register with Email</string>
-    
     <string name="facebookID">389647124570169</string>
     <string name="connection_lost">The network connection was lost</string>
-
     <!-- Activity literals -->
     <string name="activity_login_signin">Sign In</string>
     <string name="activity_login_register_email">Register with Email</string>
@@ -30,40 +27,31 @@
     <string name="profile_edit_profile">Edit Profile</string>
     <string name="profile_marks_following">following</string>
     <string name="profile_marks_followers">followers</string>
-
     <!-- Menu names -->
     <string name="menu_info">Friends</string>
     <string name="menu_search_timeline">Search timeline</string>
     <string name="menu_search_friends">Find friends</string>
-
     <!-- Errors -->
     <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-
     <!-- TimeUtils -->
     <string name="minutes">m</string>
     <string name="seconds">s</string>
     <string name="hours">h</string>
     <string name="days">d</string>
     <string name="now">now</string>
-
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
     <string name="activity_find_friends_hint">Find friends</string>
     <string name="activity_find_participants_hint">Find participants</string>
     <string name="activity_find_friends_empty_message">No Results</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
-
     <string name="cancel">Cancel</string>
-
-
     <string name="activity_edit_profile_name_hint">Name</string>
     <string name="activity_edit_profile_username_hint">Username</string>
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_profile_bio_hint">Bio</string>
-
     <string name="photo_edit_take">Camera</string>
     <string name="photo_edit_gallery">Gallery</string>
     <string name="change_photo">Change photo</string>
@@ -118,7 +106,6 @@
     <string name="error_login_credentials_invalid">Id or password are not valid</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
-
     <string name="entered_just_now">Entered just now</string>
     <string name="entered_a_minute_ago">Entered 1 minute ago</string>
     <string name="entered_minutes_ago">Entered %d minutes ago</string>
@@ -127,32 +114,10 @@
     <string name="entered_a_day_ago">Entered 1 day ago</string>
     <string name="entered_days_ago">Entered %d days ago</string>
     <string name="entered_long_time_ago">Entered many days ago</string>
-
     <string name="user_not_found">User not found</string>
-
     <string name="title_activity_reset_password">Reset Password</string>
-
-    <plurals name="listing_favorites">
-        <item quantity="one">
-            %d favorite
-        </item>
-        <item quantity="other">
-            %d favorites
-        </item>
-    </plurals>
-
-    <plurals name="replies_header_count_pattern">
-        <item quantity="one">
-            %d reply
-        </item>
-        <item quantity="other">
-            %d replies
-        </item>
-    </plurals>
-
     <string name="stream_participants_following_number">following %d</string>
     <string name="title_activity_stream_media">Media</string>
-
     <string name="stream_media_empty_title">No photos or videos</string>
     <string name="stream_detail_media">Media</string>
     <string name="stream_detail_edit_menu_title">Edit</string>
@@ -191,15 +156,6 @@
     <string name="remove_stream_label">Remove stream</string>
     <string name="restore_stream_label">Restore stream</string>
     <string name="remove_stream_confirmation">Remove stream?</string>
-
-    <plurals name="nice_count_pattern">
-        <item quantity="one">
-            %d nice
-        </item>
-        <item quantity="other">
-            %d nices
-        </item>
-    </plurals>
     <string name="new_stream_short_title_label">Short title</string>
     <string name="profile_all_shots">All shots</string>
     <string name="title_activity_all_shots">All shots</string>
@@ -208,7 +164,6 @@
     <string name="invite_friends_title">Invite friends</string>
     <string name="invite_friends_button">Invite friends</string>
     <string name="suggested_people_section_title">Who to follow</string>
-
     <string name="profile_support">Support</string>
     <string name="title_activity_support">Support</string>
     <string name="support_version">Version</string>
@@ -273,6 +228,7 @@
     <string name="shared_shot_activity_with_comment">Shared %s\'s shot:&#160;</string>
     <string name="mentioned_shot_activity_with_comment">Mentioned you:&#160;</string>
     <string name="report_context_menu_delete">Delete</string>
+    <string name="report_context_menu_ban_user">Ban User</string>
     <string name="error_deleted_shot">This shot was deleted</string>
     <string name="delete_shot_confirmation_message">Delete shot?</string>
     <string name="menu_save_photo">Save image</string>
@@ -308,7 +264,9 @@
     <string name="user_unblocked">User unblocked.</string>
     <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
     <string name="block_user_dialog_message">Block user?</string>
+    <string name="ban_user_dialog_message">Ban user?</string>
     <string name="block_user_dialog_block">Block</string>
+    <string name="block_user_dialog_ban">Ban</string>
     <string name="block_user_dialog_cancel">Cancel</string>
     <string name="menu_holding_shots">Show holding shots</string>
     <string name="menu_all_shots">Show all shots</string>
@@ -337,6 +295,30 @@
         </item>
         <item quantity="other">
             of %d participants
+        </item>
+    </plurals>
+    <plurals name="nice_count_pattern">
+        <item quantity="one">
+            %d nice
+        </item>
+        <item quantity="other">
+            %d nices
+        </item>
+    </plurals>
+    <plurals name="listing_favorites">
+        <item quantity="one">
+            %d favorite
+        </item>
+        <item quantity="other">
+            %d favorites
+        </item>
+    </plurals>
+    <plurals name="replies_header_count_pattern">
+        <item quantity="one">
+            %d reply
+        </item>
+        <item quantity="other">
+            %d replies
         </item>
     </plurals>
 </resources>
