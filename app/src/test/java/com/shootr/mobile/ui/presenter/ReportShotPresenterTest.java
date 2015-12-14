@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
@@ -46,6 +47,7 @@ public class ReportShotPresenterTest {
     @Mock BlockUserInteractor blockUserInteractor;
     @Mock UnblockUserInteractor unblockUserInteractor;
     @Mock GetFollowingInteractor getFollowingInteractor;
+    @Mock BanUserInteractor banUserInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -54,7 +56,8 @@ public class ReportShotPresenterTest {
         presenter = new ReportShotPresenter(deleteShotInteractor, errorMessageFactory,
           sessionRepository,
           userModelMapper,
-          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor);
+          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
+          banUserInteractor);
         presenter.setView(reportShotView);
     }
 
