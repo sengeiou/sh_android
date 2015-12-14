@@ -27,19 +27,22 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ReportShotPresenterTest {
 
     public static final String ID_USER = "idUser";
+    public static final String ANOTHER_ID_USER = "another_id_user";
     @Mock ReportShotView reportShotView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
-    @Mock DeleteShotInteractor getAllParticipantsInteractor;
-    @Mock ErrorMessageFactory selectStreamInteractor;
-    @Mock SessionRepository followInteractor;
-    @Mock UserModelMapper unfollowInteractor;
-    @Mock GetBlockedIdUsersInteractor errorMessageFactory;
+    @Mock DeleteShotInteractor deleteShotInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock SessionRepository sessionRepository;
+    @Mock UserModelMapper userModelMapper;
+    @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
     @Mock BlockUserInteractor blockUserInteractor;
     @Mock UnblockUserInteractor unblockUserInteractor;
     @Mock GetFollowingInteractor getFollowingInteractor;
@@ -48,7 +51,10 @@ public class ReportShotPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new ReportShotPresenter(getAllParticipantsInteractor, selectStreamInteractor, followInteractor, unfollowInteractor, errorMessageFactory, blockUserInteractor, unblockUserInteractor, getFollowingInteractor);
+        presenter = new ReportShotPresenter(deleteShotInteractor, errorMessageFactory,
+          sessionRepository,
+          userModelMapper,
+          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -82,6 +88,30 @@ public class ReportShotPresenterTest {
         presenter.blockUser(ID_USER);
 
         verify(reportShotView).showError(anyString());
+    }
+
+    @Test public void shouldShowDeleteShotIfUserIsStreamHolder() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+
+        presenter.onShotLongPressed(shotModel(), ID_USER);
+
+        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+    }
+
+    @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+
+        presenter.onShotLongPressed(anotherUserShot(), ANOTHER_ID_USER);
+
+        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+    }
+
+    @Test public void shouldNotShowDeleteShotIfUserIsShotAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+
+        presenter.onShotLongPressed(shotModel(), ID_USER);
+
+        verify(reportShotView, never()).showHolderContextMenu(any(ShotModel.class));
     }
 
     private void setupGetFollowingCallbacksFollowingUser() {
@@ -153,6 +183,12 @@ public class ReportShotPresenterTest {
     private ShotModel shotModel() {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdUser(ID_USER);
+        return shotModel;
+    }
+
+    private ShotModel anotherUserShot() {
+        ShotModel shotModel = new ShotModel();
+        shotModel.setIdUser(ANOTHER_ID_USER);
         return shotModel;
     }
 }

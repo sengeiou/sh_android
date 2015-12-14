@@ -87,4 +87,16 @@ public interface ProfileView {
     void setStreamsCount(Integer streams);
 
     void hideStreamsCount();
+
+    void showBlockUserButton();
+
+    void blockUser(UserModel userModel);
+
+    void showUnblockUserButton();
+
+    void unblockUser(UserModel userModel);
+
+    void showReportUserButton();
+
+    void goToReportEmail(String currentUserId, String idUser);
 }

@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.exception.StreamRemovedException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,6 +35,8 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (ApiException e) {
             if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
                 throw new ShotNotFoundException(e);
+            } else if (e.getErrorInfo() == ErrorInfo.StreamRemovedForbiddenRequestException) {
+                throw new StreamRemovedException(e);
             } else {
                 throw new ServerCommunicationException(e);
             }

@@ -16,7 +16,7 @@ public class CreateUserValidator {
     public static final int FIELD_EMAIL = 1;
     public static final int FIELD_USERNAME = 2;
     public static final int FIELD_PASSWORD = 3;
-    private static final String USERNAME_PATTERN = "^([_A-Za-z0-9])*$";
+    private static final String USERNAME_PATTERN = "^([-_A-Za-z0-9])*$";
     private static final int USERNAME_MINIMUM_LENGTH = 3;
     private static final int USERNAME_MAXIMUM_LENGTH = 25;
     private static final int PASSWORD_MINIMUM_LENGTH = 6;

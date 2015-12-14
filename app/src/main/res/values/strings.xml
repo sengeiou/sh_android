@@ -98,6 +98,7 @@
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
     <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
+    <string name="notification_shot_has_stream_removed_subtitle">Stream you tried to shot has been removed</string>
     <string name="activity_drafts_title">Drafts</string>
     <string name="drafts_empty">No Drafts</string>
     <string name="drawer_friends_title">Friends</string>
@@ -241,6 +242,7 @@
     <string name="share_via">Share via…</string>
     <string name="share_stream_message">Check out %1$s on Shootr: https://shootr.com/st/%2$s</string>
     <string name="share_stream_subject">Check out %s on Shootr</string>
+    <string name="report_user_subject">Report This Account - Issue %1$s - %2$s</string>
     <string name="shared_stream_notification">Stream shared</string>
     <string name="new_activity_notification">New activity</string>
     <string name="no_intent_handler">There are no applications available to handle this action.</string>
@@ -318,4 +320,23 @@
     <string name="intro_streams">Streams</string>
     <string name="main_activity_title">Activity</string>
     <string name="profile_edit_done_button">Done</string>
+    <string name="feedback_email_address">feedback@shootr.com</string>
+    <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
+    <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
+    <plurals name="total_watchers_pattern">
+        <item quantity="one">
+            %d participant
+        </item>
+        <item quantity="other">
+            %d participants
+        </item>
+    </plurals>
+    <plurals name="total_watchers_pattern_with_followings">
+        <item quantity="one">
+            of %d participant
+        </item>
+        <item quantity="other">
+            of %d participants
+        </item>
+    </plurals>
 </resources>

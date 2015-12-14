@@ -47,11 +47,12 @@ public interface StreamDetailView extends DataTransferView {
 
     void showAllParticipantsButton();
 
-    void setFollowingNumber(Integer numberOfFollowing);
+    void setFollowingNumber(Integer numberOfFollowing, Integer totalWatchers);
 
     void showStreamShared();
 
     void shareStreamVia(StreamModel stream);
 
     void goToAllParticipants(String idStream);
+
 }

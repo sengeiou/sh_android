@@ -57,7 +57,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
     private static final String EXTRA_SEARCH_PAGE = "currentPage";
-    public static final String USERNAME_PATTERN = "^([_A-Za-z0-9])*$";
+    public static final String USERNAME_PATTERN = "^([-_A-Za-z0-9])*$";
 
     @Inject ImageLoader imageLoader;
     @Inject InteractorHandler interactorHandler;

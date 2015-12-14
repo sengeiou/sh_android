@@ -19,6 +19,8 @@ public interface IntentFactory {
 
   Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel);
 
+  Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId);
+
   IntentFactory REAL = new IntentFactory() {
     @Override public Intent openUrlIntent(String url) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -73,5 +75,22 @@ public interface IntentFactory {
         .createChooserIntent();
     }
 
+    @Override public Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId) {
+      String adress = launchActivity.getString(R.string.feedback_email_address);
+      String subjectPattern = launchActivity.getString(R.string.report_user_subject);
+      String subject = String.format(subjectPattern, currentUserId, reportedUserId);
+      String defaultMessage = launchActivity.getString(R.string.report_user_default_message);
+
+      Intent intent = new Intent(Intent.ACTION_SENDTO);
+      intent.setType("text/plain");
+      String uriText = "mailto:" + Uri.encode(adress) +
+        "?subject=" + Uri.encode(subject) +
+        "&body=" + Uri.encode(defaultMessage);
+      Uri uri = Uri.parse(uriText);
+      intent.setData(uri);
+      Intent.createChooser(intent, launchActivity.getString(R.string.report_context_menu_report));
+
+      return intent;
+    }
   };
 }

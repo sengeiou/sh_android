@@ -9,12 +9,14 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -24,6 +26,7 @@ import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,6 +73,8 @@ public class ProfilePresenterTest {
     @Mock GetLastShotsInteractor getLastShotsInteractor;
     @Mock UploadUserPhotoInteractor uploadUserPhotoInteractor;
     @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
+    @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+    @Mock SessionRepository sessionRepository;
 
     @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -90,8 +95,7 @@ public class ProfilePresenterTest {
           unfollowInteractor,
           getLastShotsInteractor,
           uploadUserPhotoInteractor,
-          removeUserPhotoInteractor,
-          errorMessageFactory,
+          removeUserPhotoInteractor, getBlockedIdUsersInteractor, sessionRepository, errorMessageFactory,
           userModelMapper,
           shotModelMapper);
         profilePresenter.setView(profileView);
@@ -303,6 +307,55 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView).showLogoutButton();
+    }
+
+    @Test public void shouldShowBlockButtonWhenUserIsNotCurrentUserAndInitializedById() {
+        User user = user();
+        user.setMe(false);
+        setupUserIdInteractorCallbacks(user);
+        setupBlockedIdUsersIdInteractorCallbacks();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showBlockUserButton();
+    }
+
+    @Test public void shouldNotShowBlockButtonWhenUserIsCurrentUserAndInitializedById() {
+        User user = user();
+        user.setMe(true);
+        setupUserIdInteractorCallbacks(user);
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView, never()).showBlockUserButton();
+    }
+
+    @Test public void shouldShowBlockButtonWhenUserIsNotCurrentUserAndInitializedByUsername() {
+        setupUserByUsername();
+        setupBlockedIdUsersIdInteractorCallbacks();
+
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        verify(profileView).showBlockUserButton();
+    }
+
+    @Test public void shouldShowReportButtonWhenUserIsNotCurrentUserAndInitializedByUsername() {
+        setupUserByUsername();
+
+        profilePresenter.initializeWithUsername(profileView, USERNAME);
+
+        verify(profileView).showReportUserButton();
+    }
+
+    @Test public void shouldShowReportButtonWhenUserIsNotCurrentUserAndInitializedById() {
+        User user = user();
+        user.setMe(false);
+        setupUserIdInteractorCallbacks(user);
+        setupBlockedIdUsersIdInteractorCallbacks();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+
+        verify(profileView).showReportUserButton();
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
@@ -777,6 +830,7 @@ public class ProfilePresenterTest {
         user.setCreatedStreamsCount(1L);
         user.setFavoritedStreamsCount(1L);
         user.setVerifiedUser(false);
+        user.setMe(false);
         user.setPhoto("photo");
         return user;
     }
@@ -885,6 +939,20 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getUserByIdInteractor).loadUserById(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupBlockedIdUsersIdInteractorCallbacks() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(idUsers());
+                return null;
+            }
+        }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
+    }
+
+    private List<String> idUsers() {
+        return Arrays.asList("another_id_user");
     }
 
     private User userWithCounts(int createdCount, int favoritedCount) {

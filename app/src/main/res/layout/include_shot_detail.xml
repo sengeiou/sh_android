@@ -21,11 +21,18 @@
           android:focusableInTouchMode="false"
           android:src="@drawable/ic_contact_picture_default" />
 
+        <ImageView android:id="@+id/shot_detail_parent_toggle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:padding="8dp"
+          android:src="@drawable/ic_arrow_down_24_gray50" />
+
         <LinearLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_alignBottom="@+id/shot_detail_avatar"
           android:layout_alignTop="@+id/shot_detail_avatar"
           android:layout_toRightOf="@id/shot_detail_avatar"
+          android:layout_toLeftOf="@id/shot_detail_parent_toggle"
           android:orientation="vertical">
 
             <TextView android:id="@+id/shot_detail_user_name"
@@ -45,12 +52,6 @@
 
         </LinearLayout>
 
-        <ImageView android:id="@+id/shot_detail_parent_toggle"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:padding="8dp"
-          android:src="@drawable/ic_arrow_down_24_gray50" />
     </RelativeLayout>
 
     <TextView android:id="@+id/shot_detail_stream_title"

@@ -301,7 +301,7 @@ public class ListingListPresenterTest {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
         Stream stream = getStream();
         streamSearchResult.setStream(stream);
-        streamSearchResult.setWatchersNumber(1);
+        streamSearchResult.setFollowingWatchersNumber(1);
         return streamSearchResult;
     }
 

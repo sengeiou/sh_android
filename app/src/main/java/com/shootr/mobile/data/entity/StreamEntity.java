@@ -17,6 +17,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Integer removed;
     private List<UserEntity> watchers;
     private Long totalFavorites;
+    private Long totalWatchers;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -150,5 +151,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setTotalFavorites(Long totalFavorites) {
         this.totalFavorites = totalFavorites;
+    }
+
+    public Long getTotalWatchers() {
+        return totalWatchers;
+    }
+
+    public void setTotalWatchers(Long totalWatchers) {
+        this.totalWatchers = totalWatchers;
     }
 }

@@ -701,16 +701,16 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
-        return new CustomContextMenu.Builder(getActivity()).addAction(com.shootr.mobile.R.string.menu_share_shot_via_shootr,
+        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
           new Runnable() {
               @Override public void run() {
                   streamTimelinePresenter.shareShot(shotModel);
               }
-          }).addAction(com.shootr.mobile.R.string.menu_share_shot_via, new Runnable() {
+          }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 shareShotIntent(shotModel);
             }
-        }).addAction(com.shootr.mobile.R.string.menu_copy_text, new Runnable() {
+        }).addAction(R.string.menu_copy_text, new Runnable() {
             @Override public void run() {
                 copyShotCommentToClipboard(shotModel);
             }
@@ -731,7 +731,8 @@ public class StreamTimelineFragment extends BaseFragment
     @OnItemLongClick(com.shootr.mobile.R.id.timeline_shot_list)
     public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
-        reportShotPresenter.onShotLongPressed(shot);
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+        reportShotPresenter.onShotLongPressed(shot, streamAuthorIdUser);
         return true;
     }
 

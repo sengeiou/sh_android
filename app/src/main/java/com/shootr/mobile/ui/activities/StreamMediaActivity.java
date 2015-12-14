@@ -86,7 +86,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     private void checkIfEndOfListVisible() {
         int lastItemPosition = mediaAdapter.getCount() - 1;
         int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
-        if (lastItemPosition == lastVisiblePosition) {
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 1) {
             presenter.showingLastMedia(mediaAdapter.getLastMedia());
         }
     }

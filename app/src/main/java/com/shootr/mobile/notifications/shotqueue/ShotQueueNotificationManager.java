@@ -51,4 +51,10 @@ public class ShotQueueNotificationManager {
           new ShotHasParentDeletedNotification(context, notificationBuilderFactory);
         androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
+
+    public void showShotHasStreamRemovedNotification(QueuedShot shot) {
+        ShotHasStreamRemovedNotification notification =
+          new ShotHasStreamRemovedNotification(context, notificationBuilderFactory);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
+    }
 }

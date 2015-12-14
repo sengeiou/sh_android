@@ -13,6 +13,29 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.1.0] - 2015-12-14
+
+### Changed
+- Welcome Page es scrolleable.
+- Los username pueden permitir guiones.
+- Mejorado el backstack al acceder desde una notificación.
+- Mejoradas las url que se muestran en la app.
+
+### Added
+- Se muestra el número de participants en el detalle del stream.
+- Report user.
+- Block user en el perfil de un usuario.
+- El holder de un stream puede borrar cualquier shot de su stream.
+
+### Fixed
+- No se pisa el username con el toggle en el detalle de un shot.
+- Username y fecha caben completamente en el detalle de un shot.
+- Error al shootar en un stream removed.
+- Concurrent Modification Exception en la caché de people.
+- No se hace zoom en una imagen de stream nula.
+- IndexOutOfBounds en Media.
+
+
 ## [1.0.1] - 2015-11-24
 
 ### Changed

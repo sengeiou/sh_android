@@ -50,7 +50,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private String authorName;
     private String description;
-    private int mediaCount;
 
     private final Set<String> keepFollowButtonIds = new HashSet<>();
     private boolean isAllParticipantsVisible = false;
@@ -77,13 +76,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.description = description;
         if (descriptionViewHolder != null) {
             descriptionViewHolder.setText(description);
-        }
-    }
-
-    public void setMediaCount(int mediaCount) {
-        this.mediaCount = mediaCount;
-        if (mediaViewHolder != null) {
-            mediaViewHolder.setNumber(mediaCount);
         }
     }
 
@@ -169,7 +161,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_MEDIA:
                 mediaViewHolder.setIcon(com.shootr.mobile.R.drawable.ic_action_stream_gallery_gray_24);
                 mediaViewHolder.setName(com.shootr.mobile.R.string.stream_detail_media);
-                mediaViewHolder.setNumber(mediaCount);
                 break;
             case TYPE_PARTICIPANT:
                 UserModel user = participants.get(participantPosition(position));

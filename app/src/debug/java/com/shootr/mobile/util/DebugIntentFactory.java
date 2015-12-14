@@ -45,6 +45,11 @@ public final class DebugIntentFactory implements IntentFactory {
         return createCaptureIntent(baseIntent);
     }
 
+    @Override public Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId) {
+        Intent baseIntent = realIntentFactory.reportEmailIntent(launchActivity, currentUserId, reportedUserId);
+        return createCaptureIntent(baseIntent);
+    }
+
     private Intent createCaptureIntent(Intent baseIntent) {
         if (!captureIntents.get()) {
             return baseIntent;

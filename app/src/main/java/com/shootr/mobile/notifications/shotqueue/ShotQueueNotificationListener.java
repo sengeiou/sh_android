@@ -45,6 +45,11 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
         Timber.e(e, "Shot has parent removed");
     }
 
+    @Override public void onShotHasStreamRemoved(QueuedShot shot, Exception e) {
+        shotQueueNotificationManager.showShotHasStreamRemovedNotification(shot);
+        Timber.e(e, "Shot has stream removed");
+    }
+
     @Override public void onQueueShot(QueuedShot queuedShot) {
         shotQueueNotificationManager.showSendingShotNotification(queuedShot);
     }
