@@ -54,6 +54,14 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.saveBan(banEntity);
     }
 
+    @Override public List<BanEntity> getBanneds() {
+        return followManager.getBans();
+    }
+
+    @Override public void putBanneds(List<BanEntity> banneds) {
+        followManager.saveBansFromServer(banneds);
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();

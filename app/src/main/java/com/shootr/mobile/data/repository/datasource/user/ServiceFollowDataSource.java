@@ -95,6 +95,18 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
+    @Override public List<BanEntity> getBanneds() {
+        try {
+            return userApiService.getBannedIdUsers();
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void putBanneds(List<BanEntity> banneds) {
+        throw new IllegalStateException("Method not valid for service");
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not valid for service");

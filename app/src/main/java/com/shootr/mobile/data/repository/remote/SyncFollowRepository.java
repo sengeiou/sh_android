@@ -101,6 +101,16 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         remoteFollowDataSource.ban(banEntity);
     }
 
+    @Override public List<String> getBannedIdUsers() {
+        List<BanEntity> banneds = remoteFollowDataSource.getBanneds();
+        localFollowDataSource.putBanneds(banneds);
+        List<String> bannedIdUsers = new ArrayList<>(banneds.size());
+        for (BanEntity banned : banneds) {
+            bannedIdUsers.add(banned.getIdBannedUser());
+        }
+        return bannedIdUsers;
+    }
+
     @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();

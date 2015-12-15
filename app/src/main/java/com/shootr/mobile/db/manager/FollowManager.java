@@ -192,4 +192,31 @@ public class FollowManager extends AbstractManager{
               SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
+
+    public void saveBansFromServer(List<BanEntity> banneds) {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (BanEntity banEntity : banneds) {
+                ContentValues contentValues = banMapper.toContentValues(banEntity);
+                database.insertWithOnConflict(BAN_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
+
+    public List<BanEntity> getBans() {
+        List<BanEntity> bans = new ArrayList<>();
+        Cursor c = getReadableDatabase().query(BAN_TABLE, DatabaseContract.BanTable.PROJECTION,null,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                bans.add(banMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return bans;
+    }
 }

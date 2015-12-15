@@ -62,6 +62,15 @@ public class LocalFollowRepository implements FollowRepository {
         followDataSource.ban(banEntity);
     }
 
+    @Override public List<String> getBannedIdUsers() {
+        List<BanEntity> banEntities = followDataSource.getBanneds();
+        List<String> blockedIds = new ArrayList<>();
+        for (BanEntity banEntity : banEntities) {
+            blockedIds.add(banEntity.getIdBannedUser());
+        }
+        return blockedIds;
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();

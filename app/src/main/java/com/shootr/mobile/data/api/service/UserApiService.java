@@ -2,6 +2,7 @@ package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -71,4 +72,7 @@ public interface UserApiService {
 
     @POST("/ban/{idUser}")
     Response ban(@Path("idUser") String idBannedUser) throws IOException, ApiException;
+
+    @GET("/ban/")
+    List<BanEntity> getBannedIdUsers() throws IOException, ApiException;
 }
