@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
@@ -75,9 +76,10 @@ public class ProfilePresenterTest {
     @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
     @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
     @Mock SessionRepository sessionRepository;
+    @Mock GetBannedUsersInteractor getBannedUsersInteractor;
 
     @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
-
+    
     private ProfilePresenter profilePresenter;
     private UserModelMapper userModelMapper;
 
@@ -95,7 +97,9 @@ public class ProfilePresenterTest {
           unfollowInteractor,
           getLastShotsInteractor,
           uploadUserPhotoInteractor,
-          removeUserPhotoInteractor, getBlockedIdUsersInteractor, sessionRepository, errorMessageFactory,
+          removeUserPhotoInteractor, getBlockedIdUsersInteractor,
+          getBannedUsersInteractor,
+          sessionRepository, errorMessageFactory,
           userModelMapper,
           shotModelMapper);
         profilePresenter.setView(profileView);

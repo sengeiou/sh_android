@@ -216,10 +216,14 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
+    public void confirmUnBan(UserModel userModel) {
+        //TODO
+    }
+
+
     @Override public void resume() {
         /* no-op */
     }
-
 
     @Override public void pause() {
         /* no-op */

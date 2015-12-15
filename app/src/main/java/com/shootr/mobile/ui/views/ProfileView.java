@@ -20,8 +20,6 @@ public interface ProfileView {
 
     void showChangePasswordButton();
 
-    void showOpenStream();
-
     void navigateToCreatedStreamDetail(String streamId);
 
     void showShotShared();
@@ -88,11 +86,7 @@ public interface ProfileView {
 
     void hideStreamsCount();
 
-    void showBlockUserButton();
-
     void blockUser(UserModel userModel);
-
-    void showUnblockUserButton();
 
     void unblockUser(UserModel userModel);
 
@@ -101,4 +95,16 @@ public interface ProfileView {
     void goToReportEmail(String currentUserId, String idUser);
 
     void showBanUserConfirmation(UserModel userModel);
+
+    void showBlockUserButton();
+
+    void showDefaultBlockMenu(UserModel userModel);
+
+    void showBlockedMenu(UserModel userModel);
+
+    void showBannedMenu(UserModel userModel);
+
+    void showBlockAndBannedMenu(UserModel userModel);
+
+    void showUnbanUserConfirmation(UserModel userModel);
 }

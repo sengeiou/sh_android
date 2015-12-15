@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
@@ -47,6 +48,7 @@ public class ProfilePresenter implements Presenter {
     private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
     private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
     private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+    private final GetBannedUsersInteractor getBannedUsersInteractor;
     private final SessionRepository sessionRepository;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
@@ -65,7 +67,7 @@ public class ProfilePresenter implements Presenter {
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
-      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
+      GetBannedUsersInteractor getBannedUsersInteractor, SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
       ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
@@ -79,6 +81,7 @@ public class ProfilePresenter implements Presenter {
         this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
         this.removeUserPhotoInteractor = removeUserPhotoInteractor;
         this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
+        this.getBannedUsersInteractor = getBannedUsersInteractor;
         this.sessionRepository = sessionRepository;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
@@ -443,31 +446,53 @@ public class ProfilePresenter implements Presenter {
                     profileView.showChangePasswordButton();
                 } else {
                     profileView.showReportUserButton();
-                    getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
-                        @Override public void onLoaded(List<String> blockedIds) {
-                            if (blockedIds.contains(userModel.getIdUser())) {
-                                profileView.showUnblockUserButton();
-                            } else {
-                                profileView.showBlockUserButton();
-                            }
-                        }
-                    }, new Interactor.ErrorCallback() {
-                        @Override public void onError(ShootrException error) {
-                            showErrorInView(error);
-                        }
-                    });
+                    profileView.showBlockUserButton();
                 }
                 subscriber.onCompleted();
             }
         });
     }
 
-    public void blockUserClicked() {
-        profileView.blockUser(userModel);
+    public void blockMenuClicked() {
+        getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(final List<String> blockedIds) {
+                getBannedUsersInteractor.loadBannedIdUsers(new Interactor.Callback<List<String>>() {
+                    @Override public void onLoaded(List<String> bannedIds) {
+                        handleBlockMenu(bannedIds, blockedIds);
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
+                        showErrorInView(error);
+                    }
+                });
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
+        });
+    }
+
+    private void handleBlockMenu(List<String> bannedIds, List<String> blockedIds) {
+        Boolean isBlocked = blockedIds.contains(userModel.getIdUser());
+        Boolean isBanned = bannedIds.contains(userModel.getIdUser());
+        if (!isBlocked && !isBanned) {
+            profileView.showDefaultBlockMenu(userModel);
+        } else if (isBlocked && !isBanned) {
+            profileView.showBlockedMenu(userModel);
+        } else if (!isBlocked && isBanned) {
+            profileView.showBannedMenu(userModel);
+        } else {
+            profileView.showBlockAndBannedMenu(userModel);
+        }
     }
 
     public void unblockUserClicked() {
         profileView.unblockUser(userModel);
+    }
+
+    public void blockUserClicked() {
+        profileView.blockUser(userModel);
     }
 
     public void reportUserClicked() {
@@ -476,6 +501,10 @@ public class ProfilePresenter implements Presenter {
 
     public void banUserClicked() {
         profileView.showBanUserConfirmation(userModel);
+    }
+
+    public void unbanUserClicked() {
+        profileView.showUnbanUserConfirmation(userModel);
     }
 
     @Override public void resume() {

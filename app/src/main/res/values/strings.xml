@@ -258,7 +258,7 @@
     <string name="stream_timeline_remove_favorite">Remove from favorites</string>
     <string name="showing_shots_by_holder">Showing shots by holder</string>
     <string name="report_context_menu_unblock">Unblock user</string>
-    <string name="report_context_menu_block">Block user</string>
+    <string name="report_context_menu_block">Block user…</string>
     <string name="block_user_error">To block this user you need to unfollow first.</string>
     <string name="user_blocked">User blocked.</string>
     <string name="user_banned">User banned.</string>
@@ -282,6 +282,10 @@
     <string name="feedback_email_address">feedback@shootr.com</string>
     <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
+    <string name="block_ignore_user">Ignore User</string>
+    <string name="block_unblock_user">Unblock User</string>
+    <string name="block_cannot_shoot_streams">Cannot shoot on my streams</string>
+    <string name="can_shoot_streams">Can shoot on my streams</string>
     <plurals name="total_watchers_pattern">
         <item quantity="one">
             %d participant
