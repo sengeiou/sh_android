@@ -266,6 +266,7 @@
     <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
     <string name="block_user_dialog_message">Block user?</string>
     <string name="ban_user_dialog_message">Ban user?</string>
+    <string name="unban_user_dialog_message">Unban user?</string>
     <string name="block_user_dialog_block">Block</string>
     <string name="block_user_dialog_ban">Ban</string>
     <string name="block_user_dialog_cancel">Cancel</string>
@@ -286,6 +287,8 @@
     <string name="block_unblock_user">Unblock User</string>
     <string name="block_cannot_shoot_streams">Cannot shoot on my streams</string>
     <string name="can_shoot_streams">Can shoot on my streams</string>
+    <string name="user_unbanned">User unbanned.</string>
+    <string name="block_user_dialog_unban">Unban</string>
     <plurals name="total_watchers_pattern">
         <item quantity="one">
             %d participant

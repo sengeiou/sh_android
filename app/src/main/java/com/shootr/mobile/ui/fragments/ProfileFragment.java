@@ -642,8 +642,8 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showUnbanUserConfirmation(final UserModel userModel) {
-        new AlertDialog.Builder(getActivity()).setMessage(R.string.ban_user_dialog_message)
-          .setPositiveButton(getString(R.string.block_user_dialog_ban), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.unban_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_unban), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   reportShotPresenter.confirmUnBan(userModel);
               }
@@ -926,6 +926,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserBanned() {
         feedbackMessage.show(getView(), R.string.user_banned);
+    }
+
+    @Override public void showUserUnbanned() {
+        feedbackMessage.show(getView(), R.string.user_unbanned);
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

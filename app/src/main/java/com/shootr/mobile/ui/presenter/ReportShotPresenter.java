@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -29,6 +30,7 @@ public class ReportShotPresenter implements Presenter {
     private final UnblockUserInteractor unblockUserInteractor;
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
+    private final UnbanUserInteractor unbanUserInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
@@ -37,7 +39,7 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor) {
+      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -47,6 +49,7 @@ public class ReportShotPresenter implements Presenter {
         this.unblockUserInteractor = unblockUserInteractor;
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
+        this.unbanUserInteractor = unbanUserInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -217,7 +220,15 @@ public class ReportShotPresenter implements Presenter {
     }
 
     public void confirmUnBan(UserModel userModel) {
-        //TODO
+        unbanUserInteractor.unban(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                reportShotView.showUserUnbanned();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
 

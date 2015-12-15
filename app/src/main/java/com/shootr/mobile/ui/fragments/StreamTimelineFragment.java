@@ -588,6 +588,10 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
     }
 
+    @Override public void showUserUnbanned() {
+        /* no-op */
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();

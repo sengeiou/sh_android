@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
@@ -48,6 +49,7 @@ public class ReportShotPresenterTest {
     @Mock UnblockUserInteractor unblockUserInteractor;
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
+    @Mock UnbanUserInteractor unbanUserInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -57,7 +59,7 @@ public class ReportShotPresenterTest {
           sessionRepository,
           userModelMapper,
           getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
-          banUserInteractor);
+          banUserInteractor, unbanUserInteractor);
         presenter.setView(reportShotView);
     }
 

@@ -29,4 +29,6 @@ public interface ReportShotView {
     void showErrorLong(String messageForError);
 
     void showUserBanned();
+
+    void showUserUnbanned();
 }

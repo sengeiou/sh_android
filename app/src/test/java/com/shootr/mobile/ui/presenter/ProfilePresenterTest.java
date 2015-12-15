@@ -79,7 +79,7 @@ public class ProfilePresenterTest {
     @Mock GetBannedUsersInteractor getBannedUsersInteractor;
 
     @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
-    
+
     private ProfilePresenter profilePresenter;
     private UserModelMapper userModelMapper;
 
