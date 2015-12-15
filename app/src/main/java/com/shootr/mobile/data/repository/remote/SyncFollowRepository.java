@@ -111,6 +111,10 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         return bannedIdUsers;
     }
 
+    @Override public void unban(String idUser) {
+        remoteFollowDataSource.unban(idUser);
+    }
+
     @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();

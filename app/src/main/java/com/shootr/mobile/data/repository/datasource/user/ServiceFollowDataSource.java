@@ -107,6 +107,14 @@ public class ServiceFollowDataSource implements FollowDataSource {
         throw new IllegalStateException("Method not valid for service");
     }
 
+    @Override public void unban(String idUser) {
+        try {
+            userApiService.unban(idUser);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not valid for service");

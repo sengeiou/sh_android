@@ -219,4 +219,10 @@ public class FollowManager extends AbstractManager{
         c.close();
         return bans;
     }
+
+    public long deleteBan(String currentUserId, String idUser) {
+        String whereClause = ID_BANNED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{idUser, currentUserId};
+        return getWritableDatabase().delete(BAN_TABLE, whereClause, whereArgs);
+    }
 }

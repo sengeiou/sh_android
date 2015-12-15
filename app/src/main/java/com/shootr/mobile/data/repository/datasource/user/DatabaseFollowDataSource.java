@@ -62,6 +62,10 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.saveBansFromServer(banneds);
     }
 
+    @Override public void unban(String idUser) {
+        followManager.deleteBan(sessionRepository.getCurrentUserId(), idUser);
+    }
+
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();

@@ -75,4 +75,7 @@ public interface UserApiService {
 
     @GET("/ban/")
     List<BanEntity> getBannedIdUsers() throws IOException, ApiException;
+
+    @DELETE("/ban/{idUser}")
+    Response unban(@Path("idUser") String idUser) throws IOException, ApiException;
 }

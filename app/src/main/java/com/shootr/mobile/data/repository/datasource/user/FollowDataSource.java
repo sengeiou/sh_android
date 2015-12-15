@@ -28,4 +28,6 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     List<BanEntity> getBanneds();
 
     void putBanneds(List<BanEntity> banneds);
+
+    void unban(String idUser);
 }

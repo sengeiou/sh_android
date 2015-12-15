@@ -71,6 +71,10 @@ public class LocalFollowRepository implements FollowRepository {
         return blockedIds;
     }
 
+    @Override public void unban(String idUser) {
+        followDataSource.unban(idUser);
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
