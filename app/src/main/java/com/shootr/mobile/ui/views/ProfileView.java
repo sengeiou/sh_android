@@ -106,5 +106,5 @@ public interface ProfileView {
 
     void showBlockAndBannedMenu(UserModel userModel);
 
-    void showUnbanUserConfirmation(UserModel userModel);
+    void confirmUnban(UserModel userModel);
 }

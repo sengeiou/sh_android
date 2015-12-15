@@ -767,7 +767,7 @@ public class ProfilePresenterTest {
     @Test public void shouldShowUnbanConfirmationWhenUnbanClicked() throws Exception {
         profilePresenter.unbanUserClicked();
 
-        verify(profileView).showUnbanUserConfirmation(any(UserModel.class));
+        verify(profileView).confirmUnban(any(UserModel.class));
     }
 
     @Test public void shouldshowDefaultBlockMenuIfUserNotBlockedNorBanned() throws Exception {

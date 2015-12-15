@@ -641,15 +641,8 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showUnbanUserConfirmation(final UserModel userModel) {
-        new AlertDialog.Builder(getActivity()).setMessage(R.string.unban_user_dialog_message)
-          .setPositiveButton(getString(R.string.block_user_dialog_unban), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  reportShotPresenter.confirmUnBan(userModel);
-              }
-          })
-          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-          .create().show();
+    @Override public void confirmUnban(final UserModel userModel) {
+        reportShotPresenter.confirmUnBan(userModel);
     }
 
     @Override public void blockUser(UserModel userModel) {

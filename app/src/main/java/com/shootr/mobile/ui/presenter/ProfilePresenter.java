@@ -531,7 +531,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void unbanUserClicked() {
-        profileView.showUnbanUserConfirmation(userModel);
+        profileView.confirmUnban(userModel);
     }
 
     @Override public void resume() {
