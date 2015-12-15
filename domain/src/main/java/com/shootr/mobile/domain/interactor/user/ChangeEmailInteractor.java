@@ -11,13 +11,14 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.EmailInUseException;
 import com.shootr.mobile.domain.service.EmailIsAuthenticatedException;
 import com.shootr.mobile.domain.service.InsufficientAuthenticationException;
+import com.shootr.mobile.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
 public class ChangeEmailInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final com.shootr.mobile.domain.service.user.ShootrUserService shootrUserService;
+    private final ShootrUserService shootrUserService;
 
     private String email;
     private CompletedCallback callback;

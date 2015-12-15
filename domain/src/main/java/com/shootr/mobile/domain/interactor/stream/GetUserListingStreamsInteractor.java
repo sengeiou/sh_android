@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.Listing;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -80,7 +81,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
             Listing listing = getListing(favoriteStreams, holdingStreamResults);
 
             notifyLoaded(listing);
-        } catch (com.shootr.mobile.domain.exception.ShootrException error) {
+        } catch (ShootrException error) {
             /* swallow error */
         }
     }
