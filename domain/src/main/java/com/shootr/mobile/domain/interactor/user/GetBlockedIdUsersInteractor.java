@@ -49,7 +49,7 @@ public class GetBlockedIdUsersInteractor implements Interactor {
         if (blockedIdUsers == null) {
             loadRemoteBlockedIdUsers();
         } else {
-            loadRemoteBlockedIdUsers();
+            notifyResult(blockedIdUsers);
         }
     }
 
