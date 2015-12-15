@@ -725,7 +725,7 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldShowStreamsCountIfUserHasCreatedStreams() throws Exception {
-        setupUserWithStreams(1,0);
+        setupUserWithStreams(1, 0);
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
@@ -733,7 +733,7 @@ public class ProfilePresenterTest {
     }
 
     @Test public void shouldShowStreamsCountIfUserHasCreatedAndFavoritedStreams() throws Exception {
-        setupUserWithStreams(1,1);
+        setupUserWithStreams(1, 1);
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
@@ -756,6 +756,127 @@ public class ProfilePresenterTest {
         profilePresenter.confirmUnfollow();
 
         verify(profileView).setUserInfo(any(UserModel.class));
+    }
+
+    @Test public void shouldShowBanConfirmationWhenBanClicked() throws Exception {
+        profilePresenter.banUserClicked();
+
+        verify(profileView).showBanUserConfirmation(any(UserModel.class));
+    }
+
+    @Test public void shouldShowUnbanConfirmationWhenUnbanClicked() throws Exception {
+        profilePresenter.unbanUserClicked();
+
+        verify(profileView).showUnbanUserConfirmation(any(UserModel.class));
+    }
+
+    @Test public void shouldshowDefaultBlockMenuIfUserNotBlockedNorBanned() throws Exception {
+        setupUserById();
+        setupUserNotInBlockedIdsCallback();
+        setupUserNotInBannedIdsCallback();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.blockMenuClicked();
+
+        verify(profileView).showDefaultBlockMenu(any(UserModel.class));
+    }
+
+    @Test public void shouldshowBlockedMenuIfUserBlockedButNotBanned() throws Exception {
+        setupUserById();
+        setupUserInBlockedIdsCallback();
+        setupUserNotInBannedIdsCallback();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.blockMenuClicked();
+
+        verify(profileView).showBlockedMenu(any(UserModel.class));
+    }
+
+    @Test public void shouldshowBannedMenuIfUserNotBlockedButBanned() throws Exception {
+        setupUserById();
+        setupUserNotInBlockedIdsCallback();
+        setupUserInBannedIdsCallback();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.blockMenuClicked();
+
+        verify(profileView).showBannedMenu(any(UserModel.class));
+    }
+
+    @Test public void shouldshowBlockAndBannedMenuIfUserBlockedAndBanned() throws Exception {
+        setupUserById();
+        setupUserInBlockedIdsCallback();
+        setupUserInBannedIdsCallback();
+
+        profilePresenter.initializeWithIdUser(profileView, ID_USER);
+        profilePresenter.blockMenuClicked();
+
+        verify(profileView).showBlockAndBannedMenu(any(UserModel.class));
+    }
+
+    private void setupUserInBannedIdsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> completedCallback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                completedCallback.onLoaded(bannedIdsWithUser());
+                return null;
+            }
+        }).when(getBannedUsersInteractor).loadBannedIdUsers(anyCallback(), anyErrorCallback());
+    }
+
+    public void setupUserNotInBannedIdsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> completedCallback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                completedCallback.onLoaded(bannedIds());
+                return null;
+            }
+        }).when(getBannedUsersInteractor).loadBannedIdUsers(anyCallback(), anyErrorCallback());
+    }
+
+    private void setupUserInBlockedIdsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> completedCallback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                completedCallback.onLoaded(blockedIdsWithUser());
+                return null;
+            }
+        }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
+
+    }
+
+    public void setupUserNotInBlockedIdsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> completedCallback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                completedCallback.onLoaded(blockedIds());
+                return null;
+            }
+        }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
+    }
+
+    private List<String> bannedIdsWithUser() {
+        ArrayList<String> userIds = new ArrayList<>();
+        userIds.add(ID_USER);
+        return userIds;
+    }
+
+    private List<String> bannedIds() {
+        return new ArrayList<>();
+    }
+
+    private List<String> blockedIdsWithUser() {
+        ArrayList<String> userIds = new ArrayList<>();
+        userIds.add(ID_USER);
+        return userIds;
+    }
+
+    private List<String> blockedIds() {
+        return new ArrayList<>();
     }
 
     public void setupFollowCallback() {
