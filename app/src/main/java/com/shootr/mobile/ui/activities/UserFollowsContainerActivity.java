@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import com.shootr.mobile.R;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
+import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
@@ -78,8 +78,8 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setScreenTitle() {
-        String title = followType.equals(GetUsersFollowsJob.FOLLOWERS) ? getString(com.shootr.mobile.R.string.activity_followers_title) : getString(
-          com.shootr.mobile.R.string.activity_following_title);
+        String title = followType.equals(UserFollowingRelationship.FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(
+          R.string.activity_following_title);
         getSupportActionBar().setTitle(title);
     }
 

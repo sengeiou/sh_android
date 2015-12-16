@@ -108,6 +108,14 @@ public class UserFollowsPresenterTest {
         verify(userFollowsView).setEmpty(true);
     }
 
+    @Test public void shouldShowNoFollowingIfTheresNoFollowing() throws Exception {
+        setupEmptyGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+
+        verify(userFollowsView).showNoFollowing();
+    }
+
     @Test public void shouldCallGetFollowersInteractorIfObtainingFollowingUsers() throws Exception {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
 
@@ -161,6 +169,14 @@ public class UserFollowsPresenterTest {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
 
         verify(userFollowsView).setEmpty(true);
+    }
+
+    @Test public void shouldShowNoFollowersIfTheresNoFollowers() throws Exception {
+        setupEmptyGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).showNoFollowers();
     }
 
     @Test public void shouldUpdateFollowWhenClickOnFollowUser() throws Exception {

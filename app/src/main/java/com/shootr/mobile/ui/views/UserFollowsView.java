@@ -16,4 +16,8 @@ public interface UserFollowsView {
     void updateFollow(String idUser, Boolean following);
 
     void showUserBlockedError();
+
+    void showNoFollowers();
+
+    void showNoFollowing();
 }

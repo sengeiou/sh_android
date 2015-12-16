@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
@@ -98,13 +97,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setEmptyMessage();
         userlistListView.setAdapter(getAdapter());
-    }
-
-    private void setEmptyMessage() {
-        emptyTextView.setText(followType.equals(GetUsersFollowsJob.FOLLOWERS) ? R.string.follower_list_empty
-          : R.string.following_list_empty);
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
@@ -195,6 +188,14 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void showUserBlockedError() {
         feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
+    }
+
+    @Override public void showNoFollowers() {
+        emptyTextView.setText(R.string.follower_list_empty);
+    }
+
+    @Override public void showNoFollowing() {
+        emptyTextView.setText(R.string.following_list_empty);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

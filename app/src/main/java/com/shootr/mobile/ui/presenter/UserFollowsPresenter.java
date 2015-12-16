@@ -92,8 +92,17 @@ public class UserFollowsPresenter implements Presenter {
     public void handleUsersInView(List<User> users) {
         if (users.isEmpty()) {
             userFollowsView.setEmpty(true);
+            handleEmptyMessageInView();
         } else {
             userFollowsView.showUsers(userModelMapper.transform(users));
+        }
+    }
+
+    public void handleEmptyMessageInView() {
+        if (followType == FOLLOWERS) {
+            userFollowsView.showNoFollowers();
+        } else {
+            userFollowsView.showNoFollowing();
         }
     }
 
