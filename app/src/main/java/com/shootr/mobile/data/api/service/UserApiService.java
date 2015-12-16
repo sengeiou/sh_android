@@ -28,10 +28,10 @@ public interface UserApiService {
     UserEntity getUserByUsername(@Query("userName") String username) throws IOException, ApiException;
 
     @GET("/user/{idUser}/following?includeLinks=false&includeEmbed=false")
-    List<UserEntity> getFollowing(@Path("idUser") String idUser) throws IOException, ApiException;
+    List<UserEntity> getFollowing(@Path("idUser") String idUser, @Query("page") Integer page) throws IOException, ApiException;
 
     @GET("/user/{idUser}/followers?includeLinks=false&includeEmbed=false")
-    List<UserEntity> getFollowers(@Path("idUser") String idUser) throws IOException, ApiException;
+    List<UserEntity> getFollowers(@Path("idUser") String idUser, @Query("page") Integer page) throws IOException, ApiException;
 
     @GET("/user/streamParticipants/{idStream}")
     List<UserEntity> getAllParticipants(@Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;

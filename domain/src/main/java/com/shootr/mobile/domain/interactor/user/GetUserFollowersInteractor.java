@@ -25,6 +25,7 @@ public class GetUserFollowersInteractor implements Interactor {
     private String idUser;
     private Callback<List<User>> callback;
     private ErrorCallback errorCallback;
+    private Integer page;
 
     @Inject public GetUserFollowersInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
@@ -36,8 +37,9 @@ public class GetUserFollowersInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void obtainFollowers(String idUser, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainFollowers(String idUser, Integer page, Callback<List<User>> callback, ErrorCallback errorCallback) {
         this.idUser = idUser;
+        this.page = page;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -49,7 +51,7 @@ public class GetUserFollowersInteractor implements Interactor {
 
     private void obtainFollowers() {
         try {
-            List<User> usersFollowers = remoteUserRepository.getFollowers(idUser);
+            List<User> usersFollowers = remoteUserRepository.getFollowers(idUser, page);
             String currentUserId = sessionRepository.getCurrentUserId();
             List<User> currentUserFollowing = localUserRepository.getPeople();
             List<User> followers = setRelationshipInUsers(usersFollowers, currentUserId, currentUserFollowing);

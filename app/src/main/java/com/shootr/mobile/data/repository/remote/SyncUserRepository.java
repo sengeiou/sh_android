@@ -75,7 +75,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         List<User> people = userCache.getPeople();
         if (people == null) {
             List<UserEntity> remotePeopleEntities =
-              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), 0);
             savePeopleInLocal(remotePeopleEntities);
             people = transformUserEntitiesForPeople(remotePeopleEntities);
             userCache.putPeople(people);
@@ -196,12 +196,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         }
     }
 
-    @Override public List<User> getFollowing(String idUser) {
-        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowing(idUser));
+    @Override public List<User> getFollowing(String idUser, Integer page) {
+        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowing(idUser, page));
     }
 
-    @Override public List<User> getFollowers(String idUser) {
-        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowers(idUser));
+    @Override public List<User> getFollowers(String idUser, Integer page) {
+        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowers(idUser, page));
     }
 
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {

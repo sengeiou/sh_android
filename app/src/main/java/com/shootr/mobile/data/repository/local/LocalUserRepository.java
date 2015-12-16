@@ -40,7 +40,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getPeople() {
-        List<UserEntity> userEntities = localUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+        List<UserEntity> userEntities = localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), 0);
         return transformUserEntitiesForPeople(userEntities);
     }
 
@@ -90,11 +90,11 @@ public class LocalUserRepository implements UserRepository {
         localUserDataSource.updateWatch(entity);
     }
 
-    @Override public List<User> getFollowing(String idUser) {
+    @Override public List<User> getFollowing(String idUser, Integer page) {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
-    @Override public List<User> getFollowers(String idUser) {
+    @Override public List<User> getFollowers(String idUser, Integer page) {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 

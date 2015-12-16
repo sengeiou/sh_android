@@ -29,6 +29,7 @@ public class UserFollowsPresenter implements Presenter {
     private String userId;
     private Integer followType;
     private Integer page;
+    private boolean isInLastPage = false;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
       GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
@@ -63,7 +64,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     private void getFollowingUsers() {
-        getUserFollowingInteractor.obtainFollowing(userId, new Interactor.Callback<List<User>>() {
+        getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 userFollowsView.setLoadingView(false);
                 handleUsersInView(users);
@@ -77,7 +78,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     private void getFollowerUsers() {
-        getUserFollowersInteractor.obtainFollowers(userId, new Interactor.Callback<List<User>>() {
+        getUserFollowersInteractor.obtainFollowers(userId, page, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 userFollowsView.setLoadingView(false);
                 handleUsersInView(users);
@@ -128,40 +129,57 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     public void makeNextRemoteSearch() {
-        //TODO handle loading
         page++;
         userFollowsView.showProgressView();
-        if(showingFollowers()) {
-            getUserFollowersInteractor.obtainFollowers(userId, new Interactor.Callback<List<User>>() {
-                @Override public void onLoaded(List<User> users) {
-                    List<UserModel> olderUsers = userModelMapper.transform(users);
-                    if (!olderUsers.isEmpty()) {
-                        userFollowsView.renderUsersBelow(olderUsers);
-                    } else {
-                        userFollowsView.hideProgressView();
-                    }
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    userFollowsView.showError(errorMessageFactory.getMessageForError(error));
-                }
-            });
+        if (!isInLastPage) {
+            handleNextRemoteSearch();
         } else {
-            getUserFollowingInteractor.obtainFollowing(userId, new Interactor.Callback<List<User>>() {
-                @Override public void onLoaded(List<User> users) {
-                    List<UserModel> olderUsers = userModelMapper.transform(users);
-                    if (!olderUsers.isEmpty()) {
-                        userFollowsView.renderUsersBelow(olderUsers);
-                    } else {
-                        userFollowsView.hideProgressView();
-                    }
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    userFollowsView.showError(errorMessageFactory.getMessageForError(error));
-                }
-            });
+            userFollowsView.hideProgressView();
         }
+    }
+
+    public void handleNextRemoteSearch() {
+        if(showingFollowers()) {
+            nextFollowersSearch();
+        } else {
+            nextFollowingSearch();
+        }
+    }
+
+    public void nextFollowingSearch() {
+        getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> olderUsers = userModelMapper.transform(users);
+                if (!olderUsers.isEmpty()) {
+                    userFollowsView.renderUsersBelow(olderUsers);
+                } else {
+                    isInLastPage = true;
+                }
+                userFollowsView.hideProgressView();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void nextFollowersSearch() {
+        getUserFollowersInteractor.obtainFollowers(userId, page, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> olderUsers = userModelMapper.transform(users);
+                if (!olderUsers.isEmpty()) {
+                    userFollowsView.renderUsersBelow(olderUsers);
+                } else {
+                    isInLastPage = true;
+                }
+                userFollowsView.hideProgressView();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
     public boolean showingFollowers() {

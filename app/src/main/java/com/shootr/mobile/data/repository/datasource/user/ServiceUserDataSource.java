@@ -25,9 +25,9 @@ public class ServiceUserDataSource implements UserDataSource {
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId) {
+    @Override public List<UserEntity> getFollowing(String userId, Integer page) {
         try {
-            return userApiService.getFollowing(userId);
+            return userApiService.getFollowing(userId, page);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
@@ -109,9 +109,9 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getFollowers(String idUser) {
+    @Override public List<UserEntity> getFollowers(String idUser, Integer page) {
         try {
-            return userApiService.getFollowers(idUser);
+            return userApiService.getFollowers(idUser, page);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

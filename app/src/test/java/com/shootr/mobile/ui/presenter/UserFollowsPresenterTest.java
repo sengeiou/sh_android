@@ -24,6 +24,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -57,6 +58,7 @@ public class UserFollowsPresenterTest {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
 
         verify(getUserFollowingInteractor).obtainFollowing(anyString(),
+          anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -120,6 +122,7 @@ public class UserFollowsPresenterTest {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
 
         verify(getUserFollowersInteractor).obtainFollowers(anyString(),
+          anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -203,6 +206,96 @@ public class UserFollowsPresenterTest {
         verify(userFollowsView).updateFollow(anyString(), anyBoolean());
     }
 
+    @Test public void shouldShowLoadingWhenLoadingMoreFollowings() throws Exception {
+        setupGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).showProgressView();
+    }
+
+    @Test public void shouldShowLoadingWhenLoadingMoreFollowers() throws Exception {
+        setupGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).showProgressView();
+    }
+
+    @Test public void shouldShowUsersWhenLoadingMoreFollowings() throws Exception {
+        setupGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).showUsers(any(List.class));
+    }
+
+    @Test public void shouldShowUsersWhenLoadingMoreFollowers() throws Exception {
+        setupGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).showUsers(any(List.class));
+    }
+
+    @Test public void shouldShowEmptyWhenLoadingMoreFollowingsReturnsEmpty() throws Exception {
+        setupEmptyGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).setEmpty(true);
+    }
+
+    @Test public void shouldShowEmptyWhenLoadingMoreFollowersReturnsEmpty() throws Exception {
+        setupEmptyGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).setEmpty(true);
+    }
+
+    @Test public void shouldHideLoadingWhenLoadingMoreFollowings() throws Exception {
+        setupGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).hideProgressView();
+    }
+
+    @Test public void shouldHideLoadingWhenLoadingMoreFollowers() throws Exception {
+        setupGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).hideProgressView();
+    }
+
+    @Test public void shouldHideLoadingWhenLoadingMoreFollowingsReturnsEmpty() throws Exception {
+        setupEmptyGetFollowingUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).hideProgressView();
+    }
+
+    @Test public void shouldHideLoadingWhenLoadingMoreFollowersReturnsEmpty() throws Exception {
+        setupEmptyGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+        presenter.makeNextRemoteSearch();
+
+        verify(userFollowsView).hideProgressView();
+    }
+
     public void setupUnfollowCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -244,11 +337,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[2];
                 callback.onLoaded(new ArrayList<User>());
                 return null;
             }
-        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(), anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -257,11 +350,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[2];
                 callback.onLoaded(users());
                 return null;
             }
-        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(), anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -270,11 +363,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback =
-                  (Interactor.ErrorCallback) invocation.getArguments()[2];
+                  (Interactor.ErrorCallback) invocation.getArguments()[3];
                 errorCallback.onError(any(ShootrException.class));
                 return null;
             }
-        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(), anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -283,12 +376,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[2];
                 callback.onLoaded(new ArrayList<User>());
                 return null;
             }
-        }).when(getUserFollowingInteractor).obtainFollowing(anyString(),
-          any(Interactor.Callback.class),
+        }).when(getUserFollowingInteractor).obtainFollowing(anyString(), anyInt(), any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
 
@@ -296,11 +388,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback =
-                  (Interactor.ErrorCallback) invocation.getArguments()[2];
+                  (Interactor.ErrorCallback) invocation.getArguments()[3];
                 errorCallback.onError(any(ShootrException.class));
                 return null;
             }
-        }).when(getUserFollowingInteractor).obtainFollowing(anyString(), any(Interactor.Callback.class),
+        }).when(getUserFollowingInteractor).obtainFollowing(anyString(), anyInt(), any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
 
@@ -308,12 +400,11 @@ public class UserFollowsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[2];
                 callback.onLoaded(users());
                 return null;
             }
-        }).when(getUserFollowingInteractor).obtainFollowing(anyString(),
-          any(Interactor.Callback.class),
+        }).when(getUserFollowingInteractor).obtainFollowing(anyString(), anyInt(), any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
 
