@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 public class UserFollowsPresenter implements Presenter {
 
-    public static final int FOLLOWING = 1;
     public static final int FOLLOWERS = 0;
 
     private final GetUserFollowingInteractor getUserFollowingInteractor;
@@ -29,6 +28,7 @@ public class UserFollowsPresenter implements Presenter {
     private UserFollowsView userFollowsView;
     private String userId;
     private Integer followType;
+    private Integer page;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
       GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
@@ -47,6 +47,7 @@ public class UserFollowsPresenter implements Presenter {
 
     public void initialize(UserFollowsView userFollowsView, String userId, Integer followType) {
         setView(userFollowsView);
+        this.page = 0;
         this.userId = userId;
         this.followType = followType;
         retrieveUsers();
@@ -99,7 +100,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     public void handleEmptyMessageInView() {
-        if (followType == FOLLOWERS) {
+        if (showingFollowers()) {
             userFollowsView.showNoFollowers();
         } else {
             userFollowsView.showNoFollowing();
@@ -124,6 +125,47 @@ public class UserFollowsPresenter implements Presenter {
                 userFollowsView.updateFollow(user.getIdUser(), false);
             }
         });
+    }
+
+    public void makeNextRemoteSearch() {
+        //TODO handle loading
+        page++;
+        userFollowsView.showProgressView();
+        if(showingFollowers()) {
+            getUserFollowersInteractor.obtainFollowers(userId, new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    List<UserModel> olderUsers = userModelMapper.transform(users);
+                    if (!olderUsers.isEmpty()) {
+                        userFollowsView.renderUsersBelow(olderUsers);
+                    } else {
+                        userFollowsView.hideProgressView();
+                    }
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+                }
+            });
+        } else {
+            getUserFollowingInteractor.obtainFollowing(userId, new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    List<UserModel> olderUsers = userModelMapper.transform(users);
+                    if (!olderUsers.isEmpty()) {
+                        userFollowsView.renderUsersBelow(olderUsers);
+                    } else {
+                        userFollowsView.hideProgressView();
+                    }
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+                }
+            });
+        }
+    }
+
+    public boolean showingFollowers() {
+        return followType == FOLLOWERS;
     }
 
     @Override public void resume() {

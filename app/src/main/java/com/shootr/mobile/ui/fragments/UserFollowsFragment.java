@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
+import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -36,6 +37,8 @@ public class UserFollowsFragment extends BaseFragment
 
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
+
+    private Boolean isFooterLoading = false;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
@@ -51,6 +54,8 @@ public class UserFollowsFragment extends BaseFragment
     Integer followType;
 
     private UserListAdapter userListAdapter;
+    private View progressView;
+    private View progressViewContent;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -93,7 +98,29 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        progressView = getLoadingView();
+        progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
+
         userList.setAdapter(getAdapter());
+        new ListViewScrollObserver(userList).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                /* no-op */
+            }
+
+            @Override public void onScrollIdle() {
+                int lastVisiblePosition = userList.getLastVisiblePosition();
+                int loadingFooterPosition = userList.getAdapter().getCount() - 1;
+                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                if (shouldStartLoadingMore && !isFooterLoading) {
+                    userFollowsPresenter.makeNextRemoteSearch();
+                }
+            }
+        });
+    }
+
+    private View getLoadingView() {
+        return LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, userList, false);
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
@@ -188,6 +215,21 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void showNoFollowing() {
         emptyTextView.setText(R.string.following_list_empty);
+    }
+
+    @Override public void showProgressView() {
+        isFooterLoading = true;
+        userList.addFooterView(progressView, null, false);
+    }
+
+    @Override public void hideProgressView() {
+        isFooterLoading = false;
+        userList.removeFooterView(progressView);
+    }
+
+    @Override public void renderUsersBelow(List<UserModel> olderUsers) {
+        getAdapter().addItems(olderUsers);
+        getAdapter().notifyDataSetChanged();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

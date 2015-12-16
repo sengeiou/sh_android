@@ -20,4 +20,10 @@ public interface UserFollowsView {
     void showNoFollowers();
 
     void showNoFollowing();
+
+    void showProgressView();
+
+    void hideProgressView();
+
+    void renderUsersBelow(List<UserModel> olderUsers);
 }
