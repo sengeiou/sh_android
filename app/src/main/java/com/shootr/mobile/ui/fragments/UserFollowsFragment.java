@@ -33,6 +33,8 @@ import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
+import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.squareup.otto.Bus;
@@ -41,7 +43,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback {
+public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback,
+  UserFollowsView {
 
     public static final String TAG = "follows";
 
@@ -60,6 +63,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.communication_error) String communicationError;
     @BindString(com.shootr.mobile.R.string.connection_lost) String connetionLost;
+
+    @Inject UserFollowsPresenter userFollowsPresenter;
 
     // Args
     String userId;
@@ -181,8 +186,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void unfollowUser(final UserModel user){
         unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 onFollowUpdated(user.getIdUser(), false);
             }
         });
@@ -192,6 +196,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         super.onResume();
         bus.register(this);
         retrieveUsers();
+        userFollowsPresenter.initialize(this, userId, followType);
     }
 
     @Override public void onPause() {
@@ -199,12 +204,13 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         bus.unregister(this);
     }
 
-    private void setLoadingView(boolean loading) {
+    public void setLoadingView(Boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
         userlistListView.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void setEmpty(boolean empty) {
+    @Override
+    public void setEmpty(Boolean empty) {
         emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
         userlistListView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
@@ -280,5 +286,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         }
     }
 
+    @Override public void showError(String messageForError) {
+        feedbackMessage.show(getView(), messageForError);
+    }
 
+    @Override public void showUsers(List<UserModel> userModels) {
+        setListContent(userModels);
+    }
 }

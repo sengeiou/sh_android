@@ -90,6 +90,10 @@ public class LocalUserRepository implements UserRepository {
         localUserDataSource.updateWatch(entity);
     }
 
+    @Override public List<User> getFollowing(String idUser) {
+        throw new IllegalArgumentException("this method has no local implementation");
+    }
+
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();
