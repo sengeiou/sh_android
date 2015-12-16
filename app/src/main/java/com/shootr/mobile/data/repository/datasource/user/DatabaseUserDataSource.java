@@ -72,6 +72,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         userManager.saveUser(userEntity);
     }
 
+    @Override public List<UserEntity> getFollowers(String idUser) {
+        throw new IllegalArgumentException("this method has no local implementation");
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }

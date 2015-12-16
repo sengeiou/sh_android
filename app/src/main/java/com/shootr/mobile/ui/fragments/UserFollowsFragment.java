@@ -52,8 +52,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     private static final String ARGUMENT_USER_ID = "userId";
 
     @Inject ImageLoader imageLoader;
-    @Inject @Main Bus bus;
-    @Inject InteractorHandler interactorHandler;
     @Inject FeedbackMessage feedbackMessage;
     @Inject FollowInteractor followInteractor;
     @Inject UnfollowInteractor unfollowInteractor;
@@ -121,49 +119,15 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         userlistListView.setAdapter(getAdapter());
     }
 
-    private void retrieveUsers() {
-        startJob();
-        setLoadingView(true);
-        setEmpty(false);
-    }
-
-    public void startJob(){
-        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(userId, followType);
-        interactorHandler.execute(job);
-    }
-
     private void setEmptyMessage() {
         emptyTextView.setText(followType.equals(GetUsersFollowsJob.FOLLOWERS) ? R.string.follower_list_empty
           : R.string.following_list_empty);
-    }
-
-    @Subscribe
-    public void showUserList(FollowsResultEvent event) {
-        setLoadingView(false);
-        List<UserModel> usersFollowing = event.getResult();
-        if (usersFollowing.isEmpty()) {
-            setEmpty(true);
-        } else {
-            setListContent(usersFollowing);
-        }
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
         getAdapter().notifyDataSetChanged();
-    }
-
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-        feedbackMessage.show(getView(), communicationError);
-    }
-
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackMessage.show(getView(), connetionLost);
-        setLoadingView(false);
     }
 
     @OnItemClick(R.id.userlist_list)
@@ -194,14 +158,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void onResume() {
         super.onResume();
-        bus.register(this);
-        retrieveUsers();
         userFollowsPresenter.initialize(this, userId, followType);
     }
 
     @Override public void onPause() {
         super.onPause();
-        bus.unregister(this);
     }
 
     public void setLoadingView(Boolean loading) {

@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.GetUserFollowersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowingInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -33,12 +34,15 @@ public class UserFollowsPresenterTest {
     @Mock GetUserFollowingInteractor getUserFollowingInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
+    @Mock GetUserFollowersInteractor getUserFollowersInteractor;
     private UserFollowsPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new UserFollowsPresenter(getUserFollowingInteractor, errorMessageFactory, userModelMapper);
+        presenter = new UserFollowsPresenter(getUserFollowingInteractor,
+          getUserFollowersInteractor,
+          errorMessageFactory, userModelMapper);
         presenter.setView(userFollowsView);
     }
 
@@ -67,7 +71,7 @@ public class UserFollowsPresenterTest {
         verify(userFollowsView).showUsers(any(List.class));
     }
 
-    @Test public void shouldShowLoadingWhenPresenterInitialized() throws Exception {
+    @Test public void shouldShowLoadingWhenPresenterInitializedSearchingFollowing() throws Exception {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
 
         verify(userFollowsView).setLoadingView(true);
@@ -95,6 +99,100 @@ public class UserFollowsPresenterTest {
         presenter.initialize(userFollowsView, USER_ID, FOLLOWING);
 
         verify(userFollowsView).setEmpty(true);
+    }
+
+    @Test public void shouldCallGetFollowersInteractorIfObtainingFollowingUsers() throws Exception {
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(getUserFollowersInteractor).obtainFollowers(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldShowErrorInViewIfGetFollowersInteractorThrowsServerCommunicationException()
+      throws Exception {
+        setupGetFollowersInteractorErrorCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).showError(anyString());
+    }
+
+    @Test public void shouldShowFollowersUsersInViewWhenObtainingFollowingUsers() throws Exception {
+        setupGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).showUsers(any(List.class));
+    }
+
+    @Test public void shouldShowLoadingWhenPresenterInitializedSearchingFollowers() throws Exception {
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).setLoadingView(true);
+    }
+
+    @Test public void shouldHideLoadingWhenFollowersUsersShown() throws Exception {
+        setupGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).setLoadingView(false);
+    }
+
+    @Test public void shouldHideLoadingWhenFollowersUsersThrowsError() throws Exception {
+        setupGetFollowersInteractorErrorCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).setLoadingView(false);
+    }
+
+    @Test public void shouldShowEmptyIfTheresNoFollowers() throws Exception {
+        setupEmptyGetFollowersUsersCallback();
+
+        presenter.initialize(userFollowsView, USER_ID, FOLLOWERS);
+
+        verify(userFollowsView).setEmpty(true);
+    }
+
+    private void setupEmptyGetFollowersUsersCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<User>> callback =
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                callback.onLoaded(new ArrayList<User>());
+                return null;
+            }
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupGetFollowersUsersCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<User>> callback =
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                callback.onLoaded(users());
+                return null;
+            }
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupGetFollowersInteractorErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback errorCallback =
+                  (Interactor.ErrorCallback) invocation.getArguments()[2];
+                errorCallback.onError(any(ShootrException.class));
+                return null;
+            }
+        }).when(getUserFollowersInteractor).obtainFollowers(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     private void setupEmptyGetFollowingUsersCallback() {

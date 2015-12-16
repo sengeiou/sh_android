@@ -27,4 +27,6 @@ public interface UserRepository {
     void updateWatch(User user);
 
     List<User> getFollowing(String idUser);
+
+    List<User> getFollowers(String idUser);
 }

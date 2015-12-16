@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.GetUserFollowersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowingInteractor;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.UserFollowsView;
@@ -16,6 +17,7 @@ public class UserFollowsPresenter implements Presenter {
     public static final int FOLLOWERS = 0;
 
     private final GetUserFollowingInteractor getUserFollowingInteractor;
+    private final GetUserFollowersInteractor getUserFollowersInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
 
@@ -24,8 +26,9 @@ public class UserFollowsPresenter implements Presenter {
     private Integer followType;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
-      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+      GetUserFollowersInteractor getUserFollowersInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
         this.getUserFollowingInteractor = getUserFollowingInteractor;
+        this.getUserFollowersInteractor = getUserFollowersInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
     }
@@ -64,16 +67,26 @@ public class UserFollowsPresenter implements Presenter {
         });
     }
 
+    private void getFollowerUsers() {
+        getUserFollowersInteractor.obtainFollowers(userId, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                userFollowsView.setLoadingView(false);
+                handleUsersInView(users);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.setLoadingView(false);
+                userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
     public void handleUsersInView(List<User> users) {
         if (users.isEmpty()) {
             userFollowsView.setEmpty(true);
         } else {
             userFollowsView.showUsers(userModelMapper.transform(users));
         }
-    }
-
-    private void getFollowerUsers() {
-
     }
 
     @Override public void resume() {
