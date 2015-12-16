@@ -1,11 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -19,6 +23,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -35,14 +40,16 @@ public class UserFollowsPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock GetUserFollowersInteractor getUserFollowersInteractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
+
     private UserFollowsPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new UserFollowsPresenter(getUserFollowingInteractor,
-          getUserFollowersInteractor,
-          errorMessageFactory, userModelMapper);
+          getUserFollowersInteractor, followInteractor, unfollowInteractor, errorMessageFactory, userModelMapper);
         presenter.setView(userFollowsView);
     }
 
@@ -156,6 +163,67 @@ public class UserFollowsPresenterTest {
         verify(userFollowsView).setEmpty(true);
     }
 
+    @Test public void shouldUpdateFollowWhenClickOnFollowUser() throws Exception {
+        setupFollowCompletedCallback();
+
+        presenter.follow(userModel());
+
+        verify(userFollowsView).updateFollow(anyString(), anyBoolean());
+    }
+
+    @Test public void shouldShowBlockedErrorWhenClickOnFollowUserAndErrorThrown() throws Exception {
+        setupFollowErrorCallback();
+
+        presenter.follow(userModel());
+
+        verify(userFollowsView).showUserBlockedError();
+    }
+
+    @Test public void shouldUpdateFollowWhenClickOnUnfollowUser() throws Exception {
+        setupUnfollowCompletedCallback();
+
+        presenter.unfollow(userModel());
+
+        verify(userFollowsView).updateFollow(anyString(), anyBoolean());
+    }
+
+    public void setupUnfollowCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(unfollowInteractor).unfollow(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    public void setupFollowErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback callback =
+                  (Interactor.ErrorCallback) invocation.getArguments()[2];
+                callback.onError(new ShootrException() {});
+                return null;
+            }
+        }).when(followInteractor).follow(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    public void setupFollowCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(followInteractor).follow(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
     private void setupEmptyGetFollowersUsersCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -235,9 +303,20 @@ public class UserFollowsPresenterTest {
 
     private List<User> users() {
         List<User> users = new ArrayList<>();
-        User user = new User();
-        user.setIdUser(ID_USER);
+        User user = user();
         users.add(user);
         return users;
+    }
+
+    @NonNull private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        return user;
+    }
+
+    private UserModel userModel() {
+        UserModel user = new UserModel();
+        user.setIdUser(ID_USER);
+        return user;
     }
 }

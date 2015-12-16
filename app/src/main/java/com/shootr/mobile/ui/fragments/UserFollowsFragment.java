@@ -13,21 +13,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ShootrApplication;
-import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.task.events.CommunicationErrorEvent;
-import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
-import com.shootr.mobile.task.events.follows.FollowsResultEvent;
 import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -37,8 +26,6 @@ import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -53,14 +40,10 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
-    @Inject FollowInteractor followInteractor;
-    @Inject UnfollowInteractor unfollowInteractor;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
-    @BindString(R.string.communication_error) String communicationError;
-    @BindString(com.shootr.mobile.R.string.connection_lost) String connetionLost;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
 
@@ -136,24 +119,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
-    public void followUser(final UserModel user){
-        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), true);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
-            }
-        });
+    private void followUser(UserModel user){
+        userFollowsPresenter.follow(user);
     }
 
     public void unfollowUser(final UserModel user){
-        unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), false);
-            }
-        });
+        userFollowsPresenter.unfollow(user);
     }
 
     @Override public void onResume() {
@@ -209,7 +180,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
           .show();
     }
 
-    protected void onFollowUpdated(String idUser, boolean following) {
+    @Override
+    public void updateFollow(String idUser, Boolean following) {
         List<UserModel> usersInList = userListAdapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);
@@ -219,6 +191,10 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
                 break;
             }
         }
+    }
+
+    @Override public void showUserBlockedError() {
+        feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

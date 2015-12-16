@@ -12,4 +12,8 @@ public interface UserFollowsView {
     void setLoadingView(Boolean loading);
 
     void setEmpty(Boolean empty);
+
+    void updateFollow(String idUser, Boolean following);
+
+    void showUserBlockedError();
 }

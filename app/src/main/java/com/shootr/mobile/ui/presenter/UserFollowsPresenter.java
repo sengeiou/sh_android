@@ -3,8 +3,11 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -18,6 +21,8 @@ public class UserFollowsPresenter implements Presenter {
 
     private final GetUserFollowingInteractor getUserFollowingInteractor;
     private final GetUserFollowersInteractor getUserFollowersInteractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
 
@@ -26,9 +31,12 @@ public class UserFollowsPresenter implements Presenter {
     private Integer followType;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
-      GetUserFollowersInteractor getUserFollowersInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+      GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
         this.getUserFollowingInteractor = getUserFollowingInteractor;
         this.getUserFollowersInteractor = getUserFollowersInteractor;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
     }
@@ -87,6 +95,26 @@ public class UserFollowsPresenter implements Presenter {
         } else {
             userFollowsView.showUsers(userModelMapper.transform(users));
         }
+    }
+
+    public void follow(final UserModel user) {
+        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                userFollowsView.updateFollow(user.getIdUser(), true);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.showUserBlockedError();
+            }
+        });
+    }
+
+    public void unfollow(final UserModel user) {
+        unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                userFollowsView.updateFollow(user.getIdUser(), false);
+            }
+        });
     }
 
     @Override public void resume() {
