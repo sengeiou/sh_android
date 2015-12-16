@@ -30,6 +30,8 @@ public class User {
     private Long createdStreamsCount;
     private Long favoritedStreamsCount;
 
+    private Integer relationship;
+
     public Long getFavoritedStreamsCount() {
         return favoritedStreamsCount;
     }
@@ -219,6 +221,14 @@ public class User {
 
     public void setVerifiedUser(Boolean verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Integer getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(Integer relationship) {
+        this.relationship = relationship;
     }
 
     public static class UsernameComparator implements Comparator<User> {
