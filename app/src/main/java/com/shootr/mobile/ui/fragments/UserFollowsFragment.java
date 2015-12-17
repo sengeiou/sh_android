@@ -23,24 +23,27 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
+import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback,
-  UserFollowsView {
+public class UserFollowsFragment extends BaseFragment
+  implements UserListAdapter.FollowUnfollowAdapterCallback, UserFollowsView {
 
     public static final String TAG = "follows";
 
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
 
+    private Boolean isFooterLoading = false;
+
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
 
-    @Bind(R.id.userlist_list) ListView userlistListView;
+    @Bind(R.id.userlist_list) ListView userList;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
 
@@ -50,9 +53,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     String userId;
     Integer followType;
 
-    UserModel user;
-
     private UserListAdapter userListAdapter;
+    private View progressView;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -67,8 +69,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         return bundle;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
@@ -85,7 +86,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+      @Nullable Bundle savedInstanceState) {
         return inflater.inflate(com.shootr.mobile.R.layout.activity_userlist, container, false);
     }
 
@@ -94,10 +95,37 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         ButterKnife.bind(this, view);
     }
 
-
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        userlistListView.setAdapter(getAdapter());
+        setupProgressView();
+        setupUserListAdapter();
+    }
+
+    public void setupUserListAdapter() {
+        userList.setAdapter(getAdapter());
+        new ListViewScrollObserver(userList).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                /* no-op */
+            }
+
+            @Override public void onScrollIdle() {
+                int lastVisiblePosition = userList.getLastVisiblePosition();
+                int loadingFooterPosition = userList.getAdapter().getCount() - 1;
+                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                if (shouldStartLoadingMore && !isFooterLoading) {
+                    userFollowsPresenter.makeNextRemoteSearch();
+                }
+            }
+        });
+    }
+
+    public void setupProgressView() {
+        progressView = getLoadingView();
+        View progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
+    }
+
+    private View getLoadingView() {
+        return LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, userList, false);
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
@@ -106,17 +134,16 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         getAdapter().notifyDataSetChanged();
     }
 
-    @OnItemClick(R.id.userlist_list)
-    public void openUserProfile(int position) {
-        user = getAdapter().getItem(position);
+    @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
+        UserModel user = getAdapter().getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
-    private void followUser(UserModel user){
+    private void followUser(UserModel user) {
         userFollowsPresenter.follow(user);
     }
 
-    public void unfollowUser(final UserModel user){
+    public void unfollowUser(final UserModel user) {
         userFollowsPresenter.unfollow(user);
     }
 
@@ -131,17 +158,15 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void setLoadingView(Boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
-        userlistListView.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
+        userList.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
     }
 
-    @Override
-    public void setEmpty(Boolean empty) {
+    @Override public void setEmpty(Boolean empty) {
         emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
-        userlistListView.setVisibility(empty ? View.GONE : View.VISIBLE);
+        userList.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
@@ -155,17 +180,16 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Override public void follow(int position) {
-        user = getAdapter().getItem(position);
+        UserModel user = getAdapter().getItem(position);
         followUser(user);
     }
 
-
     @Override public void unFollow(int position) {
-        user = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
+        final UserModel user = getAdapter().getItem(position);
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                unfollowUser(user);
+                  unfollowUser(user);
               }
           })
           .setNegativeButton("No", null)
@@ -173,13 +197,13 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
           .show();
     }
 
-    @Override
-    public void updateFollow(String idUser, Boolean following) {
+    @Override public void updateFollow(String idUser, Boolean following) {
         List<UserModel> usersInList = userListAdapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);
             if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                userModel.setRelationship(
+                  following ? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
                 userListAdapter.notifyDataSetChanged();
                 break;
             }
@@ -198,11 +222,27 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         emptyTextView.setText(R.string.following_list_empty);
     }
 
+    @Override public void showProgressView() {
+        isFooterLoading = true;
+        userList.addFooterView(progressView, null, false);
+    }
+
+    @Override public void hideProgressView() {
+        isFooterLoading = false;
+        userList.removeFooterView(progressView);
+    }
+
+    @Override public void renderUsersBelow(List<UserModel> olderUsers) {
+        getAdapter().addItems(olderUsers);
+        getAdapter().notifyDataSetChanged();
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if(resultCode == Activity.RESULT_OK && data!=null){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
             Bundle bundleUser = data.getExtras();
-            int i=0;int index =0;
+            int i = 0;
+            int index = 0;
             UserModel userModel = new UserModel();
             userModel.setPhoto(bundleUser.getString("PHOTO"));
             userModel.setUsername(bundleUser.getString("USER_NAME"));
@@ -210,15 +250,15 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
             userModel.setIdUser(bundleUser.getString("ID_USER"));
             List<UserModel> userModels = getAdapter().getItems();
-            for(UserModel userM: userModels){
-                if(userM.getIdUser().equals(userModel.getIdUser())){
+            for (UserModel userM : userModels) {
+                if (userM.getIdUser().equals(userModel.getIdUser())) {
                     index = i;
                 }
                 i++;
             }
             userModels.remove(index);
             getAdapter().removeItems();
-            userModels.add(index,userModel);
+            userModels.add(index, userModel);
             getAdapter().setItems(userModels);
             getAdapter().notifyDataSetChanged();
         }

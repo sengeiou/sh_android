@@ -67,7 +67,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
         userlistListView.setAdapter(getParticipantsAdapter());
 
         progressView = getLoadingView();
-        progressViewContent = ButterKnife.findById(progressView, com.shootr.mobile.R.id.loading_progress);
+        progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
 
         new ListViewScrollObserver(userlistListView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
@@ -87,7 +87,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     private View getLoadingView() {
-        return LayoutInflater.from(this).inflate(com.shootr.mobile.R.layout.item_list_loading, userlistListView, false);
+        return LayoutInflater.from(this).inflate(R.layout.item_list_loading, userlistListView, false);
     }
 
     @Override protected void initializePresenter() {

@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 public class UserFollowsPresenter implements Presenter {
 
-    public static final int FOLLOWING = 1;
     public static final int FOLLOWERS = 0;
 
     private final GetUserFollowingInteractor getUserFollowingInteractor;
@@ -29,6 +28,8 @@ public class UserFollowsPresenter implements Presenter {
     private UserFollowsView userFollowsView;
     private String userId;
     private Integer followType;
+    private Integer page;
+    private boolean isInLastPage = false;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
       GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
@@ -47,6 +48,7 @@ public class UserFollowsPresenter implements Presenter {
 
     public void initialize(UserFollowsView userFollowsView, String userId, Integer followType) {
         setView(userFollowsView);
+        this.page = 0;
         this.userId = userId;
         this.followType = followType;
         retrieveUsers();
@@ -62,7 +64,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     private void getFollowingUsers() {
-        getUserFollowingInteractor.obtainFollowing(userId, new Interactor.Callback<List<User>>() {
+        getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 userFollowsView.setLoadingView(false);
                 handleUsersInView(users);
@@ -76,7 +78,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     private void getFollowerUsers() {
-        getUserFollowersInteractor.obtainFollowers(userId, new Interactor.Callback<List<User>>() {
+        getUserFollowersInteractor.obtainFollowers(userId, page, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 userFollowsView.setLoadingView(false);
                 handleUsersInView(users);
@@ -99,7 +101,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     public void handleEmptyMessageInView() {
-        if (followType == FOLLOWERS) {
+        if (showingFollowers()) {
             userFollowsView.showNoFollowers();
         } else {
             userFollowsView.showNoFollowing();
@@ -124,6 +126,64 @@ public class UserFollowsPresenter implements Presenter {
                 userFollowsView.updateFollow(user.getIdUser(), false);
             }
         });
+    }
+
+    public void makeNextRemoteSearch() {
+        page++;
+        userFollowsView.showProgressView();
+        if (!isInLastPage) {
+            handleNextRemoteSearch();
+        } else {
+            userFollowsView.hideProgressView();
+        }
+    }
+
+    public void handleNextRemoteSearch() {
+        if(showingFollowers()) {
+            nextFollowersSearch();
+        } else {
+            nextFollowingSearch();
+        }
+    }
+
+    public void nextFollowingSearch() {
+        getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> olderUsers = userModelMapper.transform(users);
+                if (!olderUsers.isEmpty()) {
+                    userFollowsView.renderUsersBelow(olderUsers);
+                } else {
+                    isInLastPage = true;
+                }
+                userFollowsView.hideProgressView();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void nextFollowersSearch() {
+        getUserFollowersInteractor.obtainFollowers(userId, page, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> olderUsers = userModelMapper.transform(users);
+                if (!olderUsers.isEmpty()) {
+                    userFollowsView.renderUsersBelow(olderUsers);
+                } else {
+                    isInLastPage = true;
+                }
+                userFollowsView.hideProgressView();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                userFollowsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public boolean showingFollowers() {
+        return followType == FOLLOWERS;
     }
 
     @Override public void resume() {

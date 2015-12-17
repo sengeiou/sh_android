@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
-    List<UserEntity> getFollowing(String userId);
+    List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize);
 
     UserEntity putUser(UserEntity userEntity);
 
@@ -26,5 +26,5 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
     void updateWatch(UserEntity userEntity);
 
-    List<UserEntity> getFollowers(String idUser);
+    List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize);
 }
