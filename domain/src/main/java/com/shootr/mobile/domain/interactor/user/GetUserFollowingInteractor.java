@@ -16,6 +16,10 @@ import javax.inject.Inject;
 
 public class GetUserFollowingInteractor implements Interactor{
 
+    public static final int PAGE_SIZE = 50;
+    public static final int IS_ME = 1;
+    public static final int FOLLOWING = 2;
+    public static final int NO_REALITON = 0;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository remoteUserRepository;
@@ -51,7 +55,7 @@ public class GetUserFollowingInteractor implements Interactor{
 
     private void obtainFollowing() {
         try {
-            List<User> following = remoteUserRepository.getFollowing(idUser, page);
+            List<User> following = remoteUserRepository.getFollowing(idUser, page, PAGE_SIZE);
             String currentUserId = sessionRepository.getCurrentUserId();
             List<User> currentUserFollowing = localUserRepository.getPeople();
             List<User> followingWithRelationship = setRelationshipInUsers(following, currentUserId, currentUserFollowing);
@@ -68,11 +72,11 @@ public class GetUserFollowingInteractor implements Interactor{
             String idUser = user.getIdUser();
             boolean isMe = idUser.equals(currentUserId);
             if (isMe) {
-                user.setRelationship(1);
+                user.setRelationship(IS_ME);
             } else if (currentUserFollowing.contains(user)) {
-                user.setRelationship(2);
+                user.setRelationship(FOLLOWING);
             } else {
-                user.setRelationship(0);
+                user.setRelationship(NO_REALITON);
             }
             users.add(user);
         }

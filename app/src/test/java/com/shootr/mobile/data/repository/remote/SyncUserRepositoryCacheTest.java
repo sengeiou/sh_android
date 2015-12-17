@@ -68,7 +68,7 @@ public class SyncUserRepositoryCacheTest {
 
         syncUserRepository.getPeople();
 
-        verify(remoteUserDataSource, never()).getFollowing(anyString(), anyInt());
+        verify(remoteUserDataSource, never()).getFollowing(anyString(), anyInt(), anyInt());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SyncUserRepositoryCacheTest {
 
         syncUserRepository.getPeople();
 
-        verify(remoteUserDataSource).getFollowing(anyString(), anyInt());
+        verify(remoteUserDataSource).getFollowing(anyString(), anyInt(), anyInt());
     }
 
     @Test

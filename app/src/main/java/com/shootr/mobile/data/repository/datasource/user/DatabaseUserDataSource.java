@@ -18,7 +18,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         this.userManager = userManager;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId, Integer page) {
+    @Override public List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize) {
         List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
         return userManager.getUsersByIds(usersFollowingIds);
     }
@@ -72,7 +72,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         userManager.saveUser(userEntity);
     }
 
-    @Override public List<UserEntity> getFollowers(String idUser, Integer page) {
+    @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
