@@ -29,7 +29,7 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
+import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
@@ -679,12 +679,12 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToFollowersList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, GetUsersFollowsJob.FOLLOWERS);
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWERS);
         startActivity(intent);
     }
 
     @Override public void goToFollowingList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, GetUsersFollowsJob.FOLLOWING);
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWING);
         startActivity(intent);
     }
 
@@ -742,8 +742,7 @@ public class ProfileFragment extends BaseFragment
                   profilePresenter.removePhotoConfirmed();
               }
           })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
+          .setNegativeButton(R.string.cancel, null).show();
     }
 
     @Override public void setupAnalytics(boolean isCurrentUser) {
@@ -792,8 +791,7 @@ public class ProfileFragment extends BaseFragment
               }
           })
           .setNegativeButton("No", null)
-          .create()
-          .show();
+          .create().show();
     }
 
     @Override public void setFollowing(Boolean following) {
@@ -842,7 +840,7 @@ public class ProfileFragment extends BaseFragment
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
               }
-          }).show();
+        }).show();
     }
 
     @Override public void showBlockFollowingUserAlert() {

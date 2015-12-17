@@ -25,4 +25,8 @@ public interface UserRepository {
     List<User> findParticipants(String idStream, String query);
 
     void updateWatch(User user);
+
+    List<User> getFollowing(String idUser);
+
+    List<User> getFollowers(String idUser);
 }

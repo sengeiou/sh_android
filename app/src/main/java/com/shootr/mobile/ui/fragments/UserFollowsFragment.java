@@ -13,35 +13,24 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ShootrApplication;
-import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.task.events.CommunicationErrorEvent;
-import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
-import com.shootr.mobile.task.events.follows.FollowsResultEvent;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
+import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback {
+public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback,
+  UserFollowsView {
 
     public static final String TAG = "follows";
 
@@ -49,17 +38,13 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     private static final String ARGUMENT_USER_ID = "userId";
 
     @Inject ImageLoader imageLoader;
-    @Inject @Main Bus bus;
-    @Inject InteractorHandler interactorHandler;
     @Inject FeedbackMessage feedbackMessage;
-    @Inject FollowInteractor followInteractor;
-    @Inject UnfollowInteractor unfollowInteractor;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
-    @BindString(R.string.communication_error) String communicationError;
-    @BindString(com.shootr.mobile.R.string.connection_lost) String connetionLost;
+
+    @Inject UserFollowsPresenter userFollowsPresenter;
 
     // Args
     String userId;
@@ -112,36 +97,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setEmptyMessage();
         userlistListView.setAdapter(getAdapter());
-    }
-
-    private void retrieveUsers() {
-        startJob();
-        setLoadingView(true);
-        setEmpty(false);
-    }
-
-    public void startJob(){
-        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(userId, followType);
-        interactorHandler.execute(job);
-    }
-
-    private void setEmptyMessage() {
-        emptyTextView.setText(followType.equals(GetUsersFollowsJob.FOLLOWERS) ? R.string.follower_list_empty
-          : R.string.following_list_empty);
-    }
-
-    @Subscribe
-    public void showUserList(FollowsResultEvent event) {
-        setLoadingView(false);
-        List<UserModel> usersFollowing = event.getResult();
-        if (usersFollowing.isEmpty()) {
-            setEmpty(true);
-        } else {
-            setListContent(usersFollowing);
-        }
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
@@ -150,61 +106,36 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         getAdapter().notifyDataSetChanged();
     }
 
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-        feedbackMessage.show(getView(), communicationError);
-    }
-
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackMessage.show(getView(), connetionLost);
-        setLoadingView(false);
-    }
-
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
         user = getAdapter().getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
-    public void followUser(final UserModel user){
-        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), true);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
-            }
-        });
+    private void followUser(UserModel user){
+        userFollowsPresenter.follow(user);
     }
 
     public void unfollowUser(final UserModel user){
-        unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), false);
-            }
-        });
+        userFollowsPresenter.unfollow(user);
     }
 
     @Override public void onResume() {
         super.onResume();
-        bus.register(this);
-        retrieveUsers();
+        userFollowsPresenter.initialize(this, userId, followType);
     }
 
     @Override public void onPause() {
         super.onPause();
-        bus.unregister(this);
     }
 
-    private void setLoadingView(boolean loading) {
+    public void setLoadingView(Boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
         userlistListView.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void setEmpty(boolean empty) {
+    @Override
+    public void setEmpty(Boolean empty) {
         emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
         userlistListView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
@@ -242,7 +173,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
           .show();
     }
 
-    protected void onFollowUpdated(String idUser, boolean following) {
+    @Override
+    public void updateFollow(String idUser, Boolean following) {
         List<UserModel> usersInList = userListAdapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);
@@ -252,6 +184,18 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
                 break;
             }
         }
+    }
+
+    @Override public void showUserBlockedError() {
+        feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
+    }
+
+    @Override public void showNoFollowers() {
+        emptyTextView.setText(R.string.follower_list_empty);
+    }
+
+    @Override public void showNoFollowing() {
+        emptyTextView.setText(R.string.following_list_empty);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -280,5 +224,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         }
     }
 
+    @Override public void showError(String messageForError) {
+        feedbackMessage.show(getView(), messageForError);
+    }
 
+    @Override public void showUsers(List<UserModel> userModels) {
+        setListContent(userModels);
+    }
 }

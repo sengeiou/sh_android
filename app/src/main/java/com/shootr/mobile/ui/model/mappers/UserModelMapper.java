@@ -40,6 +40,9 @@ public class UserModelMapper {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));
             userModel.setJoinStreamTimestamp(joinStreamDate);
         }
+        if (user.getRelationship() != null) {
+            userModel.setRelationship(user.getRelationship());
+        }
         return userModel;
     }
 

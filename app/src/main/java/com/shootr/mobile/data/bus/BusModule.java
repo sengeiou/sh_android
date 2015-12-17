@@ -2,7 +2,6 @@ package com.shootr.mobile.data.bus;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.notifications.gcm.GCMIntentService;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
@@ -19,7 +18,6 @@ import javax.inject.Singleton;
 
                 FindFriendsActivity.class,
 
-                GetUsersFollowsJob.class,
                 ProfileContainerActivity.class,
 
                 GCMIntentService.class,
