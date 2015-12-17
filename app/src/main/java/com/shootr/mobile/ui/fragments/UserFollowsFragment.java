@@ -154,6 +154,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onPause() {
         super.onPause();
+        userFollowsPresenter.pause();
     }
 
     public void setLoadingView(Boolean loading) {

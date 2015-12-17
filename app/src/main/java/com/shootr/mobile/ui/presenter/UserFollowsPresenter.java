@@ -191,6 +191,6 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     @Override public void pause() {
-        /* no-op */
+        isInLastPage = false;
     }
 }
