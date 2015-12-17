@@ -55,7 +55,6 @@ public class UserFollowsFragment extends BaseFragment
 
     private UserListAdapter userListAdapter;
     private View progressView;
-    private View progressViewContent;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -98,10 +97,11 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setupProgressView();
+        setupUserListAdapter();
+    }
 
-        progressView = getLoadingView();
-        progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
-
+    public void setupUserListAdapter() {
         userList.setAdapter(getAdapter());
         new ListViewScrollObserver(userList).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
@@ -117,6 +117,11 @@ public class UserFollowsFragment extends BaseFragment
                 }
             }
         });
+    }
+
+    public void setupProgressView() {
+        progressView = getLoadingView();
+        View progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
     }
 
     private View getLoadingView() {
