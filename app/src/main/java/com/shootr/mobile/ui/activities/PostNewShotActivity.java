@@ -28,6 +28,7 @@ import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -56,6 +57,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject PostNewShotPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
+    @Inject WritePermissionManager writePermissionManager;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -96,6 +98,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         imageLoader.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto(), avatar);
         name.setText(sessionRepository.getCurrentUser().getName());
         username.setText("@" + sessionRepository.getCurrentUser().getUsername());
+
+        writePermissionManager.init(this);
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
 
@@ -149,7 +153,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @OnClick(R.id.new_shot_gallery_button)
     public void onAddImageFromGallery() {
-        presenter.choosePhotoFromGallery();
+        if (writePermissionManager.hasWritePermission()) {
+            presenter.choosePhotoFromGallery();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
     }
 
     @OnClick(R.id.new_shot_image_remove)

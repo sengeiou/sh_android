@@ -74,6 +74,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -133,6 +134,7 @@ public class ProfileFragment extends BaseFragment
     @Inject @TemporaryFilesDir File externalFilesDir;
     @Inject AndroidTimeUtils timeUtils;
     @Inject AnalyticsTool analyticsTool;
+    @Inject WritePermissionManager writePermissionManager;
 
     //endregion
 
@@ -189,6 +191,7 @@ public class ProfileFragment extends BaseFragment
 
     private void initializeViews() {
         ButterKnife.bind(this, getView());
+        writePermissionManager.init(getActivity());
         OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
             @Override public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
@@ -652,7 +655,11 @@ public class ProfileFragment extends BaseFragment
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
+                          if (writePermissionManager.hasWritePermission()) {
+                              choosePhotoFromGallery();
+                          } else {
+                              writePermissionManager.requestWritePermissionToUser();
+                          }
                           break;
                       case R.id.menu_photo_take:
                           takePhotoFromCamera();
