@@ -40,6 +40,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +78,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject WritePermissionManager writePermissionManager;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -99,6 +101,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
+        writePermissionManager.init(this);
 
         adapter = new StreamDetailAdapter(imageLoader, //
           new View.OnClickListener() {
@@ -309,7 +312,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
+                          if (writePermissionManager.hasWritePermission()) {
+                              choosePhotoFromGallery();
+                          } else {
+                              writePermissionManager.requestWritePermissionToUser();
+                          }
                           break;
                       case com.shootr.mobile.R.id.menu_photo_take:
                           takePhotoFromCamera();

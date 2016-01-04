@@ -37,6 +37,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.TimeFormatter;
+import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -61,6 +62,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
+    @Inject WritePermissionManager writePermissionManager;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -82,6 +84,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        writePermissionManager.init(this);
         setupPhotoPicker();
         setupNewShotBarDelegate(extractShotFromIntent());
         setupAdapter();
@@ -288,7 +291,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @OnClick(com.shootr.mobile.R.id.shot_bar_photo)
     public void onStartNewShotWithPhoto() {
-        newShotBarPresenter.newShotFromImage();
+        if (writePermissionManager.hasWritePermission()) {
+            newShotBarPresenter.newShotFromImage();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
     }
 
     @OnClick(com.shootr.mobile.R.id.shot_bar_drafts) public void openDrafts() {
