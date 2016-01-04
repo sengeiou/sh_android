@@ -284,8 +284,8 @@
     <string name="feedback_email_address">feedback@shootr.com</string>
     <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-    <string name="block_ignore_user">Ignore User</string>
-    <string name="block_unblock_user">Remove Ignore</string>
+    <string name="block_ignore_user">Ignore user</string>
+    <string name="block_unblock_user">Remove ignore</string>
     <string name="block_cannot_shoot_streams">Ban user</string>
     <string name="can_shoot_streams">Remove ban</string>
     <string name="user_unbanned">Ban removed.</string>
