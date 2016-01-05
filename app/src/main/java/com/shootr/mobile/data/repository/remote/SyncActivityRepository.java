@@ -36,8 +36,8 @@ public class SyncActivityRepository implements ActivityRepository {
         this.localShotRepository = localShotRepository;
     }
 
-    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
-        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters);
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
+        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters, language);
         List<ActivityEntity> activities = bindActivityShots(activityEntities);
         localActivityDataSource.putActivities(activities);
         return activityEntityMapper.transform(activities);

@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 
 public class RefreshStreamTimelineInteractor implements Interactor {
@@ -13,6 +14,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrTimelineService shootrTimelineService;
+    private final LocaleProvider localeProvider;
 
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
@@ -20,10 +22,11 @@ public class RefreshStreamTimelineInteractor implements Interactor {
 
     @Inject
     public RefreshStreamTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShootrTimelineService shootrTimelineService) {
+      ShootrTimelineService shootrTimelineService, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrTimelineService = shootrTimelineService;
+        this.localeProvider = localeProvider;
     }
 
     public void refreshStreamTimeline(String streamId, Callback<Timeline> callback, ErrorCallback errorCallback) {
@@ -41,7 +44,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
         try {
             Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream);
             notifyLoaded(timeline);
-            shootrTimelineService.refreshTimelinesForActivity();
+            shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLanguage());
         } catch (ShootrException error) {
             notifyError(error);
         }

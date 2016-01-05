@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,6 +30,7 @@ public class RefreshActivityTimelineInteractorTest {
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
     @Mock SessionRepository sessionRepository;
+    @Mock LocaleProvider localeProvider;
     private RefreshActivityTimelineInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -43,9 +46,9 @@ public class RefreshActivityTimelineInteractorTest {
     }
 
     @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
-        when(shootrTimelineService.refreshTimelinesForActivity()).thenReturn(timelineForActivity());
+        when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUser()).thenReturn(user());
-        interactor.refreshActivityTimeline(spyCallback, errorCallback);
+        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForActivity());
     }
