@@ -54,8 +54,12 @@ public class GetPeopleInteractor implements Interactor {
     }
 
     private List<User> reorderPeopleByUsername(List<User> userList) {
-        Collections.sort(userList, new UsernameComparator());
-        return userList;
+        if (userList != null) {
+            Collections.sort(userList, new UsernameComparator());
+            return userList;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     static class UsernameComparator implements Comparator<User> {
