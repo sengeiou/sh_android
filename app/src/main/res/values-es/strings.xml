@@ -86,7 +86,7 @@
     <string name="edit_stream_listing_context_menu">Editar</string>
     <string name="email_already_registered">Email ya registrado</string>
     <string name="email_confirmation_message">Introduce un email válido para proteger tu cuenta.</string>
-    <string name="email_confirmation_message_content">Haz clic en el enlace que acaba de enviarse a </string>
+    <string name="email_confirmation_message_content">"Haz clic en el enlace que acaba de enviarse a "</string>
     <string name="email_confirmation_ok">OK</string>
     <string name="email_confirmation_title">Confirma tu email</string>
     <string name="empty_followings">-</string>
@@ -158,7 +158,7 @@
     <string name="new_password_again_hint">Nueva contraseña otra vez</string>
     <string name="new_password_hint">Nueva contraseña</string>
     <string name="new_shot_discard_message">¿Descartar foto?</string>
-    <string name="new_shot_placeholder">Escribe algo...</string>
+    <string name="new_shot_placeholder">Escribe algo…</string>
     <string name="new_shot_repeated">Whoops! Ya has publicado eso</string>
     <string name="new_stream_description_label">Descripción</string>
     <string name="new_stream_short_title_label">Título corto</string>
@@ -180,7 +180,7 @@
     <string name="notification_shot_has_stream_removed_subtitle">Este stream ha sido borrado</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d shots nuevos</string>
-    <string name="notification_shot_sending">Shooting...</string>
+    <string name="notification_shot_sending">Shooting…</string>
     <string name="notification_shot_sent">Shot enviado</string>
     <string name="now">ahora</string>
     <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
@@ -213,13 +213,13 @@
         <item quantity="other">%d respuestas</item>
     </plurals>
     <string name="reply_name_pattern">%1$s a %2$s</string>
-    <string name="reply_placeholder_pattern">Responder a %s...</string>
-    <string name="report_context_menu_block">Bloquear...</string>
+    <string name="reply_placeholder_pattern">Responder a %s…</string>
+    <string name="report_context_menu_block">Bloquear…</string>
     <string name="report_context_menu_delete">Eliminar</string>
     <string name="report_context_menu_report">Reportar</string>
     <string name="report_context_menu_unblock">Deshacer ignorar</string>
-    <string name="report_user_default_message">¿Por qué reportas esta cuenta? Ayúdanos a entender cuál es el problema.</string>
-    <string name="report_user_subject">Reportar esta cuenta - Incidenci %1$s - %2$s</string>
+    <string name="report_user_default_message">¿Por qué reportas esta cuenta? Ayúdanos a entender cuál es el problema.\n\n</string>
+    <string name="report_user_subject">Reportar esta cuenta - Incidencia %1$s - %2$s</string>
     <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
     <string name="reset_password_enter_username_email">Entra tu nombre de usuario o email en Shootr.</string>
     <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
@@ -234,13 +234,13 @@
     <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
     <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://shootr.com/st/%2$s</string>
     <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
-    <string name="share_via">Compartir vía...</string>
+    <string name="share_via">Compartir vía…</string>
     <string name="share_via_shootr">Compartir vía Shootr</string>
     <string name="shoot_all_button">Enviar todo</string>
     <string name="shot_shared_message">Shot compartido</string>
     <string name="shot_timeline_empty_title">No hay shots</string>
     <string name="showing_shots_by_holder">Shots del administrador</string>
-    <string name="sign_out_message">Cerrando sesión...</string>
+    <string name="sign_out_message">Cerrando sesión…</string>
     <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
     <string name="stream_detail_edit_menu_title">Editar</string>
     <string name="stream_detail_media">Archivos</string>
@@ -287,8 +287,8 @@
     <string name="update_warning_button">Actualizar ahora</string>
     <string name="update_warning_message">Hemos hecho mejoras que requieren actualizarse a la última versión de Shootr.</string>
     <string name="user_blocked">Usuario ignorado.</string>
-    <string name="user_not_found">Usuario no encontrado</string>
-    <string name="user_not_found_message">Usuario no encontrado</string>
+    <string name="user_not_found">Usuario no encontrado.</string>
+    <string name="user_not_found_message">Usuario no encontrado.</string>
     <string name="user_unblocked">Ignorar suprimido.</string>
     <string name="watching_stream_connected">conectado</string>
     <string name="welcome_friends_text">Salir para desconectar</string>

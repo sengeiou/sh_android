@@ -222,13 +222,13 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void unFollow(final int position) {
         final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   suggestedPeoplePresenter.unfollowUser(userModel);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
