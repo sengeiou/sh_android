@@ -129,7 +129,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
       android:layout_marginRight="8dp"
-      android:textColor="@color/gray_60"
+      android:textColor="@color/gray_80"
       android:textSize="14sp"
       tools:text="8 nices" />
 
