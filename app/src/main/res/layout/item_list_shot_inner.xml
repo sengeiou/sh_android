@@ -42,7 +42,7 @@
       android:textSize="16sp"
       android:layout_marginRight="4dp"
       tools:text="Who's the referee?"
-      android:layout_toStartOf="@+id/shot_timestamp" />
+      android:layout_toStartOf="@+id/shot_nice_button" />
 
     <FrameLayout android:id="@+id/shot_media_content"
       android:layout_width="match_parent"
