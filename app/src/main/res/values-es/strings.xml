@@ -52,12 +52,15 @@
     <string name="analytics_screen_stream_timeline">streamTimeline</string>
     <string name="analytics_screen_userProfile">userProfile</string>
     <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
+    <string name="block_user_dialog_block">Ignorar</string>
     <string name="block_user_dialog_cancel">Cancelar</string>
     <string name="block_user_dialog_message">¿Bloquear usuario?</string>
+    <string name="block_user_error">Para ignorar tienes que dejar de seguir.</string>
     <string name="cancel">Cancelar</string>
     <string name="change_password_button_text">HECHO</string>
     <string name="change_password_logout_message">La contraseña ha cambiado. Debes reiniciar sesión.</string>
     <string name="change_photo">Cambiar foto</string>
+    <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <!-- Errors -->
     <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
     <string name="connection_lost">Se ha perdido la conexión</string>
@@ -96,6 +99,7 @@
     <string name="entered_long_time_ago">Entró hace días</string>
     <string name="entered_minutes_ago">Ha entrado hace %d minutos</string>
     <string name="error_deleted_shot">Este shot ha sido eliminado</string>
+    <string name="error_following_user_blocked">No puedes seguir un usuario que ignoras.</string>
     <string name="error_login_credentials_invalid">Id o contraseña no válidos</string>
     <string name="error_message">Shootr ha encontrado un problema y necesita cerrarse.</string>
     <string name="error_message_invalid_change_password">Contraseña inválida</string>
@@ -143,6 +147,7 @@
     <string name="menu_search_friends">Encontrar amigos</string>
     <string name="menu_search_participants">Encontrar participantes</string>
     <string name="menu_search_streams">Buscar</string>
+    <string name="menu_search_timeline">Buscar timeline</string>
     <string name="menu_share_shot_via">Compartir vía...</string>
     <string name="menu_share_shot_via_shootr">Compartir vía Shootr</string>
     <string name="menu_stream_edit_info">Info</string>
@@ -212,7 +217,7 @@
     <string name="report_context_menu_block">Bloquear usuario</string>
     <string name="report_context_menu_delete">Eliminar</string>
     <string name="report_context_menu_report">Reportar</string>
-    <string name="report_context_menu_unblock"/>
+    <string name="report_context_menu_unblock">Deshacer ignorar</string>
     <string name="report_user_default_message">¿Por qué reportas esta cuenta? Ayúdanos a entender cuál es el problema.</string>
     <string name="report_user_subject">Reportar esta cuenta - Incidenci %1$s - %2$s</string>
     <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
@@ -221,7 +226,7 @@
     <string name="restore_stream_label">Restaurar stream</string>
     <string name="seconds">s</string>
     <string name="shared_shot_activity">Ha compartido un shot de %s</string>
-    <string name="shared_shot_activity_with_comment">Ha compartido de %s: </string>
+    <string name="shared_shot_activity_with_comment">Ha compartido de %s:</string>
     <string name="shared_stream_notification">Stream compartido</string>
     <string name="share_shot_chooser_title">Compartir</string>
     <string name="share_shot_message">Shot de %1$s en %2$s: %3$s</string>
@@ -245,7 +250,7 @@
     <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
     <string name="stream_media_no_more_media">No hay más archivos</string>
     <string name="stream_notification_confirmation_message">¿Notificar a tus seguidores acerca de este stream?</string>
-    <string name="stream_notification_confirmation_no"/>
+    <string name="stream_notification_confirmation_no">Nop</string>
     <string name="stream_notification_confirmation_yes">Notificar</string>
     <string name="stream_participants_following_number">siguiendo a %d</string>
     <string name="stream_timeline_add_favorite">Añadir a Favoritos</string>
@@ -278,10 +283,13 @@
     <string name="unfollow_dialog_message">¿Dejar de seguir a %s?</string>
     <string name="unfollow_dialog_no">No</string>
     <string name="unfollow_dialog_yes">Sí</string>
+    <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
     <string name="update_warning_button">Actualizar ahora</string>
     <string name="update_warning_message">Hemos hecho mejoras que requieren actualizarse a la última versión de Shootr.</string>
+    <string name="user_blocked">Usuario ignorado.</string>
     <string name="user_not_found">Usuario no encontrado</string>
     <string name="user_not_found_message">Usuario no encontrado</string>
+    <string name="user_unblocked">Ignorar suprimido</string>
     <string name="watching_stream_connected">conectado</string>
     <string name="welcome_friends_text">Salir para desconectar</string>
     <string name="welcome_get_started_button">Empezar</string>
