@@ -587,6 +587,14 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.showLong(getView(), messageForError);
     }
 
+    @Override public void showUserBanned() {
+        /* no-op */
+    }
+
+    @Override public void showUserUnbanned() {
+        /* no-op */
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();

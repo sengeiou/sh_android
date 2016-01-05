@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
@@ -21,4 +22,12 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     List<BlockEntity> getBlockeds();
 
     void putBlockeds(List<BlockEntity> blockeds);
+
+    void ban(BanEntity banEntity);
+
+    List<BanEntity> getBanneds();
+
+    void putBanneds(List<BanEntity> banneds);
+
+    void unban(String idUser);
 }

@@ -4,14 +4,17 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -46,6 +49,8 @@ public class ReportShotPresenterTest {
     @Mock BlockUserInteractor blockUserInteractor;
     @Mock UnblockUserInteractor unblockUserInteractor;
     @Mock GetFollowingInteractor getFollowingInteractor;
+    @Mock BanUserInteractor banUserInteractor;
+    @Mock UnbanUserInteractor unbanUserInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -54,7 +59,8 @@ public class ReportShotPresenterTest {
         presenter = new ReportShotPresenter(deleteShotInteractor, errorMessageFactory,
           sessionRepository,
           userModelMapper,
-          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor);
+          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
+          banUserInteractor, unbanUserInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -114,6 +120,48 @@ public class ReportShotPresenterTest {
         verify(reportShotView, never()).showHolderContextMenu(any(ShotModel.class));
     }
 
+    @Test public void shouldShowBanSuccessfullyWhenBanConfirmed() throws Exception {
+        setupBanUserCallback();
+
+        presenter.confirmBan(user());
+
+        verify(reportShotView).showUserBanned();
+    }
+
+    @Test public void shouldShowUnbanSuccessfullyWhenBanConfirmed() throws Exception {
+        setupUnbanUserCallback();
+
+        presenter.confirmUnBan(user());
+
+        verify(reportShotView).showUserUnbanned();
+    }
+
+    private void setupUnbanUserCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(unbanUserInteractor).unban(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    public void setupBanUserCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(banUserInteractor).ban(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
     private void setupGetFollowingCallbacksFollowingUser() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -124,6 +172,12 @@ public class ReportShotPresenterTest {
             }
         }).when(getFollowingInteractor).obtainPeople(any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
+    }
+
+    private UserModel user() {
+        UserModel userModel = new UserModel();
+        userModel.setIdUser(ID_USER);
+        return userModel;
     }
 
     private void setupGetFollowingCallbacksNotFollowingUser() {

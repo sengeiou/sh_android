@@ -52,7 +52,6 @@ public class GetStreamInfoInteractor implements Interactor {
 
     public void obtainStreamInfo(String idStreamWanted, Callback callback, ErrorCallback errorCallback) {
         this.idStreamWanted = checkNotNull(idStreamWanted);
-        ;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);

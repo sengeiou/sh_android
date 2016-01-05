@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.db.manager.FollowManager;
@@ -47,6 +48,22 @@ public class DatabaseFollowDataSource implements FollowDataSource {
 
     @Override public void putBlockeds(List<BlockEntity> blockeds) {
         followManager.saveBlockedsFromServer(blockeds);
+    }
+
+    @Override public void ban(BanEntity banEntity) {
+        followManager.saveBan(banEntity);
+    }
+
+    @Override public List<BanEntity> getBanneds() {
+        return followManager.getBans();
+    }
+
+    @Override public void putBanneds(List<BanEntity> banneds) {
+        followManager.saveBansFromServer(banneds);
+    }
+
+    @Override public void unban(String idUser) {
+        followManager.deleteBan(sessionRepository.getCurrentUserId(), idUser);
     }
 
     @Override

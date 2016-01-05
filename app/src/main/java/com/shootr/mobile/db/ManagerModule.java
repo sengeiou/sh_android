@@ -5,6 +5,7 @@ import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
+import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
@@ -24,8 +25,8 @@ public class ManagerModule {
         return new UserManager(openHelper, userMapper);
     }
 
-    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockEntityDBMapper) {
-        return new FollowManager(openHelper, followMapper, blockEntityDBMapper);
+    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockEntityDBMapper, BanEntityDBMapper banEntityDBMapper) {
+        return new FollowManager(openHelper, followMapper, blockEntityDBMapper, banEntityDBMapper);
     }
 
     @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper,

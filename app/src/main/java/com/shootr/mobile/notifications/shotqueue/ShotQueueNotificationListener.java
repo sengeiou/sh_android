@@ -50,6 +50,11 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
         Timber.e(e, "Shot has stream removed");
     }
 
+    @Override public void onShotHasUserBanned(QueuedShot shot, Exception e) {
+        shotQueueNotificationManager.showShotHasUserBannedNotification(shot);
+        Timber.e(e, "You have ben banned by author");
+    }
+
     @Override public void onQueueShot(QueuedShot queuedShot) {
         shotQueueNotificationManager.showSendingShotNotification(queuedShot);
     }

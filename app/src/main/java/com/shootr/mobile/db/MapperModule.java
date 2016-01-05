@@ -1,5 +1,6 @@
 package com.shootr.mobile.db;
 
+import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
@@ -51,6 +52,10 @@ public class MapperModule {
 
     @Provides BlockEntityDBMapper provideBlockMapper() {
         return new BlockEntityDBMapper();
+    }
+
+    @Provides BanEntityDBMapper provideBanMapper() {
+        return new BanEntityDBMapper();
     }
 
 }

@@ -8,21 +8,22 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import java.util.List;
 import javax.inject.Inject;
 
-public class GetBlockedIdUsersInteractor implements Interactor {
+import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
+
+public class UnbanUserInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final FollowRepository localFollowRepository;
     private final FollowRepository remoteFollowRepository;
 
-    private Callback<List<String>> callback;
+    private String idUser;
+    private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject
-    public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject public UnbanUserInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -30,37 +31,27 @@ public class GetBlockedIdUsersInteractor implements Interactor {
         this.remoteFollowRepository = remoteFollowRepository;
     }
 
-    public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback) {
+    public void unban(String idUser, CompletedCallback callback, ErrorCallback errorCallback) {
+        this.idUser = checkNotNull(idUser);
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        tryLoadingLocalUsersAndThenRemote();
-    }
-
-    private void tryLoadingLocalUsersAndThenRemote() {
-        List<String> blockedIdUsers = localFollowRepository.getBlockedIdUsers();
-        if (blockedIdUsers == null) {
-            loadRemoteBlockedIdUsers();
-        } else {
-            notifyResult(blockedIdUsers);
-        }
-    }
-
-    private void loadRemoteBlockedIdUsers() {
         try {
-            notifyResult(remoteFollowRepository.getBlockedIdUsers());
+            remoteFollowRepository.unban(idUser);
+            localFollowRepository.unban(idUser);
+            notifyCompleted();
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
-    private void notifyResult(final List<String> user) {
+    private void notifyCompleted() {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(user);
+                callback.onCompleted();
             }
         });
     }
@@ -72,4 +63,5 @@ public class GetBlockedIdUsersInteractor implements Interactor {
             }
         });
     }
+
 }

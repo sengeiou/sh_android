@@ -57,4 +57,10 @@ public class ShotQueueNotificationManager {
           new ShotHasStreamRemovedNotification(context, notificationBuilderFactory);
         androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
+
+    public void showShotHasUserBannedNotification(QueuedShot shot) {
+        ShotHasUserBannedNotification notification =
+          new ShotHasUserBannedNotification(context, notificationBuilderFactory);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
+    }
 }

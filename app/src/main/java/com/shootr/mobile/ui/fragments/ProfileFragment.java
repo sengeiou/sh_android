@@ -147,7 +147,6 @@ public class ProfileFragment extends BaseFragment
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder unblockUserMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
 
@@ -270,7 +269,6 @@ public class ProfileFragment extends BaseFragment
         supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
         changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
         blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
-        unblockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_unblock_user));
         reportUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_report_user));
     }
 
@@ -286,10 +284,7 @@ public class ProfileFragment extends BaseFragment
                 startActivity(new Intent(this.getActivity(), SupportActivity.class));
                 return true;
             case R.id.menu_profile_block_user:
-                profilePresenter.blockUserClicked();
-                return true;
-            case R.id.menu_profile_unblock_user:
-                profilePresenter.unblockUserClicked();
+                profilePresenter.blockMenuClicked();
                 return true;
             case R.id.menu_profile_report_user:
                 profilePresenter.reportUserClicked();
@@ -569,22 +564,6 @@ public class ProfileFragment extends BaseFragment
         changePasswordMenuItem.setVisible(true);
     }
 
-    @Override public void showBlockUserButton() {
-        blockUserMenuItem.setVisible(true);
-    }
-
-    @Override public void showUnblockUserButton() {
-        unblockUserMenuItem.setVisible(true);
-    }
-
-    public void hideBlockUserButton() {
-        blockUserMenuItem.setVisible(false);
-    }
-
-    public void hideUnblockUserButton() {
-        unblockUserMenuItem.setVisible(false);
-    }
-
     @Override public void unblockUser(UserModel userModel) {
         reportShotPresenter.unblockUserClicked(userModel);
     }
@@ -598,13 +577,79 @@ public class ProfileFragment extends BaseFragment
         Intents.maybeStartActivity(getActivity(), reportEmailIntent);
     }
 
-    @Override public void blockUser(UserModel userModel) {
-        reportShotPresenter.blockUserClicked(userModel);
+    @Override public void showBanUserConfirmation(final UserModel userModel) {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.ban_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_ban), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBan(userModel);
+              }
+          })
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
+          .create().show();
     }
 
-    @Override public void showOpenStream() {
-        listingContainerView.setVisibility(View.GONE);
-        openStreamContainerView.setVisibility(View.VISIBLE);
+    @Override public void showBlockUserButton() {
+        blockUserMenuItem.setVisible(true);
+    }
+
+    @Override public void showDefaultBlockMenu(UserModel userModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
+          new Runnable() {
+              @Override public void run() {
+                  profilePresenter.blockUserClicked();
+              }
+          }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.banUserClicked();
+            }
+        }).show();
+    }
+
+    @Override public void showBlockedMenu(UserModel userModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
+          new Runnable() {
+              @Override public void run() {
+                  profilePresenter.unblockUserClicked();
+              }
+          }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.banUserClicked();
+            }
+        }).show();
+    }
+
+    @Override public void showBannedMenu(UserModel userModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
+          new Runnable() {
+              @Override public void run() {
+                  profilePresenter.blockUserClicked();
+              }
+          }).addAction(R.string.can_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.unbanUserClicked();
+            }
+        }).show();
+    }
+
+    @Override public void showBlockAndBannedMenu(UserModel userModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
+          new Runnable() {
+              @Override public void run() {
+                  profilePresenter.unblockUserClicked();
+              }
+          }).addAction(R.string.can_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.unbanUserClicked();
+            }
+        }).show();
+    }
+
+    @Override public void confirmUnban(final UserModel userModel) {
+        reportShotPresenter.confirmUnBan(userModel);
+    }
+
+    @Override public void blockUser(UserModel userModel) {
+        reportShotPresenter.blockUserClicked(userModel);
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
@@ -856,14 +901,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserBlocked() {
         feedbackMessage.show(getView(), R.string.user_blocked);
-        showUnblockUserButton();
-        hideBlockUserButton();
     }
 
     @Override public void showUserUnblocked() {
         feedbackMessage.show(getView(), R.string.user_unblocked);
-        showBlockUserButton();
-        hideUnblockUserButton();
     }
 
     @Override public void showBlockUserConfirmation() {
@@ -879,6 +920,14 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showErrorLong(String messageForError) {
         feedbackMessage.showLong(getView(), messageForError);
+    }
+
+    @Override public void showUserBanned() {
+        feedbackMessage.show(getView(), R.string.user_banned);
+    }
+
+    @Override public void showUserUnbanned() {
+        feedbackMessage.show(getView(), R.string.user_unbanned);
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

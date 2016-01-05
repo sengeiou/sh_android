@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.Synchronized;
@@ -95,6 +96,25 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         return blockedIds;
     }
 
+    @Override public void ban(String idUser) {
+        BanEntity banEntity = createBan(idUser);
+        remoteFollowDataSource.ban(banEntity);
+    }
+
+    @Override public List<String> getBannedIdUsers() {
+        List<BanEntity> banneds = remoteFollowDataSource.getBanneds();
+        localFollowDataSource.putBanneds(banneds);
+        List<String> bannedIdUsers = new ArrayList<>(banneds.size());
+        for (BanEntity banned : banneds) {
+            bannedIdUsers.add(banned.getIdBannedUser());
+        }
+        return bannedIdUsers;
+    }
+
+    @Override public void unban(String idUser) {
+        remoteFollowDataSource.unban(idUser);
+    }
+
     @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
@@ -135,6 +155,14 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
+        return blockEntity;
+    }
+
+    @NonNull
+    protected BanEntity createBan(String idUser) {
+        BanEntity blockEntity = new BanEntity();
+        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
+        blockEntity.setIdBannedUser(idUser);
         return blockEntity;
     }
 }

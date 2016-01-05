@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="title_activity_registration_email">Register with Email</string>
-    
     <string name="facebookID">389647124570169</string>
     <string name="connection_lost">The network connection was lost</string>
-
     <!-- Activity literals -->
     <string name="activity_login_signin">Sign In</string>
     <string name="activity_login_register_email">Register with Email</string>
@@ -30,40 +27,31 @@
     <string name="profile_edit_profile">Edit Profile</string>
     <string name="profile_marks_following">following</string>
     <string name="profile_marks_followers">followers</string>
-
     <!-- Menu names -->
     <string name="menu_info">Friends</string>
     <string name="menu_search_timeline">Search timeline</string>
     <string name="menu_search_friends">Find friends</string>
-
     <!-- Errors -->
     <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-
     <!-- TimeUtils -->
     <string name="minutes">m</string>
     <string name="seconds">s</string>
     <string name="hours">h</string>
     <string name="days">d</string>
     <string name="now">now</string>
-
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
     <string name="activity_find_friends_hint">Find friends</string>
     <string name="activity_find_participants_hint">Find participants</string>
     <string name="activity_find_friends_empty_message">No Results</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
-
     <string name="cancel">Cancel</string>
-
-
     <string name="activity_edit_profile_name_hint">Name</string>
     <string name="activity_edit_profile_username_hint">Username</string>
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_profile_bio_hint">Bio</string>
-
     <string name="photo_edit_take">Camera</string>
     <string name="photo_edit_gallery">Gallery</string>
     <string name="change_photo">Change photo</string>
@@ -99,6 +87,7 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
     <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
     <string name="notification_shot_has_stream_removed_subtitle">Stream you tried to shot has been removed</string>
+    <string name="notification_shot_has_user_banned_subtitle">You have been banned in this stream</string>
     <string name="activity_drafts_title">Drafts</string>
     <string name="drafts_empty">No Drafts</string>
     <string name="drawer_friends_title">Friends</string>
@@ -118,7 +107,6 @@
     <string name="error_login_credentials_invalid">Id or password are not valid</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
-
     <string name="entered_just_now">Entered just now</string>
     <string name="entered_a_minute_ago">Entered 1 minute ago</string>
     <string name="entered_minutes_ago">Entered %d minutes ago</string>
@@ -127,32 +115,10 @@
     <string name="entered_a_day_ago">Entered 1 day ago</string>
     <string name="entered_days_ago">Entered %d days ago</string>
     <string name="entered_long_time_ago">Entered many days ago</string>
-
     <string name="user_not_found">User not found</string>
-
     <string name="title_activity_reset_password">Reset Password</string>
-
-    <plurals name="listing_favorites">
-        <item quantity="one">
-            %d favorite
-        </item>
-        <item quantity="other">
-            %d favorites
-        </item>
-    </plurals>
-
-    <plurals name="replies_header_count_pattern">
-        <item quantity="one">
-            %d reply
-        </item>
-        <item quantity="other">
-            %d replies
-        </item>
-    </plurals>
-
     <string name="stream_participants_following_number">following %d</string>
     <string name="title_activity_stream_media">Media</string>
-
     <string name="stream_media_empty_title">No photos or videos</string>
     <string name="stream_detail_media">Media</string>
     <string name="stream_detail_edit_menu_title">Edit</string>
@@ -191,15 +157,6 @@
     <string name="remove_stream_label">Remove stream</string>
     <string name="restore_stream_label">Restore stream</string>
     <string name="remove_stream_confirmation">Remove stream?</string>
-
-    <plurals name="nice_count_pattern">
-        <item quantity="one">
-            %d nice
-        </item>
-        <item quantity="other">
-            %d nices
-        </item>
-    </plurals>
     <string name="new_stream_short_title_label">Short title</string>
     <string name="profile_all_shots">All shots</string>
     <string name="title_activity_all_shots">All shots</string>
@@ -208,7 +165,6 @@
     <string name="invite_friends_title">Invite friends</string>
     <string name="invite_friends_button">Invite friends</string>
     <string name="suggested_people_section_title">Who to follow</string>
-
     <string name="profile_support">Support</string>
     <string name="title_activity_support">Support</string>
     <string name="support_version">Version</string>
@@ -273,6 +229,7 @@
     <string name="shared_shot_activity_with_comment">Shared %s\'s shot:&#160;</string>
     <string name="mentioned_shot_activity_with_comment">Mentioned you:&#160;</string>
     <string name="report_context_menu_delete">Delete</string>
+    <string name="report_context_menu_ban_user">Ban User</string>
     <string name="error_deleted_shot">This shot was deleted</string>
     <string name="delete_shot_confirmation_message">Delete shot?</string>
     <string name="menu_save_photo">Save image</string>
@@ -301,14 +258,18 @@
     <string name="stream_timeline_add_favorite">Add to favorites</string>
     <string name="stream_timeline_remove_favorite">Remove from favorites</string>
     <string name="showing_shots_by_holder">Showing shots by holder</string>
-    <string name="report_context_menu_unblock">Unblock user</string>
-    <string name="report_context_menu_block">Block user</string>
-    <string name="block_user_error">To block this user you need to unfollow first.</string>
-    <string name="user_blocked">User blocked.</string>
-    <string name="user_unblocked">User unblocked.</string>
-    <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
-    <string name="block_user_dialog_message">Block user?</string>
-    <string name="block_user_dialog_block">Block</string>
+    <string name="report_context_menu_unblock">Remove ignore</string>
+    <string name="report_context_menu_block">Block…</string>
+    <string name="block_user_error">To ignore this user you need to unfollow first.</string>
+    <string name="user_blocked">User ignored.</string>
+    <string name="user_banned">User banned.</string>
+    <string name="user_unblocked">Ignore removed.</string>
+    <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
+    <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
+    <string name="ban_user_dialog_message">Banning will prevent this user from shooting on your streams.</string>
+    <string name="unban_user_dialog_message">Remove ban?</string>
+    <string name="block_user_dialog_block">Ignore</string>
+    <string name="block_user_dialog_ban">Ban</string>
     <string name="block_user_dialog_cancel">Cancel</string>
     <string name="menu_holding_shots">Show holding shots</string>
     <string name="menu_all_shots">Show all shots</string>
@@ -323,6 +284,12 @@
     <string name="feedback_email_address">feedback@shootr.com</string>
     <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
+    <string name="block_ignore_user">Ignore user</string>
+    <string name="block_unblock_user">Remove ignore</string>
+    <string name="block_cannot_shoot_streams">Ban user</string>
+    <string name="can_shoot_streams">Remove ban</string>
+    <string name="user_unbanned">Ban removed.</string>
+    <string name="block_user_dialog_unban">Remove ban</string>
     <plurals name="total_watchers_pattern">
         <item quantity="one">
             %d participant
@@ -337,6 +304,30 @@
         </item>
         <item quantity="other">
             of %d participants
+        </item>
+    </plurals>
+    <plurals name="nice_count_pattern">
+        <item quantity="one">
+            %d nice
+        </item>
+        <item quantity="other">
+            %d nices
+        </item>
+    </plurals>
+    <plurals name="listing_favorites">
+        <item quantity="one">
+            %d favorite
+        </item>
+        <item quantity="other">
+            %d favorites
+        </item>
+    </plurals>
+    <plurals name="replies_header_count_pattern">
+        <item quantity="one">
+            %d reply
+        </item>
+        <item quantity="other">
+            %d replies
         </item>
     </plurals>
 </resources>

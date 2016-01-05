@@ -100,6 +100,11 @@ public class SQLiteUtils {
       + DatabaseContract.BlockTable.ID_BLOCKED_USER + " TEXT NOT NULL,"
       + " PRIMARY KEY(" + DatabaseContract.BlockTable.ID_USER + "," + DatabaseContract.BlockTable.ID_BLOCKED_USER + "))";
 
+    public static final String CREATE_TABLE_BAN = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.BanTable.TABLE + " ("
+      + DatabaseContract.BanTable.ID_USER + " TEXT NOT NULL,"
+      + DatabaseContract.BanTable.ID_BANNED_USER + " TEXT NOT NULL,"
+      + " PRIMARY KEY(" + DatabaseContract.BanTable.ID_USER + "," + DatabaseContract.BanTable.ID_BANNED_USER + "))";
+
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.DeviceTable.TABLE +" ("
             + DatabaseContract.DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"
             + DatabaseContract.DeviceTable.PLATFORM +" TEXT NOT NULL,"

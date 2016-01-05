@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.db.DatabaseContract;
+import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import java.util.ArrayList;
@@ -19,18 +21,22 @@ public class FollowManager extends AbstractManager{
 
     FollowEntityDBMapper followMapper;
     BlockEntityDBMapper blockMapper;
+    BanEntityDBMapper banMapper;
     private static final String FOLLOW_TABLE = DatabaseContract.FollowTable.TABLE;
     private static final String BLOCK_TABLE = DatabaseContract.BlockTable.TABLE;
+    private static final String BAN_TABLE = DatabaseContract.BanTable.TABLE;
     private static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;
     private static final String ID_BLOCKED_USER = DatabaseContract.BlockTable.ID_BLOCKED_USER;
+    private static final String ID_BANNED_USER = DatabaseContract.BanTable.ID_BANNED_USER;
     private static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
 
 
     @Inject
-    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockMapper){
+    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockMapper, BanEntityDBMapper banEntityDBMapper){
         super(openHelper);
         this.followMapper = followMapper;
         this.blockMapper = blockMapper;
+        this.banMapper = banEntityDBMapper;
     }
 
     /** Insert a Follow **/
@@ -175,5 +181,48 @@ public class FollowManager extends AbstractManager{
         }
         c.close();
         return blockeds;
+    }
+
+    public void saveBan(BanEntity banEntity) {
+        if(banEntity != null){
+            ContentValues contentValues = banMapper.toContentValues(banEntity);
+            getWritableDatabase().insertWithOnConflict(BAN_TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
+        }
+    }
+
+    public void saveBansFromServer(List<BanEntity> banneds) {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (BanEntity banEntity : banneds) {
+                ContentValues contentValues = banMapper.toContentValues(banEntity);
+                database.insertWithOnConflict(BAN_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
+
+    public List<BanEntity> getBans() {
+        List<BanEntity> bans = new ArrayList<>();
+        Cursor c = getReadableDatabase().query(BAN_TABLE, DatabaseContract.BanTable.PROJECTION,null,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                bans.add(banMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return bans;
+    }
+
+    public long deleteBan(String currentUserId, String idUser) {
+        String whereClause = ID_BANNED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{idUser, currentUserId};
+        return getWritableDatabase().delete(BAN_TABLE, whereClause, whereArgs);
     }
 }

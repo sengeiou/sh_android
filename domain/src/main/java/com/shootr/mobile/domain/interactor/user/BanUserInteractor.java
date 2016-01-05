@@ -15,7 +15,7 @@ import rx.Subscriber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-public class BlockUserInteractor implements Interactor {
+public class BanUserInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -23,10 +23,10 @@ public class BlockUserInteractor implements Interactor {
     private final FollowRepository remoteFollowRepository;
 
     private String idUser;
-    private CompletedCallback callback;
-    private ErrorCallback errorCallback;
+    private Interactor.CompletedCallback callback;
+    private Interactor.ErrorCallback errorCallback;
 
-    @Inject public BlockUserInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject public BanUserInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -34,7 +34,7 @@ public class BlockUserInteractor implements Interactor {
         this.remoteFollowRepository = remoteFollowRepository;
     }
 
-    public void block(String idUser, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void ban(String idUser, Interactor.CompletedCallback callback, Interactor.ErrorCallback errorCallback) {
         this.idUser = checkNotNull(idUser);
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -43,27 +43,26 @@ public class BlockUserInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            subscribeOnCompletedObserverToObservable(remoteBlockObservable());
-            subscribeOnCompletedObserverToObservable(localBlockObservable());
-            notifyCompleted();
+            subscribeOnCompletedObserverToObservable(localBanObservable());
+            subscribeOnCompletedObserverToObservable(remoteBanObservable());
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
-    private Observable<Void> localBlockObservable() {
+    private Observable<Void> localBanObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override public void call(Subscriber<? super Void> subscriber) {
-                localFollowRepository.block(idUser);
+                localFollowRepository.ban(idUser);
                 subscriber.onCompleted();
             }
         });
     }
 
-    private Observable<Void> remoteBlockObservable() {
+    private Observable<Void> remoteBanObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override public void call(Subscriber<? super Void> subscriber) {
-                remoteFollowRepository.block(idUser);
+                remoteFollowRepository.ban(idUser);
                 subscriber.onCompleted();
                 notifyCompleted();
             }
@@ -73,7 +72,7 @@ public class BlockUserInteractor implements Interactor {
     private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
         observable.subscribe(new OnCompletedObserver<Void>() {
             @Override public void onError(Throwable error) {
-                localFollowRepository.unblock(idUser);
+                localFollowRepository.unban(idUser);
                 if (error instanceof ServerCommunicationException) {
                     notifyError((ServerCommunicationException) error);
                 }
