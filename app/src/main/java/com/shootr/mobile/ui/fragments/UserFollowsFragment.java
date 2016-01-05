@@ -186,14 +186,14 @@ public class UserFollowsFragment extends BaseFragment
     }
 
     @Override public void unFollow(int position) {
-        final UserModel user = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        final UserModel userModel = getAdapter().getItem(position);
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  unfollowUser(user);
+                  unfollowUser(userModel);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
