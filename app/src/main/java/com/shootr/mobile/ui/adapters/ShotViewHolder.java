@@ -189,6 +189,9 @@ public class ShotViewHolder {
         boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
         int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
 
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
+        lp.setMargins(0, marginTop, 0, 0);
+
         ViewGroup.MarginLayoutParams lpNiceCountContainer = (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
         lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin, marginTop, lpNiceCountContainer.rightMargin, lpNiceCountContainer.bottomMargin);
 
