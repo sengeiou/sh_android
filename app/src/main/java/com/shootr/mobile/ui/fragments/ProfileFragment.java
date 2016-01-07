@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -696,33 +697,41 @@ public class ProfileFragment extends BaseFragment
           .sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery) //
           .sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take) //
           .title(R.string.change_photo) //
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          if (writePermissionManager.hasWritePermission()) {
-                              choosePhotoFromGallery();
-                          } else {
-                              writePermissionManager.requestWritePermissionToUser();
-                          }
-                          break;
-                      case R.id.menu_photo_take:
-                          takePhotoFromCamera();
-                          break;
-                      case R.id.menu_photo_remove:
-                          removePhoto();
-                          break;
-                      default:
-                          break;
-                  }
-              }
-          });
+          .listener(photoDialogListener());
 
         if (showRemove) {
             menuBuilder.sheet(R.id.menu_photo_remove, R.drawable.ic_photo_remove, R.string.photo_edit_remove);
         }
 
         menuBuilder.show();
+    }
+
+    @NonNull public DialogInterface.OnClickListener photoDialogListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case R.id.menu_photo_gallery:
+                        handleChoosePhotoFromGallery();
+                        break;
+                    case R.id.menu_photo_take:
+                        takePhotoFromCamera();
+                        break;
+                    case R.id.menu_photo_remove:
+                        removePhoto();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+    }
+
+    public void handleChoosePhotoFromGallery() {
+        if (writePermissionManager.hasWritePermission()) {
+            choosePhotoFromGallery();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
     }
 
     @Override public void goToWebsite(String website) {

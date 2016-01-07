@@ -312,11 +312,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_photo_gallery:
-                          if (writePermissionManager.hasWritePermission()) {
-                              choosePhotoFromGallery();
-                          } else {
-                              writePermissionManager.requestWritePermissionToUser();
-                          }
+                          handlePhotoSelectionFromGallery();
                           break;
                       case com.shootr.mobile.R.id.menu_photo_take:
                           takePhotoFromCamera();
@@ -325,6 +321,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
           })
           .show();
+    }
+
+    public void handlePhotoSelectionFromGallery() {
+        if (writePermissionManager.hasWritePermission()) {
+            choosePhotoFromGallery();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
     }
 
     @Override

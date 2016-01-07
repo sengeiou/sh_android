@@ -17,6 +17,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkArgument;
 
 public class ServiceFollowDataSource implements FollowDataSource {
 
+    public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
     private final SessionRepository sessionRepository;
     private final UserApiService userApiService;
 
@@ -28,7 +29,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
 
     @Override
     public List<FollowEntity> putFollows(List<FollowEntity> followEntities) {
-        throw new IllegalStateException("Method not allowed in service");
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
     }
 
     @Override public void putBlockeds(List<BlockEntity> blockeds) {
-        throw new IllegalStateException("Method not valid for service");
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 
     @Override public void ban(BanEntity banEntity) {
@@ -104,7 +105,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
     }
 
     @Override public void putBanneds(List<BanEntity> banneds) {
-        throw new IllegalStateException("Method not valid for service");
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 
     @Override public void unban(String idUser) {
@@ -117,6 +118,6 @@ public class ServiceFollowDataSource implements FollowDataSource {
 
     @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
-        throw new IllegalStateException("Method not valid for service");
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 }

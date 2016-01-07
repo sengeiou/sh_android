@@ -133,7 +133,6 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         @Bind(R.id.user_name) TextView title;
         @Bind(R.id.user_username) TextView subtitle;
         @Bind(R.id.user_follow_button) FollowButton followButton;
-        public int position;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -142,8 +141,8 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
 
     public interface FollowUnfollowAdapterCallback{
-        public void follow(int position);
-        public void unFollow(int position);
+        void follow(int position);
+        void unFollow(int position);
     }
 
 

@@ -101,7 +101,7 @@
           android:gravity="left|center_vertical"
           android:text="@string/activity_login_register_facebook"
           android:textColor="@color/primary"
-          android:textSize="14dp"
+          android:textSize="14sp"
           android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
