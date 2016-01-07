@@ -70,8 +70,8 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public Boolean performFacebookLogin(String facebookToken) throws InvalidLoginException {
-        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
+    public Boolean performFacebookLogin(String facebookToken, String language) throws InvalidLoginException {
+        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, language);
         retrievePostLoginInformation(loginResult);
         return loginResult.isNewUser();
     }
