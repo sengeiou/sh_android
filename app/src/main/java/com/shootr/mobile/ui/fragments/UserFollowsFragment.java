@@ -121,7 +121,6 @@ public class UserFollowsFragment extends BaseFragment
 
     public void setupProgressView() {
         progressView = getLoadingView();
-        View progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
     }
 
     private View getLoadingView() {
