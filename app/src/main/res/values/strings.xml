@@ -307,8 +307,8 @@
     <string name="update_warning_button">Update now</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
     <string name="user_blocked">User ignored.</string>
-    <string name="user_not_found">User not found</string>
-    <string name="user_not_found_message">User not found</string>
+    <string name="user_not_found">User not found.</string>
+    <string name="user_not_found_message">User not found.</string>
     <string name="user_unblocked">Ignore removed.</string>
     <string name="watching_stream_connected">connected</string>
     <string name="welcome_friends_text">Leave to disconnect</string>
