@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import java.util.List;
@@ -20,6 +21,7 @@ public class CreateAccountInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrUserService shootrUserService;
+    private final LocaleProvider localeProvider;
 
     private String email;
     private String username;
@@ -28,10 +30,11 @@ public class CreateAccountInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public CreateAccountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShootrUserService shootrUserService) {
+      ShootrUserService shootrUserService, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
+        this.localeProvider = localeProvider;
     }
 
     public void createAccount(String email, String username, String password, CompletedCallback completedCallback,
@@ -47,7 +50,7 @@ public class CreateAccountInteractor implements Interactor {
     @Override public void execute() throws Exception {
         if (validateInput()) {
             try {
-                shootrUserService.createAccount(username, email, password);
+                shootrUserService.createAccount(username, email, password, localeProvider.getLanguage());
                 notifyLoaded();
             } catch (EmailAlreadyExistsException e) {
                 handleServerError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);

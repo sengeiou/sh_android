@@ -59,9 +59,9 @@ public class ShootrUserService {
         checkinGateway.performCheckin(idEvent);
     }
 
-    public void createAccount(String username, String email, String password)
+    public void createAccount(String username, String email, String password, String language)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
-        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
+        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password, language);
         retrievePostLoginInformation(loginResult);
     }
 
