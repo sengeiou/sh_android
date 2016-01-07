@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.interactor.OnCompletedObserver;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
@@ -16,6 +17,8 @@ import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import rx.Observable;
+import rx.Subscriber;
 
 public class AddToFavoritesInteractor implements Interactor {
 
@@ -51,14 +54,45 @@ public class AddToFavoritesInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         Favorite favorite = favoriteFromParameters();
-        localFavoriteRepository.putFavorite(favorite);
-        notifyLoaded();
-        notifyAdditionToBus();
-        try {
-            remoteFavoriteRepository.putFavorite(favorite);
-        } catch (StreamAlreadyInFavoritesException error) {
-            notifyError(new StreamIsAlreadyInFavoritesException(error));
-        }
+        subscribeOnCompletedObserverToObservable(localAddToFavoritesObservable(favorite));
+        subscribeOnCompletedObserverToObservable(remoteAddToFavoritesObservable(favorite));
+    }
+
+    private Observable<Void> localAddToFavoritesObservable(final Favorite favorite) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override public void call(Subscriber<? super Void> subscriber) {
+                try {
+                    localFavoriteRepository.putFavorite(favorite);
+                } catch (StreamAlreadyInFavoritesException e) {
+                    /* no-op */
+                }
+                notifyLoaded();
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    private Observable<Void> remoteAddToFavoritesObservable(final Favorite favorite) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override public void call(Subscriber<? super Void> subscriber) {
+                notifyAdditionToBus();
+                try {
+                    remoteFavoriteRepository.putFavorite(favorite);
+                } catch (StreamAlreadyInFavoritesException error) {
+                    notifyError(new StreamIsAlreadyInFavoritesException(error));
+                }
+            }
+        });
+    }
+
+    private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
+        observable.subscribe(new OnCompletedObserver<Void>() {
+            @Override public void onError(Throwable error) {
+                if (error instanceof StreamAlreadyInFavoritesException) {
+                    notifyError(new StreamIsAlreadyInFavoritesException(error));
+                }
+            }
+        });
     }
 
     private Favorite favoriteFromParameters() {

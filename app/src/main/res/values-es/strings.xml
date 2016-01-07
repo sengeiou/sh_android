@@ -74,7 +74,7 @@
     <string name="done_label">Hecho</string>
     <string name="downloaded_pictures_subfolder">Shootr/</string>
     <string name="download_photo_permission_denied">Acceso denegado. Tienes que dar permiso para guardar imágenes.</string>
-    <string name="download_photo_permission_explaination">Debes permitir a Shootr guardar imágenes</string>
+    <string name="download_photo_permission_explaination">Debes permitir a Shootr guardar imágenes.</string>
     <string name="drafts_action_discard">Descartar</string>
     <string name="drafts_action_shoot">Shoot</string>
     <string name="drafts_empty">No hay borradores</string>
@@ -100,7 +100,7 @@
     <string name="entered_minutes_ago">Ha entrado hace %d minutos</string>
     <string name="error_deleted_shot">Este shot ha sido eliminado</string>
     <string name="error_following_user_blocked">No puedes seguir un usuario que ignoras.</string>
-    <string name="error_login_credentials_invalid">Id o contraseña no válidos</string>
+    <string name="error_login_credentials_invalid">Id o contraseña no válidos.</string>
     <string name="error_message">Shootr ha encontrado un problema y necesita cerrarse.</string>
     <string name="error_message_invalid_change_password">Contraseña inválida</string>
     <string name="error_restart_button">Reiniciar</string>
@@ -125,7 +125,7 @@
     <string name="intro_streams">Streams</string>
     <string name="intro_streams_text">La app de mensajería donde los chats son abiertos. Se llaman streams.</string>
     <string name="invite_friends_button">Invitar a amigos</string>
-    <string name="invite_friends_message">Hola! Te recomiendo Shootr: https://shootr.com</string>
+    <string name="invite_friends_message">Hola! Te recomiendo Shootr: https://shootr.com/</string>
     <string name="invite_friends_title">Invitar a amigos</string>
     <plurals name="listing_favorites">
         <item quantity="one">%d favorito</item>
