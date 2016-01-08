@@ -98,8 +98,8 @@ public class ShootrUserService {
         return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 
-    public void sendPasswordResetEmail(String idUser) throws IOException {
-        resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
+    public void sendPasswordResetEmail(String idUser, String language) throws IOException {
+        resetPasswordEmailGateway.sendPasswordResetEmail(idUser, language);
     }
 
     public void performLogout() {
@@ -129,8 +129,8 @@ public class ShootrUserService {
         confirmEmailGateway.changeEmail(email);
     }
 
-    public void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException {
-        changePasswordGateway.changePassword(currentPassword, newPassword);
+    public void changePassword(String currentPassword, String newPassword, String language) throws InvalidPasswordException {
+        changePasswordGateway.changePassword(currentPassword, newPassword, language);
     }
 
     public void removeSessionData() {
