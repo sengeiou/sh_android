@@ -16,6 +16,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     private final ShootrTimelineService shootrTimelineService;
     private final SessionRepository sessionRepository;
 
+    private String language;
     private Callback<ActivityTimeline> callback;
     private ErrorCallback errorCallback;
 
@@ -28,7 +29,8 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void refreshActivityTimeline(Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
+    public void refreshActivityTimeline(String language, Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
+        this.language = language;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -40,7 +42,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+            ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(language);
             notifyLoaded(activityTimeline);
             if (sessionRepository.getCurrentUser().getIdWatchingStream() != null) {
                 shootrTimelineService.refreshTimelinesForStream(sessionRepository.getCurrentUser()

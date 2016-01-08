@@ -6,6 +6,6 @@ import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 
 public interface CreateAccountGateway {
 
-    LoginResult performCreateAccount(String username, String email, String password)
+    LoginResult performCreateAccount(String username, String email, String password, String language)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 }

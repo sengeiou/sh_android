@@ -14,7 +14,7 @@ public class DatabaseActivityDataSource implements ActivityDataSource {
         this.activityManager = activityManager;
     }
 
-    @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters) {
+    @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
         return activityManager.getActivityTimelineFromParameters(parameters);
     }
 

@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.user.LoginException;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -20,13 +21,15 @@ public class PerformFacebookLoginInteractor implements Interactor {
     private String facebookToken;
     private ErrorCallback errorCallback;
     private Callback<Boolean> callback;
+    private LocaleProvider localeProvider;
 
     @Inject
     public PerformFacebookLoginInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShootrUserService shootrUserService) {
+      ShootrUserService shootrUserService, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
+        this.localeProvider = localeProvider;
     }
 
     public void attempLogin(String facebookToken, Callback<Boolean> callback, ErrorCallback errorCallback) {
@@ -38,7 +41,7 @@ public class PerformFacebookLoginInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken));
+            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLanguage()));
         } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
         } catch (ShootrException unknownException) {

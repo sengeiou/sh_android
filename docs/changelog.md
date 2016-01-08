@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.2.0] - 2016-01-08
+
+### Changed
+- Llamadas de cambio y reseteo de contraseña, login por FB y registro por email mandan el language en el body.
+- Uso de RxJava en interactors de Add y Remove From Favorites y FollowInteractor.
+
+### Added
+- Shootr in Spanish.
+- Nices on shot.
+- Holder Blocks Users (Ban & Ignore user).
+
+### Fixed
+- Defecto en el subtitulo de un user de una lista de users.
+- Limpieza de Lint y Sonar.
+- Ya no aparece como no seguidos usuarios que se siguen en StreamDetail.
+
 ## [1.1.0] - 2015-12-14
 
 ### Changed

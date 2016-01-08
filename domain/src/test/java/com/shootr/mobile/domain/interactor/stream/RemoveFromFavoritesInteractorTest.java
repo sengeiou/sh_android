@@ -47,23 +47,23 @@ public class RemoveFromFavoritesInteractorTest {
         verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
-    @Test public void shouldCallbackCompletedBeforeRemovingFavoriteFromRemote() throws Exception {
+    @Test public void shouldCallbackCompletedAfterRemovingFavoriteFromRemote() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
         InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
-        inOrder.verify(callback).onCompleted();
         inOrder.verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
+        inOrder.verify(callback).onCompleted();
     }
 
-    @Test public void shouldRemoveFavoriteFromLocalBeforeCallbackCompleted() throws Exception {
+    @Test public void shouldRemoveFavoriteFromRemoteBeforeCallbackCompleted() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
         interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
-        InOrder inOrder = inOrder(localFavoriteRepository, callback);
-        inOrder.verify(localFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
+        InOrder inOrder = inOrder(remoteFavoriteRepository, callback);
+        inOrder.verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
         inOrder.verify(callback).onCompleted();
     }
 

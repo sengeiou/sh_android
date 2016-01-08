@@ -7,7 +7,7 @@ public interface LoginGateway {
 
     LoginResult performLogin(String usernameOrEmail, String password) throws InvalidLoginException;
 
-    LoginResult performFacebookLogin(String facebookToken) throws InvalidLoginException;
+    LoginResult performFacebookLogin(String facebookToken, String language) throws InvalidLoginException;
 
     void performLogout(String idUser);
 }

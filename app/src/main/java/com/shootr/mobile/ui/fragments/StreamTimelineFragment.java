@@ -67,6 +67,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -94,6 +95,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject AnalyticsTool analyticsTool;
+    @Inject WritePermissionManager writePermissionManager;
 
     @Bind(com.shootr.mobile.R.id.timeline_shot_list) ListView listView;
     @Bind(com.shootr.mobile.R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -299,6 +301,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     //region Views manipulation
     private void initializeViews() {
+        writePermissionManager.init(getActivity());
         setupListAdapter();
         setupSwipeRefreshLayout();
         setupListScrollListeners();
@@ -584,6 +587,14 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.showLong(getView(), messageForError);
     }
 
+    @Override public void showUserBanned() {
+        /* no-op */
+    }
+
+    @Override public void showUserUnbanned() {
+        /* no-op */
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
@@ -591,7 +602,11 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void pickImage() {
-        newShotBarViewDelegate.pickImage();
+        if (writePermissionManager.hasWritePermission()) {
+            newShotBarViewDelegate.pickImage();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
     }
 
     @Override

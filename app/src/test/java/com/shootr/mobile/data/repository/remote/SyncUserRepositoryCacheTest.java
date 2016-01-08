@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -67,7 +68,7 @@ public class SyncUserRepositoryCacheTest {
 
         syncUserRepository.getPeople();
 
-        verify(remoteUserDataSource, never()).getFollowing(anyString());
+        verify(remoteUserDataSource, never()).getFollowing(anyString(), anyInt(), anyInt());
     }
 
     @Test
@@ -76,7 +77,7 @@ public class SyncUserRepositoryCacheTest {
 
         syncUserRepository.getPeople();
 
-        verify(remoteUserDataSource).getFollowing(anyString());
+        verify(remoteUserDataSource).getFollowing(anyString(), anyInt(), anyInt());
     }
 
     @Test

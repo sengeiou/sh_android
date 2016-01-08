@@ -125,7 +125,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ShotModel shotModel;
+        private ShotModel shotModel;
 
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;

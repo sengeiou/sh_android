@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 
 public class SendPasswordResetEmailInteractor implements Interactor {
@@ -17,12 +18,14 @@ public class SendPasswordResetEmailInteractor implements Interactor {
     private CompletedCallback completedCallback;
 
     private String idUser;
+    private LocaleProvider localeProvider;
 
     @Inject public SendPasswordResetEmailInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ShootrUserService shootrUserService) {
+      PostExecutionThread postExecutionThread, ShootrUserService shootrUserService, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
+        this.localeProvider = localeProvider;
     }
 
     public void sendPasswordResetEmail(String idUser, CompletedCallback completedCallback,
@@ -35,7 +38,7 @@ public class SendPasswordResetEmailInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.sendPasswordResetEmail(idUser);
+            shootrUserService.sendPasswordResetEmail(idUser, localeProvider.getLanguage());
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);
@@ -57,4 +60,5 @@ public class SendPasswordResetEmailInteractor implements Interactor {
             }
         });
     }
+
 }

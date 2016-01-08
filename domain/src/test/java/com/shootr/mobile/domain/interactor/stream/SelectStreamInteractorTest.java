@@ -13,7 +13,6 @@ import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -88,10 +87,6 @@ public class SelectStreamInteractorTest {
         interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
         verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
-    }
-
-    @Test @Ignore public void selectedStreamSavedInLocalIfNotExists() throws Exception {
-        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
     }
 
     @Test public void selectingCurrentStreamDoesNotifyUi() throws Exception {

@@ -30,9 +30,9 @@ public class LocalActivityRepository implements ActivityRepository{
         this.localStreamRepository = localStreamRepository;
     }
 
-    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
         List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters);
+          localActivityDataSource.getActivityTimeline(parameters, language);
         List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
         return activityEntityMapper.transform(activityEntities);
     }

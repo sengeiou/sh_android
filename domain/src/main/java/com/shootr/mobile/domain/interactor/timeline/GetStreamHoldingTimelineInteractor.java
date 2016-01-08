@@ -54,8 +54,7 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
     }
 
     private List<Shot> loadLoadTimeline() {
-        List<Shot> shots =  localShotRepository.getUserShotsForStreamTimeline(buildParameters());
-        return shots;
+        return localShotRepository.getUserShotsForStreamTimeline(buildParameters());
     }
 
     private List<Shot> loadRemoteTimeline(List<Shot> shots) {

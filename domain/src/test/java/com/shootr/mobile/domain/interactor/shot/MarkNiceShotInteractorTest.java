@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -17,14 +19,22 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MarkNiceShotInteractorTest {
 
     private static final String SHOT_ID = "shot_id";
+    private static final Long STREAM_ID = 2L;
+    private static final String STREAM_TITLE = "title";
+    private static final String STREAM_SHORT_TITLE = "shortTitle";
+    private static final Long SHOT_USER_ID = 3L;
+    private static final String SHOT_USERNAME = "username";
 
     @Mock NiceShotRepository niceShotRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
     @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
 
@@ -37,10 +47,12 @@ public class MarkNiceShotInteractorTest {
         interactor = new MarkNiceShotInteractor(interactorHandler,
           postExecutionThread,
           niceShotRepository,
-          remoteNiceShotRepository);
+          remoteNiceShotRepository, localShotRepository, remoteShotRepository);
     }
 
     @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {
+        setupLocalShot();
+
         interactor.markNiceShot(SHOT_ID, callback);
 
         InOrder inOrder = inOrder(callback, remoteNiceShotRepository);
@@ -48,7 +60,18 @@ public class MarkNiceShotInteractorTest {
         inOrder.verify(callback).onCompleted();
     }
 
+    @Test public void shouldIncrementNiceCountWhenMarkNiceInLocal() throws Exception {
+        setupLocalShot();
+
+        interactor.markNiceShot(SHOT_ID, callback);
+
+        Shot shot = shot();
+        shot.setNiceCount(shot.getNiceCount() + 1);
+        verify(localShotRepository).putShot(shot);
+    }
+
     @Test public void shouldNotifyCallbackWhenServiceFails() throws Exception {
+        setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
@@ -57,6 +80,7 @@ public class MarkNiceShotInteractorTest {
     }
 
     @Test public void shouldUnmarkNiceWhenServerFails() throws Exception {
+        setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
@@ -64,11 +88,52 @@ public class MarkNiceShotInteractorTest {
         verify(niceShotRepository).unmark(SHOT_ID);
     }
 
+    @Test public void shouldDecrementNiceWhenServerFails() throws Exception {
+        setupLocalShot();
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
+
+        interactor.markNiceShot(SHOT_ID, callback);
+
+        Shot shot = shot();
+        shot.setNiceCount(0);
+        verify(localShotRepository, times(2)).putShot(shot);
+    }
+
     @Test public void shouldNotSendToServiceWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
+        setupLocalShot();
         doThrow(new NiceAlreadyMarkedException()).when(niceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
         verify(remoteNiceShotRepository, never()).mark(anyString());
+    }
+
+    private void setupLocalShot() {
+        when(localShotRepository.getShot(anyString())).thenReturn(shot());
+    }
+
+    private Shot shot() {
+        Shot shot = new Shot();
+        shot.setIdShot(SHOT_ID);
+        shot.setStreamInfo(streamInfo());
+        shot.setUserInfo(userInfo());
+        shot.setType(ShotType.COMMENT);
+        shot.setNiceCount(0);
+        return shot;
+    }
+
+    private Shot.ShotStreamInfo streamInfo() {
+        Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
+        shotStreamInfo.setIdStream(String.valueOf(STREAM_ID));
+        shotStreamInfo.setStreamTitle(STREAM_TITLE);
+        shotStreamInfo.setStreamShortTitle(STREAM_SHORT_TITLE);
+        return shotStreamInfo;
+    }
+
+    private Shot.ShotUserInfo userInfo() {
+        Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
+        shotUserInfo.setIdUser(String.valueOf(SHOT_USER_ID));
+        shotUserInfo.setUsername(SHOT_USERNAME);
+        return shotUserInfo;
     }
 }

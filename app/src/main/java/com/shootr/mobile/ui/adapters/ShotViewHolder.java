@@ -46,6 +46,8 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+    @Bind(R.id.shot_nice_count) TextView niceCount;
+    @Bind(R.id.nices_container) View niceContainer;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -151,8 +153,7 @@ public class ShotViewHolder {
     private void bindUserPhoto(final ShotModel shot) {
         imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 avatarClickListener.onAvatarClick(shot.getIdUser(), v);
             }
         });
@@ -174,8 +175,7 @@ public class ShotViewHolder {
             videoTitle.setText(shot.getVideoTitle());
             videoDuration.setText(shot.getVideoDuration());
             videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     videoClickListener.onVideoClick(shot.getVideoUrl());
                 }
             });
@@ -192,6 +192,16 @@ public class ShotViewHolder {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
         lp.setMargins(0, marginTop, 0, 0);
 
+        ViewGroup.MarginLayoutParams lpNiceCountContainer = (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
+        lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin, marginTop, lpNiceCountContainer.rightMargin, lpNiceCountContainer.bottomMargin);
+
+        Integer nicesCount = shot.getNiceCount();
+        if (nicesCount > 0) {
+            setNiceCount(nicesCount);
+        } else {
+            this.niceCount.setVisibility(View.GONE);
+        }
+
         niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +213,11 @@ public class ShotViewHolder {
                 }
             }
         });
+    }
+
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount.setVisibility(View.VISIBLE);
+        this.niceCount.setText(String.valueOf(niceCount));
     }
 
     private boolean hasLongComment(ShotModel shot) {

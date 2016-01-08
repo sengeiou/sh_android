@@ -18,7 +18,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         this.userManager = userManager;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId) {
+    @Override public List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize) {
         List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
         return userManager.getUsersByIds(usersFollowingIds);
     }
@@ -70,6 +70,10 @@ public class DatabaseUserDataSource implements UserDataSource {
     public void updateWatch(UserEntity userEntity) {
         //TODO save only watching fields?
         userManager.saveUser(userEntity);
+    }
+
+    @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {
+        throw new IllegalArgumentException("this method has no local implementation");
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {

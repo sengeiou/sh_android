@@ -37,7 +37,6 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-import com.shootr.mobile.util.WritePermissionManager;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -58,7 +57,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
-    @Inject WritePermissionManager writePermissionManager;
 
     private StreamsListAdapter adapter;
 
@@ -92,18 +90,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this, getView());
-        writePermissionManager.init(getActivity());
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
         adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
-                if (writePermissionManager.hasWritePermission()) {
-                    presenter.selectStream(stream);
-                } else {
-                    writePermissionManager.requestWritePermissionToUser();
-                }
+                presenter.selectStream(stream);
             }
 
             @Override

@@ -13,61 +13,48 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ShootrApplication;
-import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.task.events.CommunicationErrorEvent;
-import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
-import com.shootr.mobile.task.events.follows.FollowsResultEvent;
-import com.shootr.mobile.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
+import com.shootr.mobile.ui.views.UserFollowsView;
+import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback {
+public class UserFollowsFragment extends BaseFragment
+  implements UserListAdapter.FollowUnfollowAdapterCallback, UserFollowsView {
 
     public static final String TAG = "follows";
 
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
 
-    @Inject ImageLoader imageLoader;
-    @Inject @Main Bus bus;
-    @Inject InteractorHandler interactorHandler;
-    @Inject FeedbackMessage feedbackMessage;
-    @Inject FollowInteractor followInteractor;
-    @Inject UnfollowInteractor unfollowInteractor;
+    private Boolean isFooterLoading = false;
 
-    @Bind(R.id.userlist_list) ListView userlistListView;
+    @Inject ImageLoader imageLoader;
+    @Inject FeedbackMessage feedbackMessage;
+
+    @Bind(R.id.userlist_list) ListView userList;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
-    @BindString(R.string.communication_error) String communicationError;
-    @BindString(com.shootr.mobile.R.string.connection_lost) String connetionLost;
+
+    @Inject UserFollowsPresenter userFollowsPresenter;
 
     // Args
     String userId;
     Integer followType;
 
-    UserModel user;
-
     private UserListAdapter userListAdapter;
+    private View progressView;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -82,8 +69,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         return bundle;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
@@ -100,7 +86,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+      @Nullable Bundle savedInstanceState) {
         return inflater.inflate(com.shootr.mobile.R.layout.activity_userlist, container, false);
     }
 
@@ -109,39 +95,36 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         ButterKnife.bind(this, view);
     }
 
-
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setEmptyMessage();
-        userlistListView.setAdapter(getAdapter());
+        setupProgressView();
+        setupUserListAdapter();
     }
 
-    private void retrieveUsers() {
-        startJob();
-        setLoadingView(true);
-        setEmpty(false);
+    public void setupUserListAdapter() {
+        userList.setAdapter(getAdapter());
+        new ListViewScrollObserver(userList).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                /* no-op */
+            }
+
+            @Override public void onScrollIdle() {
+                int lastVisiblePosition = userList.getLastVisiblePosition();
+                int loadingFooterPosition = userList.getAdapter().getCount() - 1;
+                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                if (shouldStartLoadingMore && !isFooterLoading) {
+                    userFollowsPresenter.makeNextRemoteSearch();
+                }
+            }
+        });
     }
 
-    public void startJob(){
-        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(userId, followType);
-        interactorHandler.execute(job);
+    public void setupProgressView() {
+        progressView = getLoadingView();
     }
 
-    private void setEmptyMessage() {
-        emptyTextView.setText(followType.equals(GetUsersFollowsJob.FOLLOWERS) ? R.string.follower_list_empty
-          : R.string.following_list_empty);
-    }
-
-    @Subscribe
-    public void showUserList(FollowsResultEvent event) {
-        setLoadingView(false);
-        List<UserModel> usersFollowing = event.getResult();
-        if (usersFollowing.isEmpty()) {
-            setEmpty(true);
-        } else {
-            setListContent(usersFollowing);
-        }
+    private View getLoadingView() {
+        return LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, userList, false);
     }
 
     protected void setListContent(List<UserModel> usersFollowing) {
@@ -150,67 +133,40 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         getAdapter().notifyDataSetChanged();
     }
 
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-        feedbackMessage.show(getView(), communicationError);
-    }
-
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackMessage.show(getView(), connetionLost);
-        setLoadingView(false);
-    }
-
-    @OnItemClick(R.id.userlist_list)
-    public void openUserProfile(int position) {
-        user = getAdapter().getItem(position);
+    @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
+        UserModel user = getAdapter().getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
-    public void followUser(final UserModel user){
-        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), true);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
-            }
-        });
+    private void followUser(UserModel user) {
+        userFollowsPresenter.follow(user);
     }
 
-    public void unfollowUser(final UserModel user){
-        unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
-                onFollowUpdated(user.getIdUser(), false);
-            }
-        });
+    public void unfollowUser(final UserModel user) {
+        userFollowsPresenter.unfollow(user);
     }
 
     @Override public void onResume() {
         super.onResume();
-        bus.register(this);
-        retrieveUsers();
+        userFollowsPresenter.initialize(this, userId, followType);
     }
 
     @Override public void onPause() {
         super.onPause();
-        bus.unregister(this);
+        userFollowsPresenter.pause();
     }
 
-    private void setLoadingView(boolean loading) {
+    public void setLoadingView(Boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
-        userlistListView.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
+        userList.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void setEmpty(boolean empty) {
+    @Override public void setEmpty(Boolean empty) {
         emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
-        userlistListView.setVisibility(empty ? View.GONE : View.VISIBLE);
+        userList.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
@@ -224,41 +180,69 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Override public void follow(int position) {
-        user = getAdapter().getItem(position);
+        UserModel user = getAdapter().getItem(position);
         followUser(user);
     }
 
-
     @Override public void unFollow(int position) {
-        user = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        final UserModel userModel = getAdapter().getItem(position);
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                unfollowUser(user);
+                  unfollowUser(userModel);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
 
-    protected void onFollowUpdated(String idUser, boolean following) {
+    @Override public void updateFollow(String idUser, Boolean following) {
         List<UserModel> usersInList = userListAdapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);
             if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                userModel.setRelationship(
+                  following ? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
                 userListAdapter.notifyDataSetChanged();
                 break;
             }
         }
     }
 
+    @Override public void showUserBlockedError() {
+        feedbackMessage.showLong(getView(), R.string.error_following_user_blocked);
+    }
+
+    @Override public void showNoFollowers() {
+        emptyTextView.setText(R.string.follower_list_empty);
+    }
+
+    @Override public void showNoFollowing() {
+        emptyTextView.setText(R.string.following_list_empty);
+    }
+
+    @Override public void showProgressView() {
+        isFooterLoading = true;
+        userList.addFooterView(progressView, null, false);
+    }
+
+    @Override public void hideProgressView() {
+        isFooterLoading = false;
+        userList.removeFooterView(progressView);
+    }
+
+    @Override public void renderUsersBelow(List<UserModel> olderUsers) {
+        getAdapter().addItems(olderUsers);
+        getAdapter().notifyDataSetChanged();
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if(resultCode == Activity.RESULT_OK && data!=null){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
             Bundle bundleUser = data.getExtras();
-            int i=0;int index =0;
+            int i = 0;
+            int index = 0;
             UserModel userModel = new UserModel();
             userModel.setPhoto(bundleUser.getString("PHOTO"));
             userModel.setUsername(bundleUser.getString("USER_NAME"));
@@ -266,19 +250,25 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
             userModel.setIdUser(bundleUser.getString("ID_USER"));
             List<UserModel> userModels = getAdapter().getItems();
-            for(UserModel userM: userModels){
-                if(userM.getIdUser().equals(userModel.getIdUser())){
+            for (UserModel userM : userModels) {
+                if (userM.getIdUser().equals(userModel.getIdUser())) {
                     index = i;
                 }
                 i++;
             }
             userModels.remove(index);
             getAdapter().removeItems();
-            userModels.add(index,userModel);
+            userModels.add(index, userModel);
             getAdapter().setItems(userModels);
             getAdapter().notifyDataSetChanged();
         }
     }
 
+    @Override public void showError(String messageForError) {
+        feedbackMessage.show(getView(), messageForError);
+    }
 
+    @Override public void showUsers(List<UserModel> userModels) {
+        setListContent(userModels);
+    }
 }

@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface ResetPasswordEmailGateway {
 
-    void sendPasswordResetEmail(String idUser) throws IOException;
+    void sendPasswordResetEmail(String idUser, String language) throws IOException;
 }

@@ -18,6 +18,8 @@ import javax.inject.Inject;
 
 public class LocalUserRepository implements UserRepository {
 
+    public static final int PAGE_SIZE = 100;
+    public static final int PAGE = 0;
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final SuggestedPeopleDataSource localSuggestedPeopleDataSource;
@@ -40,7 +42,8 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getPeople() {
-        List<UserEntity> userEntities = localUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+        List<UserEntity> userEntities = localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE,
+          PAGE_SIZE);
         return transformUserEntitiesForPeople(userEntities);
     }
 
@@ -88,6 +91,14 @@ public class LocalUserRepository implements UserRepository {
     public void updateWatch(User user) {
         UserEntity entity = userEntityMapper.transform(user);
         localUserDataSource.updateWatch(entity);
+    }
+
+    @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
+        throw new IllegalArgumentException("this method has no local implementation");
+    }
+
+    @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
+        throw new IllegalArgumentException("this method has no local implementation");
     }
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {

@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 
 public class RefreshHoldingStreamTimelineInteractor implements Interactor {
@@ -13,6 +14,7 @@ public class RefreshHoldingStreamTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrTimelineService shootrTimelineService;
+    private final LocaleProvider localeProvider;
 
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
@@ -20,10 +22,12 @@ public class RefreshHoldingStreamTimelineInteractor implements Interactor {
     private String idUser;
 
     @Inject public RefreshHoldingStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService) {
+      PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrTimelineService = shootrTimelineService;
+        this.localeProvider = localeProvider;
     }
 
     public void refreshHoldingStreamTimeline(String streamId, String userId, Callback<Timeline> callback,
@@ -43,7 +47,7 @@ public class RefreshHoldingStreamTimelineInteractor implements Interactor {
         try {
             Timeline timeline = shootrTimelineService.refreshHoldingTimelineForStream(idStream, idUser);
             notifyLoaded(timeline);
-            shootrTimelineService.refreshTimelinesForActivity();
+            shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLanguage());
         } catch (ShootrException error) {
             notifyError(error);
         }

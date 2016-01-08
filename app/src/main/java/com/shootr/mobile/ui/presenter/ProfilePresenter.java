@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
@@ -47,6 +48,7 @@ public class ProfilePresenter implements Presenter {
     private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
     private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
     private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+    private final GetBannedUsersInteractor getBannedUsersInteractor;
     private final SessionRepository sessionRepository;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
@@ -58,6 +60,9 @@ public class ProfilePresenter implements Presenter {
     private UserModel userModel;
     private boolean hasBeenPaused = false;
     private boolean uploadingPhoto = false;
+    private boolean isBlocked = false;
+    private boolean isBanned = false;
+    private int hadleBlockMenuCalls;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
@@ -65,7 +70,7 @@ public class ProfilePresenter implements Presenter {
       ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
-      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
+      GetBannedUsersInteractor getBannedUsersInteractor, SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
       ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
@@ -79,6 +84,7 @@ public class ProfilePresenter implements Presenter {
         this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
         this.removeUserPhotoInteractor = removeUserPhotoInteractor;
         this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
+        this.getBannedUsersInteractor = getBannedUsersInteractor;
         this.sessionRepository = sessionRepository;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
@@ -443,35 +449,89 @@ public class ProfilePresenter implements Presenter {
                     profileView.showChangePasswordButton();
                 } else {
                     profileView.showReportUserButton();
-                    getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
-                        @Override public void onLoaded(List<String> blockedIds) {
-                            if (blockedIds.contains(userModel.getIdUser())) {
-                                profileView.showUnblockUserButton();
-                            } else {
-                                profileView.showBlockUserButton();
-                            }
-                        }
-                    }, new Interactor.ErrorCallback() {
-                        @Override public void onError(ShootrException error) {
-                            showErrorInView(error);
-                        }
-                    });
+                    profileView.showBlockUserButton();
                 }
                 subscriber.onCompleted();
             }
         });
     }
 
-    public void blockUserClicked() {
-        profileView.blockUser(userModel);
+    @NonNull private Observable<Void> getBlockedIdsObservable() {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
+                    @Override public void onLoaded(final List<String> blockedIds) {
+                        hadleBlockMenuCalls++;
+                        isBlocked = blockedIds.contains(userModel.getIdUser());
+                        handleBlockMenu(isBlocked, isBanned);
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
+                        showErrorInView(error);
+                    }
+                });
+            }
+        });
+    }
+
+    @NonNull private Observable<Void> getBannedIdsObservable() {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                getBannedUsersInteractor.loadBannedIdUsers(new Interactor.Callback<List<String>>() {
+                    @Override public void onLoaded(List<String> bannedIds) {
+                        hadleBlockMenuCalls++;
+                        isBanned = bannedIds.contains(userModel.getIdUser());
+                        handleBlockMenu(isBlocked, isBanned);
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
+                        showErrorInView(error);
+                    }
+                });
+            }
+        });
+    }
+
+    public void blockMenuClicked() {
+        hadleBlockMenuCalls = 0;
+        subscribeUIObserverToObservable(getBlockedIdsObservable());
+        subscribeUIObserverToObservable(getBannedIdsObservable());
+    }
+
+    private void handleBlockMenu(Boolean isBlocked, Boolean isBanned) {
+        if (hadleBlockMenuCalls == 2) {
+            if (!isBlocked && !isBanned) {
+                profileView.showDefaultBlockMenu(userModel);
+            } else if (isBlocked && !isBanned) {
+                profileView.showBlockedMenu(userModel);
+            } else if (!isBlocked) {
+                profileView.showBannedMenu(userModel);
+            } else {
+                profileView.showBlockAndBannedMenu(userModel);
+            }
+        }
     }
 
     public void unblockUserClicked() {
         profileView.unblockUser(userModel);
     }
 
+    public void blockUserClicked() {
+        profileView.blockUser(userModel);
+    }
+
     public void reportUserClicked() {
         profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
+    }
+
+    public void banUserClicked() {
+        profileView.showBanUserConfirmation(userModel);
+    }
+
+    public void unbanUserClicked() {
+        profileView.confirmUnban(userModel);
     }
 
     @Override public void resume() {

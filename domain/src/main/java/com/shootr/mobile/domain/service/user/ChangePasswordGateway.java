@@ -4,5 +4,5 @@ import com.shootr.mobile.domain.exception.InvalidPasswordException;
 
 public interface ChangePasswordGateway {
 
-    void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException;
+    void changePassword(String currentPassword, String newPassword, String language) throws InvalidPasswordException;
 }

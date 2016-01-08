@@ -32,6 +32,7 @@ import timber.log.Timber;
 
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
+    public static final int PAGE_SIZE = 100;
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
@@ -74,11 +75,19 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     @Override public synchronized List<User> getPeople() {
         List<User> people = userCache.getPeople();
         if (people == null) {
+            Integer page = 0;
             List<UserEntity> remotePeopleEntities =
-              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
-            savePeopleInLocal(remotePeopleEntities);
-            people = transformUserEntitiesForPeople(remotePeopleEntities);
-            userCache.putPeople(people);
+              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), page, PAGE_SIZE);
+            List<User> peopleToCache = new ArrayList<>();
+            while (!remotePeopleEntities.isEmpty()) {
+                page++;
+                savePeopleInLocal(remotePeopleEntities);
+                people = transformUserEntitiesForPeople(remotePeopleEntities);
+                peopleToCache.addAll(people);
+                remotePeopleEntities =
+                  remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), page, PAGE_SIZE);
+            }
+            userCache.putPeople(peopleToCache);
         }
         return people;
     }
@@ -194,6 +203,14 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         } catch (ServerCommunicationException e) {
             queueWatchUpload(entityWithWatchValues, e);
         }
+    }
+
+    @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
+        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowing(idUser, page, pageSize));
+    }
+
+    @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
+        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowers(idUser, page, pageSize));
     }
 
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {

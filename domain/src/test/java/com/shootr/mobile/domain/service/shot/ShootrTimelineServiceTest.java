@@ -43,6 +43,7 @@ public class ShootrTimelineServiceTest {
     private static final String STREAM_SHOT_ID = "stream_shot";
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
+    public static final String LANGUAGE = "LANGUAGE";
     @Mock ShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
@@ -70,8 +71,8 @@ public class ShootrTimelineServiceTest {
 
     @Test public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
         List<Activity> activities = activitiesList();
-        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
-        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activities);
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
@@ -79,9 +80,9 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyStream()
       throws Exception {
         List<Activity> activities = activitiesList();
-        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activities);
 
-        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
@@ -89,7 +90,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
 
-        shootrTimelineService.refreshTimelinesForActivity();
+        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyStreamParameters());
     }
@@ -138,24 +139,24 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity() {
-        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activitiesList());
 
-        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);
-        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture(), anyString());
         assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(allActivityTypes());
     }
 
     @Test public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity() {
-        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(emptyActivityList());
 
-        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);
-        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture(), anyString());
         assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
     }
 

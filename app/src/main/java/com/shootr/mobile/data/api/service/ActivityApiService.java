@@ -14,7 +14,8 @@ public interface ActivityApiService {
       @Query("types") List<String> types,
       @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp,
-      @Query("maxTimestamp") Long maxTimestamp)
+      @Query("maxTimestamp") Long maxTimestamp,
+      @Query("language") String language)
     throws ApiException, IOException;
 
     @GET("/activity/{id}")

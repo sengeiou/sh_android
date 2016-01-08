@@ -26,6 +26,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -38,6 +39,7 @@ public class ServiceActivityDataSourceTest {
     private static final Date DATE_NEWER = new Date(3000);
     private static final Date DATE_NOW = new Date(2000);
     private static final Date DATE_OLDER = new Date(1000);
+    public static final String LANGUAGE = "LANGUAGE";
 
     @Mock ActivityDataSource activityDataSource;
     @Mock BusPublisher busPublisher;
@@ -59,9 +61,9 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostEventToBusWhenSyncTriggerActivityReceived() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString())).thenReturn(Arrays.asList(syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher).post(captor.capture());
@@ -70,10 +72,10 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenTwoSyncTriggerActivitiesReceived() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString())).thenReturn(Arrays.asList(
           syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -82,12 +84,12 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostEventOnceWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString()))//
           .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_NOW)));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
-        datasource.getActivityTimeline(activityTimelineParameters);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -95,12 +97,12 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostEventOnceWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString()))//
           .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_OLDER)));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
-        datasource.getActivityTimeline(activityTimelineParameters);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -108,12 +110,12 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostEventTwiceWhenReceivedActivityWithNewerDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString()))//
           .thenReturn(list(syncActivityApiWithDate(DATE_NOW)), list(syncActivityApiWithDate(DATE_NEWER)));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
-        datasource.getActivityTimeline(activityTimelineParameters);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(2)).post(captor.capture());
@@ -128,13 +130,13 @@ public class ServiceActivityDataSourceTest {
         List<ActivityApiEntity> firstRefresh = Arrays.asList(t2, t1);
         List<ActivityApiEntity> secondRefresh = Collections.singletonList(t2);
 
-        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong()))//
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong(), anyString()))//
           .thenReturn(firstRefresh, secondRefresh);
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
 
-        datasource.getActivityTimeline(activityTimelineParameters);
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -142,11 +144,11 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldNotPostStreamWhenTriggerActivityFromCurrentUser() throws Exception {
-        when(activityDataSource.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
+        when(activityDataSource.getActivityTimeline(any(ActivityTimelineParameters.class), anyString())).thenReturn(
           oneTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER_STUB);
 
-        datasource.getActivityTimeline(activityTimelineParameters);
+        datasource.getActivityTimeline(activityTimelineParameters, LANGUAGE);
 
         verify(busPublisher, never()).post(any(WatchUpdateRequest.Event.class));
     }

@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +29,7 @@ import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +42,7 @@ public class GetActivityTimelineInteractorTest {
     private static final Long DATE_OLDER = 1000L;
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
+    public static final String LANGUAGE = "LANGUAGE";
 
     @Mock ActivityRepository localActivityRepository;
     @Mock UserRepository localUserRepository;
@@ -49,6 +52,7 @@ public class GetActivityTimelineInteractorTest {
     @Mock SessionRepository sessionRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
+    @Mock LocaleProvider localeProvider;
 
     private GetActivityTimelineInteractor interactor;
 
@@ -65,20 +69,20 @@ public class GetActivityTimelineInteractorTest {
 
     @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingStream();
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class), anyString())).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(spyCallback);
+        interactor.loadActivityTimeline(localeProvider.getLanguage(), spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
     }
 
     @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching() throws Exception {
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class), anyString())).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(spyCallback);
+        interactor.loadActivityTimeline(localeProvider.getLanguage(), spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());

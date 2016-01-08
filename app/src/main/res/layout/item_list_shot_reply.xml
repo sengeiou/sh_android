@@ -114,14 +114,30 @@
       </FrameLayout>
     </RelativeLayout>
 
-  <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
-    android:layout_width="@dimen/nice_button_size"
-    android:layout_height="@dimen/nice_button_size"
+  <LinearLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:layout_below="@+id/shot_media_content"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="4dp"
-    style="@style/NiceButton" />
+    android:layout_below="@+id/shot_media_content"
+    android:orientation="horizontal">
+
+    <TextView android:id="@+id/shot_nice_count"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginRight="8dp"
+      android:textColor="@color/gray_80"
+      android:textSize="14sp"
+      tools:text="8 nices" />
+
+    <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
+      style="@style/NiceButton"
+      android:layout_width="@dimen/nice_button_size"
+      android:layout_height="@dimen/nice_button_size" />
+
+  </LinearLayout>
 
 </RelativeLayout>

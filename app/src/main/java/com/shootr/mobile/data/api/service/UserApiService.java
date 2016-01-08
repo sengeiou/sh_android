@@ -2,6 +2,7 @@ package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -28,10 +29,10 @@ public interface UserApiService {
     UserEntity getUserByUsername(@Query("userName") String username) throws IOException, ApiException;
 
     @GET("/user/{idUser}/following?includeLinks=false&includeEmbed=false")
-    List<UserEntity> getFollowing(@Path("idUser") String idUser) throws IOException, ApiException;
+    List<UserEntity> getFollowing(@Path("idUser") String idUser, @Query("page") Integer page, @Query("pageSize") Integer pageSize) throws IOException, ApiException;
 
     @GET("/user/{idUser}/followers?includeLinks=false&includeEmbed=false")
-    List<UserEntity> getFollowers(@Path("idUser") String idUser) throws IOException, ApiException;
+    List<UserEntity> getFollowers(@Path("idUser") String idUser, @Query("page") Integer page, @Query("pageSize") Integer pageSize) throws IOException, ApiException;
 
     @GET("/user/streamParticipants/{idStream}")
     List<UserEntity> getAllParticipants(@Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
@@ -68,4 +69,13 @@ public interface UserApiService {
 
     @GET("/block/")
     List<BlockEntity> getBlockedIdUsers() throws IOException, ApiException;
+
+    @POST("/ban/{idUser}")
+    Response ban(@Path("idUser") String idBannedUser) throws IOException, ApiException;
+
+    @GET("/ban/")
+    List<BanEntity> getBannedIdUsers() throws IOException, ApiException;
+
+    @DELETE("/ban/{idUser}")
+    Response unban(@Path("idUser") String idUser) throws IOException, ApiException;
 }

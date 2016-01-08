@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_message_unknown">Error desconocido</string>
+
+    <!-- Image upload -->
+    <string name="error_message_invalid_image">Imagen inválida</string>
+    <string name="error_message_invalid_session_token">Credenciales inválidas</string>
+
+    <!-- Profile: Username -->
+    <string name="error_message_username_duplicate">Nombre de usuario no disponible</string>
+    <string name="error_message_username_empty">Debe tener al menos 3 caracteres</string>
+    <string name="error_message_username_short">Debe tener al menos 3 caracteres</string>
+    <string name="error_message_username_long">De 3 a 25 caracteres</string>
+    <string name="error_message_username_invalid">Usar solo a–z, 0–9 y guion bajo</string>
+
+    <!-- Profile: Name -->
+    <string name="error_message_name_invalid">Caracteres inválidos</string>
+    <string name="error_message_name_long">De 3 a 25 caracteres</string>
+
+    <!-- Profile: Website -->
+    <string name="error_message_website_invalid">La página web tiene un formato inválido</string>
+    <string name="error_message_website_too_long">La página web puede tener como máximo 100 caracteres</string>
+
+    <!-- Profile: Bio -->
+    <string name="error_message_bio_too_long">La bio debe tener como máximo 150 caracteres</string>
+    <string name="error_message_search_too_short">Debe tener al menos 3 caracteres</string>
+
+    <!-- Event -->
+    <string name="error_message_event_title_too_short">Debe tener al menos 3 caracteres</string>
+    <string name="error_message_event_title_too_long">El titulo puede tener hasta 50 caracteres</string>
+    <string name="error_message_event_start_date_too_late">No puede empezar dentro de más de un año</string>
+    <string name="error_image_upload">Error subiendo la imagen</string>
+    <string name="error_message_update_required">La versión actual es demasiado antigua</string>
+
+    <!-- Create account -->
+    <string name="error_message_registration_username_duplicated">Nombre de usuario no disponible</string>
+    <string name="error_message_registration_username_empty">De 3 a 25 caracteres</string>
+    <string name="error_message_registration_username_too_short">De 3 a 25 caracteres</string>
+    <string name="error_message_registration_username_too_long">De 3 a 25 caracteres</string>
+    <string name="error_message_registration_username_invalid">Caracteres inválidos</string>
+    <string name="error_message_registration_email_existing">Este email ya está en uso</string>
+    <string name="error_message_registration_email_invalid">Email inválido</string>
+    <string name="error_message_registration_email_empty">Introduce tu email</string>
+    <string name="error_message_registration_password_null">De 6 a 20 caracteres</string>
+    <string name="error_message_registration_password_too_short">De 6 a 20 caracteres</string>
+    <string name="error_message_registration_password_too_long">De 6 a 20 caracteres</string>
+    <string name="error_message_registration_password_equals_username">El nombre de usuario y la contraseña deben ser distintos</string>
+    <string name="error_message_registration_password_invalid">Caracteres inválidos</string>
+    <string name="error_message_change_password_new_password_same_current_password">Tu nueva contraseña debe ser distinta</string>
+    <string name="error_message_change_password_new_password_and_again_must_match">Las contraseñas no coinciden</string>
+
+    <!-- Forgot password -->
+    <string name="error_reset_password">Cuenta no encontrada.</string>
+    
+    <string name="error_facebook_login">No se ha podido iniciar sesión con Facebook. Prueba más tarde.</string>
+
+</resources>
