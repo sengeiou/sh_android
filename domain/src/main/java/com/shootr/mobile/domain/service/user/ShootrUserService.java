@@ -59,9 +59,9 @@ public class ShootrUserService {
         checkinGateway.performCheckin(idEvent);
     }
 
-    public void createAccount(String username, String email, String password)
+    public void createAccount(String username, String email, String password, String language)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
-        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
+        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password, language);
         retrievePostLoginInformation(loginResult);
     }
 
@@ -70,8 +70,8 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public Boolean performFacebookLogin(String facebookToken) throws InvalidLoginException {
-        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
+    public Boolean performFacebookLogin(String facebookToken, String language) throws InvalidLoginException {
+        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, language);
         retrievePostLoginInformation(loginResult);
         return loginResult.isNewUser();
     }
@@ -98,8 +98,8 @@ public class ShootrUserService {
         return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 
-    public void sendPasswordResetEmail(String idUser) throws IOException {
-        resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
+    public void sendPasswordResetEmail(String idUser, String language) throws IOException {
+        resetPasswordEmailGateway.sendPasswordResetEmail(idUser, language);
     }
 
     public void performLogout() {
@@ -129,8 +129,8 @@ public class ShootrUserService {
         confirmEmailGateway.changeEmail(email);
     }
 
-    public void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException {
-        changePasswordGateway.changePassword(currentPassword, newPassword);
+    public void changePassword(String currentPassword, String newPassword, String language) throws InvalidPasswordException {
+        changePasswordGateway.changePassword(currentPassword, newPassword, language);
     }
 
     public void removeSessionData() {

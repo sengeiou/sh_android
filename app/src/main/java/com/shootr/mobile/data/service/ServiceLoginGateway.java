@@ -46,10 +46,10 @@ public class ServiceLoginGateway implements LoginGateway {
     }
 
     @Override
-    public LoginResult performFacebookLogin(String facebookToken) throws InvalidLoginException {
+    public LoginResult performFacebookLogin(String facebookToken, String language) throws InvalidLoginException {
         try {
             FacebookUserEntity loggedInUserEntity =
-              authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken));
+              authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken, language));
             User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
             String sessionToken = loggedInUserEntity.getSessionToken();
             LoginResult loginResult = new LoginResult(loggedInUser, sessionToken);

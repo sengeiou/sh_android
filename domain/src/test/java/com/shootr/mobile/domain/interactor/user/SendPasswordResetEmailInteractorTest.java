@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,6 +25,7 @@ public class SendPasswordResetEmailInteractorTest {
     @Mock ShootrUserService shootrUserService;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock Interactor.CompletedCallback completedCallback;
+    @Mock LocaleProvider localeProvider;
     private SendPasswordResetEmailInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -31,18 +33,19 @@ public class SendPasswordResetEmailInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        interactor = new SendPasswordResetEmailInteractor(interactorHandler, postExecutionThread, shootrUserService);
+        interactor = new SendPasswordResetEmailInteractor(interactorHandler, postExecutionThread, shootrUserService,
+          localeProvider);
     }
 
     @Test public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws Exception {
-        doNothing().when(shootrUserService).sendPasswordResetEmail(anyString());
+        doNothing().when(shootrUserService).sendPasswordResetEmail(anyString(), anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();
     }
 
     @Test public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws Exception {
         doThrow(new ShootrException() {
-        }).when(shootrUserService).sendPasswordResetEmail(anyString());
+        }).when(shootrUserService).sendPasswordResetEmail(anyString(), anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
