@@ -85,9 +85,9 @@ public class LoginSelectionActivity extends BaseActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
-                String visibleEventId = user.getIdWatchingStream();
-                if (visibleEventId != null) {
-                    getStreamById.loadStream(visibleEventId, new GetStreamInteractor.Callback() {
+                String visibleStreamId = user.getIdWatchingStream();
+                if (visibleStreamId != null) {
+                    getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
                         @Override public void onLoaded(Stream stream) {
                             startActivity(i);
                             finish();
