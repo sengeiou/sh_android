@@ -93,6 +93,9 @@ public class LoginSelectionActivity extends BaseActivity {
                             finish();
                         }
                     });
+                } else {
+                    startActivity(i);
+                    finish();
                 }
             }
         }, new Interactor.ErrorCallback() {
