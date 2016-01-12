@@ -161,14 +161,7 @@ public class StreamsListPresenterTest {
     }
 
     @Test public void shouldShowContextMenuWithMuteStreamIfStreamNotMutedWhenLongPress() throws Exception {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<String>> callback =
-                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-                callback.onLoaded(Collections.<String>emptyList());
-                return null;
-            }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+        setupNoMutedStreamsCallback();
 
         presenter.onStreamLongClicked(streamModel());
 
@@ -176,6 +169,14 @@ public class StreamsListPresenterTest {
     }
 
     @Test public void shouldShowContextMenuWithUnmuteStreamIfStreamMutedWhenLongPress() throws Exception {
+        setupStreamIsMutedCallback();
+
+        presenter.onStreamLongClicked(streamModel());
+
+        verify(streamsListView).showContextMenuWithUnmute(any(StreamResultModel.class));
+    }
+
+    public void setupStreamIsMutedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<String>> callback =
@@ -184,10 +185,17 @@ public class StreamsListPresenterTest {
                 return null;
             }
         }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+    }
 
-        presenter.onStreamLongClicked(streamModel());
-
-        verify(streamsListView).showContextMenuWithUnmute(any(StreamResultModel.class));
+    public void setupNoMutedStreamsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(Collections.<String>emptyList());
+                return null;
+            }
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
     }
 
     @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
