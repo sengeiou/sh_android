@@ -11,7 +11,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetMutedStreams implements Interactor {
+public class GetMutedStreamsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -22,7 +22,7 @@ public class GetMutedStreams implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public GetMutedStreams(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    public GetMutedStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;

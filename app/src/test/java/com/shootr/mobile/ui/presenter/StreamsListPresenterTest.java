@@ -6,8 +6,8 @@ import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreams;
-import com.shootr.mobile.domain.interactor.stream.MuteInterator;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
@@ -54,8 +54,8 @@ public class StreamsListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
-    @Mock GetMutedStreams getMutedStreams;
-    @Mock MuteInterator muteInterator;
+    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock MuteInteractor muteInteractor;
     @Mock UnmuteInteractor unmuteInterator;
 
     private StreamsListPresenter presenter;
@@ -68,7 +68,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
           unwatchStreamInteractor,
-          shareStreamInteractor, getMutedStreams, muteInterator, unmuteInterator, streamResultModelMapper,
+          shareStreamInteractor, getMutedStreamsInteractor, muteInteractor, unmuteInterator, streamResultModelMapper,
           errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
@@ -168,7 +168,7 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(Collections.<String>emptyList());
                 return null;
             }
-        }).when(getMutedStreams).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
 
         presenter.onStreamLongClicked(streamModel());
 
@@ -183,7 +183,7 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(mutedStreams());
                 return null;
             }
-        }).when(getMutedStreams).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
 
         presenter.onStreamLongClicked(streamModel());
 
@@ -193,7 +193,7 @@ public class StreamsListPresenterTest {
     @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
         presenter.onMuteClicked(streamModel());
 
-        verify(muteInterator).mute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+        verify(muteInteractor).mute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
     @Test public void shouldCallbackUnmuteInteractorWhenUnmutePressed() throws Exception {

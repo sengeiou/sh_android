@@ -15,7 +15,7 @@ import rx.Subscriber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-public class MuteInterator implements Interactor {
+public class MuteInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -26,7 +26,7 @@ public class MuteInterator implements Interactor {
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public MuteInterator(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject public MuteInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;

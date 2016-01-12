@@ -8,8 +8,8 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreams;
-import com.shootr.mobile.domain.interactor.stream.MuteInterator;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
@@ -29,8 +29,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
-    private final GetMutedStreams getMutedStreams;
-    private final MuteInterator muteInterator;
+    private final GetMutedStreamsInteractor getMutedStreamsInteractor;
+    private final MuteInteractor muteInteractor;
     private final UnmuteInteractor unmuteInterator;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -41,14 +41,14 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
-      ShareStreamInteractor shareStreamInteractor, GetMutedStreams getMutedStreams, MuteInterator muteInterator,
+      ShareStreamInteractor shareStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
       UnmuteInteractor unmuteInterator, StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
-        this.getMutedStreams = getMutedStreams;
-        this.muteInterator = muteInterator;
+        this.getMutedStreamsInteractor = getMutedStreamsInteractor;
+        this.muteInteractor = muteInteractor;
         this.unmuteInterator = unmuteInterator;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -176,7 +176,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     }
 
     public void onStreamLongClicked(final StreamResultModel stream) {
-        getMutedStreams.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> mutedStreamIds) {
                 if (mutedStreamIds.contains(stream.getStreamModel().getIdStream())) {
                     streamsListView.showContextMenuWithUnmute(stream);
@@ -192,7 +192,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     }
 
     public void onMuteClicked(StreamResultModel stream) {
-        muteInterator.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+        muteInteractor.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 streamsListView.showMutedStream();
             }

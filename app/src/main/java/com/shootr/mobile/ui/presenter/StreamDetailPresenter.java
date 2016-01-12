@@ -8,9 +8,12 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -36,6 +39,9 @@ public class StreamDetailPresenter implements Presenter {
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
+    private final GetMutedStreamsInteractor getMutedStreamsInteractor;
+    private final MuteInteractor muteInteractor;
+    private final UnmuteInteractor unmuteInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -55,23 +61,36 @@ public class StreamDetailPresenter implements Presenter {
     public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
+      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor, StreamModelMapper streamModelMapper,
+      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
+        this.getMutedStreamsInteractor = getMutedStreamsInteractor;
+        this.muteInteractor = muteInteractor;
+        this.unmuteInteractor = unmuteInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
 
-    public void initialize(StreamDetailView streamDetailView, String idStream) {
+    public void initialize(final StreamDetailView streamDetailView, final String idStream) {
         setView(streamDetailView);
         this.idStream = idStream;
+        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(List<String> ids) {
+                streamDetailView.setMuteStatus(ids.contains(idStream));
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
+            }
+        });
         this.loadStreamInfo();
     }
 
@@ -276,13 +295,11 @@ public class StreamDetailPresenter implements Presenter {
 
     public void shareStreamViaShootr() {
         shareStreamInteractor.shareStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 streamDetailView.showStreamShared();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -305,6 +322,30 @@ public class StreamDetailPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showErrorInView(error);
+            }
+        });
+    }
+
+    public void onMuteChecked() {
+        muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
+            }
+        });
+    }
+
+    public void onUnmuteChecked() {
+        unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
             }
         });
     }

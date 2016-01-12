@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -114,23 +115,32 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                   streamDetailPresenter.clickMedia();
               }
           }, // media
-          new View.OnClickListener() {
-              @Override public void onClick(View view) {
-                  streamDetailPresenter.clickAllParticipants();
+          new CompoundButton.OnCheckedChangeListener(){
+              @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                  if (isChecked) {
+                      streamDetailPresenter.onMuteChecked();
+                  } else {
+                      streamDetailPresenter.onUnmuteChecked();
+                  }
               }
-          }, // all participants
-          new OnUserClickListener() {
-            @Override public void onUserClick(String idUser) {
-                navigateToUser(idUser);
+          },new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                streamDetailPresenter.clickAllParticipants();
             }
-        }, // participant
+        }, // all participants
+          new OnUserClickListener() {
+              @Override public void onUserClick(String idUser) {
+                  navigateToUser(idUser);
+              }
+          }, // participant
           new OnFollowUnfollowListener() {
               @Override public void onFollow(UserModel user) {
                   streamDetailPresenter.follow(user.getIdUser());
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                    user.getUsername()))
                     .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
                             streamDetailPresenter.unfollow(user.getIdUser());
@@ -468,6 +478,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void goToAllParticipants(String idStream) {
         startActivity(AllParticipantsActivity.newIntent(this, idStream));
+    }
+
+    @Override public void setMuteStatus(Boolean isChecked) {
+        adapter.setMuteStatus(isChecked);
     }
 
     @Override
