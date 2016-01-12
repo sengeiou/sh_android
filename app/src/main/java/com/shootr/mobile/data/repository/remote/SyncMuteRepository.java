@@ -52,11 +52,11 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     @Override public List<String> getMutedIdStreams() {
         List<MuteStreamEntity> muteStreamEntities = remoteMuteDataSource.getMutedStreamEntities();
         localMuteDataSource.putMuteds(muteStreamEntities);
-        List<String> bannedIdUsers = new ArrayList<>(muteStreamEntities.size());
+        List<String> mutedIdStreams = new ArrayList<>(muteStreamEntities.size());
         for (MuteStreamEntity muteStreamEntity : muteStreamEntities) {
-            bannedIdUsers.add(muteStreamEntity.getIdStream());
+            mutedIdStreams.add(muteStreamEntity.getIdStream());
         }
-        return bannedIdUsers;
+        return mutedIdStreams;
     }
 
     @Override public void dispatchSync() {

@@ -40,7 +40,7 @@ public class MuteManager extends AbstractManager {
 
     public List<MuteStreamEntity> getMutes() {
         List<MuteStreamEntity> muteStreamEntities = new ArrayList<>();
-        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.BlockTable.PROJECTION,null,null,null,null,null);
+        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION,null,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             do{

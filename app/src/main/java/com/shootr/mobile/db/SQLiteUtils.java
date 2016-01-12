@@ -106,7 +106,12 @@ public class SQLiteUtils {
       + " PRIMARY KEY(" + DatabaseContract.BanTable.ID_USER + "," + DatabaseContract.BanTable.ID_BANNED_USER + "))";
 
     public static final String CREATE_TABLE_MUTE = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.MuteTable.TABLE +" ("
-      + DatabaseContract.MuteTable.ID_MUTED_STREAM + " TEXT NOT NULL PRIMARY KEY)";
+      + DatabaseContract.MuteTable.ID_MUTED_STREAM + " TEXT NOT NULL PRIMARY KEY, "
+      + DatabaseContract.SyncColumns.BIRTH + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.DELETED + " DATETIME NULL,"
+      + DatabaseContract.SyncColumns.REVISION + " INT NOT NULL,"
+      + DatabaseContract.SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.DeviceTable.TABLE +" ("
             + DatabaseContract.DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"
