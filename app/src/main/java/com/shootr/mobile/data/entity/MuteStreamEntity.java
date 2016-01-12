@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class MuteStreamEntity {
+public class MuteStreamEntity extends Synchronized {
 
     private String idStream;
 

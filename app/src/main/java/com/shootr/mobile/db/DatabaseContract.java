@@ -146,7 +146,7 @@ public class DatabaseContract {
         public static final String TABLE = "Mute";
         public static final String ID_MUTED_STREAM = "idMutedStream";
 
-        public static final String[] PROJECTION = { ID_MUTED_STREAM };
+        public static final String[] PROJECTION = { ID_MUTED_STREAM, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED };
     }
 
     public static final class DeviceTable {

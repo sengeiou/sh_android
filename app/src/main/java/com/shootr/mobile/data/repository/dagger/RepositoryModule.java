@@ -18,6 +18,7 @@ import javax.inject.Singleton;
     NiceShotRepositoryModule.class,
     DeviceRepositoryModule.class,
     FollowRepositoryModule.class,
+    MuteRepositoryModule.class,
   },
   complete = false,
   library = true
