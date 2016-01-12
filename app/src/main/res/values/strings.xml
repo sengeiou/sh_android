@@ -327,4 +327,6 @@
     <string name="user_banned">User banned.</string>
     <string name="user_unbanned">Ban removed.</string>
     <string name="notification_shot_has_user_banned_subtitle">You have been banned in this stream</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
 </resources>

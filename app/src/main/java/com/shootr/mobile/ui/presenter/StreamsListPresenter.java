@@ -8,8 +8,11 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreams;
+import com.shootr.mobile.domain.interactor.stream.MuteInterator;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
@@ -26,6 +29,9 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
+    private final GetMutedStreams getMutedStreams;
+    private final MuteInterator muteInterator;
+    private final UnmuteInteractor unmuteInterator;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -34,16 +40,16 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     private boolean hasBeenPaused;
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor,
-      ShareStreamInteractor shareStreamInteractor,
-      StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory,
-      @Main Bus bus) {
+      AddToFavoritesInteractor addToFavoritesInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
+      ShareStreamInteractor shareStreamInteractor, GetMutedStreams getMutedStreams, MuteInterator muteInterator,
+      UnmuteInteractor unmuteInterator, StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
+        this.getMutedStreams = getMutedStreams;
+        this.muteInterator = muteInterator;
+        this.unmuteInterator = unmuteInterator;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.bus = bus;
@@ -65,7 +71,9 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void selectStream(StreamResultModel stream) {
         streamsListView.setCurrentWatchingStreamId(stream);
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle(), stream.getStreamModel().getAuthorId());
+        selectStream(stream.getStreamModel().getIdStream(),
+          stream.getStreamModel().getShortTitle(),
+          stream.getStreamModel().getAuthorId());
     }
 
     private void selectStream(final String idStream, String streamTag, String authorId) {
@@ -74,8 +82,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void unwatchStream() {
         unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadDefaultStreamList();
                 removeCurrentWatchingStream();
             }
@@ -150,6 +157,64 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
           });
     }
 
+    public void shareStream(StreamResultModel stream) {
+        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                streamsListView.showStreamShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
+    }
+
+    @Subscribe
+    @Override
+    public void onUnwatchDone(UnwatchDone.Event event) {
+        this.loadDefaultStreamList();
+    }
+
+    public void onStreamLongClicked(final StreamResultModel stream) {
+        getMutedStreams.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(List<String> mutedStreamIds) {
+                if (mutedStreamIds.contains(stream.getStreamModel().getIdStream())) {
+                    streamsListView.showContextMenuWithUnmute(stream);
+                } else {
+                    streamsListView.showContextMenuWithMute(stream);
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO quitar?
+            }
+        });
+    }
+
+    public void onMuteClicked(StreamResultModel stream) {
+        muteInterator.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                streamsListView.showMutedStream();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO
+            }
+        });
+    }
+
+    public void onUnmuteClicked(StreamResultModel stream) {
+        unmuteInterator.unmute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                streamsListView.showUnmutedStream();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO
+            }
+        });
+    }
+
     //region Lifecycle
     @Override public void resume() {
         bus.register(this);
@@ -161,24 +226,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     @Override public void pause() {
         bus.unregister(this);
         hasBeenPaused = true;
-    }
-
-    public void shareStream(StreamResultModel stream) {
-        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  streamsListView.showStreamShared();
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showViewError(error);
-              }
-          });
-    }
-
-    @Subscribe
-    @Override
-    public void onUnwatchDone(UnwatchDone.Event event) {
-        this.loadDefaultStreamList();
     }
 
     //endregion

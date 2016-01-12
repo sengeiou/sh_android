@@ -6,8 +6,11 @@ import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreams;
+import com.shootr.mobile.domain.interactor.stream.MuteInterator;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -51,6 +54,9 @@ public class StreamsListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
+    @Mock GetMutedStreams getMutedStreams;
+    @Mock MuteInterator muteInterator;
+    @Mock UnmuteInteractor unmuteInterator;
 
     private StreamsListPresenter presenter;
 
@@ -62,8 +68,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
           unwatchStreamInteractor,
-          shareStreamInteractor,
-          streamResultModelMapper,
+          shareStreamInteractor, getMutedStreams, muteInterator, unmuteInterator, streamResultModelMapper,
           errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
@@ -153,6 +158,52 @@ public class StreamsListPresenterTest {
         presenter.shareStream(streamModel());
 
         verify(streamsListView).showError(anyString());
+    }
+
+    @Test public void shouldShowContextMenuWithMuteStreamIfStreamNotMutedWhenLongPress() throws Exception {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(Collections.<String>emptyList());
+                return null;
+            }
+        }).when(getMutedStreams).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+
+        presenter.onStreamLongClicked(streamModel());
+
+        verify(streamsListView).showContextMenuWithMute(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldShowContextMenuWithUnmuteStreamIfStreamMutedWhenLongPress() throws Exception {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(mutedStreams());
+                return null;
+            }
+        }).when(getMutedStreams).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+
+        presenter.onStreamLongClicked(streamModel());
+
+        verify(streamsListView).showContextMenuWithUnmute(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
+        presenter.onMuteClicked(streamModel());
+
+        verify(muteInterator).mute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+    }
+
+    @Test public void shouldCallbackUnmuteInteractorWhenUnmutePressed() throws Exception {
+        presenter.onUnmuteClicked(streamModel());
+
+        verify(unmuteInterator).unmute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+    }
+
+    private List<String> mutedStreams() {
+        return Arrays.asList(ID_STREAM);
     }
 
     private void setupShareStreamErrorCallback() {

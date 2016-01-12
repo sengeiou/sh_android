@@ -101,7 +101,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
             @Override
             public boolean onStreamLongClick(StreamResultModel stream) {
-                openContextualMenu(stream);
+                presenter.onStreamLongClicked(stream);
+                //openContextualMenu(stream);
                 return true;
             }
         });
@@ -179,8 +180,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         }
     }
 
-    private void openContextualMenu(final StreamResultModel stream) {
-        new CustomContextMenu.Builder(getActivity())
+    private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
+        return new CustomContextMenu.Builder(getActivity())
           .addAction(R.string.add_to_favorites_menu_title, new Runnable() {
             @Override
             public void run() {
@@ -196,7 +197,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
               @Override public void run() {
                   shareStream(stream);
               }
-          }).show();
+          });
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -232,6 +233,32 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override public void showStreamShared() {
         feedbackMessage.show(getView(), sharedStream);
+    }
+
+    @Override public void showContextMenuWithMute(final StreamResultModel stream) {
+        baseContextualMenu(stream).addAction(R.string.mute, new Runnable() {
+            @Override public void run() {
+                presenter.onMuteClicked(stream);
+            }
+        }).show();
+    }
+
+    @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
+        baseContextualMenu(stream).addAction(R.string.unmute, new Runnable() {
+            @Override public void run() {
+                presenter.onUnmuteClicked(stream);
+            }
+        }).show();
+    }
+
+    @Override public void showMutedStream() {
+        //TODO preguntar a ignasi mensaje
+        feedbackMessage.show(getView(), "MUTED");
+    }
+
+    @Override public void showUnmutedStream() {
+        //TODO preguntar a ignasi mensaje
+        feedbackMessage.show(getView(), "UNMUTED");
     }
 
     @Override public void showEmpty() {
