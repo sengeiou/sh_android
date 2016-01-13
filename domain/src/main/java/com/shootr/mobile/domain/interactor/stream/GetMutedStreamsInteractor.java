@@ -1,7 +1,6 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -19,7 +18,6 @@ public class GetMutedStreamsInteractor implements Interactor {
     private final MuteRepository remoteMuteRepository;
 
     private Callback<List<String>> callback;
-    private ErrorCallback errorCallback;
 
     @Inject
     public GetMutedStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -30,9 +28,8 @@ public class GetMutedStreamsInteractor implements Interactor {
         this.remoteMuteRepository = remoteMuteRepository;
     }
 
-    public void loadMutedStreamIds(Callback<List<String>> callback, ErrorCallback errorCallback) {
+    public void loadMutedStreamIds(Callback<List<String>> callback) {
         this.callback = callback;
-        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -53,7 +50,7 @@ public class GetMutedStreamsInteractor implements Interactor {
         try {
             notifyResult(remoteMuteRepository.getMutedIdStreams());
         } catch (ServerCommunicationException error) {
-            notifyError(error);
+            /* swallow silently */
         }
     }
 
@@ -65,11 +62,4 @@ public class GetMutedStreamsInteractor implements Interactor {
         });
     }
 
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
 }

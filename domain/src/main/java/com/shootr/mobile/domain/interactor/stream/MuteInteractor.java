@@ -2,8 +2,6 @@ package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.StreamMuted;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -27,7 +25,6 @@ public class MuteInteractor implements Interactor {
 
     private String idStream;
     private CompletedCallback callback;
-    private ErrorCallback errorCallback;
 
     @Inject public MuteInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository, BusPublisher busPublisher) {
@@ -38,10 +35,9 @@ public class MuteInteractor implements Interactor {
         this.busPublisher = busPublisher;
     }
 
-    public void mute(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void mute(String idStream, CompletedCallback callback) {
         this.idStream = checkNotNull(idStream);
         this.callback = callback;
-        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -72,9 +68,7 @@ public class MuteInteractor implements Interactor {
     private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
         observable.subscribe(new OnCompletedObserver<Void>() {
             @Override public void onError(Throwable error) {
-                if (error instanceof ServerCommunicationException) {
-                    notifyError(new ServerCommunicationException(error));
-                }
+                /* swallow silently */
             }
         });
     }
@@ -84,14 +78,6 @@ public class MuteInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onCompleted();
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
             }
         });
     }

@@ -95,10 +95,6 @@ public class StreamDetailPresenter implements Presenter {
             @Override public void onLoaded(List<String> ids) {
                 streamDetailView.setMuteStatus(ids.contains(idStream));
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO necesario?
-            }
         });
     }
     //endregion
@@ -335,10 +331,6 @@ public class StreamDetailPresenter implements Presenter {
             @Override public void onCompleted() {
                 /* no-op */
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO necesario?
-            }
         });
     }
 
@@ -346,10 +338,6 @@ public class StreamDetailPresenter implements Presenter {
         unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 /* no-op */
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO necesario?
             }
         });
     }

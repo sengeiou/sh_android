@@ -73,10 +73,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
             @Override public void onLoaded(List<String> mutedStreamsIds) {
                 mutedStreamIds = mutedStreamsIds;
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
-            }
         });
     }
 
@@ -200,10 +196,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
                     streamsListView.showContextMenuWithMute(stream);
                 }
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO quitar?
-            }
         });
     }
 
@@ -213,10 +205,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
                 loadMutedStreamIds();
                 loadDefaultStreamList();
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
-            }
         });
     }
 
@@ -225,10 +213,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
             @Override public void onCompleted() {
                 loadMutedStreamIds();
                 loadDefaultStreamList();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
             }
         });
     }

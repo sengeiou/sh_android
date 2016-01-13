@@ -184,7 +184,7 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(mutedStreams());
                 return null;
             }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
     }
 
     public void setupNoMutedStreamsCallback() {
@@ -195,19 +195,19 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(Collections.<String>emptyList());
                 return null;
             }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class), anyErrorCallback());
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
     }
 
     @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
         presenter.onMuteClicked(streamModel());
 
-        verify(muteInteractor).mute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+        verify(muteInteractor).mute(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     @Test public void shouldCallbackUnmuteInteractorWhenUnmutePressed() throws Exception {
         presenter.onUnmuteClicked(streamModel());
 
-        verify(unmuteInterator).unmute(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+        verify(unmuteInterator).unmute(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private List<String> mutedStreams() {

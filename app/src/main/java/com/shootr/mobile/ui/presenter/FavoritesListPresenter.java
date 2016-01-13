@@ -74,10 +74,6 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
             @Override public void onLoaded(List<String> mutedStreamsIds) {
                 mutedStreamIds = mutedStreamsIds;
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
-            }
         });
     }
 
@@ -119,10 +115,6 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
                     favoritesListView.showContextMenuWithMute(stream);
                 }
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO quitar?
-            }
         });
     }
 
@@ -132,10 +124,6 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
                 loadMutedStreamIds();
                 loadFavorites();
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
-            }
         });
     }
 
@@ -144,10 +132,6 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
             @Override public void onCompleted() {
                 loadMutedStreamIds();
                 loadFavorites();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO
             }
         });
     }
