@@ -16,6 +16,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
+import java.util.Collections;
 import java.util.List;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -24,6 +25,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
+    private final List<String> mutedStreamIds;
     private OnUnwatchClickListener unwatchClickListener;
 
     private boolean showsFavoritesText = false;
@@ -38,11 +40,22 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;
+    @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
+
+    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, ImageLoader imageLoader,
+      List<String> mutedStreamIds) {
+        super(itemView);
+        this.onStreamClickListener = onStreamClickListener;
+        this.imageLoader = imageLoader;
+        this.mutedStreamIds = mutedStreamIds;
+        ButterKnife.bind(this, itemView);
+    }
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, ImageLoader imageLoader) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
+        this.mutedStreamIds = Collections.emptyList();
         ButterKnife.bind(this, itemView);
     }
 
@@ -156,11 +169,19 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private CharSequence getConnectedSubtitle(StreamModel stream) {
-        return new Truss()
-          .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
-          .append(connected)
-          .popSpan()
-          .build();
+        if (mutedStreamIds.contains(stream.getIdStream())) {
+            return new Truss()
+              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
+              .append(connectedAndMuted)
+              .popSpan()
+              .build();
+        } else {
+            return new Truss()
+              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
+              .append(connected)
+              .popSpan()
+              .build();
+        }
     }
 
     private CharSequence getAuthorSubtitleWithDescription(StreamModel stream) {

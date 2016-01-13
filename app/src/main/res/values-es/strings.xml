@@ -291,6 +291,7 @@
     <string name="user_not_found_message">Usuario no encontrado.</string>
     <string name="user_unblocked">Ignorar suprimido.</string>
     <string name="watching_stream_connected">conectado</string>
+    <string name="watching_stream_connected_muted">conectado (silenciado)</string>
     <string name="welcome_friends_text">Salir para desconectar</string>
     <string name="welcome_get_started_button">Empezar</string>
     <string name="welcome_shootr_title">Entra en un stream para conectarte</string>

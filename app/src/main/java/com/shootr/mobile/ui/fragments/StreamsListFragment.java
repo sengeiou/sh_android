@@ -261,6 +261,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         feedbackMessage.show(getView(), "UNMUTED");
     }
 
+    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
+        adapter.setMutedStreamIds(mutedStreamIds);
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

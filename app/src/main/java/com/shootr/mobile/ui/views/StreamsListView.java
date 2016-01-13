@@ -27,4 +27,6 @@ public interface StreamsListView extends LoadDataView {
     void showMutedStream();
 
     void showUnmutedStream();
+
+    void setMutedStreamIds(List<String> mutedStreamIds);
 }

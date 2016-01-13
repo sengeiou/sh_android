@@ -62,7 +62,20 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     public void initialize(StreamsListView streamsListView) {
         this.setView(streamsListView);
+        this.loadMutedStreamIds();
         this.loadDefaultStreamList();
+    }
+
+    private void loadMutedStreamIds() {
+        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(List<String> mutedStreamIds) {
+                streamsListView.setMutedStreamIds(mutedStreamIds);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO
+            }
+        });
     }
 
     public void refresh() {
@@ -195,6 +208,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         muteInteractor.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 streamsListView.showMutedStream();
+                loadMutedStreamIds();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -207,6 +221,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         unmuteInterator.unmute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 streamsListView.showUnmutedStream();
+                loadMutedStreamIds();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

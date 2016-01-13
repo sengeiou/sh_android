@@ -79,23 +79,27 @@ public class StreamDetailPresenter implements Presenter {
     }
     //endregion
 
+    protected void setView(StreamDetailView streamDetailView) {
+        this.streamDetailView = streamDetailView;
+    }
+
     public void initialize(final StreamDetailView streamDetailView, final String idStream) {
         setView(streamDetailView);
         this.idStream = idStream;
+        this.loadMutedStatus();
+        this.loadStreamInfo();
+    }
+
+    public void loadMutedStatus() {
         getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> ids) {
                 streamDetailView.setMuteStatus(ids.contains(idStream));
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                //TODO necesario?
             }
         });
-        this.loadStreamInfo();
-    }
-
-    protected void setView(StreamDetailView streamDetailView) {
-        this.streamDetailView = streamDetailView;
     }
     //endregion
 
@@ -329,11 +333,11 @@ public class StreamDetailPresenter implements Presenter {
     public void onMuteChecked() {
         muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-
+                /* no-op */
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                //TODO necesario?
             }
         });
     }
@@ -341,11 +345,11 @@ public class StreamDetailPresenter implements Presenter {
     public void onUnmuteChecked() {
         unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-
+                /* no-op */
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                //TODO necesario?
             }
         });
     }
