@@ -209,7 +209,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     public void onMuteClicked(StreamResultModel stream) {
         muteInteractor.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                streamsListView.showMutedStream();
                 loadMutedStreamIds();
                 loadDefaultStreamList();
             }
@@ -223,7 +222,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     public void onUnmuteClicked(StreamResultModel stream) {
         unmuteInterator.unmute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                streamsListView.showUnmutedStream();
                 loadMutedStreamIds();
                 loadDefaultStreamList();
             }

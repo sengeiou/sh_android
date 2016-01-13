@@ -43,14 +43,6 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
-    @Override public void showMutedStream() {
-        /* no-op */
-    }
-
-    @Override public void showUnmutedStream() {
-        /* no-op */
-    }
-
     @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
         /* no-op */
     }

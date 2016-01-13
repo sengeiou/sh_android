@@ -251,16 +251,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         }).show();
     }
 
-    @Override public void showMutedStream() {
-        //TODO preguntar a ignasi mensaje
-        feedbackMessage.show(getView(), "MUTED");
-    }
-
-    @Override public void showUnmutedStream() {
-        //TODO preguntar a ignasi mensaje
-        feedbackMessage.show(getView(), "UNMUTED");
-    }
-
     @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
         adapter.setMutedStreamIds(mutedStreamIds);
     }
