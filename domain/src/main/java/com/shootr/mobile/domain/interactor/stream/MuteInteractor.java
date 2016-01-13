@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -21,17 +23,19 @@ public class MuteInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final MuteRepository localMuteRepository;
     private final MuteRepository remoteMuteRepository;
+    private final BusPublisher busPublisher;
 
     private String idStream;
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
     @Inject public MuteInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository) {
+      @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository, BusPublisher busPublisher) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localMuteRepository = localMuteRepository;
         this.remoteMuteRepository = remoteMuteRepository;
+        this.busPublisher = busPublisher;
     }
 
     public void mute(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
@@ -76,6 +80,7 @@ public class MuteInteractor implements Interactor {
     }
 
     private void notifyCompleted() {
+        notifyAdditionToBus();
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onCompleted();
@@ -91,4 +96,7 @@ public class MuteInteractor implements Interactor {
         });
     }
 
+    protected void notifyAdditionToBus() {
+        busPublisher.post(new StreamMuted.Event());
+    }
 }

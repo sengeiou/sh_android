@@ -66,6 +66,7 @@ public class AddToFavoritesInteractor implements Interactor {
                 } catch (StreamAlreadyInFavoritesException e) {
                     /* no-op */
                 }
+                notifyAdditionToBus();
                 notifyLoaded();
                 subscriber.onCompleted();
             }
@@ -75,7 +76,6 @@ public class AddToFavoritesInteractor implements Interactor {
     private Observable<Void> remoteAddToFavoritesObservable(final Favorite favorite) {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override public void call(Subscriber<? super Void> subscriber) {
-                notifyAdditionToBus();
                 try {
                     remoteFavoriteRepository.putFavorite(favorite);
                 } catch (StreamAlreadyInFavoritesException error) {

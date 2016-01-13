@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
@@ -23,7 +24,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
+public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
 
     private final StreamsListInteractor streamsListInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -232,6 +233,13 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         });
     }
 
+    @Subscribe
+    @Override
+    public void onStreamMuted(StreamMuted.Event event) {
+        loadMutedStreamIds();
+        loadDefaultStreamList();
+    }
+
     //region Lifecycle
     @Override public void resume() {
         bus.register(this);
@@ -245,6 +253,5 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         bus.unregister(this);
         hasBeenPaused = true;
     }
-
     //endregion
 }

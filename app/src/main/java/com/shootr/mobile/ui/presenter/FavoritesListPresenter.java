@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.bus.FavoriteAdded;
+import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -23,7 +24,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver, UnwatchDone.Receiver{
+public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver, UnwatchDone.Receiver, StreamMuted.Receiver{
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
@@ -207,16 +208,22 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
 
     public void unwatchStream() {
         unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadFavorites();
             }
         });
     }
 
-    @Override
     @Subscribe
+    @Override
     public void onUnwatchDone(UnwatchDone.Event event) {
         loadFavorites();
+    }
+
+    @Subscribe
+    @Override
+    public void onStreamMuted(StreamMuted.Event event) {
+        this.loadMutedStreamIds();
+        this.loadFavorites();
     }
 }
