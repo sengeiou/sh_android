@@ -25,7 +25,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
-    private final List<String> mutedStreamIds;
+    private List<String> mutedStreamIds;
     private OnUnwatchClickListener unwatchClickListener;
 
     private boolean showsFavoritesText = false;
@@ -169,6 +169,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private CharSequence getConnectedSubtitle(StreamModel stream) {
+        //TODO can be null
         if (mutedStreamIds.contains(stream.getIdStream())) {
             return new Truss()
               .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
@@ -199,5 +200,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     public void setShowsFavoritesText(Boolean showFavoritesText) {
         this.showsFavoritesText = showFavoritesText;
+    }
+
+    public void setMutedStreamIds(List<String> mutedStreamsIds) {
+        this.mutedStreamIds = mutedStreamsIds;
     }
 }

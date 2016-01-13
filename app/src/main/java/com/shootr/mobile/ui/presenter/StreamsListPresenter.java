@@ -38,6 +38,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     private StreamsListView streamsListView;
     private boolean hasBeenPaused;
+    private List<String> mutedStreamIds;
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
@@ -68,8 +69,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     private void loadMutedStreamIds() {
         getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
-            @Override public void onLoaded(List<String> mutedStreamIds) {
-                streamsListView.setMutedStreamIds(mutedStreamIds);
+            @Override public void onLoaded(List<String> mutedStreamsIds) {
+                mutedStreamIds = mutedStreamsIds;
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -123,6 +124,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
         List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
             List<StreamResultModel> streamResultModels = streamResultModelMapper.transform(streamSearchResults);
+            streamsListView.setMutedStreamIds(mutedStreamIds);
             this.renderViewStreamsList(streamResultModels);
             StreamSearchResult currentWatchingStream = resultList.getCurrentWatchingStream();
             this.setViewCurrentVisibleWatchingStream(streamResultModelMapper.transform(currentWatchingStream));
@@ -209,6 +211,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
             @Override public void onCompleted() {
                 streamsListView.showMutedStream();
                 loadMutedStreamIds();
+                loadDefaultStreamList();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -222,6 +225,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
             @Override public void onCompleted() {
                 streamsListView.showUnmutedStream();
                 loadMutedStreamIds();
+                loadDefaultStreamList();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -234,6 +238,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
     @Override public void resume() {
         bus.register(this);
         if (hasBeenPaused) {
+            this.loadMutedStreamIds();
             this.loadDefaultStreamList();
         }
     }

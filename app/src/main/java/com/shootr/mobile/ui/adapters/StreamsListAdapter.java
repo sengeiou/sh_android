@@ -61,6 +61,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getHeader();
+        ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
         ((StreamResultViewHolder) viewHolder).render(stream, false);
     }
 
