@@ -74,6 +74,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getItem(position);
         boolean showSeparator = position != getFirstItemPosition();
+        ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
         ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
     }
 

@@ -19,8 +19,8 @@ public class FavoriteStreamsAdapter extends StreamsListAdapter {
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultViewHolder streamViewHolder = (StreamResultViewHolder) viewHolder;
+        streamViewHolder.setMutedStreamIds(getMutedStreamIds());
         if (isWatchingStream(position)) {
-            streamViewHolder.setMutedStreamIds(getMutedStreamIds());
             streamViewHolder.enableWatchingState(getOnUnwatchClickListener());
         } else {
             streamViewHolder.disableWatchingState();

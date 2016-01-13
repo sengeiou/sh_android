@@ -33,6 +33,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
+    @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
@@ -78,6 +79,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     public void render(StreamResultModel streamResultModel, boolean showSeparator) {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
+        setMutedVisibility(streamResultModel);
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || showsFavoritesText) {
@@ -94,6 +96,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     public void render(StreamResultModel streamResultModel, boolean showSeparator, List<StreamResultModel> favoritedStreams) {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
+        setMutedVisibility(streamResultModel);
         renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
@@ -111,6 +114,22 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         imageLoader.loadStreamPicture(pictureUrl, picture);
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
+    }
+
+    public void setMutedVisibility(StreamResultModel streamResultModel) {
+        if (!isWatchingStateEnabled) {
+            if(streamIsMuted(streamResultModel.getStreamModel().getIdStream())) {
+                mute.setVisibility(View.VISIBLE);
+            } else {
+                mute.setVisibility(View.GONE);
+            }
+        } else {
+            mute.setVisibility(View.GONE);
+        }
+    }
+
+    public boolean streamIsMuted(String idStream) {
+        return mutedStreamIds.contains(idStream);
     }
 
     private void setClickListener(final StreamResultModel streamResult) {
@@ -170,7 +189,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private CharSequence getConnectedSubtitle(StreamModel stream) {
         //TODO can be null
-        if (mutedStreamIds.contains(stream.getIdStream())) {
+        if (streamIsMuted(stream.getIdStream())) {
             return new Truss()
               .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
               .append(connectedAndMuted)
