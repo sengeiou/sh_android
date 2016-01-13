@@ -102,7 +102,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             @Override
             public boolean onStreamLongClick(StreamResultModel stream) {
                 presenter.onStreamLongClicked(stream);
-                //openContextualMenu(stream);
                 return true;
             }
         });

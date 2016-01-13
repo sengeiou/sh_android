@@ -97,7 +97,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
             @Override
             public boolean onStreamLongClick(StreamResultModel stream) {
-                openContextualMenu(stream);
+                favoritesListPresenter.onFavoriteLongClicked(stream);
                 return true;
             }
         });
@@ -114,8 +114,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         favoritesListPresenter.initialize(this);
     }
 
-    private void openContextualMenu(final StreamResultModel stream) {
-        new CustomContextMenu.Builder(getActivity()) //
+    private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
+        return new CustomContextMenu.Builder(getActivity()) //
           .addAction(R.string.menu_remove_favorite, new Runnable() {
               @Override public void run() {
                   favoritesListPresenter.removeFromFavorites(stream);
@@ -128,7 +128,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             @Override public void run() {
                 shareStream(stream);
             }
-        }).show();
+        });
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -159,6 +159,26 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Override public void showStreamShared() {
         feedbackMessage.show(getView(), sharedStream);
+    }
+
+    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
+        adapter.setMutedStreamIds(mutedStreamIds);
+    }
+
+    @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
+        baseContextualMenu(stream).addAction(R.string.unmute, new Runnable() {
+            @Override public void run() {
+                favoritesListPresenter.onUnmuteClicked(stream);
+            }
+        }).show();
+    }
+
+    @Override public void showContextMenuWithMute(final StreamResultModel stream) {
+        baseContextualMenu(stream).addAction(R.string.mute, new Runnable() {
+            @Override public void run() {
+                favoritesListPresenter.onMuteClicked(stream);
+            }
+        }).show();
     }
 
     @Override

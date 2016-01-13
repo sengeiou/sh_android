@@ -15,4 +15,10 @@ public interface FavoritesListView extends LoadDataView {
     void navigateToStreamTimeline(String idStream, String title, String authorId);
 
     void showStreamShared();
+
+    void setMutedStreamIds(List<String> mutedStreamIds);
+
+    void showContextMenuWithUnmute(StreamResultModel stream);
+
+    void showContextMenuWithMute(StreamResultModel stream);
 }

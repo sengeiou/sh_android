@@ -92,4 +92,8 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     public void setMutedStreamIds(List<String> mutedStreamIds) {
         this.mutedStreamsIds = mutedStreamIds;
     }
+
+    public List<String> getMutedStreamIds() {
+        return mutedStreamsIds;
+    }
 }
