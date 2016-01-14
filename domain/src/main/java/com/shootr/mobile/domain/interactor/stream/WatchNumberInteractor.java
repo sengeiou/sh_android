@@ -47,9 +47,11 @@ public class WatchNumberInteractor implements Interactor {
 
     protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
         List<User> watchers = new ArrayList<>();
-        for (User user : people) {
-            if (idStream.equals(user.getIdWatchingStream())) {
-                watchers.add(user);
+        if (people != null) {
+            for (User user : people) {
+                if (idStream.equals(user.getIdWatchingStream())) {
+                    watchers.add(user);
+                }
             }
         }
         return watchers;
