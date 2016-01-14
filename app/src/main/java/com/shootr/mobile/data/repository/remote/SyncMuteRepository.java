@@ -30,15 +30,15 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     }
 
     @Override public void mute(String idStream) {
-        MuteStreamEntity followEntity = createMute(idStream);
+        MuteStreamEntity mute = createMute(idStream);
         try {
-            remoteMuteDataSource.mute(followEntity);
-            followEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-            localMuteDataSource.mute(followEntity);
+            remoteMuteDataSource.mute(mute);
+            mute.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+            localMuteDataSource.mute(mute);
             syncTrigger.triggerSync();
             dispatchSync();
         } catch (ServerCommunicationException e) {
-            queueUpload(followEntity, e);
+            queueUpload(mute, e);
         }
     }
 
@@ -61,8 +61,7 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
         try {
             syncTrigger.triggerSync();
             dispatchSync();
-            remoteMuteDataSource.unmute(idStream);
-            localMuteDataSource.unmute(idStream);
+            syncUnmute(idStream);
         } catch (ServerCommunicationException e) {
             deleteMute(idStream);
         }
@@ -72,11 +71,19 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
         List<MuteStreamEntity> pendingEntities = localMuteDataSource.getEntitiesNotSynchronized();
         for (MuteStreamEntity entity : pendingEntities) {
             if (LocalSynchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
-                remoteMuteDataSource.unmute(entity.getIdStream());
-                localMuteDataSource.unmute(entity.getIdStream());
+                syncUnmute(entity.getIdStream());
             } else {
                 syncEntities(entity);
             }
+        }
+    }
+
+    public void syncUnmute(String idStream) {
+        try {
+            remoteMuteDataSource.unmute(idStream);
+            localMuteDataSource.unmute(idStream);
+        } catch (ServerCommunicationException error) {
+            /* no-op*/
         }
     }
 

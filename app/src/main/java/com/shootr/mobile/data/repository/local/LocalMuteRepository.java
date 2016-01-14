@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.MuteStreamEntity;
+import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
@@ -26,8 +27,10 @@ public class LocalMuteRepository implements MuteRepository {
     }
 
     @Override public void unmute(String idStream) {
+        MuteStreamEntity muteStreamEntity = muteDataSource.getMute(idStream);
+        muteStreamEntity.setSynchronizedStatus(Synchronized.SYNC_DELETED);
+        muteDataSource.mute(muteStreamEntity);
         remoteMuteRepository.dispatchSync();
-        muteDataSource.unmute(idStream);
     }
 
     @Override public List<String> getMutedIdStreams() {

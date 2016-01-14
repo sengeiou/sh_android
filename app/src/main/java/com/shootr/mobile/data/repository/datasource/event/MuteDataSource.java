@@ -14,4 +14,6 @@ public interface MuteDataSource {
     List<MuteStreamEntity> getEntitiesNotSynchronized();
 
     void putMuteds(List<MuteStreamEntity> muteStreamEntities);
+
+    MuteStreamEntity getMute(String idStream);
 }

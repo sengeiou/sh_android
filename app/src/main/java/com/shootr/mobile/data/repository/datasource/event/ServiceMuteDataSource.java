@@ -48,4 +48,8 @@ public class ServiceMuteDataSource implements MuteDataSource {
     @Override public void putMuteds(List<MuteStreamEntity> muteStreamEntities) {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
+
+    @Override public MuteStreamEntity getMute(String idStream) {
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
+    }
 }

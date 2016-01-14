@@ -32,4 +32,8 @@ public class DatabaseMuteDataSource implements MuteDataSource {
     @Override public void putMuteds(List<MuteStreamEntity> muteStreamEntities) {
         muteManager.saveMutesFromServer(muteStreamEntities);
     }
+
+    @Override public MuteStreamEntity getMute(String idStream) {
+        return muteManager.getMute(idStream);
+    }
 }

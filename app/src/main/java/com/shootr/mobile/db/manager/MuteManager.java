@@ -40,7 +40,8 @@ public class MuteManager extends AbstractManager {
 
     public List<MuteStreamEntity> getMutes() {
         List<MuteStreamEntity> muteStreamEntities = new ArrayList<>();
-        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION,null,null,null,null,null);
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'S' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
+        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             do{
@@ -77,5 +78,30 @@ public class MuteManager extends AbstractManager {
         } finally {
             database.endTransaction();
         }
+    }
+
+    public MuteStreamEntity getMute(String idStream) {
+        String where = DatabaseContract.MuteTable.ID_MUTED_STREAM + "= ?";
+        String[] whereArguments = new String[] { idStream };
+
+        return readMute(where, whereArguments);
+    }
+
+    private MuteStreamEntity readMute(String whereClause, String[] whereArguments) {
+        MuteStreamEntity muteStreamEntity = null;
+        Cursor c = getReadableDatabase().query(DatabaseContract.MuteTable.TABLE,
+          DatabaseContract.MuteTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            muteStreamEntity = muteStreamEntityDBMapper.fromCursor(c);
+        }
+        c.close();
+        return muteStreamEntity;
     }
 }
