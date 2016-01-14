@@ -3,8 +3,11 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -37,6 +40,9 @@ public class FavoritesListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Bus bus;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock MuteInteractor muteInteractor;
+    @Mock UnmuteInteractor unmuteInterator;
 
     private FavoritesListPresenter presenter;
 
@@ -44,7 +50,11 @@ public class FavoritesListPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, shareStreamInteractor,
-          removeFromFavoritesInteractor, unwatchStreamInteractor, streamResultModelMapper, errorMessageFactory, bus);
+          removeFromFavoritesInteractor, unwatchStreamInteractor,
+          getMutedStreamsInteractor,
+          muteInteractor,
+          unmuteInterator,
+          streamResultModelMapper, errorMessageFactory, bus);
         presenter.setView(favoritesListView);
     }
 

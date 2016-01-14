@@ -39,4 +39,18 @@
     android:visible="false"
     app:showAsAction="always" />
 
+  <item
+    android:id="@+id/menu_mute_stream"
+    android:orderInCategory="100"
+    android:title="@string/mute"
+    android:visible="false"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/menu_unmute_stream"
+    android:orderInCategory="100"
+    android:title="@string/unmute"
+    android:visible="false"
+    app:showAsAction="always" />
+
 </menu>

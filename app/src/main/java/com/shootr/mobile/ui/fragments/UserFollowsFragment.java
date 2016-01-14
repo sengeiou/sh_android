@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
+import com.shootr.mobile.ui.views.nullview.NullUserFollowsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -169,6 +170,7 @@ public class UserFollowsFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        userFollowsPresenter.setView(new NullUserFollowsView());
     }
 
     public UserListAdapter getAdapter() {

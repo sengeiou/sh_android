@@ -35,6 +35,18 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void showContextMenuWithMute(StreamResultModel stream) {
+        /* no-op */
+    }
+
+    @Override public void showContextMenuWithUnmute(StreamResultModel stream) {
+        /* no-op */
+    }
+
+    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

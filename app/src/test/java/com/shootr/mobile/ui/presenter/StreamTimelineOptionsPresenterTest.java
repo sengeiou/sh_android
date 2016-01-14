@@ -3,8 +3,11 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
-import com.shootr.mobile.ui.views.FavoriteStatusView;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
+import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,43 +21,50 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
-public class FavoriteStatusPresenterTest {
+public class StreamTimelineOptionsPresenterTest {
 
     private static final String STUB_STREAM_ID = "stream_id";
 
     @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
-    @Mock FavoriteStatusView favoriteStatusView;
+    @Mock StreamTimelineOptionsView streamTimelineOptionsView;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock MuteInteractor muteInteractor;
+    @Mock UnmuteInteractor unmuteInteractor;
 
-    private FavoriteStatusPresenter presenter;
+    private StreamTimelineOptionsPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoriteStatusPresenter(getFavoriteStatusInteractor,
+        presenter = new StreamTimelineOptionsPresenter(getFavoriteStatusInteractor,
           addToFavoritesInteractor,
-          removeFromFavoritesInteractor, errorMessageFactory);
-        presenter.setView(favoriteStatusView);
+          removeFromFavoritesInteractor,
+          getMutedStreamsInteractor,
+          muteInteractor,
+          unmuteInteractor,
+          errorMessageFactory);
+        presenter.setView(streamTimelineOptionsView);
     }
 
     @Test
     public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite() throws Exception {
         setupFavoriteStatusCallbacks(true);
 
-        presenter.initialize(favoriteStatusView, STUB_STREAM_ID);
+        presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
 
-        verify(favoriteStatusView).showRemoveFromFavoritesButton();
+        verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
     }
 
     @Test
     public void shouldShowAddToFavoritesButtonWhenInitializeIfStreamIsNotFavorite() throws Exception {
         setupFavoriteStatusCallbacks(false);
 
-        presenter.initialize(favoriteStatusView, STUB_STREAM_ID);
+        presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
 
-        verify(favoriteStatusView).showAddToFavoritesButton();
+        verify(streamTimelineOptionsView).showAddToFavoritesButton();
     }
 
     @Test
@@ -63,7 +73,7 @@ public class FavoriteStatusPresenterTest {
 
         presenter.addToFavorites();
 
-        verify(favoriteStatusView).hideAddToFavoritesButton();
+        verify(streamTimelineOptionsView).hideAddToFavoritesButton();
     }
 
     @Test
@@ -72,7 +82,7 @@ public class FavoriteStatusPresenterTest {
 
         presenter.addToFavorites();
 
-        verify(favoriteStatusView).showRemoveFromFavoritesButton();
+        verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
     }
 
     @Test
@@ -81,7 +91,7 @@ public class FavoriteStatusPresenterTest {
 
         presenter.removeFromFavorites();
 
-        verify(favoriteStatusView).hideRemoveFromFavoritesButton();
+        verify(streamTimelineOptionsView).hideRemoveFromFavoritesButton();
     }
 
     @Test
@@ -90,7 +100,7 @@ public class FavoriteStatusPresenterTest {
 
         presenter.removeFromFavorites();
 
-        verify(favoriteStatusView).showAddToFavoritesButton();
+        verify(streamTimelineOptionsView).showAddToFavoritesButton();
     }
 
     private void setupRemoveFromFavoriteCallbacks() {
