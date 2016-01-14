@@ -309,6 +309,6 @@
     <string name="user_unbanned">Veto suprimido.</string>
     <string name="notification_shot_has_user_banned_subtitle">Has sido vetado en este stream</string>
     <string name="mute">Silenciar</string>
-    <string name="unmute">No silenciar</string>
+    <string name="unmute">Quitar silencio</string>
     <string name="stream_detail_mute">Silenciar</string>
 </resources>

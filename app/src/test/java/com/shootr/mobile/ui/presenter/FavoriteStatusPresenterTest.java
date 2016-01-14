@@ -3,7 +3,10 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.ui.views.FavoriteStatusView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import org.junit.Before;
@@ -27,6 +30,9 @@ public class FavoriteStatusPresenterTest {
     @Mock FavoriteStatusView favoriteStatusView;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock MuteInteractor muteInteractor;
+    @Mock UnmuteInteractor unmuteInteractor;
 
     private FavoriteStatusPresenter presenter;
 
@@ -35,7 +41,11 @@ public class FavoriteStatusPresenterTest {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoriteStatusPresenter(getFavoriteStatusInteractor,
           addToFavoritesInteractor,
-          removeFromFavoritesInteractor, errorMessageFactory);
+          removeFromFavoritesInteractor,
+          getMutedStreamsInteractor,
+          muteInteractor,
+          unmuteInteractor,
+          errorMessageFactory);
         presenter.setView(favoriteStatusView);
     }
 

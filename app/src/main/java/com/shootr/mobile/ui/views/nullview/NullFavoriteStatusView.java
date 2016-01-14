@@ -32,4 +32,20 @@ public class NullFavoriteStatusView implements FavoriteStatusView {
     @Override public void showError(String errorMessage) {
         /* no-op */
     }
+
+    @Override public void showUnmuteButton() {
+        /* no-op */
+    }
+
+    @Override public void showMuteButton() {
+        /* no-op */
+    }
+
+    @Override public void hideMuteButton() {
+        /* no-op */
+    }
+
+    @Override public void hideUnmuteButton() {
+        /* no-op */
+    }
 }

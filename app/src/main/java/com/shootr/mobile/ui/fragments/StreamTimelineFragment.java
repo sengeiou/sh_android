@@ -122,6 +122,8 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -192,6 +194,9 @@ public class StreamTimelineFragment extends BaseFragment
         addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_add_favorite));
         removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_remove_favorite));
 
+        muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
+        unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(com.shootr.mobile.R.drawable.watchers_badge_circle);
             icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_people, getResources().getDrawable(com.shootr.mobile.R.drawable.ic_action_ic_one_people));
@@ -219,6 +224,12 @@ public class StreamTimelineFragment extends BaseFragment
                 return true;
             case com.shootr.mobile.R.id.menu_stream_remove_favorite:
                 favoriteStatusPresenter.removeFromFavorites();
+                return true;
+            case R.id.menu_mute_stream:
+                favoriteStatusPresenter.mute();
+                return true;
+            case R.id.menu_unmute_stream:
+                favoriteStatusPresenter.unmute();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -549,6 +560,22 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void showError(String message) {
         feedbackMessage.showLong(getView(), message);
+    }
+
+    @Override public void showUnmuteButton() {
+        unmuteMenuItem.setVisible(true);
+    }
+
+    @Override public void showMuteButton() {
+        muteMenuItem.setVisible(true);
+    }
+
+    @Override public void hideMuteButton() {
+        muteMenuItem.setVisible(false);
+    }
+
+    @Override public void hideUnmuteButton() {
+        unmuteMenuItem.setVisible(false);
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
