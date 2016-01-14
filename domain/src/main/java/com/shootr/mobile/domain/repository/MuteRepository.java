@@ -9,4 +9,6 @@ public interface MuteRepository {
     void unmute(String idStream);
 
     List<String> getMutedIdStreams();
+
+    void dispatchSync();
 }

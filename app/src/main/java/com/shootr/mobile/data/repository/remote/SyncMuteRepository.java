@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class SyncMuteRepository implements MuteRepository, SyncableRepository {
 
@@ -33,24 +35,20 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
             remoteMuteDataSource.mute(followEntity);
             followEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             localMuteDataSource.mute(followEntity);
+            syncTrigger.triggerSync();
+            dispatchSync();
         } catch (ServerCommunicationException e) {
-            followEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
-            localMuteDataSource.mute(followEntity);
-            syncTrigger.notifyNeedsSync(this);
-        }
-    }
-
-    @Override public void unmute(String idStream) {
-        try {
-            remoteMuteDataSource.unmute(idStream);
-            localMuteDataSource.unmute(idStream);
-        } catch (ServerCommunicationException e) {
-            deleteMute(idStream);
+            queueUpload(followEntity, e);
         }
     }
 
     @Override public List<String> getMutedIdStreams() {
+        syncTrigger.triggerSync();
+        dispatchSync();
         List<MuteStreamEntity> muteStreamEntities = remoteMuteDataSource.getMutedStreamEntities();
+        for (MuteStreamEntity muteStreamEntity : muteStreamEntities) {
+            muteStreamEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+        }
         localMuteDataSource.putMuteds(muteStreamEntities);
         List<String> mutedIdStreams = new ArrayList<>(muteStreamEntities.size());
         for (MuteStreamEntity muteStreamEntity : muteStreamEntities) {
@@ -59,16 +57,48 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
         return mutedIdStreams;
     }
 
+    @Override public void unmute(String idStream) {
+        try {
+            syncTrigger.triggerSync();
+            dispatchSync();
+            remoteMuteDataSource.unmute(idStream);
+            localMuteDataSource.unmute(idStream);
+        } catch (ServerCommunicationException e) {
+            deleteMute(idStream);
+        }
+    }
+
     @Override public void dispatchSync() {
         List<MuteStreamEntity> pendingEntities = localMuteDataSource.getEntitiesNotSynchronized();
         for (MuteStreamEntity entity : pendingEntities) {
-            if (Synchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
+            if (LocalSynchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
                 remoteMuteDataSource.unmute(entity.getIdStream());
                 localMuteDataSource.unmute(entity.getIdStream());
             } else {
                 syncEntities(entity);
             }
         }
+    }
+
+    private void queueUpload(MuteStreamEntity muteStreamEntity, ServerCommunicationException reason) {
+        Timber.w(reason,
+          "Mute upload queued: idStream %s",
+          muteStreamEntity.getIdStream());
+        prepareEntityForSynchronization(muteStreamEntity);
+        syncTrigger.notifyNeedsSync(this);
+    }
+
+    private void prepareEntityForSynchronization(MuteStreamEntity muteStreamEntity) {
+        if (!isReadyForSync(muteStreamEntity)) {
+            muteStreamEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+        }
+        localMuteDataSource.mute(muteStreamEntity);
+    }
+
+    private boolean isReadyForSync(MuteStreamEntity muteStreamEntity) {
+        return LocalSynchronized.SYNC_UPDATED.equals(muteStreamEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_NEW.equals(muteStreamEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_DELETED.equals(muteStreamEntity.getSynchronizedStatus());
     }
 
     private void deleteMute(String idStream) {
@@ -88,8 +118,12 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     }
 
     private void syncEntities(MuteStreamEntity entity) {
-        remoteMuteDataSource.mute(entity);
-        entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-        localMuteDataSource.mute(entity);
+        try {
+            remoteMuteDataSource.mute(entity);
+            entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+            localMuteDataSource.mute(entity);
+        } catch (ServerCommunicationException error) {
+            /* no-op*/
+        }
     }
 }

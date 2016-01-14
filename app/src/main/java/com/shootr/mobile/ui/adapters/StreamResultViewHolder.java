@@ -129,7 +129,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     public boolean streamIsMuted(String idStream) {
-        return mutedStreamIds.contains(idStream);
+        return mutedStreamIds != null && mutedStreamIds.contains(idStream);
     }
 
     private void setClickListener(final StreamResultModel streamResult) {

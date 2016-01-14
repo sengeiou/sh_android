@@ -42,7 +42,7 @@ public class UserFollowsPresenter implements Presenter {
         this.userModelMapper = userModelMapper;
     }
 
-    protected void setView(UserFollowsView userFollowsView) {
+    public void setView(UserFollowsView userFollowsView) {
         this.userFollowsView = userFollowsView;
     }
 
