@@ -58,8 +58,10 @@ public class StreamTimelineOptionsPresenter implements Presenter {
             @Override public void onLoaded(List<String> ids) {
                 if (ids.contains(idStream)) {
                     streamTimelineOptionsView.showUnmuteButton();
+                    streamTimelineOptionsView.hideMuteButton();
                 } else {
                     streamTimelineOptionsView.showMuteButton();
+                    streamTimelineOptionsView.hideUnmuteButton();
                 }
             }
         });
@@ -108,6 +110,7 @@ public class StreamTimelineOptionsPresenter implements Presenter {
         muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 streamTimelineOptionsView.hideMuteButton();
+                streamTimelineOptionsView.showUnmuteButton();
             }
         });
     }
@@ -116,6 +119,7 @@ public class StreamTimelineOptionsPresenter implements Presenter {
         unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 streamTimelineOptionsView.hideUnmuteButton();
+                streamTimelineOptionsView.showMuteButton();
             }
         });
     }
