@@ -39,7 +39,7 @@ public class GetMutedStreamsInteractor implements Interactor {
 
     private void tryLoadingLocalMutesAndThenRemote() {
         List<String> mutedIdStreams = localMuteRepository.getMutedIdStreams();
-        if (mutedIdStreams == null) {
+        if (mutedIdStreams.isEmpty()) {
             loadRemoteMutes();
         } else {
             notifyResult(mutedIdStreams);
