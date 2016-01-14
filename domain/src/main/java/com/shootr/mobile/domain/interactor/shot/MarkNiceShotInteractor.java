@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -65,10 +66,14 @@ public class MarkNiceShotInteractor implements Interactor {
     }
 
     private void markNiceInLocal() throws NiceAlreadyMarkedException {
-        localNiceShotRepository.mark(idShot);
-        Shot shot = getShotFromLocalIfExists();
-        shot.setNiceCount(shot.getNiceCount() + 1);
-        localShotRepository.putShot(shot);
+        try {
+            localNiceShotRepository.mark(idShot);
+            Shot shot = getShotFromLocalIfExists();
+            shot.setNiceCount(shot.getNiceCount() + 1);
+            localShotRepository.putShot(shot);
+        } catch (ShotNotFoundException error) {
+            /* swallow */
+        }
     }
 
     private Shot getShotFromLocalIfExists() {
