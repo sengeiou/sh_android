@@ -8,12 +8,12 @@ import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
-import com.shootr.mobile.ui.views.FavoriteStatusView;
+import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FavoriteStatusPresenter implements Presenter {
+public class StreamTimelineOptionsPresenter implements Presenter {
 
     private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -24,12 +24,12 @@ public class FavoriteStatusPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
 
-    private FavoriteStatusView favoriteStatusView;
+    private StreamTimelineOptionsView streamTimelineOptionsView;
     private String idStream;
     private boolean hasBeenPaused;
 
     @Inject
-    public FavoriteStatusPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
+    public StreamTimelineOptionsPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
       UnmuteInteractor unmuteInteractor, ErrorMessageFactory errorMessageFactory) {
@@ -42,13 +42,13 @@ public class FavoriteStatusPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void setView(FavoriteStatusView favoriteStatusView) {
-        this.favoriteStatusView = favoriteStatusView;
+    public void setView(StreamTimelineOptionsView streamTimelineOptionsView) {
+        this.streamTimelineOptionsView = streamTimelineOptionsView;
     }
 
-    public void initialize(FavoriteStatusView favoriteStatusView, String idStream) {
+    public void initialize(StreamTimelineOptionsView streamTimelineOptionsView, String idStream) {
         this.idStream = idStream;
-        this.setView(favoriteStatusView);
+        this.setView(streamTimelineOptionsView);
         this.loadFavoriteStatus();
         this.loadMuteStatus();
     }
@@ -57,9 +57,9 @@ public class FavoriteStatusPresenter implements Presenter {
         getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> ids) {
                 if (ids.contains(idStream)) {
-                    favoriteStatusView.showUnmuteButton();
+                    streamTimelineOptionsView.showUnmuteButton();
                 } else {
-                    favoriteStatusView.showMuteButton();
+                    streamTimelineOptionsView.showMuteButton();
                 }
             }
         });
@@ -69,9 +69,9 @@ public class FavoriteStatusPresenter implements Presenter {
         getFavoriteStatusInteractor.loadFavoriteStatus(idStream, new Interactor.Callback<Boolean>() {
             @Override public void onLoaded(Boolean isFavorite) {
                 if (!isFavorite) {
-                    favoriteStatusView.showAddToFavoritesButton();
+                    streamTimelineOptionsView.showAddToFavoritesButton();
                 } else {
-                    favoriteStatusView.showRemoveFromFavoritesButton();
+                    streamTimelineOptionsView.showRemoveFromFavoritesButton();
                 }
             }
         });
@@ -80,9 +80,9 @@ public class FavoriteStatusPresenter implements Presenter {
     public void addToFavorites() {
         addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                favoriteStatusView.hideAddToFavoritesButton();
-                favoriteStatusView.showRemoveFromFavoritesButton();
-                favoriteStatusView.showAddedToFavorites();
+                streamTimelineOptionsView.hideAddToFavoritesButton();
+                streamTimelineOptionsView.showRemoveFromFavoritesButton();
+                streamTimelineOptionsView.showAddedToFavorites();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -92,14 +92,14 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     private void showErrorInView(ShootrException error) {
-        favoriteStatusView.showError(errorMessageFactory.getMessageForError(error));
+        streamTimelineOptionsView.showError(errorMessageFactory.getMessageForError(error));
     }
 
     public void removeFromFavorites() {
         removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                favoriteStatusView.showAddToFavoritesButton();
-                favoriteStatusView.hideRemoveFromFavoritesButton();
+                streamTimelineOptionsView.showAddToFavoritesButton();
+                streamTimelineOptionsView.hideRemoveFromFavoritesButton();
             }
         });
     }
@@ -107,7 +107,7 @@ public class FavoriteStatusPresenter implements Presenter {
     public void mute() {
         muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                favoriteStatusView.hideMuteButton();
+                streamTimelineOptionsView.hideMuteButton();
             }
         });
     }
@@ -115,7 +115,7 @@ public class FavoriteStatusPresenter implements Presenter {
     public void unmute() {
         unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                favoriteStatusView.hideUnmuteButton();
+                streamTimelineOptionsView.hideUnmuteButton();
             }
         });
     }

@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.views.nullview;
 
-import com.shootr.mobile.ui.views.FavoriteStatusView;
+import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 
-public class NullFavoriteStatusView implements FavoriteStatusView {
+public class NullStreamTimelineOptionsView implements StreamTimelineOptionsView {
 
     @Override
     public void showAddToFavoritesButton() {

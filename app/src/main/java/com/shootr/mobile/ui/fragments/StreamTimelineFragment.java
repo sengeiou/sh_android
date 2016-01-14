@@ -42,19 +42,19 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.presenter.FavoriteStatusPresenter;
+import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
-import com.shootr.mobile.ui.views.FavoriteStatusView;
+import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NullNewShotBarView;
 import com.shootr.mobile.ui.views.NullWatchNumberView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
-import com.shootr.mobile.ui.views.nullview.NullFavoriteStatusView;
+import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
@@ -74,7 +74,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
@@ -85,7 +85,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject StreamTimelinePresenter streamTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject FavoriteStatusPresenter favoriteStatusPresenter;
+    @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
 
     @Inject ImageLoader imageLoader;
@@ -150,7 +150,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.setView(new NullStreamTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
-        favoriteStatusPresenter.setView(new NullFavoriteStatusView());
+        streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
     }
 
     @Override
@@ -220,16 +220,16 @@ public class StreamTimelineFragment extends BaseFragment
                 streamTimelinePresenter.onAllStreamShotsClick();
                 return true;
             case com.shootr.mobile.R.id.menu_stream_add_favorite:
-                favoriteStatusPresenter.addToFavorites();
+                streamTimelineOptionsPresenter.addToFavorites();
                 return true;
             case com.shootr.mobile.R.id.menu_stream_remove_favorite:
-                favoriteStatusPresenter.removeFromFavorites();
+                streamTimelineOptionsPresenter.removeFromFavorites();
                 return true;
             case R.id.menu_mute_stream:
-                favoriteStatusPresenter.mute();
+                streamTimelineOptionsPresenter.mute();
                 return true;
             case R.id.menu_unmute_stream:
-                favoriteStatusPresenter.unmute();
+                streamTimelineOptionsPresenter.unmute();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -242,7 +242,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.resume();
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
-        favoriteStatusPresenter.resume();
+        streamTimelineOptionsPresenter.resume();
     }
 
     @Override
@@ -251,14 +251,14 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.pause();
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
-        favoriteStatusPresenter.pause();
+        streamTimelineOptionsPresenter.pause();
     }
 
     private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
-        favoriteStatusPresenter.initialize(this, idStream);
+        streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
     //endregion
