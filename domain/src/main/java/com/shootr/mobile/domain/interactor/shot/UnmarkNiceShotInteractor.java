@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -70,7 +71,7 @@ public class UnmarkNiceShotInteractor implements Interactor {
     protected void sendUndoNiceToRemote() {
         try {
             remoteNiceShotRepository.unmark(idShot);
-        } catch (com.shootr.mobile.domain.exception.ShootrException | NiceNotMarkedException e) {
+        } catch (ShootrException | NiceNotMarkedException e) {
             try {
                 redoNiceInLocal();
             } catch (NiceAlreadyMarkedException error) {
