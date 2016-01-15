@@ -16,9 +16,16 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.BooleanPreference;
+import com.shootr.mobile.data.prefs.CurrentUserId;
+import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
+import com.shootr.mobile.data.prefs.StringPreference;
+import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
@@ -39,6 +46,10 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject @SessionToken StringPreference sessionTokenPreference;
+    @Inject @CurrentUserId StringPreference currentUserIdPreference;
+    @Inject GetUserByIdInteractor getUserByIdInteractor;
+    @Inject GetStreamInteractor getStreamById;
     @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
 
     private CallbackManager callbackManager;
@@ -56,13 +67,42 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @Override
     protected void initializePresenter() {
-        if (shouldShowIntro.get()) {
-            shouldShowIntro.set(false);
-            startActivity(new Intent(this, IntroActivity.class));
-            finish();
+        if (sessionTokenPreference.get() != null) {
+            retrieveOnUpgradeInfo();
         } else {
-            setupFacebook();
+            if (shouldShowIntro.get()) {
+                shouldShowIntro.set(false);
+                startActivity(new Intent(this, IntroActivity.class));
+                finish();
+            } else {
+                setupFacebook();
+            }
         }
+    }
+
+    private void retrieveOnUpgradeInfo() {
+        final Intent i = new Intent(this, MainTabbedActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                String visibleStreamId = user.getIdWatchingStream();
+                if (visibleStreamId != null) {
+                    getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
+                        @Override public void onLoaded(Stream stream) {
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                } else {
+                    startActivity(i);
+                    finish();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
+        });
     }
 
     @Override
