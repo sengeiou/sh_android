@@ -251,7 +251,7 @@
     <string name="shoot_all_button">Shoot all</string>
     <string name="shot_shared_message">Shot shared</string>
     <string name="shot_timeline_empty_title">No Shots</string>
-    <string name="showing_shots_by_holder">Showing shots by holder</string>
+    <string name="showing_shots_by_holder">Showing shots by holder.</string>
     <string name="sign_out_message">Signing out…</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
     <string name="stream_detail_edit_menu_title">Edit stream</string>
@@ -265,9 +265,9 @@
     <string name="stream_notification_confirmation_no">Nope</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_participants_following_number">following %d</string>
-    <string name="stream_timeline_add_favorite">Add to favorites</string>
+    <string name="stream_timeline_add_favorite">Add to Favorites</string>
     <string name="stream_timeline_empty_message">Checking for shots…</string>
-    <string name="stream_timeline_remove_favorite">Remove from favorites</string>
+    <string name="stream_timeline_remove_favorite">Remove from Favorites</string>
     <string name="suggested_people_section_title">Who to follow</string>
     <string name="support_blog">Blog</string>
     <string name="support_help">Help</string>
