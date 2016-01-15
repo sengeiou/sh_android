@@ -239,7 +239,7 @@
     <string name="shoot_all_button">Enviar todo</string>
     <string name="shot_shared_message">Shot compartido</string>
     <string name="shot_timeline_empty_title">No hay shots</string>
-    <string name="showing_shots_by_holder">Shots del administrador</string>
+    <string name="showing_shots_by_holder">Shots del administrador.</string>
     <string name="sign_out_message">Cerrando sesión…</string>
     <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
     <string name="stream_detail_edit_menu_title">Editar</string>
