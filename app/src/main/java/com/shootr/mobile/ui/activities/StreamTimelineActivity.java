@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +9,15 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
-import java.util.List;
+import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
+
+    @Inject BackStackHandler backStackHandler;
 
     public static Intent newIntent(Context context, String streamId, String streamShortTitle, String authorId) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
@@ -40,23 +42,10 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            handleBackIntent();
+            backStackHandler.handleBackStack(this);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void handleBackIntent() {
-        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-        if(taskList.get(0).numActivities == 1 &&
-          taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
-            Intent intent = new Intent(this, MainTabbedActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            finish();
         }
     }
 
