@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -24,7 +24,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
-import com.shootr.mobile.util.IntentFactory;
+import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -35,7 +35,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
+    @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
     @Inject MainScreenPresenter mainScreenPresenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     private ToolbarDecorator toolbarDecorator;
     private BadgeDrawable activityBadgeIcon;
@@ -145,12 +147,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void showHasMultipleActivities(Integer badgeCount) {
-        //TODO REFACTOR: user FeedbackMessage
-        Snackbar.make(getView(),badgeCount+" activities notifications",Snackbar.LENGTH_LONG).setAction("ir", new View.OnClickListener() {
+        String multipleActivities = getString(R.string.multiple_activity_notification, badgeCount);
+        feedbackMessage.showMultipleActivities(getView(), multipleActivities, multipleActivitiesAction, new View.OnClickListener() {
             @Override public void onClick(View view) {
                 navigateToActivity();
             }
-        }).show();
+        });
     }
 
 
