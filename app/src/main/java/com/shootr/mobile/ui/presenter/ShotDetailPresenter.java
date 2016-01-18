@@ -18,6 +18,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
@@ -33,6 +34,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private ShotModel shotModel;
     private List<ShotModel> repliesModels;
     private boolean justSentReply = false;
+    private boolean isNiceBlocked;
+    private boolean isNiceMarked;
 
     @Inject
     public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
@@ -66,7 +69,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadShotDetail() {
-        shotDetailView.renderShot(shotModel);
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 onShotDetailLoaded(shotDetail);
@@ -84,6 +86,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
         onRepliesLoaded(shotDetail.getReplies());
         shotDetailView.setReplyUsername(shotModel.getUsername());
+        isNiceBlocked = false;
     }
 
     public void imageClick(ShotModel shot) {
@@ -100,19 +103,37 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void markNiceShot(String idShot) {
-        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadShotDetail();
-            }
-        });
+        if(!isNiceBlocked && !isNiceMarked) {
+            isNiceMarked = true;
+            isNiceBlocked = true;
+            markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    loadShotDetail();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    isNiceBlocked = false;
+                    isNiceMarked = false;
+                }
+            });
+        }
     }
 
     public void unmarkNiceShot(String idShot) {
-        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadShotDetail();
-            }
-        });
+        if(!isNiceBlocked && isNiceMarked) {
+            isNiceMarked = false;
+            isNiceBlocked = true;
+            unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    loadShotDetail();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    isNiceBlocked = false;
+                    isNiceMarked = true;
+                }
+            });
+        }
     }
 
     private void startProfileContainerActivity(String username) {

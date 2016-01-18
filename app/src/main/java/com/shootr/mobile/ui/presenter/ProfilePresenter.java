@@ -197,6 +197,10 @@ public class ProfilePresenter implements Presenter {
             @Override public void onCompleted() {
                 loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
         });
     }
 
@@ -204,6 +208,10 @@ public class ProfilePresenter implements Presenter {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
             }
         });
     }
