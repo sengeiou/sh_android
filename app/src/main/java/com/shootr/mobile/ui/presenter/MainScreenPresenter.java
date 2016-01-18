@@ -47,10 +47,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         this.loadCurrentUser();
         this.sendDeviceInfo();
         this.updateActivityBadge();
-        this.showMultipleActivities();
+        this.setupMultipleActivitiesNotification();
     }
 
-    private void showMultipleActivities() {
+    private void setupMultipleActivitiesNotification() {
         if(hasMultipleActivities()){
             mainScreenView.showHasMultipleActivities(badgeCount.get());
         }
@@ -83,7 +83,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         bus.register(this);
         if (hasBeenPaused) {
             loadCurrentUser();
-            showMultipleActivities();
+            setupMultipleActivitiesNotification();
         }
     }
 
