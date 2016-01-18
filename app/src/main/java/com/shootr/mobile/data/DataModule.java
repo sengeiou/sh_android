@@ -44,6 +44,8 @@ import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
+import com.shootr.mobile.util.BackStackHandler;
+import com.shootr.mobile.util.BackStackHandlerTool;
 import com.shootr.mobile.util.BitmapImageResizer;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
@@ -201,6 +203,10 @@ public class DataModule {
 
     @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
         return new GoogleAnalyticsTool();
+    }
+
+    @Provides @Singleton BackStackHandler provideBackStackHandler() {
+        return new BackStackHandlerTool();
     }
 
     @Provides @Singleton WritePermissionManager provideWritePermissionManager() {
