@@ -43,6 +43,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         this.loadCurrentUser();
         this.sendDeviceInfo();
         this.updateActivityBadge();
+        //TODO extract method (2)
+        if(badgeCount.get()>1){
+            mainScreenView.showHasMultipleActivities(badgeCount.get());
+        }
     }
 
     private void sendDeviceInfo() {
@@ -67,6 +71,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         updateActivityBadge();
         bus.register(this);
         if (hasBeenPaused) {
+            //TODO multiple activies
             loadCurrentUser();
         }
     }
@@ -80,5 +85,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     @Subscribe
     public void onBadgeChanged(BadgeChanged.Event event) {
         updateActivityBadge();
+        //TODO multiple activities
     }
 }

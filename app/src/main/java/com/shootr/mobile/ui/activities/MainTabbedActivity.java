@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
+import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -141,6 +143,16 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     public void showActivityBadge(int count) {
        updateWatchNumberIcon(count);
     }
+
+    @Override public void showHasMultipleActivities(Integer badgeCount) {
+        //TODO REFACTOR: user FeedbackMessage
+        Snackbar.make(getView(),badgeCount+" activities notifications",Snackbar.LENGTH_LONG).setAction("ir", new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                navigateToActivity();
+            }
+        }).show();
+    }
+
 
     private void setToolbarClickListener(final UserModel userModel) {
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
