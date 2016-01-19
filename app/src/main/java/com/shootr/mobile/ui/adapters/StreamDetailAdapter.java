@@ -3,12 +3,12 @@ package com.shootr.mobile.ui.adapters;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -260,7 +260,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class SwitchViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.action_name) TextView name;
-        @Bind(R.id.action_switch) Switch muteSwitch;
+        @Bind(R.id.action_switch) SwitchCompat muteSwitch;
 
         public SwitchViewHolder(final View itemView) {
             super(itemView);

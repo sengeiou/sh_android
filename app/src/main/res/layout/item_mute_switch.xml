@@ -13,7 +13,8 @@
     android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
     tools:text="Mute" />
 
-  <Switch android:id="@+id/action_switch"
+  <android.support.v7.widget.SwitchCompat
+    android:id="@+id/action_switch"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="end|center_vertical"
