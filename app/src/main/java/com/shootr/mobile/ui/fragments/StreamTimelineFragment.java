@@ -161,6 +161,7 @@ public class StreamTimelineFragment extends BaseFragment
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
+        setStreamTitleClickListener(idStream);
         initializePresenters(idStream, streamAuthorIdUser);
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
@@ -265,7 +266,14 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setStreamTitle(String streamShortTitle) {
         toolbarDecorator.setTitle(streamShortTitle);
+    }
 
+    private void setStreamTitleClickListener(final String idStream) {
+        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                navigateToStreamDetail(idStream);
+            }
+        });
     }
 
     private void setupNewShotBarDelegate() {
