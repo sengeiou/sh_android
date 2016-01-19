@@ -115,9 +115,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void updateWatchNumberIcon(int count) {
-        if (activityBadgeIcon != null ) {
-            activityBadgeIcon.setCount(count);
+        if (activityBadgeIcon == null ) {
+            LayerDrawable activityIcon = (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
+            setupActivityBadgeIcon(activityIcon);
         }
+        activityBadgeIcon.setCount(count);
     }
 
     @Override
