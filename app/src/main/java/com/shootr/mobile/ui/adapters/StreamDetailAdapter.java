@@ -260,7 +260,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class SwitchViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.action_name) TextView name;
-        @Bind(R.id.action_switch) SwitchCompat muteSwitch;
+        @Bind(R.id.action_mute_switch) SwitchCompat muteSwitch;
 
         public SwitchViewHolder(final View itemView) {
             super(itemView);
