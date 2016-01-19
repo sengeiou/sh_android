@@ -206,6 +206,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setMuteStatus(Boolean isChecked) {
+        checkNotNull(muteViewHolder);
         muteViewHolder.setMuteStatus(isChecked);
     }
 

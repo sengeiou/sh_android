@@ -10,6 +10,8 @@ import com.shootr.mobile.domain.repository.Remote;
 import java.util.List;
 import javax.inject.Inject;
 
+import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
+
 public class GetMutedStreamsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
@@ -42,13 +44,16 @@ public class GetMutedStreamsInteractor implements Interactor {
         if (mutedIdStreams.isEmpty()) {
             loadRemoteMutes();
         } else {
+            checkNotNull(mutedIdStreams);
             notifyResult(mutedIdStreams);
         }
     }
 
     private void loadRemoteMutes() {
         try {
-            notifyResult(remoteMuteRepository.getMutedIdStreams());
+            List<String> mutedIdStreams = remoteMuteRepository.getMutedIdStreams();
+            checkNotNull(mutedIdStreams);
+            notifyResult(mutedIdStreams);
         } catch (ServerCommunicationException error) {
             /* swallow silently */
         }

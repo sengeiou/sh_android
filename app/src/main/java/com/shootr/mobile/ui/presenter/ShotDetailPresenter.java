@@ -34,7 +34,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private List<ShotModel> repliesModels;
     private boolean justSentReply = false;
     private boolean isNiceBlocked;
-    private boolean isNiceMarked;
 
     @Inject
     public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
@@ -50,9 +49,17 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
-        this.shotDetailView = shotDetailView;
+    protected void setShotModel(ShotModel shotModel) {
         this.shotModel = shotModel;
+    }
+
+    protected void setShotDetailView(ShotDetailView shotDetailView) {
+        this.shotDetailView = shotDetailView;
+    }
+
+    public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
+        this.setShotDetailView(shotDetailView);
+        this.setShotModel(shotModel);
         this.loadShotDetail();
     }
 
@@ -87,7 +94,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
         onRepliesLoaded(shotDetail.getReplies());
         shotDetailView.setReplyUsername(shotModel.getUsername());
-        isNiceBlocked = false;
+        setNiceBlocked(false);
     }
 
     public void imageClick(ShotModel shot) {
@@ -104,34 +111,30 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void markNiceShot(String idShot) {
-        if(!isNiceBlocked && !isNiceMarked) {
-            isNiceMarked = true;
-            isNiceBlocked = true;
+        if(!isNiceBlocked) {
+            setNiceBlocked(true);
             markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
                     loadShotDetail();
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
-                    isNiceBlocked = false;
-                    isNiceMarked = false;
+                    setNiceBlocked(false);
                 }
             });
         }
     }
 
     public void unmarkNiceShot(String idShot) {
-        if(!isNiceBlocked && isNiceMarked) {
-            isNiceMarked = false;
-            isNiceBlocked = true;
+        if(!isNiceBlocked) {
+            setNiceBlocked(true);
             unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
                     loadShotDetail();
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
-                    isNiceBlocked = false;
-                    isNiceMarked = true;
+                    setNiceBlocked(false);
                 }
             });
         }
@@ -160,6 +163,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    protected void setNiceBlocked(Boolean blocked){
+        this.isNiceBlocked= blocked;
     }
 
     @Override public void resume() {
