@@ -18,7 +18,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
@@ -61,10 +60,12 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();
         repliesModels = shotModelMapper.transform(replies);
-        shotDetailView.renderReplies(repliesModels);
-        if (justSentReply && previousReplyCount < newReplyCount) {
-            shotDetailView.scrollToBottom();
-            justSentReply = false;
+        if (newReplyCount > 0) {
+            shotDetailView.renderReplies(repliesModels);
+            if (justSentReply && previousReplyCount < newReplyCount) {
+                shotDetailView.scrollToBottom();
+                justSentReply = false;
+            }
         }
     }
 
