@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -60,6 +61,25 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(1);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            Integer cont = 0;
+            @Override public void onTabSelected(TabLayout.Tab tab) {
+                cont++;
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override public void onTabUnselected(TabLayout.Tab tab) {
+                cont = 0;
+            }
+
+            @Override public void onTabReselected(TabLayout.Tab tab) {
+                cont++;
+                if(cont >= 3) {
+                    Toast.makeText(getBaseContext(), String.valueOf(tab.getPosition()), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
