@@ -240,6 +240,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   .build();
                 startActivity(newShotIntent);
             }
+
+            @Override public void goToLanding() {
+                /* no-op */
+            }
         };
     }
 
@@ -331,6 +335,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     public void showError(String errorMessage) {
         feedbackMessage.show(getView(), errorMessage);
+    }
+
+    @Override public void goToLanding() {
+        /* no-op */
     }
 
     @Override public void showShotShared() {
