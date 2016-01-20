@@ -66,7 +66,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void onRepliesLoaded(List<Shot> replies) {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();
-        if (newReplyCount > 0) {
+        if (newReplyCount >= previousReplyCount) {
             repliesModels = shotModelMapper.transform(replies);
             renderReplies(previousReplyCount, newReplyCount);
         } else if (repliesModels!= null && newReplyCount == 0){
