@@ -26,19 +26,36 @@
           app:border_width="2dp"
           tools:visibility="visible" />
 
-        <TextView android:id="@+id/toolbar_title"
-          style="@style/ActionBar.TitleText"
-          android:layout_width="wrap_content"
+        <LinearLayout android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:drawablePadding="8dp"
-          android:ellipsize="end"
-          android:gravity="center_vertical|start"
-          android:paddingLeft="@dimen/toolbar_title_padding"
-          android:singleLine="true"
-          android:visibility="gone"
-          tools:drawableRight="@drawable/spinner_triangle_white"
-          tools:text="Title"
-          tools:visibility="visible" />
+          android:orientation="vertical">
+
+          <TextView android:id="@+id/toolbar_title"
+            style="@style/ActionBar.TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical|start"
+            android:paddingLeft="@dimen/toolbar_title_padding"
+            android:singleLine="true"
+            android:visibility="gone"
+            tools:drawableRight="@drawable/spinner_triangle_white"
+            tools:text="Title"
+            tools:visibility="visible" />
+
+          <TextView android:id="@+id/toolbar_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/toolbar_title_padding"
+            android:singleLine="true"
+            android:textColor="#80ffffff"
+            android:textSize="15sp"
+            android:visibility="gone"
+            tools:text="following 3"
+            tools:visibility="visible" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
