@@ -35,4 +35,10 @@ public class SnackbarFeedbackMessage implements FeedbackMessage {
             Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).show();
         }
     }
+
+    @Override public void showMultipleActivities(View view, String multipleActivitiesMessage, String action, View.OnClickListener onClickListener) {
+        Snackbar.make(view, multipleActivitiesMessage, Snackbar.LENGTH_LONG)
+          .setAction(action, onClickListener)
+          .show();
+    }
 }

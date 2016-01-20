@@ -331,4 +331,6 @@
     <string name="mute">Mute</string>
     <string name="unmute">Unmute</string>
     <string name="stream_detail_mute">Mute</string>
+    <string name="multiple_activity_notification">%d new Activity notifications</string>
+    <string name="multiple_activities_action">GO</string>
 </resources>

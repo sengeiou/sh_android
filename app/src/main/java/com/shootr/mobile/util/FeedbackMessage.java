@@ -18,4 +18,6 @@ public interface FeedbackMessage {
     @UiThread
     void showLong(View view, @StringRes int feedback);
 
+    @UiThread
+    void showMultipleActivities(View view, String badgeCount, String go, View.OnClickListener onClickListener);
 }
