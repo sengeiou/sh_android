@@ -63,7 +63,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail();
     }
 
-    private void onRepliesLoaded(List<Shot> replies) {
+    protected void onRepliesLoaded(List<Shot> replies) {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();
         if (newReplyCount >= previousReplyCount) {
@@ -173,6 +173,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     protected void setNiceBlocked(Boolean blocked){
         this.isNiceBlocked= blocked;
+    }
+
+    protected void setRepliesModels(List<ShotModel> repliesModels) {
+        this.repliesModels = repliesModels;
     }
 
     @Override public void resume() {
