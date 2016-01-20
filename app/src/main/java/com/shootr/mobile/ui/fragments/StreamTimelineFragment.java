@@ -114,7 +114,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
-    private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
@@ -183,8 +182,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(com.shootr.mobile.R.menu.timeline, menu);
-        watchersMenuItem = menu.findItem(com.shootr.mobile.R.id.menu_info);
-        watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_showing_holding_shots));
         showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -200,10 +197,9 @@ public class StreamTimelineFragment extends BaseFragment
 
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(com.shootr.mobile.R.drawable.watchers_badge_circle);
-            icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_people, getResources().getDrawable(com.shootr.mobile.R.drawable.ic_action_ic_one_people));
+            icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_people,
+              getResources().getDrawable(com.shootr.mobile.R.drawable.ic_action_ic_one_people));
             setupWatchNumberBadgeIcon(getActivity(), icon);
-            watchersMenuItem.setIcon(icon);
-            watchersMenuItem.getIcon();
             updateWatchNumberIcon();
         }
     }
@@ -211,9 +207,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case com.shootr.mobile.R.id.menu_info:
-                watchNumberPresenter.onWatchNumberClick();
-                return true;
             case com.shootr.mobile.R.id.menu_showing_holding_shots:
                 streamTimelinePresenter.onHoldingShotsClick();
                 return true;
@@ -312,9 +305,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void updateWatchNumberIcon() {
-        if (watchersBadgeDrawable != null && watchersMenuItem != null && watchNumberCount != null) {
-            watchersBadgeDrawable.setCount(watchNumberCount);
-            watchersMenuItem.setVisible(true);
+        if (watchersBadgeDrawable != null && watchNumberCount != null) {
+            toolbarDecorator.setSubtitle(watchNumberCount);
         }
     }
 
