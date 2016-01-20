@@ -313,4 +313,5 @@
     <string name="stream_detail_mute">Silenciar</string>
     <string name="multiple_activity_notification">%d notificaciones nuevas</string>
     <string name="multiple_activities_action">VER</string>
+    <string name="stream_subtitle">siguiendo a %d</string>
 </resources>

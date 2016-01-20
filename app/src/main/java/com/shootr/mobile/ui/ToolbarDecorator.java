@@ -22,6 +22,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
+    private TextView subtitleText;
     private ViewGroup titleContainer;
 
     private CircleImageView avatar;
@@ -35,6 +36,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         View inflatedView = LayoutInflater.from(context).inflate(R.layout.action_bar_decor, originalRoot, true);
         toolbar = ((Toolbar) inflatedView.findViewById(R.id.toolbar_actionbar));
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
         avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
         setupTitleContainerTransitions();
@@ -64,13 +66,22 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         }
     }
 
+    public void setSubtitle(Integer following) {
+        if (following == 0) {
+            hideSubtitle();
+        } else {
+            subtitleText.setVisibility(View.VISIBLE);
+            subtitleText.setText(context.getString(R.string.stream_subtitle, following));
+        }
+    }
+
     public void setTitleClickListener(View.OnClickListener clickListener) {
         titleContainer.setOnClickListener(clickListener);
     }
 
     public void setAvatarImage(String imageURL) {
         avatar.setVisibility(View.VISIBLE);
-        imageLoader.loadProfilePhoto(imageURL,avatar);
+        imageLoader.loadProfilePhoto(imageURL, avatar);
     }
 
     public Toolbar getToolbar() {
@@ -83,6 +94,10 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void hideTitle() {
         titleText.setVisibility(View.GONE);
+    }
+
+    public void hideSubtitle() {
+        subtitleText.setVisibility(View.GONE);
     }
 
     private void setupTitleContainerTransitions() {
