@@ -21,6 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -114,6 +115,29 @@ public class ShotDetaillPresenterTest {
         presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView).setReplyUsername(anyString());
+    }
+
+    @Test public void shouldRenderRepliesWhenNiceIsMarked() throws Exception {
+        presenter.setNiceBlocked(false);
+        presenter.setShotModel(shotModel());
+        setupMarkNiceShotInteractorCallback();
+        setupGetSHotDetailInteractorCallback();
+
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView).renderReplies(anyList());
+
+    }
+
+    @Test public void shouldRenderRepliesWhenNiceIsUnmarked() throws Exception {
+        presenter.setNiceBlocked(false);
+        presenter.setShotModel(shotModel());
+        setupUnmarkNiceShotInteractorCallback();
+        setupGetSHotDetailInteractorCallback();
+
+        presenter.unmarkNiceShot(ID_SHOT);
+
+        verify(shotDetailView).renderReplies(anyList());
     }
 
     private Shot shot(){
