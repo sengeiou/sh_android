@@ -311,4 +311,5 @@
     <string name="mute">Silenciar</string>
     <string name="unmute">Quitar silencio</string>
     <string name="stream_detail_mute">Silenciar</string>
+    <string name="stream_subtitle">siguiendo a %d</string>
 </resources>
