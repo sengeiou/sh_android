@@ -2,11 +2,8 @@ package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -56,7 +53,6 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
-import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -114,7 +110,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
-    private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
     private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
@@ -196,10 +191,6 @@ public class StreamTimelineFragment extends BaseFragment
         unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
 
         if (isAdded()) {
-            LayerDrawable icon = (LayerDrawable) getResources().getDrawable(com.shootr.mobile.R.drawable.watchers_badge_circle);
-            icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_people,
-              getResources().getDrawable(com.shootr.mobile.R.drawable.ic_action_ic_one_people));
-            setupWatchNumberBadgeIcon(getActivity(), icon);
             updateWatchNumberIcon();
         }
     }
@@ -290,22 +281,8 @@ public class StreamTimelineFragment extends BaseFragment
         };
     }
 
-    public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
-        // Reuse drawable if possible
-        if (watchersBadgeDrawable == null) {
-            Drawable reuse = icon.findDrawableByLayerId(com.shootr.mobile.R.id.ic_badge);
-            if (reuse != null && reuse instanceof BadgeDrawable) {
-                watchersBadgeDrawable = (BadgeDrawable) reuse;
-            } else {
-                watchersBadgeDrawable = new BadgeDrawable(context);
-            }
-        }
-        icon.mutate();
-        icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_badge, watchersBadgeDrawable);
-    }
-
     private void updateWatchNumberIcon() {
-        if (watchersBadgeDrawable != null && watchNumberCount != null) {
+        if (watchNumberCount != null) {
             toolbarDecorator.setSubtitle(watchNumberCount);
         }
     }
