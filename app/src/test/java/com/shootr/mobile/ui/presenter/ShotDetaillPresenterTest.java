@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 
 public class ShotDetaillPresenterTest {
 
+    private static final String ID_SHOT = "idShot";
     private ShotDetailPresenter presenter;
     @Mock GetShotDetailInteractor getShotDetaillInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
@@ -55,7 +56,7 @@ public class ShotDetaillPresenterTest {
         setupMarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.markNiceShot("idShot");
+        presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView).renderShot(any(ShotModel.class));
     }
@@ -66,7 +67,7 @@ public class ShotDetaillPresenterTest {
         setupMarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.markNiceShot("idShot");
+        presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView).renderParent(any(ShotModel.class));
     }
@@ -77,7 +78,7 @@ public class ShotDetaillPresenterTest {
         setupMarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.markNiceShot("idShot");
+        presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView).setReplyUsername(anyString());
     }
@@ -88,7 +89,7 @@ public class ShotDetaillPresenterTest {
         setupUnmarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.unmarkNiceShot("idShot");
+        presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView).renderShot(any(ShotModel.class));
     }
@@ -99,7 +100,7 @@ public class ShotDetaillPresenterTest {
         setupUnmarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.unmarkNiceShot("idShot");
+        presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView).renderParent(any(ShotModel.class));
     }
@@ -110,14 +111,14 @@ public class ShotDetaillPresenterTest {
         setupUnmarkNiceShotInteractorCallback();
         setupGetSHotDetailInteractorCallback();
 
-        presenter.unmarkNiceShot("idShot");
+        presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView).setReplyUsername(anyString());
     }
 
     private Shot shot(){
         Shot shot = new Shot();
-        shot.setIdShot("idShot");
+        shot.setIdShot(ID_SHOT);
         shot.setStreamInfo(new Shot.ShotStreamInfo());
         shot.setUserInfo(new Shot.ShotUserInfo());
         return shot;
@@ -125,7 +126,7 @@ public class ShotDetaillPresenterTest {
 
     private ShotModel shotModel(){
         ShotModel shotModel=new ShotModel();
-        shotModel.setIdShot("idShot");
+        shotModel.setIdShot(ID_SHOT);
         return shotModel;
     }
 

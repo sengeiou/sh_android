@@ -89,7 +89,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void onShotDetailLoaded(ShotDetail shotDetail) {
-        shotModel = shotModelMapper.transform(shotDetail.getShot());
+        setShotModel(shotModelMapper.transform(shotDetail.getShot()));
         shotDetailView.renderShot(shotModel);
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
         onRepliesLoaded(shotDetail.getReplies());
