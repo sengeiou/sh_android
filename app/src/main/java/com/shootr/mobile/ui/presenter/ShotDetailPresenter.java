@@ -33,6 +33,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private ShotModel shotModel;
     private List<ShotModel> repliesModels;
     private boolean justSentReply = false;
+    private boolean isNiceBlocked;
 
     @Inject
     public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
@@ -48,16 +49,32 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
-        this.shotDetailView = shotDetailView;
+    protected void setShotModel(ShotModel shotModel) {
         this.shotModel = shotModel;
+    }
+
+    protected void setShotDetailView(ShotDetailView shotDetailView) {
+        this.shotDetailView = shotDetailView;
+    }
+
+    public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
+        this.setShotDetailView(shotDetailView);
+        this.setShotModel(shotModel);
         this.loadShotDetail();
     }
 
     private void onRepliesLoaded(List<Shot> replies) {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();
-        repliesModels = shotModelMapper.transform(replies);
+        if (newReplyCount >= previousReplyCount) {
+            repliesModels = shotModelMapper.transform(replies);
+            renderReplies(previousReplyCount, newReplyCount);
+        } else if (repliesModels!= null && newReplyCount == 0){
+            renderReplies(previousReplyCount, newReplyCount);
+        }
+    }
+
+    private void renderReplies(int previousReplyCount, int newReplyCount) {
         shotDetailView.renderReplies(repliesModels);
         if (justSentReply && previousReplyCount < newReplyCount) {
             shotDetailView.scrollToBottom();
@@ -66,7 +83,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadShotDetail() {
-        shotDetailView.renderShot(shotModel);
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 onShotDetailLoaded(shotDetail);
@@ -78,12 +94,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    protected void onShotDetailLoaded(ShotDetail shotDetail) {
-        shotModel = shotModelMapper.transform(shotDetail.getShot());
+    private void onShotDetailLoaded(ShotDetail shotDetail) {
+        setShotModel(shotModelMapper.transform(shotDetail.getShot()));
         shotDetailView.renderShot(shotModel);
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
         onRepliesLoaded(shotDetail.getReplies());
         shotDetailView.setReplyUsername(shotModel.getUsername());
+        setNiceBlocked(false);
     }
 
     public void imageClick(ShotModel shot) {
@@ -96,23 +113,36 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void usernameClick(String username) {
         goToUserProfile(username);
-
     }
 
     public void markNiceShot(String idShot) {
-        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadShotDetail();
-            }
-        });
+        if(!isNiceBlocked) {
+            setNiceBlocked(true);
+            markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    loadShotDetail();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    setNiceBlocked(false);
+                }
+            });
+        }
     }
 
     public void unmarkNiceShot(String idShot) {
-        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadShotDetail();
-            }
-        });
+        if(!isNiceBlocked) {
+            setNiceBlocked(true);
+            unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    loadShotDetail();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    setNiceBlocked(false);
+                }
+            });
+        }
     }
 
     private void startProfileContainerActivity(String username) {
@@ -138,6 +168,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    protected void setNiceBlocked(Boolean blocked){
+        this.isNiceBlocked= blocked;
     }
 
     @Override public void resume() {

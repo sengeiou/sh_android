@@ -306,6 +306,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             @Override public void onCompleted() {
                 loadTimeline();
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
         });
     }
 
@@ -313,6 +317,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadTimeline();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
             }
         });
 
