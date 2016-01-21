@@ -63,7 +63,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail();
     }
 
-    protected void onRepliesLoaded(List<Shot> replies) {
+    private void onRepliesLoaded(List<Shot> replies) {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();
         if (newReplyCount >= previousReplyCount) {
@@ -94,7 +94,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    protected void onShotDetailLoaded(ShotDetail shotDetail) {
+    private void onShotDetailLoaded(ShotDetail shotDetail) {
         setShotModel(shotModelMapper.transform(shotDetail.getShot()));
         shotDetailView.renderShot(shotModel);
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
@@ -113,7 +113,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void usernameClick(String username) {
         goToUserProfile(username);
-
     }
 
     public void markNiceShot(String idShot) {
@@ -173,10 +172,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     protected void setNiceBlocked(Boolean blocked){
         this.isNiceBlocked= blocked;
-    }
-
-    protected void setRepliesModels(List<ShotModel> repliesModels) {
-        this.repliesModels = repliesModels;
     }
 
     @Override public void resume() {

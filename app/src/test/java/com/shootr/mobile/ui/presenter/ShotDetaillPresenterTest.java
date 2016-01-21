@@ -27,7 +27,7 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class ShotDetaillPresenterTest {
@@ -145,36 +145,45 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView).renderReplies(anyList());
     }
 
-    @Test public void shouldRenderRepliesWhenNewRepliesAreMoreThanPrevious() throws Exception {
-        presenter.setRepliesModels(repliesList(2));
 
-        presenter.onRepliesLoaded(shotList(3));
+    @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsMarked() throws Exception {
+        setupGetShotDetailInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
 
-        verify(shotDetailView).renderReplies(anyListOf(ShotModel.class));
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldRenderRepliesWhenNewRepliesAreZero() throws Exception {
-        presenter.setRepliesModels(repliesList(2));
+    @Test public void shouldRenderRepliesWhenNewRepliesAreEqualsThanPreviousAndIsMarked() throws Exception {
+        setupGetShotDetailWithRepliesInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
 
-        presenter.onRepliesLoaded(Collections.<Shot>emptyList());
+        presenter.initialize(shotDetailView,shotModel());
+        presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderReplies(anyListOf(ShotModel.class));
+        verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldNotRenderRepliesIfNewRepliesAreLessThanPreviousButMoreThanZero() throws Exception {
-        presenter.setRepliesModels(repliesList(2));
+    @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsUnmarked() throws Exception {
+        setupGetShotDetailInteractorCallback();
+        setupUnmarkNiceShotInteractorCallback();
 
-        presenter.onRepliesLoaded(shotList(1));
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.unmarkNiceShot(ID_SHOT);
 
-        verify(shotDetailView,never()).renderReplies(anyListOf(ShotModel.class));
+        verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldRenderRepliesWhenNewRepliesAreEqualsThanPrevious() throws Exception {
-        presenter.setRepliesModels(repliesList(1));
+    @Test public void shouldRenderRepliesWhenNewRepliesAreEqualsThanPreviousAndIsUnmarked() throws Exception {
+        setupGetShotDetailWithRepliesInteractorCallback();
+        setupUnmarkNiceShotInteractorCallback();
 
-        presenter.onRepliesLoaded(shotList(1));
+        presenter.initialize(shotDetailView,shotModel());
+        presenter.unmarkNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderReplies(anyListOf(ShotModel.class));
+        verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
     private List<Shot> shotList(int shots){
@@ -183,14 +192,6 @@ public class ShotDetaillPresenterTest {
             shotList.add(shot());
         }
         return shotList;
-    }
-
-    private List<ShotModel> repliesList(int shotsModels){
-        ArrayList<ShotModel> shotModelList = new ArrayList<>();
-        for(int i=0;i<shotsModels;i++){
-            shotModelList.add(shotModel());
-        }
-        return shotModelList;
     }
 
     private Shot shot(){
@@ -202,7 +203,7 @@ public class ShotDetaillPresenterTest {
     }
 
     private ShotModel shotModel(){
-        ShotModel shotModel=new ShotModel();
+        ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(ID_SHOT);
         return shotModel;
     }
@@ -214,6 +215,13 @@ public class ShotDetaillPresenterTest {
         return shotDetail;
     }
 
+    private ShotDetail shotDetailWithReplies() {
+        ShotDetail shotDetail= new ShotDetail();
+        shotDetail.setShot(shot());
+        shotDetail.setReplies(shotList(2));
+        return shotDetail;
+    }
+
     private void setupUnmarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -222,8 +230,7 @@ public class ShotDetaillPresenterTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(unmarkNiceShotInteractor).unmarkNiceShot(anyString(),
-          any(Interactor.CompletedCallback.class),
+        }).when(unmarkNiceShotInteractor).unmarkNiceShot(anyString(), any(Interactor.CompletedCallback.class),
           any(Interactor.ErrorCallback.class));
     }
 
@@ -237,6 +244,18 @@ public class ShotDetaillPresenterTest {
             }
         }).when(getShotDetaillInteractor).loadShotDetail(anyString(),
           any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupGetShotDetailWithRepliesInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<ShotDetail> callback =
+                  (Interactor.Callback<ShotDetail>) invocation.getArguments()[1];
+                callback.onLoaded(shotDetailWithReplies());
+                return null;
+            }
+        }).when(getShotDetaillInteractor).loadShotDetail(anyString(), any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
 
