@@ -178,19 +178,19 @@ public class ShotDetaillPresenterTest {
     }
 
     private List<Shot> shotList(int shots){
-        ArrayList<Shot> lista = new ArrayList<>();
+        ArrayList<Shot> shotList = new ArrayList<>();
         for(int i=0;i<shots;i++){
-            lista.add(shot());
+            shotList.add(shot());
         }
-        return lista;
+        return shotList;
     }
 
     private List<ShotModel> repliesList(int shotsModels){
-        ArrayList<ShotModel> lista = new ArrayList<>();
+        ArrayList<ShotModel> shotModelList = new ArrayList<>();
         for(int i=0;i<shotsModels;i++){
-            lista.add(shotModel());
+            shotModelList.add(shotModel());
         }
-        return lista;
+        return shotModelList;
     }
 
     private Shot shot(){
