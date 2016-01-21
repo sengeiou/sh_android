@@ -9,9 +9,8 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.service.NetworkNotAvailableException;
 import javax.inject.Inject;
-
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class GetStreamIsReadOnlyInteractor implements Interactor {
 
@@ -45,12 +44,15 @@ public class GetStreamIsReadOnlyInteractor implements Interactor {
         if (stream == null) {
             try {
                 stream = remoteStreamRepository.getStreamById(streamId);
+                if (stream == null) {
+                    notifyError(new NetworkNotAvailableException(new Throwable()));
+                } else {
+                    notifyLoaded(stream.isRemoved());
+                }
             } catch (ServerCommunicationException error){
                 notifyError(error);
             }
         }
-        checkNotNull(stream);
-        notifyLoaded(stream.isRemoved());
     }
 
     private void notifyLoaded(final Boolean isRemoved) {
