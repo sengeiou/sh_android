@@ -144,8 +144,7 @@ public class ShotDetaillPresenterTest {
 
         verify(shotDetailView).renderReplies(anyList());
     }
-
-
+    
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsMarked() throws Exception {
         setupGetShotDetailInteractorCallback();
         setupMarkNiceShotInteractorCallback();
