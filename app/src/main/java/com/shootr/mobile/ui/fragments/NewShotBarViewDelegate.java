@@ -100,8 +100,4 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
     public void showError(String errorMessage) {
         feedbackMessage.show(draftsButton, errorMessage);
     }
-
-    @Override public void goToLanding() {
-        /* no-op */
-    }
 }

@@ -28,8 +28,4 @@ public class NullNewShotBarView implements NewShotBarView {
     public void showError(String errorMessage) {
         /* no-op */
     }
-
-    @Override public void goToLanding() {
-        /* no-op */
-    }
 }

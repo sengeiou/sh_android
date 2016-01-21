@@ -57,7 +57,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 if(error instanceof NetworkNotAvailableException) {
-                    newShotBarView.goToLanding();
+                    /* no-op */
                 } else {
                     showReadOnlyError();
                 }

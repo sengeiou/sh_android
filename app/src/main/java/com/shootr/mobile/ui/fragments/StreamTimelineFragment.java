@@ -26,7 +26,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
-import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -278,10 +277,6 @@ public class StreamTimelineFragment extends BaseFragment
                   .withImage(image) //
                   .build();
                 startActivity(newShotIntent);
-            }
-
-            @Override public void goToLanding() {
-                /* no-op */
             }
         };
     }
@@ -542,10 +537,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void showError(String message) {
         feedbackMessage.showLong(getView(), message);
-    }
-
-    @Override public void goToLanding() {
-        startActivity(new Intent(getContext(), MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Override public void showUnmuteButton() {
