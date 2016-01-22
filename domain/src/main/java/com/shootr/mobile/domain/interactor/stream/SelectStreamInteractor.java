@@ -63,12 +63,17 @@ public class SelectStreamInteractor implements Interactor {
         if (isSelectingCurrentWatchingStream(currentUser)) {
             notifyLoaded(selectedStream);
         } else {
-            User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
 
-            sessionRepository.setCurrentUser(updatedUser);
-            localUserRepository.updateWatch(updatedUser);
-            notifyLoaded(selectedStream);
-            remoteUserRepository.updateWatch(updatedUser);
+            if (selectedStream != null) {
+                User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+
+                sessionRepository.setCurrentUser(updatedUser);
+                localUserRepository.updateWatch(updatedUser);
+                notifyLoaded(selectedStream);
+                remoteUserRepository.updateWatch(updatedUser);
+            } else {
+                notifyError(new ServerCommunicationException(new Throwable()));
+            }
         }
     }
 

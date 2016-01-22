@@ -37,6 +37,7 @@ public class UnmarkNiceShotInteractorTest {
     @Mock ShotRepository remoteShotRepository;
     @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
+    @Mock Interactor.ErrorCallback errorCallback;
 
     private UnmarkNiceShotInteractor interactor;
 
@@ -53,7 +54,7 @@ public class UnmarkNiceShotInteractorTest {
     @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {
         setupLocalShot();
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         InOrder inOrder = inOrder(callback, remoteNiceShotRepository);
         inOrder.verify(remoteNiceShotRepository).unmark(SHOT_ID);
@@ -63,7 +64,7 @@ public class UnmarkNiceShotInteractorTest {
     @Test public void shouldDecrementNiceCountWhenMarkNiceInLocal() throws Exception {
         setupLocalShot();
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         Shot shot = shot();
         shot.setNiceCount(shot.getNiceCount() - 1);
@@ -74,7 +75,7 @@ public class UnmarkNiceShotInteractorTest {
         setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).unmark(anyString());
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         verify(callback).onCompleted();
     }
@@ -83,7 +84,7 @@ public class UnmarkNiceShotInteractorTest {
         setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).unmark(anyString());
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         verify(niceShotRepository).unmark(SHOT_ID);
     }
@@ -92,7 +93,7 @@ public class UnmarkNiceShotInteractorTest {
         setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).unmark(anyString());
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         Shot shot = shot();
         shot.setNiceCount(1);
@@ -103,7 +104,7 @@ public class UnmarkNiceShotInteractorTest {
         setupLocalShot();
         doThrow(new NiceNotMarkedException()).when(niceShotRepository).unmark(anyString());
 
-        interactor.unmarkNiceShot(SHOT_ID, callback);
+        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
         verify(remoteNiceShotRepository, never()).unmark(anyString());
     }

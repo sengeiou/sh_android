@@ -251,7 +251,7 @@
     <string name="shoot_all_button">Shoot all</string>
     <string name="shot_shared_message">Shot shared</string>
     <string name="shot_timeline_empty_title">No Shots</string>
-    <string name="showing_shots_by_holder">Showing shots by holder</string>
+    <string name="showing_shots_by_holder">Showing shots by holder.</string>
     <string name="sign_out_message">Signing out…</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
     <string name="stream_detail_edit_menu_title">Edit stream</string>
@@ -265,9 +265,9 @@
     <string name="stream_notification_confirmation_no">Nope</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_participants_following_number">following %d</string>
-    <string name="stream_timeline_add_favorite">Add to favorites</string>
+    <string name="stream_timeline_add_favorite">Add to Favorites</string>
     <string name="stream_timeline_empty_message">Checking for shots…</string>
-    <string name="stream_timeline_remove_favorite">Remove from favorites</string>
+    <string name="stream_timeline_remove_favorite">Remove from Favorites</string>
     <string name="suggested_people_section_title">Who to follow</string>
     <string name="support_blog">Blog</string>
     <string name="support_help">Help</string>
@@ -311,6 +311,7 @@
     <string name="user_not_found_message">User not found.</string>
     <string name="user_unblocked">Ignore removed.</string>
     <string name="watching_stream_connected">connected</string>
+    <string name="watching_stream_connected_muted">connected (muted)</string>
     <string name="welcome_friends_text">Leave to disconnect</string>
     <string name="welcome_get_started_button">Got it</string>
     <string name="welcome_shootr_title">Enter a stream to connect</string>
@@ -327,4 +328,10 @@
     <string name="user_banned">User banned.</string>
     <string name="user_unbanned">Ban removed.</string>
     <string name="notification_shot_has_user_banned_subtitle">You have been banned in this stream</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
+    <string name="stream_detail_mute">Mute</string>
+    <string name="multiple_activity_notification">%d new Activity notifications</string>
+    <string name="multiple_activities_action">GO</string>
+    <string name="stream_subtitle">following %d</string>
 </resources>

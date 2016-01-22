@@ -6,8 +6,11 @@ import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -51,6 +54,9 @@ public class StreamsListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
+    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock MuteInteractor muteInteractor;
+    @Mock UnmuteInteractor unmuteInterator;
 
     private StreamsListPresenter presenter;
 
@@ -62,8 +68,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
           unwatchStreamInteractor,
-          shareStreamInteractor,
-          streamResultModelMapper,
+          shareStreamInteractor, getMutedStreamsInteractor, muteInteractor, unmuteInterator, streamResultModelMapper,
           errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
@@ -153,6 +158,60 @@ public class StreamsListPresenterTest {
         presenter.shareStream(streamModel());
 
         verify(streamsListView).showError(anyString());
+    }
+
+    @Test public void shouldShowContextMenuWithMuteStreamIfStreamNotMutedWhenLongPress() throws Exception {
+        setupNoMutedStreamsCallback();
+
+        presenter.onStreamLongClicked(streamModel());
+
+        verify(streamsListView).showContextMenuWithMute(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldShowContextMenuWithUnmuteStreamIfStreamMutedWhenLongPress() throws Exception {
+        setupStreamIsMutedCallback();
+
+        presenter.onStreamLongClicked(streamModel());
+
+        verify(streamsListView).showContextMenuWithUnmute(any(StreamResultModel.class));
+    }
+
+    public void setupStreamIsMutedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(mutedStreams());
+                return null;
+            }
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }
+
+    public void setupNoMutedStreamsCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(Collections.<String>emptyList());
+                return null;
+            }
+        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
+        presenter.onMuteClicked(streamModel());
+
+        verify(muteInteractor).mute(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    @Test public void shouldCallbackUnmuteInteractorWhenUnmutePressed() throws Exception {
+        presenter.onUnmuteClicked(streamModel());
+
+        verify(unmuteInterator).unmute(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    private List<String> mutedStreams() {
+        return Arrays.asList(ID_STREAM);
     }
 
     private void setupShareStreamErrorCallback() {

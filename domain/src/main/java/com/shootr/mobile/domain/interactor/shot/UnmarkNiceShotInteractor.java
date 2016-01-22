@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -23,6 +24,7 @@ public class UnmarkNiceShotInteractor implements Interactor {
 
     private String idShot;
     private CompletedCallback completedCallback;
+    private ErrorCallback errorCallback;
 
     @Inject
     public UnmarkNiceShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -36,9 +38,10 @@ public class UnmarkNiceShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void unmarkNiceShot(String idShot, CompletedCallback completedCallback) {
+    public void unmarkNiceShot(String idShot, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idShot = idShot;
         this.completedCallback = completedCallback;
+        this.errorCallback = errorCallback;
         this.interactorHandler.execute(this);
     }
 
@@ -70,7 +73,8 @@ public class UnmarkNiceShotInteractor implements Interactor {
     protected void sendUndoNiceToRemote() {
         try {
             remoteNiceShotRepository.unmark(idShot);
-        } catch (com.shootr.mobile.domain.exception.ShootrException | NiceNotMarkedException e) {
+        } catch (ShootrException | NiceNotMarkedException e) {
+            notifyError(new ShootrException() {});
             try {
                 redoNiceInLocal();
             } catch (NiceAlreadyMarkedException error) {
@@ -90,6 +94,14 @@ public class UnmarkNiceShotInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 completedCallback.onCompleted();
+            }
+        });
+    }
+
+    protected void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

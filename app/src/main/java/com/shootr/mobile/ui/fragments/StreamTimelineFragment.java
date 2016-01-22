@@ -2,11 +2,8 @@ package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,21 +39,20 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
+import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
-import com.shootr.mobile.ui.views.FavoriteStatusView;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NullNewShotBarView;
 import com.shootr.mobile.ui.views.NullWatchNumberView;
 import com.shootr.mobile.ui.views.ReportShotView;
+import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
-import com.shootr.mobile.ui.views.nullview.NullFavoriteStatusView;
+import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
-import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -74,7 +70,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
@@ -85,7 +81,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject StreamTimelinePresenter streamTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject FavoriteStatusPresenter favoriteStatusPresenter;
+    @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
 
     @Inject ImageLoader imageLoader;
@@ -114,14 +110,14 @@ public class StreamTimelineFragment extends BaseFragment
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
-    private MenuItem watchersMenuItem;
-    private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
     private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -148,7 +144,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.setView(new NullStreamTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
-        favoriteStatusPresenter.setView(new NullFavoriteStatusView());
+        streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
     }
 
     @Override
@@ -159,6 +155,7 @@ public class StreamTimelineFragment extends BaseFragment
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
+        setStreamTitleClickListener(idStream);
         initializePresenters(idStream, streamAuthorIdUser);
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
@@ -180,8 +177,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(com.shootr.mobile.R.menu.timeline, menu);
-        watchersMenuItem = menu.findItem(com.shootr.mobile.R.id.menu_info);
-        watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_showing_holding_shots));
         showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -192,12 +187,10 @@ public class StreamTimelineFragment extends BaseFragment
         addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_add_favorite));
         removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_remove_favorite));
 
+        muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
+        unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+
         if (isAdded()) {
-            LayerDrawable icon = (LayerDrawable) getResources().getDrawable(com.shootr.mobile.R.drawable.watchers_badge_circle);
-            icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_people, getResources().getDrawable(com.shootr.mobile.R.drawable.ic_action_ic_one_people));
-            setupWatchNumberBadgeIcon(getActivity(), icon);
-            watchersMenuItem.setIcon(icon);
-            watchersMenuItem.getIcon();
             updateWatchNumberIcon();
         }
     }
@@ -205,9 +198,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case com.shootr.mobile.R.id.menu_info:
-                watchNumberPresenter.onWatchNumberClick();
-                return true;
             case com.shootr.mobile.R.id.menu_showing_holding_shots:
                 streamTimelinePresenter.onHoldingShotsClick();
                 return true;
@@ -215,10 +205,16 @@ public class StreamTimelineFragment extends BaseFragment
                 streamTimelinePresenter.onAllStreamShotsClick();
                 return true;
             case com.shootr.mobile.R.id.menu_stream_add_favorite:
-                favoriteStatusPresenter.addToFavorites();
+                streamTimelineOptionsPresenter.addToFavorites();
                 return true;
             case com.shootr.mobile.R.id.menu_stream_remove_favorite:
-                favoriteStatusPresenter.removeFromFavorites();
+                streamTimelineOptionsPresenter.removeFromFavorites();
+                return true;
+            case R.id.menu_mute_stream:
+                streamTimelineOptionsPresenter.mute();
+                return true;
+            case R.id.menu_unmute_stream:
+                streamTimelineOptionsPresenter.unmute();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -231,7 +227,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.resume();
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
-        favoriteStatusPresenter.resume();
+        streamTimelineOptionsPresenter.resume();
     }
 
     @Override
@@ -240,21 +236,28 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.pause();
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
-        favoriteStatusPresenter.pause();
+        streamTimelineOptionsPresenter.pause();
     }
 
     private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
-        favoriteStatusPresenter.initialize(this, idStream);
+        streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
     //endregion
 
     private void setStreamTitle(String streamShortTitle) {
         toolbarDecorator.setTitle(streamShortTitle);
+    }
 
+    private void setStreamTitleClickListener(final String idStream) {
+        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                navigateToStreamDetail(idStream);
+            }
+        });
     }
 
     private void setupNewShotBarDelegate() {
@@ -278,24 +281,9 @@ public class StreamTimelineFragment extends BaseFragment
         };
     }
 
-    public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
-        // Reuse drawable if possible
-        if (watchersBadgeDrawable == null) {
-            Drawable reuse = icon.findDrawableByLayerId(com.shootr.mobile.R.id.ic_badge);
-            if (reuse != null && reuse instanceof BadgeDrawable) {
-                watchersBadgeDrawable = (BadgeDrawable) reuse;
-            } else {
-                watchersBadgeDrawable = new BadgeDrawable(context);
-            }
-        }
-        icon.mutate();
-        icon.setDrawableByLayerId(com.shootr.mobile.R.id.ic_badge, watchersBadgeDrawable);
-    }
-
     private void updateWatchNumberIcon() {
-        if (watchersBadgeDrawable != null && watchersMenuItem != null && watchNumberCount != null) {
-            watchersBadgeDrawable.setCount(watchNumberCount);
-            watchersMenuItem.setVisible(true);
+        if (watchNumberCount != null) {
+            toolbarDecorator.setSubtitle(watchNumberCount);
         }
     }
 
@@ -549,6 +537,22 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void showError(String message) {
         feedbackMessage.showLong(getView(), message);
+    }
+
+    @Override public void showUnmuteButton() {
+        unmuteMenuItem.setVisible(true);
+    }
+
+    @Override public void showMuteButton() {
+        muteMenuItem.setVisible(true);
+    }
+
+    @Override public void hideMuteButton() {
+        muteMenuItem.setVisible(false);
+    }
+
+    @Override public void hideUnmuteButton() {
+        unmuteMenuItem.setVisible(false);
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {

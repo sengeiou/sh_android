@@ -6,8 +6,12 @@ import android.view.MenuItem;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
+import com.shootr.mobile.util.BackStackHandler;
+import javax.inject.Inject;
 
 public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActivity {
+
+    @Inject BackStackHandler backStackHandler;
 
     @Override
     protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -37,10 +41,11 @@ public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActiv
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            backStackHandler.handleBackStack(this);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+
 }

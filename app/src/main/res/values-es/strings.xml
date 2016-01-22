@@ -239,7 +239,7 @@
     <string name="shoot_all_button">Enviar todo</string>
     <string name="shot_shared_message">Shot compartido</string>
     <string name="shot_timeline_empty_title">No hay shots</string>
-    <string name="showing_shots_by_holder">Shots del administrador</string>
+    <string name="showing_shots_by_holder">Shots del administrador.</string>
     <string name="sign_out_message">Cerrando sesión…</string>
     <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
     <string name="stream_detail_edit_menu_title">Editar</string>
@@ -291,6 +291,7 @@
     <string name="user_not_found_message">Usuario no encontrado.</string>
     <string name="user_unblocked">Ignorar suprimido.</string>
     <string name="watching_stream_connected">conectado</string>
+    <string name="watching_stream_connected_muted">conectado (silenciado)</string>
     <string name="welcome_friends_text">Salir para desconectar</string>
     <string name="welcome_get_started_button">Empezar</string>
     <string name="welcome_shootr_title">Entra en un stream para conectarte</string>
@@ -307,4 +308,10 @@
     <string name="user_banned">Usuario vetado.</string>
     <string name="user_unbanned">Veto suprimido.</string>
     <string name="notification_shot_has_user_banned_subtitle">Has sido vetado en este stream</string>
+    <string name="mute">Silenciar</string>
+    <string name="unmute">Quitar silencio</string>
+    <string name="stream_detail_mute">Silenciar</string>
+    <string name="multiple_activity_notification">%d notificaciones nuevas</string>
+    <string name="multiple_activities_action">VER</string>
+    <string name="stream_subtitle">siguiendo a %d</string>
 </resources>

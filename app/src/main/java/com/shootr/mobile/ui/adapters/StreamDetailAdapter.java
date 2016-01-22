@@ -3,13 +3,16 @@ package com.shootr.mobile.ui.adapters;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -28,12 +31,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int TYPE_AUTHOR = 1;
     private static final int TYPE_MEDIA = 2;
-    private static final int TYPE_PARTICIPANTS_TITLE = 3;
-    private static final int TYPE_PARTICIPANT = 4;
-    private static final int TYPE_DESCRIPTION = 5;
-    private static final int TYPE_ALL_PARTICIPANTS = 6;
+    private static final int TYPE_MUTE = 3;
+    private static final int TYPE_PARTICIPANTS_TITLE = 4;
+    private static final int TYPE_PARTICIPANT = 5;
+    private static final int TYPE_DESCRIPTION = 6;
+    private static final int TYPE_ALL_PARTICIPANTS = 7;
 
-    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 4;
+    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 5;
 
     private final View.OnClickListener onAuthorClickListener;
     private final View.OnClickListener onMediaClickListener;
@@ -41,8 +45,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final OnUserClickListener onUserClickListener;
     private final OnFollowUnfollowListener onFollowUnfollowListener;
     private final ImageLoader imageLoader;
+    private final CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
     private ActionViewHolder authorViewHolder;
     private ActionViewHolder mediaViewHolder;
+    private SwitchViewHolder muteViewHolder;
     private AllParticipantsViewHolder allParticipantsViewHolder;
 
     private List<UserModel> participants = Collections.emptyList();
@@ -55,10 +61,11 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean isAllParticipantsVisible = false;
 
     public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
-      View.OnClickListener onMediaClickListener, View.OnClickListener onAllParticipantsClickListener,
+      View.OnClickListener onMediaClickListener, CompoundButton.OnCheckedChangeListener onCheckedChangeListener, View.OnClickListener onAllParticipantsClickListener,
       OnUserClickListener onUserClickListener, OnFollowUnfollowListener onFollowUnfollowListener) {
         this.onAuthorClickListener = onAuthorClickListener;
         this.onMediaClickListener = onMediaClickListener;
+        this.onCheckedChangeListener = onCheckedChangeListener;
         this.onAllParticipantsClickListener = onAllParticipantsClickListener;
         this.onUserClickListener = onUserClickListener;
         this.imageLoader = imageLoader;
@@ -99,6 +106,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case 2:
                 return TYPE_MEDIA;
             case 3:
+                return TYPE_MUTE;
+            case 4:
                 return TYPE_PARTICIPANTS_TITLE;
             default:
                 return TYPE_PARTICIPANT;
@@ -130,6 +139,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     mediaViewHolder = new ActionViewHolder(v);
                 }
                 return mediaViewHolder;
+            case TYPE_MUTE:
+                if (muteViewHolder == null) {
+                    v = inflater.inflate(R.layout.item_mute_switch, parent, false);
+                    muteViewHolder = new SwitchViewHolder(v);
+                }
+                return muteViewHolder;
             case TYPE_PARTICIPANTS_TITLE:
                 v = inflater.inflate(com.shootr.mobile.R.layout.item_card_title_separator, parent, false);
                 return new SeparatorViewHolder(v);
@@ -162,6 +177,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mediaViewHolder.setIcon(com.shootr.mobile.R.drawable.ic_action_stream_gallery_gray_24);
                 mediaViewHolder.setName(com.shootr.mobile.R.string.stream_detail_media);
                 break;
+            case TYPE_MUTE:
+                muteViewHolder.setName(R.string.stream_detail_mute);
+                muteViewHolder.setMuteSwitch(onCheckedChangeListener);
+                break;
             case TYPE_PARTICIPANT:
                 UserModel user = participants.get(participantPosition(position));
                 ((WatcherViewHolder) viewHolder).bind(user);
@@ -184,6 +203,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setParticipants(List<UserModel> watchers) {
         this.participants = watchers;
+    }
+
+    public void setMuteStatus(Boolean isChecked) {
+        if (muteViewHolder != null) {
+            muteViewHolder.setMuteStatus(isChecked);
+        }
     }
 
     public static class TextViewHolder extends RecyclerView.ViewHolder {
@@ -231,6 +256,33 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 optionalNumber.setVisibility(View.VISIBLE);
                 optionalNumber.setText(String.valueOf(number));
             }
+        }
+    }
+
+    public static class SwitchViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.action_name) TextView name;
+        @Bind(R.id.action_mute_switch) SwitchCompat muteSwitch;
+
+        public SwitchViewHolder(final View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void setName(@StringRes int nameRes) {
+            name.setText(nameRes);
+        }
+
+        public void setName(String actionName) {
+            name.setText(actionName);
+        }
+
+        public void setMuteSwitch(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
+            muteSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
+        }
+
+        public void setMuteStatus(Boolean isChecked) {
+            muteSwitch.setChecked(isChecked);
         }
     }
 

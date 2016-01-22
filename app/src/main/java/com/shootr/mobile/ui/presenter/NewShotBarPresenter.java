@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
+import com.shootr.mobile.domain.service.NetworkNotAvailableException;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -55,7 +56,11 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                showReadOnlyError();
+                if(error instanceof NetworkNotAvailableException) {
+                    /* no-op */
+                } else {
+                    showReadOnlyError();
+                }
             }
         });
     }

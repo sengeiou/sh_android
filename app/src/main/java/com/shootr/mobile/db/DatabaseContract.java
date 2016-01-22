@@ -137,6 +137,18 @@ public class DatabaseContract {
           ID_USER, ID_BANNED_USER };
     }
 
+    public static final class MuteTable implements SyncColumns {
+
+        private MuteTable() {
+            /* no instances */
+        }
+
+        public static final String TABLE = "Mute";
+        public static final String ID_MUTED_STREAM = "idMutedStream";
+
+        public static final String[] PROJECTION = { ID_MUTED_STREAM, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED };
+    }
+
     public static final class DeviceTable {
 
         private DeviceTable() {

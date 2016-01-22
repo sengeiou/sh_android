@@ -2,11 +2,13 @@ package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
@@ -57,4 +59,13 @@ public interface StreamApiService {
 
     @GET("/stream/help/")
     StreamEntity getHelpStream(@Query("country") String country, @Query("language") String language) throws IOException, ApiException;
+
+    @GET("/mute/")
+    List<MuteStreamEntity> getMuteStreams() throws IOException, ApiException;
+
+    @POST("/mute/{idStream}")
+    Response mute(@Path("idStream") String idStream) throws ApiException, IOException;
+
+    @DELETE("/mute/{idStream}")
+    Response unmute(@Path("idStream") String idStream) throws IOException, ApiException;
 }

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +29,7 @@ import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.AndroidTimeUtils;
+import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -63,6 +63,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject BackStackHandler backStackHandler;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -119,7 +120,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            handleBackIntent();
+            backStackHandler.handleBackStack(this);
             return true;
         }else if (item.getItemId() == com.shootr.mobile.R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
@@ -128,19 +129,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void handleBackIntent() {
-        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-        if(taskList.get(0).numActivities == 1 &&
-          taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
-            Intent intent = new Intent(this, MainTabbedActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            finish();
-        }
     }
 
     private void openContextualMenu(final ShotModel shotModel) {

@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.views;
 
-public interface FavoriteStatusView {
+public interface StreamTimelineOptionsView {
 
     void showAddToFavoritesButton();
 
@@ -13,4 +13,12 @@ public interface FavoriteStatusView {
     void showAddedToFavorites();
 
     void showError(String errorMessage);
+
+    void showUnmuteButton();
+
+    void showMuteButton();
+
+    void hideMuteButton();
+
+    void hideUnmuteButton();
 }

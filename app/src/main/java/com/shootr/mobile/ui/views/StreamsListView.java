@@ -19,4 +19,10 @@ public interface StreamsListView extends LoadDataView {
     void showAddedToFavorites();
 
     void showStreamShared();
+
+    void showContextMenuWithMute(StreamResultModel stream);
+
+    void showContextMenuWithUnmute(StreamResultModel stream);
+
+    void setMutedStreamIds(List<String> mutedStreamIds);
 }

@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -24,6 +25,7 @@ public class MarkNiceShotInteractor implements Interactor {
 
     private String idShot;
     private CompletedCallback completedCallback;
+    private ErrorCallback errorCallback;
 
     @Inject public MarkNiceShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local NiceShotRepository localNiceShotRepository, @Remote NiceShotRepository remoteNiceShotRepository,
@@ -36,9 +38,10 @@ public class MarkNiceShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void markNiceShot(String idShot, CompletedCallback completedCallback) {
+    public void markNiceShot(String idShot, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idShot = idShot;
         this.completedCallback = completedCallback;
+        this.errorCallback = errorCallback;
         this.interactorHandler.execute(this);
     }
 
@@ -56,6 +59,7 @@ public class MarkNiceShotInteractor implements Interactor {
         try {
             remoteNiceShotRepository.mark(idShot);
         } catch (ShootrException | NiceAlreadyMarkedException e) {
+            notifyError(new ShootrException() {});
             try {
                 undoNiceInLocal();
             } catch (NiceNotMarkedException error) {
@@ -65,10 +69,14 @@ public class MarkNiceShotInteractor implements Interactor {
     }
 
     private void markNiceInLocal() throws NiceAlreadyMarkedException {
-        localNiceShotRepository.mark(idShot);
-        Shot shot = getShotFromLocalIfExists();
-        shot.setNiceCount(shot.getNiceCount() + 1);
-        localShotRepository.putShot(shot);
+        try {
+            localNiceShotRepository.mark(idShot);
+            Shot shot = getShotFromLocalIfExists();
+            shot.setNiceCount(shot.getNiceCount() + 1);
+            localShotRepository.putShot(shot);
+        } catch (ShotNotFoundException error) {
+            /* swallow */
+        }
     }
 
     private Shot getShotFromLocalIfExists() {
@@ -90,6 +98,14 @@ public class MarkNiceShotInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 completedCallback.onCompleted();
+            }
+        });
+    }
+
+    protected void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

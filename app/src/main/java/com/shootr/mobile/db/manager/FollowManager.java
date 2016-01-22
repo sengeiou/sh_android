@@ -14,7 +14,6 @@ import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class FollowManager extends AbstractManager{
 
@@ -94,9 +93,6 @@ public class FollowManager extends AbstractManager{
 
         String args = ID_USER+"=? AND "+DatabaseContract.SyncColumns.DELETED +" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUser)};
-        if(isTableEmpty(FOLLOW_TABLE)){
-            Timber.e("La tabla follow está vacia");
-        }
         Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, DatabaseContract.FollowTable.PROJECTION,args,argsString,null,null,null,null);
 
         if (c.getCount() > 0) {
