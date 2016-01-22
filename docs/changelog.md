@@ -13,6 +13,26 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.3.0] - 2016-01-22
+
+### Changed
+- Se elimina el log que indica que la tabla follow está vacía.
+- Mejorado el nice en un ShotDetail que tiene una lista de replies.
+- Cambiado el identificador de Analytics.
+
+### Added
+- Autologin on update.
+- Mute stream.
+- Redirección a Activity si hay un push con varias activities.
+- Feedback de que se tienen que mirar las activities.
+- Subtítulo en timeline de un stream para parecerse más a Telegram.
+- Terms of Service en LoginSelectionActivity.
+
+### Fixed
+- Corregido crash nice shot removed abierto desde push.
+- Cambiados literales con defectos.
+- No crashea cuando entras en un timeline de un stream que no tienes en local a través de un push con la app cerrada y sin conexión.
+
 ## [1.2.0] - 2016-01-08
 
 ### Changed
