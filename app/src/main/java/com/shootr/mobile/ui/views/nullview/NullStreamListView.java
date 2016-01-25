@@ -47,6 +47,10 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void scrollListToTop() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }
