@@ -1,7 +1,9 @@
 package com.shootr.mobile.ui.views;
 
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.base.DataTransferView;
 import java.io.File;
+import java.util.List;
 
 public interface PostNewShotView extends DataTransferView {
 
@@ -38,4 +40,6 @@ public interface PostNewShotView extends DataTransferView {
     void choosePhotoFromGallery();
 
     void showReplyToUsername(String replyToUsername);
+
+    void showMentionSuggestions(List<UserModel> mentionSuggestions);
 }

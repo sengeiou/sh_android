@@ -26,12 +26,14 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -326,6 +328,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showReplyToUsername(String replyToUsername) {
         editTextView.setHint(getString(R.string.reply_placeholder_pattern, replyToUsername));
+    }
+
+    @Override public void showMentionSuggestions(List<UserModel> mentionSuggestions) {
+
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -9,6 +9,8 @@ import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -27,6 +29,7 @@ public class PostNewShotPresenter implements Presenter {
     private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
     private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
     private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
+    private final UserModelMapper userModelMapper;
 
     private PostNewShotView postNewShotView;
     private File selectedImageFile;
@@ -40,12 +43,13 @@ public class PostNewShotPresenter implements Presenter {
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
       PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
-      GetMentionedPeopleInteractor getMentionedPeopleInteractor) {
+      GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
         this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
+        this.userModelMapper = userModelMapper;
     }
 
     protected void setView(PostNewShotView postNewShotView) {
@@ -256,7 +260,8 @@ public class PostNewShotPresenter implements Presenter {
     public void autocompleteMention(String username) {
         getMentionedPeopleInteractor.obtainMentionedPeople(username, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
-                Timber.d(users.toString());
+                List<UserModel> mentionSuggestions = userModelMapper.transform(users);
+                postNewShotView.showMentionSuggestions(mentionSuggestions);
             }
         });
     }
