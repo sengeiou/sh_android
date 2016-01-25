@@ -261,7 +261,12 @@ public class PostNewShotPresenter implements Presenter {
         getMentionedPeopleInteractor.obtainMentionedPeople(username, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> mentionSuggestions = userModelMapper.transform(users);
-                postNewShotView.showMentionSuggestions(mentionSuggestions);
+                if (!mentionSuggestions.isEmpty()) {
+                    postNewShotView.showMentionSuggestions();
+                    postNewShotView.renderMentionSuggestions(mentionSuggestions);
+                } else {
+                    postNewShotView.hideMentionSuggestions();
+                }
             }
         });
     }

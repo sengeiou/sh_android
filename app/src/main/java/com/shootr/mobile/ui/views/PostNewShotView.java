@@ -41,5 +41,9 @@ public interface PostNewShotView extends DataTransferView {
 
     void showReplyToUsername(String replyToUsername);
 
-    void showMentionSuggestions(List<UserModel> mentionSuggestions);
+    void renderMentionSuggestions(List<UserModel> mentionSuggestions);
+
+    void showMentionSuggestions();
+
+    void hideMentionSuggestions();
 }

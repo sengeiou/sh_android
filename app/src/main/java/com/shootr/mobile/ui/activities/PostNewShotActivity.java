@@ -13,8 +13,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,6 +27,8 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
+import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
@@ -61,7 +65,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.new_shot_send_button) ImageButton sendButton;
     @Bind(R.id.new_shot_send_progress) ProgressBar progress;
     @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
+    @Bind(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
     @Bind(R.id.new_shot_image) ImageView image;
+
+    @Bind(R.id.new_shot_mentions) ListView mentionsListView;
 
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
@@ -71,6 +78,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject WritePermissionManager writePermissionManager;
 
     private Subscription commentSubscription;
+    private MentionsAdapter adapter;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -136,6 +144,17 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
               }
           })
           .build();
+
+        if (adapter == null) {
+            adapter = new MentionsAdapter(this, new OnMentionClickListener() {
+                @Override public void mention(UserModel user) {
+                    //TODO write username and hide
+                    Toast.makeText(getBaseContext(), user.getUsername(), Toast.LENGTH_SHORT).show();
+                }
+            }, imageLoader);
+        }
+
+        mentionsListView.setAdapter(adapter);
     }
 
     private void initializeSubscription() {
@@ -330,8 +349,20 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         editTextView.setHint(getString(R.string.reply_placeholder_pattern, replyToUsername));
     }
 
-    @Override public void showMentionSuggestions(List<UserModel> mentionSuggestions) {
+    @Override public void renderMentionSuggestions(List<UserModel> mentionSuggestions) {
+        mentionsListView.setVisibility(View.VISIBLE);
+        adapter.setItems(mentionSuggestions);
+        adapter.notifyDataSetChanged();
+    }
 
+    @Override public void showMentionSuggestions() {
+        mentionsContainer.setVisibility(View.VISIBLE);
+        mentionsListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideMentionSuggestions() {
+        mentionsContainer.setVisibility(View.GONE);
+        mentionsListView.setVisibility(View.GONE);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
