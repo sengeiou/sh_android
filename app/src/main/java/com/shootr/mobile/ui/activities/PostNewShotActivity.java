@@ -33,6 +33,8 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import rx.Observer;
 import rx.Subscription;
@@ -42,6 +44,7 @@ import timber.log.Timber;
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
+    private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
     private static final String EXTRA_SELECTED_IMAGE = "image";
     private static final String EXTRA_REPLY_PARENT_ID = "parentId";
@@ -118,18 +121,15 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         photoPickerController = new PhotoPickerController.Builder().onActivity(this)
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
-              @Override
-              public void onSelected(File imageFile) {
+              @Override public void onSelected(File imageFile) {
                   presenter.selectImage(imageFile);
               }
 
-              @Override
-              public void onError(Exception e) {
+              @Override public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override
-              public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           })
@@ -157,8 +157,16 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
             @Override
             public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
-                //TODO busar regex tipo @username y si se da, llamar al presenter
-                Timber.d(onTextChangeEvent.text().toString());
+                Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
+                String input = onTextChangeEvent.text().toString();
+                Matcher matcher = pattern.matcher(input);
+                //TODO mejorar la regex
+                if (matcher.find()) {
+                    int termsStart = matcher.start();
+                    int termsEnd = matcher.end();
+                    String username = input.substring(termsStart + 1, termsEnd);
+                    presenter.autocompleteMention(username);
+                }
             }
         };
     }
