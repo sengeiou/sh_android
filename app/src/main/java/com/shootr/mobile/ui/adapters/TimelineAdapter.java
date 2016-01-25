@@ -139,4 +139,28 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     public ShotModel getLastShot() {
         return shots.get(shots.size() - 1);
     }
+
+    public OnAvatarClickListener getAvatarClickListener() {
+        return avatarClickListener;
+    }
+
+    public OnVideoClickListener getVideoClickListener() {
+        return videoClickListener;
+    }
+
+    public OnUsernameClickListener getOnUsernameClickListener() {
+        return onUsernameClickListener;
+    }
+
+    public AndroidTimeUtils getTimeUtils() {
+        return timeUtils;
+    }
+
+    public ImageLoader getImageLoader() {
+        return imageLoader;
+    }
+
+    public ShotTextSpannableBuilder getShotTextSpannableBuilder() {
+        return shotTextSpannableBuilder;
+    }
 }

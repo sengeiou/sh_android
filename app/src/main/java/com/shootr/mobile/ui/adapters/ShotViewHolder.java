@@ -45,7 +45,7 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+    @Nullable @Bind (R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.nices_container) View niceContainer;
 
@@ -81,7 +81,9 @@ public class ShotViewHolder {
         bindUserPhoto(shot);
         bindImageInfo(shot);
         bindVideoInfo(shot);
-        bindNiceInfo(shot);
+        if(niceButton!=null) {
+            bindNiceInfo(shot);
+        }
     }
 
     protected void bindComment(ShotModel item, boolean shouldShowShortTitle) {

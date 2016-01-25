@@ -23,6 +23,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -44,9 +45,11 @@ import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.SupportActivity;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.mobile.ui.adapters.TimeLineProfileAdapter;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -142,7 +145,7 @@ public class ProfileFragment extends BaseFragment
     String idUserArgument;
     String usernameArgument;
 
-    private TimelineAdapter latestsShotsAdapter;
+    private TimeLineProfileAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
@@ -212,13 +215,9 @@ public class ProfileFragment extends BaseFragment
             }
         };
 
-        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
-            @Override public void markNice(String idShot) {
-                profilePresenter.markNiceShot(idShot);
-            }
-
-            @Override public void unmarkNice(String idShot) {
-                profilePresenter.unmarkNiceShot(idShot);
+        OnHideClickListener onHideClickListener= new OnHideClickListener() {
+            @Override public void onHideClick(String idSHot) {
+                Toast.makeText(getContext(),"debo esconder shot "+idSHot,Toast.LENGTH_LONG).show();
             }
         };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
@@ -230,8 +229,8 @@ public class ProfileFragment extends BaseFragment
         });
 
         latestsShotsAdapter =
-          new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener, videoClickListener, onNiceShotListener,
+          new TimeLineProfileAdapter(getActivity(),
+            imageLoader, timeUtils, avatarClickListener, videoClickListener, onHideClickListener,
             onUsernameClickListener){
               @Override protected boolean shouldShowShortTitle() {
                   return true;

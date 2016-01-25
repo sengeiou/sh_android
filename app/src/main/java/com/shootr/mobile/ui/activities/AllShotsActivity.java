@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -17,9 +18,9 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.TimelineAdapter;
+import com.shootr.mobile.ui.adapters.TimeLineProfileAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -56,7 +57,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
-    @Deprecated private TimelineAdapter adapter;
+    @Deprecated private TimeLineProfileAdapter adapter;
 
     private View footerProgress;
 
@@ -151,13 +152,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
-        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
-            @Override public void markNice(String idShot) {
-                presenter.markNiceShot(idShot);
-            }
-
-            @Override public void unmarkNice(String idShot) {
-                presenter.unmarkNiceShot(idShot);
+        OnHideClickListener onHideClickListener = new OnHideClickListener() {
+            @Override public void onHideClick(String idSHot) {
+                Toast.makeText(getApplicationContext(),"Debo esconder shot "+idSHot,Toast.LENGTH_LONG).show();
             }
         };
 
@@ -168,8 +165,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
-          videoClickListener, onNiceShotListener, onUsernameClickListener){
+        adapter = new TimeLineProfileAdapter(this, imageLoader, timeUtils, avatarClickListener,
+          videoClickListener, onHideClickListener, onUsernameClickListener){
             @Override protected boolean shouldShowShortTitle() {
                 return true;
             }
