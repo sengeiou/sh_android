@@ -19,6 +19,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -30,7 +32,11 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
@@ -59,6 +65,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
 
+    private Subscription commentSubscription;
+
     private int charCounterColorError;
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
@@ -74,6 +82,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         initializeViews();
+        initializeSubscription();
     }
 
     @Override protected void initializePresenter() {
@@ -125,6 +134,33 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
               }
           })
           .build();
+    }
+
+    private void initializeSubscription() {
+        commentSubscription = RxTextView.textChangeEvents(editTextView)//
+          .debounce(400, TimeUnit.MILLISECONDS)// default Scheduler is Computation
+          .observeOn(AndroidSchedulers.mainThread())//
+          .subscribe(getShotCommentObserver());
+    }
+
+    private Observer<TextViewTextChangeEvent> getShotCommentObserver() {
+        return new Observer<TextViewTextChangeEvent>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("--------- onComplete");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "--------- Woops on error!");
+            }
+
+            @Override
+            public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
+                //TODO busar regex tipo @username y si se da, llamar al presenter
+                Timber.d(onTextChangeEvent.text().toString());
+            }
+        };
     }
 
     private void setupPhotoIfAny() {
@@ -195,6 +231,9 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     protected void onPause() {
         super.onPause();
         presenter.pause();
+        if (commentSubscription != null) {
+            commentSubscription.unsubscribe();
+        }
     }
 
     @Override protected void onSaveInstanceState(Bundle outState) {
