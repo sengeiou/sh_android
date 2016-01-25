@@ -102,8 +102,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             }
         });
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
-            @Override
-            public void onUnwatchClick() {
+            @Override public void onUnwatchClick() {
                 favoritesListPresenter.unwatchStream();
             }
         });
@@ -181,6 +180,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         }).show();
     }
 
+    @Override public void scrollListToTop() {
+        favoritesList.scrollToPosition(0);
+    }
+
     @Override
     public void showEmpty() {
         empty.setVisibility(View.VISIBLE);
@@ -205,4 +208,5 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     public void showError(String message) {
         feedbackMessage.show(getView(), message);
     }
+
 }

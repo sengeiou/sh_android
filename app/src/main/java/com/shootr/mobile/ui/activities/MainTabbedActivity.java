@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,26 +61,39 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         viewPager.setOffscreenPageLimit(2);
 
         tabLayout.setupWithViewPager(viewPager);
+        setupTabLayoutListener();
         viewPager.setCurrentItem(1);
+    }
 
+    private void setupTabLayoutListener() {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            Integer cont = 0;
+
             @Override public void onTabSelected(TabLayout.Tab tab) {
-                cont++;
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override public void onTabUnselected(TabLayout.Tab tab) {
-                cont = 0;
+                /* no-op */
             }
 
             @Override public void onTabReselected(TabLayout.Tab tab) {
-                cont++;
-                if(cont >= 3) {
-                    Toast.makeText(getBaseContext(), String.valueOf(tab.getPosition()), Toast.LENGTH_SHORT).show();
-                }
+                Fragment currentPage = getSupportFragmentManager().findFragmentByTag("android:switcher:"
+                  + R.id.pager
+                  + ":"
+                  + viewPager.getCurrentItem());
+                scrollToTop(currentPage, viewPager.getCurrentItem());
             }
         });
+    }
+
+    private void scrollToTop(Fragment currentPage, int currentItem) {
+        if (currentPage != null && currentItem == 0) {
+            ((FavoritesFragment) currentPage).scrollListToTop();
+        } else if (currentPage != null && currentItem == 1) {
+            ((StreamsListFragment) currentPage).scrollListToTop();
+        } else if (currentPage != null && currentItem==2) {
+            ((PeopleFragment) currentPage).scrollListToTop();
+        }
     }
 
     @Override

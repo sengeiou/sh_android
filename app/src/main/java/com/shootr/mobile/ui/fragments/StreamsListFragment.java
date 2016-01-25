@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -252,6 +253,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
         adapter.setMutedStreamIds(mutedStreamIds);
+    }
+
+    @Override public void scrollListToTop() {
+        streamsList.scrollToPosition(0);
     }
 
     @Override public void showEmpty() {
