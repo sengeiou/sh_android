@@ -267,6 +267,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     protected void onResume() {
         super.onResume();
         presenter.resume();
+        initializeSubscription();
     }
 
     @Override
