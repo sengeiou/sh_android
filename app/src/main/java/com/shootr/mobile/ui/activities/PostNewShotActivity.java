@@ -32,6 +32,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.ui.widgets.NestedListView;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
@@ -43,7 +44,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
@@ -76,6 +77,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject CrashReportTool crashReportTool;
 
     private Subscription commentSubscription;
     private MentionsAdapter adapter;
@@ -159,7 +161,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private void initializeSubscription() {
         commentSubscription = RxTextView.textChangeEvents(editTextView)//
           .debounce(400, TimeUnit.MILLISECONDS)//
-          .observeOn(Schedulers.io())//
+          .observeOn(AndroidSchedulers.mainThread())//
           .subscribe(getShotCommentObserver());
     }
 
@@ -172,7 +174,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "autocomplete mention onError");
+                crashReportTool.logException(e);
             }
 
             @Override

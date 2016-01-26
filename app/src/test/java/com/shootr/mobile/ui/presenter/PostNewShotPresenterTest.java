@@ -31,6 +31,9 @@ public class PostNewShotPresenterTest {
 
     private static final String ID_USER = "idUser";
     public static final String USERNAME = "username";
+    public static final String PART_OF_A_USERNAME = "use";
+    public static final String COMMENT_WITH_PART_OF_USERNAME = "comment @use";
+    public static final String COMMENT_WITH_USERNAME = "comment @username ";
     private PostNewShotPresenter presenter;
 
     @Mock Bus bus;
@@ -93,17 +96,17 @@ public class PostNewShotPresenterTest {
     @Test public void shouldMentionUserWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention("use");
-        presenter.onMentionClicked(userModel(), "comment @use");
+        presenter.autocompleteMention(PART_OF_A_USERNAME);
+        presenter.onMentionClicked(userModel(), COMMENT_WITH_PART_OF_USERNAME);
 
-        verify(postNewShotView).mentionUser("comment @username ");
+        verify(postNewShotView).mentionUser(COMMENT_WITH_USERNAME);
     }
 
     @Test public void shouldHideMentionSuggestionsWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention("use");
-        presenter.onMentionClicked(userModel(), "comment @use");
+        presenter.autocompleteMention(PART_OF_A_USERNAME);
+        presenter.onMentionClicked(userModel(), COMMENT_WITH_PART_OF_USERNAME);
 
         verify(postNewShotView).hideMentionSuggestions();
     }
@@ -111,8 +114,8 @@ public class PostNewShotPresenterTest {
     @Test public void shouldShowImageContainerWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention("use");
-        presenter.onMentionClicked(userModel(), "comment @use");
+        presenter.autocompleteMention(PART_OF_A_USERNAME);
+        presenter.onMentionClicked(userModel(), COMMENT_WITH_PART_OF_USERNAME);
 
         verify(postNewShotView).showImageContainer();
     }
@@ -120,8 +123,8 @@ public class PostNewShotPresenterTest {
     @Test public void shouldSetCursonrToEndOfTextWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention("use");
-        presenter.onMentionClicked(userModel(), "comment @use");
+        presenter.autocompleteMention(PART_OF_A_USERNAME);
+        presenter.onMentionClicked(userModel(), COMMENT_WITH_PART_OF_USERNAME);
 
         verify(postNewShotView).setCursorToEndOfText();
     }
@@ -130,6 +133,12 @@ public class PostNewShotPresenterTest {
         presenter.onStopMentioning();
 
         verify(postNewShotView).hideMentionSuggestions();
+    }
+
+    @Test public void shouldShowImageContainerWhenStopMentioning() throws Exception {
+        presenter.onStopMentioning();
+
+        verify(postNewShotView).showImageContainer();
     }
 
     private List<User> mentionSuggestions() {
@@ -148,7 +157,7 @@ public class PostNewShotPresenterTest {
     private UserModel userModel() {
         UserModel userModel = new UserModel();
         userModel.setIdUser(ID_USER);
-        userModel.setUsername("username");
+        userModel.setUsername(USERNAME);
         return userModel;
     }
 

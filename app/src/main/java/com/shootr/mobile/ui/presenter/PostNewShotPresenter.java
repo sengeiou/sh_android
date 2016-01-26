@@ -293,6 +293,7 @@ public class PostNewShotPresenter implements Presenter {
 
     public void onStopMentioning() {
         postNewShotView.hideMentionSuggestions();
+        postNewShotView.showImageContainer();
     }
 
     @Override public void resume() {

@@ -30,5 +30,9 @@ public class CrashReportToolFactoryImpl implements CrashReportTool.Factory {
         public void setUserEmail(String email) {
             /* no-op */
         }
+
+        @Override public void logException(Throwable error) {
+            /* no-op */
+        }
     }
 }

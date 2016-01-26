@@ -12,6 +12,8 @@ public interface CrashReportTool {
 
     void setUserEmail(String email);
 
+    void logException(Throwable error);
+
     interface Factory {
 
         CrashReportTool create();

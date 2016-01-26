@@ -25,4 +25,8 @@ public class CrashlyticsReportTool implements CrashReportTool {
     public void setUserEmail(String email) {
         Crashlytics.setUserEmail(email);
     }
+
+    @Override public void logException(Throwable error) {
+        Crashlytics.logException(error);
+    }
 }
