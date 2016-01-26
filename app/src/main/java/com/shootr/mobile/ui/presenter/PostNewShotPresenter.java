@@ -282,7 +282,7 @@ public class PostNewShotPresenter implements Presenter {
         String substring = comment;
         if (matcher.find()) {
             int termsStart = matcher.start();
-            substring = comment.substring(0, termsStart - 1) + " @" +user.getUsername() + " ";
+            substring = comment.substring(0, termsStart - 1) + "@" +user.getUsername() + " ";
         }
         postNewShotView.mentionUser(substring);
         postNewShotView.hideMentionSuggestions();
