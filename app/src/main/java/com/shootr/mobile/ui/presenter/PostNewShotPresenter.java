@@ -262,7 +262,8 @@ public class PostNewShotPresenter implements Presenter {
 
     public void autocompleteMention(String username) {
         this.mentionedUser = username;
-        getMentionedPeopleInteractor.obtainMentionedPeople(username, new Interactor.Callback<List<User>>() {
+        String extractedUsername = username.substring(1);
+        getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> mentionSuggestions = userModelMapper.transform(users);
                 if (!mentionSuggestions.isEmpty()) {
@@ -271,7 +272,7 @@ public class PostNewShotPresenter implements Presenter {
                     postNewShotView.renderMentionSuggestions(mentionSuggestions);
                 } else {
                     postNewShotView.hideMentionSuggestions();
-                    postNewShotView.showImageContainer();
+                    showImage();
                 }
             }
         });
@@ -280,11 +281,19 @@ public class PostNewShotPresenter implements Presenter {
     public void onMentionClicked(UserModel user, String comment) {
         Pattern pattern = Pattern.compile(mentionedUser);
         Matcher matcher = pattern.matcher(comment);
-        String substring = comment;
-        if (matcher.find()) {
-            int termsStart = matcher.start();
-            substring = comment.substring(0, termsStart - 1) + "@" +user.getUsername() + " ";
+        int termsStart = 0;
+
+        while (matcher.find()) {
+            termsStart = matcher.start();
         }
+
+        String substring;
+        if (termsStart > 0) {
+            substring = comment.substring(0, termsStart) + "@" +user.getUsername() + " ";
+        } else {
+            substring = "@" +user.getUsername() + " ";
+        }
+
         postNewShotView.mentionUser(substring);
         postNewShotView.hideMentionSuggestions();
         postNewShotView.setCursorToEndOfText();

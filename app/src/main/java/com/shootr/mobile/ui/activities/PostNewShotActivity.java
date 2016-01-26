@@ -196,8 +196,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
                 presenter.onStopMentioning();
             } else {
                 if (matcher.find()) {
-                    String username = lastWord.substring(1);
-                    presenter.autocompleteMention(username);
+                    presenter.autocompleteMention(lastWord);
                 } else {
                     presenter.onStopMentioning();
                 }

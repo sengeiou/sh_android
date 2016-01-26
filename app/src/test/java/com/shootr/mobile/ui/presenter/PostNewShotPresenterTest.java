@@ -32,7 +32,7 @@ public class PostNewShotPresenterTest {
 
     private static final String ID_USER = "idUser";
     public static final String USERNAME = "username";
-    public static final String PART_OF_A_USERNAME = "use";
+    public static final String PART_OF_A_USERNAME = "@use";
     public static final String COMMENT_WITH_PART_OF_USERNAME = "comment @use";
     public static final String COMMENT_WITH_USERNAME = "comment @username ";
     private PostNewShotPresenter presenter;
@@ -84,14 +84,6 @@ public class PostNewShotPresenterTest {
         presenter.autocompleteMention(USERNAME);
 
         verify(postNewShotView).hideMentionSuggestions();
-    }
-
-    @Test public void shouldShowImageContainerIfNoPeopleObtainedWhenMentioning() throws Exception {
-        setupNoMentionedPeopleCallback();
-
-        presenter.autocompleteMention(USERNAME);
-
-        verify(postNewShotView).showImageContainer();
     }
 
     @Test public void shouldMentionUserWhenMentionClicked() throws Exception {
