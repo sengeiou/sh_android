@@ -384,6 +384,14 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         editTextView.setSelection(editTextView.getText().length());
     }
 
+    @Override public void hideImageContainer() {
+        imageContainer.setVisibility(View.GONE);
+    }
+
+    @Override public void showImageContainer() {
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         photoPickerController.onActivityResult(requestCode, resultCode, data);

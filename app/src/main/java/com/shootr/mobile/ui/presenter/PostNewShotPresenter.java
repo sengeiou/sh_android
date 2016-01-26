@@ -267,9 +267,11 @@ public class PostNewShotPresenter implements Presenter {
                 List<UserModel> mentionSuggestions = userModelMapper.transform(users);
                 if (!mentionSuggestions.isEmpty()) {
                     postNewShotView.showMentionSuggestions();
+                    postNewShotView.hideImageContainer();
                     postNewShotView.renderMentionSuggestions(mentionSuggestions);
                 } else {
                     postNewShotView.hideMentionSuggestions();
+                    postNewShotView.showImageContainer();
                 }
             }
         });
@@ -285,6 +287,7 @@ public class PostNewShotPresenter implements Presenter {
         }
         postNewShotView.mentionUser(substring);
         postNewShotView.hideMentionSuggestions();
+        postNewShotView.showImageContainer();
         postNewShotView.setCursorToEndOfText();
     }
 

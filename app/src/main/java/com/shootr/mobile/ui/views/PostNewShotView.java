@@ -50,4 +50,8 @@ public interface PostNewShotView extends DataTransferView {
     void mentionUser(String comment);
 
     void setCursorToEndOfText();
+
+    void hideImageContainer();
+
+    void showImageContainer();
 }
