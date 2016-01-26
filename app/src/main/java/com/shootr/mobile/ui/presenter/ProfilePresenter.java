@@ -40,8 +40,6 @@ public class ProfilePresenter implements Presenter {
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
-    private final MarkNiceShotInteractor markNiceShotInteractor;
-    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final HideShotInteractor hideShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final FollowInteractor followInteractor;
@@ -68,7 +66,6 @@ public class ProfilePresenter implements Presenter {
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       HideShotInteractor hideShotInteractor,ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
@@ -77,8 +74,6 @@ public class ProfilePresenter implements Presenter {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
-        this.markNiceShotInteractor = markNiceShotInteractor;
-        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
@@ -194,31 +189,7 @@ public class ProfilePresenter implements Presenter {
             }
         });
     }
-
-    public void markNiceShot(String idShot) {
-        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
-            }
-        });
-    }
-
-    public void unmarkNiceShot(String idShot) {
-        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
-            }
-        });
-    }
-
+    
     public void streamCreated(String streamId) {
         profileView.navigateToCreatedStreamDetail(streamId);
     }

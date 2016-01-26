@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
+import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -62,8 +63,7 @@ public class ProfilePresenterTest {
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
-    @Mock MarkNiceShotInteractor markNiceShotInteractor;
-    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock HideShotInteractor hideShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
     @Mock FollowInteractor followInteractor;
     @Mock UnfollowInteractor unfollowInteractor;
@@ -90,8 +90,7 @@ public class ProfilePresenterTest {
         profilePresenter = new ProfilePresenter(getUserByIdInteractor,
           getUserByUsernameInteractor,
           logoutInteractor,
-          markNiceShotInteractor,
-          unmarkNiceShotInteractor,
+          hideShotInteractor,
           shareShotInteractor,
           followInteractor,
           unfollowInteractor,
@@ -813,7 +812,7 @@ public class ProfilePresenterTest {
 
         verify(profileView).showBlockAndBannedMenu(any(UserModel.class));
     }
-
+    
     private void setupUserInBannedIdsCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

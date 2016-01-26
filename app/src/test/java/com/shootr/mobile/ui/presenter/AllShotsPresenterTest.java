@@ -8,9 +8,11 @@ import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,11 +36,11 @@ public class AllShotsPresenterTest {
     public static final String AVATAR = "avatar";
     public static final String USERNAME = "username";
     public static final long ANY_TIMESTAMP = 0L;
+    private static final Long HIDDEN = 1L;
 
     @Mock GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
-    @Mock MarkNiceShotInteractor markNiceShotInteractor;
-    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock HideShotInteractor hideShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock AllShotsView allShotsView;
@@ -51,14 +53,13 @@ public class AllShotsPresenterTest {
         MockitoAnnotations.initMocks(this);
         shotModelMapper = new ShotModelMapper();
         allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor,
-          markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, errorMessageFactory, shotModelMapper);
+          hideShotInteractor,shareShotInteractor, errorMessageFactory, shotModelMapper);
         allShotsPresenter.setView(allShotsView);
         allShotsPresenter.setUserId(USER_ID);
     }
 
     @Test
-    public void shouldShowAllShotsWhenLoadAllShots() {
+    public void shouldShowAllNonHiddenShotsWhenLoadAllShots() {
         setupAllShotsInteractorCallback(shotList());
 
         allShotsPresenter.initialize(allShotsView, USER_ID);
@@ -161,13 +162,31 @@ public class AllShotsPresenterTest {
     }
 
     private List<Shot> shotList() {
-        Shot shot = new Shot();
+        ArrayList shotList= new ArrayList();
+        shotList.add(nonHiddenShot());
+        shotList.add(hiddenShot());
+        return shotList;
+    }
+
+    private void setupUserInfoForShot(Shot shot){
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setAvatar(AVATAR);
         userInfo.setIdUser(USER_ID);
         userInfo.setUsername(USERNAME);
         shot.setUserInfo(userInfo);
-        return Arrays.asList(shot);
+    }
+
+    private Shot hiddenShot(){
+        Shot shot = new Shot();
+        shot.setProfileHidden(HIDDEN);
+        setupUserInfoForShot(shot);
+        return shot;
+    }
+
+    private Shot nonHiddenShot(){
+        Shot shot = new Shot();
+        setupUserInfoForShot(shot);
+        return shot;
     }
 
     private void setupAllShotsInteractorCallback(final List<Shot> shotList) {
