@@ -215,7 +215,6 @@ public class ProfileFragment extends BaseFragment
 
         OnHideClickListener onHideClickListener= new OnHideClickListener() {
             @Override public void onHideClick(String idSHot) {
-                Toast.makeText(getContext(),"debo esconder shot "+idSHot,Toast.LENGTH_LONG).show();
                 profilePresenter.hideShot(idSHot);
             }
         };

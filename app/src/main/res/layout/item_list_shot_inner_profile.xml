@@ -119,8 +119,8 @@
 
 
   <LinearLayout android:id="@+id/shot_hide_button"
-    android:layout_width="@dimen/nice_button_size"
-    android:layout_height="@dimen/nice_button_size"
+    android:layout_width="@dimen/hide_button_container_size"
+    android:layout_height="@dimen/hide_button_container_size"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_below="@+id/shot_media_content"
@@ -130,6 +130,7 @@
       android:layout_height="@dimen/hide_button_size"
       android:layout_width="@dimen/hide_button_size"
       android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:background="?selectableItemBackgroundBorderless"
       />
   </LinearLayout>
 
