@@ -25,6 +25,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class PostNewShotPresenterTest {
@@ -111,13 +112,13 @@ public class PostNewShotPresenterTest {
         verify(postNewShotView).hideMentionSuggestions();
     }
 
-    @Test public void shouldShowImageContainerWhenMentionClicked() throws Exception {
+    @Test public void shouldShowImageContainerWhenMentionClickedIfThereWasNoPictureSelected() throws Exception {
         setupMentionedPeopleCallback();
 
         presenter.autocompleteMention(PART_OF_A_USERNAME);
         presenter.onMentionClicked(userModel(), COMMENT_WITH_PART_OF_USERNAME);
 
-        verify(postNewShotView).showImageContainer();
+        verify(postNewShotView, never()).showImageContainer();
     }
 
     @Test public void shouldSetCursonrToEndOfTextWhenMentionClicked() throws Exception {
@@ -135,10 +136,10 @@ public class PostNewShotPresenterTest {
         verify(postNewShotView).hideMentionSuggestions();
     }
 
-    @Test public void shouldShowImageContainerWhenStopMentioning() throws Exception {
+    @Test public void shouldNotShowImageContainerWhenStopMentioningIfThereWasNoImageSelected() throws Exception {
         presenter.onStopMentioning();
 
-        verify(postNewShotView).showImageContainer();
+        verify(postNewShotView, never()).showImageContainer();
     }
 
     private List<User> mentionSuggestions() {

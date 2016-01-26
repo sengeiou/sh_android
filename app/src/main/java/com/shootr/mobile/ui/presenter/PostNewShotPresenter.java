@@ -287,13 +287,19 @@ public class PostNewShotPresenter implements Presenter {
         }
         postNewShotView.mentionUser(substring);
         postNewShotView.hideMentionSuggestions();
-        postNewShotView.showImageContainer();
         postNewShotView.setCursorToEndOfText();
+        showImage();
     }
 
     public void onStopMentioning() {
         postNewShotView.hideMentionSuggestions();
-        postNewShotView.showImageContainer();
+        showImage();
+    }
+
+    public void showImage() {
+        if (hasImage()) {
+            postNewShotView.showImageContainer();
+        }
     }
 
     @Override public void resume() {
