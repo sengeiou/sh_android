@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
@@ -55,6 +55,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_REPLY_PARENT_ID = "parentId";
     private static final String EXTRA_REPLY_USERNAME = "parentUsername";
     public static final String EXTRA_PHOTO = "photo";
+    public static final String SPACE = " ";
 
     @Bind(R.id.new_shot_avatar) ImageView avatar;
     @Bind(R.id.new_shot_title) TextView name;
@@ -157,8 +158,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     private void initializeSubscription() {
         commentSubscription = RxTextView.textChangeEvents(editTextView)//
-          .debounce(400, TimeUnit.MILLISECONDS)// default Scheduler is Computation
-          .observeOn(AndroidSchedulers.mainThread())//
+          .debounce(400, TimeUnit.MILLISECONDS)//
+          .observeOn(Schedulers.io())//
           .subscribe(getShotCommentObserver());
     }
 
@@ -166,36 +167,40 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         return new Observer<TextViewTextChangeEvent>() {
             @Override
             public void onCompleted() {
-                Timber.d("--------- onComplete");
+                Timber.d("autocomplete mention onComplete");
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "--------- Woops on error!");
+                Timber.e(e, "autocomplete mention onError");
             }
 
             @Override
             public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
-                Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
-                String input = onTextChangeEvent.text().toString();
-                String[] words = input.split(" ");
-                String lastWord = words[words.length - 1];
-                Matcher matcher = pattern.matcher(lastWord);
-                //TODO mejorar la regex
-                if(input.length() > 0) {
-                    if (input.substring(input.length()-1).equals(" ")) {
-                        hideMentionSuggestions();
-                    } else {
-                        if (matcher.find()) {
-                            String username = lastWord.substring(1);
-                            presenter.autocompleteMention(username);
-                        } else {
-                            hideMentionSuggestions();
-                        }
-                    }
-                }
+                checkIfWritingMention(onTextChangeEvent);
             }
         };
+    }
+
+    public void checkIfWritingMention(TextViewTextChangeEvent onTextChangeEvent) {
+        Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
+        String input = onTextChangeEvent.text().toString();
+        String[] words = input.split(SPACE);
+        String lastWord = words[words.length - 1];
+        Matcher matcher = pattern.matcher(lastWord);
+
+        if(input.length() > 0) {
+            if (input.substring(input.length() - 1).equals(SPACE)) {
+                presenter.onStopMentioning();
+            } else {
+                if (matcher.find()) {
+                    String username = lastWord.substring(1);
+                    presenter.autocompleteMention(username);
+                } else {
+                    presenter.onStopMentioning();
+                }
+            }
+        }
     }
 
     private void setupPhotoIfAny() {

@@ -25,7 +25,6 @@ import timber.log.Timber;
 public class PostNewShotPresenter implements Presenter {
 
     private static final int MAX_LENGTH = 140;
-    private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -287,6 +286,10 @@ public class PostNewShotPresenter implements Presenter {
         postNewShotView.mentionUser(substring);
         postNewShotView.hideMentionSuggestions();
         postNewShotView.setCursorToEndOfText();
+    }
+
+    public void onStopMentioning() {
+        postNewShotView.hideMentionSuggestions();
     }
 
     @Override public void resume() {
