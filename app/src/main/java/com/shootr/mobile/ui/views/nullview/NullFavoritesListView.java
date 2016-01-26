@@ -43,6 +43,10 @@ public class NullFavoritesListView implements FavoritesListView {
         /* no-op */
     }
 
+    @Override public void scrollListToTop() {
+        /* no-op */
+    }
+
     @Override
     public void showEmpty() {
         /* no-op */

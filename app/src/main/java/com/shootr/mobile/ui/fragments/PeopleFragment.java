@@ -129,7 +129,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
         intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getActivity().getString(com.shootr.mobile.R.string.invite_friends_title)));
+        startActivity(Intent.createChooser(intent,
+          getActivity().getString(com.shootr.mobile.R.string.invite_friends_title)));
     }
 
     @Override
@@ -241,4 +242,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         return suggestedPeopleAdapter;
     }
 
+    public void scrollListToTop() {
+        userlistListView.setSelection(0);
+    }
 }

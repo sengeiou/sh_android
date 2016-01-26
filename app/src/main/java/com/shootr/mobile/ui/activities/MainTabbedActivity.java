@@ -59,7 +59,39 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         viewPager.setOffscreenPageLimit(2);
 
         tabLayout.setupWithViewPager(viewPager);
+        setupTabLayoutListener();
         viewPager.setCurrentItem(1);
+    }
+
+    private void setupTabLayoutListener() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override public void onTabUnselected(TabLayout.Tab tab) {
+                /* no-op */
+            }
+
+            @Override public void onTabReselected(TabLayout.Tab tab) {
+                Fragment currentPage = getSupportFragmentManager().findFragmentByTag("android:switcher:"
+                  + R.id.pager
+                  + ":"
+                  + viewPager.getCurrentItem());
+                scrollToTop(currentPage, viewPager.getCurrentItem());
+            }
+        });
+    }
+
+    private void scrollToTop(Fragment currentPage, int currentItem) {
+        if (currentPage != null && currentItem == 0) {
+            ((FavoritesFragment) currentPage).scrollListToTop();
+        } else if (currentPage != null && currentItem == 1) {
+            ((StreamsListFragment) currentPage).scrollListToTop();
+        } else if (currentPage != null && currentItem==2) {
+            ((PeopleFragment) currentPage).scrollListToTop();
+        }
     }
 
     @Override
