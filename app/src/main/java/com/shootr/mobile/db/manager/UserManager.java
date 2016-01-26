@@ -193,4 +193,30 @@ public class UserManager extends AbstractManager {
         queryResults.close();
         return result;
     }
+
+    public List<UserEntity> getUsersForMention(String idUser) {
+        String whereClause = DatabaseContract.UserTable.ID + "<> ?";
+        String[] whereArguments = new String[] { idUser };
+
+        Cursor queryResults = getReadableDatabase().query(DatabaseContract.UserTable.TABLE,
+          DatabaseContract.UserTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          DatabaseContract.UserTable.USER_NAME + " COLLATE NOCASE");
+
+        List<UserEntity> result = new ArrayList<>(queryResults.getCount());
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                UserEntity user = userMapper.fromCursor(queryResults);
+                if (user != null) {
+                    result.add(user);
+                }
+            } while (queryResults.moveToNext());
+        }
+        queryResults.close();
+        return result;
+    }
 }

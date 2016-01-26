@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,15 +21,18 @@ public class GetMentionedPeopleInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
+    private final SessionRepository sessionRepository;
     private String mention;
     private Callback<List<User>> callback;
 
     @Inject public GetMentionedPeopleInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
+      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public void obtainMentionedPeople(String mention, Callback<List<User>> callback) {
@@ -38,14 +42,15 @@ public class GetMentionedPeopleInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalPeople();
-        obtainRemotePeople();
+        obtainLocalPeopleThenFallbackToRemote();
     }
 
-    private void obtainLocalPeople() {
-        List<User> userList = localUserRepository.getPeople();
+    private void obtainLocalPeopleThenFallbackToRemote() {
+        List<User> userList = localUserRepository.getUsersForMention(sessionRepository.getCurrentUserId());
         if (!userList.isEmpty()) {
             notifyResult(getUsersPossiblyMentioned(userList));
+        } else {
+            obtainRemotePeople();
         }
     }
 

@@ -217,6 +217,10 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return userEntityMapper.transformEntities(remoteUserDataSource.getFollowers(idUser, page, pageSize));
     }
 
+    @Override public List<User> getUsersForMention(String idUser) {
+        throw new IllegalArgumentException("No remote implementation");
+    }
+
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
         List<User> participants = new ArrayList<>(allParticipants.size());
         for (UserEntity participantEntity : allParticipants) {

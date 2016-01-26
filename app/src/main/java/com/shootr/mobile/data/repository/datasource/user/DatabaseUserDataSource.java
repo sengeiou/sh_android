@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.UserManager;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -74,6 +75,10 @@ public class DatabaseUserDataSource implements UserDataSource {
 
     @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {
         throw new IllegalArgumentException("this method has no local implementation");
+    }
+
+    @Override public List<UserEntity> getUsersForMentions(String idUser) {
+        return userManager.getUsersForMention(idUser);
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {

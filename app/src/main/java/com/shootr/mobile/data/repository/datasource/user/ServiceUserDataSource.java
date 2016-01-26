@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.entity.UserEntity;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserNotFoundException;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -115,6 +116,10 @@ public class ServiceUserDataSource implements UserDataSource {
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
+    }
+
+    @Override public List<UserEntity> getUsersForMentions(String idUser) {
+        throw new RuntimeException("Server DataSource can't access to this");
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
