@@ -6,15 +6,13 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
-import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
-import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -529,7 +527,7 @@ public class ProfilePresenter implements Presenter {
     public void hideShot(String idShot) {
         hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
+                loadLatestShots(userModel.getIdUser());
             }
         });
     }

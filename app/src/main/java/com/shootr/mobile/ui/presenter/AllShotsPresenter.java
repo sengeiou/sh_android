@@ -6,7 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
-import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;

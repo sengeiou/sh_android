@@ -5,10 +5,8 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
-import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -37,6 +35,7 @@ public class AllShotsPresenterTest {
     public static final String USERNAME = "username";
     public static final long ANY_TIMESTAMP = 0L;
     private static final Long HIDDEN = 1L;
+    private static final String SHOT_ID ="shot_id" ;
 
     @Mock GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
@@ -157,36 +156,38 @@ public class AllShotsPresenterTest {
         verify(allShotsView).showError(anyString());
     }
 
+    @Test public void shouldShowAllShotsNonHiddenWhenMarkHideShot() throws Exception {
+        setupAllShotsInteractorCallback(shotList());
+        setupHideShotInteractorCallback();
+
+        allShotsPresenter.hideShot(SHOT_ID);
+
+        verify(allShotsView).showShots();
+    }
+
     private List<Shot> emptyShotList() {
         return Collections.emptyList();
     }
 
     private List<Shot> shotList() {
-        ArrayList shotList= new ArrayList();
-        shotList.add(nonHiddenShot());
-        shotList.add(hiddenShot());
-        return shotList;
-    }
-
-    private void setupUserInfoForShot(Shot shot){
+        Shot shot = new Shot();
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setAvatar(AVATAR);
         userInfo.setIdUser(USER_ID);
         userInfo.setUsername(USERNAME);
         shot.setUserInfo(userInfo);
+        return Arrays.asList(shot);
     }
 
-    private Shot hiddenShot(){
-        Shot shot = new Shot();
-        shot.setProfileHidden(HIDDEN);
-        setupUserInfoForShot(shot);
-        return shot;
-    }
-
-    private Shot nonHiddenShot(){
-        Shot shot = new Shot();
-        setupUserInfoForShot(shot);
-        return shot;
+    private void setupHideShotInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(hideShotInteractor)
+          .hideShot(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private void setupAllShotsInteractorCallback(final List<Shot> shotList) {
