@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -279,6 +280,14 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     public void onMentionClicked(UserModel user, String comment) {
+        String shotComment = mountShotComment(user, comment);
+        postNewShotView.mentionUser(shotComment);
+        postNewShotView.hideMentionSuggestions();
+        postNewShotView.setCursorToEndOfText();
+        showImage();
+    }
+
+    @NonNull public String mountShotComment(UserModel user, String comment) {
         Pattern pattern = Pattern.compile(mentionedUser);
         Matcher matcher = pattern.matcher(comment);
         int termsStart = 0;
@@ -293,11 +302,7 @@ public class PostNewShotPresenter implements Presenter {
         } else {
             substring = "@" +user.getUsername() + " ";
         }
-
-        postNewShotView.mentionUser(substring);
-        postNewShotView.hideMentionSuggestions();
-        postNewShotView.setCursorToEndOfText();
-        showImage();
+        return substring;
     }
 
     public void onStopMentioning() {
