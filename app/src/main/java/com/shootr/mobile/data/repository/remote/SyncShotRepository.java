@@ -93,4 +93,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public void deleteShotsByStream(String idStream) {
         throw new IllegalArgumentException("deleteShotsByStream not implemented in remote");
     }
+
+    @Override public void hideShot(String idShot) {
+        remoteShotDataSource.hideShot(idShot);
+    }
 }

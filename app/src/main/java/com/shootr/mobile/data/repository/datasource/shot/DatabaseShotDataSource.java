@@ -89,4 +89,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public void deleteShotsByIdStream(String idStream) {
         shotManager.deleteShotsByIdStream(idStream);
     }
+
+    @Override public void hideShot(String idShot) {
+        shotManager.hideShot(idShot);
+    }
 }

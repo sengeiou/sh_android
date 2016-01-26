@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -153,8 +152,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         };
 
         OnHideClickListener onHideClickListener = new OnHideClickListener() {
-            @Override public void onHideClick(String idSHot) {
-                Toast.makeText(getApplicationContext(),"Debo esconder shot "+idSHot,Toast.LENGTH_LONG).show();
+            @Override public void onHideClick(String idShot) {
+                presenter.hideShot(idShot);
             }
         };
 

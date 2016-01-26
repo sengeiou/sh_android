@@ -45,14 +45,14 @@ public class ShotManager extends AbstractManager {
     }
 
     public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
-        String whereSelection = ShotTable.ID_USER + " = ?";
+        String whereSelection = ShotTable.ID_USER + " = ? and "+ShotTable.PROFILE_HIDDEN+" IS NULL";
         String[] whereArguments = new String[] { idUser };
 
         return readShots(whereSelection, whereArguments, String.valueOf(limit));
     }
 
     public List<ShotEntity> getAllShotsFromUser(String idUser) {
-        String whereSelection = ShotTable.ID_USER + " = ?";
+        String whereSelection = ShotTable.ID_USER + " = ? and "+ShotTable.PROFILE_HIDDEN+" IS NULL";
         String[] whereArguments = new String[] { idUser };
 
         return readShots(whereSelection, whereArguments);
@@ -191,6 +191,20 @@ public class ShotManager extends AbstractManager {
             database.setTransactionSuccessful();
         } finally {
             database.endTransaction();
+        }
+    }
+
+    public void hideShot(String idShot){
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            ContentValues contentValues = new ContentValues(1);
+            contentValues.put(ShotTable.PROFILE_HIDDEN, "1");
+            String where = ShotTable.ID_SHOT + "=?";
+            String[] whereArgs = new String[] {idShot};
+            database.update(SHOT_TABLE,contentValues, where,whereArgs);
+
+        } finally {
+           database.close();
         }
     }
 }

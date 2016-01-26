@@ -5,9 +5,8 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
-import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.user.HideShotInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
@@ -19,11 +18,10 @@ public class AllShotsPresenter implements Presenter {
 
     private final GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     private final GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
-    private final MarkNiceShotInteractor markNiceShotInteractor;
-    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final ShotModelMapper shotModelMapper;
+    private final HideShotInteractor hideShotInteractor;
 
     private AllShotsView allShotsView;
     private String userId;
@@ -32,13 +30,11 @@ public class AllShotsPresenter implements Presenter {
     private boolean hasBeenPaused = false;
 
     @Inject public AllShotsPresenter(GetAllShotsByUserInteractor getAllShotsByUserInteractor,
-      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
+      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, HideShotInteractor hideShotInteractor, ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
       ShotModelMapper shotModelMapper) {
         this.getAllShotsByUserInteractor = getAllShotsByUserInteractor;
         this.getOlderAllShotsByUserInteractor = getOlderAllShotsByUserInteractor;
-        this.markNiceShotInteractor = markNiceShotInteractor;
-        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+        this.hideShotInteractor= hideShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.shotModelMapper = shotModelMapper;
@@ -116,29 +112,12 @@ public class AllShotsPresenter implements Presenter {
           });
     }
 
-    public void markNiceShot(String idShot) {
-        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+    public void hideShot(String idShot){
+        hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadAllShots();
             }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
-            }
         });
-    }
-
-    public void unmarkNiceShot(String idShot) {
-        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadAllShots();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
-            }
-        });
-
     }
 
     @Override public void resume() {

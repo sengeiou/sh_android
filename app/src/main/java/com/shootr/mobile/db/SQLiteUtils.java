@@ -52,6 +52,7 @@ public class SQLiteUtils {
             + DatabaseContract.ShotTable.VIDEO_URL+ " TEXT NULL,"
             + DatabaseContract.ShotTable.VIDEO_TITLE+ " TEXT NULL,"
             + DatabaseContract.ShotTable.VIDEO_DURATION+ " NUMBER NULL,"
+            + DatabaseContract.ShotTable.PROFILE_HIDDEN+ " NUMBER NULL,"
             + DatabaseContract.SyncColumns.BIRTH + " DATETIME NOT NULL,"
             + DatabaseContract.SyncColumns.MODIFIED + " DATETIME NOT NULL,"
             + DatabaseContract.SyncColumns.DELETED + " DATETIME NULL,"

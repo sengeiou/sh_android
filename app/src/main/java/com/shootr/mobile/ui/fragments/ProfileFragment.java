@@ -46,11 +46,9 @@ import com.shootr.mobile.ui.activities.SupportActivity;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimeLineProfileAdapter;
-import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -218,6 +216,7 @@ public class ProfileFragment extends BaseFragment
         OnHideClickListener onHideClickListener= new OnHideClickListener() {
             @Override public void onHideClick(String idSHot) {
                 Toast.makeText(getContext(),"debo esconder shot "+idSHot,Toast.LENGTH_LONG).show();
+                profilePresenter.hideShot(idSHot);
             }
         };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
