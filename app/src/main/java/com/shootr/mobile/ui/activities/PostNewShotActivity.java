@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,6 +32,7 @@ import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
+import com.shootr.mobile.ui.widgets.NestedListView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
@@ -68,7 +68,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
     @Bind(R.id.new_shot_image) ImageView image;
 
-    @Bind(R.id.new_shot_mentions) ListView mentionsListView;
+    @Bind(R.id.new_shot_mentions) NestedListView mentionsListView;
 
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
@@ -148,13 +148,31 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         if (adapter == null) {
             adapter = new MentionsAdapter(this, new OnMentionClickListener() {
                 @Override public void mention(UserModel user) {
-                    //TODO write username and hide
-                    Toast.makeText(getBaseContext(), user.getUsername(), Toast.LENGTH_SHORT).show();
+                    presenter.onMentionClicked(user, editTextView.getText().toString());
                 }
             }, imageLoader);
         }
 
         mentionsListView.setAdapter(adapter);
+    }
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        if (adapter == null)
+            return;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            view = adapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
     private void initializeSubscription() {
@@ -180,13 +198,21 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
                 Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
                 String input = onTextChangeEvent.text().toString();
-                Matcher matcher = pattern.matcher(input);
+                String[] words = input.split(" ");
+                String lastWord = words[words.length - 1];
+                Matcher matcher = pattern.matcher(lastWord);
                 //TODO mejorar la regex
-                if (matcher.find()) {
-                    int termsStart = matcher.start();
-                    int termsEnd = matcher.end();
-                    String username = input.substring(termsStart + 1, termsEnd);
-                    presenter.autocompleteMention(username);
+                if(input.length() > 0) {
+                    if (input.substring(input.length()-1).equals(" ")) {
+                        hideMentionSuggestions();
+                    } else {
+                        if (matcher.find()) {
+                            String username = lastWord.substring(1);
+                            presenter.autocompleteMention(username);
+                        } else {
+                            hideMentionSuggestions();
+                        }
+                    }
                 }
             }
         };
@@ -363,6 +389,14 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Override public void hideMentionSuggestions() {
         mentionsContainer.setVisibility(View.GONE);
         mentionsListView.setVisibility(View.GONE);
+    }
+
+    @Override public void mentionUser(String comment) {
+        editTextView.setText(comment);
+    }
+
+    @Override public void setCursorToEndOfText() {
+        editTextView.setSelection(editTextView.getText().length());
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

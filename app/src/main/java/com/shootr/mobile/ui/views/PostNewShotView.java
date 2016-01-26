@@ -46,4 +46,8 @@ public interface PostNewShotView extends DataTransferView {
     void showMentionSuggestions();
 
     void hideMentionSuggestions();
+
+    void mentionUser(String comment);
+
+    void setCursorToEndOfText();
 }

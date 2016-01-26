@@ -17,12 +17,15 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class PostNewShotPresenter implements Presenter {
 
     private static final int MAX_LENGTH = 140;
+    private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -38,6 +41,7 @@ public class PostNewShotPresenter implements Presenter {
     private boolean isReply;
     private String replyParentId;
     private boolean isInitialized = false;
+    private String mentionedUser;
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
@@ -258,6 +262,7 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     public void autocompleteMention(String username) {
+        this.mentionedUser = username;
         getMentionedPeopleInteractor.obtainMentionedPeople(username, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> mentionSuggestions = userModelMapper.transform(users);
@@ -269,6 +274,19 @@ public class PostNewShotPresenter implements Presenter {
                 }
             }
         });
+    }
+
+    public void onMentionClicked(UserModel user, String comment) {
+        Pattern pattern = Pattern.compile(mentionedUser);
+        Matcher matcher = pattern.matcher(comment);
+        String substring = comment;
+        if (matcher.find()) {
+            int termsStart = matcher.start();
+            substring = comment.substring(0, termsStart - 1) + " @" +user.getUsername() + " ";
+        }
+        postNewShotView.mentionUser(substring);
+        postNewShotView.hideMentionSuggestions();
+        postNewShotView.setCursorToEndOfText();
     }
 
     @Override public void resume() {

@@ -87,10 +87,10 @@
                   android:visibility="gone"
                   tools:visibility="visible">
 
-                  <com.shootr.mobile.ui.widgets.ScrollListView
+                  <com.shootr.mobile.ui.widgets.NestedListView
                     android:id="@+id/new_shot_mentions"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
                     tools:visibility="visible" />
 
