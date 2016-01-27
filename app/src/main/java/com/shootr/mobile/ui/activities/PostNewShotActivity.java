@@ -192,7 +192,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         Matcher matcher = pattern.matcher(lastWord);
 
         if(input.length() > 0) {
-            if (input.substring(input.length() - 1).equals(SPACE)) {
+            if (input.endsWith(SPACE)) {
                 presenter.onStopMentioning();
             } else {
                 if (matcher.find()) {
