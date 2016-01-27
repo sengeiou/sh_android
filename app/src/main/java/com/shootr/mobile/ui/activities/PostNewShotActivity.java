@@ -372,12 +372,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showMentionSuggestions() {
         mentionsContainer.setVisibility(View.VISIBLE);
-        mentionsListView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideMentionSuggestions() {
         mentionsContainer.setVisibility(View.GONE);
-        mentionsListView.setVisibility(View.GONE);
     }
 
     @Override public void mentionUser(String comment) {
