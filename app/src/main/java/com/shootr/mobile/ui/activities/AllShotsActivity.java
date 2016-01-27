@@ -17,9 +17,10 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.TimeLineProfileAdapter;
+import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -42,6 +43,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
     private static final String EXTRA_USER = "user";
+    private static final String CURRENT_USER= "current_user";
 
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
@@ -56,13 +58,15 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
-    @Deprecated private TimeLineProfileAdapter adapter;
+    @Deprecated private TimelineAdapter adapter;
 
     private View footerProgress;
 
-    public static Intent newIntent(Context context, String userId) {
+
+    public static Intent newIntent(Context context, String userId, Boolean isCurrentUser) {
         Intent intent = new Intent(context, AllShotsActivity.class);
         intent.putExtra(EXTRA_USER, userId);
+        intent.putExtra(CURRENT_USER, isCurrentUser);
         return intent;
     }
 
@@ -82,7 +86,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override protected void initializePresenter() {
         String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
-        presenter.initialize(this, userId);
+        Boolean isCurrentUser = getIntent().getBooleanExtra(CURRENT_USER,false);
+        presenter.initialize(this, userId,isCurrentUser);
         reportShotPresenter.initialize(this);
     }
 
@@ -151,6 +156,16 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
+        OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
+            @Override public void markNice(String idShot) {
+                presenter.markNiceShot(idShot);
+            }
+
+            @Override public void unmarkNice(String idShot) {
+                presenter.unmarkNiceShot(idShot);
+            }
+        };
+
         OnHideClickListener onHideClickListener = new OnHideClickListener() {
             @Override public void onHideClick(String idShot) {
                 presenter.hideShot(idShot);
@@ -164,8 +179,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimeLineProfileAdapter(this, imageLoader, timeUtils, avatarClickListener,
-          videoClickListener, onHideClickListener, onUsernameClickListener){
+        adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
+          videoClickListener,onNiceShotListener, onUsernameClickListener, onHideClickListener,presenter.getIsCurrentUser()){
             @Override protected boolean shouldShowShortTitle() {
                 return true;
             }
@@ -259,6 +274,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showShots() {
+        adapter.setIsCurrentUser(presenter.getIsCurrentUser());
+        adapter.notifyDataSetChanged();
         listView.setVisibility(View.VISIBLE);
     }
 

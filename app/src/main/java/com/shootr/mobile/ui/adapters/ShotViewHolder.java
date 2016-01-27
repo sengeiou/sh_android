@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
@@ -15,6 +16,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -36,6 +38,7 @@ public class ShotViewHolder {
     private final AndroidTimeUtils timeUtils;
     private final ImageLoader imageLoader;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private final OnHideClickListener onHideClickListener;
 
     @Bind(R.id.shot_avatar) ImageView avatar;
     @Bind(R.id.shot_user_name) TextView name;
@@ -45,9 +48,10 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Nullable @Bind (R.id.shot_nice_button) NiceButtonView niceButton;
+    @Bind (R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.nices_container) View niceContainer;
+    @Bind(R.id.shot_hide_button) LinearLayout hideButton;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -55,14 +59,16 @@ public class ShotViewHolder {
     @BindColor(R.color.short_title_color) int shortTitleColor;
     public int position;
     private View view;
+    private Boolean isCurrentUser;
 
     public ShotViewHolder(View view,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener,
+      OnHideClickListener onHideClickListener,
       OnUsernameClickListener onUsernameClickListener,
       AndroidTimeUtils timeUtils,
       ImageLoader imageLoader,
-      ShotTextSpannableBuilder shotTextSpannableBuilder) {
+      ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
@@ -72,6 +78,8 @@ public class ShotViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         ButterKnife.bind(this, view);
         this.view = view;
+        this.onHideClickListener = onHideClickListener;
+        this.isCurrentUser= isCurrentUser;
     }
 
     protected void render(ShotModel shot, boolean shouldShowShortTitle) {
@@ -81,9 +89,22 @@ public class ShotViewHolder {
         bindUserPhoto(shot);
         bindImageInfo(shot);
         bindVideoInfo(shot);
-        if(niceButton!=null) {
+        if(isCurrentUser){
+            bindHideButton(shot);
+        }else {
             bindNiceInfo(shot);
         }
+
+    }
+
+    private void bindHideButton(final ShotModel shot){
+        hideButton.setVisibility(View.VISIBLE);
+        niceButton.setVisibility(View.GONE);
+        hideButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                onHideClickListener.onHideClick(shot.getIdShot());
+            }
+        });
     }
 
     protected void bindComment(ShotModel item, boolean shouldShowShortTitle) {
@@ -191,6 +212,8 @@ public class ShotViewHolder {
         boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
         int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
 
+        hideButton.setVisibility(View.GONE);
+        niceButton.setVisibility(View.VISIBLE);
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
         lp.setMargins(0, marginTop, 0, 0);
 

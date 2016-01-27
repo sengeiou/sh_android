@@ -6,7 +6,9 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
 import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -62,6 +64,8 @@ public class ProfilePresenterTest {
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
+    @Mock MarkNiceShotInteractor markNiceShotInteractor;
+    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock HideShotInteractor hideShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
     @Mock FollowInteractor followInteractor;
@@ -89,6 +93,8 @@ public class ProfilePresenterTest {
         profilePresenter = new ProfilePresenter(getUserByIdInteractor,
           getUserByUsernameInteractor,
           logoutInteractor,
+          markNiceShotInteractor,
+          unmarkNiceShotInteractor,
           hideShotInteractor,
           shareShotInteractor,
           followInteractor,

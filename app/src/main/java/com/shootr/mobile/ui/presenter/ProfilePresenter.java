@@ -6,7 +6,9 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
+import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -38,6 +40,8 @@ public class ProfilePresenter implements Presenter {
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
+    private final MarkNiceShotInteractor markNiceShotInteractor;
+    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final HideShotInteractor hideShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final FollowInteractor followInteractor;
@@ -63,7 +67,7 @@ public class ProfilePresenter implements Presenter {
     private int hadleBlockMenuCalls;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
-      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
+      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       HideShotInteractor hideShotInteractor,ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
@@ -72,6 +76,8 @@ public class ProfilePresenter implements Presenter {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.logoutInteractor = logoutInteractor;
+        this.markNiceShotInteractor = markNiceShotInteractor;
+        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
@@ -126,6 +132,7 @@ public class ProfilePresenter implements Presenter {
         profileView.showListing();
         renderStreamsNumber();
         profileView.setupAnalytics(isCurrentUser);
+        profileView.resetTimelineAdapter();
     }
 
     private void renderStreamsNumber() {
@@ -187,7 +194,31 @@ public class ProfilePresenter implements Presenter {
             }
         });
     }
-    
+
+    public void markNiceShot(String idShot) {
+        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
+        });
+    }
+
+    public void unmarkNiceShot(String idShot) {
+        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadLatestShots(ProfilePresenter.this.userModel.getIdUser());
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
+        });
+    }
+
     public void streamCreated(String streamId) {
         profileView.navigateToCreatedStreamDetail(streamId);
     }
@@ -530,5 +561,9 @@ public class ProfilePresenter implements Presenter {
                 loadLatestShots(userModel.getIdUser());
             }
         });
+    }
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
     }
 }

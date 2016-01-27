@@ -360,7 +360,7 @@ public class StreamTimelineFragment extends BaseFragment
               public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
-          });
+          },null,false);
 
         listView.setAdapter(adapter);
     }

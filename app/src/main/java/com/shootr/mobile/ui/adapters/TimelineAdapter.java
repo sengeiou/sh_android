@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -24,8 +25,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private final OnHideClickListener onHideClickListener;
 
     private List<ShotModel> shots;
+
+    private boolean isCurrentUser;
 
     public TimelineAdapter(Context context,
       ImageLoader imageLoader,
@@ -33,7 +37,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
       OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener,
-      OnUsernameClickListener onUsernameClickListener) {
+      OnUsernameClickListener onUsernameClickListener,
+      OnHideClickListener onHideClickListener,Boolean isCurrentUser) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -43,6 +48,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         shotTextSpannableBuilder = new ShotTextSpannableBuilder();
+        this.onHideClickListener = onHideClickListener;
+        this.isCurrentUser = isCurrentUser;
     }
 
     @Override
@@ -92,10 +99,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 view = inflater.inflate(com.shootr.mobile.R.layout.item_list_shot, container, false);
                 view.setTag(new ShotViewHolder(view, avatarClickListener, videoClickListener,
                   onNiceShotListener,
+                  onHideClickListener,
                   onUsernameClickListener,
                   timeUtils,
                   imageLoader,
-                  shotTextSpannableBuilder));
+                  shotTextSpannableBuilder,isCurrentUser));
                 break;
             default:
                 break;
@@ -162,5 +170,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     public ShotTextSpannableBuilder getShotTextSpannableBuilder() {
         return shotTextSpannableBuilder;
+    }
+
+    public void setIsCurrentUser(boolean isCurrentUser) {
+        this.isCurrentUser = isCurrentUser;
     }
 }
