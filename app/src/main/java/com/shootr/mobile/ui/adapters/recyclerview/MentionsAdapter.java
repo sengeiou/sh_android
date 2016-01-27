@@ -14,7 +14,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MentionsAdapter extends BindableAdapter<UserModel> {
@@ -33,18 +32,6 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
 
     public void setItems(List<UserModel> users) {
         this.users = users;
-    }
-
-    public void addItems(List<UserModel> users) {
-        this.users.addAll(users);
-    }
-
-    public void removeItems(){
-        this.users = Collections.emptyList();
-    }
-
-    public boolean isFollowButtonVisible() {
-        return false;
     }
 
     @Override public int getCount() {
@@ -93,13 +80,8 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
         return String.format("@%s", item.getUsername());
     }
 
-    public List<UserModel> getItems() {
-        return users;
-    }
-
     public static class ViewHolder {
 
-        private final OnMentionClickListener onMentionClickListener;
         @Bind(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
         @Bind(R.id.user_name) TextView title;
         @Bind(R.id.user_username) TextView subtitle;
@@ -107,7 +89,6 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
 
         public ViewHolder(View view, final OnMentionClickListener onMentionClickListener) {
             ButterKnife.bind(this, view);
-            this.onMentionClickListener = onMentionClickListener;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     onMentionClickListener.mention(user);
