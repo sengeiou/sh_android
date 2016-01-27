@@ -18,8 +18,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Objects;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -41,7 +40,8 @@ public class PostNewShotPresenter implements Presenter {
     private boolean isReply;
     private String replyParentId;
     private boolean isInitialized = false;
-    private String mentionedUser;
+    private Integer wordPosition;
+    private String[] words;
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
@@ -261,8 +261,9 @@ public class PostNewShotPresenter implements Presenter {
         return selectedImageFile;
     }
 
-    public void autocompleteMention(String username) {
-        this.mentionedUser = username;
+    public void autocompleteMention(String username, String[] words, Integer wordPosition) {
+        this.words = words;
+        this.wordPosition = wordPosition;
         String extractedUsername = username.substring(1);
         getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
@@ -279,30 +280,26 @@ public class PostNewShotPresenter implements Presenter {
         });
     }
 
-    public void onMentionClicked(UserModel user, String comment) {
-        String shotComment = mountShotComment(user, comment);
+    public void onMentionClicked(UserModel user) {
+        String shotComment = mountShotComment(user);
         postNewShotView.mentionUser(shotComment);
         postNewShotView.hideMentionSuggestions();
         postNewShotView.setCursorToEndOfText();
         showImage();
     }
 
-    @NonNull public String mountShotComment(UserModel user, String comment) {
-        Pattern pattern = Pattern.compile(mentionedUser);
-        Matcher matcher = pattern.matcher(comment);
-        int termsStart = 0;
-
-        while (matcher.find()) {
-            termsStart = matcher.start();
+    @NonNull public String mountShotComment(UserModel user) {
+        String shotComment = "";
+        Integer position = 0;
+        for (String word : words) {
+            if (Objects.equals(position, wordPosition)) {
+                shotComment += "@" +user.getUsername() + " ";
+            } else {
+                shotComment += word + " ";
+            }
+            position++;
         }
-
-        String substring;
-        if (termsStart > 0) {
-            substring = comment.substring(0, termsStart) + "@" +user.getUsername() + " ";
-        } else {
-            substring = "@" +user.getUsername() + " ";
-        }
-        return substring;
+        return shotComment;
     }
 
     public void onStopMentioning() {

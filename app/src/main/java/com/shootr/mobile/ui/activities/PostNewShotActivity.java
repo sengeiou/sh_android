@@ -150,7 +150,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         if (adapter == null) {
             adapter = new MentionsAdapter(this, new OnMentionClickListener() {
                 @Override public void mention(UserModel user) {
-                    presenter.onMentionClicked(user, editTextView.getText().toString());
+                    presenter.onMentionClicked(user);
                 }
             }, imageLoader);
         }
@@ -188,21 +188,42 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
         String input = onTextChangeEvent.text().toString();
         String[] words = input.split(SPACE);
-        String lastWord = words[words.length - 1];
-        Matcher matcher = pattern.matcher(lastWord);
 
-        if(input.length() > 0) {
-            if (input.endsWith(SPACE)) {
-                presenter.onStopMentioning();
-            } else {
+        Integer wordPosition = 0;
+
+        if(input.length() > 0 && !input.endsWith(SPACE)) {
+            for (String word : words) {
+                Matcher matcher = pattern.matcher(word);
                 if (matcher.find()) {
-                    presenter.autocompleteMention(lastWord);
+                    Pattern wordPattern = Pattern.compile(word + " ");
+                    Matcher wordMatcher = wordPattern.matcher(input);
+                    if (!wordMatcher.find()) {
+                        presenter.autocompleteMention(word, words, wordPosition);
+                    }
+                    if (word.equals("@")) {
+                        presenter.autocompleteMention(word, words, wordPosition);
+                    }
                 } else {
-                    presenter.onStopMentioning();
+                    if (wordPosition == 0 && word.equals("@")) {
+                        presenter.autocompleteMention(word, words, wordPosition);
+                    } else {
+                        presenter.onStopMentioning();
+                    }
                 }
+                wordPosition++;
             }
-        } else {
+        } else if (input.length() <= 0) {
             presenter.onStopMentioning();
+        } else if (input.endsWith(SPACE)) {
+            if (words.length == 1) {
+                String word = words[wordPosition];
+                if (word.equals("@")) {
+                    presenter.autocompleteMention(word, words, wordPosition);
+                }
+            } else {
+                presenter.onStopMentioning();
+            }
+
         }
     }
 
@@ -372,10 +393,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showMentionSuggestions() {
         mentionsContainer.setVisibility(View.VISIBLE);
+        mentionsListView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideMentionSuggestions() {
         mentionsContainer.setVisibility(View.GONE);
+        mentionsListView.setVisibility(View.GONE);
     }
 
     @Override public void mentionUser(String comment) {
