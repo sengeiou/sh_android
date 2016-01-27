@@ -201,6 +201,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
                     presenter.onStopMentioning();
                 }
             }
+        } else {
+            presenter.onStopMentioning();
         }
     }
 
