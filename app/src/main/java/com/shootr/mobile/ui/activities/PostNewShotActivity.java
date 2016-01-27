@@ -160,7 +160,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     private void initializeSubscription() {
         commentSubscription = RxTextView.textChangeEvents(editTextView)//
-          .debounce(400, TimeUnit.MILLISECONDS)//
+          .debounce(100, TimeUnit.MILLISECONDS)//
           .observeOn(AndroidSchedulers.mainThread())//
           .subscribe(getShotCommentObserver());
     }

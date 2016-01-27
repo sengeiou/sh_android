@@ -55,34 +55,22 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
     @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.setUser(item);
-        viewHolder.title.setText(item.getName());
 
-        if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getSubtitle(item));
-            viewHolder.subtitle.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.subtitle.setVisibility(View.GONE);
-        }
+        viewHolder.title.setText(item.getName());
+        viewHolder.subtitle.setText(getSubtitle(item));
+        viewHolder.subtitle.setVisibility(View.VISIBLE);
 
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
     }
 
-    protected boolean showSubtitle(UserModel item) {
-        return true;
-    }
-
     protected String getSubtitle(UserModel item) {
-        return getUsernameForSubtitle(item);
-    }
-
-    private String getUsernameForSubtitle(UserModel item) {
         return String.format("@%s", item.getUsername());
     }
 
     public static class ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
+        @Bind(R.id.user_avatar) ImageView avatar;
         @Bind(R.id.user_name) TextView title;
         @Bind(R.id.user_username) TextView subtitle;
         private UserModel user;
