@@ -4,7 +4,6 @@
 
     <!-- Image upload -->
     <string name="error_message_invalid_image">Imagen inválida</string>
-    <string name="error_message_invalid_session_token">Credenciales inválidas</string>
 
     <!-- Profile: Username -->
     <string name="error_message_username_duplicate">Nombre de usuario no disponible</string>
@@ -18,8 +17,8 @@
     <string name="error_message_name_long">De 3 a 25 caracteres</string>
 
     <!-- Profile: Website -->
-    <string name="error_message_website_invalid">La página web tiene un formato inválido</string>
-    <string name="error_message_website_too_long">La página web puede tener como máximo 100 caracteres</string>
+    <string name="error_message_website_invalid">La web tiene un formato inválido</string>
+    <string name="error_message_website_too_long">La web puede tener como máximo 100 caracteres</string>
 
     <!-- Profile: Bio -->
     <string name="error_message_bio_too_long">La bio debe tener como máximo 150 caracteres</string>
@@ -29,7 +28,6 @@
     <string name="error_message_stream_title_too_short">Debe tener al menos 3 caracteres</string>
     <string name="error_message_stream_title_too_long">El titulo puede tener hasta 50 caracteres</string>
     <string name="error_image_upload">Error subiendo la imagen</string>
-    <string name="error_message_update_required">La versión actual es demasiado antigua</string>
 
     <!-- Create account -->
     <string name="error_message_registration_username_duplicated">Nombre de usuario no disponible</string>
