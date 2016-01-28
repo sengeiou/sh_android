@@ -107,15 +107,16 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
         throw new IllegalArgumentException("deleteShotsByStream not implemented in remote");
     }
 
-    @Override public void hideShot(String idShot) {
+    @Override public void hideShot(String idShot, Long timestamp) {
         ShotEntity shotEntity = localShotDataSource.getShot(idShot);
         try {
-            remoteShotDataSource.hideShot(idShot);
+            remoteShotDataSource.hideShot(idShot,timestamp);
             shotEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-            localShotDataSource.hideShot(idShot);
+            shotEntity.setProfileHidden(timestamp);
+            localShotDataSource.putShot(shotEntity);
         } catch (ServerCommunicationException e) {
             shotEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
-            localShotDataSource.hideShot(idShot);
+            localShotDataSource.hideShot(idShot,timestamp);
             localShotDataSource.putShot(shotEntity);
             syncTrigger.notifyNeedsSync(this);
         }
@@ -130,9 +131,9 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
 
     private void syncHiddenEntities(ShotEntity entity) {
         try {
-            remoteShotDataSource.hideShot(entity.getIdShot());
+            remoteShotDataSource.hideShot(entity.getIdShot(),entity.getProfileHidden());
             entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-            localShotDataSource.hideShot(entity.getIdShot());
+            localShotDataSource.hideShot(entity.getIdShot(),entity.getProfileHidden());
         } catch (Exception error) {
             error.printStackTrace();
         }

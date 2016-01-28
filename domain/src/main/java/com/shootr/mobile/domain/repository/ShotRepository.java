@@ -35,5 +35,5 @@ public interface ShotRepository {
 
     void deleteShotsByStream(String idStream);
 
-    void hideShot(String idShot);
+    void hideShot(String idShot, Long timestamp);
 }

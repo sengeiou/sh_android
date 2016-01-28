@@ -9,23 +9,21 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
+import java.util.Date;
 import javax.inject.Inject;
 
 public class HideShotInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
 
     private String idShot;
     private CompletedCallback completedCallback;
 
-    @Inject HideShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
+    @Inject HideShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
     }
 
@@ -45,7 +43,8 @@ public class HideShotInteractor implements Interactor {
     }
 
     private void sendHideShotToServer(){
-        remoteShotRepository.hideShot(idShot);
+        Date now = new Date();
+        remoteShotRepository.hideShot(idShot,now.getTime());
     }
 
     private void notifyCompleted() {

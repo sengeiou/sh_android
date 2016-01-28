@@ -189,7 +189,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         throw new IllegalArgumentException("This method should not have remote implementation");
     }
 
-    @Override public void hideShot(String idShot) {
+    @Override public void hideShot(String idShot, Long timestamp) {
         try {
             shotApiService.hideShot(idShot);
         } catch (ApiException | IOException e) {

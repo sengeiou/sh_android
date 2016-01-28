@@ -194,11 +194,11 @@ public class ShotManager extends AbstractManager {
         }
     }
 
-    public void hideShot(String idShot){
+    public void hideShot(String idShot, Long timestamp){
         SQLiteDatabase database = getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues(1);
-            contentValues.put(ShotTable.PROFILE_HIDDEN, 1);
+            contentValues.put(ShotTable.PROFILE_HIDDEN, timestamp);
             String where = ShotTable.ID_SHOT + "=?";
             String[] whereArgs = new String[] {idShot};
             database.update(SHOT_TABLE, contentValues, where, whereArgs);

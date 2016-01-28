@@ -36,5 +36,5 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
     void deleteShotsByIdStream(String idStream);
 
-    void hideShot(String idShot);
+    void hideShot(String idShot, Long timestamp);
 }
