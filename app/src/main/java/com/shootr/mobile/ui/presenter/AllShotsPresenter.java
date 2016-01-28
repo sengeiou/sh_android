@@ -125,6 +125,10 @@ public class AllShotsPresenter implements Presenter {
             @Override public void onCompleted() {
                 loadAllShots();
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no - op */
+            }
         });
     }
 
@@ -132,6 +136,10 @@ public class AllShotsPresenter implements Presenter {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadAllShots();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no - op */
             }
         });
 
