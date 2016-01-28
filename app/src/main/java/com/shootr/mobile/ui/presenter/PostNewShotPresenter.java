@@ -265,19 +265,21 @@ public class PostNewShotPresenter implements Presenter {
         this.words = words;
         this.wordPosition = wordPosition;
         String extractedUsername = username.substring(1);
-        getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                List<UserModel> mentionSuggestions = userModelMapper.transform(users);
-                if (!mentionSuggestions.isEmpty()) {
-                    postNewShotView.showMentionSuggestions();
-                    postNewShotView.hideImageContainer();
-                    postNewShotView.renderMentionSuggestions(mentionSuggestions);
-                } else {
-                    postNewShotView.hideMentionSuggestions();
-                    showImage();
+        if (extractedUsername.length()>=1) {
+            getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    List<UserModel> mentionSuggestions = userModelMapper.transform(users);
+                    if (!mentionSuggestions.isEmpty()) {
+                        postNewShotView.showMentionSuggestions();
+                        postNewShotView.hideImageContainer();
+                        postNewShotView.renderMentionSuggestions(mentionSuggestions);
+                    } else {
+                        postNewShotView.hideMentionSuggestions();
+                        showImage();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void onMentionClicked(UserModel user) {

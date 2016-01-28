@@ -190,14 +190,19 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         String[] words = input.split(SPACE);
 
         Integer wordPosition = 0;
+        Integer characterPosition = 0;
 
         if(input.length() > 0 && !input.endsWith(SPACE)) {
             for (String word : words) {
+                characterPosition += word.length();
                 Matcher matcher = pattern.matcher(word);
                 if (matcher.find()) {
                     Pattern wordPattern = Pattern.compile(word + " ");
                     Matcher wordMatcher = wordPattern.matcher(input);
                     if (!wordMatcher.find()) {
+                        presenter.autocompleteMention(word, words, wordPosition);
+                    }
+                    if (editTextView.getSelectionEnd() == characterPosition) {
                         presenter.autocompleteMention(word, words, wordPosition);
                     }
                     if (word.equals("@")) {
@@ -210,6 +215,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
                         presenter.onStopMentioning();
                     }
                 }
+                characterPosition++;
                 wordPosition++;
             }
         } else if (input.length() <= 0) {
@@ -221,9 +227,14 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
                     presenter.autocompleteMention(word, words, wordPosition);
                 }
             } else {
-                presenter.onStopMentioning();
+                String word = words[wordPosition];
+                Matcher matcher = pattern.matcher(word);
+                if (matcher.find() && editTextView.getSelectionEnd() != input.length()) {
+                    presenter.autocompleteMention(word, words, wordPosition);
+                } else {
+                    presenter.onStopMentioning();
+                }
             }
-
         }
     }
 
