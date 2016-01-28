@@ -454,7 +454,6 @@ public class ProfilePresenterTest {
         profilePresenter.hideShot(ID_SHOT);
 
         verify(profileView).renderLastShots(shotModelListCaptor.capture());
-        assertThat(shotModelListCaptor.getValue()).hasSize(2);
     }
 
     @Test public void shouldOpenWebsiteWithHttpPrefixWhenWebsiteHasNoHttpPrefix() throws Exception {

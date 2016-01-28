@@ -5,6 +5,7 @@ import com.shootr.mobile.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ShotApiService;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.domain.ShotType;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {
 
+    public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
 
@@ -193,5 +195,10 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
+    }
+
+    @Override
+    public List<ShotEntity> getEntitiesNotSynchronized() {
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 }

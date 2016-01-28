@@ -45,14 +45,14 @@ public class ShotManager extends AbstractManager {
     }
 
     public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
-        String whereSelection = ShotTable.ID_USER + " = ? and "+ShotTable.PROFILE_HIDDEN+" IS NULL";
+        String whereSelection = ShotTable.ID_USER + " = ? and " + ShotTable.PROFILE_HIDDEN + " IS NULL";
         String[] whereArguments = new String[] { idUser };
 
         return readShots(whereSelection, whereArguments, String.valueOf(limit));
     }
 
     public List<ShotEntity> getAllShotsFromUser(String idUser) {
-        String whereSelection = ShotTable.ID_USER + " = ? and "+ShotTable.PROFILE_HIDDEN+" IS NULL";
+        String whereSelection = ShotTable.ID_USER + " = ? and " + ShotTable.PROFILE_HIDDEN + " IS NULL";
         String[] whereArguments = new String[] { idUser };
 
         return readShots(whereSelection, whereArguments);
@@ -198,13 +198,27 @@ public class ShotManager extends AbstractManager {
         SQLiteDatabase database = getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues(1);
-            contentValues.put(ShotTable.PROFILE_HIDDEN, "1");
+            contentValues.put(ShotTable.PROFILE_HIDDEN, 1);
             String where = ShotTable.ID_SHOT + "=?";
             String[] whereArgs = new String[] {idShot};
-            database.update(SHOT_TABLE,contentValues, where,whereArgs);
+            database.update(SHOT_TABLE, contentValues, where, whereArgs);
 
         } finally {
            database.close();
         }
+    }
+
+    public List<ShotEntity> getHiddenShotNotSynchronized() {
+        List<ShotEntity> shotsToUpdate = new ArrayList<>();
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
+        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION,args,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                shotsToUpdate.add(shotEntityMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return shotsToUpdate;
     }
 }

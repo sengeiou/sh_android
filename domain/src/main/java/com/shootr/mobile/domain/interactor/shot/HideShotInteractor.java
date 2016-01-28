@@ -37,7 +37,6 @@ public class HideShotInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            hideShotInLocal();
             sendHideShotToServer();
         } catch (ServerCommunicationException e) {
             /* Ignore error and notify callback */
@@ -45,20 +44,8 @@ public class HideShotInteractor implements Interactor {
         notifyCompleted();
     }
 
-    private void hideShotInLocal() throws Exception {
-        try {
-            localShotRepository.hideShot(idShot);
-        } catch (ShotNotFoundException error) {
-            /* swallow */
-        }
-    }
-
     private void sendHideShotToServer(){
-        try {
-            remoteShotRepository.hideShot(idShot);
-        } catch (ShootrException e) {
-            /* swallow */
-        }
+        remoteShotRepository.hideShot(idShot);
     }
 
     private void notifyCompleted() {
