@@ -193,47 +193,54 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         Integer characterPosition = 0;
 
         if(input.length() > 0 && !input.endsWith(SPACE)) {
-            for (String word : words) {
-                characterPosition += word.length();
-                Matcher matcher = pattern.matcher(word);
-                if (matcher.find()) {
-                    Pattern wordPattern = Pattern.compile(word + " ");
-                    Matcher wordMatcher = wordPattern.matcher(input);
-                    if (!wordMatcher.find()) {
-                        presenter.autocompleteMention(word, words, wordPosition);
-                    }
-                    if (editTextView.getSelectionEnd() == characterPosition) {
-                        presenter.autocompleteMention(word, words, wordPosition);
-                    }
-                    if (word.equals("@")) {
-                        presenter.autocompleteMention(word, words, wordPosition);
-                    }
-                } else {
-                    if (wordPosition == 0 && word.equals("@")) {
-                        presenter.autocompleteMention(word, words, wordPosition);
-                    } else {
-                        presenter.onStopMentioning();
-                    }
-                }
-                characterPosition++;
-                wordPosition++;
-            }
+            autocompleteWhenInputEndsWithoutSpace(pattern, input, words, wordPosition, characterPosition);
         } else if (input.length() <= 0) {
             presenter.onStopMentioning();
         } else if (input.endsWith(SPACE)) {
-            if (words.length == 1) {
-                String word = words[wordPosition];
-                if (word.equals("@")) {
-                    presenter.autocompleteMention(word, words, wordPosition);
-                }
+            autocompleteWhenInputEndsWithSpace(pattern, input, words, wordPosition);
+        }
+    }
+
+    public void autocompleteWhenInputEndsWithoutSpace(Pattern pattern, String input, String[] words,
+      Integer wordPosition, Integer characterPosition) {
+        for (String word : words) {
+            characterPosition += word.length();
+            Matcher matcher = pattern.matcher(word);
+            if (matcher.find()) {
+                autocompleteIfNoMentionedBefore(input, words, wordPosition, word);
+                autocompleteIfWritingUsername(words, wordPosition, characterPosition, word);
             } else {
-                String word = words[wordPosition];
-                Matcher matcher = pattern.matcher(word);
-                if (matcher.find() && editTextView.getSelectionEnd() != input.length()) {
-                    presenter.autocompleteMention(word, words, wordPosition);
-                } else {
-                    presenter.onStopMentioning();
-                }
+                presenter.onStopMentioning();
+            }
+            characterPosition++;
+            wordPosition++;
+        }
+    }
+
+    public void autocompleteIfWritingUsername(String[] words, Integer wordPosition, Integer characterPosition,
+      String word) {
+        if (editTextView.getSelectionEnd() == characterPosition) {
+            presenter.autocompleteMention(word, words, wordPosition);
+        }
+    }
+
+    public void autocompleteIfNoMentionedBefore(String input, String[] words, Integer wordPosition, String word) {
+        Pattern wordPattern = Pattern.compile(word + SPACE);
+        Matcher wordMatcher = wordPattern.matcher(input);
+        if (!wordMatcher.find()) {
+            presenter.autocompleteMention(word, words, wordPosition);
+        }
+    }
+
+    public void autocompleteWhenInputEndsWithSpace(Pattern pattern, String input, String[] words,
+      Integer wordPosition) {
+        if (words.length >= 1) {
+            String word = words[wordPosition];
+            Matcher matcher = pattern.matcher(word);
+            if (matcher.find() && editTextView.getSelectionEnd() != input.length()) {
+                presenter.autocompleteMention(word, words, wordPosition);
+            } else {
+                presenter.onStopMentioning();
             }
         }
     }
