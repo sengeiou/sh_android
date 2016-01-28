@@ -132,7 +132,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     private void checkIfEndOfListVisible() {
         int lastItemPosition = listView.getAdapter().getCount() - 1;
         int lastVisiblePosition = listView.getLastVisiblePosition();
-        if (lastItemPosition == lastVisiblePosition) {
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
             presenter.showingLastShot(adapter.getLastShot());
         }
     }
