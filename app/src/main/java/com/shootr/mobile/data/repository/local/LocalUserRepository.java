@@ -101,6 +101,10 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
+    @Override public List<User> getUsersForMention(String idUser) {
+        return transformUserEntitiesForPeople(localUserDataSource.getUsersForMentions(idUser));
+    }
+
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();

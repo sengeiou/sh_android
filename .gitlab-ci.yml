@@ -1,4 +1,4 @@
-image: sloydev/android-env:23.1
+image: sloydev/android-env:23.2
 
 before_script:
 

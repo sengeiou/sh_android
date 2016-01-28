@@ -157,7 +157,7 @@
     <string name="new_activity_notification">Nueva actividad</string>
     <string name="new_password_again_hint">Nueva contraseña otra vez</string>
     <string name="new_password_hint">Nueva contraseña</string>
-    <string name="new_shot_discard_message">¿Descartar foto?</string>
+    <string name="new_shot_discard_message">¿Descartar shot?</string>
     <string name="new_shot_placeholder">Escribe algo…</string>
     <string name="new_shot_repeated">Whoops! Ya has publicado eso</string>
     <string name="new_stream_description_label">Descripción</string>
