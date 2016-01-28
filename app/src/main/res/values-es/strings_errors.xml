@@ -28,7 +28,6 @@
     <!-- Event -->
     <string name="error_message_event_title_too_short">Debe tener al menos 3 caracteres</string>
     <string name="error_message_event_title_too_long">El titulo puede tener hasta 50 caracteres</string>
-    <string name="error_message_event_start_date_too_late">No puede empezar dentro de más de un año</string>
     <string name="error_image_upload">Error subiendo la imagen</string>
     <string name="error_message_update_required">La versión actual es demasiado antigua</string>
 
