@@ -155,16 +155,16 @@ public class ProfilePresenterTest {
 
     @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
         setupUserById();
-        setupLatestShotCallbacks(shotList(4));
+        setupLatestShotCallbacks(shotList(11));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView).showAllShotsButton();
     }
 
-    @Test public void shouldHideAllShotsIfUserHaveThreeLatestShots() throws Exception {
+    @Test public void shouldHideAllShotsIfUserHaveTenLatestShots() throws Exception {
         setupUserById();
-        setupLatestShotCallbacks(shotList(3));
+        setupLatestShotCallbacks(shotList(10));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
@@ -415,24 +415,24 @@ public class ProfilePresenterTest {
         verify(profileView).hideLatestShotsEmpty();
     }
 
-    @Test public void shouldShowThreeLatestShotsWhenReceivedFour() throws Exception {
+    @Test public void shouldShowTenLatestShotsWhenReceivedEleven() throws Exception {
         setupUserById();
-        setupLatestShotCallbacks(shotList(4));
+        setupLatestShotCallbacks(shotList(11));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView).renderLastShots(shotModelListCaptor.capture());
-        assertThat(shotModelListCaptor.getValue()).hasSize(3);
+        assertThat(shotModelListCaptor.getValue()).hasSize(10);
     }
 
-    @Test public void shouldShowThreeLatestShotsWhenReceivedThree() throws Exception {
+    @Test public void shouldShowTenLatestShotsWhenReceivedTen() throws Exception {
         setupUserById();
-        setupLatestShotCallbacks(shotList(3));
+        setupLatestShotCallbacks(shotList(10));
 
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
 
         verify(profileView).renderLastShots(shotModelListCaptor.capture());
-        assertThat(shotModelListCaptor.getValue()).hasSize(3);
+        assertThat(shotModelListCaptor.getValue()).hasSize(10);
     }
 
     @Test public void shouldShowTwoLatestShotsWhenReceivedTwo() throws Exception {

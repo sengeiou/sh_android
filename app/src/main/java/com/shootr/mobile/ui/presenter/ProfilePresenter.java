@@ -35,8 +35,8 @@ import rx.Subscriber;
 
 public class ProfilePresenter implements Presenter {
 
-    public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 4;
-    public static final int MAX_SHOTS_SHOWN = 3;
+    public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 11;
+    public static final int MAX_SHOTS_SHOWN = 10;
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
