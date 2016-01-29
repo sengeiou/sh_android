@@ -261,6 +261,19 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         /* no-op */
     }
 
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        getBaseContextMenu(shotModel)
+          .addAction(R.string.report_context_menu_delete, new Runnable() {
+              @Override public void run() {
+                  openDeleteConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+
+    }
+
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
     }
@@ -352,7 +365,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenu(shotModel)
           .addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {

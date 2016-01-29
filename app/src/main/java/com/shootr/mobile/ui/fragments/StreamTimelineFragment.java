@@ -599,6 +599,19 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
     }
 
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+        builder.addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        adapter.onPinnedShot(shotModel);
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
@@ -696,7 +709,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
         builder.addAction(com.shootr.mobile.R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {

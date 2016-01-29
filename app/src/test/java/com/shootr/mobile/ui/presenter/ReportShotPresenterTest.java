@@ -103,7 +103,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(shotModel(), ID_USER);
 
-        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -111,7 +111,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(anotherUserShot(), ANOTHER_ID_USER);
 
-        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldNotShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -119,7 +119,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(shotModel(), ID_USER);
 
-        verify(reportShotView, never()).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView, never()).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldShowBanSuccessfullyWhenBanConfirmed() throws Exception {

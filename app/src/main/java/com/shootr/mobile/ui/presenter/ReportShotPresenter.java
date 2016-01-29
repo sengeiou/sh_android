@@ -79,7 +79,11 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(final ShotModel shotModel) {
         if (currentUserIsShotAuthor(shotModel)) {
-            reportShotView.showHolderContextMenu(shotModel);
+            if (shotModel.getHide() != null && shotModel.getHide() != 0L) {
+                reportShotView.showHolderContextMenuWithPin(shotModel);
+            } else {
+                reportShotView.showHolderContextMenuWithoutPin(shotModel);
+            }
         } else {
             handleBlockContextMenu(shotModel);
         }
@@ -87,7 +91,7 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
         if (currentUserIsStreamHolder(streamAuthorIdUser)) {
-            reportShotView.showHolderContextMenu(shot);
+            reportShotView.showHolderContextMenuWithPin(shot);
         } else {
             onShotLongPressed(shot);
         }
@@ -236,10 +240,11 @@ public class ReportShotPresenter implements Presenter {
     }
 
 
-    public void pinToProfile(ShotModel shotModel) {
+    public void pinToProfile(final ShotModel shotModel) {
         pinToProfileInteractor.hideShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                /* no-op */
+                shotModel.setHide(0L);
+                reportShotView.notifyPinnedShot(shotModel);
             }
         });
     }

@@ -899,7 +899,7 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
@@ -949,6 +949,19 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserUnbanned() {
         feedbackMessage.show(getView(), R.string.user_unbanned);
+    }
+
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
+          new Runnable() {
+              @Override public void run() {
+                  openDeleteShotConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

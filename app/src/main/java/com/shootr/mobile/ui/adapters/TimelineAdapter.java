@@ -175,4 +175,16 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     public void setIsCurrentUser(boolean isCurrentUser) {
         this.isCurrentUser = isCurrentUser;
     }
+
+    public void onPinnedShot(ShotModel shotModel) {
+        List<ShotModel> shotModels = new ArrayList<>();
+        for (ShotModel shot : shots) {
+            if (shotModel.getIdShot().equals(shot.getIdShot())) {
+                shotModels.add(shotModel);
+            } else {
+                shotModels.add(shot);
+            }
+        }
+        this.shots = shotModels;
+    }
 }

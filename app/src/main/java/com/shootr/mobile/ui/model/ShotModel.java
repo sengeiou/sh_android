@@ -28,6 +28,8 @@ public class ShotModel implements Serializable{
     private Integer niceCount;
     private Boolean isMarkedAsNice;
 
+    private Long hide;
+
     public String getIdShot() {
         return idShot;
     }
@@ -170,5 +172,13 @@ public class ShotModel implements Serializable{
 
     public void setStreamId(String streamId) {
         this.streamId = streamId;
+    }
+
+    public Long getHide() {
+        return hide;
+    }
+
+    public void setHide(Long hide) {
+        this.hide = hide;
     }
 }
