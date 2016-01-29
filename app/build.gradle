@@ -55,7 +55,6 @@ android {
         versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
         archivesBaseName = "Shootr-" + versionName
 
-        resConfigs "es", "en"
         resConfigs "hdpi", "xhdpi", "xxhdpi"
 
         multiDexEnabled true

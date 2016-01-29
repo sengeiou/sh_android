@@ -211,7 +211,7 @@
   <string name="profile_listing_number">0</string>
   <string name="profile_logout">Finalizar sessão</string>
   <string name="profile_marks_followers">seguidores</string>
-  <string name="profile_marks_following">Seguindo</string>
+  <string name="profile_marks_following">seguindo</string>
   <string name="profile_support">Suporte</string>
   <string name="profile_updated">Perfil atualizado</string>
   <string name="registration_create_button_text">Criar conta</string>
