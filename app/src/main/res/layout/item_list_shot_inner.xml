@@ -136,12 +136,13 @@
     android:gravity="center|bottom|right"
     android:visibility="visible">
 
-    <ImageView
-      android:layout_height="@dimen/hide_button_size"
-      android:layout_width="@dimen/hide_button_size"
-      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+    <ImageView android:id="@+id/stream_remove"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:background="?selectableItemBackgroundBorderless"
-      />
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:layout_gravity="right|bottom"
+      android:layout_marginRight="-4dp" />
 
   </LinearLayout>
 
