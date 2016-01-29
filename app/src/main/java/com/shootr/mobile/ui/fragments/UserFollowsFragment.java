@@ -227,6 +227,12 @@ public class UserFollowsFragment extends BaseFragment
     @Override public void showProgressView() {
         isFooterLoading = true;
         userList.addFooterView(progressView, null, false);
+        setupUserListAfterAddFooter();
+    }
+
+    public void setupUserListAfterAddFooter(){
+        userList.setAdapter(getAdapter());
+        userList.setSelection(getAdapter().getCount()-1);
     }
 
     @Override public void hideProgressView() {
