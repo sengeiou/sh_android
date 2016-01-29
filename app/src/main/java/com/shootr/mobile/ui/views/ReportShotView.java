@@ -35,4 +35,6 @@ public interface ReportShotView {
     void showHolderContextMenuWithoutPin(ShotModel shotModel);
 
     void notifyPinnedShot(ShotModel shotModel);
+
+    void showPinned();
 }

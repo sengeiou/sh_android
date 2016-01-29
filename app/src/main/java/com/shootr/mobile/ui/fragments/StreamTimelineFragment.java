@@ -612,6 +612,10 @@ public class StreamTimelineFragment extends BaseFragment
         adapter.onPinnedShot(shotModel);
     }
 
+    @Override public void showPinned() {
+        feedbackMessage.show(getView(), R.string.shot_pinned);
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
@@ -710,14 +714,26 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(com.shootr.mobile.R.string.report_context_menu_delete, new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(R.string.menu_pin_shot, new Runnable() {
+              @Override public void run() {
+                  reportShotPresenter.pinToProfile(shotModel);
+              }
+          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+            @Override public void run() {
+                streamTimelinePresenter.shareShot(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShotIntent(shotModel);
+            }
+        }).addAction(R.string.menu_copy_text, new Runnable() {
+            @Override public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {
                 openDeleteConfirmation(shotModel);
-            }
-        }).addAction(R.string.menu_pin_shot, new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.pinToProfile(shotModel);
             }
         }).show();
     }

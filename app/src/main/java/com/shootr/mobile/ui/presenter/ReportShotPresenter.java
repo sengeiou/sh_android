@@ -245,6 +245,7 @@ public class ReportShotPresenter implements Presenter {
             @Override public void onCompleted() {
                 shotModel.setHide(0L);
                 reportShotView.notifyPinnedShot(shotModel);
+                reportShotView.showPinned();
             }
         });
     }

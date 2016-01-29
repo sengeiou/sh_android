@@ -961,7 +961,11 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void notifyPinnedShot(ShotModel shotModel) {
+        /* no-op */
+    }
 
+    @Override public void showPinned() {
+        /* no-op */
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
