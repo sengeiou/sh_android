@@ -733,6 +733,10 @@ public class StreamTimelineFragment extends BaseFragment
             @Override public void run() {
                 copyShotCommentToClipboard(shotModel);
             }
+        }).addAction(R.string.menu_pin_shot, new Runnable() {
+            @Override public void run() {
+                //TODO call presenter
+            }
         });
     }
 
