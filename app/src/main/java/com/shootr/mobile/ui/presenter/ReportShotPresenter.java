@@ -232,6 +232,10 @@ public class ReportShotPresenter implements Presenter {
     }
 
 
+    public void pinToProfile(ShotModel shotModel) {
+        //TODO call interactor
+    }
+
     @Override public void resume() {
         /* no-op */
     }

@@ -704,8 +704,7 @@ public class StreamTimelineFragment extends BaseFragment
             }
         }).addAction(R.string.menu_pin_shot, new Runnable() {
             @Override public void run() {
-                //TODO call
-
+                reportShotPresenter.pinToProfile(shotModel);
             }
         }).show();
     }
