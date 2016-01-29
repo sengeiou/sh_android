@@ -4,7 +4,6 @@
 
     <!-- Image upload -->
     <string name="error_message_invalid_image">Invalid image</string>
-    <string name="error_message_invalid_session_token">Invalid credentials</string>
 
     <!-- Profile: Username -->
     <string name="error_message_username_duplicate">Username already taken</string>
@@ -25,12 +24,10 @@
     <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
     <string name="error_message_search_too_short">3 or more characters required</string>
 
-    <!-- Event -->
-    <string name="error_message_event_title_too_short">3 or more characters required</string>
-    <string name="error_message_event_title_too_long">Must not have more than 50 characters</string>
-    <string name="error_message_event_start_date_too_late">Can\'t start more than a year ahead</string>
+    <!-- Stream -->
+    <string name="error_message_stream_title_too_short">3 or more characters required</string>
+    <string name="error_message_stream_title_too_long">Must not have more than 50 characters</string>
     <string name="error_image_upload">Error trying to upload image</string>
-    <string name="error_message_update_required">Current version too old</string>
 
     <!-- Create account -->
     <string name="error_message_registration_username_duplicated">Username already in use</string>

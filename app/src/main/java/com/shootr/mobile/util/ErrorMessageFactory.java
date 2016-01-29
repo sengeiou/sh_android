@@ -35,7 +35,6 @@ public class ErrorMessageFactory {
         codeResourceMap = new HashMap<>();
         codeResourceMap.put(ShootrError.ERROR_CODE_UNKNOWN_ERROR, RESOURCE_ERROR_UNKNOWN);
         codeResourceMap.put(ShootrError.ERROR_CODE_INVALID_IMAGE, R.string.error_message_invalid_image);
-        codeResourceMap.put(ShootrError.ERROR_CODE_INVALID_SESSION_TOKEN, R.string.error_message_invalid_session_token);
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_DUPLICATE, R.string.error_message_username_duplicate);
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_NULL, R.string.error_message_username_empty);
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, R.string.error_message_username_short);
@@ -48,10 +47,8 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_SHOT_TEXT_DUPLICATED, R.string.new_shot_repeated);
         codeResourceMap.put(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT, R.string.error_message_search_too_short);
-        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, R.string.error_message_event_title_too_short);
-        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, R.string.error_message_event_title_too_long);
-        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_START_DATE_TOO_LATE, R.string.error_message_event_start_date_too_late);
-        codeResourceMap.put(ShootrError.ERROR_CODE_UPDATE_REQUIRED, R.string.error_message_update_required);
+        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, R.string.error_message_stream_title_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, R.string.error_message_stream_title_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE, R.string.error_message_registration_username_duplicated);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL, R.string.error_message_registration_username_empty);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT, R.string.error_message_registration_username_too_short);
