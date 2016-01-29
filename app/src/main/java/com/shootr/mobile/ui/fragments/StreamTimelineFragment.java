@@ -702,6 +702,11 @@ public class StreamTimelineFragment extends BaseFragment
             @Override public void run() {
                 openDeleteConfirmation(shotModel);
             }
+        }).addAction(R.string.menu_pin_shot, new Runnable() {
+            @Override public void run() {
+                //TODO call
+
+            }
         }).show();
     }
 
@@ -732,10 +737,6 @@ public class StreamTimelineFragment extends BaseFragment
         }).addAction(R.string.menu_copy_text, new Runnable() {
             @Override public void run() {
                 copyShotCommentToClipboard(shotModel);
-            }
-        }).addAction(R.string.menu_pin_shot, new Runnable() {
-            @Override public void run() {
-                //TODO call presenter
             }
         });
     }
