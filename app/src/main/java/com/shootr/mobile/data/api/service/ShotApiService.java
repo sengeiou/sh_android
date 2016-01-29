@@ -64,4 +64,7 @@ public interface ShotApiService {
 
     @PUT("/shot/{idShot}/hide")
     Response hideShot(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shot/{idShot}/hide")
+    Response pinShot(@Path("idShot") String idShot) throws ApiException, IOException;
 }

@@ -88,4 +88,8 @@ public class LocalShotRepository implements ShotRepository {
     @Override public void hideShot(String idShot, Long timestamp) {
         localShotDataSource.hideShot(idShot, timestamp);
     }
+
+    @Override public void pinShot(String idShot) {
+
+    }
 }

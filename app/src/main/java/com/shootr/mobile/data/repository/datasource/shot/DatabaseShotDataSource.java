@@ -94,6 +94,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
         shotManager.hideShot(idShot,timeStamp);
     }
 
+    @Override public void pinShot(String idShot) {
+        shotManager.pinShot(idShot);
+    }
+
     @Override public List<ShotEntity> getEntitiesNotSynchronized() {
         return shotManager.getHiddenShotNotSynchronized();
     }

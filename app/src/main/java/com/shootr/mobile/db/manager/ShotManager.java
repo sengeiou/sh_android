@@ -221,4 +221,18 @@ public class ShotManager extends AbstractManager {
         c.close();
         return shotsToUpdate;
     }
+
+    public void pinShot(String idShot) {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            ContentValues contentValues = new ContentValues(1);
+            contentValues.put(ShotTable.PROFILE_HIDDEN, "NULL");
+            String where = ShotTable.ID_SHOT + "=?";
+            String[] whereArgs = new String[] {idShot};
+            database.update(SHOT_TABLE, contentValues, where, whereArgs);
+
+        } finally {
+            database.close();
+        }
+    }
 }

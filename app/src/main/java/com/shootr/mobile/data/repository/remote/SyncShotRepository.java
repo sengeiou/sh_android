@@ -122,6 +122,10 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
         }
     }
 
+    @Override public void pinShot(String idShot) {
+        remoteShotDataSource.pinShot(idShot);
+    }
+
     @Override public void dispatchSync() {
         List<ShotEntity> pendingEntities = localShotDataSource.getEntitiesNotSynchronized();
         for (ShotEntity entity : pendingEntities) {

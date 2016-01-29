@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.PinToProfileInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -31,6 +32,7 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
+    private final PinToProfileInteractor pinToProfileInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
@@ -39,7 +41,8 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
+      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
+      PinToProfileInteractor pinToProfileInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -50,6 +53,7 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
+        this.pinToProfileInteractor = pinToProfileInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -233,7 +237,11 @@ public class ReportShotPresenter implements Presenter {
 
 
     public void pinToProfile(ShotModel shotModel) {
-        //TODO call interactor
+        pinToProfileInteractor.hideShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        });
     }
 
     @Override public void resume() {
