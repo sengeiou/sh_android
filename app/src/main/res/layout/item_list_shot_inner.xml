@@ -123,6 +123,27 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_below="@+id/shot_media_content"
-    android:layout_marginTop="@dimen/nice_button_margin_top_normal" />
+    android:layout_marginTop="@dimen/nice_button_margin_top_normal"
+    android:visibility="gone"/>
+
+  <LinearLayout android:id="@+id/shot_hide_button"
+    android:layout_width="@dimen/hide_button_container_size"
+    android:layout_height="@dimen/hide_button_container_size"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/shot_media_content"
+    android:layout_marginTop="@dimen/nice_button_margin_top_normal"
+    android:gravity="center|bottom|right"
+    android:visibility="visible">
+
+    <ImageView android:id="@+id/stream_remove"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:layout_gravity="right|bottom"
+      android:layout_marginRight="-4dp" />
+
+  </LinearLayout>
 
 </RelativeLayout>

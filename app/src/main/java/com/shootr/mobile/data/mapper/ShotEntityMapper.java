@@ -58,6 +58,8 @@ public class ShotEntityMapper {
         shot.setNiceCount(shotEntity.getNiceCount());
         shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
 
+        shot.setProfileHidden(shotEntity.getProfileHidden());
+
         shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
 
         return shot;
@@ -109,6 +111,8 @@ public class ShotEntityMapper {
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
         shotEntity.setNiceCount(shot.getNiceCount());
+
+        shotEntity.setProfileHidden(shot.getProfileHidden());
 
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
 

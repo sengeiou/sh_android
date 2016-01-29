@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -41,6 +42,7 @@ public class ProfilePresenter implements Presenter {
     private final LogoutInteractor logoutInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    private final HideShotInteractor hideShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
@@ -65,9 +67,8 @@ public class ProfilePresenter implements Presenter {
     private int hadleBlockMenuCalls;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
-      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
+      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      HideShotInteractor hideShotInteractor,ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
       GetBannedUsersInteractor getBannedUsersInteractor, SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
@@ -89,6 +90,7 @@ public class ProfilePresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
+        this.hideShotInteractor=hideShotInteractor;
     }
 
     protected void setView(ProfileView profileView) {
@@ -130,6 +132,7 @@ public class ProfilePresenter implements Presenter {
         profileView.showListing();
         renderStreamsNumber();
         profileView.setupAnalytics(isCurrentUser);
+        profileView.resetTimelineAdapter();
     }
 
     private void renderStreamsNumber() {
@@ -550,5 +553,17 @@ public class ProfilePresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public void hideShot(String idShot) {
+        hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadLatestShots(userModel.getIdUser());
+            }
+        });
+    }
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
     }
 }

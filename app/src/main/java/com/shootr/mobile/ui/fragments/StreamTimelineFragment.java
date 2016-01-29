@@ -360,7 +360,7 @@ public class StreamTimelineFragment extends BaseFragment
               public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
-          });
+          },null,false);
 
         listView.setAdapter(adapter);
     }
@@ -599,6 +599,23 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
     }
 
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+        builder.addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        adapter.onPinnedShot(shotModel);
+    }
+
+    @Override public void showPinned() {
+        feedbackMessage.show(getView(), R.string.shot_pinned);
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
@@ -696,9 +713,25 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(com.shootr.mobile.R.string.report_context_menu_delete, new Runnable() {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(R.string.menu_pin_shot, new Runnable() {
+              @Override public void run() {
+                  reportShotPresenter.pinToProfile(shotModel);
+              }
+          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+            @Override public void run() {
+                streamTimelinePresenter.shareShot(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShotIntent(shotModel);
+            }
+        }).addAction(R.string.menu_copy_text, new Runnable() {
+            @Override public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {
                 openDeleteConfirmation(shotModel);
             }

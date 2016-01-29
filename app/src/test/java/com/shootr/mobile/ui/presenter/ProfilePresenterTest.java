@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
@@ -59,11 +60,13 @@ public class ProfilePresenterTest {
     private static final String WEBSITE_HTTP_PREFIX = "http://website";
     private static final String WEBSITE_HTTPS_PREFIX = "https://website";
     public static final String PHOTO_PATH = "photoPath";
+    private static final String ID_SHOT ="id_shot" ;
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock HideShotInteractor hideShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
     @Mock FollowInteractor followInteractor;
     @Mock UnfollowInteractor unfollowInteractor;
@@ -92,6 +95,7 @@ public class ProfilePresenterTest {
           logoutInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
+          hideShotInteractor,
           shareShotInteractor,
           followInteractor,
           unfollowInteractor,
@@ -439,6 +443,17 @@ public class ProfilePresenterTest {
 
         verify(profileView).renderLastShots(shotModelListCaptor.capture());
         assertThat(shotModelListCaptor.getValue()).hasSize(2);
+    }
+
+    @Test public void shouldShowLatestShotsWhenMarkHideShot() throws Exception {
+        setupUserById();
+        profilePresenter.setUserModel(userModel());
+        setupHideShotInteractorCallback();
+        setupLatestShotCallbacks(shotList(2));
+
+        profilePresenter.hideShot(ID_SHOT);
+
+        verify(profileView).renderLastShots(shotModelListCaptor.capture());
     }
 
     @Test public void shouldOpenWebsiteWithHttpPrefixWhenWebsiteHasNoHttpPrefix() throws Exception {
@@ -1085,6 +1100,21 @@ public class ProfilePresenterTest {
         user.setCreatedStreamsCount((long) createdCount);
         user.setFavoritedStreamsCount((long) favoritedCount);
         return user;
+    }
+
+    private UserModel userModel(){
+        return new UserModel();
+    }
+
+    private void setupHideShotInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(hideShotInteractor)
+          .hideShot(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private void setupLatestShotCallbacks(final List<Shot> result) {

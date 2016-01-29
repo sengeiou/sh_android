@@ -47,6 +47,7 @@ import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -221,6 +222,12 @@ public class ProfileFragment extends BaseFragment
                 profilePresenter.unmarkNiceShot(idShot);
             }
         };
+
+        OnHideClickListener onHideClickListener= new OnHideClickListener() {
+            @Override public void onHideClick(String idSHot) {
+                profilePresenter.hideShot(idSHot);
+            }
+        };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
             @Override public void onUserClick(String idUser) {
@@ -231,8 +238,8 @@ public class ProfileFragment extends BaseFragment
 
         latestsShotsAdapter =
           new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener, videoClickListener, onNiceShotListener,
-            onUsernameClickListener){
+            imageLoader, timeUtils, avatarClickListener, videoClickListener,onNiceShotListener,
+            onUsernameClickListener, onHideClickListener,profilePresenter.isCurrentUser()){
               @Override protected boolean shouldShowShortTitle() {
                   return true;
               }
@@ -248,6 +255,11 @@ public class ProfileFragment extends BaseFragment
                 reportShotPresenter.onShotLongPressed(shot);
             }
         });
+    }
+
+    @Override public void resetTimelineAdapter(){
+        latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
+        latestsShotsAdapter.notifyDataSetChanged();
     }
 
     private void initializePresenter() {
@@ -767,7 +779,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToAllShots(String idUser) {
-        startActivity(AllShotsActivity.newIntent(getActivity(), idUser));
+        startActivity(AllShotsActivity.newIntent(getActivity(), idUser, profilePresenter.isCurrentUser()));
     }
 
     @Override public void showLatestShots() {
@@ -887,7 +899,7 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
@@ -937,6 +949,23 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserUnbanned() {
         feedbackMessage.show(getView(), R.string.user_unbanned);
+    }
+
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
+          new Runnable() {
+              @Override public void run() {
+                  openDeleteShotConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void showPinned() {
+        /* no-op */
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

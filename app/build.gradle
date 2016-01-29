@@ -35,7 +35,7 @@ def versionRevision = 1
 
 def isSnapshot = true
 def isPreProduction = false
-def databaseVersion = 20
+def databaseVersion = 21
 
 android {
     compileSdkVersion 23

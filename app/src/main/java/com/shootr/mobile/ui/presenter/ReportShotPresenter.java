@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.PinToProfileInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -31,6 +32,7 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
+    private final PinToProfileInteractor pinToProfileInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
@@ -39,7 +41,8 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
+      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
+      PinToProfileInteractor pinToProfileInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -50,6 +53,7 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
+        this.pinToProfileInteractor = pinToProfileInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -75,7 +79,11 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(final ShotModel shotModel) {
         if (currentUserIsShotAuthor(shotModel)) {
-            reportShotView.showHolderContextMenu(shotModel);
+            if (shotModel.getHide() != null && shotModel.getHide() != 0L) {
+                reportShotView.showHolderContextMenuWithPin(shotModel);
+            } else {
+                reportShotView.showHolderContextMenuWithoutPin(shotModel);
+            }
         } else {
             handleBlockContextMenu(shotModel);
         }
@@ -83,7 +91,7 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
         if (currentUserIsStreamHolder(streamAuthorIdUser)) {
-            reportShotView.showHolderContextMenu(shot);
+            reportShotView.showHolderContextMenuWithPin(shot);
         } else {
             onShotLongPressed(shot);
         }
@@ -231,6 +239,16 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
+
+    public void pinToProfile(final ShotModel shotModel) {
+        pinToProfileInteractor.hideShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                shotModel.setHide(0L);
+                reportShotView.notifyPinnedShot(shotModel);
+                reportShotView.showPinned();
+            }
+        });
+    }
 
     @Override public void resume() {
         /* no-op */

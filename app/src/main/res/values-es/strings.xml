@@ -314,4 +314,6 @@
     <string name="multiple_activity_notification">%d notificaciones nuevas</string>
     <string name="multiple_activities_action">VER</string>
     <string name="stream_subtitle">siguiendo a %d</string>
+    <string name="menu_pin_shot">Anclar al perfil</string>
+    <string name="shot_pinned">Anclado</string>
 </resources>

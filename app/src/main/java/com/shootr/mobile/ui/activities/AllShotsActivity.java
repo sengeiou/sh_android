@@ -19,6 +19,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -42,6 +43,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
     private static final String EXTRA_USER = "user";
+    private static final String CURRENT_USER= "current_user";
 
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
@@ -60,9 +62,11 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private View footerProgress;
 
-    public static Intent newIntent(Context context, String userId) {
+
+    public static Intent newIntent(Context context, String userId, Boolean isCurrentUser) {
         Intent intent = new Intent(context, AllShotsActivity.class);
         intent.putExtra(EXTRA_USER, userId);
+        intent.putExtra(CURRENT_USER, isCurrentUser);
         return intent;
     }
 
@@ -82,7 +86,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override protected void initializePresenter() {
         String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
-        presenter.initialize(this, userId);
+        Boolean isCurrentUser = getIntent().getBooleanExtra(CURRENT_USER,false);
+        presenter.initialize(this, userId,isCurrentUser);
         reportShotPresenter.initialize(this);
     }
 
@@ -161,6 +166,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
+        OnHideClickListener onHideClickListener = new OnHideClickListener() {
+            @Override public void onHideClick(String idShot) {
+                presenter.hideShot(idShot);
+            }
+        };
+
         View footerView = LayoutInflater.from(this).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -169,7 +180,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
-          videoClickListener, onNiceShotListener, onUsernameClickListener){
+          videoClickListener,onNiceShotListener, onUsernameClickListener, onHideClickListener,presenter.getIsCurrentUser()){
             @Override protected boolean shouldShowShortTitle() {
                 return true;
             }
@@ -250,6 +261,23 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         /* no-op */
     }
 
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        getBaseContextMenu(shotModel)
+          .addAction(R.string.report_context_menu_delete, new Runnable() {
+              @Override public void run() {
+                  openDeleteConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+
+    }
+
+    @Override public void showPinned() {
+        /* no-op */
+    }
+
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
     }
@@ -263,6 +291,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showShots() {
+        adapter.setIsCurrentUser(presenter.getIsCurrentUser());
+        adapter.notifyDataSetChanged();
         listView.setVisibility(View.VISIBLE);
     }
 
@@ -339,7 +369,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenu(shotModel)
           .addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {

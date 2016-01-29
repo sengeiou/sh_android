@@ -89,4 +89,16 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public void deleteShotsByIdStream(String idStream) {
         shotManager.deleteShotsByIdStream(idStream);
     }
+
+    @Override public void hideShot(String idShot, Long timeStamp) {
+        shotManager.hideShot(idShot,timeStamp);
+    }
+
+    @Override public void pinShot(String idShot) {
+        shotManager.pinShot(idShot);
+    }
+
+    @Override public List<ShotEntity> getEntitiesNotSynchronized() {
+        return shotManager.getHiddenShotNotSynchronized();
+    }
 }

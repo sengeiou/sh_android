@@ -107,4 +107,6 @@ public interface ProfileView {
     void showBlockAndBannedMenu(UserModel userModel);
 
     void confirmUnban(UserModel userModel);
+
+    void resetTimelineAdapter();
 }

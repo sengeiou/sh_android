@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -24,30 +25,33 @@ public class AllShotsPresenter implements Presenter {
     private final ShareShotInteractor shareShotInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final ShotModelMapper shotModelMapper;
+    private final HideShotInteractor hideShotInteractor;
 
     private AllShotsView allShotsView;
     private String userId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
     private boolean hasBeenPaused = false;
+    private Boolean isCurrentUser=false;
 
     @Inject public AllShotsPresenter(GetAllShotsByUserInteractor getAllShotsByUserInteractor,
-      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
+      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor, ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
       ShotModelMapper shotModelMapper) {
         this.getAllShotsByUserInteractor = getAllShotsByUserInteractor;
         this.getOlderAllShotsByUserInteractor = getOlderAllShotsByUserInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+        this.hideShotInteractor= hideShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.shotModelMapper = shotModelMapper;
     }
 
-    public void initialize(AllShotsView allShotsView, String userId) {
+    public void initialize(AllShotsView allShotsView, String userId, Boolean isCurrentUser) {
         this.setView(allShotsView);
         this.setUserId(userId);
         this.startLoadingAllShots();
+        this.isCurrentUser=isCurrentUser;
     }
 
     protected void setUserId(String userId) {
@@ -123,7 +127,7 @@ public class AllShotsPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                /* no-op */
+                /* no - op */
             }
         });
     }
@@ -135,10 +139,18 @@ public class AllShotsPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                /* no-op */
+                /* no - op */
             }
         });
 
+    }
+
+    public void hideShot(String idShot){
+        hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadAllShots();
+            }
+        });
     }
 
     @Override public void resume() {
@@ -161,5 +173,9 @@ public class AllShotsPresenter implements Presenter {
                 allShotsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public Boolean getIsCurrentUser() {
+        return isCurrentUser;
     }
 }

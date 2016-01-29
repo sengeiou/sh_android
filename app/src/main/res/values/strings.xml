@@ -334,4 +334,6 @@
     <string name="multiple_activity_notification">%d new Activity notifications</string>
     <string name="multiple_activities_action">GO</string>
     <string name="stream_subtitle">following %d</string>
+    <string name="menu_pin_shot">Pin to profile</string>
+    <string name="shot_pinned">Pinned</string>
 </resources>

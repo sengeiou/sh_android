@@ -34,4 +34,8 @@ public interface ShotRepository {
     List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
 
     void deleteShotsByStream(String idStream);
+
+    void hideShot(String idShot, Long timestamp);
+
+    void pinShot(String idShot);
 }

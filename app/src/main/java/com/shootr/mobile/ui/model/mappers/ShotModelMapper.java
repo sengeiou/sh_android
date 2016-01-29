@@ -43,6 +43,8 @@ public class ShotModelMapper {
         shotModel.setNiceCount(shot.getNiceCount());
         shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
 
+        shotModel.setHide(shot.getProfileHidden());
+
         return shotModel;
     }
 
