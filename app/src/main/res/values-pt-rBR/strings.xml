@@ -92,7 +92,7 @@
   <string name="edit_stream_listing_context_menu">Editar</string>
   <string name="email_already_registered">Email já registrado</string>
   <string name="email_confirmation_message">Introduza um email válido para proteger sua conta.</string>
-  <string name="email_confirmation_message_content">Clique no link que foi enviado a</string>
+  <string name="email_confirmation_message_content">Clique no link que foi enviado a %s</string>
   <string name="email_confirmation_ok">OK</string>
   <string name="email_confirmation_title">Confirme seu email</string>
   <string name="empty_followings">-</string>
