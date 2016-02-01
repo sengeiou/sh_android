@@ -101,7 +101,7 @@ public class FindStreamsPresenterTest {
     @Test public void shouldNavigateToStreamTimeLineWhenStreamSelected() throws Exception {
         findStreamsPresenter.selectStream(streamResultModel());
 
-        verify(findStreamsView).navigateToStreamTimeline(anyString(), anyString(), anyString());
+        verify(findStreamsView).navigateToStreamTimeline(SELECTED_STREAM_ID,SELECTED_STREAM_SHORT_TITLE,STREAM_AUTHOR_ID);
     }
 
     private void setupSearchStreamInteractorCallbacks(final List<StreamSearchResult> result) {
