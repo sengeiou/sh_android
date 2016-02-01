@@ -23,7 +23,7 @@ public interface FindStreamsView {
 
     void showError(String errorMessage);
 
-    void navigateToStreamTimeline(String idStream, String streamTitle, String authorId);
+    void navigateToStreamTimeline(String idStream, String streamShortTitle, String authorId);
 
     void showAddedToFavorites();
 
