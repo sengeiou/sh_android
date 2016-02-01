@@ -94,7 +94,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
         shotManager.hideShot(idShot,timeStamp);
     }
 
-    @Override public void pinShot(String idShot) {
+    @Override public void unhideShot(String idShot) {
         shotManager.pinShot(idShot);
     }
 

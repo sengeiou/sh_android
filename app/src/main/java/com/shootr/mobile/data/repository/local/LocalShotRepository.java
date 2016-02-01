@@ -90,6 +90,6 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public void unhideShot(String idShot) {
-
+        throw new IllegalArgumentException("No local implementation");
     }
 }
