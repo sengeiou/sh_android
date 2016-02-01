@@ -9,6 +9,8 @@ import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamSearchInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
@@ -23,6 +25,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -31,7 +34,7 @@ import static org.mockito.Mockito.verify;
 public class FindStreamsPresenterTest {
 
     private static final String SELECTED_STREAM_ID = "selected_stream";
-    private static final String SELECTED_STREAM_TITLE = "title";
+    private static final String SELECTED_STREAM_SHORT_TITLE = "short_title";
     private static final String STREAM_AUTHOR_ID = "author";
     public static final String QUERY = "query";
 
@@ -95,6 +98,12 @@ public class FindStreamsPresenterTest {
         verify(findStreamsView, times(1)).showContent();
     }
 
+    @Test public void shouldNavigateToStreamTimeLineWhenStreamSelected() throws Exception {
+        findStreamsPresenter.selectStream(streamResultModel());
+
+        verify(findStreamsView).navigateToStreamTimeline(anyString(), anyString(), anyString());
+    }
+
     private void setupSearchStreamInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -135,10 +144,24 @@ public class FindStreamsPresenterTest {
         return streamSearchResult;
     }
 
+    private StreamResultModel streamResultModel(){
+        StreamResultModel streamResultModel = new StreamResultModel();
+        streamResultModel.setStreamModel(streamModel());
+        return streamResultModel;
+    }
+
+    private StreamModel streamModel(){
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(SELECTED_STREAM_ID);
+        streamModel.setShortTitle(SELECTED_STREAM_SHORT_TITLE);
+        streamModel.setAuthorId(STREAM_AUTHOR_ID);
+        return streamModel;
+    }
+
     private Stream selectedStream() {
         Stream stream = new Stream();
         stream.setId(SELECTED_STREAM_ID);
-        stream.setTitle(SELECTED_STREAM_TITLE);
+        stream.setShortTitle(SELECTED_STREAM_SHORT_TITLE);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
