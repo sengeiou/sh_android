@@ -292,14 +292,6 @@
             %d participants
         </item>
     </plurals>
-    <plurals name="total_watchers_pattern_with_followings">
-    <item quantity="one">
-            of %d participant
-        </item>
-    <item quantity="other">
-            of %d participants
-        </item>
-    </plurals>
     <string name="unfollow_dialog_message">Unfollow %s?</string>
     <string name="unfollow_dialog_no">No</string>
     <string name="unfollow_dialog_yes">Yes</string>
@@ -334,6 +326,7 @@
     <string name="multiple_activity_notification">%d new Activity notifications</string>
     <string name="multiple_activities_action">GO</string>
     <string name="stream_subtitle">following %d</string>
+    <string name="stream_subtitle_pattern_multiple_participants">following %1$s of %2$s participants</string>
     <string name="menu_pin_shot">Pin to profile</string>
     <string name="shot_pinned">Pinned</string>
 </resources>

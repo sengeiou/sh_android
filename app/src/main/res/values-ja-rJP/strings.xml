@@ -286,9 +286,7 @@
     <plurals name="total_watchers_pattern">
         <item quantity="other">参加者: %d人</item>
     </plurals>
-    <plurals name="total_watchers_pattern_with_followings">
-        <item quantity="other">参加者%d人のうち</item>
-    </plurals>
+    <string name="stream_subtitle_pattern_multiple_participants"></string>
     <string name="unfollow_dialog_message">%sのフォローを解除しますか？</string>
     <string name="unfollow_dialog_no">いいえ</string>
     <string name="unfollow_dialog_yes">はい</string>

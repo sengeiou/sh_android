@@ -276,10 +276,6 @@
         <item quantity="one">%d participante</item>
         <item quantity="other">%d participantes</item>
     </plurals>
-    <plurals name="total_watchers_pattern_with_followings">
-        <item quantity="one">de %d participante</item>
-        <item quantity="other">de %d participantes</item>
-    </plurals>
     <string name="unfollow_dialog_message">¿Dejar de seguir a %s?</string>
     <string name="unfollow_dialog_no">No</string>
     <string name="unfollow_dialog_yes">Sí</string>
@@ -314,6 +310,7 @@
     <string name="multiple_activity_notification">%d notificaciones nuevas</string>
     <string name="multiple_activities_action">VER</string>
     <string name="stream_subtitle">siguiendo a %d</string>
+    <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
     <string name="menu_pin_shot">Anclar al perfil</string>
     <string name="shot_pinned">Anclado</string>
 </resources>
