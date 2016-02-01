@@ -15,10 +15,10 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 
-public class PinToProfileInteractorTest {
+public class PinShotInteractorTest {
 
     public static final String ID_SHOT = "idShot";
-    private PinToProfileInteractor interactor;
+    private PinShotInteractor interactor;
     @Mock ShotRepository remoteShotRepository;
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock PostExecutionThread postExecutionThread;
@@ -26,20 +26,20 @@ public class PinToProfileInteractorTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
-        interactor = new PinToProfileInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
+        interactor = new PinShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
     }
 
     @Test public void shouldSendHideShotToServer() throws Exception {
         interactor.pinShot(ID_SHOT, completedCallback);
 
-        verify(remoteShotRepository).pinShot(ID_SHOT);
+        verify(remoteShotRepository).unhideShot(ID_SHOT);
     }
 
     @Test public void shouldNotifyCompletedWhenSendHideShotToServer() throws Exception {
         interactor.pinShot(ID_SHOT, completedCallback);
 
         InOrder inOrder = inOrder(remoteShotRepository, postExecutionThread);
-        inOrder.verify(remoteShotRepository).pinShot(anyString());
+        inOrder.verify(remoteShotRepository).unhideShot(anyString());
         inOrder.verify(postExecutionThread).post(any(Runnable.class));
     }
 }

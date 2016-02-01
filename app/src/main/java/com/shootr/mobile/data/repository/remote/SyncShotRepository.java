@@ -130,7 +130,7 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
         return shot;
     }
 
-    @Override public void pinShot(String idShot) {
+    @Override public void unhideShot(String idShot) {
         remoteShotDataSource.pinShot(idShot);
     }
 
