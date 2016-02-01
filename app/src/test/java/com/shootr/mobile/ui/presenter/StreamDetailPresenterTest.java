@@ -201,6 +201,12 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).setMuteStatus(false);
     }
 
+    @Test public void shouldNeverSelectStreamIfNoStreamInOnResume() throws Exception {
+        presenter.resume();
+
+        verify(selectStreamInteractor, never()).selectStream(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }
+
     public void setupNoStreamMutedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
