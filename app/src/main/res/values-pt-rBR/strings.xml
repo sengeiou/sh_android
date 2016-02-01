@@ -198,7 +198,7 @@
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Criou (stream)</string>
   <string name="participants_list_empty">Nenhum participante</string>
-  <string name="photo_edit_gallery">Galeria.</string>
+  <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Apagar foto</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
@@ -289,10 +289,7 @@
     <item quantity="one">%d participante</item>
     <item quantity="other">%d participantes</item>
   </plurals>
-  <plurals name="total_watchers_pattern_with_followings">
-    <item quantity="one">de %d participante</item>
-    <item quantity="other">de %d participantes</item>
-  </plurals>
+  <string name="stream_subtitle_pattern_multiple_participants"></string>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">Não</string>
   <string name="unfollow_dialog_yes">Sim</string>

@@ -457,11 +457,25 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               .getQuantityString(R.plurals.total_watchers_pattern, totalWatchers, totalWatchers));
         } else {
             streamSubtitle.setVisibility(View.VISIBLE);
-            String followings = getString(R.string.stream_participants_following_number, numberOfFollowing);
-            String participants = getResources().getQuantityString(R.plurals.total_watchers_pattern_with_followings,
-              totalWatchers,
-              totalWatchers);
-            streamSubtitle.setText(getString(R.string.stream_detail_subtitle_pattern, followings, participants));
+            loadSubtitle(numberOfFollowing, totalWatchers);
+        }
+    }
+
+    public void loadSubtitle(Integer numberOfFollowing, Integer totalWatchers) {
+        if (numberOfFollowing <= 0) {
+            if (totalWatchers == 1) {
+                String participants = getResources().getQuantityString(R.plurals.total_watchers_pattern,
+                  totalWatchers,
+                  totalWatchers);
+                streamSubtitle.setText(participants);
+            } else {
+                String participants = getResources().getQuantityString(R.plurals.total_watchers_pattern,
+                  totalWatchers,
+                  totalWatchers);
+                streamSubtitle.setText(participants);
+            }
+        } else {
+            streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants, numberOfFollowing, totalWatchers));
         }
     }
 
