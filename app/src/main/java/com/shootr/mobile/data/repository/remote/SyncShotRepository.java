@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
@@ -108,7 +107,7 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     }
 
     @Override public void hideShot(String idShot, Long timestamp) {
-        ShotEntity shotEntity = localShotDataSource.getShot(idShot);
+        ShotEntity shotEntity = getShotEntity(idShot);
         try {
             remoteShotDataSource.hideShot(idShot,timestamp);
             shotEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
@@ -120,6 +119,15 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
             localShotDataSource.putShot(shotEntity);
             syncTrigger.notifyNeedsSync(this);
         }
+
+    }
+
+    private ShotEntity getShotEntity(String idShot) {
+        ShotEntity shot = localShotDataSource.getShot(idShot);
+        if (shot == null) {
+            shot = remoteShotDataSource.getShot(idShot);
+        }
+        return shot;
     }
 
     @Override public void pinShot(String idShot) {
