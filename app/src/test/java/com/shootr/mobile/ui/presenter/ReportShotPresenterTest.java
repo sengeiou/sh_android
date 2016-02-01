@@ -138,6 +138,33 @@ public class ReportShotPresenterTest {
         verify(reportShotView).showUserUnbanned();
     }
 
+    @Test public void shouldNotifyShotPinnedWhenPinShot() throws Exception {
+        setupPinShotCallback();
+
+        presenter.pinToProfile(shotModel());
+
+        reportShotView.notifyPinnedShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldFeedbackShotPinnedWhenPinShot() throws Exception {
+        setupPinShotCallback();
+
+        presenter.pinToProfile(shotModel());
+
+        reportShotView.showPinned();
+    }
+
+    public void setupPinShotCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(pinToProfileInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
     private void setupUnbanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
