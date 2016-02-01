@@ -63,11 +63,11 @@ public class FindStreamsPresenter implements Presenter {
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(), stream.getStreamModel().getAuthorId());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle(), stream.getStreamModel().getAuthorId());
     }
 
-    private void selectStream(final String idStream, String streamTitle, String authorId) {
-        findStreamsView.navigateToStreamTimeline(idStream, streamTitle, authorId);
+    private void selectStream(final String idStream, String streamShortTitle, String authorId) {
+        findStreamsView.navigateToStreamTimeline(idStream, streamShortTitle, authorId);
     }
 
     private void onSearchResults(StreamSearchResultList streamSearchResultList) {
