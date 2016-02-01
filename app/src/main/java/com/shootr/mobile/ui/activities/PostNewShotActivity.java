@@ -437,7 +437,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        photoPickerController.onActivityResult(requestCode, resultCode, data);
+        try {
+            photoPickerController.onActivityResult(requestCode, resultCode, data);
+        } catch (NullPointerException error) {
+            feedbackMessage.show(getView(), R.string.error_message_invalid_image);
+        }
     }
 
     @Override public void showLoading() {
