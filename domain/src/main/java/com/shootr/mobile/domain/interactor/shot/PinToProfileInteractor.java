@@ -25,7 +25,7 @@ public class PinToProfileInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void hideShot(String idShot,CompletedCallback completedCallback){
+    public void pinShot(String idShot, CompletedCallback completedCallback){
         this.idShot = idShot;
         this.completedCallback = completedCallback;
         this.interactorHandler.execute(this);

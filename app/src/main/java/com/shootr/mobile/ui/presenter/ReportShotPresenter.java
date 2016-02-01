@@ -241,7 +241,7 @@ public class ReportShotPresenter implements Presenter {
 
 
     public void pinToProfile(final ShotModel shotModel) {
-        pinToProfileInteractor.hideShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+        pinToProfileInteractor.pinShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 shotModel.setHide(0L);
                 reportShotView.notifyPinnedShot(shotModel);
