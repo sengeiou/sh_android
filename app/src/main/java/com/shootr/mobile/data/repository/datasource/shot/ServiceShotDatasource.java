@@ -5,7 +5,6 @@ import com.shootr.mobile.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ShotApiService;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.domain.ShotType;
@@ -197,9 +196,9 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public void pinShot(String idShot) {
+    @Override public void unhideShot(String idShot) {
         try {
-            shotApiService.pinShot(idShot);
+            shotApiService.unhideShot(idShot);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
