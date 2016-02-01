@@ -326,8 +326,12 @@ public class ProfileFragment extends BaseFragment
             File changedPhotoFile;
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
-                changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                profilePresenter.uploadPhoto(changedPhotoFile);
+                try {
+                    changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
+                    profilePresenter.uploadPhoto(changedPhotoFile);
+                } catch (NullPointerException error) {
+                    feedbackMessage.show(getView(), R.string.error_message_invalid_image);
+                }
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
                 profilePresenter.uploadPhoto(changedPhotoFile);

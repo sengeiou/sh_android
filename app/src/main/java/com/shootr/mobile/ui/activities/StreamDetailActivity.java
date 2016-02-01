@@ -212,8 +212,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
-            File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-            streamDetailPresenter.photoSelected(photoFile);
+            try {
+                File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+                streamDetailPresenter.photoSelected(photoFile);
+            } catch (NullPointerException error) {
+                feedbackMessage.show(getView(), R.string.error_message_invalid_image);
+            }
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             File photoFile = getCameraPhotoFile();
             streamDetailPresenter.photoSelected(photoFile);
