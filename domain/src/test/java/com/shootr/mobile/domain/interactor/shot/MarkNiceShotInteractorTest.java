@@ -97,9 +97,7 @@ public class MarkNiceShotInteractorTest {
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback, errorCallback);
-
-        Shot shot = shot();
-        shot.setNiceCount(0);
+        
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
