@@ -60,6 +60,8 @@ public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.inter
             notifyError(error);
         } catch (IOException error) {
             notifyError(new ImageResizingException(error));
+        }catch (NullPointerException error){
+            notifyError(new ImageResizingException(error));
         }
     }
 
