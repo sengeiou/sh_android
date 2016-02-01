@@ -118,7 +118,7 @@
   </LinearLayout>
 
 
-  <LinearLayout android:id="@+id/shot_hide_button"
+  <LinearLayout android:id="@+id/shot_hide_button_container"
     android:layout_width="@dimen/hide_button_container_size"
     android:layout_height="@dimen/hide_button_container_size"
     android:layout_alignParentEnd="true"

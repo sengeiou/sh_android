@@ -8,7 +8,6 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
@@ -51,7 +50,7 @@ public class ShotViewHolder {
     @Bind (R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.nices_container) View niceContainer;
-    @Bind(R.id.shot_hide_button) LinearLayout hideButton;
+    @Bind(R.id.shot_hide_button_container) View hideContainer;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -98,9 +97,9 @@ public class ShotViewHolder {
     }
 
     private void bindHideButton(final ShotModel shot){
-        hideButton.setVisibility(View.VISIBLE);
+        hideContainer.setVisibility(View.VISIBLE);
         niceButton.setVisibility(View.GONE);
-        hideButton.setOnClickListener(new View.OnClickListener() {
+        hideContainer.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 onHideClickListener.onHideClick(shot.getIdShot());
             }
@@ -212,7 +211,7 @@ public class ShotViewHolder {
         boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
         int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
 
-        hideButton.setVisibility(View.GONE);
+        hideContainer.setVisibility(View.GONE);
         niceButton.setVisibility(View.VISIBLE);
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
         lp.setMargins(0, marginTop, 0, 0);
