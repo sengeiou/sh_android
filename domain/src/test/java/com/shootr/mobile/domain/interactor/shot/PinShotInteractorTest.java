@@ -29,13 +29,13 @@ public class PinShotInteractorTest {
         interactor = new PinShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
     }
 
-    @Test public void shouldSendHideShotToServer() throws Exception {
+    @Test public void shouldSendUnhideShotToServer() throws Exception {
         interactor.pinShot(ID_SHOT, completedCallback);
 
         verify(remoteShotRepository).unhideShot(ID_SHOT);
     }
 
-    @Test public void shouldNotifyCompletedWhenSendHideShotToServer() throws Exception {
+    @Test public void shouldNotifyCompletedWhenSendUnhideShotToServer() throws Exception {
         interactor.pinShot(ID_SHOT, completedCallback);
 
         InOrder inOrder = inOrder(remoteShotRepository, postExecutionThread);
