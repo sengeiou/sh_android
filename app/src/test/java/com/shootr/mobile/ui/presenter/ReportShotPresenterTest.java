@@ -164,7 +164,7 @@ public class ReportShotPresenterTest {
             }
         }).when(pinShotInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
     }
-
+    
     private void setupUnbanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

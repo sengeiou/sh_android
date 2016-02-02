@@ -18,10 +18,12 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
 
+    private static final String EN_LOCALE = "en";
     private final DeleteShotInteractor deleteShotInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final SessionRepository sessionRepository;
@@ -71,10 +73,14 @@ public class ReportShotPresenter implements Presenter {
     public void report(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         if (userModel.isEmailConfirmed()) {
-            reportShotView.goToReport(sessionRepository.getSessionToken(), shotModel);
+            reportShotView.handleReport(sessionRepository.getSessionToken(), shotModel);
         } else {
             reportShotView.showEmailNotConfirmedError();
         }
+    }
+
+    public boolean isEnglishLocale(String locale){
+        return locale.equals(EN_LOCALE);
     }
 
     public void onShotLongPressed(final ShotModel shotModel) {
@@ -248,6 +254,14 @@ public class ReportShotPresenter implements Presenter {
                 reportShotView.showPinned();
             }
         });
+    }
+
+    public void reportClicked(String language, String sessionToken, ShotModel shotModel) {
+        if(isEnglishLocale(language)){
+            reportShotView.goToReport(sessionToken, shotModel);
+        }else{
+            reportShotView.showAlertLanguageSupportDialog(sessionToken, shotModel);
+        }
     }
 
     @Override public void resume() {
