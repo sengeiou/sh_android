@@ -8,5 +8,7 @@ public interface SupportView {
 
     void goToStream(Stream blog);
 
-    void showSupportLanguageDialog();
+    void handleReport();
+
+    void showAlertDialog();
 }
