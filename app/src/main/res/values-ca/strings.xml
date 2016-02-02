@@ -267,7 +267,7 @@
     <string name="stream_notification_confirmation_yes">Notificar</string>
     <string name="stream_participants_following_number">seguint a %d</string>
     <string name="stream_subtitle">seguint a %d</string>
-    <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
+    <string name="stream_subtitle_pattern_multiple_participants">seguint a %1$s de %2$s participants</string>
     <string name="stream_timeline_add_favorite">Afegir a Favorits</string>
     <string name="stream_timeline_empty_message">Comprovant shots…</string>
     <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
