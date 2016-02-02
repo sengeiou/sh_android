@@ -125,7 +125,8 @@
     android:layout_alignParentRight="true"
     android:layout_below="@+id/shot_media_content"
     android:layout_marginTop="@dimen/nice_button_margin_top_normal"
-    android:gravity="center|bottom|right">
+    android:gravity="center|bottom|right"
+    android:visibility="gone">
     <ImageView
       android:layout_height="@dimen/hide_button_size"
       android:layout_width="@dimen/hide_button_size"
