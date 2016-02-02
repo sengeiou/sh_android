@@ -310,4 +310,54 @@
     <string name="whale_title_default">暫くお待ちください</string>
     <string name="yes">はい</string>
     <string name="language_support_alert">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
+    <string name="error_message_unknown">不明なエラー</string>
+
+    <!-- Image upload -->
+    <string name="error_message_invalid_image">無効な画像です</string>
+
+    <!-- Profile: Username -->
+    <string name="error_message_username_duplicate">このユーザー名は使用できません。</string>
+    <string name="error_message_username_empty">ユーザー名は3文字以上20文字以内で入力してください。</string>
+    <string name="error_message_username_short">ユーザー名は3文字以上20文字以内で入力してください。</string>
+    <string name="error_message_username_long">3文字以上25文字以内</string>
+    <string name="error_message_username_invalid">半角英数字、アンダーライン(_)のみ使用できます。</string>
+
+    <!-- Profile: Name -->
+    <string name="error_message_name_invalid">パスワードが無効です</string>
+    <string name="error_message_name_long">3文字以上25文字以内</string>
+
+    <!-- Profile: Website -->
+    <string name="error_message_website_invalid">ウェブサイトのフォーマットが無効です</string>
+    <string name="error_message_website_too_long">ウェブサイトは100文字以内で入力してください</string>
+
+    <!-- Profile: Bio -->
+    <string name="error_message_bio_too_long">自己紹介は150文字以内で入力してください。</string>
+    <string name="error_message_search_too_short">3文字以上で入力してください</string>
+
+    <!-- Stream -->
+    <string name="error_message_stream_title_too_short">3文字以上で入力してください</string>
+    <string name="error_message_stream_title_too_long">タイトルは50文字以内で入力してください</string>
+    <string name="error_image_upload">別の画像を使用してください。</string>
+
+    <!-- Create account -->
+    <string name="error_message_registration_username_duplicated">このユーザー名は使用できません。</string>
+    <string name="error_message_registration_username_empty">3文字以上25文字以内</string>
+    <string name="error_message_registration_username_too_short">3文字以上25文字以内</string>
+    <string name="error_message_registration_username_too_long">3文字以上25文字以内</string>
+    <string name="error_message_registration_username_invalid">パスワードが無効です</string>
+    <string name="error_message_registration_email_existing">このメールアドレスは既に使用されています。</string>
+    <string name="error_message_registration_email_invalid">無効なメールアドレスです</string>
+    <string name="error_message_registration_email_empty">メールアドレスを入力してください</string>
+    <string name="error_message_registration_password_null">6文字以上20文字以内</string>
+    <string name="error_message_registration_password_too_short">6文字以上20文字以内</string>
+    <string name="error_message_registration_password_too_long">6文字以上20文字以内</string>
+    <string name="error_message_registration_password_equals_username">ユーザー名とパスワードば別のものを設定してください。</string>
+    <string name="error_message_registration_password_invalid">パスワードが無効です</string>
+    <string name="error_message_change_password_new_password_same_current_password">同じパスワードは使用できません</string>
+    <string name="error_message_change_password_new_password_and_again_must_match">パスワードが一致しません</string>
+
+    <!-- Forgot password -->
+    <string name="error_reset_password">アカウントが見つかりません</string>
+
+    <string name="error_facebook_login">Facebookでログインすることができませんでした。後程またお試しください。</string>
 </resources>
