@@ -52,6 +52,8 @@ public class GetStreamIsReadOnlyInteractor implements Interactor {
             } catch (ServerCommunicationException error){
                 notifyError(error);
             }
+        } else {
+            notifyLoaded(stream.isRemoved());
         }
     }
 
