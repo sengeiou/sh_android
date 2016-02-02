@@ -313,4 +313,5 @@
     <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
     <string name="menu_pin_shot">Anclar al perfil</string>
     <string name="shot_pinned">Anclado</string>
+    <string name="language_support_alert">We currently support English only. Thank you for your understanding</string>
 </resources>
