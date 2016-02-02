@@ -319,4 +319,55 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">Tornem aviat</string>
     <string name="yes">Sí</string>
+
+    <string name="error_message_unknown">Error desconegut</string>
+
+    <!-- Image upload -->
+    <string name="error_message_invalid_image">Imatge invàlida</string>
+
+    <!-- Profile: Username -->
+    <string name="error_message_username_duplicate">Nom d\'usuari no disponible</string>
+    <string name="error_message_username_empty">ha de tenir almenys 3 caràcters</string>
+    <string name="error_message_username_short">ha de tenir almenys 3 caràcters</string>
+    <string name="error_message_username_long">De 3 a 25 caràcters</string>
+    <string name="error_message_username_invalid">Usar només a–z, 0–9 i guió baix</string>
+
+    <!-- Profile: Name -->
+    <string name="error_message_name_invalid">Caracters invàlids</string>
+    <string name="error_message_name_long">De 3 a 25 caràcters</string>
+
+    <!-- Profile: Website -->
+    <string name="error_message_website_invalid">La web té un format invàlid</string>
+    <string name="error_message_website_too_long">La pàgina web pot tenir fins a 100 caràcters</string>
+
+    <!-- Profile: Bio -->
+    <string name="error_message_bio_too_long">La Bio pot tenir fins a 150 caràcters</string>
+    <string name="error_message_search_too_short">Ha de tenir almenys 3 caràcters</string>
+
+    <!-- Stream -->
+    <string name="error_message_stream_title_too_short">Ha de tenir almenys 3 caràcters</string>
+    <string name="error_message_stream_title_too_long">Títol massa llarg</string>
+    <string name="error_image_upload">Si us plau, tria una altra imatge</string>
+
+    <!-- Create account -->
+    <string name="error_message_registration_username_duplicated">Nom d\'usuari no disponible</string>
+    <string name="error_message_registration_username_empty">De 3 a 25 caràcters</string>
+    <string name="error_message_registration_username_too_short">De 3 a 25 caràcters</string>
+    <string name="error_message_registration_username_too_long">De 3 a 25 caràcters</string>
+    <string name="error_message_registration_username_invalid">Caracters invàlids</string>
+    <string name="error_message_registration_email_existing">Has de triar un email diferent</string>
+    <string name="error_message_registration_email_invalid">Email invàlid</string>
+    <string name="error_message_registration_email_empty">Introdueix un email</string>
+    <string name="error_message_registration_password_null">De 6 a 20 caràcters</string>
+    <string name="error_message_registration_password_too_short">De 6 a 20 caràcters</string>
+    <string name="error_message_registration_password_too_long">De 6 a 20 caràcters</string>
+    <string name="error_message_registration_password_equals_username">Cal que la contrasenya sigui diferent a l\'anterior</string>
+    <string name="error_message_registration_password_invalid">Caracters invàlids</string>
+    <string name="error_message_change_password_new_password_same_current_password">Cal que la contrasenya sigui diferent a l\'anterior</string>
+    <string name="error_message_change_password_new_password_and_again_must_match">Les contrasenyes no coincideixen</string>
+
+    <!-- Forgot password -->
+    <string name="error_reset_password">Compte no trobat.</string>
+
+    <string name="error_facebook_login">No s\'ha pogut iniciar sessió amb Facebook. Prova més tard.</string>
 </resources>
