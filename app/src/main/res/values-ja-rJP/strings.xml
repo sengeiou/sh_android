@@ -309,4 +309,5 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">暫くお待ちください</string>
     <string name="yes">はい</string>
+    <string name="language_support_alert">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
 </resources>

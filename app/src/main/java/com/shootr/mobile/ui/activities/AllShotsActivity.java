@@ -87,7 +87,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Override protected void initializePresenter() {
         String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
         Boolean isCurrentUser = getIntent().getBooleanExtra(CURRENT_USER,false);
-        presenter.initialize(this, userId,isCurrentUser);
+        presenter.initialize(this, userId, isCurrentUser);
         reportShotPresenter.initialize(this);
     }
 
@@ -324,7 +324,23 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         feedbackMessage.show(getView(), shotShared);
     }
 
+    private void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  setupGoToReport(sessionToken, shotModel);
+              }
+          }).show();
+    }
+
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        showAlertLanguageSupportDialog(sessionToken, shotModel);
+    }
+
+    private void setupGoToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
           sessionToken,
           shotModel.getIdShot())));

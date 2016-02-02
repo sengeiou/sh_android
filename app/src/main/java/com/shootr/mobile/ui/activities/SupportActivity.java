@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -105,5 +108,21 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Override public void goToStream(Stream blog) {
         Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle(), blog.getAuthorId());
         startActivity(intent);
+    }
+
+    @Override public void showSupportLanguageDialog() {
+        setupAlertDialog();
+    }
+
+    private void setupAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                    /* no-op */
+              }
+          }).show();
     }
 }
