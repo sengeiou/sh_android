@@ -106,4 +106,8 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle(), blog.getAuthorId());
         startActivity(intent);
     }
+
+    @Override public void showSupportLanguageDialog() {
+        /* implements */
+    }
 }
