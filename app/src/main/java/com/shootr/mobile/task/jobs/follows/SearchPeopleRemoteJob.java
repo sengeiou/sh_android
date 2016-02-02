@@ -9,6 +9,7 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.mobile.task.jobs.ShootrBaseJob;
 import com.shootr.mobile.ui.model.UserModel;
@@ -23,12 +24,13 @@ import javax.inject.Inject;
 public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResultEvent> {
 
     UserApiService userApiService;
-
     private String searchString;
-    private int pageOffset;
 
+    private int pageOffset;
     private FollowManager followManager;
+
     private SessionRepository sessionRepository;
+    private LocaleProvider localeProvider;
 
     private UserEntityModelMapper userModelMapper;
 
@@ -38,12 +40,14 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
       UserApiService userApiService,
       FollowManager followManager,
       UserEntityModelMapper userModelMapper,
-      SessionRepository sessionRepository) {
+      SessionRepository sessionRepository,
+      LocaleProvider localeProvider) {
         super(app, bus);
         this.userApiService = userApiService;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
         this.sessionRepository = sessionRepository;
+        this.localeProvider = localeProvider;
     }
 
     public void init(String searchString, int pageOffset) {
@@ -73,7 +77,7 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
 
     private List<UserModel> getSearchFromServer() throws IOException {
         try {
-            return getUserVOs(userApiService.search(searchString, pageOffset));
+            return getUserVOs(userApiService.search(searchString, pageOffset, localeProvider.getLocale()));
         } catch (ApiException e) {
             throw new ServerCommunicationException(e);
         }
