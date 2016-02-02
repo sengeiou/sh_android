@@ -139,7 +139,7 @@
   </plurals>
   <string name="listing_title_favorites">Favoritos</string>
   <string name="listing_title_holding">Criados</string>
-  <string name="loading_activity_message">Carregando...</string>
+  <string name="loading_activity_message">Carregando…</string>
   <string name="main_activity_title">Atividade</string>
   <string name="mentioned_shot_activity_with_comment">Te mencionou:</string>
   <string name="menu_all_shots">Mostrar todos os shots</string>
@@ -154,7 +154,7 @@
   <string name="menu_search_participants">Encontrar participantes</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
-  <string name="menu_share_shot_via">Compartilhar via...</string>
+  <string name="menu_share_shot_via">Compartilhar via…</string>
   <string name="menu_share_shot_via_shootr">Compartilhar via Shootr</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
@@ -167,7 +167,7 @@
   <string name="new_password_again_hint">Repita a nova senha</string>
   <string name="new_password_hint">Nova senha</string>
   <string name="new_shot_discard_message">Descartar foto?</string>
-  <string name="new_shot_placeholder">Escreva algo...</string>
+  <string name="new_shot_placeholder">Escreva algo…</string>
   <string name="new_shot_repeated">Whoops! Você já publicou isso</string>
   <string name="new_stream_description_label">Descrição</string>
   <string name="new_stream_short_title_label">Título curto</string>
@@ -178,7 +178,6 @@
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
-    <item quantity="zero"/>
   </plurals>
   <string name="no">Não</string>
   <string name="notification_image">Imagem</string>
@@ -224,8 +223,8 @@
     <item quantity="other">%d respostas</item>
   </plurals>
   <string name="reply_name_pattern">%1$s a %2$s</string>
-  <string name="reply_placeholder_pattern">Responder a %s...</string>
-  <string name="report_context_menu_block">Bloquear...</string>
+  <string name="reply_placeholder_pattern">Responder a %s…</string>
+  <string name="report_context_menu_block">Bloquear…</string>
   <string name="report_context_menu_delete">Eliminar</string>
   <string name="report_context_menu_report">Reportar</string>
   <string name="report_context_menu_unblock">Desfazer ignorar</string>
@@ -245,13 +244,13 @@
   <string name="share_stream_activity_text_pattern">Não compartilhado (stream)</string>
   <string name="share_stream_message">Confira %1$s em Shootr: https://shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Confira a %s em Shootr</string>
-  <string name="share_via">Compartilhar via...</string>
+  <string name="share_via">Compartilhar via…</string>
   <string name="share_via_shootr">Compartilhar via Shootr</string>
   <string name="shoot_all_button">Enviar tudo</string>
   <string name="shot_shared_message">Shot compartilhado</string>
   <string name="shot_timeline_empty_title">Nenhum shot</string>
   <string name="showing_shots_by_holder">Shots do administrador.</string>
-  <string name="sign_out_message">Finalizando sessão...</string>
+  <string name="sign_out_message">Finalizando sessão…</string>
   <string name="started_shooting_activity_text_pattern">Escreveu em (stream)</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_media">Arquivos</string>
@@ -267,7 +266,7 @@
   <string name="stream_participants_following_number">seguindo a %d</string>
   <string name="stream_subtitle">seguindo a %d</string>
   <string name="stream_timeline_add_favorite">Adicionar aos Favoritos</string>
-  <string name="stream_timeline_empty_message">Checando shots...</string>
+  <string name="stream_timeline_empty_message">Checando shots…</string>
   <string name="stream_timeline_remove_favorite">Remover dos Favoritos</string>
   <string name="suggested_people_section_title">Quem seguir</string>
   <string name="support_blog">Blog</string>
@@ -289,7 +288,7 @@
     <item quantity="one">%d participante</item>
     <item quantity="other">%d participantes</item>
   </plurals>
-  <string name="stream_subtitle_pattern_multiple_participants"></string>
+  <string name="stream_subtitle_pattern_multiple_participants">seguindo a %1$s de %2$s participantes</string>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">Não</string>
   <string name="unfollow_dialog_yes">Sim</string>
@@ -314,6 +313,8 @@
   <string name="yes">Sim</string>
   <string name="language_support_alert">We currently support English only. Thank you for your understanding</string>
   <string name="error_message_unknown">Error desconocido</string>
+  <string name="menu_pin_shot">Linkar ao perfil</string>
+  <string name="shot_pinned">Linkado</string>
 
   <!-- Image upload -->
   <string name="error_message_invalid_image">Imagem inválida</string>
