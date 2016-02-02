@@ -136,11 +136,10 @@
     <plurals name="listing_favorites">
         <item quantity="one">%d favorit</item>
         <item quantity="other">%d favorits</item>
-        <item quantity="zero"/>
     </plurals>
     <string name="listing_title_favorites">Favorits</string>
     <string name="listing_title_holding">Creats</string>
-    <string name="loading_activity_message">Carregant...</string>
+    <string name="loading_activity_message">Carregant…</string>
     <string name="main_activity_title">Activitat</string>
     <string name="mentioned_shot_activity_with_comment">T\'ha mencionat:</string>
     <string name="menu_all_shots">Mostrar tots els shots</string>
@@ -156,7 +155,7 @@
     <string name="menu_search_participants">Trobar participants</string>
     <string name="menu_search_streams">Buscar</string>
     <string name="menu_search_timeline">Buscar timeline</string>
-    <string name="menu_share_shot_via">Compartir via...</string>
+    <string name="menu_share_shot_via">Compartir via…</string>
     <string name="menu_share_shot_via_shootr">Compartir via Shootr</string>
     <string name="menu_stream_edit_info">Info</string>
     <string name="menu_stream_edit_photo">Foto</string>
@@ -169,7 +168,7 @@
     <string name="new_password_again_hint">Nova contrasenya altre cop</string>
     <string name="new_password_hint">Nova contrasenya</string>
     <string name="new_shot_discard_message">Descartar foto?</string>
-    <string name="new_shot_placeholder">Escriu alguna cosa...</string>
+    <string name="new_shot_placeholder">Escriu alguna cosa…</string>
     <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
     <string name="new_stream_description_label">Descripció</string>
     <string name="new_stream_short_title_label">Títol curt</string>
@@ -225,7 +224,7 @@
         <item quantity="other">%d respostes</item>
     </plurals>
     <string name="reply_name_pattern">%1$s a %2$s</string>
-    <string name="reply_placeholder_pattern">Respondre a %s...</string>
+    <string name="reply_placeholder_pattern">Respondre a %s…</string>
     <string name="report_context_menu_block">Bloquejar…</string>
     <string name="report_context_menu_delete">Eliminar</string>
     <string name="report_context_menu_report">Reportar</string>
@@ -268,6 +267,7 @@
     <string name="stream_notification_confirmation_yes">Notificar</string>
     <string name="stream_participants_following_number">seguint a %d</string>
     <string name="stream_subtitle">seguint a %d</string>
+    <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
     <string name="stream_timeline_add_favorite">Afegir a Favorits</string>
     <string name="stream_timeline_empty_message">Comprovant shots…</string>
     <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
@@ -290,12 +290,10 @@
     <plurals name="total_watchers_pattern">
         <item quantity="one">%d participant</item>
         <item quantity="other">%d participants</item>
-        <item quantity="zero"/>
     </plurals>
     <plurals name="total_watchers_pattern_with_followings">
         <item quantity="one">de %d participant</item>
         <item quantity="other">de %d participants</item>
-        <item quantity="zero"/>
     </plurals>
     <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
     <string name="unfollow_dialog_no">No</string>
