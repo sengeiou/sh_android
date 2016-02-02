@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -18,20 +17,17 @@ public class GetBannedUsersInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final FollowRepository localFollowRepository;
     private final FollowRepository remoteFollowRepository;
-    private final SessionRepository sessionRepository;
 
     private Callback<List<String>> callback;
     private ErrorCallback errorCallback;
 
     @Inject
     public GetBannedUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository,
-      SessionRepository sessionRepository) {
+      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
         this.remoteFollowRepository = remoteFollowRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     public void loadBannedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback) {
