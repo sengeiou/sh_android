@@ -30,6 +30,11 @@ public class SupportPresenter implements Presenter {
         this.setView(supportView);
         loadBlog();
         loadHelp();
+        showAlertDialog();
+    }
+
+    private void showAlertDialog() {
+        supportView.showSupportLanguageDialog();
     }
 
     private void loadHelp() {
