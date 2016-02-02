@@ -610,8 +610,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showDefaultBlockMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.blockUserClicked();
               }
@@ -649,8 +648,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showBlockAndBannedMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.unblockUserClicked();
               }
@@ -761,7 +759,9 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToFollowingList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWING);
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(),
+          idUser,
+          UserFollowingRelationship.FOLLOWING);
         startActivity(intent);
     }
 
@@ -876,6 +876,22 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        showAlertLanguageSupportDialog(sessionToken,shotModel);
+    }
+
+    private void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  setupGoToReport(sessionToken, shotModel);
+              }
+          }).show();
+    }
+
+    private void setupGoToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -914,9 +930,9 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
         }).show();
     }
 
