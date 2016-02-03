@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -29,11 +30,18 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
-        Integer participantsNumber = getIntent().getIntExtra(ARGUMENT_PARTICIPANTS_NUMBER, 0);
-        Integer favoritesNumber = getIntent().getIntExtra(ARGUMENT_PARTICIPANTS_NUMBER, 0);
+        setupStatics();
+    }
+
+    private void setupStatics() {
+        Intent intent = getIntent();
+        Long participantsNumber = (Long) intent.getExtras().get(ARGUMENT_PARTICIPANTS_NUMBER);
+        Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
+        Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
 
         participantsNumberTextView.setText(String.valueOf(participantsNumber));
         favoritesNumberTextView.setText(String.valueOf(favoritesNumber));
+        shotsNumberTextView.setText(String.valueOf(shotsNumber));
     }
 
     @Override protected void initializePresenter() {
