@@ -34,6 +34,7 @@ public class SupportPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new SupportPresenter(getBlogInteractor, getHelpInteractor);
+        presenter.setView(supportView);
     }
 
     @Test public void shouldLoadBlogWhenPresenterInitialized() throws Exception {
@@ -114,14 +115,12 @@ public class SupportPresenterTest {
     }
 
     @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
-        presenter.initialize(supportView);
         presenter.setUpAlertDialog(ES_LOCALE);
 
         verify(supportView).showAlertDialog();
     }
 
     @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnglish() throws Exception {
-        presenter.initialize(supportView);
         presenter.setUpAlertDialog(EN_LOCALE);
 
         verify(supportView,never()).showAlertDialog();

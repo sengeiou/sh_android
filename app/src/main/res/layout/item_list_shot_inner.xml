@@ -124,7 +124,7 @@
     android:layout_alignParentRight="true"
     android:layout_below="@+id/shot_media_content"
     android:layout_marginTop="@dimen/nice_button_margin_top_normal"
-    android:visibility="visible"/>
+    android:visibility="gone"/>
 
   <LinearLayout android:id="@+id/shot_hide_button_container"
     android:layout_width="48dp"
