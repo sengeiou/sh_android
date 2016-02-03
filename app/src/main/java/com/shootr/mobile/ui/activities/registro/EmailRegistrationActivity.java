@@ -40,15 +40,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.registration_password) EditText passwordInput;
     @Bind(R.id.registration_create_button) View createButton;
     @Bind(R.id.registration_create_progress) View progress;
-    @Bind(R.id.registration_legal_disclaimer) TextView disclaimer;
-
-    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
 
     @Inject EmailRegistrationPresenter presenter;
-    @Inject LocaleProvider localeProvider;
     @Inject FeedbackMessage feedbackMessage;
-    @Inject IntentFactory intentFactory;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -61,64 +55,6 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        setupDisclaimerLinks();
-    }
-
-    private void setupDisclaimerLinks() {
-        String originalDisclaimerText = getString(R.string.activity_registration_legal_disclaimer);
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(originalDisclaimerText);
-
-        String termsPatternText = "\\(terms-of-service\\)";
-        String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
-        final View.OnClickListener termsClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-                Intent termsIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, termsUrl);
-                Intents.maybeStartActivity(EmailRegistrationActivity.this, termsIntent);
-            }
-        };
-        replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
-
-        String privacyPatternText = "\\(privacy-policy\\)";
-        String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
-        final View.OnClickListener privacyClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-                Intent privacyIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, privacyUrl);
-                Intents.maybeStartActivity(EmailRegistrationActivity.this, privacyIntent);
-            }
-        };
-        replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
-
-        disclaimer.setText(spannableStringBuilder);
-        disclaimer.setMovementMethod(new LinkMovementMethod());
-    }
-
-    private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder, String patternText,
-      String replaceText, final View.OnClickListener onClick) {
-        Pattern termsPattern = Pattern.compile(patternText);
-        Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
-        if (termsMatcher.find()) {
-            int termsStart = termsMatcher.start();
-            int termsEnd = termsMatcher.end();
-            spannableBuilder.replace(termsStart, termsEnd, replaceText);
-
-            CharacterStyle termsSpan = new ClickableSpan() {
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(false);
-                }
-
-                @Override public void onClick(View widget) {
-                    onClick.onClick(widget);
-                }
-            };
-            spannableBuilder.setSpan(termsSpan,
-              termsStart,
-              termsStart + replaceText.length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
     }
 
     @Override protected void initializePresenter() {
