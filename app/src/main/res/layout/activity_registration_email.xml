@@ -96,20 +96,6 @@
 
         </FrameLayout>
 
-        <TextView android:id="@+id/registration_legal_disclaimer"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/registration_create_button_container"
-          android:layout_gravity="bottom"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_marginTop="32dp"
-          android:gravity="center_horizontal"
-          android:lineSpacingMultiplier="1.4"
-          android:text="@string/activity_registration_legal_disclaimer"
-          android:textColor="@color/gray_50"
-          android:textSize="14sp" />
-
     </RelativeLayout>
 
 </ScrollView>
