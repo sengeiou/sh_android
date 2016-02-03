@@ -38,6 +38,7 @@ public class StreamEntityMapper {
         stream.setTotalWatchers(
           streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
         stream.setHistoricWatchers(streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
+        stream.setTotalShots(streamEntity.getTotalShots() != null ? streamEntity.getTotalShots() : 0L);
         return stream;
     }
 
@@ -71,5 +72,6 @@ public class StreamEntityMapper {
         entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFavorites()));
         entityTemplate.setTotalWatchers(Long.valueOf(stream.getTotalWatchers()));
         entityTemplate.setHistoricWatchers(stream.getHistoricWatchers());
+        entityTemplate.setTotalShots(stream.getTotalShots());
     }
 }
