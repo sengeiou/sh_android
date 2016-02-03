@@ -361,4 +361,5 @@
     <string name="error_reset_password">アカウントが見つかりません</string>
 
     <string name="error_facebook_login">Facebookでログインすることができませんでした。後程またお試しください。</string>
+    <string name="title_activity_stream_data_info" />
 </resources>

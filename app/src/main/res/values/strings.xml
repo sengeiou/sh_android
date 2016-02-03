@@ -381,4 +381,8 @@
     <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
 
     <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
+    <string name="stream_data_info_participants">Participants</string>
+    <string name="stream_data_info_shots">Shots</string>
+    <string name="stream_data_info_favorites">Favorites</string>
+    <string name="title_activity_stream_data_info" > Numbers </string>
 </resources>

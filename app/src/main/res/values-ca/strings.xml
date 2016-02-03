@@ -369,4 +369,5 @@
     <string name="error_reset_password">Compte no trobat.</string>
 
     <string name="error_facebook_login">No s\'ha pogut iniciar sessió amb Facebook. Prova més tard.</string>
+    <string name="title_activity_stream_data_info" />
 </resources>

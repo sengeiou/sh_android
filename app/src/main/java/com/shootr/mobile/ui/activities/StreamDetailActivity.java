@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -414,8 +413,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
             boolean needsToAdjustPadding = true;
 
-            @Override
-            public void onCollapseChanged(float collapseProgress) {
+            @Override public void onCollapseChanged(float collapseProgress) {
                 if (collapseProgress == 0f) {
                     setPaddingRight(0);
                     needsToAdjustPadding = true;
@@ -485,7 +483,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 streamSubtitle.setText(participants);
             }
         } else {
-            streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants, numberOfFollowing, totalWatchers));
+            streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants,
+              numberOfFollowing,
+              totalWatchers));
         }
     }
 
@@ -509,8 +509,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {
-        //TODO REAL IMPLEMENTATION
-        Toast.makeText(this, streamModel.getHistoricWatchers().toString(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, StreamDataInfoActivity.class));
     }
 
     @Override

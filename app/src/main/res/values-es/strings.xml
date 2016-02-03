@@ -364,4 +364,5 @@
     <string name="error_reset_password">Cuenta no encontrada.</string>
 
     <string name="error_facebook_login">No se ha podido iniciar sesión con Facebook. Prueba más tarde.</string>
+    <string name="title_activity_stream_data_info" > Números </string>
 </resources>
