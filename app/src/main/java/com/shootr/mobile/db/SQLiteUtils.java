@@ -139,7 +139,8 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
             + DatabaseContract.StreamTable.TOTAL_FAVORITES +" INTEGER NOT NULL,"
             + DatabaseContract.StreamTable.TOTAL_WATCHERS +" INTEGER NOT NULL,"
-            + DatabaseContract.StreamTable.HISTORIC_WATCHERS +" INTEGER NOT NULL,"
+            + DatabaseContract.StreamTable.HISTORIC_WATCHERS +" INTEGER NULL,"
+            + DatabaseContract.StreamTable.TOTAL_SHOTS +" NUMBER NULL,"
             + DatabaseContract.SyncColumns.BIRTH +" DATETIME NOT NULL,"
             + DatabaseContract.SyncColumns.MODIFIED +" DATETIME NOT NULL,"
             + DatabaseContract.SyncColumns.DELETED +" DATETIME NULL,"
@@ -161,7 +162,8 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
             + DatabaseContract.StreamTable.TOTAL_FAVORITES +" INTEGER NOT NULL,"
             + DatabaseContract.StreamTable.TOTAL_WATCHERS +" INTEGER NOT NULL,"
-            + DatabaseContract.StreamTable.HISTORIC_WATCHERS +" INTEGER NOT NULL,"
+            + DatabaseContract.StreamTable.HISTORIC_WATCHERS +" INTEGER NULL,"
+            + DatabaseContract.StreamTable.TOTAL_SHOTS +" NUMBER NULL,"
             + DatabaseContract.SyncColumns.BIRTH
       +" DATETIME NOT NULL,"
             + DatabaseContract.SyncColumns.MODIFIED
