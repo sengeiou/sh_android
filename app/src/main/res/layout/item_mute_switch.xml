@@ -3,7 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="56dp"
-  android:background="?selectableItemBackground" >
+  android:background="?selectableItemBackground"
+  android:id="@+id/action_mute_switch_container">
 
   <TextView android:id="@+id/action_name"
     android:layout_width="match_parent"
