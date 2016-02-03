@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -120,11 +119,6 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                    /* no-op */
-              }
-          }).show();
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), null).show();
     }
 }
