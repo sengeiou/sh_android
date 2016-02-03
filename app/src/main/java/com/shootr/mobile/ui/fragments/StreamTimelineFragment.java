@@ -66,6 +66,7 @@ import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -683,23 +684,25 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override
-    public void goToReport(String sessionToken, ShotModel shotModel) {
-        showAlertLanguageSupportDialog(sessionToken,shotModel);
+    public void handleReport(String sessionToken, ShotModel shotModel) {
+        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
     }
 
-    private void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    @Override
+    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
           .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                  setupGoToReport(sessionToken, shotModel);
+                  goToReport(sessionToken, shotModel);
               }
           }).show();
     }
 
-    private void setupGoToReport(String sessionToken, ShotModel shotModel){
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);

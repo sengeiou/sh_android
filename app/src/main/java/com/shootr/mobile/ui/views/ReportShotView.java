@@ -4,7 +4,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 
 public interface ReportShotView {
 
-    void goToReport(String sessionToken, ShotModel shotModel);
+    void handleReport(String sessionToken, ShotModel shotModel);
 
     void showEmailNotConfirmedError();
 
@@ -37,4 +37,8 @@ public interface ReportShotView {
     void notifyPinnedShot(ShotModel shotModel);
 
     void showPinned();
+
+    void goToReport(String sessionToken, ShotModel shotModel);
+
+    void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);
 }

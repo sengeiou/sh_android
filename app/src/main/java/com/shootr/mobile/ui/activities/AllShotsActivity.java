@@ -36,6 +36,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -324,23 +325,25 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         feedbackMessage.show(getView(), shotShared);
     }
 
-    private void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    @Override public void handleReport(String sessionToken, ShotModel shotModel) {
+        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
+    }
+
+    @Override
+    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
           .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                  setupGoToReport(sessionToken, shotModel);
+                  goToReport(sessionToken, shotModel);
               }
           }).show();
     }
 
-    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        showAlertLanguageSupportDialog(sessionToken, shotModel);
-    }
-
-    private void setupGoToReport(String sessionToken, ShotModel shotModel){
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
           sessionToken,
           shotModel.getIdShot())));

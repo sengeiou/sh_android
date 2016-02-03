@@ -80,6 +80,7 @@ import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -610,12 +611,11 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showDefaultBlockMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
-          new Runnable() {
-              @Override public void run() {
-                  profilePresenter.blockUserClicked();
-              }
-          }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user, new Runnable() {
+            @Override public void run() {
+                profilePresenter.blockUserClicked();
+            }
+        }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
             @Override public void run() {
                 profilePresenter.banUserClicked();
             }
@@ -649,8 +649,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showBlockAndBannedMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.unblockUserClicked();
               }
@@ -761,7 +760,9 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToFollowingList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWING);
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(),
+          idUser,
+          UserFollowingRelationship.FOLLOWING);
         startActivity(intent);
     }
 
@@ -875,7 +876,25 @@ public class ProfileFragment extends BaseFragment
         followButton.setFollowing(following);
     }
 
-    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+    @Override public void handleReport(String sessionToken, ShotModel shotModel) {
+        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
+    }
+
+    @Override
+    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  goToReport(sessionToken, shotModel);
+              }
+          }).show();
+    }
+
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -914,9 +933,9 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
         }).show();
     }
 

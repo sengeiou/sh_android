@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,6 +20,7 @@ import com.shootr.mobile.ui.views.SupportView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
+import java.util.Locale;
 import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
@@ -110,19 +110,15 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         startActivity(intent);
     }
 
-    @Override public void showSupportLanguageDialog() {
-        setupAlertDialog();
+    @Override public void handleReport() {
+        supportPresenter.setUpAlertDialog(Locale.getDefault().getLanguage());
     }
 
-    private void setupAlertDialog() {
+    @Override
+    public void showAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                    /* no-op */
-              }
-          }).show();
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), null).show();
     }
 }
