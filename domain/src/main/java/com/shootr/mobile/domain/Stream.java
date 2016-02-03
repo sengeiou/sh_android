@@ -20,6 +20,7 @@ public class Stream {
     private List<User> watchers;
     private Integer totalFavorites;
     private Integer totalWatchers;
+    private Long historicWatchers;
 
     public Boolean isRemoved() {
         return removed;
@@ -160,6 +161,14 @@ public class Stream {
 
     public void setTotalWatchers(Integer totalWatchers) {
         this.totalWatchers = totalWatchers;
+    }
+
+    public Long getHistoricWatchers() {
+        return historicWatchers;
+    }
+
+    public void setHistoricWatchers(Long historicWatchers) {
+        this.historicWatchers = historicWatchers;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {
