@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -153,6 +154,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           }); //follow
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @OnClick(R.id.stream_title_container)
+    public void onTitleContainerClicked() {
+        streamDetailPresenter.toolbarClicked();
     }
 
     @OnClick(R.id.stream_share_button)
@@ -500,6 +506,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
+    }
+
+    @Override public void goToStreamDataInfo(StreamModel streamModel) {
+        //TODO REAL IMPLEMENTATION
+        Toast.makeText(this, streamModel.getHistoricWatchers().toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

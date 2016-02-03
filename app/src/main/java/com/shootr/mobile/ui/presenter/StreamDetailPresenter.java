@@ -344,6 +344,10 @@ public class StreamDetailPresenter implements Presenter {
         });
     }
 
+    public void toolbarClicked() {
+        streamDetailView.goToStreamDataInfo(streamModel);
+    }
+
     @Override
     public void resume() {
         if (hasBeenPaused) {
