@@ -134,7 +134,7 @@
     android:layout_below="@+id/shot_media_content"
     android:layout_marginTop="@dimen/nice_button_margin_top_normal"
     android:gravity="center|bottom|right"
-    android:visibility="gone"
+    android:visibility="visible"
     >
 
     <ImageView android:id="@+id/shot_hide_button"
