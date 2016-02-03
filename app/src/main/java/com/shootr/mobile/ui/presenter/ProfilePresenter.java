@@ -37,6 +37,7 @@ public class ProfilePresenter implements Presenter {
 
     public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 11;
     public static final int MAX_SHOTS_SHOWN = 10;
+    private static final String EN_LOCALE = "en";
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
@@ -536,7 +537,6 @@ public class ProfilePresenter implements Presenter {
     public void reportUserClicked() {
         profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
     }
-
     public void banUserClicked() {
         profileView.showBanUserConfirmation(userModel);
     }
