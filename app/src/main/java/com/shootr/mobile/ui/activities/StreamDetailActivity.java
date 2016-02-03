@@ -509,7 +509,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {
-        startActivity(new Intent(this, StreamDataInfoActivity.class));
+        Intent intent = new Intent(this, StreamDataInfoActivity.class);
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER, streamModel.getTotalFavorites());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_PARTICIPANTS_NUMBER, streamModel.getHistoricWatchers());
+        startActivity(intent);
     }
 
     @Override
