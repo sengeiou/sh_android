@@ -52,22 +52,6 @@ public class NiceManager extends AbstractManager {
         return result;
     }
 
-    public boolean isMarked(String idShot) {
-        String where = NiceShotTable.ID_SHOT + " = ?";
-        String[] whereArgs = new String[] { idShot };
-        Cursor query = getReadableDatabase().query(NiceShotTable.TABLE,
-          NiceShotTable.PROJECTION,
-          where,
-          whereArgs,
-          null,
-          null,
-          null,
-          "1");
-        boolean result = query.getCount() > 0;
-        query.close();
-        return result;
-    }
-
     public void unmark(String idShot) throws NiceNotMarkedException {
         String where = NiceShotTable.ID_SHOT + " = ?";
         String[] whereArgs = new String[] { idShot };

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.fragments;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

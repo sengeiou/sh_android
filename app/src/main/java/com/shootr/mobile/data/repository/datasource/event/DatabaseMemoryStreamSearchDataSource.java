@@ -41,9 +41,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
     @Override public List<StreamSearchEntity> getDefaultStreams(String locale) {
         Map<String, Integer> watchersCountByStreams = getWatchersCountByStreams();
         List<StreamSearchEntity> defaultStreamSearch = streamManager.getDefaultStreamSearch();
-        List<StreamSearchEntity> streamSearchEntitiesWithUpdatedWatchNumber =
-          updateWatchNumberInStreams(watchersCountByStreams, defaultStreamSearch);
-        return streamSearchEntitiesWithUpdatedWatchNumber;
+        return updateWatchNumberInStreams(watchersCountByStreams, defaultStreamSearch);
     }
 
     private List<StreamSearchEntity> updateWatchNumberInStreams(Map<String, Integer> watchersCountByStreams,
@@ -70,8 +68,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
         if (streamFromDefaultList != null) {
             return streamFromDefaultList;
         } else {
-            StreamSearchEntity streamFromLastSearchResults = lastStreamSearchResults.get(idStream);
-            return streamFromLastSearchResults;
+            return lastStreamSearchResults.get(idStream);
         }
     }
 

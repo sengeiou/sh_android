@@ -175,11 +175,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override
-    public void hideSectionTitles() {
-        adapter.setShowTitles(false);
-    }
-
-    @Override
     public void showSectionTitles() {
         adapter.setShowTitles(true);
     }

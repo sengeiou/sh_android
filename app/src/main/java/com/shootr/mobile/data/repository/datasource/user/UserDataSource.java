@@ -2,7 +2,6 @@ package com.shootr.mobile.data.repository.datasource.user;
 
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
-import com.shootr.mobile.domain.User;
 import java.util.List;
 
 public interface UserDataSource  extends SyncableDataSource<UserEntity>{
