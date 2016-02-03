@@ -23,6 +23,8 @@ public class SupportPresenterTest {
     public static final String ID_STREAM = "idStream";
     public static final String TITLE = "title";
     public static final String ID_AUTHOR = "id_author";
+    private static final String ES_LOCALE = "es";
+    private static final String EN_LOCALE = "en";
     @Mock GetBlogInteractor getBlogInteractor;
     @Mock GetHelpInteractor getHelpInteractor;
     @Mock SupportView supportView;
@@ -109,6 +111,20 @@ public class SupportPresenterTest {
         presenter.helpClicked();
 
         verify(supportView, never()).goToStream(stream());
+    }
+
+    @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
+        presenter.initialize(supportView);
+        presenter.setUpAlertDialog(ES_LOCALE);
+
+        verify(supportView).showAlertDialog();
+    }
+
+    @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnglish() throws Exception {
+        presenter.initialize(supportView);
+        presenter.setUpAlertDialog(EN_LOCALE);
+
+        verify(supportView,never()).showAlertDialog();
     }
 
     private Stream stream() {

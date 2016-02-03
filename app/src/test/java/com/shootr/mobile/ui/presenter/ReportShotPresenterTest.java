@@ -39,6 +39,9 @@ public class ReportShotPresenterTest {
 
     public static final String ID_USER = "idUser";
     public static final String ANOTHER_ID_USER = "another_id_user";
+    private static final String ES_LOCALE = "es";
+    private static final String SESSION_TOKEN = "session_token";
+    private static final String EN_LOCALE = "en";
     @Mock ReportShotView reportShotView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
@@ -152,6 +155,22 @@ public class ReportShotPresenterTest {
         presenter.pinToProfile(shotModel());
 
         reportShotView.showPinned();
+    }
+
+    @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
+        ShotModel shotModel = shotModel();
+
+        presenter.reportClicked(ES_LOCALE,SESSION_TOKEN,shotModel);
+
+        verify(reportShotView).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
+    }
+
+    @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnlgish() throws Exception {
+        ShotModel shotModel = shotModel();
+
+        presenter.reportClicked(EN_LOCALE,SESSION_TOKEN,shotModel);
+
+        verify(reportShotView,never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
     }
 
     public void setupPinShotCallback() {
