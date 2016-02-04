@@ -183,7 +183,7 @@
     <string name="listing_title_holding">Creats</string>
     <string name="loading_activity_message">Carregant…</string>
     <string name="main_activity_title">Activitat</string>
-    <string name="mentioned_shot_activity_with_comment">T\'ha mencionat:</string>
+    <string name="mentioned_shot_activity_with_comment">"T\'ha mencionat: "</string>
     <string name="menu_all_shots">Mostrar tots els shots</string>
     <string name="menu_copy_text">Copiar text</string>
     <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
@@ -217,7 +217,7 @@
     <string name="new_stream_title_label">Títol</string>
     <string name="next">Següent</string>
     <string name="niced_shot_activity">T\'ha fet un nice</string>
-    <string name="niced_shot_activity_with_comment">T\'ha fet un nice:</string>
+    <string name="niced_shot_activity_with_comment">"T\'ha fet un nice: "</string>
     <plurals name="nice_count_pattern">
         <item quantity="one">%d nice</item>
         <item quantity="other">%d nices</item>
@@ -279,7 +279,7 @@
     <string name="restore_stream_label">Restaurar stream</string>
     <string name="seconds">s</string>
     <string name="shared_shot_activity">Ha compartit un shot de %s</string>
-    <string name="shared_shot_activity_with_comment">Ha compartit de %s:</string>
+    <string name="shared_shot_activity_with_comment">"Ha compartit de %s: "</string>
     <string name="shared_stream_notification">Stream compartit</string>
     <string name="share_shot_chooser_title">Compartir</string>
     <string name="share_shot_message">%1$s ha fet un shot a %2$s: %3$s</string>

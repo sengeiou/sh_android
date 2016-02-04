@@ -182,7 +182,7 @@
     <string name="listing_title_holding">作成したストリーム</string>
     <string name="loading_activity_message">ロード中…</string>
     <string name="main_activity_title">アクティビティ</string>
-    <string name="mentioned_shot_activity_with_comment">あなたについて書きました:</string>
+    <string name="mentioned_shot_activity_with_comment">"あなたについて書きました: "</string>
     <string name="menu_all_shots">全てのショットを見る</string>
     <string name="menu_copy_text">テキストをコピー</string>
     <string name="menu_holding_shots">作成者のショットを表示する</string>
@@ -216,7 +216,7 @@
     <string name="new_stream_title_label">タイトル</string>
     <string name="next">次へ</string>
     <string name="niced_shot_activity">あなたにナイス！をしました</string>
-    <string name="niced_shot_activity_with_comment">あなたにナイス！をしました:</string>
+    <string name="niced_shot_activity_with_comment">"あなたにナイス！をしました: "</string>
     <plurals name="nice_count_pattern">
         <item quantity="other">%d件のナイス！ </item>
     </plurals>
