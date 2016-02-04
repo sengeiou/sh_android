@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.domain.utils.TimeUtils;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
@@ -205,6 +206,12 @@ public class StreamDetailPresenterTest {
         presenter.resume();
 
         verify(selectStreamInteractor, never()).selectStream(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
+        presenter.dataInfoClicked();
+
+        verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
     }
 
     public void setupNoStreamMutedCallback() {

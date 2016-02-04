@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
+import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamMediaActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -83,6 +84,7 @@ import javax.inject.Singleton;
     FindParticipantsActivity.class,
     WelcomePageActivity.class,
     ErrorActivity.class,
+    StreamDataInfoActivity.class,
   },
   complete = false) public class UiModule {
 

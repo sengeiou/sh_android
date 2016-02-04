@@ -56,4 +56,6 @@ public interface StreamDetailView extends DataTransferView {
     void goToAllParticipants(String idStream);
 
     void setMuteStatus(Boolean isChecked);
+
+    void goToStreamDataInfo(StreamModel streamModel);
 }

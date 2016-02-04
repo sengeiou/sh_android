@@ -88,7 +88,7 @@
     <string name="drawer_favorites_title">お気に入り</string>
     <string name="drawer_friends_title">友達</string>
     <string name="drawer_streams_title">ストリーム</string>
-    <string name="edit_stream">ストリームを編集</string>
+    <string name="edit_stream">編集</string>
     <string name="edit_stream_listing_context_menu">編集</string>
     <string name="email_already_registered">このメールアドレスは既に使用されています</string>
     <string name="email_confirmation_message">アカウント保護のために、有効なメールアドレスを入力してください。</string>
@@ -352,4 +352,9 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">暫くお待ちください</string>
     <string name="yes">はい</string>
+    <string name="title_activity_stream_data_info" >統計</string>
+    <string name="stream_data_info_participants">参加者数</string>
+    <string name="stream_data_info_shots">ショット</string>
+    <string name="stream_data_info_favorites">お気に入り</string>
+    <string name="stream_detail_menu_data_info">統計</string>
 </resources>

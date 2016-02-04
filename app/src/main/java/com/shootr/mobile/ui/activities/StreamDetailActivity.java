@@ -83,6 +83,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -184,7 +185,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(com.shootr.mobile.R.menu.stream, menu);
-        editMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_edit));
+        editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
+        dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
+        dataInfoMenuItem.setVisible(true);
         return true;
     }
 
@@ -194,8 +197,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_edit:
+            case R.id.stream_detail_menu_edit:
                 streamDetailPresenter.editStreamClick();
+                return true;
+            case R.id.stream_detail_menu_data_info:
+                streamDetailPresenter.dataInfoClicked();
                 return true;
             default:
                 return false;
@@ -408,8 +414,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
             boolean needsToAdjustPadding = true;
 
-            @Override
-            public void onCollapseChanged(float collapseProgress) {
+            @Override public void onCollapseChanged(float collapseProgress) {
                 if (collapseProgress == 0f) {
                     setPaddingRight(0);
                     needsToAdjustPadding = true;
@@ -479,7 +484,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 streamSubtitle.setText(participants);
             }
         } else {
-            streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants, numberOfFollowing, totalWatchers));
+            streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants,
+              numberOfFollowing,
+              totalWatchers));
         }
     }
 
@@ -500,6 +507,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
+    }
+
+    @Override public void goToStreamDataInfo(StreamModel streamModel) {
+        Intent intent = new Intent(this, StreamDataInfoActivity.class);
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_PARTICIPANTS_NUMBER, streamModel.getHistoricWatchers());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_SHOTS_NUMBER, streamModel.getTotalShots());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER, streamModel.getTotalFavorites());
+        startActivity(intent);
     }
 
     @Override

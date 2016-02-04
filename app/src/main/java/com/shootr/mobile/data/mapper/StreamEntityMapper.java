@@ -33,8 +33,12 @@ public class StreamEntityMapper {
         if (streamEntity.getWatchers() != null) {
             stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
         }
-        stream.setTotalFavorites(streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
-        stream.setTotalWatchers(streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
+        stream.setTotalFavorites(
+          streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
+        stream.setTotalWatchers(
+          streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
+        stream.setHistoricWatchers(streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
+        stream.setTotalShots(streamEntity.getTotalShots() != null ? streamEntity.getTotalShots() : 0L);
         return stream;
     }
 
@@ -67,5 +71,7 @@ public class StreamEntityMapper {
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFavorites()));
         entityTemplate.setTotalWatchers(Long.valueOf(stream.getTotalWatchers()));
+        entityTemplate.setHistoricWatchers(stream.getHistoricWatchers());
+        entityTemplate.setTotalShots(stream.getTotalShots());
     }
 }
