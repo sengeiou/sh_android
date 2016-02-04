@@ -209,7 +209,7 @@ public class StreamDetailPresenterTest {
     }
 
     @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
-        presenter.toolbarClicked();
+        presenter.dataInfoClicked();
 
         verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
     }

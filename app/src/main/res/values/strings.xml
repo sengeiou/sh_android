@@ -82,7 +82,7 @@
     <string name="drawer_favorites_title">Favorites</string>
     <string name="drawer_friends_title">Friends</string>
     <string name="drawer_streams_title">Streams</string>
-    <string name="edit_stream">Edit Stream</string>
+    <string name="edit_stream">Edit</string>
     <string name="edit_stream_listing_context_menu">Edit</string>
     <string name="email_already_registered">Email already registered</string>
     <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
@@ -384,5 +384,6 @@
     <string name="stream_data_info_participants">Participants</string>
     <string name="stream_data_info_shots">Shots</string>
     <string name="stream_data_info_favorites">Favorites</string>
-    <string name="title_activity_stream_data_info" > Numbers </string>
+    <string name="title_activity_stream_data_info">Numbers</string>
+    <string name="stream_detail_menu_data_info">Numbers</string>
 </resources>

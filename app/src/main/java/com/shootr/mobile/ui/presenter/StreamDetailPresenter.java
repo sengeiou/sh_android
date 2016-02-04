@@ -344,7 +344,7 @@ public class StreamDetailPresenter implements Presenter {
         });
     }
 
-    public void toolbarClicked() {
+    public void dataInfoClicked() {
         streamDetailView.goToStreamDataInfo(streamModel);
     }
 

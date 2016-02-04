@@ -83,6 +83,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -155,11 +156,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    @OnClick(R.id.stream_title_container)
-    public void onTitleContainerClicked() {
-        streamDetailPresenter.toolbarClicked();
-    }
-
     @OnClick(R.id.stream_share_button)
     public void onShareClick() {
         openContextualMenuForSharing();
@@ -189,7 +185,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(com.shootr.mobile.R.menu.stream, menu);
-        editMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_edit));
+        editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
+        dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
+        dataInfoMenuItem.setVisible(true);
         return true;
     }
 
@@ -199,8 +197,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_edit:
+            case R.id.stream_detail_menu_edit:
                 streamDetailPresenter.editStreamClick();
+                return true;
+            case R.id.stream_detail_menu_data_info:
+                streamDetailPresenter.dataInfoClicked();
                 return true;
             default:
                 return false;

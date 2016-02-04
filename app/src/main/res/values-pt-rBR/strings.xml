@@ -88,7 +88,7 @@
   <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_friends_title">Amigos</string>
   <string name="drawer_streams_title">Streams</string>
-  <string name="edit_stream">Editar stream</string>
+  <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>
   <string name="email_already_registered">Email já registrado</string>
   <string name="email_confirmation_message">Introduza um email válido para proteger sua conta.</string>
@@ -364,5 +364,9 @@
   <string name="error_reset_password">Conta não encontrada</string>
 
   <string name="error_facebook_login">Não foi possível fazer login com o Facebook. Tente mais tarde.</string>
-  <string name="title_activity_stream_data_info" />
+  <string name="title_activity_stream_data_info" >Estatísticas</string>
+  <string name="stream_data_info_participants">Participantes</string>
+  <string name="stream_data_info_shots">Shots</string>
+  <string name="stream_data_info_favorites">Favoritos</string>
+  <string name="stream_detail_menu_data_info">Estatísticas</string>
 </resources>
