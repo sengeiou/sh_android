@@ -23,6 +23,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.bumptech.glide.Glide;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
@@ -47,6 +48,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.gpu.VignetteFilterTransformation;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
@@ -64,6 +67,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(com.shootr.mobile.R.id.stream_title_container) View streamTitleContainer;
     @Bind(com.shootr.mobile.R.id.cat_avatar) View streamPictureContainer;
     @Bind(com.shootr.mobile.R.id.stream_avatar) ImageView streamPicture;
+    @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
     @Bind(R.id.subtitle) TextView streamSubtitle;
@@ -301,6 +305,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public void setStreamPicture(String picture) {
         imageLoader.loadStreamPicture(picture, streamPicture);
+        Glide.with(this).load(picture)
+          .bitmapTransform(new BlurTransformation(this))
+          .into(toolbarImage);
     }
 
     @Override
@@ -356,8 +363,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamPicture.setImageResource(R.drawable.ic_stream_picture_edit);
     }
 
-    @Override
-    public void showLoadingPictureUpload() {
+    @Override public void showLoadingPictureUpload() {
         streamPicture.setVisibility(View.GONE);
         streamPictureLoading.setVisibility(View.VISIBLE);
     }
@@ -407,8 +413,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void showEditStreamButton() {
+    @Override public void showEditStreamButton() {
         editMenuItem.setVisible(true);
         collapsingAvatarToolbar.setCollapseChangedListener(new CollapsingAvatarToolbar.CollapseChangedListener() {
 
@@ -479,8 +484,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 streamSubtitle.setText(participants);
             } else {
                 String participants = getResources().getQuantityString(R.plurals.total_watchers_pattern,
-                  totalWatchers,
-                  totalWatchers);
+                  totalWatchers, totalWatchers);
                 streamSubtitle.setText(participants);
             }
         } else {
