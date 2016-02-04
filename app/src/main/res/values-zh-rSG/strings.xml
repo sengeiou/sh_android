@@ -182,7 +182,7 @@
     <string name="listing_title_holding">建立</string>
     <string name="loading_activity_message">等待中…</string>
     <string name="main_activity_title">动态</string>
-    <string name="mentioned_shot_activity_with_comment">提到了你:</string>
+    <string name="mentioned_shot_activity_with_comment">"提到了你: "</string>
     <string name="menu_all_shots">显示所有shot</string>
     <string name="menu_copy_text">复制全文</string>
     <string name="menu_holding_shots">发送至管理员的shot</string>
@@ -216,7 +216,7 @@
     <string name="new_stream_title_label">标题</string>
     <string name="next">继续</string>
     <string name="niced_shot_activity">赞了你的shot</string>
-    <string name="niced_shot_activity_with_comment">赞了你的shot:</string>
+    <string name="niced_shot_activity_with_comment">"赞了你的shot: "</string>
     <plurals name="nice_count_pattern">
         <item quantity="other">%d赞</item>
     </plurals>
@@ -277,14 +277,14 @@
     <string name="restore_stream_label">还原stream</string>
     <string name="seconds">秒</string>
     <string name="shared_shot_activity">分享了%s的shot</string>
-    <string name="shared_shot_activity_with_comment">分享%s的shot:</string>
+    <string name="shared_shot_activity_with_comment">"分享%s的shot: "</string>
     <string name="shared_stream_notification">被分享的shared</string>
     <string name="share_shot_chooser_title">分享</string>
     <string name="share_shot_message">%1$s 评论了在%2$s: %3$s</string>
     <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
     <string name="share_stream_activity_text_pattern">分享(stream)</string>
     <string name="share_stream_message">在Shootr上查看%1$s: https://shootr.com/st/%2$s</string>
-    <string name="share_stream_subject">在Shootr上查看%s:</string>
+    <string name="share_stream_subject">"在Shootr上查看%s: "</string>
     <string name="share_via">分享到…</string>
     <string name="share_via_shootr">分享到Shootr</string>
     <string name="shoot_all_button">shoot所有</string>
