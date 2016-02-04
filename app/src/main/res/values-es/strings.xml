@@ -285,7 +285,7 @@
     <string name="share_shot_message">Shot de %1$s en %2$s: %3$s</string>
     <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
     <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
-    <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://shootr.com/st/%2$s</string>
+    <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
     <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
     <string name="share_via">Compartir vía…</string>
     <string name="share_via_shootr">Compartir vía Shootr</string>
