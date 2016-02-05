@@ -5,13 +5,13 @@ public class CreateAccountApiEntity {
     private String userName;
     private String email;
     private String password;
-    private String language;
+    private String locale;
 
-    public CreateAccountApiEntity(String userName, String email, String password, String language) {
+    public CreateAccountApiEntity(String userName, String email, String password, String locale) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.language = language;
+        this.locale = locale;
     }
 
     public String getUserName() {
@@ -38,11 +38,11 @@ public class CreateAccountApiEntity {
         this.password = password;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }
