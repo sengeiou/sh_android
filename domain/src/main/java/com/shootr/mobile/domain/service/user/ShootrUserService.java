@@ -129,8 +129,8 @@ public class ShootrUserService {
         confirmEmailGateway.changeEmail(email);
     }
 
-    public void changePassword(String currentPassword, String newPassword, String language) throws InvalidPasswordException {
-        changePasswordGateway.changePassword(currentPassword, newPassword, language);
+    public void changePassword(String currentPassword, String newPassword, String locale) throws InvalidPasswordException {
+        changePasswordGateway.changePassword(currentPassword, newPassword, locale);
     }
 
     public void removeSessionData() {

@@ -17,11 +17,11 @@ public class ServiceChangePasswordGateway implements ChangePasswordGateway {
         this.changePasswordApiService = changePasswordApiService;
     }
 
-    @Override public void changePassword(String currentPassword, String newPassword, String language) throws InvalidPasswordException {
+    @Override public void changePassword(String currentPassword, String newPassword, String locale) throws InvalidPasswordException {
         ChangePasswordEntity changePasswordEntity = new ChangePasswordEntity();
         changePasswordEntity.setPassword(currentPassword);
         changePasswordEntity.setNewPassword(newPassword);
-        changePasswordEntity.setLanguage(language);
+        changePasswordEntity.setLocale(locale);
         try {
             changePasswordApiService.changePassword(changePasswordEntity);
         } catch (ApiException e) {
