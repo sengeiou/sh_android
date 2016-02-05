@@ -3,11 +3,11 @@ package com.shootr.mobile.data.api.entity;
 public class FacebookLoginApiEntity {
 
     private String accessToken;
-    private String language;
+    private String locale;
 
     public FacebookLoginApiEntity(String accessToken, String language) {
         this.accessToken = accessToken;
-        this.language = language;
+        this.locale = language;
     }
 
     public String getAccessToken() {
@@ -18,11 +18,11 @@ public class FacebookLoginApiEntity {
         this.accessToken = accessToken;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }
