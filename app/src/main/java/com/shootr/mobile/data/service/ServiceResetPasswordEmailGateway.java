@@ -16,10 +16,10 @@ public class ServiceResetPasswordEmailGateway implements ResetPasswordEmailGatew
         this.resetPasswordApiService = resetPasswordApiService;
     }
 
-    @Override public void sendPasswordResetEmail(String idUser, String language) {
+    @Override public void sendPasswordResetEmail(String idUser, String locale) {
         ResetPasswordEntity resetPasswordEntity = new ResetPasswordEntity();
         resetPasswordEntity.setIdUser(idUser);
-        resetPasswordEntity.setLanguage(language);
+        resetPasswordEntity.setLocale(locale);
         try {
             resetPasswordApiService.sendResetPasswordEmail(resetPasswordEntity);
         } catch (IOException | ApiException error) {

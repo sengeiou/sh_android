@@ -98,8 +98,8 @@ public class ShootrUserService {
         return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 
-    public void sendPasswordResetEmail(String idUser, String language) throws IOException {
-        resetPasswordEmailGateway.sendPasswordResetEmail(idUser, language);
+    public void sendPasswordResetEmail(String idUser, String loacale) throws IOException {
+        resetPasswordEmailGateway.sendPasswordResetEmail(idUser, loacale);
     }
 
     public void performLogout() {
