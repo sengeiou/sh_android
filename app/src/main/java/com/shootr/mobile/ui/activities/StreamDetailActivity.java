@@ -5,10 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,15 +47,16 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
-import com.shootr.mobile.util.ToolbarColorizeHelper;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.gpu.VignetteFilterTransformation;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
@@ -66,6 +71,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(com.shootr.mobile.R.id.toolbar_dummy_content) View toolbarDummyContent;
     @Bind(com.shootr.mobile.R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
+    @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
     @Bind(com.shootr.mobile.R.id.stream_title_container) View streamTitleContainer;
     @Bind(com.shootr.mobile.R.id.cat_avatar) View streamPictureContainer;
     @Bind(com.shootr.mobile.R.id.stream_avatar) ImageView streamPicture;
@@ -240,8 +246,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     protected void onResume() {
         super.onResume();
         streamDetailPresenter.resume();
-        //ToolbarColorizeHelper.colorizeToolbar(toolbar, Color.BLACK, this);
-
     }
 
     @Override
@@ -249,6 +253,71 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         super.onPause();
         streamDetailPresenter.pause();
         analyticsTool.analyticsStop(getBaseContext(), this);
+    }
+
+    public static int getDominantColor1(Bitmap bitmap) {
+
+        if (bitmap == null)
+            throw new NullPointerException();
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int size = width * height;
+        int pixels[] = new int[size];
+
+        Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
+
+        bitmap2.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        final List<HashMap<Integer, Integer>> colorMap = new ArrayList<HashMap<Integer, Integer>>();
+        colorMap.add(new HashMap<Integer, Integer>());
+        colorMap.add(new HashMap<Integer, Integer>());
+        colorMap.add(new HashMap<Integer, Integer>());
+
+        int color = 0;
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        Integer rC, gC, bC;
+        for (int i = 0; i < pixels.length; i++) {
+            color = pixels[i];
+
+            r = Color.red(color);
+            g = Color.green(color);
+            b = Color.blue(color);
+
+            rC = colorMap.get(0).get(r);
+            if (rC == null)
+                rC = 0;
+            colorMap.get(0).put(r, ++rC);
+
+            gC = colorMap.get(1).get(g);
+            if (gC == null)
+                gC = 0;
+            colorMap.get(1).put(g, ++gC);
+
+            bC = colorMap.get(2).get(b);
+            if (bC == null)
+                bC = 0;
+            colorMap.get(2).put(b, ++bC);
+        }
+
+        int[] rgb = new int[3];
+        for (int i = 0; i < 3; i++) {
+            int max = 0;
+            int val = 0;
+            for (Map.Entry<Integer, Integer> entry : colorMap.get(i).entrySet()) {
+                if (entry.getValue() > max) {
+                    max = entry.getValue();
+                    val = entry.getKey();
+                }
+            }
+            rgb[i] = val;
+        }
+
+        int dominantColor = Color.rgb(rgb[0], rgb[1], rgb[2]);
+
+        return dominantColor;
     }
 
     private void setShortTitleResultForPreviousActivity(String shortTitle) {
@@ -312,6 +381,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         Glide.with(this).load(picture)
           .bitmapTransform(new BlurTransformation(this))
           .into(toolbarImage);
+
+        streamPicture.buildDrawingCache();
+        Bitmap bitmap = streamPicture.getDrawingCache();
+        int color = getDominantColor1(bitmap);
+        collapsingToolbar.setContentScrimColor(color);
+        collapsingToolbar.setStatusBarScrimColor(color);
     }
 
     @Override
