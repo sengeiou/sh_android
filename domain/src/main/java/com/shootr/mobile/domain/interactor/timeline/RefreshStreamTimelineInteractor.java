@@ -44,7 +44,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
         try {
             Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream);
             notifyLoaded(timeline);
-            shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLanguage());
+            shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
         } catch (ShootrException error) {
             notifyError(error);
         }

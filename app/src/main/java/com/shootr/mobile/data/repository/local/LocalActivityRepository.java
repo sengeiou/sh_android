@@ -27,9 +27,9 @@ public class LocalActivityRepository implements ActivityRepository{
         this.localShotRepository = localShotRepository;
     }
 
-    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
         List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters, language);
+          localActivityDataSource.getActivityTimeline(parameters, locale);
         List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
         return activityEntityMapper.transform(activityEntities);
     }
