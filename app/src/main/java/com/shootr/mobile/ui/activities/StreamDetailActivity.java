@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -42,6 +43,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ToolbarColorizeHelper;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
@@ -238,6 +240,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     protected void onResume() {
         super.onResume();
         streamDetailPresenter.resume();
+        //ToolbarColorizeHelper.colorizeToolbar(toolbar, Color.BLACK, this);
+
     }
 
     @Override
