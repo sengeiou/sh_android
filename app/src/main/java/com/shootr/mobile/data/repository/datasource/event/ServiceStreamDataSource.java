@@ -97,9 +97,9 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public StreamEntity getBlogStream(String country, String language) {
+    @Override public StreamEntity getBlogStream(String country, String locale) {
         try {
-            return streamApiService.getBlogStream(country, language);
+            return streamApiService.getBlogStream(country, locale);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
