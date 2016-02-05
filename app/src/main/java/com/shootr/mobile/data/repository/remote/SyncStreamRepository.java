@@ -73,8 +73,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         remoteStreamDataSource.restoreStream(idStream);
     }
 
-    @Override public Stream getBlogStream(String country, String locale) {
-        StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, locale);
+    @Override public Stream getBlogStream(String country, String language) {
+        StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
         if (blogStream != null) {
             markEntityAsSynchronized(blogStream);
             localStreamDataSource.putStream(blogStream);
@@ -84,8 +84,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         }
     }
 
-    @Override public Stream getHelpStream(String country, String locale) {
-        StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, locale);
+    @Override public Stream getHelpStream(String country, String language) {
+        StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, language);
         if (helpStream != null) {
             markEntityAsSynchronized(helpStream);
             localStreamDataSource.putStream(helpStream);

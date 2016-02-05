@@ -38,7 +38,7 @@ public class GetHelpInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             notifyLoaded(remoteStreamRepository.getHelpStream(localeProvider.getCountry(),
-              localeProvider.getLocale()));
+              localeProvider.getLanguage()));
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }

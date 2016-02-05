@@ -97,17 +97,17 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public StreamEntity getBlogStream(String country, String locale) {
+    @Override public StreamEntity getBlogStream(String country, String language) {
         try {
-            return streamApiService.getBlogStream(country, locale);
+            return streamApiService.getBlogStream(country, language);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public StreamEntity getHelpStream(String country, String locale) {
+    @Override public StreamEntity getHelpStream(String country, String language) {
         try {
-            return streamApiService.getHelpStream(country, locale);
+            return streamApiService.getHelpStream(country, language);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

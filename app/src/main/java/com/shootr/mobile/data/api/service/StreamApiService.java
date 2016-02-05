@@ -55,10 +55,10 @@ public interface StreamApiService {
     Response restoreStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
     @GET("/stream/blog/")
-    StreamEntity getBlogStream(@Query("country") String country, @Query("locale") String locale) throws IOException, ApiException;
+    StreamEntity getBlogStream(@Query("country") String country, @Query("language") String language) throws IOException, ApiException;
 
     @GET("/stream/help/")
-    StreamEntity getHelpStream(@Query("country") String country, @Query("locale") String locale) throws IOException, ApiException;
+    StreamEntity getHelpStream(@Query("country") String country, @Query("language") String language) throws IOException, ApiException;
 
     @GET("/mute/")
     List<MuteStreamEntity> getMuteStreams() throws IOException, ApiException;
