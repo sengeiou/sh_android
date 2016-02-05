@@ -105,9 +105,9 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public StreamEntity getHelpStream(String country, String language) {
+    @Override public StreamEntity getHelpStream(String country, String locale) {
         try {
-            return streamApiService.getHelpStream(country, language);
+            return streamApiService.getHelpStream(country, locale);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

@@ -84,8 +84,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         }
     }
 
-    @Override public Stream getHelpStream(String country, String language) {
-        StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, language);
+    @Override public Stream getHelpStream(String country, String locale) {
+        StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, locale);
         if (helpStream != null) {
             markEntityAsSynchronized(helpStream);
             localStreamDataSource.putStream(helpStream);
