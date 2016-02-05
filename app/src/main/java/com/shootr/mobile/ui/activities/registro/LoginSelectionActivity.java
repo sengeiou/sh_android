@@ -186,6 +186,8 @@ public class LoginSelectionActivity extends BaseActivity {
     }
 
     private void retrieveOnUpgradeInfo() {
+        buttonsContainer.setVisibility(View.GONE);
+        showLoading();
         final Intent i = new Intent(this, MainTabbedActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), new Interactor.Callback<User>() {
@@ -194,11 +196,13 @@ public class LoginSelectionActivity extends BaseActivity {
                 if (visibleStreamId != null) {
                     getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
                         @Override public void onLoaded(Stream stream) {
+                            hideLoading();
                             startActivity(i);
                             finish();
                         }
                     });
                 } else {
+                    hideLoading();
                     startActivity(i);
                     finish();
                 }
