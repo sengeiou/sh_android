@@ -45,8 +45,6 @@ public class ShootrTimelineService {
           .since(activityRefreshDateSince) //
           .build();
 
-        activityTimelineParameters.excludeHiddenTypes();
-
         if (localActivityRepository.getActivityTimeline(activityTimelineParameters, language).isEmpty()) {
             activityTimelineParameters.excludeHiddenTypes();
         }
