@@ -41,7 +41,9 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     private void loadLocalActivities() {
-        List<Activity> activities = loadLocalActivities(buildParameters());
+        ActivityTimelineParameters activityTimelineParameters = buildParameters();
+        activityTimelineParameters.excludeHiddenTypes();
+        List<Activity> activities = loadLocalActivities(activityTimelineParameters);
         activities = sortActivitiesByPublishDate(activities);
         notifyTimelineFromActivities(activities);
     }

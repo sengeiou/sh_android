@@ -42,6 +42,7 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
     @Override public void execute() throws Exception {
         try {
             ActivityTimelineParameters timelineParameters = buildTimelineParameters();
+            timelineParameters.excludeHiddenTypes();
             List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters, language);
             sortActivitiesByPublishDate(olderActivities);
             notifyTimelineFromActivities(olderActivities);
