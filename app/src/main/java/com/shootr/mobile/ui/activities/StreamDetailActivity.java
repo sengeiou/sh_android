@@ -10,17 +10,21 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -255,71 +259,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         analyticsTool.analyticsStop(getBaseContext(), this);
     }
 
-    public static int getDominantColor1(Bitmap bitmap) {
-
-        if (bitmap == null)
-            throw new NullPointerException();
-
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int size = width * height;
-        int pixels[] = new int[size];
-
-        Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
-
-        bitmap2.getPixels(pixels, 0, width, 0, 0, width, height);
-
-        final List<HashMap<Integer, Integer>> colorMap = new ArrayList<HashMap<Integer, Integer>>();
-        colorMap.add(new HashMap<Integer, Integer>());
-        colorMap.add(new HashMap<Integer, Integer>());
-        colorMap.add(new HashMap<Integer, Integer>());
-
-        int color = 0;
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        Integer rC, gC, bC;
-        for (int i = 0; i < pixels.length; i++) {
-            color = pixels[i];
-
-            r = Color.red(color);
-            g = Color.green(color);
-            b = Color.blue(color);
-
-            rC = colorMap.get(0).get(r);
-            if (rC == null)
-                rC = 0;
-            colorMap.get(0).put(r, ++rC);
-
-            gC = colorMap.get(1).get(g);
-            if (gC == null)
-                gC = 0;
-            colorMap.get(1).put(g, ++gC);
-
-            bC = colorMap.get(2).get(b);
-            if (bC == null)
-                bC = 0;
-            colorMap.get(2).put(b, ++bC);
-        }
-
-        int[] rgb = new int[3];
-        for (int i = 0; i < 3; i++) {
-            int max = 0;
-            int val = 0;
-            for (Map.Entry<Integer, Integer> entry : colorMap.get(i).entrySet()) {
-                if (entry.getValue() > max) {
-                    max = entry.getValue();
-                    val = entry.getKey();
-                }
-            }
-            rgb[i] = val;
-        }
-
-        int dominantColor = Color.rgb(rgb[0], rgb[1], rgb[2]);
-
-        return dominantColor;
-    }
-
     private void setShortTitleResultForPreviousActivity(String shortTitle) {
         setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_SHORT_TITLE, shortTitle));
     }
@@ -384,9 +323,17 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
-        int color = getDominantColor1(bitmap);
-        collapsingToolbar.setContentScrimColor(color);
-        collapsingToolbar.setStatusBarScrimColor(color);
+        Palette palette = Palette.from(bitmap).generate();
+        collapsingToolbar.setContentScrimColor(palette.getDarkMutedColor(getColor(R.color.primary)));
+        collapsingToolbar.setStatusBarScrimColor(palette.getDarkMutedColor(getColor(R.color.primary)));
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(palette.getDarkVibrantColor(getColor(R.color.primary_dark)));
+        }
     }
 
     @Override
