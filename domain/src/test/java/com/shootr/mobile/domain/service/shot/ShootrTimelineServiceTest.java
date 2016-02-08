@@ -138,7 +138,7 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
-    @Test public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity() {
+    @Test public void shouldReturnVisibleActivityTypesIfIsThereWasLocalActivity() {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activitiesList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
@@ -146,7 +146,7 @@ public class ShootrTimelineServiceTest {
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture(), anyString());
-        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(allActivityTypes());
+        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
     }
 
     @Test public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity() {
