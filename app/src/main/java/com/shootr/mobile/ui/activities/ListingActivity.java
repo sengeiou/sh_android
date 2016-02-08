@@ -15,6 +15,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ListingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
@@ -22,6 +23,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.ListingListPresenter;
 import com.shootr.mobile.ui.views.ListingView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
@@ -40,10 +42,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Bind(com.shootr.mobile.R.id.listing_empty_title) View emptyView;
     @Bind(com.shootr.mobile.R.id.listing_add_stream) FloatingActionButton addStream;
     @BindString(com.shootr.mobile.R.string.shared_stream_notification) String sharedStream;
+    @BindString(R.string.analytics_screen_user_streams) String analyticsScreenuserStreams;
 
     @Inject ListingListPresenter presenter;
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     private ListingAdapter adapter;
 
@@ -60,6 +64,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(),analyticsScreenuserStreams);
         Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
         adapter = new ListingAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
@@ -122,6 +127,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override
     protected void onPause() {
         super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(),this);
         presenter.pause();
     }
 
