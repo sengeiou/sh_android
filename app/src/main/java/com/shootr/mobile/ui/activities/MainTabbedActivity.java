@@ -75,9 +75,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             Pattern shareStreamPattern = Pattern.compile("#/st");
             Matcher matcher = shareStreamPattern.matcher(address);
             if (matcher.find()) {
-                Timber.d("INTENT OK "+data.toString());
+                //https://web.shootr.com/#/st/5579baa069d47a345fdd4104 28
+                String idStream = address.substring(28);
+                Timber.d("INTENT OK "+idStream);
             } else {
                 Timber.d("SHARE SHOT");
+                //https://web.shootr.com/#/s/5579baa069d47a345fdd4104 27
+                String idShot = address.substring(27);
+                Timber.d("INTENT OK "+idShot);
             }
         }
 
