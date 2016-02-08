@@ -370,4 +370,5 @@
   <string name="analytics_screen_change_password">changePassword</string>
   <string name="analytics_screen_user_streams">userStreams</string>
   <string name="analytics_screen_stream_numbers">streamNumbers</string>
+  <string name="analytics_screen_forgot_password">forgotPassword</string>
 </resources>

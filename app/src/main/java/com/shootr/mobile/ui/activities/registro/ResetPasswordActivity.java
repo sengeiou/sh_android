@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -20,6 +21,7 @@ import com.shootr.mobile.ui.presenter.ResetPasswordConfirmationPresenter;
 import com.shootr.mobile.ui.presenter.ResetPasswordRequestPresenter;
 import com.shootr.mobile.ui.views.ResetPasswordConfirmationView;
 import com.shootr.mobile.ui.views.ResetPasswordRequestView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import javax.inject.Inject;
@@ -28,11 +30,13 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     @Bind(R.id.reset_password_request_view) View resetPasswordRequestLayout;
     @Bind(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
+    @BindString(R.string.analytics_screen_forgot_password) String analyticsScreenForgotPassword;
 
     @Inject ImageLoader imageLoader;
     @Inject ResetPasswordRequestPresenter resetPasswordRequestPresenter;
     @Inject ResetPasswordConfirmationPresenter resetPasswordConfirmationPresenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     private ResetPasswordRequestView resetPasswordRequestView;
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
@@ -46,6 +50,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenForgotPassword);
         setupViewImplementations();
         resetPasswordRequestLayout.setVisibility(View.VISIBLE);
         resetPasswordConfirmationLayout.setVisibility(View.GONE);
@@ -229,5 +234,10 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         public void showError(String message) {
             feedbackMessage.show(getView(), message);
         }
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 }
