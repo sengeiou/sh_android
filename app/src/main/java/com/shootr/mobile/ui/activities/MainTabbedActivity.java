@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,10 @@ import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -61,6 +65,22 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         tabLayout.setupWithViewPager(viewPager);
         setupTabLayoutListener();
         viewPager.setCurrentItem(1);
+
+        Uri data=getIntent().getData();
+        if (data==null) {
+            Timber.d("INTENT FAILED");
+        }
+        else {
+            String address = data.toString();
+            Pattern shareStreamPattern = Pattern.compile("#/st");
+            Matcher matcher = shareStreamPattern.matcher(address);
+            if (matcher.find()) {
+                Timber.d("INTENT OK "+data.toString());
+            } else {
+                Timber.d("SHARE SHOT");
+            }
+        }
+
     }
 
     private void setupTabLayoutListener() {
