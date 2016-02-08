@@ -364,4 +364,5 @@
     <string name="analytics_screen_user_follower">followersPeople</string>
     <string name="analytics_screen_user_following">followingPeople</string>
     <string name="analytics_screen_support">support</string>
+    <string name="analytics_screen_change_password">changePassword</string>
 </resources>
