@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.util.AnalyticsTool;
+import javax.inject.Inject;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
@@ -18,6 +21,9 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     @Bind(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
     @Bind(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
     @Bind(R.id.stream_data_info_favorites_number) TextView favoritesNumberTextView;
+    @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
+
+    @Inject AnalyticsTool analyticsTool;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -29,6 +35,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamNumbers);
 
         setupStatics();
     }
@@ -56,5 +63,10 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
         }else{
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 }
