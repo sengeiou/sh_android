@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.ui.Poller;
@@ -65,6 +66,7 @@ public class StreamTimelinePresenterTest {
     @Mock StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
     @Mock DeleteLocalShotsByStream deleteLocalShotsByStream;
     @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
+    @Mock GetStreamInteractor getStreamInteractor;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -76,7 +78,9 @@ public class StreamTimelinePresenterTest {
           streamHoldingTimelineInteractorsWrapper,
           selectStreamInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller,
+          unmarkNiceShotInteractor, shareShotInteractor,
+          getStreamInteractor,
+          shotModelMapper, bus, errorMessageFactory, poller,
           deleteLocalShotsByStream, reloadStreamTimelineInteractor);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
@@ -366,6 +370,20 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).hideLoading();
     }
 
+    @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM);
+
+        verify(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    @Test public void shouldSetToolbarTitleIfInitializedWithoutAuthorIdUser() throws Exception {
+        setupGetStreamInteractorCallback();
+
+        presenter.initialize(streamTimelineView, ID_STREAM);
+
+        verify(streamTimelineView).setTitle(anyString());
+    }
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
@@ -488,6 +506,15 @@ public class StreamTimelinePresenterTest {
             }
         }).when(reloadStreamTimelineInteractor)
           .loadStreamTimeline(anyString(), any(Interactor.Callback.class), anyErrorCallback());
+    }
+
+    private void setupGetStreamInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStream());
+                return null;
+            }
+        }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
     }
     //endregion
 }

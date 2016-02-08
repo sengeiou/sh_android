@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -78,6 +77,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             //TODO: Real implementation
             if (matcher.find()) {
                 String idStream = address.substring(28);
+                startActivity(StreamTimelineActivity.newIntent(this, idStream));
             } else {
                 String idShot = address.substring(27);
             }

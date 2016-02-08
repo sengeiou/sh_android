@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
@@ -10,6 +11,7 @@ import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.ui.Poller;
@@ -34,6 +36,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
+    private final GetStreamInteractor getStreamInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -53,8 +56,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper,
-      @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
+      GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
       DeleteLocalShotsByStream deleteLocalShotsByStream,
       ReloadStreamTimelineInteractor reloadStreamTimelineInteractor) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
@@ -63,6 +66,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
+        this.getStreamInteractor = getStreamInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -92,6 +96,28 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
                 loadNewShots();
+            }
+        });
+    }
+
+    public void initialize(final StreamTimelineView streamTimelineView, String idStream) {
+        this.streamId = idStream;
+        this.setView(streamTimelineView);
+        this.loadStream(streamTimelineView, idStream);
+        this.streamTimelineView.showHoldingShots();
+        this.selectStream();
+        this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+            @Override public void run() {
+                loadNewShots();
+            }
+        });
+    }
+
+    public void loadStream(final StreamTimelineView streamTimelineView, String idStream) {
+        getStreamInteractor.loadStream(idStream, new GetStreamInteractor.Callback() {
+            @Override public void onLoaded(Stream stream) {
+                setIdAuthor(stream.getAuthorId());
+                streamTimelineView.setTitle(stream.getShortTitle());
             }
         });
     }
