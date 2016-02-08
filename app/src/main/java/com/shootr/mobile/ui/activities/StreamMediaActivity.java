@@ -16,6 +16,7 @@ import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.StreamMediaPresenter;
 import com.shootr.mobile.ui.views.StreamMediaView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -33,10 +34,13 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.media_empty) View emptyView;
     @Bind(R.id.stream_media_loading) View loadingView;
     @BindString(R.string.stream_media_no_more_media) String noMoreMedia;
+    @BindString(R.string.analytics_screen_stream_media) String analyticsScreenStreamMedia;
 
     @Inject StreamMediaPresenter presenter;
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
+
+    @Inject AnalyticsTool analyticsTool;
 
     @NonNull
     protected static Intent newIntent(Context context, String idStream, int predictedMediaCount) {
@@ -52,6 +56,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamMedia);
         layoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns));
         mediaView.setLayoutManager(layoutManager);
         mediaAdapter = new MediaAdapter(this, imageLoader);
@@ -139,5 +144,10 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
         }else{
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 }
