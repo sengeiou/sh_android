@@ -362,4 +362,5 @@
     <string name="stream_detail_menu_data_info">Nombres</string>
     <string name="analytics_screen_stream_media">streamMedia</string>
     <string name="analytics_screen_all_participants">allParticipants</string>
+    <string name="analytics_screen_user_follows">userFollows</string>
 </resources>
