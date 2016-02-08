@@ -377,4 +377,5 @@
     <string name="title_activity_stream_data_info">Stats</string>
     <string name="stream_detail_menu_data_info">Stats</string>
     <string name="analytics_screen_stream_media">streamMedia</string>
+    <string name="analytics_screen_all_participants">allParticipants</string>
 </resources>
