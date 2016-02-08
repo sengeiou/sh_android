@@ -364,4 +364,6 @@
   <string name="analytics_screen_all_participants">allParticipants</string>
   <string name="analytics_screen_user_follows">userFollows</string>
   <string name="analytics_screen_edit_profile">editProfile</string>
+  <string name="analytics_screen_user_follower">followersPeople</string>
+  <string name="analytics_screen_user_following">followingPeople</string>
 </resources>

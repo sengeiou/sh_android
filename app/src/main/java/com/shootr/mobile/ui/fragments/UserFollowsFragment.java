@@ -49,7 +49,8 @@ public class UserFollowsFragment extends BaseFragment
     @Bind(R.id.userlist_list) ListView userList;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
-    @BindString(R.string.analytics_screen_user_follows) String analyticsScreenUserFollows;
+    @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
+    @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
@@ -102,7 +103,6 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollows);
         setupProgressView();
         setupUserListAdapter();
     }
@@ -249,6 +249,14 @@ public class UserFollowsFragment extends BaseFragment
     @Override public void renderUsersBelow(List<UserModel> olderUsers) {
         getAdapter().addItems(olderUsers);
         getAdapter().notifyDataSetChanged();
+    }
+
+    @Override public void registerAnalytics(boolean followers) {
+        if(followers){
+            analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollower);
+        }else{
+            analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollowing);
+        }
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

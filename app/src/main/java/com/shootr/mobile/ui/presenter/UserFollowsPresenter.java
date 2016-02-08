@@ -58,8 +58,10 @@ public class UserFollowsPresenter implements Presenter {
         userFollowsView.setLoadingView(true);
         if (followType.equals(FOLLOWERS)) {
             getFollowerUsers();
+            userFollowsView.registerAnalytics(true);
         } else {
             getFollowingUsers();
+            userFollowsView.registerAnalytics(false);
         }
     }
 
