@@ -67,7 +67,7 @@ public class GlideImageLoader implements ImageLoader {
             glide.load(url).listener(listener).dontAnimate().bitmapTransform(new BlurTransformation(blurView.getContext())).diskCacheStrategy(
               DiskCacheStrategy.ALL).into(blurView);
         } else {
-            blurView.setImageResource(DEFAULT_STREAM_PICTURE_RES);
+            /* no - op */
         }
     }
 

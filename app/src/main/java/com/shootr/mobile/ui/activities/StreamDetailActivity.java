@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -80,6 +81,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
     @Bind(R.id.subtitle) TextView streamSubtitle;
+    @Bind(R.id.blurLayout) FrameLayout blurLayout;
 
     @Bind(R.id.list) RecyclerView recyclerView;
     @Bind(com.shootr.mobile.R.id.loading_progress) View progressView;
@@ -317,6 +319,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     private void changeToolbarColor() {
+        blurLayout.setBackgroundColor(Color.parseColor("#ff666666"));
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
         Palette palette = Palette.from(bitmap).generate();
