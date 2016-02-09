@@ -63,6 +63,31 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail();
     }
 
+    public void initialize(final ShotDetailView shotDetailView, String idShot) {
+        this.setShotDetailView(shotDetailView);
+        loadShotDetailFromIdShot(shotDetailView, idShot);
+    }
+
+    public void loadShotDetailFromIdShot(final ShotDetailView shotDetailView, String idShot) {
+        getShotDetailInteractor.loadShotDetail(idShot, new Interactor.Callback<ShotDetail>() {
+            @Override public void onLoaded(ShotDetail shotDetail) {
+                ShotModel shotModel = shotModelMapper.transform(shotDetail.getShot());
+                setShotModel(shotModel);
+                onShotDetailLoaded(shotDetail);
+                initializeNewShotBarDelegate(shotModel, shotDetailView);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void initializeNewShotBarDelegate(ShotModel shotModel, ShotDetailView shotDetailView) {
+        shotDetailView.setupNewShotBarDelegate(shotModel);
+        shotDetailView.initializeNewShotBarPresenter(shotModel.getStreamId());
+    }
+
     private void onRepliesLoaded(List<Shot> replies) {
         int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
         int newReplyCount = replies.size();

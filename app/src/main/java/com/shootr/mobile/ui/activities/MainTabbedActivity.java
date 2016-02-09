@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,12 +28,18 @@ import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
+    public static final String SHARE_STREAM_PATTERN_HTTPS = "https://web.shootr.com/#/st/";
+    public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/#/st/";
+    public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/#/s/";
+    public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/#/s/";
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
@@ -61,6 +68,44 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         tabLayout.setupWithViewPager(viewPager);
         setupTabLayoutListener();
         viewPager.setCurrentItem(1);
+
+        loadIntentData();
+    }
+
+    private void loadIntentData() {
+        Uri data=getIntent().getData();
+        if (data!=null) {
+            String address = data.toString();
+            loadPatternMatching(address);
+        }
+    }
+
+    private void loadPatternMatching(String address) {
+        Pattern shareStreamPatternWithHttps = Pattern.compile(SHARE_STREAM_PATTERN_HTTPS);
+        Matcher matcherShareStreamHttps = shareStreamPatternWithHttps.matcher(address);
+
+        Pattern shareStreamPatternWithHttp = Pattern.compile(SHARE_STREAM_PATTERN_HTTP);
+        Matcher matcherShateStreamHttp = shareStreamPatternWithHttp.matcher(address);
+
+        Pattern shareShotPatternWithHttp = Pattern.compile(SHARE_SHOT_PATTERN_HTTP);
+        Matcher matcherShareShotHttp = shareShotPatternWithHttp.matcher(address);
+
+        Pattern shareShotPatternWithHttps = Pattern.compile(SHARE_SHOT_PATTERN_HTTPS);
+        Matcher matcherShareShotHttps = shareShotPatternWithHttps.matcher(address);
+
+        if (matcherShareStreamHttps.find()) {
+            String idStream = address.substring(matcherShareStreamHttps.end());
+            startActivity(StreamTimelineActivity.newIntent(this, idStream));
+        } else if (matcherShateStreamHttp.find()) {
+            String idStream = address.substring(matcherShateStreamHttp.end());
+            startActivity(StreamTimelineActivity.newIntent(this, idStream));
+        } else if (matcherShareShotHttp.find()) {
+            String idShot = address.substring(matcherShareShotHttp.end());
+            startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
+        } else if (matcherShareShotHttps.find()) {
+            String idShot = address.substring(matcherShareShotHttps.end());
+            startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
+        }
     }
 
     private void setupTabLayoutListener() {

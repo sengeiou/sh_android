@@ -27,6 +27,12 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
         return intent;
     }
 
+    public static Intent newIntent(Context context, String streamId) {
+        Intent intent = new Intent(context, StreamTimelineActivity.class);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
+        return intent;
+    }
+
     @Override protected int getLayoutResource() {
         return R.layout.activity_fragment_container;
     }

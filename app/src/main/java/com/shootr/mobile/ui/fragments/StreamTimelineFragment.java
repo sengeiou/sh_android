@@ -157,7 +157,12 @@ public class StreamTimelineFragment extends BaseFragment
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         setStreamTitleClickListener(idStream);
-        initializePresenters(idStream, streamAuthorIdUser);
+        if (streamAuthorIdUser != null) {
+            initializePresenters(idStream, streamAuthorIdUser);
+        } else {
+            initializePresenters(idStream);
+        }
+
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
 
@@ -247,6 +252,15 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
+
+    private void initializePresenters(String idStream) {
+        streamTimelinePresenter.initialize(this, idStream);
+        newShotBarPresenter.initialize(this, idStream);
+        watchNumberPresenter.initialize(this, idStream);
+        streamTimelineOptionsPresenter.initialize(this, idStream);
+        reportShotPresenter.initialize(this);
+    }
+
     //endregion
 
     private void setStreamTitle(String streamShortTitle) {
@@ -513,6 +527,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideAllStreamShots() {
         showAllShotsMenuItem.setVisible(false);
+    }
+
+    @Override public void setTitle(String shortTitle) {
+        setStreamTitle(shortTitle);
     }
 
     @Override

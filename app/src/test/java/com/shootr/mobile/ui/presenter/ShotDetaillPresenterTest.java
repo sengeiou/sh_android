@@ -25,6 +25,7 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anySet;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -183,6 +184,30 @@ public class ShotDetaillPresenterTest {
         presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldLoadShotDetailFromShotIdWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldSetupNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(shotDetailView).setupNewShotBarDelegate(any(ShotModel.class));
+    }
+
+    @Test public void shouldInitializeNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(shotDetailView).initializeNewShotBarPresenter(anyString());
     }
 
     private List<Shot> shotList(int shots){

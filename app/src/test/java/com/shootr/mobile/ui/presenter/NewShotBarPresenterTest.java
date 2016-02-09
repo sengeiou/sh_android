@@ -84,6 +84,7 @@ public class NewShotBarPresenterTest {
     public void shouldHideDraftsButtonWhenResumedAndNoDraftsReturned() throws Exception {
         setupDraftsInteractorCallbacks(emptyDraftsList());
 
+        presenter.pause();
         presenter.resume();
 
         verify(newShotBarView).hideDraftsButton();
@@ -93,6 +94,7 @@ public class NewShotBarPresenterTest {
     public void shouldShowDraftsButtonWhenResumedAndDraftsReturned() throws Exception {
         setupDraftsInteractorCallbacks(draftsList());
 
+        presenter.pause();
         presenter.resume();
 
         verify(newShotBarView).showDraftsButton();
