@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
+import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.Stream;
@@ -19,14 +20,16 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     private final StreamDataSource localStreamDataSource;
     private final StreamDataSource remoteStreamDataSource;
     private final SyncableStreamEntityFactory syncableStreamEntityFactory;
+    private final StreamCache streamCache;
 
     @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource,
-      SyncableStreamEntityFactory syncableStreamEntityFactory) {
+      SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.remoteStreamDataSource = remoteStreamDataSource;
         this.streamEntityMapper = streamEntityMapper;
         this.syncableStreamEntityFactory = syncableStreamEntityFactory;
+        this.streamCache = streamCache;
     }
 
     @Override public Stream getStreamById(String idStream) {
@@ -34,7 +37,9 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
             localStreamDataSource.putStream(streamEntity);
-            return streamEntityMapper.transform(streamEntity);
+            Stream stream = streamEntityMapper.transform(streamEntity);
+            streamCache.putStream(stream);
+            return stream;
         } else {
             return null;
         }

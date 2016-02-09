@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.event.StreamSearchDataSource;
+import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.StreamRepository;
@@ -15,20 +16,28 @@ public class LocalStreamRepository implements StreamRepository {
     private final StreamDataSource localStreamDataSource;
     private final StreamSearchDataSource localStreamSearchDataSource;
     private final StreamEntityMapper streamEntityMapper;
+    private final StreamCache streamCache;
 
     @Inject public LocalStreamRepository(@Local StreamDataSource localStreamDataSource,
-      @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper) {
+      @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper,
+      StreamCache streamCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.streamEntityMapper = streamEntityMapper;
+        this.streamCache = streamCache;
     }
 
     @Override public Stream getStreamById(String idStream) {
-        StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream);
-        if (streamEntity == null) {
-            streamEntity = fallbackOnSearchResults(idStream);
+        Stream cachedStream = streamCache.getStreamById(idStream);
+        if (cachedStream != null) {
+            return cachedStream;
+        } else {
+            StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream);
+            if (streamEntity == null) {
+                streamEntity = fallbackOnSearchResults(idStream);
+            }
+            return streamEntityMapper.transform(streamEntity);
         }
-        return streamEntityMapper.transform(streamEntity);
     }
 
     private StreamEntity fallbackOnSearchResults(String idEvent) {
