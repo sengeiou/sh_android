@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +30,9 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
@@ -55,12 +55,8 @@ import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
@@ -317,17 +313,29 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public void setStreamPicture(String picture) {
         imageLoader.loadStreamPicture(picture, streamPicture);
-        Glide.with(this).load(picture)
-          .bitmapTransform(new BlurTransformation(this))
-          .into(toolbarImage);
+        imageLoader.loadBlurStreamPicture(picture, toolbarImage, new RequestListener<String, GlideDrawable>() {
+            @Override public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+              boolean isFirstResource) {
+                return false;
+            }
 
+            @Override public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+              boolean isFromMemoryCache, boolean isFirstResource) {
+
+                changeToolbarColor();
+                return false;
+            }
+        });
+
+
+    }
+
+    private void changeToolbarColor(){
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
         Palette palette = Palette.from(bitmap).generate();
         collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(Color.parseColor("#0288d1")));
         collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(Color.parseColor("#0288d1")));
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
