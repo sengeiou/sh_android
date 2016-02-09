@@ -13,6 +13,39 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.4.0] - 2016-02-09
+
+### Changed
+- Actualizadas dependencias, Google Analytics y GCM.
+- Todos los strings que se montaban a mano se montan con variables.
+- Se muestran 10 Shots en el perfil.
+- Eliminado TOS en Login por email.
+- Cambiados enlaces de share shot y stream.
+- Se envía locale donde antes se mandaba Language (menos en Ayuda y Blog).
+
+### Added
+- Tab Refresh Fragment.
+- Hidden shots.
+- Shootr goes Catalonian.
+- Shootr goes Japanese.
+- Shootr goes Simplified Chinese.
+- Alert de idioma en el Soporte y Reporte.
+- Stream Data Info.
+
+### Fixed
+- Corregido IndexOutOfBounds en Timelines de shots.
+- Corrección bug con las listas de seguidores < 4.4.
+- Se muestra el Short Title de un stream en el TL cuando entras desde búsqueda.
+- Errores en la obtención de imágenes.
+- Corregido Crash MarkNiceShotInteractor.
+- Crash onResume detalle de un stream.
+- Refactorizados los strings_error.
+- Se notifica el estado de removed si se tiene el stream en local.
+- Se añade locale a la busqueda de usuarios.
+- Listener del mute en todo el container.
+- Eliminado matcher en la busqueda de usuarios.
+- Se mostraba el esquema de video cuando tardaba en cargar un shotdetail.
+
 ## [1.3.0] - 2016-01-22
 
 ### Changed
