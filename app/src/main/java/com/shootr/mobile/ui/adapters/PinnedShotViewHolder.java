@@ -11,8 +11,8 @@ import com.shootr.mobile.util.ImageLoader;
 
 public class PinnedShotViewHolder extends ShotActivityViewHolder {
 
-    @BindString(R.string.shared_shot_activity) String pinnedShotPattern;
-    @BindString(R.string.shared_shot_activity_with_comment) String pinnedShotPrefixPattern;
+    @BindString(R.string.pinned_shot_activity) String pinnedShotPattern;
+    @BindString(R.string.pinned_shot_activity_with_comment) String pinnedShotPrefixPattern;
 
     public PinnedShotViewHolder(View view,
       ImageLoader imageLoader,
