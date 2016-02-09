@@ -36,6 +36,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
+    public static final String SHARE_STREAM_PATTERN = "#/st";
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
@@ -72,9 +73,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         Uri data=getIntent().getData();
         if (data!=null) {
             String address = data.toString();
-            Pattern shareStreamPattern = Pattern.compile("#/st");
+            Pattern shareStreamPattern = Pattern.compile(SHARE_STREAM_PATTERN);
             Matcher matcher = shareStreamPattern.matcher(address);
-            //TODO: Real implementation
             if (matcher.find()) {
                 String idStream = address.substring(28);
                 startActivity(StreamTimelineActivity.newIntent(this, idStream));
