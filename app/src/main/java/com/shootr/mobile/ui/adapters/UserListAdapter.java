@@ -70,7 +70,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
         if (verifiedUser(item)) {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
-            viewHolder.title.setCompoundDrawablePadding(8);
+            viewHolder.title.setCompoundDrawablePadding(6);
         }else{
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }

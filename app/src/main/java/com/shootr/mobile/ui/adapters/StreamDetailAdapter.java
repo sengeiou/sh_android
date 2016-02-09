@@ -336,7 +336,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             name.setText(userModel.getUsername());
             if (verifiedUser(userModel)) {
                 name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
-                name.setCompoundDrawablePadding(8);
+                name.setCompoundDrawablePadding(6);
+            }else{
+                name.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
             }
 
             watchingText.setText(userModel.getJoinStreamDate());
