@@ -27,6 +27,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
         contentValues.put(DatabaseContract.StreamTable.TOTAL_FAVORITES, streamEntity.getTotalFavorites());
         contentValues.put(DatabaseContract.StreamTable.TOTAL_WATCHERS, streamEntity.getTotalWatchers());
+        contentValues.put(DatabaseContract.StreamTable.HISTORIC_WATCHERS, streamEntity.getHistoricWatchers());
+        contentValues.put(DatabaseContract.StreamTable.TOTAL_SHOTS, streamEntity.getTotalShots());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -49,6 +51,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
         streamEntity.setTotalFavorites(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FAVORITES)));
         streamEntity.setTotalWatchers(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_WATCHERS)));
+        streamEntity.setHistoricWatchers(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.HISTORIC_WATCHERS)));
+        streamEntity.setTotalShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_SHOTS)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

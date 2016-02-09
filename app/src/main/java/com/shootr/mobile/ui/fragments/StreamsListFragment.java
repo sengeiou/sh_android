@@ -254,6 +254,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         adapter.setMutedStreamIds(mutedStreamIds);
     }
 
+    @Override public void scrollListToTop() {
+        streamsList.scrollToPosition(0);
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

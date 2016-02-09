@@ -19,28 +19,44 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
+import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
+import com.shootr.mobile.ui.widgets.NestedListView;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
+    private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
     private static final String EXTRA_SELECTED_IMAGE = "image";
     private static final String EXTRA_REPLY_PARENT_ID = "parentId";
     private static final String EXTRA_REPLY_USERNAME = "parentUsername";
     public static final String EXTRA_PHOTO = "photo";
+    public static final String SPACE = " ";
 
     @Bind(R.id.new_shot_avatar) ImageView avatar;
     @Bind(R.id.new_shot_title) TextView name;
@@ -50,7 +66,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.new_shot_send_button) ImageButton sendButton;
     @Bind(R.id.new_shot_send_progress) ProgressBar progress;
     @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
+    @Bind(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
     @Bind(R.id.new_shot_image) ImageView image;
+
+    @Bind(R.id.new_shot_mentions) NestedListView mentionsListView;
 
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
@@ -58,6 +77,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject CrashReportTool crashReportTool;
+
+    private Subscription commentSubscription;
+    private MentionsAdapter adapter;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -74,6 +97,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         initializeViews();
+        initializeSubscription();
     }
 
     @Override protected void initializePresenter() {
@@ -109,22 +133,116 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         photoPickerController = new PhotoPickerController.Builder().onActivity(this)
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
-              @Override
-              public void onSelected(File imageFile) {
+              @Override public void onSelected(File imageFile) {
                   presenter.selectImage(imageFile);
               }
 
-              @Override
-              public void onError(Exception e) {
+              @Override public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override
-              public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           })
           .build();
+
+        if (adapter == null) {
+            adapter = new MentionsAdapter(this, new OnMentionClickListener() {
+                @Override public void mention(UserModel user) {
+                    presenter.onMentionClicked(user);
+                }
+            }, imageLoader);
+        }
+
+        mentionsListView.setAdapter(adapter);
+    }
+
+    private void initializeSubscription() {
+        commentSubscription = RxTextView.textChangeEvents(editTextView)//
+          .debounce(100, TimeUnit.MILLISECONDS)//
+          .observeOn(AndroidSchedulers.mainThread())//
+          .subscribe(getShotCommentObserver());
+    }
+
+    private Observer<TextViewTextChangeEvent> getShotCommentObserver() {
+        return new Observer<TextViewTextChangeEvent>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("autocomplete mention onComplete");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                crashReportTool.logException(e);
+            }
+
+            @Override
+            public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
+                checkIfWritingMention(onTextChangeEvent);
+            }
+        };
+    }
+
+    public void checkIfWritingMention(TextViewTextChangeEvent onTextChangeEvent) {
+        Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
+        String input = onTextChangeEvent.text().toString();
+        String[] words = input.split(SPACE);
+
+        Integer wordPosition = 0;
+        Integer characterPosition = 0;
+
+        if(input.length() > 0 && !input.endsWith(SPACE)) {
+            autocompleteWhenInputEndsWithoutSpace(pattern, input, words, wordPosition, characterPosition);
+        } else if (input.length() <= 0) {
+            presenter.onStopMentioning();
+        } else if (input.endsWith(SPACE)) {
+            autocompleteWhenInputEndsWithSpace(pattern, input, words, wordPosition);
+        }
+    }
+
+    public void autocompleteWhenInputEndsWithoutSpace(Pattern pattern, String input, String[] words,
+      Integer wordPosition, Integer characterPosition) {
+        for (String word : words) {
+            characterPosition += word.length();
+            Matcher matcher = pattern.matcher(word);
+            if (matcher.find()) {
+                autocompleteIfNoMentionedBefore(input, words, wordPosition, word);
+                autocompleteIfWritingUsername(words, wordPosition, characterPosition, word);
+            } else {
+                presenter.onStopMentioning();
+            }
+            characterPosition++;
+            wordPosition++;
+        }
+    }
+
+    public void autocompleteIfWritingUsername(String[] words, Integer wordPosition, Integer characterPosition,
+      String word) {
+        if (editTextView.getSelectionEnd() == characterPosition) {
+            presenter.autocompleteMention(word, words, wordPosition);
+        }
+    }
+
+    public void autocompleteIfNoMentionedBefore(String input, String[] words, Integer wordPosition, String word) {
+        Pattern wordPattern = Pattern.compile(word + SPACE);
+        Matcher wordMatcher = wordPattern.matcher(input);
+        if (!wordMatcher.find()) {
+            presenter.autocompleteMention(word, words, wordPosition);
+        }
+    }
+
+    public void autocompleteWhenInputEndsWithSpace(Pattern pattern, String input, String[] words,
+      Integer wordPosition) {
+        if (words.length >= 1) {
+            String word = words[wordPosition];
+            Matcher matcher = pattern.matcher(word);
+            if (matcher.find() && editTextView.getSelectionEnd() != input.length()) {
+                presenter.autocompleteMention(word, words, wordPosition);
+            } else {
+                presenter.onStopMentioning();
+            }
+        }
     }
 
     private void setupPhotoIfAny() {
@@ -189,12 +307,16 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     protected void onResume() {
         super.onResume();
         presenter.resume();
+        initializeSubscription();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         presenter.pause();
+        if (commentSubscription != null) {
+            commentSubscription.unsubscribe();
+        }
     }
 
     @Override protected void onSaveInstanceState(Bundle outState) {
@@ -281,9 +403,45 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         editTextView.setHint(getString(R.string.reply_placeholder_pattern, replyToUsername));
     }
 
+    @Override public void renderMentionSuggestions(List<UserModel> mentionSuggestions) {
+        mentionsListView.setVisibility(View.VISIBLE);
+        adapter.setItems(mentionSuggestions);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override public void showMentionSuggestions() {
+        mentionsContainer.setVisibility(View.VISIBLE);
+        mentionsListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideMentionSuggestions() {
+        mentionsContainer.setVisibility(View.GONE);
+        mentionsListView.setVisibility(View.GONE);
+    }
+
+    @Override public void mentionUser(String comment) {
+        editTextView.setText(comment);
+    }
+
+    @Override public void setCursorToEndOfText() {
+        editTextView.setSelection(editTextView.getText().length());
+    }
+
+    @Override public void hideImageContainer() {
+        imageContainer.setVisibility(View.GONE);
+    }
+
+    @Override public void showImageContainer() {
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        photoPickerController.onActivityResult(requestCode, resultCode, data);
+        try {
+            photoPickerController.onActivityResult(requestCode, resultCode, data);
+        } catch (NullPointerException error) {
+            feedbackMessage.show(getView(), R.string.error_message_invalid_image);
+        }
     }
 
     @Override public void showLoading() {

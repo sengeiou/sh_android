@@ -21,4 +21,6 @@ public interface FavoritesListView extends LoadDataView {
     void showContextMenuWithUnmute(StreamResultModel stream);
 
     void showContextMenuWithMute(StreamResultModel stream);
+
+    void scrollListToTop();
 }

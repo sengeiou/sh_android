@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -18,6 +20,7 @@ import com.shootr.mobile.ui.views.SupportView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
+import java.util.Locale;
 import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
@@ -105,5 +108,17 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Override public void goToStream(Stream blog) {
         Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle(), blog.getAuthorId());
         startActivity(intent);
+    }
+
+    @Override public void handleReport() {
+        supportPresenter.setUpAlertDialog(Locale.getDefault().getLanguage());
+    }
+
+    @Override
+    public void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), null).show();
     }
 }

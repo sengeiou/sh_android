@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
@@ -34,34 +35,39 @@ public class AllShotsPresenterTest {
     public static final String AVATAR = "avatar";
     public static final String USERNAME = "username";
     public static final long ANY_TIMESTAMP = 0L;
+    private static final Long HIDDEN = 1L;
+    private static final String SHOT_ID ="shot_id" ;
 
     @Mock GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock HideShotInteractor hideShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock AllShotsView allShotsView;
 
+
     private ShotModelMapper shotModelMapper;
     private AllShotsPresenter allShotsPresenter;
+    private Boolean isCurrentUser;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shotModelMapper = new ShotModelMapper();
-        allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor,
-          markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, errorMessageFactory, shotModelMapper);
+        allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor,markNiceShotInteractor,unmarkNiceShotInteractor,
+          hideShotInteractor,shareShotInteractor, errorMessageFactory, shotModelMapper);
         allShotsPresenter.setView(allShotsView);
         allShotsPresenter.setUserId(USER_ID);
+        isCurrentUser = allShotsPresenter.getIsCurrentUser();
     }
 
     @Test
-    public void shouldShowAllShotsWhenLoadAllShots() {
+    public void shouldShowAllNonHiddenShotsWhenLoadAllShots() {
         setupAllShotsInteractorCallback(shotList());
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).showShots();
     }
@@ -70,7 +76,7 @@ public class AllShotsPresenterTest {
     public void shouldHideLoadingWhenLoadAllShots() {
         setupAllShotsInteractorCallback(shotList());
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).hideLoading();
     }
@@ -79,7 +85,7 @@ public class AllShotsPresenterTest {
     public void shouldShowEmptyWhenLoadAllShotsAndNothingFound() {
         setupAllShotsInteractorCallback(emptyShotList());
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).showEmpty();
     }
@@ -88,7 +94,7 @@ public class AllShotsPresenterTest {
     public void shouldHideShotsListWhenLoadAllShotsAndNothingFound() {
         setupAllShotsInteractorCallback(emptyShotList());
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).hideShots();
     }
@@ -142,7 +148,7 @@ public class AllShotsPresenterTest {
     public void shouldHideLoadingWhenCommunicationErrorLoadingAllShots() {
         setupAllShotsInteractorErrorCallback();
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).hideLoading();
     }
@@ -151,9 +157,18 @@ public class AllShotsPresenterTest {
     public void shouldShowErrorWhenCommunicationErrorLoadingAllShots() {
         setupAllShotsInteractorErrorCallback();
 
-        allShotsPresenter.initialize(allShotsView, USER_ID);
+        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
 
         verify(allShotsView).showError(anyString());
+    }
+
+    @Test public void shouldShowAllShotsNonHiddenWhenMarkHideShot() throws Exception {
+        setupAllShotsInteractorCallback(shotList());
+        setupHideShotInteractorCallback();
+
+        allShotsPresenter.hideShot(SHOT_ID);
+
+        verify(allShotsView).showShots();
     }
 
     private List<Shot> emptyShotList() {
@@ -168,6 +183,17 @@ public class AllShotsPresenterTest {
         userInfo.setUsername(USERNAME);
         shot.setUserInfo(userInfo);
         return Arrays.asList(shot);
+    }
+
+    private void setupHideShotInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(hideShotInteractor)
+          .hideShot(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private void setupAllShotsInteractorCallback(final List<Shot> shotList) {

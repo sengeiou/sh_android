@@ -4,13 +4,13 @@ import com.shootr.mobile.ui.model.ShotModel;
 
 public interface ReportShotView {
 
-    void goToReport(String sessionToken, ShotModel shotModel);
+    void handleReport(String sessionToken, ShotModel shotModel);
 
     void showEmailNotConfirmedError();
 
     void showContextMenu(ShotModel shotModel);
 
-    void showHolderContextMenu(ShotModel shotModel);
+    void showHolderContextMenuWithPin(ShotModel shotModel);
 
     void notifyDeletedShot(ShotModel shotModel);
 
@@ -31,4 +31,14 @@ public interface ReportShotView {
     void showUserBanned();
 
     void showUserUnbanned();
+
+    void showHolderContextMenuWithoutPin(ShotModel shotModel);
+
+    void notifyPinnedShot(ShotModel shotModel);
+
+    void showPinned();
+
+    void goToReport(String sessionToken, ShotModel shotModel);
+
+    void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);
 }

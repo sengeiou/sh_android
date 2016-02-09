@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class SupportPresenter implements Presenter {
 
+    private static final String EN_LOCALE = "en";
     private final GetBlogInteractor getBlogInteractor;
     private final GetHelpInteractor getHelpInteractor;
 
@@ -30,6 +31,21 @@ public class SupportPresenter implements Presenter {
         this.setView(supportView);
         loadBlog();
         loadHelp();
+        showAlertDialog();
+    }
+
+    private void showAlertDialog() {
+        supportView.handleReport();
+    }
+
+    public boolean isEnglishLocale(String locale){
+        return locale.equals(EN_LOCALE);
+    }
+
+    public void setUpAlertDialog(String language) {
+        if(!isEnglishLocale(language)) {
+            supportView.showAlertDialog();
+        }
     }
 
     private void loadHelp() {

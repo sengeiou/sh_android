@@ -19,20 +19,17 @@ public class LocalActivityRepository implements ActivityRepository{
     private final ActivityDataSource localActivityDataSource;
     private final ActivityEntityMapper activityEntityMapper;
     private final LocalShotRepository localShotRepository;
-    private final LocalStreamRepository localStreamRepository;
 
     @Inject public LocalActivityRepository(@Local ActivityDataSource localActivityDataSource,
-      ActivityEntityMapper activityEntityMapper, LocalShotRepository localShotRepository,
-      LocalStreamRepository localStreamRepository) {
+      ActivityEntityMapper activityEntityMapper, LocalShotRepository localShotRepository) {
         this.localActivityDataSource = localActivityDataSource;
         this.activityEntityMapper = activityEntityMapper;
         this.localShotRepository = localShotRepository;
-        this.localStreamRepository = localStreamRepository;
     }
 
-    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
         List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters, language);
+          localActivityDataSource.getActivityTimeline(parameters, locale);
         List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
         return activityEntityMapper.transform(activityEntities);
     }

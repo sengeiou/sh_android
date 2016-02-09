@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
@@ -34,13 +35,15 @@ import rx.Subscriber;
 
 public class ProfilePresenter implements Presenter {
 
-    public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 4;
-    public static final int MAX_SHOTS_SHOWN = 3;
+    public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 11;
+    public static final int MAX_SHOTS_SHOWN = 10;
+    private static final String EN_LOCALE = "en";
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final LogoutInteractor logoutInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    private final HideShotInteractor hideShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
@@ -65,9 +68,8 @@ public class ProfilePresenter implements Presenter {
     private int hadleBlockMenuCalls;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
-      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
+      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      HideShotInteractor hideShotInteractor,ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
       GetBannedUsersInteractor getBannedUsersInteractor, SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
@@ -89,6 +91,7 @@ public class ProfilePresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
+        this.hideShotInteractor=hideShotInteractor;
     }
 
     protected void setView(ProfileView profileView) {
@@ -130,6 +133,7 @@ public class ProfilePresenter implements Presenter {
         profileView.showListing();
         renderStreamsNumber();
         profileView.setupAnalytics(isCurrentUser);
+        profileView.resetTimelineAdapter();
     }
 
     private void renderStreamsNumber() {
@@ -533,7 +537,6 @@ public class ProfilePresenter implements Presenter {
     public void reportUserClicked() {
         profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
     }
-
     public void banUserClicked() {
         profileView.showBanUserConfirmation(userModel);
     }
@@ -550,5 +553,17 @@ public class ProfilePresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public void hideShot(String idShot) {
+        hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadLatestShots(userModel.getIdUser());
+            }
+        });
+    }
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
     }
 }

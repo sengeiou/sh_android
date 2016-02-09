@@ -27,4 +27,6 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
     void updateWatch(UserEntity userEntity);
 
     List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize);
+
+    List<UserEntity> getUsersForMentions(String idUser);
 }

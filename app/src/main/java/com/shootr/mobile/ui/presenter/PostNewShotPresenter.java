@@ -1,17 +1,24 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
+import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
+import java.util.List;
+import java.util.Objects;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -23,6 +30,8 @@ public class PostNewShotPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
     private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
+    private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
+    private final UserModelMapper userModelMapper;
 
     private PostNewShotView postNewShotView;
     private File selectedImageFile;
@@ -31,15 +40,20 @@ public class PostNewShotPresenter implements Presenter {
     private boolean isReply;
     private String replyParentId;
     private boolean isInitialized = false;
+    private Integer wordPosition;
+    private String[] words;
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
-      PostNewShotAsReplyInteractor postNewShotAsReplyInteractor) {
+      PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
+      GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
+        this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
+        this.userModelMapper = userModelMapper;
     }
 
     protected void setView(PostNewShotView postNewShotView) {
@@ -243,15 +257,73 @@ public class PostNewShotPresenter implements Presenter {
         return isInitialized;
     }
 
+    public File getSelectedImageFile() {
+        return selectedImageFile;
+    }
+
+    public void autocompleteMention(String username, String[] words, Integer wordPosition) {
+        this.words = words;
+        this.wordPosition = wordPosition;
+        String extractedUsername = username.substring(1);
+        if (extractedUsername.length()>=1) {
+            loadMentions(extractedUsername);
+        }
+    }
+
+    public void loadMentions(String extractedUsername) {
+        getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> mentionSuggestions = userModelMapper.transform(users);
+                if (!mentionSuggestions.isEmpty()) {
+                    postNewShotView.showMentionSuggestions();
+                    postNewShotView.hideImageContainer();
+                    postNewShotView.renderMentionSuggestions(mentionSuggestions);
+                } else {
+                    postNewShotView.hideMentionSuggestions();
+                    showImage();
+                }
+            }
+        });
+    }
+
+    public void onMentionClicked(UserModel user) {
+        String shotComment = mountShotComment(user);
+        postNewShotView.mentionUser(shotComment);
+        postNewShotView.hideMentionSuggestions();
+        postNewShotView.setCursorToEndOfText();
+        showImage();
+    }
+
+    @NonNull public String mountShotComment(UserModel user) {
+        String shotComment = "";
+        Integer position = 0;
+        for (String word : words) {
+            if (Objects.equals(position, wordPosition)) {
+                shotComment += "@" +user.getUsername() + " ";
+            } else {
+                shotComment += word + " ";
+            }
+            position++;
+        }
+        return shotComment;
+    }
+
+    public void onStopMentioning() {
+        postNewShotView.hideMentionSuggestions();
+        showImage();
+    }
+
+    public void showImage() {
+        if (hasImage()) {
+            postNewShotView.showImageContainer();
+        }
+    }
+
     @Override public void resume() {
         bus.register(this);
     }
 
     @Override public void pause() {
         bus.unregister(this);
-    }
-
-    public File getSelectedImageFile() {
-        return selectedImageFile;
     }
 }

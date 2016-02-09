@@ -117,6 +117,10 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
+    @Override public List<UserEntity> getUsersForMentions(String idUser) {
+        throw new RuntimeException("Server DataSource can't access to this");
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }

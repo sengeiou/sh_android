@@ -29,4 +29,6 @@ public interface UserRepository {
     List<User> getFollowing(String idUser, Integer page, Integer pageSize);
 
     List<User> getFollowers(String idUser, Integer page, Integer pageSize);
+
+    List<User> getUsersForMention(String idUser);
 }

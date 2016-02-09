@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
@@ -15,11 +16,11 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,15 +90,13 @@ public class MarkNiceShotInteractorTest {
         verify(niceShotRepository).unmark(SHOT_ID);
     }
 
-    @Test public void shouldDecrementNiceWhenServerFails() throws Exception {
+    @Test public void shouldNotifyErrorNiceWhenServerFails() throws Exception {
         setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback, errorCallback);
-
-        Shot shot = shot();
-        shot.setNiceCount(0);
-        verify(localShotRepository, times(2)).putShot(shot);
+        
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test public void shouldNotSendToServiceWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {

@@ -7,4 +7,8 @@ public interface SupportView {
     void showError();
 
     void goToStream(Stream blog);
+
+    void handleReport();
+
+    void showAlertDialog();
 }

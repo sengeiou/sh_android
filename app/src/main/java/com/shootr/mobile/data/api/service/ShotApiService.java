@@ -61,4 +61,10 @@ public interface ShotApiService {
     @GET("/shot/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getAllShotsFromUserInStream(@Path("idUser") String userId,
       @Query("idStream") String idStream, @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
+
+    @PUT("/shot/{idShot}/hide")
+    Response hideShot(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shot/{idShot}/hide")
+    Response unhideShot(@Path("idShot") String idShot) throws ApiException, IOException;
 }

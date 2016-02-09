@@ -23,6 +23,7 @@ public class ShotEntity extends Synchronized{
     private String videoUrl;
     private String videoTitle;
     private Long videoDuration;
+    private Long profileHidden;
 
     public String getIdShot() {
         return idShot;
@@ -158,5 +159,13 @@ public class ShotEntity extends Synchronized{
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
+    }
+
+    public Long getProfileHidden() {
+        return profileHidden;
+    }
+
+    public void setProfileHidden(Long profileHidden) {
+        this.profileHidden = profileHidden;
     }
 }

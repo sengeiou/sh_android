@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -17,10 +18,12 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
 
+    private static final String EN_LOCALE = "en";
     private final DeleteShotInteractor deleteShotInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final SessionRepository sessionRepository;
@@ -31,6 +34,7 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
+    private final PinShotInteractor pinShotInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
@@ -39,7 +43,8 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
+      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
+      PinShotInteractor pinShotInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -50,6 +55,7 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
+        this.pinShotInteractor = pinShotInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -67,15 +73,23 @@ public class ReportShotPresenter implements Presenter {
     public void report(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         if (userModel.isEmailConfirmed()) {
-            reportShotView.goToReport(sessionRepository.getSessionToken(), shotModel);
+            reportShotView.handleReport(sessionRepository.getSessionToken(), shotModel);
         } else {
             reportShotView.showEmailNotConfirmedError();
         }
     }
 
+    public boolean isEnglishLocale(String locale){
+        return locale.equals(EN_LOCALE);
+    }
+
     public void onShotLongPressed(final ShotModel shotModel) {
         if (currentUserIsShotAuthor(shotModel)) {
-            reportShotView.showHolderContextMenu(shotModel);
+            if (shotModel.getHide() != null && shotModel.getHide() != 0L) {
+                reportShotView.showHolderContextMenuWithPin(shotModel);
+            } else {
+                reportShotView.showHolderContextMenuWithoutPin(shotModel);
+            }
         } else {
             handleBlockContextMenu(shotModel);
         }
@@ -83,7 +97,7 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
         if (currentUserIsStreamHolder(streamAuthorIdUser)) {
-            reportShotView.showHolderContextMenu(shot);
+            reportShotView.showHolderContextMenuWithPin(shot);
         } else {
             onShotLongPressed(shot);
         }
@@ -231,6 +245,24 @@ public class ReportShotPresenter implements Presenter {
         });
     }
 
+
+    public void pinToProfile(final ShotModel shotModel) {
+        pinShotInteractor.pinShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                shotModel.setHide(0L);
+                reportShotView.notifyPinnedShot(shotModel);
+                reportShotView.showPinned();
+            }
+        });
+    }
+
+    public void reportClicked(String language, String sessionToken, ShotModel shotModel) {
+        if(isEnglishLocale(language)){
+            reportShotView.goToReport(sessionToken, shotModel);
+        }else{
+            reportShotView.showAlertLanguageSupportDialog(sessionToken, shotModel);
+        }
+    }
 
     @Override public void resume() {
         /* no-op */

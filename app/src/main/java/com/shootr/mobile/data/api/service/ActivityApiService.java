@@ -15,7 +15,7 @@ public interface ActivityApiService {
       @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp,
       @Query("maxTimestamp") Long maxTimestamp,
-      @Query("language") String language)
+      @Query("locale") String locale)
     throws ApiException, IOException;
 
     @GET("/activity/{id}")

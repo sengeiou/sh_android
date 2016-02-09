@@ -66,6 +66,7 @@ import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -360,7 +361,7 @@ public class StreamTimelineFragment extends BaseFragment
               public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
-          });
+          },null,false);
 
         listView.setAdapter(adapter);
     }
@@ -397,7 +398,7 @@ public class StreamTimelineFragment extends BaseFragment
     private void checkIfEndOfListVisible() {
         int lastItemPosition = listView.getAdapter().getCount() - 1;
         int lastVisiblePosition = listView.getLastVisiblePosition();
-        if (lastItemPosition == lastVisiblePosition) {
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
             streamTimelinePresenter.showingLastShot(adapter.getLastShot());
         }
     }
@@ -599,6 +600,23 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
     }
 
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+        builder.addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        adapter.onPinnedShot(shotModel);
+    }
+
+    @Override public void showPinned() {
+        feedbackMessage.show(getView(), R.string.shot_pinned);
+    }
+
     @Override
     public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
@@ -666,7 +684,25 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override
-    public void goToReport(String sessionToken, ShotModel shotModel) {
+    public void handleReport(String sessionToken, ShotModel shotModel) {
+        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
+    }
+
+    @Override
+    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  goToReport(sessionToken, shotModel);
+              }
+          }).show();
+    }
+
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -696,9 +732,25 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(com.shootr.mobile.R.string.report_context_menu_delete, new Runnable() {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(R.string.menu_pin_shot, new Runnable() {
+              @Override public void run() {
+                  reportShotPresenter.pinToProfile(shotModel);
+              }
+          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+            @Override public void run() {
+                streamTimelinePresenter.shareShot(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShotIntent(shotModel);
+            }
+        }).addAction(R.string.menu_copy_text, new Runnable() {
+            @Override public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {
                 openDeleteConfirmation(shotModel);
             }

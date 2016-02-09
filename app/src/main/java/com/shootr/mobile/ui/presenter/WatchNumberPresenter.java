@@ -78,8 +78,4 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
             watchNumberView.hideWatchingPeopleCount();
         }
     }
-
-    public void onWatchNumberClick() {
-        watchNumberView.navigateToStreamDetail(idStream);
-    }
 }

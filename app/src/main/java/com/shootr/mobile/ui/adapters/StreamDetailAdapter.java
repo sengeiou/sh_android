@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -263,10 +264,20 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Bind(R.id.action_name) TextView name;
         @Bind(R.id.action_mute_switch) SwitchCompat muteSwitch;
+        @Bind(R.id.action_mute_switch_container) FrameLayout muteContainer;
 
         public SwitchViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            setupMuteContainer();
+        }
+
+        private void setupMuteContainer(){
+            muteContainer.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    muteSwitch.setChecked(!muteSwitch.isChecked());
+                }
+            });
         }
 
         public void setName(@StringRes int nameRes) {

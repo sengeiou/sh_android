@@ -53,7 +53,7 @@ public interface UserApiService {
     List<SuggestedPeopleEntity> getSuggestedPeople() throws IOException, ApiException;
 
     @GET("/user/search/{query}?includeLinks=false&includeEmbed=false")
-    List<UserEntity> search(@Path("query") String query, @Query("page") int pageOffset) throws IOException, ApiException;
+    List<UserEntity> search(@Path("query") String query, @Query("page") int pageOffset, @Query("locale") String locale) throws IOException, ApiException;
 
     @POST("/follow/{idUser}")
     Response follow(@Path("idUser") String idUser) throws IOException, ApiException;

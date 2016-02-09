@@ -315,15 +315,17 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void selectStream() {
-        selectStreamInteractor.selectStream(streamModel.getIdStream(), new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+        if(streamModel!=null) {
+            selectStreamInteractor.selectStream(streamModel.getIdStream(), new Interactor.Callback<StreamSearchResult>() {
+                  @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
-        });
+                  }
+              }, new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      showErrorInView(error);
+                  }
+              });
+        }
     }
 
     public void onMuteChecked() {
@@ -340,6 +342,10 @@ public class StreamDetailPresenter implements Presenter {
                 /* no-op */
             }
         });
+    }
+
+    public void dataInfoClicked() {
+        streamDetailView.goToStreamDataInfo(streamModel);
     }
 
     @Override

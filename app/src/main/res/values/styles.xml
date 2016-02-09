@@ -330,6 +330,11 @@
         <item name="android:src">@drawable/ic_thumb_up_16_checkable_nopadding</item>
     </style>
 
+    <style name="HideButton">
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_action_close_gray60_24_nopadding</item>
+    </style>
+
     <style name="ListSectionTitleAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/gray_45</item>

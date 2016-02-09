@@ -21,7 +21,7 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
     private Long currentOldestDate;
     private Callback<ActivityTimeline> callback;
     private ErrorCallback errorCallback;
-    private String language;
+    private String locale;
 
     @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Remote ActivityRepository remoteActivityRepository) {
@@ -33,7 +33,7 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
     public void loadOlderActivityTimeline(Long currentOldestDate, String language, Callback<ActivityTimeline> callback,
       ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
-        this.language = language;
+        this.locale = language;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -42,7 +42,7 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
     @Override public void execute() throws Exception {
         try {
             ActivityTimelineParameters timelineParameters = buildTimelineParameters();
-            List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters, language);
+            List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters, locale);
             sortActivitiesByPublishDate(olderActivities);
             notifyTimelineFromActivities(olderActivities);
         } catch (ShootrException error) {

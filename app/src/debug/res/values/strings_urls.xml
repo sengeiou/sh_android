@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="share_shot_base_url">http://tst.shootr.com/#/s/%s</string>
+    <string name="share_shot_base_url">http://web.shootr.com/#/s/%s</string>
 </resources>

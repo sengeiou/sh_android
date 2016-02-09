@@ -16,6 +16,8 @@ public class StreamModel implements Serializable {
     private Boolean removed;
     private Integer totalFavorites;
     private Integer totalWatchers;
+    private Long historicWatchers;
+    private Long totalShots;
 
     public Boolean isRemoved() {
         return removed;
@@ -135,5 +137,21 @@ public class StreamModel implements Serializable {
 
     public void setTotalWatchers(Integer totalWatchers) {
         this.totalWatchers = totalWatchers;
+    }
+
+    public Long getHistoricWatchers() {
+        return historicWatchers;
+    }
+
+    public void setHistoricWatchers(Long historicWatchers) {
+        this.historicWatchers = historicWatchers;
+    }
+
+    public Long getTotalShots() {
+        return totalShots;
+    }
+
+    public void setTotalShots(Long totalShots) {
+        this.totalShots = totalShots;
     }
 }

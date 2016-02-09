@@ -42,9 +42,9 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         this.localStreamDataSource = localStreamDataSource;
     }
 
-    @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String language) {
+    @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
         try {
-            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate(), language);
+            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate(), locale);
             storeEmbedStreams(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (ApiException | IOException e) {

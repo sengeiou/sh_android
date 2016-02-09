@@ -84,4 +84,12 @@ public class LocalShotRepository implements ShotRepository {
     @Override public void deleteShotsByStream(String idStream) {
         localShotDataSource.deleteShotsByIdStream(idStream);
     }
+
+    @Override public void hideShot(String idShot, Long timestamp) {
+        localShotDataSource.hideShot(idShot, timestamp);
+    }
+
+    @Override public void unhideShot(String idShot) {
+        throw new IllegalArgumentException("No local implementation");
+    }
 }

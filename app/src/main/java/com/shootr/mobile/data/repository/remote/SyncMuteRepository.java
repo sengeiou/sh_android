@@ -36,7 +36,6 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
             mute.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             localMuteDataSource.mute(mute);
             syncTrigger.triggerSync();
-            dispatchSync();
         } catch (ServerCommunicationException e) {
             queueUpload(mute, e);
         }
@@ -44,7 +43,6 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
 
     @Override public List<String> getMutedIdStreams() {
         syncTrigger.triggerSync();
-        dispatchSync();
         List<MuteStreamEntity> muteStreamEntities = remoteMuteDataSource.getMutedStreamEntities();
         for (MuteStreamEntity muteStreamEntity : muteStreamEntities) {
             muteStreamEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
@@ -60,7 +58,6 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     @Override public void unmute(String idStream) {
         try {
             syncTrigger.triggerSync();
-            dispatchSync();
             syncUnmute(idStream);
         } catch (ServerCommunicationException e) {
             deleteMute(idStream);

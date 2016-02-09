@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 public class GetLastShotsInteractor implements Interactor {
 
+    public static final int LAST_SHOTS_TRESHOLD = 11;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository localShotRepository;
@@ -51,13 +52,13 @@ public class GetLastShotsInteractor implements Interactor {
     }
 
     private void loadLastShotsFromLocal() {
-        List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, 4);
+        List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
         notifyLoaded(lastShots);
     }
 
     private void loadLastShotsFromRemote() {
         try {
-            List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, 4);
+            List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
             notifyLoaded(remoteShots);
             saveShotsForCurrentUserAndFollowing(remoteShots);
         } catch (ServerCommunicationException error) {

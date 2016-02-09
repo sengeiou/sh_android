@@ -47,6 +47,7 @@ import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -79,6 +80,7 @@ import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -221,6 +223,12 @@ public class ProfileFragment extends BaseFragment
                 profilePresenter.unmarkNiceShot(idShot);
             }
         };
+
+        OnHideClickListener onHideClickListener= new OnHideClickListener() {
+            @Override public void onHideClick(String idSHot) {
+                profilePresenter.hideShot(idSHot);
+            }
+        };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
             @Override public void onUserClick(String idUser) {
@@ -231,8 +239,8 @@ public class ProfileFragment extends BaseFragment
 
         latestsShotsAdapter =
           new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener, videoClickListener, onNiceShotListener,
-            onUsernameClickListener){
+            imageLoader, timeUtils, avatarClickListener, videoClickListener,onNiceShotListener,
+            onUsernameClickListener, onHideClickListener,profilePresenter.isCurrentUser()){
               @Override protected boolean shouldShowShortTitle() {
                   return true;
               }
@@ -248,6 +256,11 @@ public class ProfileFragment extends BaseFragment
                 reportShotPresenter.onShotLongPressed(shot);
             }
         });
+    }
+
+    @Override public void resetTimelineAdapter(){
+        latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
+        latestsShotsAdapter.notifyDataSetChanged();
     }
 
     private void initializePresenter() {
@@ -314,8 +327,12 @@ public class ProfileFragment extends BaseFragment
             File changedPhotoFile;
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
-                changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                profilePresenter.uploadPhoto(changedPhotoFile);
+                try {
+                    changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
+                    profilePresenter.uploadPhoto(changedPhotoFile);
+                } catch (NullPointerException error) {
+                    feedbackMessage.show(getView(), R.string.error_message_invalid_image);
+                }
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
                 profilePresenter.uploadPhoto(changedPhotoFile);
@@ -594,12 +611,11 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showDefaultBlockMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
-          new Runnable() {
-              @Override public void run() {
-                  profilePresenter.blockUserClicked();
-              }
-          }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user, new Runnable() {
+            @Override public void run() {
+                profilePresenter.blockUserClicked();
+            }
+        }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
             @Override public void run() {
                 profilePresenter.banUserClicked();
             }
@@ -633,8 +649,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showBlockAndBannedMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.unblockUserClicked();
               }
@@ -745,7 +760,9 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToFollowingList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWING);
+        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(),
+          idUser,
+          UserFollowingRelationship.FOLLOWING);
         startActivity(intent);
     }
 
@@ -767,7 +784,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToAllShots(String idUser) {
-        startActivity(AllShotsActivity.newIntent(getActivity(), idUser));
+        startActivity(AllShotsActivity.newIntent(getActivity(), idUser, profilePresenter.isCurrentUser()));
     }
 
     @Override public void showLatestShots() {
@@ -859,7 +876,25 @@ public class ProfileFragment extends BaseFragment
         followButton.setFollowing(following);
     }
 
-    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+    @Override public void handleReport(String sessionToken, ShotModel shotModel) {
+        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
+    }
+
+    @Override
+    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder //
+          .setMessage(getString(R.string.language_support_alert)) //
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  goToReport(sessionToken, shotModel);
+              }
+          }).show();
+    }
+
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -887,7 +922,7 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
@@ -898,9 +933,9 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
         }).show();
     }
 
@@ -937,6 +972,23 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUserUnbanned() {
         feedbackMessage.show(getView(), R.string.user_unbanned);
+    }
+
+    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
+          new Runnable() {
+              @Override public void run() {
+                  openDeleteShotConfirmation(shotModel);
+              }
+          }).show();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void showPinned() {
+        /* no-op */
     }
 
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {

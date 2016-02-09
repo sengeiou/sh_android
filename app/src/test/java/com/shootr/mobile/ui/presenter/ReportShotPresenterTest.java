@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -38,6 +39,9 @@ public class ReportShotPresenterTest {
 
     public static final String ID_USER = "idUser";
     public static final String ANOTHER_ID_USER = "another_id_user";
+    private static final String ES_LOCALE = "es";
+    private static final String SESSION_TOKEN = "session_token";
+    private static final String EN_LOCALE = "en";
     @Mock ReportShotView reportShotView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
@@ -51,6 +55,7 @@ public class ReportShotPresenterTest {
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
+    @Mock PinShotInteractor pinShotInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -60,7 +65,7 @@ public class ReportShotPresenterTest {
           sessionRepository,
           userModelMapper,
           getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
-          banUserInteractor, unbanUserInteractor);
+          banUserInteractor, unbanUserInteractor, pinShotInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -101,7 +106,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(shotModel(), ID_USER);
 
-        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -109,7 +114,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(anotherUserShot(), ANOTHER_ID_USER);
 
-        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldNotShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -117,7 +122,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(shotModel(), ID_USER);
 
-        verify(reportShotView, never()).showHolderContextMenu(any(ShotModel.class));
+        verify(reportShotView, never()).showHolderContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldShowBanSuccessfullyWhenBanConfirmed() throws Exception {
@@ -136,6 +141,49 @@ public class ReportShotPresenterTest {
         verify(reportShotView).showUserUnbanned();
     }
 
+    @Test public void shouldNotifyShotPinnedWhenPinShot() throws Exception {
+        setupPinShotCallback();
+
+        presenter.pinToProfile(shotModel());
+
+        reportShotView.notifyPinnedShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldFeedbackShotPinnedWhenPinShot() throws Exception {
+        setupPinShotCallback();
+
+        presenter.pinToProfile(shotModel());
+
+        reportShotView.showPinned();
+    }
+
+    @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
+        ShotModel shotModel = shotModel();
+
+        presenter.reportClicked(ES_LOCALE,SESSION_TOKEN,shotModel);
+
+        verify(reportShotView).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
+    }
+
+    @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnlgish() throws Exception {
+        ShotModel shotModel = shotModel();
+
+        presenter.reportClicked(EN_LOCALE,SESSION_TOKEN,shotModel);
+
+        verify(reportShotView,never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
+    }
+
+    public void setupPinShotCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(pinShotInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
+    }
+    
     private void setupUnbanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

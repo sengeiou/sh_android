@@ -61,7 +61,7 @@
         <ScrollView
           android:layout_width="match_parent"
           android:layout_height="0dp"
-          android:layout_weight="1">
+          android:layout_weight="2">
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -78,6 +78,23 @@
                   android:hint="@string/new_shot_placeholder"
                   android:inputType="text|textCapSentences|textMultiLine"
                   android:padding="16dp" />
+
+                <FrameLayout
+                  android:id="@+id/new_shot_mentions_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:padding="16dp"
+                  android:visibility="gone"
+                  tools:visibility="visible">
+
+                  <com.shootr.mobile.ui.widgets.NestedListView
+                    android:id="@+id/new_shot_mentions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                </FrameLayout>
 
                 <FrameLayout
                   android:id="@+id/new_shot_image_container"

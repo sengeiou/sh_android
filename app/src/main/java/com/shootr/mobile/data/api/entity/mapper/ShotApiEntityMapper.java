@@ -51,6 +51,8 @@ public class ShotApiEntityMapper {
         shotEntity.setModified(new Date(shotApiEntity.getModified()));
         shotEntity.setRevision(shotApiEntity.getRevision());
 
+        shotEntity.setProfileHidden(shotApiEntity.getProfileHidden());
+
         return shotEntity;
     }
 

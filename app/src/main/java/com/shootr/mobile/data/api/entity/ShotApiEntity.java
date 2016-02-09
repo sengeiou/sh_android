@@ -30,6 +30,7 @@ public class ShotApiEntity {
     private Long birth;
     private Long modified;
     private Integer revision;
+    private Long profileHidden;
 
     public String getIdShot() {
         return idShot;
@@ -189,5 +190,13 @@ public class ShotApiEntity {
 
     public void setParent(ShotApiEntity parent) {
         this.parent = parent;
+    }
+
+    public Long getProfileHidden() {
+        return profileHidden;
+    }
+
+    public void setProfileHidden(Long profileHidden) {
+        this.profileHidden = profileHidden;
     }
 }

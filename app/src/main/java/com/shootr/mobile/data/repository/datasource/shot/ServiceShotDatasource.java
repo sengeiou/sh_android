@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {
 
+    public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
 
@@ -185,5 +186,26 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public void deleteShotsByIdStream(String idStream) {
         throw new IllegalArgumentException("This method should not have remote implementation");
+    }
+
+    @Override public void hideShot(String idShot, Long timestamp) {
+        try {
+            shotApiService.hideShot(idShot);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void unhideShot(String idShot) {
+        try {
+            shotApiService.unhideShot(idShot);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public List<ShotEntity> getEntitiesNotSynchronized() {
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 }

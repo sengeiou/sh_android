@@ -41,7 +41,7 @@ public class PerformFacebookLoginInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLanguage()));
+            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLocale()));
         } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
         } catch (ShootrException unknownException) {

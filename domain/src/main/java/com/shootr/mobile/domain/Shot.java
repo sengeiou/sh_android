@@ -24,7 +24,7 @@ public class Shot {
     private String type;
     private Integer niceCount;
     private Boolean isMarkedAsNice;
-
+    private Long profileHidden;
     private EntityMetadata metadata;
 
     public String getIdShot() {
@@ -231,6 +231,14 @@ public class Shot {
           ", niceCount='" + niceCount + '\'' +
           ", publishDate=" + publishDate +
           '}';
+    }
+
+    public Long getProfileHidden() {
+        return profileHidden;
+    }
+
+    public void setProfileHidden(Long profileHidden) {
+        this.profileHidden = profileHidden;
     }
 
     public static class ShotStreamInfo {

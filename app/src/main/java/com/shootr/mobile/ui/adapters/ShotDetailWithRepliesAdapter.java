@@ -342,6 +342,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         public void setImage(final ShotModel shotModel, String imageUrl) {
+            shotImage.setVisibility(View.VISIBLE);
             imageLoader.loadTimelineImage(imageUrl, shotImage);
             shotImage.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -352,6 +353,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         public void setVideo(final ShotModel shotModel) {
             this.videoFrame.setVisibility(View.VISIBLE);
+            this.shotImage.setVisibility(View.VISIBLE);
             this.videoTitle.setText(shotModel.getVideoTitle());
             this.videoDuration.setText(shotModel.getVideoDuration());
             this.videoFrame.setOnClickListener(new View.OnClickListener() {

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout android:id="@+id/action_mute_switch_container"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="56dp"
-  android:background="?selectableItemBackground" >
+  android:background="?selectableItemBackground">
 
-  <TextView android:id="@+id/action_name"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:paddingLeft="@dimen/keyline_2"
-    android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
-    tools:text="Mute" />
+    <TextView android:id="@+id/action_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:paddingLeft="@dimen/keyline_2"
+      android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+      tools:text="Mute" />
 
-  <android.support.v7.widget.SwitchCompat
-    android:id="@+id/action_mute_switch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="end|center_vertical"
-    android:layout_marginRight="16dp"
-    android:gravity="center_vertical"
-    android:paddingRight="8dp" />
+    <android.support.v7.widget.SwitchCompat android:id="@+id/action_mute_switch"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end|center_vertical"
+      android:layout_marginRight="16dp"
+      android:gravity="center_vertical"
+      android:paddingRight="8dp" />
 
 </FrameLayout>
