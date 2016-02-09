@@ -181,8 +181,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
           })
           .addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
-              @Override
-              public void run() {
+              @Override public void run() {
                   streamDetailPresenter.shareStreamVia();
               }
           }).show();
@@ -326,11 +325,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return false;
             }
         });
-
-
     }
 
-    private void changeToolbarColor(){
+     @Override public void changeToolbarColor(){
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
         Palette palette = Palette.from(bitmap).generate();
