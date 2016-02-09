@@ -324,15 +324,15 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
         Palette palette = Palette.from(bitmap).generate();
-        collapsingToolbar.setContentScrimColor(palette.getDarkMutedColor(getColor(R.color.primary)));
-        collapsingToolbar.setStatusBarScrimColor(palette.getDarkMutedColor(getColor(R.color.primary)));
+        collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(Color.parseColor("#0288d1")));
+        collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(Color.parseColor("#0288d1")));
 
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(palette.getDarkVibrantColor(getColor(R.color.primary_dark)));
+            window.setStatusBarColor(palette.getDarkVibrantColor(Color.parseColor("#01579b")));
         }
     }
 
