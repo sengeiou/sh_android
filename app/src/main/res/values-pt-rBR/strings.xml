@@ -43,14 +43,6 @@
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Um email confirmado é requerido</string>
   <string name="all_participants_button">Todos os participantes</string>
-  <string name="analytics_screen_activity">atividade</string>
-  <string name="analytics_screen_favorites">favoritos</string>
-  <string name="analytics_screen_friends">amigos</string>
-  <string name="analytics_screen_me">me</string>
-  <string name="analytics_screen_stream_detail">streamDetail</string>
-  <string name="analytics_screen_stream_list">popularStreams</string>
-  <string name="analytics_screen_stream_timeline">streamTimeline</string>
-  <string name="analytics_screen_userProfile">userProfile</string>
   <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">O usuário não poderá publicar shots nos seus streams.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
@@ -360,15 +352,4 @@
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_data_info_favorites">Favoritos</string>
   <string name="stream_detail_menu_data_info">Estatísticas</string>
-  <string name="analytics_screen_stream_media">streamMedia</string>
-  <string name="analytics_screen_all_participants">allParticipants</string>
-  <string name="analytics_screen_user_follows">userFollows</string>
-  <string name="analytics_screen_edit_profile">editProfile</string>
-  <string name="analytics_screen_user_follower">followersPeople</string>
-  <string name="analytics_screen_user_following">followingPeople</string>
-  <string name="analytics_screen_support">support</string>
-  <string name="analytics_screen_change_password">changePassword</string>
-  <string name="analytics_screen_user_streams">userStreams</string>
-  <string name="analytics_screen_stream_numbers">streamNumbers</string>
-  <string name="analytics_screen_forgot_password">forgotPassword</string>
 </resources>
