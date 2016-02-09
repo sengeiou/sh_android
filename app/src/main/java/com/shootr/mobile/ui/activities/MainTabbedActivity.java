@@ -79,7 +79,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 String idStream = address.substring(28);
                 startActivity(StreamTimelineActivity.newIntent(this, idStream));
             } else {
-                String idShot = address.substring(27);
+                String idShot = address.substring(26);
+                startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
             }
         }
     }
