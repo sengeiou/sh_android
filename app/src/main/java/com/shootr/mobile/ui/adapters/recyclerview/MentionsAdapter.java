@@ -57,11 +57,26 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
         viewHolder.setUser(item);
 
         viewHolder.title.setText(item.getName());
+
+        if (verifiedUser(item)) {
+            viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
+            viewHolder.title.setCompoundDrawablePadding(8);
+        }else{
+            viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
+
         viewHolder.subtitle.setText(getSubtitle(item));
         viewHolder.subtitle.setVisibility(View.VISIBLE);
 
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
+    }
+
+    private boolean verifiedUser(UserModel userModel) {
+        if(userModel.isVerifiedUser()!=null) {
+            return userModel.isVerifiedUser();
+        }
+        return false;
     }
 
     protected String getSubtitle(UserModel item) {
