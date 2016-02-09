@@ -33,23 +33,25 @@ public class ShootrTimelineService {
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
-    public ActivityTimeline refreshTimelinesForActivity(String locale) {
-        List<Activity> activities = refreshActivityShots(locale);
+    public ActivityTimeline refreshTimelinesForActivity(String language) {
+        List<Activity> activities = refreshActivityShots(language);
         return buildSortedActivityTimeline(activities);
     }
 
-    private List<Activity> refreshActivityShots(String locale) {
+    private List<Activity> refreshActivityShots(String language) {
         Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
 
         ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
           .since(activityRefreshDateSince) //
           .build();
 
-        if (localActivityRepository.getActivityTimeline(activityTimelineParameters, locale).isEmpty()) {
+        activityTimelineParameters.excludeHiddenTypes();
+
+        if (localActivityRepository.getActivityTimeline(activityTimelineParameters, language).isEmpty()) {
             activityTimelineParameters.excludeHiddenTypes();
         }
 
-        return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, locale);
+        return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, language);
     }
 
     public Timeline refreshTimelinesForStream(String idStream) {
