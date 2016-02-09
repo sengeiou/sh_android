@@ -67,6 +67,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
+    private int counterToolbarPrintTimes =0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(com.shootr.mobile.R.id.toolbar_dummy_content) View toolbarDummyContent;
@@ -311,6 +312,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void setStreamPicture(String picture) {
+
         imageLoader.loadStreamPicture(picture, streamPicture);
         imageLoader.loadBlurStreamPicture(picture, toolbarImage, new RequestListener<String, GlideDrawable>() {
             @Override public boolean onException(Exception e, String model, Target<GlideDrawable> target,
@@ -321,13 +323,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             @Override public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
               boolean isFromMemoryCache, boolean isFirstResource) {
 
-                changeToolbarColor();
+                if (counterToolbarPrintTimes ==0) {
+                    changeToolbarColor();
+                    counterToolbarPrintTimes++;
+                }
                 return false;
             }
         });
     }
 
-     @Override public void changeToolbarColor(){
+     private void changeToolbarColor(){
         streamPicture.buildDrawingCache();
         Bitmap bitmap = streamPicture.getDrawingCache();
         Palette palette = Palette.from(bitmap).generate();
