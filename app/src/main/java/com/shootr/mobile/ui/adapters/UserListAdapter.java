@@ -38,7 +38,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         this.users.addAll(users);
     }
 
-    public void removeItems(){
+    public void removeItems() {
         this.users = Collections.emptyList();
     }
 
@@ -68,6 +68,13 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.title.setText(item.getName());
 
+        if (verifiedUser(item)) {
+            viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
+            viewHolder.title.setCompoundDrawablePadding(6);
+        }else{
+            viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
+
         if (showSubtitle(item)) {
             viewHolder.subtitle.setText(getSubtitle(item));
             viewHolder.subtitle.setVisibility(View.VISIBLE);
@@ -78,34 +85,40 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
-        if(isFollowButtonVisible()){
-            if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
+        if (isFollowButtonVisible()) {
+            if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
                 viewHolder.followButton.setVisibility(View.VISIBLE);
                 viewHolder.followButton.setFollowing(true);
-            }else if(item.getRelationship() == FollowEntity.RELATIONSHIP_OWN){
+            } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
                 viewHolder.followButton.setVisibility(View.GONE);
                 viewHolder.followButton.setEditProfile();
-            }else {
+            } else {
                 viewHolder.followButton.setVisibility(View.VISIBLE);
                 viewHolder.followButton.setFollowing(false);
             }
             viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                       if(viewHolder.followButton.isFollowing()){
-                            if(callback!=null){
-                                callback.unFollow(position);
-                            }
-                       }else{
-                           if(callback!=null){
-                               callback.follow(position);
-                           }
-                       }
+                    if (viewHolder.followButton.isFollowing()) {
+                        if (callback != null) {
+                            callback.unFollow(position);
+                        }
+                    } else {
+                        if (callback != null) {
+                            callback.follow(position);
+                        }
+                    }
                 }
             });
-
-        }else{
+        } else {
             viewHolder.followButton.setVisibility(View.GONE);
-         }
+        }
+    }
+
+    private boolean verifiedUser(UserModel userModel) {
+        if(userModel.isVerifiedUser()!=null) {
+            return userModel.isVerifiedUser();
+        }
+        return false;
     }
 
     protected boolean showSubtitle(UserModel item) {
@@ -117,10 +130,10 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     private String getUsernameForSubtitle(UserModel item) {
-        return String.format("@%s",item.getUsername());
+        return String.format("@%s", item.getUsername());
     }
 
-    public void setCallback(FollowUnfollowAdapterCallback callback){
+    public void setCallback(FollowUnfollowAdapterCallback callback) {
         this.callback = callback;
     }
 
@@ -129,6 +142,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     public static class ViewHolder {
+
         @Bind(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
         @Bind(R.id.user_name) TextView title;
         @Bind(R.id.user_username) TextView subtitle;
@@ -139,12 +153,10 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }
     }
 
+    public interface FollowUnfollowAdapterCallback {
 
-    public interface FollowUnfollowAdapterCallback{
         void follow(int position);
+
         void unFollow(int position);
     }
-
-
-
 }

@@ -5,43 +5,40 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp">
+  android:paddingBottom="8dp"
+  android:paddingTop="8dp">
 
-  <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/user_avatar"
+    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/user_avatar"
       android:layout_width="48dp"
       android:layout_height="48dp"
-      android:src="@drawable/ic_contact_picture_default"
-      android:layout_alignParentTop="true"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
-      android:layout_marginLeft="16dp" />
+      android:layout_alignParentTop="true"
+      android:layout_marginLeft="16dp"
+      android:src="@drawable/ic_contact_picture_default" />
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/item_list_user_info"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignBottom="@+id/user_avatar"
       android:layout_alignTop="@+id/user_avatar"
       android:layout_marginLeft="16dp"
-      android:layout_toRightOf="@+id/user_avatar"
       android:layout_toLeftOf="@+id/user_follow_button"
+      android:layout_toRightOf="@+id/user_avatar"
       android:gravity="center_vertical"
-      android:orientation="vertical"
-      android:id="@+id/item_list_user_info">
+      android:orientation="vertical">
 
-        <TextView
-          android:id="@+id/user_name"
+        <TextView android:id="@+id/user_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:singleLine="true"
           android:textColor="@color/gray_10"
           android:textSize="17sp"
-          tools:text="Rafa" />
+          tools:text="Rafa"
+          android:paddingRight="8dp"/>
 
-        <TextView
-          android:id="@+id/user_username"
+        <TextView android:id="@+id/user_username"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:ellipsize="end"
@@ -54,11 +51,10 @@
 
     </LinearLayout>
 
-    <com.shootr.mobile.ui.widgets.FollowButton
-      android:id="@+id/user_follow_button"
+    <com.shootr.mobile.ui.widgets.FollowButton android:id="@+id/user_follow_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
-      android:layout_marginRight="16dp"
-      android:layout_centerVertical="true"/>
+      android:layout_centerVertical="true"
+      android:layout_marginRight="16dp" />
 </RelativeLayout>
