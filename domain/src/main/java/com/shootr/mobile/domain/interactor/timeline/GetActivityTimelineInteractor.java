@@ -19,7 +19,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ActivityRepository localActivityRepository;
     private Callback callback;
-    private String language;
+    private String locale;
 
     @Inject
     public GetActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -31,7 +31,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     //endregion
 
     public void loadActivityTimeline(String language, Callback<ActivityTimeline> callback) {
-        this.language = language;
+        this.locale = language;
         this.callback = callback;
         interactorHandler.execute(this);
     }
@@ -47,7 +47,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     private List<Activity> loadLocalActivities(ActivityTimelineParameters timelineParameters) {
-        return localActivityRepository.getActivityTimeline(timelineParameters, language);
+        return localActivityRepository.getActivityTimeline(timelineParameters, locale);
     }
 
     private ActivityTimelineParameters buildParameters() {

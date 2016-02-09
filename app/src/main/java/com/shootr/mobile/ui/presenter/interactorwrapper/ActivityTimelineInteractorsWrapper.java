@@ -26,15 +26,15 @@ public class ActivityTimelineInteractorsWrapper {
     }
 
     public void loadTimeline(Interactor.Callback<ActivityTimeline> callback) {
-        getActivityTimelineInteractor.loadActivityTimeline(localeProvider.getLanguage(), callback);
+        getActivityTimelineInteractor.loadActivityTimeline(localeProvider.getLocale(), callback);
     }
 
     public void refreshTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshActivityTimelineInteractor.refreshActivityTimeline(localeProvider.getLanguage(), callback, errorCallback);
+        refreshActivityTimelineInteractor.refreshActivityTimeline(localeProvider.getLocale(), callback, errorCallback);
     }
 
     public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<ActivityTimeline> callback,
       Interactor.ErrorCallback errorCallback) {
-        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(currentOldestDate, localeProvider.getLanguage(), callback, errorCallback);
+        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(currentOldestDate, localeProvider.getLocale(), callback, errorCallback);
     }
 }

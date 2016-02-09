@@ -50,7 +50,7 @@ public class CreateAccountInteractor implements Interactor {
     @Override public void execute() throws Exception {
         if (validateInput()) {
             try {
-                shootrUserService.createAccount(username, email, password, localeProvider.getLanguage());
+                shootrUserService.createAccount(username, email, password, localeProvider.getLocale());
                 notifyLoaded();
             } catch (EmailAlreadyExistsException e) {
                 handleServerError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);

@@ -4,7 +4,7 @@ public class ChangePasswordEntity {
 
     private String password;
     private String newPassword;
-    private String language;
+    private String locale;
 
     public String getPassword() {
         return password;
@@ -22,11 +22,11 @@ public class ChangePasswordEntity {
         this.newPassword = newPassword;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

@@ -42,7 +42,7 @@ public class ChangePasswordInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.changePassword(currentPassword, newPassword, localeProvider.getLanguage());
+            shootrUserService.changePassword(currentPassword, newPassword, localeProvider.getLocale());
             notifyLoaded();
         } catch (ServerCommunicationException error) {
             notifyError(error);

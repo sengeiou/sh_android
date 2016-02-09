@@ -3,7 +3,7 @@ package com.shootr.mobile.data.entity;
 public class ResetPasswordEntity {
 
     private String idUser;
-    private String language;
+    private String locale;
 
     public String getIdUser() {
         return idUser;
@@ -13,11 +13,11 @@ public class ResetPasswordEntity {
         this.idUser = idUser;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

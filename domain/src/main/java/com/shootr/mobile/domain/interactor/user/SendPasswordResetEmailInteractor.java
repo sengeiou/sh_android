@@ -38,7 +38,7 @@ public class SendPasswordResetEmailInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.sendPasswordResetEmail(idUser, localeProvider.getLanguage());
+            shootrUserService.sendPasswordResetEmail(idUser, localeProvider.getLocale());
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);
