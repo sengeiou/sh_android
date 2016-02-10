@@ -17,6 +17,7 @@
     <color name="shadow_start">#33000000</color>
 
     <!-- Gray scale -->
+    <color name="gray_material">#9E9E9E</color>
     <color name="gray_10">#1a1a1a</color>
     <color name="gray_20">#ff333333</color>
     <color name="gray_30">#4d4d4d</color>
