@@ -349,4 +349,6 @@
     <string name="stream_data_info_favorites">喜爱</string>
     <string name="title_activity_stream_data_info" >数据</string>
     <string name="stream_detail_menu_data_info">数据</string>
+    <string name="pinned_shot_activity">分享到个人主页</string>
+    <string name="pinned_shot_activity_with_comment">分享到个人主页: </string>
 </resources>
