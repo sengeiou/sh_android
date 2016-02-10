@@ -30,6 +30,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_STREAM_FAVORITED = 7;
     public static final int TYPE_MENTION = 8;
     public static final int TYPE_FOLLOW = 9;
+    public static final int TYPE_PINNED_SHOT = 10;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -83,6 +84,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_MENTION;
                 case ActivityType.START_FOLLOW:
                     return TYPE_FOLLOW;
+                case ActivityType.PINNED_SHOT:
+                    return TYPE_PINNED_SHOT;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -105,6 +108,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateSharedStreamViewHolder(parent);
             case TYPE_SHARE_SHOT:
                 return onCreateShareShotViewHolder(parent);
+            case TYPE_PINNED_SHOT:
+                return onCreatePinnedShotViewHolder(parent);
             case TYPE_MENTION:
                 return onCreateMentionViewHolder(parent);
             case TYPE_OPENED:
@@ -190,6 +195,14 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent) {
         return new ShareShotViewHolder(createActivityView(parent),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          onShotClick);
+    }
+
+    private PinnedShotViewHolder onCreatePinnedShotViewHolder(ViewGroup parent) {
+        return new PinnedShotViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           avatarClickListener,

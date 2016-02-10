@@ -352,4 +352,6 @@
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_data_info_favorites">Favoritos</string>
   <string name="stream_detail_menu_data_info">Estatísticas</string>
+  <string name="pinned_shot_activity">Linkado ao perfil</string>
+  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
 </resources>
