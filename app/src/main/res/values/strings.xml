@@ -376,4 +376,5 @@
     <string name="stream_data_info_favorites">Favorites</string>
     <string name="title_activity_stream_data_info">Stats</string>
     <string name="stream_detail_menu_data_info">Stats</string>
+    <string name="stream_data_info_participants_with_shots">Participants with shots</string>
 </resources>

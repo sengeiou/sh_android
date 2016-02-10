@@ -36,6 +36,37 @@
       android:layout_marginRight="8dp"
       android:background="@color/separator" />
 
+    <FrameLayout android:id="@+id/stream_data_info_participants_with_shots_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/stream_data_info_participants_with_shots_number"
+          android:layout_width="wrap_content"
+          android:layout_height="56dp"
+          android:layout_gravity="end|center_vertical"
+          android:gravity="center_vertical"
+          android:paddingRight="16dp"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textColor="@color/gray_60"
+          tools:text="88" />
+
+        <TextView android:id="@+id/stream_data_info_participants_with_shots_text"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:gravity="center_vertical"
+          android:paddingLeft="16dp"
+          android:text="@string/stream_data_info_participants_with_shots"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textColor="@color/gray_30" />
+
+    </FrameLayout>
+
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="@color/separator" />
+
     <FrameLayout android:id="@+id/stream_data_info_shots_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
