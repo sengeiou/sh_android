@@ -360,4 +360,5 @@
     <string name="stream_data_info_favorites">Favoritos</string>
     <string name="title_activity_stream_data_info" >Números</string>
     <string name="stream_detail_menu_data_info">Números</string>
+    <string name="stream_data_info_participants_with_shots">Participantes con shots</string>
 </resources>
