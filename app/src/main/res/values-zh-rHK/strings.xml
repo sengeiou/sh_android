@@ -43,14 +43,6 @@
   <string name="alert_report_confirmed_email_ok">好的</string>
   <string name="alert_report_confirmed_email_title">必须确认邮箱。</string>
   <string name="all_participants_button">所有参与者</string>
-  <string name="analytics_screen_activity">动态</string>
-  <string name="analytics_screen_favorites">喜爱</string>
-  <string name="analytics_screen_friends">朋友</string>
-  <string name="analytics_screen_me">我</string>
-  <string name="analytics_screen_stream_detail">streamDetail</string>
-  <string name="analytics_screen_stream_list">popularStreams</string>
-  <string name="analytics_screen_stream_timeline">streamTimeline</string>
-  <string name="analytics_screen_userProfile">userProfile</string>
   <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">禁止后该用户将不能回复你的streams。</string>
   <string name="block_cannot_shoot_streams">禁止用户</string>
@@ -358,4 +350,6 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
+  <string name="pinned_shot_activity">分享到個人主頁</string>
+  <string name="pinned_shot_activity_with_comment">分享到個人主頁: </string>
 </resources>
