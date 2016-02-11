@@ -360,5 +360,5 @@
     <string name="stream_data_info_shots">Shots</string>
     <string name="stream_data_info_favorites">Favorits</string>
     <string name="stream_detail_menu_data_info">Nombres</string>
-    <string name="stream_data_info_participants_with_shots">Participants amb shots</string>
+    <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
 </resources>

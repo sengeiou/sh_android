@@ -360,5 +360,5 @@
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_data_info_favorites">Favoritos</string>
   <string name="stream_detail_menu_data_info">Estatísticas</string>
-  <string name="stream_data_info_participants_with_shots">Participants who Shot</string>
+  <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
 </resources>
