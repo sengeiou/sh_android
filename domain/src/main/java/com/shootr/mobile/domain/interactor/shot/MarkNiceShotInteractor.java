@@ -67,7 +67,7 @@ public class MarkNiceShotInteractor implements Interactor {
                 /* swallow */
             }
         } catch (ServerCommunicationException error) {
-            localNiceShotRepository.unmark(idShot);
+            undoNiceInLocal();
             notifyError(error);
         }
     }
