@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.remote;
 
-import android.support.annotation.NonNull;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
@@ -15,7 +14,6 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -149,17 +147,5 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
         } catch (Exception error) {
             error.printStackTrace();
         }
-    }
-
-    @NonNull
-    protected ShotEntity createHiddenShot(String idShot) {
-        ShotEntity shotEntity = new ShotEntity();
-        shotEntity.setIdUser(sessionRepository.getCurrentUserId());
-        shotEntity.setIdShot(idShot);
-        shotEntity.setProfileHidden(1L);
-        Date now = new Date();
-        shotEntity.setBirth(now);
-        shotEntity.setModified(now);
-        return shotEntity;
     }
 }

@@ -9,7 +9,6 @@ import java.text.Normalizer;
 public class UserEntityDBMapper extends GenericDBMapper {
 
     public UserEntityDBMapper() {
-
     }
 
     public UserEntity fromCursor(Cursor c) {

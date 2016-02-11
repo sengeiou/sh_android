@@ -14,10 +14,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 @Singleton
 public class ActivityEntityMapper {
 
-    private final StreamEntityMapper streamEntityMapper;
-
-    @Inject public ActivityEntityMapper(StreamEntityMapper streamEntityMapper) {
-        this.streamEntityMapper = streamEntityMapper;
+    @Inject public ActivityEntityMapper() {
     }
 
     public Activity transform(ActivityEntity activityEntity) {

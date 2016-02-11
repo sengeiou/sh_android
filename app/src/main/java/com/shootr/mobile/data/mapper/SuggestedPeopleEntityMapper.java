@@ -12,7 +12,7 @@ public class SuggestedPeopleEntityMapper {
     @Inject public SuggestedPeopleEntityMapper() {
     }
 
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity, String currentUserId, boolean isFollower, boolean isFollowing) {
+    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity) {
         if (suggestedPeopleEntity == null) {
             return null;
         }
@@ -83,13 +83,5 @@ public class SuggestedPeopleEntityMapper {
             }
         }
         return suggestedPeopleEntities;
-    }
-
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity, String idCurrentUser) {
-        return transform(suggestedPeopleEntity, idCurrentUser, false, false);
-    }
-
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity) {
-        return transform(suggestedPeopleEntity, "-1L", false, false);
     }
 }

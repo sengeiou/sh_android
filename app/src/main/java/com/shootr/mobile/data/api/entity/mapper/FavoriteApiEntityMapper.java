@@ -4,7 +4,6 @@ import com.shootr.mobile.data.api.entity.FavoriteApiEntity;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,7 +28,4 @@ public class FavoriteApiEntityMapper {
         return favoriteEntities;
     }
 
-    private Date toDate(Long timestamp) {
-        return timestamp != null ? new Date(timestamp) : null;
-    }
 }
