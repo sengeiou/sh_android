@@ -525,6 +525,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_PARTICIPANTS_NUMBER, streamModel.getHistoricWatchers());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_SHOTS_NUMBER, streamModel.getTotalShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER, streamModel.getTotalFavorites());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
         startActivity(intent);
     }
 

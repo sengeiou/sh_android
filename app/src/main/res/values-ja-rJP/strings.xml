@@ -351,4 +351,5 @@
     <string name="stream_detail_menu_data_info">統計</string>
     <string name="pinned_shot_activity">プロフィールに表示</string>
     <string name="pinned_shot_activity_with_comment">プロフィールに表示: </string>
+    <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>
 </resources>

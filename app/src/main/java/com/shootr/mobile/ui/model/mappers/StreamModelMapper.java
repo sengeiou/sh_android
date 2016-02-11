@@ -31,6 +31,7 @@ public class StreamModelMapper {
         streamModel.setTotalWatchers(stream.getTotalWatchers());
         streamModel.setHistoricWatchers(stream.getHistoricWatchers());
         streamModel.setTotalShots(stream.getTotalShots());
+        streamModel.setUniqueShots(stream.getUniqueShots());
         return streamModel;
     }
 
