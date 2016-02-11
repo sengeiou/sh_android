@@ -43,7 +43,6 @@
   <string name="alert_report_confirmed_email_ok">好的</string>
   <string name="alert_report_confirmed_email_title">必须确认邮箱。</string>
   <string name="all_participants_button">所有参与者</string>
-  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">禁止后该用户将不能回复你的streams。</string>
   <string name="block_cannot_shoot_streams">禁止用户</string>
   <string name="block_ignore_user">屏蔽用户</string>
