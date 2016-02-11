@@ -96,7 +96,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @OnLongClick(com.shootr.mobile.R.id.support_version_container)
     public boolean onVersionLongClick() {
-        Toast.makeText(this, com.shootr.mobile.R.string.app_easter_egg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, com.shootr.mobile.R.string.app_easter_egg, Toast.LENGTH_LONG).show();
         return true;
     }
 
