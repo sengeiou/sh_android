@@ -14,6 +14,8 @@ import com.shootr.mobile.util.ImageLoader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
+
 public abstract class ClickableStreamActivityViewHolder extends GenericActivityViewHolder {
 
     private final OnStreamTitleClickListener onStreamTitleClickListener;
@@ -37,6 +39,8 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         String streamPlaceholder = "\\(stream\\)";
         String streamTitle = activity.getStreamTitle();
         SpannableStringBuilder spannableCheckinPattern = new SpannableStringBuilder(commentPattern);
+
+        checkNotNull(streamTitle, "Oh no! Stream from Api is corrupted! idStream=%s", activity.getIdStream());
 
         replacePlaceholderWithStreamTitleSpan(spannableCheckinPattern,
           streamPlaceholder,
