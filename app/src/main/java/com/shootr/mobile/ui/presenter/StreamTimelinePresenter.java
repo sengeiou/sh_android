@@ -53,6 +53,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isEmpty = true;
     private String idAuthor;
     private boolean showingHoldingShots;
+    private boolean isFirstShotPosition;
+    private boolean isFirstLoad;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -157,7 +159,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                   @Override public void onLoaded(Timeline timeline) {
                       showShotsInView(timeline);
                   }
-              }, new Interactor.ErrorCallback() {
+              },
+              new Interactor.ErrorCallback() {
                   @Override public void onError(ShootrException error) {
                       showErrorLoadingNewShots();
                   }
@@ -167,15 +170,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void showShotsInView(Timeline timeline) {
         List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-        streamTimelineView.setShots(shotModels);
-        isEmpty = shotModels.isEmpty();
-        streamTimelineView.hideCheckingForShots();
-        if (isEmpty) {
-            streamTimelineView.showEmpty();
-            streamTimelineView.hideShots();
-        } else {
-            streamTimelineView.hideEmpty();
-            streamTimelineView.showShots();
+        if (isFirstShotPosition || isFirstLoad) {
+            streamTimelineView.setShots(shotModels);
+            isEmpty = shotModels.isEmpty();
+            streamTimelineView.hideCheckingForShots();
+            if (isEmpty) {
+                streamTimelineView.showEmpty();
+                streamTimelineView.hideShots();
+            } else {
+                streamTimelineView.hideEmpty();
+                streamTimelineView.showShots();
+                isFirstLoad = false;
+            }
         }
         loadNewShots();
     }
@@ -426,6 +432,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         } else {
             streamTimelineView.hideEmpty();
         }
+    }
+
+    public void onFirstShotPosition(Boolean firstPositionVisible) {
+        this.isFirstShotPosition = firstPositionVisible;
+    }
+
+    public void setIsFirstLoad(boolean isFirstLoad) {
+        this.isFirstLoad = isFirstLoad;
     }
 
     @Override public void resume() {

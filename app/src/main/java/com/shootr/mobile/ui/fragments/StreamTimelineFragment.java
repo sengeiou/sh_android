@@ -163,6 +163,9 @@ public class StreamTimelineFragment extends BaseFragment
             initializePresenters(idStream);
         }
 
+        streamTimelinePresenter.setIsFirstLoad(true);
+        streamTimelinePresenter.onFirstShotPosition(true);
+
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
 
@@ -396,10 +399,16 @@ public class StreamTimelineFragment extends BaseFragment
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no - op */
+                /* no-op */
             }
 
             @Override public void onScrollIdle() {
+                Timber.d("onScrollIdle: "+listView.getFirstVisiblePosition());
+                if (listView.getFirstVisiblePosition() == 0) {
+                    streamTimelinePresenter.onFirstShotPosition(true);
+                } else {
+                    streamTimelinePresenter.onFirstShotPosition(false);
+                }
                 checkIfEndOfListVisible();
             }
         });
