@@ -177,10 +177,10 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         }
     }
 
-    @Override public List<SuggestedPeople> getSuggestedPeople() {
-        List<SuggestedPeopleEntity> suggestions = cachedSuggestedPeopleDataSource.getSuggestedPeople();
+    @Override public List<SuggestedPeople> getSuggestedPeople(String locale) {
+        List<SuggestedPeopleEntity> suggestions = cachedSuggestedPeopleDataSource.getSuggestedPeople(locale);
         if (suggestions == null || suggestions.isEmpty()) {
-            suggestions = remoteSuggestedPeopleDataSource.getSuggestedPeople();
+            suggestions = remoteSuggestedPeopleDataSource.getSuggestedPeople(locale);
             cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestions);
         }
         return suggestedPeopleEntitiesToDomain(suggestions);

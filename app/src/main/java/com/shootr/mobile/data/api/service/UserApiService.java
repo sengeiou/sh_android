@@ -50,7 +50,7 @@ public interface UserApiService {
     UserEntity putUser(@Body UserApiEntity userApiEntity) throws IOException, ApiException;
 
     @GET("/user/suggested")
-    List<SuggestedPeopleEntity> getSuggestedPeople() throws IOException, ApiException;
+    List<SuggestedPeopleEntity> getSuggestedPeople(@Query("locale") String locale) throws IOException, ApiException;
 
     @GET("/user/search/{query}?includeLinks=false&includeEmbed=false")
     List<UserEntity> search(@Path("query") String query, @Query("page") int pageOffset, @Query("locale") String locale) throws IOException, ApiException;

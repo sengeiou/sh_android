@@ -13,7 +13,7 @@ public class DatabaseSuggestedPeopleDataSource implements SuggestedPeopleDataSou
         this.suggestedPeopleManager = suggestedPeopleManager;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String locale) {
         return suggestedPeopleManager.getSuggestedPeople();
     }
 

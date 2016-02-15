@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,9 +24,11 @@ import static org.mockito.Mockito.when;
 
 public class GetSuggestedPeopleInteractorTest {
 
+    public static final String LOCALE = "locale";
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock Interactor.ErrorCallback errorCallback;
+    @Mock LocaleProvider localeProvider;
     @Spy SpyCallback<List<SuggestedPeople>> callback = new SpyCallback<>();
 
     private GetSuggestedPeopleInteractor interactor;
@@ -37,30 +40,31 @@ public class GetSuggestedPeopleInteractorTest {
         interactor = new GetSuggestedPeopleInteractor(interactorHandler,
           postExecutionThread,
           remoteUserRepository,
-          localUserRepository);
+          localUserRepository, localeProvider);
+        when(localeProvider.getLocale()).thenReturn(LOCALE);
     }
 
     @Test public void shouldNotAskForRemoteSuggestionsWhenLocalRepositoryReturnsData() throws Exception {
         setupDoesFollowSomeone();
-        when(localUserRepository.getSuggestedPeople()).thenReturn(stubSuggestions());
+        when(localUserRepository.getSuggestedPeople(localeProvider.getLocale())).thenReturn(stubSuggestions());
 
         interactor.loadSuggestedPeople(callback, errorCallback);
 
-        verify(remoteUserRepository, never()).getSuggestedPeople();
+        verify(remoteUserRepository, never()).getSuggestedPeople(localeProvider.getLocale());
     }
 
     @Test public void shouldAskForRemoteSuggestionsWhenLocalRepositoryReturnsEmpty() throws Exception {
         setupDoesFollowSomeone();
-        when(localUserRepository.getSuggestedPeople()).thenReturn(Collections.<SuggestedPeople>emptyList());
+        when(localUserRepository.getSuggestedPeople(localeProvider.getLocale())).thenReturn(Collections.<SuggestedPeople>emptyList());
 
         interactor.loadSuggestedPeople(callback, errorCallback);
 
-        verify(remoteUserRepository).getSuggestedPeople();
+        verify(remoteUserRepository).getSuggestedPeople(localeProvider.getLocale());
     }
 
     @Test public void shouldCallbackOneUserWhenRepositoryReturnsTwoUsersAndOneIsFollowed() throws Exception {
         setupDoesFollowSomeone();
-        when(localUserRepository.getSuggestedPeople()).thenReturn(Arrays.asList(followedSuggestion(),
+        when(localUserRepository.getSuggestedPeople(localeProvider.getLocale())).thenReturn(Arrays.asList(followedSuggestion(),
           notFollowedSuggestion()));
 
         interactor.loadSuggestedPeople(callback, errorCallback);
@@ -71,7 +75,7 @@ public class GetSuggestedPeopleInteractorTest {
 
     @Test public void shouldCallbackEmptyWhenRepositoryReturnsFollowedUsersOnly() throws Exception {
         setupDoesFollowSomeone();
-        when(localUserRepository.getSuggestedPeople()).thenReturn(Arrays.asList(followedSuggestion(),
+        when(localUserRepository.getSuggestedPeople(localeProvider.getLocale())).thenReturn(Arrays.asList(followedSuggestion(),
           followedSuggestion()));
 
         interactor.loadSuggestedPeople(callback, errorCallback);
@@ -85,7 +89,7 @@ public class GetSuggestedPeopleInteractorTest {
 
         interactor.loadSuggestedPeople(callback, errorCallback);
 
-        verify(remoteUserRepository).getSuggestedPeople();
+        verify(remoteUserRepository).getSuggestedPeople(localeProvider.getLocale());
     }
 
     protected void setupDoesFollowSomeone() {

@@ -16,9 +16,9 @@ public class ServiceSuggestedPeopleDataSource implements SuggestedPeopleDataSour
         this.userApiService = userApiService;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String locale) {
         try {
-            return userApiService.getSuggestedPeople();
+            return userApiService.getSuggestedPeople(locale);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
