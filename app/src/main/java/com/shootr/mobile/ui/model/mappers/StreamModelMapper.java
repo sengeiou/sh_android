@@ -29,9 +29,9 @@ public class StreamModelMapper {
         streamModel.setRemoved(stream.isRemoved());
         streamModel.setTotalFavorites(stream.getTotalFavorites());
         streamModel.setTotalWatchers(stream.getTotalWatchers());
-        streamModel.setHistoricWatchers(stream.getHistoricWatchers());
-        streamModel.setTotalShots(stream.getTotalShots());
-        streamModel.setUniqueShots(stream.getUniqueShots());
+        streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null? stream.getHistoricWatchers(): 0);
+        streamModel.setTotalShots(stream.getTotalShots() != null? stream.getTotalShots(): 0);
+        streamModel.setUniqueShots(stream.getUniqueShots() != null? stream.getUniqueShots(): 0);
         return streamModel;
     }
 
