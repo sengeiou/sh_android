@@ -74,17 +74,19 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
 
     //region View methods
     @Override public void showConfirmationEmailSentAlert(String email, final Runnable alertCallback) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
-          .setMessage(getString(R.string.email_confirmation_message_content, email)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  if (alertCallback != null) {
-                      alertCallback.run();
+        if(!isFinishing()) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
+              .setMessage(getString(R.string.email_confirmation_message_content, email)) //
+              .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      if (alertCallback != null) {
+                          alertCallback.run();
+                      }
                   }
-              }
-          }).show();
+              }).show();
+        }
     }
 
     @Override public void showUserEmail(String userEmail) {
