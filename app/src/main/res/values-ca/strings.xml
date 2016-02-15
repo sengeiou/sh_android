@@ -221,7 +221,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Esborrany desat</string>
     <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respons ha estat eliminat</string>
     <string name="notification_shot_has_stream_removed_subtitle">Aquest stream ha estat esborrat</string>
-    <string name="notification_shot_has_user_banned_subtitle">Has estat vetat en aquest stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d shots nous</string>
     <string name="notification_shot_sending">Enviant…</string>

@@ -229,7 +229,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
     <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to reply has been deleted</string>
     <string name="notification_shot_has_stream_removed_subtitle">This stream has been removed</string>
-    <string name="notification_shot_has_user_banned_subtitle">You have been banned in this stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
     <string name="notification_shot_sending">Shooting…</string>

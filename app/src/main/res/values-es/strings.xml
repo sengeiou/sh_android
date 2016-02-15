@@ -221,7 +221,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>
     <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respondes ha sido eliminado</string>
     <string name="notification_shot_has_stream_removed_subtitle">Este stream ha sido borrado</string>
-    <string name="notification_shot_has_user_banned_subtitle">Has sido vetado en este stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d shots nuevos</string>
     <string name="notification_shot_sending">Shooting…</string>

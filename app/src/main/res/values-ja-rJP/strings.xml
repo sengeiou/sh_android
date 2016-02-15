@@ -219,7 +219,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">下書きが保存されました</string>
     <string name="notification_shot_has_parent_deleted_subtitle">返信したショットは削除されました</string>
     <string name="notification_shot_has_stream_removed_subtitle">このストリームは削除されました</string>
-    <string name="notification_shot_has_user_banned_subtitle">あなたはこのストリームへの投稿を禁止されました</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">新しいショット: %d件</string>
     <string name="notification_shot_sending">ショットを送信中…</string>
