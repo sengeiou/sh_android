@@ -384,6 +384,18 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).setTitle(anyString());
     }
 
+    @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
+        presenter.onShotDeleted(0);
+
+        verify(streamTimelineView).showEmpty();
+    }
+
+    @Test public void shouldHideEmptyWhenShotDeletedAndThereAreShotsInTimeline() throws Exception {
+        presenter.onShotDeleted(1);
+
+        verify(streamTimelineView).hideEmpty();
+    }
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);

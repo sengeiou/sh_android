@@ -420,6 +420,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
+    public void onShotDeleted(Integer count) {
+        if (count <= 0) {
+            streamTimelineView.showEmpty();
+        } else {
+            streamTimelineView.hideEmpty();
+        }
+    }
+
     @Override public void resume() {
         bus.register(this);
         startPollingShots();

@@ -808,6 +808,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
         adapter.removeShot(shotModel);
+        adapter.notifyDataSetChanged();
+        streamTimelinePresenter.onShotDeleted(adapter.getCount());
     }
 
     @OnItemClick(com.shootr.mobile.R.id.timeline_shot_list)
