@@ -18,7 +18,7 @@ public interface UserRepository {
 
     User putUser(User user);
 
-    List<SuggestedPeople> getSuggestedPeople();
+    List<SuggestedPeople> getSuggestedPeople(String locale);
 
     List<User> getAllParticipants(String idStream, Long maxJoinDate);
 

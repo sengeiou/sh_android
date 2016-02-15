@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,17 +21,20 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
+    private final LocaleProvider localeProvider;
 
     private Callback<List<SuggestedPeople>> callback;
     private ErrorCallback errorCallback;
 
     @Inject
     public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;
+        this.localeProvider = localeProvider;
     }
 
     public void loadSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback) {
@@ -48,9 +52,9 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     }
 
     private void loadSuggestedPeople() {
-        List<SuggestedPeople> localSuggestions = localUserRepository.getSuggestedPeople();
+        List<SuggestedPeople> localSuggestions = localUserRepository.getSuggestedPeople(localeProvider.getLocale());
         if (localSuggestions.isEmpty()) {
-            List<SuggestedPeople> remoteSuggestions = remoteUserRepository.getSuggestedPeople();
+            List<SuggestedPeople> remoteSuggestions = remoteUserRepository.getSuggestedPeople(localeProvider.getLocale());
             filterAndCallback(remoteSuggestions);
         } else {
             filterAndCallback(localSuggestions);

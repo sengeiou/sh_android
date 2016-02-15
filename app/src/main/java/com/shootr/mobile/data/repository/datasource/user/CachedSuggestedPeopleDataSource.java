@@ -20,9 +20,9 @@ public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSourc
         this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String locale) {
         if (isValid()) {
-            return localSuggestedPeopleDataSource.getSuggestedPeople();
+            return localSuggestedPeopleDataSource.getSuggestedPeople(locale);
         } else {
             return null;
         }
