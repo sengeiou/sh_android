@@ -106,7 +106,7 @@ public class GetStreamInfoInteractor implements Interactor {
         }
 
         Boolean hasMoreParticipants = false;
-        if (watchers.size() > MAX_WATCHERS_VISIBLE) {
+        if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
             watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
             hasMoreParticipants = true;
         }
