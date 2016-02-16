@@ -58,10 +58,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private Integer oldListSize;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
-      StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
+      StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
+      SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
-      GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
-      DeleteLocalShotsByStream deleteLocalShotsByStream,
+      GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory, Poller poller, DeleteLocalShotsByStream deleteLocalShotsByStream,
       ReloadStreamTimelineInteractor reloadStreamTimelineInteractor) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
@@ -173,7 +174,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void showShotsInView(Timeline timeline) {
         List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-        if(isFirstLoad || isFirstShotPosition) {
+        if (isFirstLoad || isFirstShotPosition) {
             streamTimelineView.setShots(shotModels);
             isEmpty = shotModels.isEmpty();
             streamTimelineView.hideCheckingForShots();
@@ -187,14 +188,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             }
         }
 
-        if(!isFirstShotPosition && !isFirstLoad){
+        if (!isFirstShotPosition && !isFirstLoad) {
             setShotsAndReposition(shotModels);
         }
         oldListSize = shotModels.size();
         loadNewShots();
     }
 
-    private void setShotsAndReposition(List<ShotModel> shotModels){
+    private void setShotsAndReposition(List<ShotModel> shotModels) {
         int oldFirstVisiblePosition = streamTimelineView.getFirstVisiblePosition();
         int newPosition = Math.abs(oldListSize - shotModels.size()) + oldFirstVisiblePosition;
 
@@ -291,7 +292,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         boolean hasNewShots = !timeline.getShots().isEmpty();
         if (hasNewShots) {
             loadTimeline();
-        }else if (isEmpty) {
+        } else if (isEmpty) {
             streamTimelineView.showEmpty();
         }
         streamTimelineView.hideLoading();
@@ -371,11 +372,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 /* no-op */
             }
         });
-
     }
 
-    @Subscribe
-    @Override public void onShotSent(ShotSent.Event event) {
+    @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         refresh();
     }
 
@@ -450,7 +449,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    public void onFirstShotPosition(Boolean firstPositionVisible) {
+    public void setIsFirstShotPosition(Boolean firstPositionVisible) {
         this.isFirstShotPosition = firstPositionVisible;
     }
 
