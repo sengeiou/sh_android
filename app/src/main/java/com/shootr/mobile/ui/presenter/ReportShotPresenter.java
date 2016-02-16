@@ -84,7 +84,7 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(final ShotModel shotModel) {
         if (currentUserIsShotAuthor(shotModel)) {
-            if (shotModel.getHide() != null && shotModel.getHide() != 0L) {
+            if (isShotVisible(shotModel)) {
                 reportShotView.showAuthorContextMenuWithPin(shotModel);
             } else {
                 reportShotView.showAuthorContextMenuWithoutPin(shotModel);
@@ -104,7 +104,7 @@ public class ReportShotPresenter implements Presenter {
 
     public void handlePinContextMenu(ShotModel shot) {
         if (currentUserIsShotAuthor(shot)) {
-            if (shot.getHide() != null && shot.getHide() != 0L) {
+            if (isShotVisible(shot)) {
                 reportShotView.showAuthorContextMenuWithPin(shot);
             } else {
                 reportShotView.showAuthorContextMenuWithoutPin(shot);
@@ -112,6 +112,10 @@ public class ReportShotPresenter implements Presenter {
         } else {
             reportShotView.showHolderContextMenu(shot);
         }
+    }
+
+    public boolean isShotVisible(ShotModel shot) {
+        return shot.getHide() != null && shot.getHide() != 0L;
     }
 
     public boolean currentUserIsShotAuthor(ShotModel shotModel) {
