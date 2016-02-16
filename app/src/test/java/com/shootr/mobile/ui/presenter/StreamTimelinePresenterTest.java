@@ -37,6 +37,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -293,6 +294,30 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).showShots();
     }
 
+    @Test public void shouldShowStreamTimelineIndicatorWhenRefreshTimelineAndIsNotInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
+    }
+    
     //endregion
 
     //region Older shots
