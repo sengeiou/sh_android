@@ -356,6 +356,6 @@
     <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
     <plurals name="new_shots_indicator">
         <item quantity="one">%d shot nuevos</item>
-        <item quantity="other">%d shots nuevo</item>
+        <item quantity="other">%d shots nuevos</item>
     </plurals>
 </resources>
