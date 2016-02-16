@@ -54,6 +54,7 @@ public class StreamTimelinePresenterTest {
     public static final String ID_STREAM = "ID_STREAM";
     public static final String ID_AUTHOR = "idAuthor";
     private static final Integer OLD_LIST_SIZE = 10;
+    public static final int NEW_SHOTS_NUMBER = 10;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -127,6 +128,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.loadTimeline();
 
@@ -146,6 +148,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.loadTimeline();
 
@@ -241,6 +244,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
@@ -280,9 +284,9 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
-        presenter.setIsFirstLoad(false);
-        presenter.setOldListSize(10);
-        presenter.setIsFirstShotPosition(false);
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
@@ -608,6 +612,10 @@ public class StreamTimelinePresenterTest {
     private void setupIsNotFirstLoadAndIsFirstPosition() {
         presenter.setIsFirstLoad(false);
         presenter.setIsFirstShotPosition(true);
+    }
+
+    private void setupNewShotsNumbers() {
+        presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
     }
 
     //endregion
