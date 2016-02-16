@@ -66,6 +66,14 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public int getItemposition() {
+        return 0;
+    }
+
+    @Override public void setPosition(int newPosition) {
+
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

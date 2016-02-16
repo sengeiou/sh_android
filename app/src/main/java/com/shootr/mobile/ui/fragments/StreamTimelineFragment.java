@@ -538,6 +538,14 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
+    @Override public int getItemposition() {
+        return listView.getFirstVisiblePosition();
+    }
+
+    @Override public void setPosition(int newPosition) {
+        listView.setSelection(newPosition);
+    }
+
     @Override
     public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
@@ -831,6 +839,5 @@ public class StreamTimelineFragment extends BaseFragment
         reportShotPresenter.onShotLongPressed(shot, streamAuthorIdUser);
         return true;
     }
-
     //endregion
 }

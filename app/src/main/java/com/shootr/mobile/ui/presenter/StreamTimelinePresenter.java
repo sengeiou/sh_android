@@ -55,6 +55,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean showingHoldingShots;
     private boolean isFirstShotPosition;
     private boolean isFirstLoad;
+    private Integer oldListSize;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper, SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -91,6 +92,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor) {
         this.streamId = idStream;
+        oldListSize = 0;
         setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
@@ -104,6 +106,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void initialize(final StreamTimelineView streamTimelineView, String idStream) {
         this.streamId = idStream;
+        oldListSize = 0;
         this.setView(streamTimelineView);
         this.loadStream(streamTimelineView, idStream);
         this.streamTimelineView.showHoldingShots();
@@ -170,7 +173,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void showShotsInView(Timeline timeline) {
         List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-        if (isFirstShotPosition || isFirstLoad) {
+        if(isFirstLoad || isFirstShotPosition) {
             streamTimelineView.setShots(shotModels);
             isEmpty = shotModels.isEmpty();
             streamTimelineView.hideCheckingForShots();
@@ -183,6 +186,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 isFirstLoad = false;
             }
         }
+
+        if(!isFirstShotPosition && !isFirstLoad){
+            int oldItemposition = streamTimelineView.getItemposition();
+            int newPosition = Math.abs(oldListSize - shotModels.size()) + oldItemposition;
+
+            streamTimelineView.setShots(shotModels);
+            streamTimelineView.setPosition(newPosition);
+        }
+        oldListSize = shotModels.size();
         loadNewShots();
     }
 
