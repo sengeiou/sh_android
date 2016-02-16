@@ -397,6 +397,7 @@ public class StreamTimelineFragment extends BaseFragment
             @Override public void onScrollIdle() {
                 if (listView.getFirstVisiblePosition() == 0) {
                     streamTimelinePresenter.setIsFirstShotPosition(true);
+                    hideTimelineIndicator();
                 } else {
                     streamTimelinePresenter.setIsFirstShotPosition(false);
                 }
@@ -531,7 +532,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void hideTimelineIndicator() {
-        /* implements */
+        timelineIndicator.setVisibility(View.GONE);
     }
 
     @Override public void showEmpty() {
