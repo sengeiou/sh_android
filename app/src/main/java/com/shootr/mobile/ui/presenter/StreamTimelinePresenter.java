@@ -458,6 +458,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.isFirstLoad = isFirstLoad;
     }
 
+    protected void setOldListSize(Integer oldListSize) {
+        this.oldListSize = oldListSize;
+    }
+
     @Override public void resume() {
         bus.register(this);
         startPollingShots();
