@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -102,6 +103,9 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
     @Bind(com.shootr.mobile.R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View draftsButton;
+
+    @Bind(R.id.timeline_indicator_container) LinearLayout timelineIndicator;
+    @Bind(R.id.timeline_indicator_text) TextView timelineIndicatorText;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
@@ -520,6 +524,14 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void setPosition(int newPosition) {
         listView.setSelection(newPosition);
+    }
+
+    @Override public void showTimelineIndicator() {
+        /* implements */
+    }
+
+    @Override public void hideTimelineIndicator() {
+        /* implements */
     }
 
     @Override public void showEmpty() {
