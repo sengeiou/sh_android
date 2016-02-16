@@ -384,7 +384,6 @@ public class StreamTimelineFragment extends BaseFragment
             }
 
             @Override public void onScrollIdle() {
-                Timber.d("onScrollIdle: " + listView.getFirstVisiblePosition());
                 if (listView.getFirstVisiblePosition() == 0) {
                     streamTimelinePresenter.setIsFirstShotPosition(true);
                 } else {
