@@ -36,7 +36,7 @@ public interface StreamTimelineView extends LoadDataView{
 
     void setTitle(String shortTitle);
 
-    int getItemposition();
+    Integer getFirstVisiblePosition();
 
     void setPosition(int newPosition);
 }

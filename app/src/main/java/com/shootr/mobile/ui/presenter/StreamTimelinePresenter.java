@@ -188,14 +188,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         }
 
         if(!isFirstShotPosition && !isFirstLoad){
-            int oldItemposition = streamTimelineView.getItemposition();
-            int newPosition = Math.abs(oldListSize - shotModels.size()) + oldItemposition;
-
-            streamTimelineView.setShots(shotModels);
-            streamTimelineView.setPosition(newPosition);
+            setShotsAndReposition(shotModels);
         }
         oldListSize = shotModels.size();
         loadNewShots();
+    }
+
+    private void setShotsAndReposition(List<ShotModel> shotModels){
+        int oldFirstVisiblePosition = streamTimelineView.getFirstVisiblePosition();
+        int newPosition = Math.abs(oldListSize - shotModels.size()) + oldFirstVisiblePosition;
+
+        streamTimelineView.setShots(shotModels);
+        streamTimelineView.setPosition(newPosition);
     }
 
     public void refresh() {

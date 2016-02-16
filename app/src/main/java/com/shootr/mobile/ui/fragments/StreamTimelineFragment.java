@@ -538,7 +538,7 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
-    @Override public int getItemposition() {
+    @Override public Integer getFirstVisiblePosition() {
         return listView.getFirstVisiblePosition();
     }
 
