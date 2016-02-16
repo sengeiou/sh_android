@@ -5,19 +5,21 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
+  <include android:id="@+id/timeline_indicator"
+    layout="@layout/timeline_indicator"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"/>
+
     <FrameLayout android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_above="@+id/timeline_new_shot_bar">
+      android:layout_above="@+id/timeline_new_shot_bar"
+      android:layout_below="@+id/timeline_indicator">
 
         <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
           android:layout_width="match_parent"
           android:layout_height="match_parent">
-
-            <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:listitem="@layout/item_list_shot" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -42,6 +44,12 @@
         tools:visibility="visible" />
 
       <include layout="@layout/include_shadow_above_shot_bar" />
+
+      <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_list_shot"
+        android:layout_gravity="center" />
 
     </FrameLayout>
 
