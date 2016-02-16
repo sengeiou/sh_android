@@ -527,7 +527,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTimelineIndicator() {
-        /* implements */
+        timelineIndicator.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideTimelineIndicator() {

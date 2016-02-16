@@ -180,6 +180,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
         if (!isFirstShotPosition && !isFirstLoad) {
             setShotsAndReposition(shotModels);
+            streamTimelineView.showTimelineIndicator();
         }
         oldListSize = shotModels.size();
         loadNewShots();
