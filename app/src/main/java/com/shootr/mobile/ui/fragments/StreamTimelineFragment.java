@@ -531,12 +531,15 @@ public class StreamTimelineFragment extends BaseFragment
         listView.setSelection(newPosition);
     }
 
-    @Override public void showTimelineIndicator() {
+    @Override public void showTimelineIndicator(Integer numberNewShots) {
         timelineIndicator.setVisibility(View.VISIBLE);
+        String indicatorText = getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
+        timelineIndicatorText.setText(indicatorText);
     }
 
     @Override public void hideTimelineIndicator() {
         timelineIndicator.setVisibility(View.GONE);
+        streamTimelinePresenter.setNewShotsNumber(0);
     }
 
     @Override public void showEmpty() {

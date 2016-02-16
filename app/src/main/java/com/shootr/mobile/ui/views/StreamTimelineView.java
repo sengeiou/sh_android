@@ -40,7 +40,7 @@ public interface StreamTimelineView extends LoadDataView{
 
     void setPosition(int newPosition);
 
-    void showTimelineIndicator();
+    void showTimelineIndicator(Integer numberNewShots);
 
     void hideTimelineIndicator();
 }

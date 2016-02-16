@@ -74,7 +74,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showTimelineIndicator() {
+    @Override public void showTimelineIndicator(Integer numberNewShots) {
         /* no-op */
     }
 
