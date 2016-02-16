@@ -614,7 +614,7 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
     }
 
-    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
         builder.addAction(R.string.report_context_menu_delete, new Runnable() {
             @Override public void run() {
@@ -715,6 +715,26 @@ public class StreamTimelineFragment extends BaseFragment
           }).show();
     }
 
+    @Override public void showHolderContextMenu(final ShotModel shot) {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+            @Override public void run() {
+                streamTimelinePresenter.shareShot(shot);
+            }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShotIntent(shot);
+            }
+        }).addAction(R.string.menu_copy_text, new Runnable() {
+            @Override public void run() {
+                copyShotCommentToClipboard(shot);
+            }
+        }).addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shot);
+            }
+        }).show();
+    }
+
     @Override
     public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
@@ -746,7 +766,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
         new CustomContextMenu.Builder(getActivity())
           .addAction(R.string.menu_pin_shot, new Runnable() {
               @Override public void run() {
