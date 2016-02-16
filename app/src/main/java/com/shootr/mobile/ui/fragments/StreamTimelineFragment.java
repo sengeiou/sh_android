@@ -452,6 +452,10 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
+    @OnClick(R.id.timeline_indicator_container) public void goToTopOfTimeline(){
+        listView.smoothScrollToPosition(0);
+    }
+
     //region View methods
     @Override public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
