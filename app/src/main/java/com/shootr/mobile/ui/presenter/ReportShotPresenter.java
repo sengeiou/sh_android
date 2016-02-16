@@ -18,7 +18,6 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
@@ -86,9 +85,9 @@ public class ReportShotPresenter implements Presenter {
     public void onShotLongPressed(final ShotModel shotModel) {
         if (currentUserIsShotAuthor(shotModel)) {
             if (shotModel.getHide() != null && shotModel.getHide() != 0L) {
-                reportShotView.showHolderContextMenuWithPin(shotModel);
+                reportShotView.showAuthorContextMenuWithPin(shotModel);
             } else {
-                reportShotView.showHolderContextMenuWithoutPin(shotModel);
+                reportShotView.showAuthorContextMenuWithoutPin(shotModel);
             }
         } else {
             handleBlockContextMenu(shotModel);
@@ -97,9 +96,21 @@ public class ReportShotPresenter implements Presenter {
 
     public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
         if (currentUserIsStreamHolder(streamAuthorIdUser)) {
-            reportShotView.showHolderContextMenuWithPin(shot);
+            handlePinContextMenu(shot);
         } else {
             onShotLongPressed(shot);
+        }
+    }
+
+    public void handlePinContextMenu(ShotModel shot) {
+        if (currentUserIsShotAuthor(shot)) {
+            if (shot.getHide() != null && shot.getHide() != 0L) {
+                reportShotView.showAuthorContextMenuWithPin(shot);
+            } else {
+                reportShotView.showAuthorContextMenuWithoutPin(shot);
+            }
+        } else {
+            reportShotView.showHolderContextMenu(shot);
         }
     }
 

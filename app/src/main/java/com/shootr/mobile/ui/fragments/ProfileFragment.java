@@ -893,6 +893,10 @@ public class ProfileFragment extends BaseFragment
           }).show();
     }
 
+    @Override public void showHolderContextMenu(ShotModel shot) {
+        showAuthorContextMenuWithPin(shot);
+    }
+
     @Override
     public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
@@ -922,7 +926,7 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
@@ -974,7 +978,7 @@ public class ProfileFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.user_unbanned);
     }
 
-    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {

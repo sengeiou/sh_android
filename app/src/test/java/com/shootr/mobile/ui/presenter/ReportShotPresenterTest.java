@@ -104,9 +104,9 @@ public class ReportShotPresenterTest {
     @Test public void shouldShowDeleteShotIfUserIsStreamHolder() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
 
-        presenter.onShotLongPressed(shotModel(), ID_USER);
+        presenter.onShotLongPressed(anotherUserShot(), ID_USER);
 
-        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
+        verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
     }
 
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -114,7 +114,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(anotherUserShot(), ANOTHER_ID_USER);
 
-        verify(reportShotView).showHolderContextMenuWithPin(any(ShotModel.class));
+        verify(reportShotView).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldNotShowDeleteShotIfUserIsShotAuthor() throws Exception {
@@ -122,7 +122,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressed(shotModel(), ID_USER);
 
-        verify(reportShotView, never()).showHolderContextMenuWithPin(any(ShotModel.class));
+        verify(reportShotView, never()).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
 
     @Test public void shouldShowBanSuccessfullyWhenBanConfirmed() throws Exception {
@@ -285,12 +285,14 @@ public class ReportShotPresenterTest {
     private ShotModel shotModel() {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdUser(ID_USER);
+        shotModel.setHide(1L);
         return shotModel;
     }
 
     private ShotModel anotherUserShot() {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdUser(ANOTHER_ID_USER);
+        shotModel.setHide(1L);
         return shotModel;
     }
 }
