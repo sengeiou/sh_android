@@ -30,7 +30,8 @@ public class LocalNiceShotRepository implements NiceShotRepository {
     @Override
     public boolean isMarked(String idShot) {
         initMarkedShots();
-        return getMarkedShots().contains(idShot);
+        Set<String> markedShots = getMarkedShots();
+        return markedShots != null && markedShots.contains(idShot);
     }
 
     private void initMarkedShots() {
