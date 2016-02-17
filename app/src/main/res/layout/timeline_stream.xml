@@ -6,7 +6,7 @@
   android:orientation="vertical">
 
     <include android:id="@+id/timeline_indicator"
-      layout="@layout/timeline_indicator"
+      layout="@layout/include_timeline_indicator"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true" />
