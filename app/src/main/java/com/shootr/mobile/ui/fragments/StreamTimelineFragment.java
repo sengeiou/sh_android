@@ -392,7 +392,9 @@ public class StreamTimelineFragment extends BaseFragment
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no-op */
+                if (delta > 10) {
+                    hideTimelineIndicator();
+                }
             }
 
             @Override public void onScrollIdle() {
