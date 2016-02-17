@@ -3,7 +3,6 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
-
     <LinearLayout android:id="@+id/timeline_indicator_container"
       android:layout_width="match_parent"
       android:layout_height="40dp"
@@ -20,11 +19,7 @@
           android:gravity="center"
           android:textColor="@color/gray_10"
           android:textSize="15sp"
-          android:textStyle="bold" />
+          android:textStyle="bold"/>
 
-        <View android:layout_width="match_parent"
-          android:layout_height="4dp"
-          android:layout_weight="5"
-          android:background="@drawable/shadow_top_down" />
     </LinearLayout>
 </LinearLayout>

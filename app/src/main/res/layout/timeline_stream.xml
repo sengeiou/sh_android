@@ -51,6 +51,11 @@
           android:layout_gravity="center"
           tools:listitem="@layout/item_list_shot" />
 
+      <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="top"
+        android:background="@drawable/shadow_top_down"/>
+
     </FrameLayout>
 
     <include android:id="@+id/timeline_new_shot_bar"
