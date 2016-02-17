@@ -49,8 +49,6 @@
           android:visibility="gone"
           tools:visibility="visible" />
 
-        <include layout="@layout/include_shadow_above_shot_bar" />
-
     </FrameLayout>
 
     <include android:id="@+id/timeline_new_shot_bar"

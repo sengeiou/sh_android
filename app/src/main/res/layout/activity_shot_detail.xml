@@ -14,7 +14,6 @@
       android:layout_height="match_parent"
       android:orientation="vertical" />
 
-    <include layout="@layout/include_shadow_above_shot_bar" />
   </FrameLayout>
 
   <include android:id="@+id/detail_new_shot_bar"
