@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.ArrayList;
@@ -20,17 +21,20 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RefreshActivityTimelineInteractorTest {
 
     public static final String ID_WATCHING_STREAM = "idWatchingStream";
+    public static final String ID_USER = "idUser";
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
     @Mock SessionRepository sessionRepository;
     @Mock LocaleProvider localeProvider;
+    @Mock UserRepository localUserRepository;
     private RefreshActivityTimelineInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -42,7 +46,7 @@ public class RefreshActivityTimelineInteractorTest {
         this.interactor = new RefreshActivityTimelineInteractor(interactorHandler,
           postExecutionThread,
           shootrTimelineService,
-          sessionRepository);
+          sessionRepository, localUserRepository);
     }
 
     @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
@@ -53,9 +57,44 @@ public class RefreshActivityTimelineInteractorTest {
         verify(spyCallback).onLoaded(timelineForActivity());
     }
 
+    @Test public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStream() throws Exception {
+        when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
+
+        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+
+        verify(shootrTimelineService).refreshTimelinesForStream(anyString());
+    }
+
+    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStream() throws Exception {
+        when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(localUserRepository.getUserById(ID_USER)).thenReturn(userWithoutWatchingStream());
+
+        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+
+        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString());
+    }
+
+    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsNullUser() throws Exception {
+        when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(localUserRepository.getUserById(ID_USER)).thenReturn(null);
+
+        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+
+        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString());
+    }
+
     private User user() {
         User user = new User();
         user.setIdWatchingStream(ID_WATCHING_STREAM);
+        return user;
+    }
+
+    private User userWithoutWatchingStream() {
+        User user = new User();
         return user;
     }
 
