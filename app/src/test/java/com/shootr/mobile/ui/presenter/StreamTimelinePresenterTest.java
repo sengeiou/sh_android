@@ -55,7 +55,8 @@ public class StreamTimelinePresenterTest {
     public static final String ID_STREAM = "ID_STREAM";
     public static final String ID_AUTHOR = "idAuthor";
     private static final Integer OLD_LIST_SIZE = 10;
-    public static final int NEW_SHOTS_NUMBER = 10;
+    public static final Integer NEW_SHOTS_NUMBER = 10;
+    private static final Integer ZERO_NEW_SHOTS = 0;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -316,6 +317,18 @@ public class StreamTimelinePresenterTest {
         presenter.refresh();
 
         verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupZeroNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
     }
     
     //endregion
@@ -641,6 +654,10 @@ public class StreamTimelinePresenterTest {
 
     private void setupNewShotsNumbers() {
         presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
+    }
+
+    private void setupZeroNewShotsNumbers() {
+        presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
     }
 
     //endregion
