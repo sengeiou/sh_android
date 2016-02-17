@@ -104,9 +104,9 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(com.shootr.mobile.R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View draftsButton;
 
-    @Bind(R.id.timeline_indicator_container) LinearLayout timelineIndicator;
-    @Bind(R.id.timeline_indicator_text) TextView timelineIndicatorText;
-    @Bind(R.id.shadow_timeline_indicator) View shadowTimelineIndicator;
+    @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
+    @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
+    @Bind(R.id.shadow_timeline_new_shots_indicator) View shadowTimelineIndicator;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
@@ -453,7 +453,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
-    @OnClick(R.id.timeline_indicator_container) public void goToTopOfTimeline(){
+    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline(){
         listView.smoothScrollToPosition(0);
     }
 

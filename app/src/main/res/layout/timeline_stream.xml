@@ -5,8 +5,8 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-    <include android:id="@+id/timeline_indicator"
-      layout="@layout/include_timeline_indicator"
+    <include android:id="@+id/timeline_new_shots_indicator"
+      layout="@layout/include_timeline_new_shots_indicator"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true" />
@@ -15,7 +15,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/timeline_new_shot_bar"
-      android:layout_below="@+id/timeline_indicator">
+      android:layout_below="@+id/timeline_new_shots_indicator">
 
         <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
           android:layout_width="match_parent"
@@ -51,7 +51,7 @@
 
         <include layout="@layout/include_shadow_above_shot_bar" />
 
-        <View android:id="@+id/shadow_timeline_indicator"
+        <View android:id="@+id/shadow_timeline_new_shots_indicator"
           android:layout_width="match_parent"
           android:layout_height="4dp"
           android:layout_gravity="top"

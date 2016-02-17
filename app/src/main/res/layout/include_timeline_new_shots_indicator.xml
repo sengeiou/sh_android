@@ -4,7 +4,7 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-    <LinearLayout android:id="@+id/timeline_indicator_container"
+    <LinearLayout android:id="@+id/timeline_new_shots_indicator_container"
       android:layout_width="match_parent"
       android:layout_height="56dp"
       android:layout_gravity="center_horizontal"
@@ -12,7 +12,7 @@
       android:orientation="vertical"
       android:visibility="gone">
 
-        <TextView android:id="@+id/timeline_indicator_text"
+        <TextView android:id="@+id/timeline_new_shots_indicator_text"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:background="?selectableItemBackground"
