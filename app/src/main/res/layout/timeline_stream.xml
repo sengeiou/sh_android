@@ -21,6 +21,12 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent">
 
+            <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              tools:listitem="@layout/item_list_shot" />
+
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <TextView android:id="@+id/timeline_empty"
@@ -45,18 +51,12 @@
 
         <include layout="@layout/include_shadow_above_shot_bar" />
 
-        <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
+        <View android:id="@+id/shadow_timeline_indicator"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_gravity="center"
-          tools:listitem="@layout/item_list_shot" />
-
-      <View android:id="@+id/shadow_timeline_indicator"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_gravity="top"
-        android:background="@drawable/shadow_top_down"
-        android:visibility="gone"/>
+          android:layout_height="4dp"
+          android:layout_gravity="top"
+          android:background="@drawable/shadow_top_down"
+          android:visibility="gone" />
 
     </FrameLayout>
 
