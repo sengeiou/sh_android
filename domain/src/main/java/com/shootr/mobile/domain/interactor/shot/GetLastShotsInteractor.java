@@ -67,7 +67,7 @@ public class GetLastShotsInteractor implements Interactor {
     }
 
     private void saveShotsForCurrentUserAndFollowing(List<Shot> remoteShots) {
-        if (sessionRepository.getCurrentUserId().equals(userId) || localUserRepository.isFollowing(userId)) {
+        if (userId.equals(sessionRepository.getCurrentUserId()) || localUserRepository.isFollowing(userId)) {
             localShotRepository.putShots(remoteShots);
         }
     }

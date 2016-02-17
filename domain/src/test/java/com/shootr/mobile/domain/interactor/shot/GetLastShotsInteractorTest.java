@@ -76,6 +76,16 @@ public class GetLastShotsInteractorTest {
         verify(localShotRepository, never()).putShots(remoteShots);
     }
 
+    @Test public void shouldNotPutRemoteShotsInLocalWhenSessionRepositoryReturnsNull() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(null);
+        List<Shot> remoteShots = shotList();
+        when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt())).thenReturn(remoteShots);
+
+        interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
+
+        verify(localShotRepository, never()).putShots(remoteShots);
+    }
+
     private List<Shot> shotList() {
         return Collections.singletonList(shot());
     }
