@@ -40,7 +40,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         String streamTitle = activity.getStreamTitle();
         SpannableStringBuilder spannableCheckinPattern = new SpannableStringBuilder(commentPattern);
 
-        checkNotNull(streamTitle, "Oh no! Stream from Api is corrupted! idStream=%s", activity.getIdStream());
+        checkNotNull(streamTitle, "Oh no! Stream from Api is corrupted! idActivity=%s", activity.getIdActivity());
 
         replacePlaceholderWithStreamTitleSpan(spannableCheckinPattern,
           streamPlaceholder,
