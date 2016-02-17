@@ -43,7 +43,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="alert_report_confirmed_email_title">メールアドレスの確認を済ませてください</string>
     <string name="all_participants_button">全ての参加者</string>
-    <string name="ban_user_dialog_message">このユーザーはあなたのストリームに投稿できません。</string>
+    <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
     <string name="block_cannot_shoot_streams">投稿を禁止</string>
     <string name="block_ignore_user">無視する</string>
     <string name="block_unblock_user">無視を解除</string>
