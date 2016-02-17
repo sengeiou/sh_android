@@ -34,5 +34,9 @@ public class CrashReportToolFactoryImpl implements CrashReportTool.Factory {
         @Override public void logException(Throwable error) {
             /* no-op */
         }
+
+        @Override public void logException(String message) {
+            /* no-op */
+        }
     }
 }
