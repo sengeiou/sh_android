@@ -106,7 +106,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    protected void loadShotDetail(ShotModel shotModel) {
+    private void loadShotDetail(ShotModel shotModel) {
         if (shotModel != null) {
             handleShotDetail(shotModel);
         } else {

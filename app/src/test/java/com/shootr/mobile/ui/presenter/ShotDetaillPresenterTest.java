@@ -192,7 +192,9 @@ public class ShotDetaillPresenterTest {
 
         presenter.initialize(shotDetailView, ID_SHOT);
 
-        verify(getShotDetaillInteractor).loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldSetupNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
@@ -214,7 +216,7 @@ public class ShotDetaillPresenterTest {
     @Test public void shouldLoadShotDetailFromShotModelWhenShotModelIsNotNull() throws Exception {
         setupGetShotDetailInteractorCallback();
 
-        presenter.loadShotDetail(shotModel());
+        presenter.initialize(shotDetailView,shotModel());
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
           any(Interactor.Callback.class),
@@ -224,7 +226,7 @@ public class ShotDetaillPresenterTest {
     @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
         setupGetShotDetailInteractorCallback();
 
-        presenter.loadShotDetail(null);
+        presenter.initialize(shotDetailView,shotModelNull());
 
         verify(getShotDetaillInteractor,never()).loadShotDetail(anyString(),
           any(Interactor.Callback.class),
@@ -232,7 +234,9 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
-        presenter.loadShotDetail(null);
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView,shotModelNull());
 
         verify(shotDetailView).showError(anyString());
 
@@ -258,6 +262,10 @@ public class ShotDetaillPresenterTest {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(ID_SHOT);
         return shotModel;
+    }
+
+    private ShotModel shotModelNull(){
+        return null;
     }
 
     private ShotDetail shotDetail() {
