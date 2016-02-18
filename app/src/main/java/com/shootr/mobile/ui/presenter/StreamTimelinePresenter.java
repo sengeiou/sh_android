@@ -191,8 +191,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void calculeNewShotsNumberAndShowTimeLineIndicator(List<ShotModel> shotModels){
         newShotsNumber += Math.abs(oldListSize - shotModels.size());
-        if(newShotsNumber!=0) {
+        if(newShotsNumber != null && newShotsNumber > 0) {
             streamTimelineView.showTimelineIndicator(newShotsNumber);
+        } else {
+            streamTimelineView.hideTimelineIndicator();
         }
     }
 

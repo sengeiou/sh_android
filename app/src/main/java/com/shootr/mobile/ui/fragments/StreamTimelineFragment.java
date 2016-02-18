@@ -105,6 +105,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View draftsButton;
 
     @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
+    @Bind(R.id.timeline_new_shots_indicator) LinearLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
@@ -534,12 +535,14 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTimelineIndicator(Integer numberNewShots) {
+        timelineIndicatorContainer.setVisibility(View.VISIBLE);
         timelineIndicator.setVisibility(View.VISIBLE);
         String indicatorText = getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
         timelineIndicatorText.setText(indicatorText);
     }
 
     @Override public void hideTimelineIndicator() {
+        timelineIndicatorContainer.setVisibility(View.GONE);
         timelineIndicator.setVisibility(View.GONE);
         streamTimelinePresenter.setNewShotsNumber(0);
     }
