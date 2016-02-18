@@ -135,7 +135,10 @@ public class PhotoPickerController {
 
     private void onChoosePhotoResult(Intent data) {
         Uri selectedImageUri = data.getData();
-        handler.onSelected(new File(FileChooserUtils.getPath(activity, selectedImageUri)));
+        String path = FileChooserUtils.getPath(activity, selectedImageUri);
+        if (path != null) {
+            handler.onSelected(new File(path));
+        }
     }
 
     private void onTakePhotoResult() {

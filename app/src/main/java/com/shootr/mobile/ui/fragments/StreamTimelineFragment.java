@@ -57,6 +57,7 @@ import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -93,6 +94,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject CrashReportTool crashReportTool;
 
     @Bind(com.shootr.mobile.R.id.timeline_shot_list) ListView listView;
     @Bind(com.shootr.mobile.R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -313,6 +315,14 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupPhotoPicker() {
+        if (tmpFiles != null) {
+            setupPhotoControllerWithTmpFilesDir();
+        } else {
+            crashReportTool.logException("Picker must have a temporary files directory.");
+        }
+    }
+
+    private void setupPhotoControllerWithTmpFilesDir() {
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
@@ -321,9 +331,7 @@ public class StreamTimelineFragment extends BaseFragment
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
-              @Override
-              public void onError(Exception e) {
-                  //TODO mostrar algo
+              @Override public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
@@ -336,7 +344,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-
         View footerView = LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, com.shootr.mobile.R.id.loading_progress);
 

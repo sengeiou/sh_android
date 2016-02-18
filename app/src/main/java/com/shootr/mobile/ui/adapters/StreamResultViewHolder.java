@@ -149,7 +149,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         checkNotNull(actionsContainer, "The view used in this ViewHolder doesn't contain the unwatch button.");
         actionsContainer.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                unwatchClickListener.onUnwatchClick();
+                if (unwatchClickListener != null) {
+                    unwatchClickListener.onUnwatchClick();
+                }
             }
         });
     }

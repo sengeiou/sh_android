@@ -29,4 +29,8 @@ public class CrashlyticsReportTool implements CrashReportTool {
     @Override public void logException(Throwable error) {
         Crashlytics.logException(error);
     }
+
+    @Override public void logException(String message) {
+        Crashlytics.log(message);
+    }
 }

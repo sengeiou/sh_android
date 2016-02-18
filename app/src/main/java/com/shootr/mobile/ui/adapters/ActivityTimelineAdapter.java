@@ -103,7 +103,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             case TYPE_GENERIC_ACTIVITY:
                 return onCreateActivityViewHolder(parent);
             case TYPE_CHECKIN:
-                return onCreateCheckinViewHolder(parent);
+                return onCreateActivityViewHolder(parent);
             case TYPE_SHARE_STREAM:
                 return onCreateSharedStreamViewHolder(parent);
             case TYPE_SHARE_SHOT:
