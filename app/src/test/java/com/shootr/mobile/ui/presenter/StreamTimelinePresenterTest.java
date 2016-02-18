@@ -500,16 +500,6 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).hideEmpty();
     }
 
-    @Test public void shouldShowStreamTimelineIndicatorWhenHandleVisibilityIndicatorAndNewShotsNumbersIsNotZero()
-      throws Exception {
-        presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
-        presenter.pause();
-
-        presenter.resume();
-
-        verify(streamTimelineView).showTimelineIndicator(NEW_SHOTS_NUMBER);
-    }
-
     @Test public void shouldNotShowStreamTimelineIndicatorWhenHandleVisibilityIndicatorAndNewShotsNumberIsZero()
       throws Exception {
         presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
