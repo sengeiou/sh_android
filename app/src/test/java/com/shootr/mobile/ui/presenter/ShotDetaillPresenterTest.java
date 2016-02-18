@@ -28,6 +28,7 @@ import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anySet;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -208,6 +209,33 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, ID_SHOT);
 
         verify(shotDetailView).initializeNewShotBarPresenter(anyString());
+    }
+
+    @Test public void shouldLoadShotDetailFromShotModelWhenShotModelIsNotNull() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.loadShotDetail(shotModel());
+
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.loadShotDetail(null);
+
+        verify(getShotDetaillInteractor,never()).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
+        presenter.loadShotDetail(null);
+
+        verify(shotDetailView).showError(anyString());
+
     }
 
     private List<Shot> shotList(int shots){
