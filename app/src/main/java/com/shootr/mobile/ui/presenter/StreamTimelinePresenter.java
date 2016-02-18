@@ -488,6 +488,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         if (hasBeenPaused) {
             loadTimeline();
             selectStream();
+            handleVisibilityTimelineIndicatorInResume();
+        }
+    }
+
+    protected void handleVisibilityTimelineIndicatorInResume(){
+        if(newShotsNumber!=0) {
+            streamTimelineView.showTimelineIndicator(newShotsNumber);
+        }else{
+            streamTimelineView.hideTimelineIndicator();
         }
     }
 
