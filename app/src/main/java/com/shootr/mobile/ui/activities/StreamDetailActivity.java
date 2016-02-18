@@ -62,7 +62,7 @@ import timber.log.Timber;
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
     private static final int REQUEST_EDIT_STREAM = 3;
-    private static final int REQUEST_CHOOSE_PHOTO = 4;
+    private static final int REQUEST_CHOOSE_PHOTO = 0;
     private static final int REQUEST_TAKE_PHOTO = 5;
 
     private static final String EXTRA_STREAM_ID = "streamId";
@@ -255,11 +255,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     private void choosePhotoFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(com.shootr.mobile.R.string.photo_edit_gallery)),
-          REQUEST_CHOOSE_PHOTO);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
     private void takePhotoFromCamera() {
