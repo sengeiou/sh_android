@@ -30,6 +30,7 @@
     <color name="gray_90">#e6e6e6</color>
     <color name="gray_92">#eeeeee</color>
     <color name="white">#ffffff</color>
+    <color name="white_bar">#F5F5F5</color>
     <color name="white_disabled">#aaffffff</color>
 
     <color name="refresh_1">#0288d1</color>

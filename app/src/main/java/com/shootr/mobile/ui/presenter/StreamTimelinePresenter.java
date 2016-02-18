@@ -56,6 +56,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isFirstShotPosition;
     private boolean isFirstLoad;
     private Integer oldListSize;
+    private Integer newShotsNumber;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -94,6 +95,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor) {
         this.streamId = idStream;
         this.oldListSize = 0;
+        this.newShotsNumber=0;
         setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
@@ -108,6 +110,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void initialize(final StreamTimelineView streamTimelineView, String idStream) {
         this.streamId = idStream;
         this.oldListSize = 0;
+        this.newShotsNumber=0;
         this.setView(streamTimelineView);
         this.loadStream(streamTimelineView, idStream);
         this.streamTimelineView.showHoldingShots();
@@ -180,9 +183,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
         if (!isFirstShotPosition && !isFirstLoad) {
             setShotsAndReposition(shotModels);
+            calculeNewShotsNumberAndShowTimeLineIndicator(shotModels);
         }
         oldListSize = shotModels.size();
         loadNewShots();
+    }
+
+    private void calculeNewShotsNumberAndShowTimeLineIndicator(List<ShotModel> shotModels){
+        newShotsNumber += Math.abs(oldListSize - shotModels.size());
+        if(newShotsNumber!=0) {
+            streamTimelineView.showTimelineIndicator(newShotsNumber);
+        }
     }
 
     private void setShotsWithoutReposition(List<ShotModel> shotModels){
@@ -457,6 +468,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void setIsFirstShotPosition(Boolean firstPositionVisible) {
         this.isFirstShotPosition = firstPositionVisible;
+    }
+
+    public void setNewShotsNumber(Integer newShotsNumber) {
+        this.newShotsNumber = newShotsNumber;
     }
 
     public void setIsFirstLoad(boolean isFirstLoad) {

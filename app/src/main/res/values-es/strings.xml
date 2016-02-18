@@ -354,4 +354,8 @@
     <string name="pinned_shot_activity">Ha anclado al perfil</string>
     <string name="pinned_shot_activity_with_comment">Ha anclado al perfil: </string>
     <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="one">%d shot nuevo</item>
+        <item quantity="other">%d shots nuevos</item>
+    </plurals>
 </resources>

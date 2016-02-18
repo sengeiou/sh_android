@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -102,6 +103,9 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
     @Bind(com.shootr.mobile.R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View draftsButton;
+
+    @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
+    @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
@@ -387,12 +391,15 @@ public class StreamTimelineFragment extends BaseFragment
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no-op */
+                if (delta > 10) {
+                    hideTimelineIndicator();
+                }
             }
 
             @Override public void onScrollIdle() {
                 if (listView.getFirstVisiblePosition() == 0) {
                     streamTimelinePresenter.setIsFirstShotPosition(true);
+                    hideTimelineIndicator();
                 } else {
                     streamTimelinePresenter.setIsFirstShotPosition(false);
                 }
@@ -445,6 +452,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(com.shootr.mobile.R.id.shot_bar_drafts) public void openDraftsClicked() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
+    }
+
+    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline(){
+        listView.smoothScrollToPosition(0);
     }
 
     //region View methods
@@ -520,6 +531,17 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void setPosition(int newPosition) {
         listView.setSelection(newPosition);
+    }
+
+    @Override public void showTimelineIndicator(Integer numberNewShots) {
+        timelineIndicator.setVisibility(View.VISIBLE);
+        String indicatorText = getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
+        timelineIndicatorText.setText(indicatorText);
+    }
+
+    @Override public void hideTimelineIndicator() {
+        timelineIndicator.setVisibility(View.GONE);
+        streamTimelinePresenter.setNewShotsNumber(0);
     }
 
     @Override public void showEmpty() {

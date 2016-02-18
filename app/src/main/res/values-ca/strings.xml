@@ -354,4 +354,8 @@
     <string name="pinned_shot_activity">Ha fixat al perfil</string>
     <string name="pinned_shot_activity_with_comment">Ha fixat al perfil: </string>
     <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="one">%d shot nou</item>
+        <item quantity="other">%d shots nous</item>
+    </plurals>
 </resources>

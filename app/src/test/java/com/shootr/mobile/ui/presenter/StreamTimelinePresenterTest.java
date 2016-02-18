@@ -37,6 +37,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -54,6 +55,8 @@ public class StreamTimelinePresenterTest {
     public static final String ID_STREAM = "ID_STREAM";
     public static final String ID_AUTHOR = "idAuthor";
     private static final Integer OLD_LIST_SIZE = 10;
+    public static final Integer NEW_SHOTS_NUMBER = 10;
+    private static final Integer ZERO_NEW_SHOTS = 0;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -127,6 +130,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.loadTimeline();
 
@@ -146,6 +150,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.loadTimeline();
 
@@ -241,6 +246,7 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
         setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
@@ -280,15 +286,51 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
-        presenter.setIsFirstLoad(false);
-        presenter.setOldListSize(10);
-        presenter.setIsFirstShotPosition(false);
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
         verify(streamTimelineView, never()).showShots();
     }
 
+    @Test public void shouldShowStreamTimelineIndicatorWhenRefreshTimelineAndIsNotInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupZeroNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
+    }
+    
     //endregion
 
     //region Older shots
@@ -608,6 +650,14 @@ public class StreamTimelinePresenterTest {
     private void setupIsNotFirstLoadAndIsFirstPosition() {
         presenter.setIsFirstLoad(false);
         presenter.setIsFirstShotPosition(true);
+    }
+
+    private void setupNewShotsNumbers() {
+        presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
+    }
+
+    private void setupZeroNewShotsNumbers() {
+        presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
     }
 
     //endregion
