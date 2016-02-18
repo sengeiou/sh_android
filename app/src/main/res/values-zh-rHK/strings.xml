@@ -219,7 +219,6 @@
   <string name="notification_shot_failed_subtitle_pattern_no_comment">保存</string>
   <string name="notification_shot_has_parent_deleted_subtitle">你回复的shot已被删除</string>
   <string name="notification_shot_has_stream_removed_subtitle">此条stream已经被清除</string>
-  <string name="notification_shot_has_user_banned_subtitle">在这个stream你已被禁止</string>
   <!-- Notifications -->
   <string name="notification_shot_multiple_title">%d新shot</string>
   <string name="notification_shot_sending">Shooting…</string>

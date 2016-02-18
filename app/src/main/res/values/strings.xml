@@ -43,7 +43,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
     <string name="all_participants_button">All participants</string>
-    <string name="ban_user_dialog_message">Banning will prevent this user from shooting on your streams.</string>
+    <string name="ban_user_dialog_message">User\'s shots on your streams will only be visible to his/her followers.</string>
     <string name="block_cannot_shoot_streams">Ban user</string>
     <string name="block_ignore_user">Ignore user</string>
     <string name="block_unblock_user">Remove ignore</string>
@@ -229,7 +229,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
     <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to reply has been deleted</string>
     <string name="notification_shot_has_stream_removed_subtitle">This stream has been removed</string>
-    <string name="notification_shot_has_user_banned_subtitle">You have been banned in this stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
     <string name="notification_shot_sending">Shooting…</string>

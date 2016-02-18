@@ -43,7 +43,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="alert_report_confirmed_email_title">Cal un email confirmat</string>
     <string name="all_participants_button">Tots els participants</string>
-    <string name="ban_user_dialog_message">L\'usuari no podrà publicar shots als teus streams.</string>
+    <string name="ban_user_dialog_message">Els shots que publiqui als teus streams només es mostraràn als seus seguidors.</string>
     <string name="block_cannot_shoot_streams">Vetar usuari</string>
     <string name="block_ignore_user">Ignorar usuari</string>
     <string name="block_unblock_user">Desfer Ignorar</string>
@@ -221,7 +221,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Esborrany desat</string>
     <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respons ha estat eliminat</string>
     <string name="notification_shot_has_stream_removed_subtitle">Aquest stream ha estat esborrat</string>
-    <string name="notification_shot_has_user_banned_subtitle">Has estat vetat en aquest stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d shots nous</string>
     <string name="notification_shot_sending">Enviant…</string>

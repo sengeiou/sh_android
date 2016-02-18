@@ -43,7 +43,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="alert_report_confirmed_email_title">メールアドレスの確認を済ませてください</string>
     <string name="all_participants_button">全ての参加者</string>
-    <string name="ban_user_dialog_message">このユーザーはあなたのストリームに投稿できません。</string>
+    <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
     <string name="block_cannot_shoot_streams">投稿を禁止</string>
     <string name="block_ignore_user">無視する</string>
     <string name="block_unblock_user">無視を解除</string>
@@ -219,7 +219,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">下書きが保存されました</string>
     <string name="notification_shot_has_parent_deleted_subtitle">返信したショットは削除されました</string>
     <string name="notification_shot_has_stream_removed_subtitle">このストリームは削除されました</string>
-    <string name="notification_shot_has_user_banned_subtitle">あなたはこのストリームへの投稿を禁止されました</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">新しいショット: %d件</string>
     <string name="notification_shot_sending">ショットを送信中…</string>
