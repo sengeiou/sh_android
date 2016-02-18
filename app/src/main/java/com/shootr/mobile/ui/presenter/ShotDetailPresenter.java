@@ -35,8 +35,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private boolean justSentReply = false;
     private boolean isNiceBlocked;
 
-    @Inject
-    public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
+    @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory) {
@@ -60,7 +59,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
         this.setShotDetailView(shotDetailView);
         this.setShotModel(shotModel);
-        this.loadShotDetail();
+        this.loadShotDetail(shotModel);
     }
 
     public void initialize(final ShotDetailView shotDetailView, String idShot) {
@@ -94,7 +93,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         if (newReplyCount >= previousReplyCount) {
             repliesModels = shotModelMapper.transform(replies);
             renderReplies(previousReplyCount, newReplyCount);
-        } else if (repliesModels!= null && newReplyCount == 0){
+        } else if (repliesModels != null && newReplyCount == 0) {
             renderReplies(previousReplyCount, newReplyCount);
         }
     }
@@ -107,7 +106,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    private void loadShotDetail() {
+    private void loadShotDetail(ShotModel shotModel) {
+        if (shotModel != null) {
+            handleShotDetail(shotModel);
+        } else {
+            shotDetailView.showError(errorMessageFactory.getCommunicationErrorMessage());
+        }
+    }
+
+    private void handleShotDetail(ShotModel shotModel) {
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 onShotDetailLoaded(shotDetail);
@@ -141,11 +148,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void markNiceShot(String idShot) {
-        if(!isNiceBlocked) {
+        if (!isNiceBlocked) {
             setNiceBlocked(true);
             markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail();
+                    loadShotDetail(shotModel);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -156,11 +163,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void unmarkNiceShot(String idShot) {
-        if(!isNiceBlocked) {
+        if (!isNiceBlocked) {
             setNiceBlocked(true);
             unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail();
+                    loadShotDetail(shotModel);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -180,7 +187,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         justSentReply = true;
-        this.loadShotDetail();
+        this.loadShotDetail(shotModel);
     }
 
     public void shareShot(ShotModel shotModel) {
@@ -195,8 +202,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    protected void setNiceBlocked(Boolean blocked){
-        this.isNiceBlocked= blocked;
+    protected void setNiceBlocked(Boolean blocked) {
+        this.isNiceBlocked = blocked;
     }
 
     @Override public void resume() {
