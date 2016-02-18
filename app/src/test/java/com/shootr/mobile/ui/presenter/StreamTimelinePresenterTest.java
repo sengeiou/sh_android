@@ -319,7 +319,8 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
     }
 
-    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero() throws Exception {
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero()
+      throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
@@ -330,7 +331,7 @@ public class StreamTimelinePresenterTest {
 
         verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
     }
-    
+
     //endregion
 
     //region Older shots
@@ -497,6 +498,26 @@ public class StreamTimelinePresenterTest {
         presenter.onShotDeleted(1);
 
         verify(streamTimelineView).hideEmpty();
+    }
+
+    @Test public void shouldShowStreamTimelineIndicatorWhenHandleVisibilityIndicatorAndNewShotsNumbersIsNotZero()
+      throws Exception {
+        presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
+        presenter.pause();
+
+        presenter.resume();
+
+        verify(streamTimelineView).showTimelineIndicator(NEW_SHOTS_NUMBER);
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenHandleVisibilityIndicatorAndNewShotsNumberIsZero()
+      throws Exception {
+        presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
+        presenter.pause();
+
+        presenter.resume();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
     }
 
     //region Matchers
