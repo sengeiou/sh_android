@@ -134,14 +134,12 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     public void setShots(List<ShotModel> shots) {
         this.shots = shots;
-        notifyDataSetChanged();
     }
 
     public void addShotsAbove(List<ShotModel> shotModels) {
         List<ShotModel> newShotList = new ArrayList<>(shotModels);
         newShotList.addAll(this.shots);
         this.shots = newShotList;
-        notifyDataSetChanged();
     }
 
     public ShotModel getLastShot() {

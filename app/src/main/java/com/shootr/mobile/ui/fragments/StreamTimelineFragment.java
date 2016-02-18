@@ -130,17 +130,14 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     //region Lifecycle methods
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-      @Nullable ViewGroup container,
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(com.shootr.mobile.R.layout.timeline_stream, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
@@ -150,8 +147,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializeViews();
         setHasOptionsMenu(true);
@@ -165,16 +161,18 @@ public class StreamTimelineFragment extends BaseFragment
             initializePresenters(idStream);
         }
 
+        streamTimelinePresenter.setIsFirstLoad(true);
+        streamTimelinePresenter.setIsFirstShotPosition(true);
+
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_STREAM_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             if (getActivity() != null) {
                 getActivity().finish();
             }
-        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK){
+        } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
             String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
             setStreamTitle(updatedShortTitle);
         } else {
@@ -182,8 +180,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(com.shootr.mobile.R.menu.timeline, menu);
 
         showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_showing_holding_shots));
@@ -203,8 +200,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case com.shootr.mobile.R.id.menu_showing_holding_shots:
                 streamTimelinePresenter.onHoldingShotsClick();
@@ -229,8 +225,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         streamTimelinePresenter.resume();
         newShotBarPresenter.resume();
@@ -238,8 +233,7 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelineOptionsPresenter.resume();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         streamTimelinePresenter.pause();
         newShotBarPresenter.pause();
@@ -278,8 +272,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton,
-          feedbackMessage) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
@@ -287,8 +280,7 @@ public class StreamTimelineFragment extends BaseFragment
                 startActivity(newShotIntent);
             }
 
-            @Override
-            public void openNewShotViewWithImage(File image) {
+            @Override public void openNewShotViewWithImage(File image) {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
                   .withImage(image) //
@@ -326,8 +318,7 @@ public class StreamTimelineFragment extends BaseFragment
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
-              @Override
-              public void onSelected(File imageFile) {
+              @Override public void onSelected(File imageFile) {
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
@@ -335,8 +326,7 @@ public class StreamTimelineFragment extends BaseFragment
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override
-              public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           })
@@ -355,42 +345,36 @@ public class StreamTimelineFragment extends BaseFragment
           imageLoader, //
           timeUtils, //
           new OnAvatarClickListener() {
-              @Override
-              public void onAvatarClick(String userId, View avatarView) {
+              @Override public void onAvatarClick(String userId, View avatarView) {
                   openProfile(userId);
               }
           }, //
           new OnVideoClickListener() {
-              @Override
-              public void onVideoClick(String url) {
+              @Override public void onVideoClick(String url) {
                   openVideo(url);
               }
           }, //
           new OnNiceShotListener() {
-              @Override
-              public void markNice(String idShot) {
+              @Override public void markNice(String idShot) {
                   streamTimelinePresenter.markNiceShot(idShot);
               }
 
-              @Override
-              public void unmarkNice(String idShot) {
+              @Override public void unmarkNice(String idShot) {
                   streamTimelinePresenter.unmarkNiceShot(idShot);
               }
           }, //
           new OnUsernameClickListener() {
-              @Override
-              public void onUsernameClick(String username) {
+              @Override public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
-          },null,false);
+          }, null, false);
 
         listView.setAdapter(adapter);
     }
 
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            @Override public void onRefresh() {
                 streamTimelinePresenter.refresh();
             }
         });
@@ -403,10 +387,15 @@ public class StreamTimelineFragment extends BaseFragment
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no - op */
+                /* no-op */
             }
 
             @Override public void onScrollIdle() {
+                if (listView.getFirstVisiblePosition() == 0) {
+                    streamTimelinePresenter.setIsFirstShotPosition(true);
+                } else {
+                    streamTimelinePresenter.setIsFirstShotPosition(false);
+                }
                 checkIfEndOfListVisible();
             }
         });
@@ -446,60 +435,49 @@ public class StreamTimelineFragment extends BaseFragment
         Clipboard.copyShotComment(getActivity(), shotModel);
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_text)
-    public void startNewShot() {
+    @OnClick(com.shootr.mobile.R.id.shot_bar_text) public void startNewShot() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_photo)
-    public void startNewShotWithPhoto() {
+    @OnClick(com.shootr.mobile.R.id.shot_bar_photo) public void startNewShotWithPhoto() {
         newShotBarPresenter.newShotFromImage();
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_drafts)
-    public void openDraftsClicked() {
+    @OnClick(com.shootr.mobile.R.id.shot_bar_drafts) public void openDraftsClicked() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
     //region View methods
-    @Override
-    public void setShots(List<ShotModel> shots) {
+    @Override public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void hideShots() {
+    @Override public void hideShots() {
         listView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showShots() {
+    @Override public void showShots() {
         listView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void addNewShots(List<ShotModel> newShots) {
+    @Override public void addNewShots(List<ShotModel> newShots) {
         adapter.addShotsAbove(newShots);
     }
 
-    @Override
-    public void addOldShots(List<ShotModel> oldShots) {
+    @Override public void addOldShots(List<ShotModel> oldShots) {
         adapter.addShotsBelow(oldShots);
     }
 
-    @Override
-    public void showLoadingOldShots() {
+    @Override public void showLoadingOldShots() {
         footerProgress.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideLoadingOldShots() {
+    @Override public void hideLoadingOldShots() {
         footerProgress.setVisibility(View.GONE);
     }
 
-    @Override
-    public void navigateToStreamDetail(String idStream) {
+    @Override public void navigateToStreamDetail(String idStream) {
         startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
     }
 
@@ -536,28 +514,31 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
-    @Override
-    public void showEmpty() {
+    @Override public Integer getFirstVisiblePosition() {
+        return listView.getFirstVisiblePosition();
+    }
+
+    @Override public void setPosition(int newPosition) {
+        listView.setSelection(newPosition);
+    }
+
+    @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideEmpty() {
+    @Override public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showLoading() {
+    @Override public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    @Override
-    public void hideLoading() {
+    @Override public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void showError(String message) {
+    @Override public void showError(String message) {
         feedbackMessage.showLong(getView(), message);
     }
 
@@ -600,13 +581,15 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(getActivity()).setMessage(com.shootr.mobile.R.string.block_user_dialog_message)
-          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  reportShotPresenter.confirmBlock();
-              }
-          })
+          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    reportShotPresenter.confirmBlock();
+                }
+            })
           .setNegativeButton(getString(com.shootr.mobile.R.string.block_user_dialog_cancel), null)
-          .create().show();
+          .create()
+          .show();
     }
 
     @Override public void showErrorLong(String messageForError) {
@@ -638,13 +621,11 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.shot_pinned);
     }
 
-    @Override
-    public void openNewShotView() {
+    @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
 
-    @Override
-    public void pickImage() {
+    @Override public void pickImage() {
         if (writePermissionManager.hasWritePermission()) {
             newShotBarViewDelegate.pickImage();
         } else {
@@ -652,74 +633,62 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void openNewShotViewWithImage(File image) {
+    @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
     }
 
-    @Override
-    public void showDraftsButton() {
+    @Override public void showDraftsButton() {
         newShotBarViewDelegate.showDraftsButton();
     }
 
-    @Override
-    public void hideDraftsButton() {
+    @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
     }
 
-    @Override
-    public void showWatchingPeopleCount(Integer count) {
+    @Override public void showWatchingPeopleCount(Integer count) {
         watchNumberCount = count;
         updateWatchNumberIcon();
     }
 
-    @Override
-    public void hideWatchingPeopleCount() {
+    @Override public void hideWatchingPeopleCount() {
         watchNumberCount = null;
         updateWatchNumberIcon();
     }
 
-    @Override
-    public void showAddToFavoritesButton() {
+    @Override public void showAddToFavoritesButton() {
         addToFavoritesMenuItem.setVisible(true);
     }
 
-    @Override
-    public void hideAddToFavoritesButton() {
+    @Override public void hideAddToFavoritesButton() {
         addToFavoritesMenuItem.setVisible(false);
     }
 
-    @Override
-    public void showRemoveFromFavoritesButton() {
+    @Override public void showRemoveFromFavoritesButton() {
         removeFromFavoritesMenuItem.setVisible(true);
     }
 
-    @Override
-    public void hideRemoveFromFavoritesButton() {
+    @Override public void hideRemoveFromFavoritesButton() {
         removeFromFavoritesMenuItem.setVisible(false);
     }
 
-    @Override
-    public void showAddedToFavorites() {
+    @Override public void showAddedToFavorites() {
         feedbackMessage.show(getView(), addToFavorites);
     }
 
-    @Override
-    public void handleReport(String sessionToken, ShotModel shotModel) {
+    @Override public void handleReport(String sessionToken, ShotModel shotModel) {
         reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
     }
 
-    @Override
-    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    @Override public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  goToReport(sessionToken, shotModel);
-              }
-          }).show();
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    goToReport(sessionToken, shotModel);
+                }
+            }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shot) {
@@ -749,8 +718,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(browserIntent);
     }
 
-    @Override
-    public void showEmailNotConfirmedError() {
+    @Override public void showEmailNotConfirmedError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(getActivity().getString(com.shootr.mobile.R.string.alert_report_confirmed_email_message))
@@ -835,20 +803,17 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.onShotDeleted(adapter.getCount());
     }
 
-    @OnItemClick(com.shootr.mobile.R.id.timeline_shot_list)
-    public void openShot(int position) {
+    @OnItemClick(com.shootr.mobile.R.id.timeline_shot_list) public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
         Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(intent);
     }
 
-    @OnItemLongClick(com.shootr.mobile.R.id.timeline_shot_list)
-    public boolean openContextMenu(int position) {
+    @OnItemLongClick(com.shootr.mobile.R.id.timeline_shot_list) public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressed(shot, streamAuthorIdUser);
         return true;
     }
-
     //endregion
 }
