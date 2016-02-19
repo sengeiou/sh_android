@@ -14,6 +14,8 @@ public interface CrashReportTool {
 
     void logException(Throwable error);
 
+    void logException(String message);
+
     interface Factory {
 
         CrashReportTool create();

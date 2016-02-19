@@ -27,6 +27,7 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -185,6 +186,61 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
+    @Test public void shouldLoadShotDetailFromShotIdWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldSetupNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(shotDetailView).setupNewShotBarDelegate(any(ShotModel.class));
+    }
+
+    @Test public void shouldInitializeNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        verify(shotDetailView).initializeNewShotBarPresenter(anyString());
+    }
+
+    @Test public void shouldLoadShotDetailFromShotModelWhenShotModelIsNotNull() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView,shotModel());
+
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView,shotModelNull());
+
+        verify(getShotDetaillInteractor,never()).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
+        setupGetShotDetailInteractorCallback();
+
+        presenter.initialize(shotDetailView,shotModelNull());
+
+        verify(shotDetailView).showError(anyString());
+
+    }
+
     private List<Shot> shotList(int shots){
         ArrayList<Shot> shotList = new ArrayList<>();
         for(int i=0;i<shots;i++){
@@ -205,6 +261,10 @@ public class ShotDetaillPresenterTest {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(ID_SHOT);
         return shotModel;
+    }
+
+    private ShotModel shotModelNull(){
+        return null;
     }
 
     private ShotDetail shotDetail() {

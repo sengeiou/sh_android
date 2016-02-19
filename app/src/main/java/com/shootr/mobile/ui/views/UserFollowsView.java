@@ -26,4 +26,6 @@ public interface UserFollowsView {
     void hideProgressView();
 
     void renderUsersBelow(List<UserModel> olderUsers);
+
+    void registerAnalytics(boolean followers);
 }

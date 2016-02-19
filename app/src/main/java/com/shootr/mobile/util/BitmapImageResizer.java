@@ -119,7 +119,11 @@ public class BitmapImageResizer implements ImageResizer {
         boolean imageIsRotatedWithExif = rotation != 0f;
         if (imageIsRotatedWithExif) {
             int rotationInDegrees = exifToDegrees(rotation);
-            return rotateImage(originalImage, rotationInDegrees);
+            try {
+                return rotateImage(originalImage, rotationInDegrees);
+            } catch (OutOfMemoryError error) {
+                return originalImage;
+            }
         } else {
             return originalImage;
         }

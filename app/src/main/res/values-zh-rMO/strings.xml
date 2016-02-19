@@ -43,16 +43,7 @@
     <string name="alert_report_confirmed_email_ok">好的</string>
     <string name="alert_report_confirmed_email_title">必须确认邮箱。</string>
     <string name="all_participants_button">所有参与者</string>
-    <string name="analytics_screen_activity">动态</string>
-    <string name="analytics_screen_favorites">喜爱</string>
-    <string name="analytics_screen_friends">朋友</string>
-    <string name="analytics_screen_me">我</string>
-    <string name="analytics_screen_stream_detail">streamDetail</string>
-    <string name="analytics_screen_stream_list">popularStreams</string>
-    <string name="analytics_screen_stream_timeline">streamTimeline</string>
-    <string name="analytics_screen_userProfile">userProfile</string>
-    <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
-    <string name="ban_user_dialog_message">禁止后该用户将不能回复你的streams。</string>
+    <string name="ban_user_dialog_message">用户在你的streams上发布的shots只对他/她的关注者可见。</string>
     <string name="block_cannot_shoot_streams">禁止用户</string>
     <string name="block_ignore_user">屏蔽用户</string>
     <string name="block_unblock_user">清除屏蔽</string>
@@ -228,7 +219,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">保存</string>
     <string name="notification_shot_has_parent_deleted_subtitle">你回复的shot已被删除</string>
     <string name="notification_shot_has_stream_removed_subtitle">此条stream已经被清除</string>
-    <string name="notification_shot_has_user_banned_subtitle">在这个stream你已被禁止</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d新shot</string>
     <string name="notification_shot_sending">Shooting…</string>
@@ -357,4 +347,11 @@
     <string name="stream_data_info_favorites">喜爱</string>
     <string name="title_activity_stream_data_info" >数据</string>
     <string name="stream_detail_menu_data_info">数据</string>
+    <string name="pinned_shot_activity">分享到个人主页</string>
+    <string name="pinned_shot_activity_with_comment">分享到个人主页: </string>
+    <string name="stream_data_info_participants_with_shots">发送shot的参与者</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="one">%d个新shot</item>
+        <item quantity="other">%d个新shot</item>
+    </plurals>
 </resources>

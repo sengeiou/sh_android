@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SupportPresenter;
 import com.shootr.mobile.ui.views.SupportView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
@@ -28,6 +29,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
     @Inject SupportPresenter supportPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(com.shootr.mobile.R.id.support_version_number) TextView versionNumber;
     @Bind(com.shootr.mobile.R.id.support_blog_text) TextView blog;
@@ -35,6 +37,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @BindString(com.shootr.mobile.R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(com.shootr.mobile.R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
 
     //region lifecycle methods
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -47,6 +50,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamSupport);
         versionNumber.setText(VersionUtils.getVersionName(getApplication()));
     }
 
@@ -92,7 +96,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @OnLongClick(com.shootr.mobile.R.id.support_version_container)
     public boolean onVersionLongClick() {
-        Toast.makeText(this, com.shootr.mobile.R.string.app_easter_egg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, com.shootr.mobile.R.string.app_easter_egg, Toast.LENGTH_LONG).show();
         return true;
     }
 
@@ -120,5 +124,10 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
           .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), null).show();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 }

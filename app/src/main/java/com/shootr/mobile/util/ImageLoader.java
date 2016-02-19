@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.widget.ImageView;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,6 +16,9 @@ public interface ImageLoader {
 
     @UiThread
     void loadStreamPicture(String url, ImageView view);
+
+    @UiThread
+    void loadBlurStreamPicture(String url, ImageView blurView, RequestListener<String, GlideDrawable> listener);
 
     @UiThread
     void loadTimelineImage(String url, ImageView view);

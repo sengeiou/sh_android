@@ -21,6 +21,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -88,6 +89,15 @@ public class MarkNiceShotInteractorTest {
         interactor.markNiceShot(SHOT_ID, callback, errorCallback);
 
         verify(niceShotRepository).unmark(SHOT_ID);
+    }
+
+    @Test public void shouldUpdateShotInLocalWhenServerFails() throws Exception {
+        setupLocalShot();
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
+
+        interactor.markNiceShot(SHOT_ID, callback, errorCallback);
+
+        verify(localShotRepository, times(2)).putShot(shot());
     }
 
     @Test public void shouldNotifyErrorNiceWhenServerFails() throws Exception {

@@ -262,7 +262,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         /* no-op */
     }
 
-    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
         getBaseContextMenu(shotModel)
           .addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {
@@ -342,6 +342,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           }).show();
     }
 
+    @Override public void showHolderContextMenu(ShotModel shot) {
+        showAuthorContextMenuWithPin(shot);
+    }
+
     @Override
     public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
@@ -388,7 +392,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }).show();
     }
 
-    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenu(shotModel)
           .addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {

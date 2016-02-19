@@ -49,4 +49,8 @@ public class NullUserFollowsView implements UserFollowsView {
     @Override public void renderUsersBelow(List<UserModel> olderUsers) {
         /* no-op */
     }
+
+    @Override public void registerAnalytics(boolean followers) {
+        /* no-op */
+    }
 }

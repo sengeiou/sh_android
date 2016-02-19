@@ -56,9 +56,13 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     }
 
     @Override protected void run() throws SQLException, IOException {
-        List<UserModel> searchResults = getSearchFromServer();
-        if(searchResults!=null){
-            postSuccessfulEvent(new SearchPeopleRemoteResultEvent(searchResults));
+        try {
+            List<UserModel> searchResults = getSearchFromServer();
+            if(searchResults!=null){
+                postSuccessfulEvent(new SearchPeopleRemoteResultEvent(searchResults));
+            }
+        } catch (ServerCommunicationException e) {
+            /* swallow silently */
         }
     }
 

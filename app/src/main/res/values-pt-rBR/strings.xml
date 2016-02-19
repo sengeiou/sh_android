@@ -43,16 +43,7 @@
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Um email confirmado é requerido</string>
   <string name="all_participants_button">Todos os participantes</string>
-  <string name="analytics_screen_activity">atividade</string>
-  <string name="analytics_screen_favorites">favoritos</string>
-  <string name="analytics_screen_friends">amigos</string>
-  <string name="analytics_screen_me">me</string>
-  <string name="analytics_screen_stream_detail">streamDetail</string>
-  <string name="analytics_screen_stream_list">popularStreams</string>
-  <string name="analytics_screen_stream_timeline">streamTimeline</string>
-  <string name="analytics_screen_userProfile">userProfile</string>
-  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
-  <string name="ban_user_dialog_message">O usuário não poderá publicar shots nos seus streams.</string>
+  <string name="ban_user_dialog_message">Os shots que publique nos seus streams só serão exibidos aos seus seguidores.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
   <string name="block_ignore_user">Ignorar usuário</string>
   <string name="block_unblock_user">Desfazer ignorar</string>
@@ -230,7 +221,6 @@
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Rascunho salvo</string>
   <string name="notification_shot_has_parent_deleted_subtitle">O shot que está respondendo foi eliminado</string>
   <string name="notification_shot_has_stream_removed_subtitle">Este stream foi apagado</string>
-  <string name="notification_shot_has_user_banned_subtitle">Foi banido neste stream</string>
   <!-- Notifications -->
   <string name="notification_shot_multiple_title">%d novos shots</string>
   <string name="notification_shot_sending">Enviando…</string>
@@ -360,4 +350,11 @@
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_data_info_favorites">Favoritos</string>
   <string name="stream_detail_menu_data_info">Estatísticas</string>
+  <string name="pinned_shot_activity">Linkado ao perfil</string>
+  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
+  <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
+  <plurals name="new_shots_indicator">
+    <item quantity="one">%d shot novo</item>
+    <item quantity="other">%d shots novos</item>
+  </plurals>
 </resources>

@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.ui.Poller;
@@ -36,6 +37,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -52,6 +54,9 @@ public class StreamTimelinePresenterTest {
     private static final String SELECTED_STREAM_ID = "stream";
     public static final String ID_STREAM = "ID_STREAM";
     public static final String ID_AUTHOR = "idAuthor";
+    private static final Integer OLD_LIST_SIZE = 10;
+    public static final Integer NEW_SHOTS_NUMBER = 10;
+    private static final Integer ZERO_NEW_SHOTS = 0;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -65,6 +70,7 @@ public class StreamTimelinePresenterTest {
     @Mock StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
     @Mock DeleteLocalShotsByStream deleteLocalShotsByStream;
     @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
+    @Mock GetStreamInteractor getStreamInteractor;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -76,16 +82,22 @@ public class StreamTimelinePresenterTest {
           streamHoldingTimelineInteractorsWrapper,
           selectStreamInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller,
-          deleteLocalShotsByStream, reloadStreamTimelineInteractor);
+          unmarkNiceShotInteractor,
+          shareShotInteractor,
+          getStreamInteractor,
+          shotModelMapper,
+          bus,
+          errorMessageFactory,
+          poller,
+          deleteLocalShotsByStream,
+          reloadStreamTimelineInteractor);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }
 
     //region Select stream
 
-    @Test
-    public void shouldSelectStreamWhenInitialized() throws Exception {
+    @Test public void shouldSelectStreamWhenInitialized() throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.initialize(streamTimelineView, ID_STREAM, SELECTED_STREAM_ID);
@@ -103,20 +115,46 @@ public class StreamTimelinePresenterTest {
         verify(timelineInteractorWrapper).loadTimeline(anyString(), anyCallback());
     }
 
-    @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+    @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShotsAndIsFirstPosition()
+      throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
         verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+    @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
+      throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndFirstPosition() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
         verify(streamTimelineView).showShots();
+    }
+
+    @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView, never()).showShots();
     }
 
     @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
@@ -127,6 +165,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldNotHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -135,6 +174,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldNotHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
         setupLoadTimelineInteractorCallbacks(emptyTimeline());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -143,6 +183,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
         setupLoadTimelineInteractorCallbacks(emptyTimeline());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -151,6 +192,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShots() throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -159,6 +201,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -167,6 +210,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
         setupLoadTimelineInteractorCallbacks(emptyTimeline());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -175,6 +219,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
         setupLoadTimelineInteractorCallbacks(emptyTimeline());
+        setupFirstShotPosition();
 
         presenter.loadTimeline();
 
@@ -186,9 +231,22 @@ public class StreamTimelinePresenterTest {
     //endregion
 
     //region Refresh main timeline
-    @Test public void shouldSetShotsWhenRefreshTimelineRespondsShots() throws Exception {
+    @Test public void shouldSetShotsWhenRefreshTimelineRespondsShotsAndIsFirstPosition() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstLoadAndIsFirstPosition();
+
+        presenter.refresh();
+
+        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldSetShotsWhenRefreshTimelineRespondsShotsAndIsNotFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
@@ -225,13 +283,53 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).hideLoading();
     }
 
-    @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
+    @Test public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
 
         presenter.refresh();
 
-        verify(streamTimelineView).showShots();
+        verify(streamTimelineView, never()).showShots();
+    }
+
+    @Test public void shouldShowStreamTimelineIndicatorWhenRefreshTimelineAndIsNotInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero()
+      throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupZeroNewShotsNumbers();
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
     }
 
     //endregion
@@ -271,17 +369,24 @@ public class StreamTimelinePresenterTest {
 
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
+        verify(streamHoldingTimelineInteractorsWrapper).obtainOlderTimeline(anyLong(),
+          anyString(),
+          anyCallback(),
+          anyErrorCallback());
     }
 
-    @Test public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
+    @Test public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted()
+      throws Exception {
         presenter.setIdAuthor(ID_AUTHOR);
         presenter.showingHolderShots(true);
 
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
+          anyString(),
+          anyCallback(),
+          anyErrorCallback());
     }
 
     @Test public void shouldObtainHolderOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {
@@ -292,7 +397,10 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(), anyCallback(), anyErrorCallback());
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
+          anyString(),
+          anyCallback(),
+          anyErrorCallback());
     }
     //endregion
 
@@ -364,6 +472,42 @@ public class StreamTimelinePresenterTest {
         presenter.onAllStreamShotsClick();
 
         verify(streamTimelineView).hideLoading();
+    }
+
+    @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM);
+
+        verify(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    @Test public void shouldSetToolbarTitleIfInitializedWithoutAuthorIdUser() throws Exception {
+        setupGetStreamInteractorCallback();
+
+        presenter.initialize(streamTimelineView, ID_STREAM);
+
+        verify(streamTimelineView).setTitle(anyString());
+    }
+
+    @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
+        presenter.onShotDeleted(0);
+
+        verify(streamTimelineView).showEmpty();
+    }
+
+    @Test public void shouldHideEmptyWhenShotDeletedAndThereAreShotsInTimeline() throws Exception {
+        presenter.onShotDeleted(1);
+
+        verify(streamTimelineView).hideEmpty();
+    }
+
+    @Test public void shouldNotShowStreamTimelineIndicatorWhenHandleVisibilityIndicatorAndNewShotsNumberIsZero()
+      throws Exception {
+        presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
+        presenter.pause();
+
+        presenter.resume();
+
+        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
     }
 
     //region Matchers
@@ -448,7 +592,8 @@ public class StreamTimelinePresenterTest {
                 ((Interactor.Callback<Timeline>) invocation.getArguments()[2]).onLoaded(timeline);
                 return null;
             }
-        }).when(streamHoldingTimelineInteractorsWrapper).loadTimeline(anyString(), anyString(), anyCallback(), anyErrorCallback());
+        }).when(streamHoldingTimelineInteractorsWrapper)
+          .loadTimeline(anyString(), anyString(), anyCallback(), anyErrorCallback());
     }
 
     private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {
@@ -463,7 +608,8 @@ public class StreamTimelinePresenterTest {
     private void setupSelectStreamInteractorCallbacksStream() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<StreamSearchResult> callback = (Interactor.Callback<StreamSearchResult>) invocation.getArguments()[1];
+                Interactor.Callback<StreamSearchResult> callback =
+                  (Interactor.Callback<StreamSearchResult>) invocation.getArguments()[1];
                 callback.onLoaded(streamResult());
                 return null;
             }
@@ -489,5 +635,41 @@ public class StreamTimelinePresenterTest {
         }).when(reloadStreamTimelineInteractor)
           .loadStreamTimeline(anyString(), any(Interactor.Callback.class), anyErrorCallback());
     }
+
+    private void setupGetStreamInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStream());
+                return null;
+            }
+        }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    private void setupFirstShotPosition() {
+        presenter.setIsFirstShotPosition(true);
+    }
+
+    private void setupIsNotFirstShotPosition() {
+        presenter.setIsFirstLoad(false);
+        presenter.setIsFirstShotPosition(false);
+    }
+
+    private void setupOldListSize() {
+        presenter.setOldListSize(OLD_LIST_SIZE);
+    }
+
+    private void setupIsNotFirstLoadAndIsFirstPosition() {
+        presenter.setIsFirstLoad(false);
+        presenter.setIsFirstShotPosition(true);
+    }
+
+    private void setupNewShotsNumbers() {
+        presenter.setNewShotsNumber(NEW_SHOTS_NUMBER);
+    }
+
+    private void setupZeroNewShotsNumbers() {
+        presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
+    }
+
     //endregion
 }

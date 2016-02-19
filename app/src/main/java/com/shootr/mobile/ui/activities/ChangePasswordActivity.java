@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.EditText;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -14,6 +15,7 @@ import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.presenter.ChangePasswordPresenter;
 import com.shootr.mobile.ui.views.ChangePasswordView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -26,9 +28,11 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @Bind(R.id.current_password) EditText currentPasswordInput;
     @Bind(R.id.new_password) EditText newPasswordInput;
     @Bind(R.id.new_password_again) EditText newPasswordAgainInput;
+    @BindString(R.string.analytics_screen_change_password) String analyticsScreenChangePassword;
 
     @Inject ChangePasswordPresenter changePasswordPresenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -40,6 +44,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(),analyticsScreenChangePassword);
     }
 
     @Override protected void initializePresenter() {
@@ -102,5 +107,10 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
         Intent intent = new Intent(this, LoginSelectionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(),this);
     }
 }

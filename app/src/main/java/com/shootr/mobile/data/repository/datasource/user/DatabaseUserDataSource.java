@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.UserManager;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -13,7 +12,7 @@ public class DatabaseUserDataSource implements UserDataSource {
     private final FollowManager followManager;
     private final UserManager userManager;
 
-    @Inject public DatabaseUserDataSource(SessionRepository sessionRepository, FollowManager followManager, UserManager userManager) {
+    @Inject public DatabaseUserDataSource(FollowManager followManager, UserManager userManager) {
         this.followManager = followManager;
         this.userManager = userManager;
     }

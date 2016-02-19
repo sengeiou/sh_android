@@ -28,6 +28,4 @@
       android:layout_gravity="center"
       android:textSize="20sp" />
 
-  <include layout="@layout/include_shadow_above_shot_bar" />
-
 </FrameLayout>

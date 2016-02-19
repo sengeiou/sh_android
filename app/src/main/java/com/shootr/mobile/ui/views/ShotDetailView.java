@@ -24,4 +24,8 @@ public interface ShotDetailView  {
     void showError(String errorMessage);
 
     void showShotShared();
+
+    void setupNewShotBarDelegate(ShotModel shotModel);
+
+    void initializeNewShotBarPresenter(String streamId);
 }

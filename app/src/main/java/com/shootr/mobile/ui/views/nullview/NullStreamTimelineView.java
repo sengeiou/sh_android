@@ -62,6 +62,26 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void setTitle(String shortTitle) {
+        /* no-op */
+    }
+
+    @Override public Integer getFirstVisiblePosition() {
+        return null;
+    }
+
+    @Override public void setPosition(int newPosition) {
+        /* no-op */
+    }
+
+    @Override public void showTimelineIndicator(Integer numberNewShots) {
+        /* no-op */
+    }
+
+    @Override public void hideTimelineIndicator() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

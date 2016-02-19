@@ -43,16 +43,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="alert_report_confirmed_email_title">Se requiere un email confirmado</string>
     <string name="all_participants_button">Todos los participantes</string>
-    <string name="analytics_screen_activity">actividad</string>
-    <string name="analytics_screen_favorites">favoritos</string>
-    <string name="analytics_screen_friends">amigos</string>
-    <string name="analytics_screen_me">me</string>
-    <string name="analytics_screen_stream_detail">streamDetail</string>
-    <string name="analytics_screen_stream_list">popularStreams</string>
-    <string name="analytics_screen_stream_timeline">streamTimeline</string>
-    <string name="analytics_screen_userProfile">userProfile</string>
-    <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
-    <string name="ban_user_dialog_message">El usuario no podrá publicar shots en tus streams.</string>
+    <string name="ban_user_dialog_message">Los shots que publique en tus streams solo se mostrarán a sus seguidores.</string>
     <string name="block_cannot_shoot_streams">Vetar usuario</string>
     <string name="block_ignore_user">Ignorar usuario</string>
     <string name="block_unblock_user">Deshacer ignorar</string>
@@ -230,7 +221,6 @@
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>
     <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respondes ha sido eliminado</string>
     <string name="notification_shot_has_stream_removed_subtitle">Este stream ha sido borrado</string>
-    <string name="notification_shot_has_user_banned_subtitle">Has sido vetado en este stream</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d shots nuevos</string>
     <string name="notification_shot_sending">Shooting…</string>
@@ -360,4 +350,11 @@
     <string name="stream_data_info_favorites">Favoritos</string>
     <string name="title_activity_stream_data_info" >Números</string>
     <string name="stream_detail_menu_data_info">Números</string>
+    <string name="pinned_shot_activity">Ha anclado al perfil</string>
+    <string name="pinned_shot_activity_with_comment">Ha anclado al perfil: </string>
+    <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="one">%d shot nuevo</item>
+        <item quantity="other">%d shots nuevos</item>
+    </plurals>
 </resources>

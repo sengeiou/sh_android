@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.shootr.mobile.R;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
 public class GlideImageLoader implements ImageLoader {
@@ -55,6 +57,17 @@ public class GlideImageLoader implements ImageLoader {
             glide.load(url).dontAnimate().placeholder(DEFAULT_STREAM_PICTURE_RES).into(view);
         } else {
             view.setImageResource(DEFAULT_STREAM_PICTURE_RES);
+        }
+    }
+
+    @Override public void loadBlurStreamPicture(String url, ImageView blurView, RequestListener <String,GlideDrawable> listener) {
+        boolean isValidPicture = url != null && !url.isEmpty();
+        if (isValidPicture) {
+            /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
+            glide.load(url).listener(listener).dontAnimate().bitmapTransform(new BlurTransformation(blurView.getContext())).diskCacheStrategy(
+              DiskCacheStrategy.ALL).into(blurView);
+        } else {
+            /* no - op */
         }
     }
 

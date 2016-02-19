@@ -24,18 +24,19 @@ repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'http://dl.bintray.com/sloy/maven'} //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
+    mavenCentral()
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 4
+def versionMinor = 5
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 22
+def databaseVersion = 23
 
 android {
     compileSdkVersion 23
@@ -55,8 +56,6 @@ android {
         versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
         archivesBaseName = "Shootr-" + versionName
 
-        resConfigs "hdpi", "xhdpi", "xxhdpi"
-
         multiDexEnabled true
 
         buildConfigField "int", "DATABASE_VERSION", databaseVersion.toString()
@@ -65,8 +64,18 @@ android {
         buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
     }
 
+    splits {
+        density {
+            enable true
+            exclude "ldpi", "tvdpi", "xxxhdpi"
+            compatibleScreens 'small', 'normal', 'large', 'xlarge'
+        }
+    }
     signingConfigs {
         release {
             storeFile file('../certs/release.keystore')
@@ -120,6 +129,7 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/license.txt'
         exclude 'LICENSE.txt'
+        exclude 'lib/mips/libRSSupport.so'
     }
 
     lintOptions {
@@ -198,6 +208,12 @@ dependencies {
 
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
+
+    compile 'jp.wasabeef:glide-transformations:1.3.1'
+    // If you want to use the GPU Filters
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+
+    compile 'com.android.support:palette-v7:22.1.1'
 
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'

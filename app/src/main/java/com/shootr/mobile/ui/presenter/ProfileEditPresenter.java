@@ -71,11 +71,19 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void loadProfileData() {
-        currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        this.profileEditView.renderUserInfo(currentUserModel);
-        if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
-            profileEditView.showEmailNotConfirmedError();
-        }
+        getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+                profileEditView.renderUserInfo(currentUserModel);
+                if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
+                    profileEditView.showEmailNotConfirmedError();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                profileEditView.alertComunicationError();
+            }
+        });
     }
 
     public void discard() {

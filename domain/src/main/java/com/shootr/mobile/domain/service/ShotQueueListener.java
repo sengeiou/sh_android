@@ -14,8 +14,6 @@ public interface ShotQueueListener {
 
     void onShotHasStreamRemoved(QueuedShot shot, Exception e);
 
-    void onShotHasUserBanned(QueuedShot shot, Exception e);
-
     void onQueueShot(QueuedShot queuedShot);
 
     void resetQueue();

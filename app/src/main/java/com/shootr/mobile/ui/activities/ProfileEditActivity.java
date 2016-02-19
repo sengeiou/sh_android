@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ProfileEditPresenter;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.ui.widgets.MaxLinesInputFilter;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -35,6 +36,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject ProfileEditPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(com.shootr.mobile.R.id.scroll) ScrollView scroll;
     @Bind(com.shootr.mobile.R.id.profile_edit_name) TextView name;
@@ -45,6 +47,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     @BindString(R.string.profile_updated) String profileUpdated;
     @BindString(com.shootr.mobile.R.string.communication_error) String communicationError;
     @BindString(com.shootr.mobile.R.string.connection_lost) String connectionLost;
+    @BindString(R.string.analytics_screen_edit_profile) String analyticsScreenEditProfile;
 
     private MenuItem menuItemDone;
 
@@ -58,6 +61,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenEditProfile);
 
         scrollViewFocusHack();
         limitBioFilters();
@@ -100,6 +104,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void onPause() {
         super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(),this);
         presenter.pause();
     }
 

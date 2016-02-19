@@ -73,9 +73,9 @@ public class LocalUserRepository implements UserRepository {
         return user;
     }
 
-    @Override public List<SuggestedPeople> getSuggestedPeople() {
+    @Override public List<SuggestedPeople> getSuggestedPeople(String locale) {
         List<SuggestedPeopleEntity> suggestedPeople =
-          localSuggestedPeopleDataSource.getSuggestedPeople();
+          localSuggestedPeopleDataSource.getSuggestedPeople(locale);
         return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 

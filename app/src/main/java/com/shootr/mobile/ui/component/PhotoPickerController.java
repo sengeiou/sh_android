@@ -118,11 +118,8 @@ public class PhotoPickerController {
     }
 
     public void pickPhotoFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        Intent photoChooserIntent = Intent.createChooser(intent, activity.getString(R.string.photo_edit_gallery));
-        handler.startPickerActivityForResult(photoChooserIntent, REQUEST_CHOOSE_PHOTO);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        handler.startPickerActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,7 +132,10 @@ public class PhotoPickerController {
 
     private void onChoosePhotoResult(Intent data) {
         Uri selectedImageUri = data.getData();
-        handler.onSelected(new File(FileChooserUtils.getPath(activity, selectedImageUri)));
+        String path = FileChooserUtils.getPath(activity, selectedImageUri);
+        if (path != null) {
+            handler.onSelected(new File(path));
+        }
     }
 
     private void onTakePhotoResult() {

@@ -23,6 +23,7 @@ public class UserEntityModelMapper {
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
+        userModel.setVerifiedUser(user.getVerifiedUser()==1);
         return userModel;
     }
 

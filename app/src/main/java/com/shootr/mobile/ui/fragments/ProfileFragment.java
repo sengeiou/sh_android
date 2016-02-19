@@ -353,11 +353,8 @@ public class ProfileFragment extends BaseFragment
     }
 
     private void choosePhotoFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
-          REQUEST_CHOOSE_PHOTO);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -893,6 +890,10 @@ public class ProfileFragment extends BaseFragment
           }).show();
     }
 
+    @Override public void showHolderContextMenu(ShotModel shot) {
+        showAuthorContextMenuWithPin(shot);
+    }
+
     @Override
     public void goToReport(String sessionToken, ShotModel shotModel){
         Intent browserIntent =
@@ -922,7 +923,7 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void showHolderContextMenuWithPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {
@@ -974,7 +975,7 @@ public class ProfileFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.user_unbanned);
     }
 
-    @Override public void showHolderContextMenuWithoutPin(final ShotModel shotModel) {
+    @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
           new Runnable() {
               @Override public void run() {

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -24,6 +25,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.AllParticipantsPresenter;
 import com.shootr.mobile.ui.views.AllParticipantsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -43,10 +45,12 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
     @Bind(R.id.userlist_empty) TextView emptyTextView;
+    @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AllParticipantsPresenter allParticipantsPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, AllParticipantsActivity.class);
@@ -64,6 +68,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenAllParticipants);
         userlistListView.setAdapter(getParticipantsAdapter());
 
         progressView = getLoadingView();
@@ -115,6 +120,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
 
     @Override public void onPause() {
         super.onPause();
+        analyticsTool.analyticsStop(getBaseContext(),this);
         allParticipantsPresenter.pause();
     }
 

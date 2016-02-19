@@ -12,7 +12,7 @@ public class SuggestedPeopleEntityMapper {
     @Inject public SuggestedPeopleEntityMapper() {
     }
 
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity, String currentUserId, boolean isFollower, boolean isFollowing) {
+    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity) {
         if (suggestedPeopleEntity == null) {
             return null;
         }
@@ -28,6 +28,7 @@ public class SuggestedPeopleEntityMapper {
         user.setWebsite(suggestedPeopleEntity.getWebsite());
         user.setBio(suggestedPeopleEntity.getBio());
         user.setPoints(suggestedPeopleEntity.getPoints());
+        user.setVerifiedUser(suggestedPeopleEntity.getVerifiedUser() == 1);
 
         user.setIdWatchingStream(suggestedPeopleEntity.getIdWatchingStream());
         user.setWatchingStreamTitle(suggestedPeopleEntity.getWatchingStreamTitle());
@@ -53,6 +54,7 @@ public class SuggestedPeopleEntityMapper {
         suggestedPeopleEntity.setEmail(suggestedPeople.getUser().getEmail());
         suggestedPeopleEntity.setPhoto(suggestedPeople.getUser().getPhoto());
         suggestedPeopleEntity.setPoints(suggestedPeople.getUser().getPoints());
+        suggestedPeopleEntity.setVerifiedUser(suggestedPeople.getUser().isVerifiedUser() ? 1:0);
         suggestedPeopleEntity.setNumFollowings(suggestedPeople.getUser().getNumFollowings());
         suggestedPeopleEntity.setNumFollowers(suggestedPeople.getUser().getNumFollowers());
         suggestedPeopleEntity.setWebsite(suggestedPeople.getUser().getWebsite());
@@ -81,13 +83,5 @@ public class SuggestedPeopleEntityMapper {
             }
         }
         return suggestedPeopleEntities;
-    }
-
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity, String idCurrentUser) {
-        return transform(suggestedPeopleEntity, idCurrentUser, false, false);
-    }
-
-    public SuggestedPeople transform(SuggestedPeopleEntity suggestedPeopleEntity) {
-        return transform(suggestedPeopleEntity, "-1L", false, false);
     }
 }

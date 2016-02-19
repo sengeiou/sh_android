@@ -60,6 +60,8 @@ public class ChangeStreamPhotoInteractor implements Interactor {
             notifyError(new ServerCommunicationException(e));
         } catch (ServerCommunicationException e) {
             notifyError(e);
+        } catch (OutOfMemoryError error) {
+            notifyError(new ShootrException() {});
         }
     }
 

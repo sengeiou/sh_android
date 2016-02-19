@@ -46,6 +46,7 @@ import timber.log.Timber;
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
 
     public static final String EXTRA_SHOT = "shot";
+    public static final String EXTRA_ID_SHOT = "idShot";
 
     @Bind(com.shootr.mobile.R.id.shot_detail_list) RecyclerView detailList;
     @Bind(com.shootr.mobile.R.id.detail_new_shot_bar) View newShotBar;
@@ -75,6 +76,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         return intent;
     }
 
+    public static Intent getIntentForActivity(Context context, String idShot) {
+        Intent intent = new Intent(context, ShotDetailActivity.class);
+        intent.putExtra(EXTRA_ID_SHOT, idShot);
+        return intent;
+    }
+
     @Override protected int getLayoutResource() {
         return com.shootr.mobile.R.layout.activity_shot_detail;
     }
@@ -87,12 +94,21 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         ButterKnife.bind(this);
         writePermissionManager.init(this);
         setupPhotoPicker();
-        setupNewShotBarDelegate(extractShotFromIntent());
+        ShotModel shotModel = extractShotFromIntent();
+        if (shotModel != null) {
+            setupNewShotBarDelegate(shotModel);
+        }
         setupAdapter();
     }
 
     @Override protected void initializePresenter() {
-        initializePresenter(extractShotFromIntent());
+        ShotModel shotModel = extractShotFromIntent();
+        if (shotModel != null) {
+            initializePresenter(shotModel);
+        } else {
+            String idShot = getIntent().getStringExtra(EXTRA_ID_SHOT);
+            initializePresenter(idShot);
+        }
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -109,7 +125,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected void onPause() {
         super.onPause();
         detailPresenter.pause();
-        newShotBarPresenter.resume();
+        newShotBarPresenter.pause();
     }
 
     @Override
@@ -221,7 +237,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
           .build();
     }
 
-    private void setupNewShotBarDelegate(final ShotModel shotModel) {
+    public void setupNewShotBarDelegate(final ShotModel shotModel) {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton,
           feedbackMessage) {
             @Override public void openNewShotView() {
@@ -243,6 +259,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         };
     }
 
+    @Override public void initializeNewShotBarPresenter(String streamId) {
+        newShotBarPresenter.initialize(this, streamId);
+    }
+
     private ShotModel extractShotFromIntent() {
         return (ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT);
     }
@@ -250,6 +270,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
         newShotBarPresenter.initialize(this, shotModel.getStreamId());
+    }
+
+    private void initializePresenter(String idShot) {
+        detailPresenter.initialize(this, idShot);
     }
 
     //region Listeners

@@ -26,6 +26,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     private NewShotBarView newShotBarView;
     private String idStreamForShot;
     private boolean isStreamReadOnly = false;
+    private boolean hasBeenPaused;
 
     @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
       GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
@@ -103,11 +104,14 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     @Override public void resume() {
         bus.register(this);
-        updateDraftsButtonVisibility();
+        if(hasBeenPaused) {
+            updateDraftsButtonVisibility();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        hasBeenPaused = true;
     }
 
     @Subscribe

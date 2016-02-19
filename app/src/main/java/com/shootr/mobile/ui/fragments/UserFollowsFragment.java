@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -25,6 +26,7 @@ import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.ui.views.nullview.NullUserFollowsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -47,8 +49,11 @@ public class UserFollowsFragment extends BaseFragment
     @Bind(R.id.userlist_list) ListView userList;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
+    @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
+    @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     // Args
     String userId;
@@ -169,6 +174,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onDestroyView() {
         super.onDestroyView();
+        analyticsTool.analyticsStop(getContext(),getActivity());
         ButterKnife.unbind(this);
         userFollowsPresenter.setView(new NullUserFollowsView());
     }
@@ -243,6 +249,14 @@ public class UserFollowsFragment extends BaseFragment
     @Override public void renderUsersBelow(List<UserModel> olderUsers) {
         getAdapter().addItems(olderUsers);
         getAdapter().notifyDataSetChanged();
+    }
+
+    @Override public void registerAnalytics(boolean followers) {
+        if(followers){
+            analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollower);
+        }else{
+            analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollowing);
+        }
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

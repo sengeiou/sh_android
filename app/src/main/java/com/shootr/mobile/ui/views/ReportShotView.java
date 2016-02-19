@@ -10,7 +10,7 @@ public interface ReportShotView {
 
     void showContextMenu(ShotModel shotModel);
 
-    void showHolderContextMenuWithPin(ShotModel shotModel);
+    void showAuthorContextMenuWithPin(ShotModel shotModel);
 
     void notifyDeletedShot(ShotModel shotModel);
 
@@ -32,7 +32,7 @@ public interface ReportShotView {
 
     void showUserUnbanned();
 
-    void showHolderContextMenuWithoutPin(ShotModel shotModel);
+    void showAuthorContextMenuWithoutPin(ShotModel shotModel);
 
     void notifyPinnedShot(ShotModel shotModel);
 
@@ -41,4 +41,6 @@ public interface ReportShotView {
     void goToReport(String sessionToken, ShotModel shotModel);
 
     void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);
+
+    void showHolderContextMenu(ShotModel shot);
 }

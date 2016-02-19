@@ -334,6 +334,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void bind(final UserModel userModel) {
             userId = userModel.getIdUser();
             name.setText(userModel.getUsername());
+            if (verifiedUser(userModel)) {
+                name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
+                name.setCompoundDrawablePadding(6);
+            }else{
+                name.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            }
+
             watchingText.setText(userModel.getJoinStreamDate());
             imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
 
@@ -371,6 +378,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (onUserClickListener != null) {
                 onUserClickListener.onUserClick(userId);
             }
+        }
+
+        private boolean verifiedUser(UserModel userModel) {
+            if(userModel.isVerifiedUser()!=null) {
+                return userModel.isVerifiedUser();
+            }
+            return false;
         }
     }
 
