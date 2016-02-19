@@ -26,6 +26,5 @@ sonar:
     script: gradle sonarRunner
     stage: deploy
     only:
-        - master
         - sonar
     allow_failure: true
