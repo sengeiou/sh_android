@@ -13,6 +13,26 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.5.0] - 2016-02-19
+
+### Changed
+- Se añade el locale en la petición de suggested people
+- Las fotos se obtienen solo de galería/fotos/cámara.
+
+### Added
+- Timeline fixed Scroll
+- Timeline Fixed Scroll Indicator
+- New Ban User
+
+### Fixed
+- Problemas bitmaps
+- Nullpointers en reposiroty
+- Nullpointers en presenters
+- EmptyView en Timeline
+- Si no se tiene stats del stream, se pinta 0 por defecto en stats
+- Opción de pinnear para el holder de un stream
+
+
 ## [1.4.0] - 2016-02-09
 
 ### Changed
