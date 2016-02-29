@@ -822,9 +822,9 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void setupAnalytics(boolean isCurrentUser) {
         if (isCurrentUser) {
-            analyticsTool.analyticsStart(getContext(), analyticsScreenMe);
+            analyticsTool.analyticsStart(getActivity(), analyticsScreenMe);
         } else {
-            analyticsTool.analyticsStart(getContext(), analyticsScreenUserProfile);
+            analyticsTool.analyticsStart(getActivity(), analyticsScreenUserProfile);
         }
     }
 
