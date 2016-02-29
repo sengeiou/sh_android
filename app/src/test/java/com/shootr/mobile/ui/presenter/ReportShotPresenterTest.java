@@ -55,7 +55,6 @@ public class ReportShotPresenterTest {
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
-    @Mock PinShotInteractor pinShotInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -65,7 +64,7 @@ public class ReportShotPresenterTest {
           sessionRepository,
           userModelMapper,
           getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
-          banUserInteractor, unbanUserInteractor, pinShotInteractor);
+          banUserInteractor, unbanUserInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -141,22 +140,6 @@ public class ReportShotPresenterTest {
         verify(reportShotView).showUserUnbanned();
     }
 
-    @Test public void shouldNotifyShotPinnedWhenPinShot() throws Exception {
-        setupPinShotCallback();
-
-        presenter.pinToProfile(shotModel());
-
-        reportShotView.notifyPinnedShot(any(ShotModel.class));
-    }
-
-    @Test public void shouldFeedbackShotPinnedWhenPinShot() throws Exception {
-        setupPinShotCallback();
-
-        presenter.pinToProfile(shotModel());
-
-        reportShotView.showPinned();
-    }
-
     @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
         ShotModel shotModel = shotModel();
 
@@ -171,17 +154,6 @@ public class ReportShotPresenterTest {
         presenter.reportClicked(EN_LOCALE,SESSION_TOKEN,shotModel);
 
         verify(reportShotView,never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
-    }
-
-    public void setupPinShotCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
-                callback.onCompleted();
-                return null;
-            }
-        }).when(pinShotInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
     }
     
     private void setupUnbanUserCallback() {
