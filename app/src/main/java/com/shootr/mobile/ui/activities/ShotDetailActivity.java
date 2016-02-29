@@ -25,8 +25,10 @@ import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
+import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
+import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
@@ -36,6 +38,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
@@ -43,7 +46,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
+public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView,
+  PinShotView {
 
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
@@ -65,10 +69,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
     @Inject BackStackHandler backStackHandler;
+    @Inject PinShotPresenter pinShotPresenter;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
+    private MenuItemValueHolder pinShotMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -131,6 +138,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(com.shootr.mobile.R.menu.menu_shot_detail, menu);
+        pinShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_pin_shot));
+        copyShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_copy_text));
         return true;
     }
 
@@ -143,6 +152,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             openContextualMenu(shotModel);
         }else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
+        } else if (item.getItemId() == R.id.menu_pin_shot) {
+            ShotModel shotModel = extractShotFromIntent();
+            pinShotPresenter.pinToProfile(shotModel);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -269,6 +281,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
+        pinShotPresenter.initialize(this, shotModel);
         newShotBarPresenter.initialize(this, shotModel.getStreamId());
     }
 
@@ -379,6 +392,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void showPinned() {
+        feedbackMessage.show(getView(), R.string.shot_pinned);
+    }
+
+    @Override public void hidePinShotButton() {
+        pinShotMenuItem.setVisible(false);
+    }
+
+    @Override public void showPinShotButton() {
+        pinShotMenuItem.setVisible(true);
     }
 
     //endregion

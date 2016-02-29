@@ -651,6 +651,14 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.shot_pinned);
     }
 
+    @Override public void hidePinShotButton() {
+        /* no-op */
+    }
+
+    @Override public void showPinShotButton() {
+        /* no-op */
+    }
+
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }

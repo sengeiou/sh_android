@@ -7,4 +7,8 @@ public interface PinShotView {
     void notifyPinnedShot(ShotModel shotModel);
 
     void showPinned();
+
+    void hidePinShotButton();
+
+    void showPinShotButton();
 }
