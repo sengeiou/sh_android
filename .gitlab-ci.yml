@@ -21,10 +21,3 @@ distribution:
     stage: deploy
     only:
         - master
-
-sonar:
-    script: gradle sonarRunner
-    stage: deploy
-    only:
-        - sonar
-    allow_failure: true
