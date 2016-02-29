@@ -157,6 +157,17 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).showShots();
     }
 
+    @Test public void shouldSetPositionInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+        setupIsNotFirstShotPosition();
+        setupOldListSize();
+        setupNewShotsNumbers();
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).setPosition(NEW_SHOTS_NUMBER, timelineWithShots().getShots().size());
+    }
+
     @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 

@@ -526,11 +526,8 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
-    @Override public Integer getFirstVisiblePosition() {
-        return listView.getFirstVisiblePosition();
-    }
-
-    @Override public void setPosition(int newPosition) {
+    @Override public void setPosition(Integer oldListSize, Integer shots) {
+        int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
         listView.setSelection(newPosition);
     }
 
