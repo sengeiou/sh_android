@@ -31,6 +31,7 @@ import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -65,6 +66,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
     @Inject BackStackHandler backStackHandler;
+    @Inject CrashReportTool crashReportTool;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -216,6 +218,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupPhotoPicker() {
+        if (tmpFiles != null) {
+            setupPhotoControllerWithTmpFilesDir();
+        } else {
+            crashReportTool.logException("Picker must have a temporary files directory.");
+        }
+    }
+
+    private void setupPhotoControllerWithTmpFilesDir() {
         photoPickerController = new PhotoPickerController.Builder().onActivity(this)
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
