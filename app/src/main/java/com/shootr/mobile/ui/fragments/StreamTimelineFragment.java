@@ -443,6 +443,10 @@ public class StreamTimelineFragment extends BaseFragment
         Clipboard.copyShotComment(getActivity(), shotModel);
     }
 
+    private Integer getFirstVisiblePosition() {
+        return listView.getFirstVisiblePosition();
+    }
+
     @OnClick(com.shootr.mobile.R.id.shot_bar_text) public void startNewShot() {
         newShotBarPresenter.newShotFromTextBox();
     }
@@ -526,11 +530,8 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
-    @Override public Integer getFirstVisiblePosition() {
-        return listView.getFirstVisiblePosition();
-    }
-
-    @Override public void setPosition(int newPosition) {
+    @Override public void setPosition(Integer oldListSize, Integer shots) {
+        int newPosition = Math.abs(oldListSize - shots) + getFirstVisiblePosition();
         listView.setSelection(newPosition);
     }
 

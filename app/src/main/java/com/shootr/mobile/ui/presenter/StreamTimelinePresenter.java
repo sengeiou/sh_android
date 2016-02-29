@@ -206,11 +206,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void setShotsAndReposition(List<ShotModel> shotModels) {
-        int oldFirstVisiblePosition = streamTimelineView.getFirstVisiblePosition();
-        int newPosition = Math.abs(oldListSize - shotModels.size()) + oldFirstVisiblePosition;
-
         streamTimelineView.setShots(shotModels);
-        streamTimelineView.setPosition(newPosition);
+        streamTimelineView.setPosition(oldListSize, shotModels.size());
     }
 
     private void handleStreamTimeLineVisibility(){
