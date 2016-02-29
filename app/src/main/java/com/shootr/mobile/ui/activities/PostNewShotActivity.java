@@ -130,6 +130,28 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
 
+        setupPhotoPicker();
+
+        if (adapter == null) {
+            adapter = new MentionsAdapter(this, new OnMentionClickListener() {
+                @Override public void mention(UserModel user) {
+                    presenter.onMentionClicked(user);
+                }
+            }, imageLoader);
+        }
+
+        mentionsListView.setAdapter(adapter);
+    }
+
+    private void setupPhotoPicker() {
+        if (tmpFiles != null) {
+            setupPhotoControllerWithTmpFilesDir();
+        } else {
+            crashReportTool.logException("Picker must have a temporary files directory.");
+        }
+    }
+
+    private void setupPhotoControllerWithTmpFilesDir() {
         photoPickerController = new PhotoPickerController.Builder().onActivity(this)
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
@@ -146,17 +168,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
               }
           })
           .build();
-
-        if (adapter == null) {
-            adapter = new MentionsAdapter(this, new OnMentionClickListener() {
-                @Override public void mention(UserModel user) {
-                    presenter.onMentionClicked(user);
-                }
-            }, imageLoader);
-        }
-
-        mentionsListView.setAdapter(adapter);
     }
+
 
     private void initializeSubscription() {
         commentSubscription = RxTextView.textChangeEvents(editTextView)//
