@@ -169,7 +169,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         OnHideClickListener onHideClickListener = new OnHideClickListener() {
             @Override public void onHideClick(String idShot) {
-                presenter.hideShot(idShot);
+                presenter.handleHideShot(idShot);
             }
         };
 
@@ -323,6 +323,19 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showShotShared() {
         feedbackMessage.show(getView(), shotShared);
+    }
+
+    @Override public void showHideShotConfirmation(final String idShot) {
+        new AlertDialog.Builder(this)
+          .setTitle("Title")
+          .setMessage("Do you really want to whatever?")
+          .setIcon(android.R.drawable.ic_dialog_alert)
+          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+              public void onClick(DialogInterface dialog, int whichButton) {
+                  presenter.hideShot(idShot);
+              }})
+          .setNegativeButton(android.R.string.no, null).show();
     }
 
     @Override public void handleReport(String sessionToken, ShotModel shotModel) {

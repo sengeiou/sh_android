@@ -171,6 +171,15 @@ public class AllShotsPresenterTest {
         verify(allShotsView).showShots();
     }
 
+    @Test public void shouldShowHideShotAlertDialogWhenHideShotIsPressed() throws Exception {
+        setupAllShotsInteractorCallback(shotList());
+        setupHideShotInteractorCallback();
+
+        allShotsPresenter.handleHideShot(SHOT_ID);
+
+        verify(allShotsView).showHideShotConfirmation(SHOT_ID);
+    }
+
     private List<Shot> emptyShotList() {
         return Collections.emptyList();
     }
