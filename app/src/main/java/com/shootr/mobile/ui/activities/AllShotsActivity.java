@@ -57,6 +57,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(com.shootr.mobile.R.id.all_shots_loading) View loadingView;
     @BindString(R.string.shot_shared_message) String shotShared;
     @BindString(R.string.confirmationMessage) String confirmationMessage;
+    @BindString(R.string.confirmHideShot) String confirmHideShotAlertDialogMessage;
+    @BindString(R.string.cancelHideShot) String cancelHideShotAlertDialogMessage;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
@@ -331,13 +333,13 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showHideShotConfirmation(final String idShot) {
         new AlertDialog.Builder(this).setMessage(confirmationMessage)
-          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+          .setPositiveButton(confirmHideShotAlertDialogMessage, new DialogInterface.OnClickListener() {
 
               public void onClick(DialogInterface dialog, int whichButton) {
                   presenter.hideShot(idShot);
               }
           })
-          .setNegativeButton(android.R.string.no, null)
+          .setNegativeButton(cancelHideShotAlertDialogMessage, null)
           .show();
     }
 
