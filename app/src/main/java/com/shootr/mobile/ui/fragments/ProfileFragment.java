@@ -126,6 +126,7 @@ public class ProfileFragment extends BaseFragment
     @BindString(R.string.report_base_url) String reportBaseUrl;
     @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
     @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
+    @BindString(R.string.confirmationMessage) String confirmationMessage;
 
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
@@ -224,7 +225,7 @@ public class ProfileFragment extends BaseFragment
             }
         };
 
-        OnHideClickListener onHideClickListener= new OnHideClickListener() {
+        OnHideClickListener onHideClickListener = new OnHideClickListener() {
             @Override public void onHideClick(String idSHot) {
                 profilePresenter.handleHideShot(idSHot);
             }
@@ -237,14 +238,19 @@ public class ProfileFragment extends BaseFragment
             }
         });
 
-        latestsShotsAdapter =
-          new TimelineAdapter(getActivity(),
-            imageLoader, timeUtils, avatarClickListener, videoClickListener,onNiceShotListener,
-            onUsernameClickListener, onHideClickListener,profilePresenter.isCurrentUser()){
-              @Override protected boolean shouldShowShortTitle() {
-                  return true;
-              }
-          };
+        latestsShotsAdapter = new TimelineAdapter(getActivity(),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          videoClickListener,
+          onNiceShotListener,
+          onUsernameClickListener,
+          onHideClickListener,
+          profilePresenter.isCurrentUser()) {
+            @Override protected boolean shouldShowShortTitle() {
+                return true;
+            }
+        };
         shotsList.setAdapter(latestsShotsAdapter);
         shotsList.setOnShotClick(new OnShotClick() {
             @Override public void onShotClick(ShotModel shot) {
@@ -258,22 +264,21 @@ public class ProfileFragment extends BaseFragment
         });
     }
 
-    @Override public void resetTimelineAdapter(){
+    @Override public void resetTimelineAdapter() {
         latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
         latestsShotsAdapter.notifyDataSetChanged();
     }
 
-     @Override public void showHideShotConfirmation(final String idShot) {
-        new AlertDialog.Builder(getActivity())
-          .setTitle("Title")
-          .setMessage("Do you really want to whatever?")
-          .setIcon(android.R.drawable.ic_dialog_alert)
+    @Override public void showHideShotConfirmation(final String idShot) {
+        new AlertDialog.Builder(getActivity()).setMessage(confirmationMessage)
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
               public void onClick(DialogInterface dialog, int whichButton) {
                   profilePresenter.hideShot(idShot);
-              }})
-          .setNegativeButton(android.R.string.no, null).show();
+              }
+          })
+          .setNegativeButton(android.R.string.no, null)
+          .show();
     }
 
     private void initializePresenter() {
@@ -495,11 +500,11 @@ public class ProfileFragment extends BaseFragment
         profilePresenter.avatarClicked();
     }
 
-    @OnClick({ R.id.profile_marks_following, R.id.profile_following}) public void openFollowingList() {
+    @OnClick({ R.id.profile_marks_following, R.id.profile_following }) public void openFollowingList() {
         profilePresenter.followingButtonClicked();
     }
 
-    @OnClick({ R.id.profile_marks_followers, R.id.profile_followers}) public void openFollowersList() {
+    @OnClick({ R.id.profile_marks_followers, R.id.profile_followers }) public void openFollowersList() {
         profilePresenter.followersButtonClicked();
     }
 
@@ -613,7 +618,8 @@ public class ProfileFragment extends BaseFragment
               }
           })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-          .create().show();
+          .create()
+          .show();
     }
 
     @Override public void showBlockUserButton() {
@@ -633,8 +639,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showBlockedMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.unblockUserClicked();
               }
@@ -646,8 +651,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showBannedMenu(UserModel userModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user,
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user, new Runnable() {
               @Override public void run() {
                   profilePresenter.blockUserClicked();
               }
@@ -660,10 +664,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showBlockAndBannedMenu(UserModel userModel) {
         new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
-              @Override public void run() {
-                  profilePresenter.unblockUserClicked();
-              }
-          }).addAction(R.string.can_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.unblockUserClicked();
+            }
+        }).addAction(R.string.can_shoot_streams, new Runnable() {
             @Override public void run() {
                 profilePresenter.unbanUserClicked();
             }
@@ -765,14 +769,14 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void goToFollowersList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWERS);
+        Intent intent =
+          UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWERS);
         startActivity(intent);
     }
 
     @Override public void goToFollowingList(String idUser) {
-        Intent intent = UserFollowsContainerActivity.getIntent(getActivity(),
-          idUser,
-          UserFollowingRelationship.FOLLOWING);
+        Intent intent =
+          UserFollowsContainerActivity.getIntent(getActivity(), idUser, UserFollowingRelationship.FOLLOWING);
         startActivity(intent);
     }
 
@@ -783,14 +787,11 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showUnfollowConfirmation(String username) {
         new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
-          username))
-          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  profilePresenter.confirmUnfollow();
-              }
-          })
-          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-          .create().show();
+          username)).setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                profilePresenter.confirmUnfollow();
+            }
+        }).setNegativeButton(getString(R.string.unfollow_dialog_no), null).create().show();
     }
 
     @Override public void goToAllShots(String idUser) {
@@ -830,7 +831,8 @@ public class ProfileFragment extends BaseFragment
                   profilePresenter.removePhotoConfirmed();
               }
           })
-          .setNegativeButton(R.string.cancel, null).show();
+          .setNegativeButton(R.string.cancel, null)
+          .show();
     }
 
     @Override public void setupAnalytics(boolean isCurrentUser) {
@@ -879,7 +881,8 @@ public class ProfileFragment extends BaseFragment
               }
           })
           .setNegativeButton("No", null)
-          .create().show();
+          .create()
+          .show();
     }
 
     @Override public void setFollowing(Boolean following) {
@@ -890,25 +893,23 @@ public class ProfileFragment extends BaseFragment
         reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
     }
 
-    @Override
-    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    @Override public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  goToReport(sessionToken, shotModel);
-              }
-          }).show();
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    goToReport(sessionToken, shotModel);
+                }
+            }).show();
     }
 
     @Override public void showHolderContextMenu(ShotModel shot) {
         showAuthorContextMenuWithPin(shot);
     }
 
-    @Override
-    public void goToReport(String sessionToken, ShotModel shotModel){
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -937,8 +938,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
-          new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {
                   openDeleteShotConfirmation(shotModel);
               }
@@ -973,7 +973,8 @@ public class ProfileFragment extends BaseFragment
               }
           })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-          .create().show();
+          .create()
+          .show();
     }
 
     @Override public void showErrorLong(String messageForError) {
@@ -989,8 +990,7 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
-          new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
               @Override public void run() {
                   openDeleteShotConfirmation(shotModel);
               }

@@ -44,7 +44,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
     private static final String EXTRA_USER = "user";
-    private static final String CURRENT_USER= "current_user";
+    private static final String CURRENT_USER = "current_user";
 
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
@@ -56,13 +56,13 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
     @Bind(com.shootr.mobile.R.id.all_shots_loading) View loadingView;
     @BindString(R.string.shot_shared_message) String shotShared;
+    @BindString(R.string.confirmationMessage) String confirmationMessage;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
     @Deprecated private TimelineAdapter adapter;
 
     private View footerProgress;
-
 
     public static Intent newIntent(Context context, String userId, Boolean isCurrentUser) {
         Intent intent = new Intent(context, AllShotsActivity.class);
@@ -87,29 +87,26 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override protected void initializePresenter() {
         String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
-        Boolean isCurrentUser = getIntent().getBooleanExtra(CURRENT_USER,false);
+        Boolean isCurrentUser = getIntent().getBooleanExtra(CURRENT_USER, false);
         presenter.initialize(this, userId, isCurrentUser);
         reportShotPresenter.initialize(this);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         presenter.resume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         presenter.pause();
     }
@@ -180,8 +177,15 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
-          videoClickListener,onNiceShotListener, onUsernameClickListener, onHideClickListener,presenter.getIsCurrentUser()){
+        adapter = new TimelineAdapter(this,
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          videoClickListener,
+          onNiceShotListener,
+          onUsernameClickListener,
+          onHideClickListener,
+          presenter.getIsCurrentUser()) {
             @Override protected boolean shouldShowShortTitle() {
                 return true;
             }
@@ -219,8 +223,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenu(shotModel).addAction(com.shootr.mobile.R.string.report_context_menu_unblock,
-          new Runnable() {
+        getBaseContextMenu(shotModel).addAction(com.shootr.mobile.R.string.report_context_menu_unblock, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
               }
@@ -241,13 +244,15 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(this).setMessage(R.string.block_user_dialog_message)
-          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  reportShotPresenter.confirmBlock();
-              }
-          })
+          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    reportShotPresenter.confirmBlock();
+                }
+            })
           .setNegativeButton(getString(com.shootr.mobile.R.string.block_user_dialog_cancel), null)
-          .create().show();
+          .create()
+          .show();
     }
 
     @Override public void showErrorLong(String messageForError) {
@@ -263,12 +268,11 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
-        getBaseContextMenu(shotModel)
-          .addAction(R.string.report_context_menu_delete, new Runnable() {
-              @Override public void run() {
-                  openDeleteConfirmation(shotModel);
-              }
-          }).show();
+        getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
     }
 
     @Override public void notifyPinnedShot(ShotModel shotModel) {
@@ -326,64 +330,57 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showHideShotConfirmation(final String idShot) {
-        new AlertDialog.Builder(this)
-          .setTitle("Title")
-          .setMessage("Do you really want to whatever?")
-          .setIcon(android.R.drawable.ic_dialog_alert)
+        new AlertDialog.Builder(this).setMessage(confirmationMessage)
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
               public void onClick(DialogInterface dialog, int whichButton) {
                   presenter.hideShot(idShot);
-              }})
-          .setNegativeButton(android.R.string.no, null).show();
+              }
+          })
+          .setNegativeButton(android.R.string.no, null)
+          .show();
     }
 
     @Override public void handleReport(String sessionToken, ShotModel shotModel) {
         reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
     }
 
-    @Override
-    public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    @Override public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  goToReport(sessionToken, shotModel);
-              }
-          }).show();
+          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    goToReport(sessionToken, shotModel);
+                }
+            }).show();
     }
 
     @Override public void showHolderContextMenu(ShotModel shot) {
         showAuthorContextMenuWithPin(shot);
     }
 
-    @Override
-    public void goToReport(String sessionToken, ShotModel shotModel){
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
-          sessionToken,
-          shotModel.getIdShot())));
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        Intent browserIntent =
+          new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 
-    @OnItemClick(R.id.all_shots_list)
-    public void openShot(int position) {
+    @OnItemClick(R.id.all_shots_list) public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
         Intent intent = ShotDetailActivity.getIntentForActivity(this, shot);
         startActivity(intent);
     }
 
-    @OnItemLongClick(R.id.all_shots_list)
-    public boolean openContextMenu(int position) {
+    @OnItemLongClick(R.id.all_shots_list) public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
         reportShotPresenter.onShotLongPressed(shot);
         return true;
     }
 
     @Override public void showEmailNotConfirmedError() {
-        AlertDialog.Builder builder =
-          new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(getString(R.string.alert_report_confirmed_email_message))
           .setTitle(getString(com.shootr.mobile.R.string.alert_report_confirmed_email_title))
@@ -393,12 +390,11 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
-        getBaseContextMenu(shotModel)
-          .addAction(R.string.report_context_menu_report, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.report(shotModel);
-              }
-          }).addAction(R.string.report_context_menu_block, new Runnable() {
+        getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).addAction(R.string.report_context_menu_block, new Runnable() {
             @Override public void run() {
                 reportShotPresenter.blockUserClicked(shotModel);
             }
@@ -406,31 +402,27 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        getBaseContextMenu(shotModel)
-          .addAction(R.string.report_context_menu_delete, new Runnable() {
-              @Override public void run() {
-                  openDeleteConfirmation(shotModel);
-              }
-          }).show();
+        getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
     }
 
     private CustomContextMenu.Builder getBaseContextMenu(final ShotModel shotModel) {
-        return new CustomContextMenu.Builder(this)
-          .addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
-              @Override public void run() {
-                  presenter.shareShot(shotModel);
-              }
-          })
-          .addAction(com.shootr.mobile.R.string.menu_share_shot_via, new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          })
-          .addAction(R.string.menu_copy_text, new Runnable() {
-              @Override public void run() {
-                  Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
-              }
-          });
+        return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+            @Override public void run() {
+                presenter.shareShot(shotModel);
+            }
+        }).addAction(com.shootr.mobile.R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).addAction(R.string.menu_copy_text, new Runnable() {
+            @Override public void run() {
+                Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
+            }
+        });
     }
 
     private void openDeleteConfirmation(final ShotModel shotModel) {
