@@ -28,6 +28,7 @@ Se recomienda hacer ./gradlew lint para comprobar que no falten strings traducid
 5. En develop, incrementar el número de revisión y quitar el flag de snapshot. Es el típico commit con mensaje `Bump version for next release vX.Y.z-snapshot`
 6. Hacer push de master, develop, **y tags** (git push --tags).
 7. En master se tiene la última versión de release, por lo que se hace ./gradlew clean build para generar una apk.
+8. Esta apk generada deberá ser subida a Beta de Crashlytics para que todos los usuarios la tengan disponible.
 
 > Al finalizar la release, en el commit de tags poner vX.Y.Z (si se deja vacío git flow falla).  
 > Commitear en la rama master provoca una compilación completa, subida a Amazon S3 del apk como Shootr-latest.apk y con su número de versión.
