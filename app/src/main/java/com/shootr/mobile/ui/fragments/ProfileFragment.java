@@ -226,7 +226,7 @@ public class ProfileFragment extends BaseFragment
 
         OnHideClickListener onHideClickListener= new OnHideClickListener() {
             @Override public void onHideClick(String idSHot) {
-                profilePresenter.hideShot(idSHot);
+                profilePresenter.handleHideShot(idSHot);
             }
         };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
@@ -261,6 +261,19 @@ public class ProfileFragment extends BaseFragment
     @Override public void resetTimelineAdapter(){
         latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
         latestsShotsAdapter.notifyDataSetChanged();
+    }
+
+     @Override public void showHideShotConfirmation(final String idShot) {
+        new AlertDialog.Builder(getActivity())
+          .setTitle("Title")
+          .setMessage("Do you really want to whatever?")
+          .setIcon(android.R.drawable.ic_dialog_alert)
+          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+              public void onClick(DialogInterface dialog, int whichButton) {
+                  profilePresenter.hideShot(idShot);
+              }})
+          .setNegativeButton(android.R.string.no, null).show();
     }
 
     private void initializePresenter() {

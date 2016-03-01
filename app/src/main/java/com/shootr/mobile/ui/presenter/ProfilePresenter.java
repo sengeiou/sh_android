@@ -555,7 +555,11 @@ public class ProfilePresenter implements Presenter {
         hasBeenPaused = true;
     }
 
-    public void hideShot(String idShot) {
+    public void handleHideShot(String idShot) {
+        profileView.showHideShotConfirmation(idShot);
+    }
+
+    public void hideShot(String idShot){
         hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadLatestShots(userModel.getIdUser());
