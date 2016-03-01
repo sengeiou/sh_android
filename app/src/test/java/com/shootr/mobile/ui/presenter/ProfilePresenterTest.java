@@ -829,8 +829,10 @@ public class ProfilePresenterTest {
         verify(profileView).showBlockAndBannedMenu(any(UserModel.class));
     }
 
-    @Test public void shouldShowHideShotAlertDialogWhenHideShotIsPressed() throws Exception {
+    @Test public void shouldShowHideShotConfirmationDialogWhenHideShotIsPressed() throws Exception {
         setupUserById();
+        setupUserInBlockedIdsCallback();
+        setupUserInBannedIdsCallback();
 
         profilePresenter.showUnpinShotAlert(ID_SHOT);
 
