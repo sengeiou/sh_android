@@ -351,6 +351,8 @@
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
   <string name="confirmationMessage">Realmente desea ocultar este shot?</string>
+  <string name="confirmHideShot">Remove</string>
+  <string name="cancelHideShot">Cancel</string>
   <plurals name="new_shots_indicator">
     <item quantity="one">%d個新shot</item>
     <item quantity="other">%d個新shot</item>

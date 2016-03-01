@@ -127,6 +127,8 @@ public class ProfileFragment extends BaseFragment
     @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
     @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
     @BindString(R.string.confirmationMessage) String confirmationMessage;
+    @BindString(R.string.confirmHideShot) String confirmHideShotAlertDialogMessage;
+    @BindString(R.string.cancelHideShot) String cancelHideShotAlertDialogMessage;
 
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
@@ -271,13 +273,13 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showHideShotConfirmation(final String idShot) {
         new AlertDialog.Builder(getActivity()).setMessage(confirmationMessage)
-          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+          .setPositiveButton(confirmHideShotAlertDialogMessage, new DialogInterface.OnClickListener() {
 
               public void onClick(DialogInterface dialog, int whichButton) {
                   profilePresenter.hideShot(idShot);
               }
           })
-          .setNegativeButton(android.R.string.no, null)
+          .setNegativeButton(cancelHideShotAlertDialogMessage, null)
           .show();
     }
 
