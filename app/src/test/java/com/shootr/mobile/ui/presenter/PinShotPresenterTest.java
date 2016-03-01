@@ -1,10 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.PinShotView;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,31 +20,35 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PinShotPresenterTest {
 
     public static final String ID_USER = "idUser";
-    public static final long SHOT_VISIBLE = 0L;
     public static final long SHOT_HIDDEN = 1L;
+    public static final String ID_SHOT = "idShot";
 
     @Mock PinShotInteractor pinShotInteractor;
     @Mock PinShotView pinShotView;
     @Mock SessionRepository sessionRepository;
+    @Mock GetShotDetailInteractor getShotDetailInteractor;
 
+    private ShotModelMapper shotModelMapper;
     private PinShotPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new PinShotPresenter(pinShotInteractor, sessionRepository);
+        shotModelMapper = new ShotModelMapper();
+        presenter = new PinShotPresenter(pinShotInteractor, getShotDetailInteractor, sessionRepository, shotModelMapper);
         presenter.setView(pinShotView);
     }
 
     @Test public void shouldNotifyShotPinnedWhenPinShot() throws Exception {
         setupPinShotCallback();
 
-        presenter.pinToProfile(shotModel(SHOT_VISIBLE));
+        presenter.pinToProfile(shotModel(null));
 
         pinShotView.notifyPinnedShot(any(ShotModel.class));
     }
@@ -47,7 +56,7 @@ public class PinShotPresenterTest {
     @Test public void shouldFeedbackShotPinnedWhenPinShot() throws Exception {
         setupPinShotCallback();
 
-        presenter.pinToProfile(shotModel(SHOT_VISIBLE));
+        presenter.pinToProfile(shotModel(null));
 
         pinShotView.showPinned();
     }
@@ -63,7 +72,7 @@ public class PinShotPresenterTest {
     @Test public void shouldHidePinButtonIfShotModelIsHiddenWhenInitializedWithShotModel() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
 
-        presenter.initialize(pinShotView, shotModel(SHOT_VISIBLE));
+        presenter.initialize(pinShotView, shotModel(null));
 
         verify(pinShotView).hidePinShotButton();
     }
@@ -71,9 +80,50 @@ public class PinShotPresenterTest {
     @Test public void shouldHidePinButtonIfUserIdInSessionIsNull() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(null);
 
-        presenter.initialize(pinShotView, shotModel(SHOT_VISIBLE));
+        presenter.initialize(pinShotView, shotModel(null));
 
         verify(pinShotView).hidePinShotButton();
+    }
+
+    @Test public void shouldGetShotDetailWhenResumeIfHasBeenPaused() throws Exception {
+        presenter.setShot(shotModel(null));
+
+        presenter.pause();
+        presenter.resume();
+
+        verify(getShotDetailInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldNotGetShotDetailWhenResumeIfHasNotBeenPaused() throws Exception {
+        presenter.resume();
+
+        verify(getShotDetailInteractor, never()).loadShotDetail(anyString(), any(Interactor.Callback.class), any(
+          Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldShowPinButtonIfShotModelIsHiddenWhenResumed() throws Exception {
+        setupGetShotDetailInteractorCallback(SHOT_HIDDEN);
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        presenter.setShot(shotModel(SHOT_HIDDEN));
+
+        presenter.pause();
+        presenter.resume();
+
+        verify(pinShotView).showPinShotButton();
+    }
+
+    @Test public void shouldHidePinButtonIfShotModelIsVisibleWhenResumed() throws Exception {
+        setupGetShotDetailInteractorCallback(null);
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        presenter.setShot(shotModel(null));
+
+        presenter.pause();
+        presenter.resume();
+
+        verify(pinShotView).hidePinShotButton();
+
     }
 
     public void setupPinShotCallback() {
@@ -87,11 +137,42 @@ public class PinShotPresenterTest {
         }).when(pinShotInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
     }
 
+    private void setupGetShotDetailInteractorCallback(final Long profileHidden) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<ShotDetail> callback =
+                  (Interactor.Callback<ShotDetail>) invocation.getArguments()[1];
+                callback.onLoaded(shotDetail(profileHidden));
+                return null;
+            }
+        }).when(getShotDetailInteractor).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
     private ShotModel shotModel(Long hidden) {
         ShotModel shotModel = new ShotModel();
+        shotModel.setIdShot(ID_SHOT);
         shotModel.setIdUser(ID_USER);
         shotModel.setHide(hidden);
         return shotModel;
     }
 
+    private ShotDetail shotDetail(Long profileHidden) {
+        ShotDetail shotDetail= new ShotDetail();
+        shotDetail.setShot(shot(profileHidden));
+        shotDetail.setReplies(Collections.<Shot>emptyList());
+        return shotDetail;
+    }
+
+    private Shot shot(Long profileHidden){
+        Shot shot = new Shot();
+        shot.setIdShot(ID_SHOT);
+        shot.setProfileHidden(profileHidden);
+        shot.setStreamInfo(new Shot.ShotStreamInfo());
+        Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
+        shotUserInfo.setIdUser(ID_USER);
+        shot.setUserInfo(shotUserInfo);
+        return shot;
+    }
 }

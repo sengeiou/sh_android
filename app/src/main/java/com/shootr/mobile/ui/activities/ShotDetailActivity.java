@@ -126,12 +126,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected void onResume() {
         super.onResume();
         detailPresenter.resume();
+        pinShotPresenter.resume();
         newShotBarPresenter.resume();
     }
 
     @Override protected void onPause() {
         super.onPause();
         detailPresenter.pause();
+        pinShotPresenter.pause();
         newShotBarPresenter.pause();
     }
 
@@ -281,7 +283,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
-        pinShotPresenter.initialize(this, shotModel);
         newShotBarPresenter.initialize(this, shotModel.getStreamId());
     }
 
@@ -331,6 +332,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     //region View methods
     @Override public void renderShot(ShotModel shotModel) {
         detailAdapter.renderMainShot(shotModel);
+        pinShotPresenter.initialize(this, shotModel);
     }
 
     @Override public void renderReplies(List<ShotModel> shotModels) {
