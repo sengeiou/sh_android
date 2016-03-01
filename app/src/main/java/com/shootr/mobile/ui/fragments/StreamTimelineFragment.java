@@ -339,7 +339,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-        View footerView = LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
+        View footerView =
+          LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, com.shootr.mobile.R.id.loading_progress);
 
         footerProgress.setVisibility(View.GONE);
@@ -398,15 +399,15 @@ public class StreamTimelineFragment extends BaseFragment
             }
 
             @Override public void onScrollIdle() {
-                if(listView != null) {
+                if (listView != null) {
                     if (listView.getFirstVisiblePosition() == 0) {
                         streamTimelinePresenter.setIsFirstShotPosition(true);
                         hideTimelineIndicator();
                     } else {
                         streamTimelinePresenter.setIsFirstShotPosition(false);
                     }
+                    checkIfEndOfListVisible();
                 }
-                checkIfEndOfListVisible();
             }
         });
     }
@@ -457,7 +458,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
-    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline(){
+    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline() {
         listView.smoothScrollToPosition(0);
     }
 
@@ -540,7 +541,8 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void showTimelineIndicator(Integer numberNewShots) {
         timelineIndicatorContainer.setVisibility(View.VISIBLE);
         timelineIndicator.setVisibility(View.VISIBLE);
-        String indicatorText = getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
+        String indicatorText =
+          getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
         timelineIndicatorText.setText(indicatorText);
     }
 
@@ -739,8 +741,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override
-    public void goToReport(String sessionToken, ShotModel shotModel){
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -770,12 +771,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(R.string.menu_pin_shot, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.pinToProfile(shotModel);
-              }
-          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.pinToProfile(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 streamTimelinePresenter.shareShot(shotModel);
             }
