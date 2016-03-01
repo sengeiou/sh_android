@@ -353,9 +353,6 @@
   <string name="pinned_shot_activity">Linkado ao perfil</string>
   <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
   <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
-  <string name="confirmationMessage">Realmente desea ocultar este shot?</string>
-  <string name="confirmHideShot">Remove</string>
-  <string name="cancelHideShot">Cancel</string>
   <plurals name="new_shots_indicator">
     <item quantity="one">%d shot novo</item>
     <item quantity="other">%d shots novos</item>

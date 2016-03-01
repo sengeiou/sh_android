@@ -350,9 +350,6 @@
     <string name="pinned_shot_activity">プロフィールに表示</string>
     <string name="pinned_shot_activity_with_comment">プロフィールに表示: </string>
     <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>
-    <string name="confirmationMessage">Realmente desea ocultar este shot?</string>
-    <string name="confirmHideShot">Remove</string>
-    <string name="cancelHideShot">Cancel</string>
     <plurals name="new_shots_indicator">
         <item quantity="one">New: %d件</item>
         <item quantity="other">New: %d件</item>
