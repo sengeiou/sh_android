@@ -527,8 +527,12 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void setPosition(Integer oldListSize, Integer shots) {
-        int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
-        listView.setSelection(newPosition);
+        if (oldListSize != null && shots != null && listView != null) {
+            int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
+            listView.setSelection(newPosition);
+        } else {
+            crashReportTool.logException("NullPointerException in setPosition. Old List Size: " + oldListSize + " shots: " + shots + " listView: " + listView);
+        }
     }
 
     @Override public void showTimelineIndicator(Integer numberNewShots) {
