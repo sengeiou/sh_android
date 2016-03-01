@@ -175,7 +175,7 @@ public class AllShotsPresenterTest {
         setupAllShotsInteractorCallback(shotList());
         setupHideShotInteractorCallback();
 
-        allShotsPresenter.handleHideShot(SHOT_ID);
+        allShotsPresenter.showHideShotAlert(SHOT_ID);
 
         verify(allShotsView).showHideShotConfirmation(SHOT_ID);
     }

@@ -166,7 +166,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         OnHideClickListener onHideClickListener = new OnHideClickListener() {
             @Override public void onHideClick(String idShot) {
-                presenter.handleHideShot(idShot);
+                presenter.showHideShotAlert(idShot);
             }
         };
 
