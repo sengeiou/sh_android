@@ -153,7 +153,7 @@ public class AllShotsPresenter implements Presenter {
         });
     }
 
-    public void showHideShotAlert(String idShot) {
+    public void showUnpinShotAlert(String idShot) {
         allShotsView.showHideShotConfirmation(idShot);
     }
 

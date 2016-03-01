@@ -67,7 +67,7 @@ public class AllShotsPresenterTest {
     public void shouldShowAllNonHiddenShotsWhenLoadAllShots() {
         setupAllShotsInteractorCallback(shotList());
 
-        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
+        allShotsPresenter.initialize(allShotsView, USER_ID, isCurrentUser);
 
         verify(allShotsView).showShots();
     }
@@ -148,7 +148,7 @@ public class AllShotsPresenterTest {
     public void shouldHideLoadingWhenCommunicationErrorLoadingAllShots() {
         setupAllShotsInteractorErrorCallback();
 
-        allShotsPresenter.initialize(allShotsView, USER_ID,isCurrentUser);
+        allShotsPresenter.initialize(allShotsView, USER_ID, isCurrentUser);
 
         verify(allShotsView).hideLoading();
     }
@@ -175,7 +175,7 @@ public class AllShotsPresenterTest {
         setupAllShotsInteractorCallback(shotList());
         setupHideShotInteractorCallback();
 
-        allShotsPresenter.showHideShotAlert(SHOT_ID);
+        allShotsPresenter.showUnpinShotAlert(SHOT_ID);
 
         verify(allShotsView).showHideShotConfirmation(SHOT_ID);
     }

@@ -832,7 +832,7 @@ public class ProfilePresenterTest {
     @Test public void shouldShowHideShotAlertDialogWhenHideShotIsPressed() throws Exception {
         setupUserById();
 
-        profilePresenter.showHideShotAlert(ID_SHOT);
+        profilePresenter.showUnpinShotAlert(ID_SHOT);
 
         verify(profileView).showHideShotConfirmation(ID_SHOT);
     }
