@@ -227,7 +227,7 @@ public class ProfileFragment extends BaseFragment
 
         OnHideClickListener onHideClickListener = new OnHideClickListener() {
             @Override public void onHideClick(String idSHot) {
-                profilePresenter.handleHideShot(idSHot);
+                profilePresenter.showHideShotAlert(idSHot);
             }
         };
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());

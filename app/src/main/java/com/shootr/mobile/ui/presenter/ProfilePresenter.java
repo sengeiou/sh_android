@@ -555,7 +555,7 @@ public class ProfilePresenter implements Presenter {
         hasBeenPaused = true;
     }
 
-    public void handleHideShot(String idShot) {
+    public void showHideShotAlert(String idShot) {
         profileView.showHideShotConfirmation(idShot);
     }
 

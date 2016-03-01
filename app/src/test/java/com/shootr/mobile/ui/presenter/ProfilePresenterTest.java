@@ -832,7 +832,7 @@ public class ProfilePresenterTest {
     @Test public void shouldShowHideShotCOnfirmationWhenHideShotIsPressed() throws Exception {
         setupUserById();
 
-        profilePresenter.handleHideShot(ID_SHOT);
+        profilePresenter.showHideShotAlert(ID_SHOT);
 
         verify(profileView).showHideShotConfirmation(ID_SHOT);
     }
