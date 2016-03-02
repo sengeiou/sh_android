@@ -153,21 +153,14 @@
       android:layout_height="wrap_content"
       android:orientation="horizontal"
       android:paddingBottom="16dp"
-      android:paddingLeft="16dp"
-      android:visibility="gone">
-
-        <ImageView android:id="@+id/shot_detail_pint_to_profile_image"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_marginLeft="16dp"
-          android:src="@drawable/ic_stream_author_24_gray50" />
+      android:background="?selectableItemBackground"
+      android:visibility="visible">
 
         <TextView android:id="@+id/shot_detail_pint_to_profile_text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
-          android:paddingLeft="@dimen/keyline_2"
+          android:paddingLeft="72dp"
           android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
           android:text="@string/menu_pin_shot" />
 
