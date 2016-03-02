@@ -154,12 +154,13 @@
       android:orientation="horizontal"
       android:paddingBottom="16dp"
       android:background="?selectableItemBackground"
-      android:visibility="visible">
+      android:visibility="gone">
 
         <TextView android:id="@+id/shot_detail_pint_to_profile_text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
+          android:gravity="center"
           android:paddingLeft="72dp"
           android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
           android:text="@string/menu_pin_shot" />
