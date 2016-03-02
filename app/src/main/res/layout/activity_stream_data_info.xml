@@ -51,7 +51,7 @@
           android:layout_height="56dp"
           android:layout_gravity="end|center_vertical"
           android:gravity="center_vertical"
-          android:paddingRight="16dp"
+          android:paddingRight="2dp"
           android:textAppearance="@style/TextAppearance.Switch"
           android:textColor="@color/gray_60"
           tools:text="88" />
@@ -130,7 +130,7 @@
           android:layout_height="56dp"
           android:layout_gravity="end|center_vertical"
           android:gravity="center_vertical"
-          android:paddingRight="16dp"
+          android:paddingRight="2dp"
           android:textAppearance="@style/TextAppearance.Switch"
           android:textColor="@color/gray_60"
           tools:text="88" />
