@@ -373,5 +373,5 @@
         <item quantity="one">%d new shot</item>
         <item quantity="other">%d new shots</item>
     </plurals>
-    <string name="stream_data_info_pct"> (%s%%) </string>
+    <string name="stream_data_info_pct">(%s%%)</string>
 </resources>
