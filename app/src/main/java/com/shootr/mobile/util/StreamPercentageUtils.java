@@ -11,12 +11,21 @@ public class StreamPercentageUtils implements PercentageUtils {
 
 
     @Override public Double getPercentage(Long dividend, Long divider){
-        return (double)((float) dividend / divider * 100);
+        Double result = 0.0;
+        if(divider!=null && dividend != null && divider !=0 ){
+            result = (double)((float) dividend / divider * 100);
+        }
+        return result;
     }
 
     @Override public String formatPercentage(Double number){
-        DecimalFormat decimalFormat = new DecimalFormat(FORMAT_PERCENTAGE);
-        return decimalFormat.format(number);
+        String numberFormatted="";
+        if(number != null){
+            DecimalFormat decimalFormat = new DecimalFormat(FORMAT_PERCENTAGE);
+            numberFormatted= decimalFormat.format(number);
+        }
+
+        return numberFormatted;
     }
 
 }
