@@ -19,13 +19,16 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     public static final String ARGUMENT_SHOTS_NUMBER = "shotsNumber";
     public static final String ARGUMENT_FAVORITES_NUMBER = "favoritesNumber";
     public static final String ARGUMENT_UNIQUE_SHOTS = "uniqueShotsNumber";
+    public static final String ARGUMENT_STREAM_NAME = "streamName";
 
     @Bind(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
     @Bind(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
     @Bind(R.id.stream_data_info_favorites_number) TextView favoritesNumberTextView;
     @Bind(R.id.stream_data_info_favorites_number_pct) TextView favoritesNumberPtcTextView;
     @Bind(R.id.stream_data_info_participants_with_shots_number) TextView participantsWithShotsNumberTextView;
+    @Bind(R.id.stream_data_info_stream_name) TextView streamNameTextView;
     @Bind(R.id.stream_data_info_participants_with_shots_number_pct) TextView participantsWithShotsPtcNumberTextView;
+
     @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 
     @Inject AnalyticsTool analyticsTool;
@@ -48,6 +51,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
     private void setupStatics() {
         Intent intent = getIntent();
+        String streamName = (String)intent.getExtras().get(ARGUMENT_STREAM_NAME);
         Long participantsNumber = (Long) intent.getExtras().get(ARGUMENT_PARTICIPANTS_NUMBER);
         Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
         Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
@@ -55,6 +59,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
         Double pctParticipantsWithShots = streamPercentageUtils.getPercentage(participantsWithShotsNumber,participantsNumber);
         Double pctFavoritesNumber = streamPercentageUtils.getPercentage(favoritesNumber.longValue(),participantsNumber);
 
+        streamNameTextView.setText(streamName);
         participantsNumberTextView.setText(String.valueOf(participantsNumber));
         favoritesNumberTextView.setText(String.valueOf(favoritesNumber));
         shotsNumberTextView.setText(String.valueOf(shotsNumber));

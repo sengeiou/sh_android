@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -529,6 +530,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_SHOTS_NUMBER, streamModel.getTotalShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER, streamModel.getTotalFavorites());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
     }
 
