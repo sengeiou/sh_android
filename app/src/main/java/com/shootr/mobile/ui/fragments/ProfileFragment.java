@@ -127,8 +127,8 @@ public class ProfileFragment extends BaseFragment
     @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
     @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
     @BindString(R.string.confirmationMessage) String confirmationMessage;
-    @BindString(R.string.confirmHideShot) String confirmHideShotAlertDialogMessage;
-    @BindString(R.string.cancelHideShot) String cancelHideShotAlertDialogMessage;
+    @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
+    @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
 
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
