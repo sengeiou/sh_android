@@ -353,8 +353,8 @@
     <string name="pinned_shot_activity">Ha anclado al perfil</string>
     <string name="pinned_shot_activity_with_comment">Ha anclado al perfil: </string>
     <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
-    <string name="confirmationMessage">Realmente desea ocultar este shot?</string>
-    <string name="confirm_hide_shot">Borrrar</string>
+    <string name="confirmationMessage">Quitar shot</string>
+    <string name="confirm_hide_shot">Quitar</string>
     <string name="cancel_hide_shot">Cancelar</string>
     <plurals name="new_shots_indicator">
         <item quantity="one">%d shot nuevo</item>
