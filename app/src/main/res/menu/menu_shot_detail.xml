@@ -9,12 +9,6 @@
       app:showAsAction="always" />
 
     <item
-      android:id="@+id/menu_pin_shot"
-      android:title="@string/menu_pin_shot"
-      android:visible="false"
-      app:showAsAction="never" />
-
-    <item
       android:id="@+id/menu_copy_text"
       android:title="@string/menu_copy_text"
       android:visible="true"

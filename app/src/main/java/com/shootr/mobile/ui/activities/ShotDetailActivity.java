@@ -75,7 +75,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
-    private MenuItemValueHolder pinShotMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
@@ -140,7 +139,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(com.shootr.mobile.R.menu.menu_shot_detail, menu);
-        pinShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_pin_shot));
         copyShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_copy_text));
         return true;
     }
@@ -154,9 +152,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             openContextualMenu(shotModel);
         } else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
-        } else if (item.getItemId() == R.id.menu_pin_shot) {
-            ShotModel shotModel = extractShotFromIntent();
-            pinShotPresenter.pinToProfile(shotModel);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -392,12 +387,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void hidePinShotButton() {
-        pinShotMenuItem.setVisible(false);
         detailAdapter.hidePinToProfileButton();
     }
 
     @Override public void showPinShotButton() {
-        pinShotMenuItem.setVisible(true);
         detailAdapter.showPinToProfileContainer();
     }
 
