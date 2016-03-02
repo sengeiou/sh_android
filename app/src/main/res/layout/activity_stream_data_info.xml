@@ -15,7 +15,7 @@
           android:gravity="center_vertical"
           android:paddingLeft="@dimen/keyline_1"
           android:paddingRight="16dp"
-          android:paddingTop="8dp"
+          android:paddingTop="14dp"
           android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
           android:textColor="@color/watching"
           android:textSize="14sp" />
