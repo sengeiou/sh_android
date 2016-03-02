@@ -10,8 +10,8 @@ public class StreamPercentageUtils implements PercentageUtils {
     }
 
 
-    @Override public Double getPercentage(Long number, Long number2){
-        return (double)((float)number/number2 * 100);
+    @Override public Double getPercentage(Long dividend, Long divider){
+        return (double)((float) dividend / divider * 100);
     }
 
     @Override public String formatPercentage(Double number){
