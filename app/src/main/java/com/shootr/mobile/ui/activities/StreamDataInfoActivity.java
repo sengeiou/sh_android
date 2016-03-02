@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.util.AnalyticsTool;
-import java.text.DecimalFormat;
+import com.shootr.mobile.util.StreamPercentageUtils;
 import javax.inject.Inject;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
@@ -19,7 +19,6 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     public static final String ARGUMENT_SHOTS_NUMBER = "shotsNumber";
     public static final String ARGUMENT_FAVORITES_NUMBER = "favoritesNumber";
     public static final String ARGUMENT_UNIQUE_SHOTS = "uniqueShotsNumber";
-    private static final String FORMAT_PERCENTAGE = "#,##0.0";
 
     @Bind(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
     @Bind(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
@@ -30,6 +29,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 
     @Inject AnalyticsTool analyticsTool;
+    @Inject StreamPercentageUtils streamPercentageUtils;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -52,22 +52,19 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
         Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
         Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
         Long participantsWithShotsNumber = (Long) intent.getExtras().get(ARGUMENT_UNIQUE_SHOTS);
-        Double pctParticipantsWithShots = (double)((float)participantsWithShotsNumber/participantsNumber * 100);
-        Double pctFavoritesNumber = (double)((float)favoritesNumber/participantsNumber.intValue() * 100);
+        Double pctParticipantsWithShots = streamPercentageUtils.getPercentage(participantsWithShotsNumber,participantsNumber);
+        Double pctFavoritesNumber = streamPercentageUtils.getPercentage(favoritesNumber.longValue(),participantsNumber);
 
         participantsNumberTextView.setText(String.valueOf(participantsNumber));
         favoritesNumberTextView.setText(String.valueOf(favoritesNumber));
         shotsNumberTextView.setText(String.valueOf(shotsNumber));
         participantsWithShotsNumberTextView.setText(String.valueOf(participantsWithShotsNumber));
-        participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct, formatPercentage(pctParticipantsWithShots)));
-        favoritesNumberPtcTextView.setText(getString(R.string.stream_data_info_pct, formatPercentage(pctFavoritesNumber)));
+        participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct,
+          streamPercentageUtils.formatPercentage(pctParticipantsWithShots)));
+        favoritesNumberPtcTextView.setText(getString(R.string.stream_data_info_pct,
+          streamPercentageUtils.formatPercentage(pctFavoritesNumber)));
     }
 
-    private String formatPercentage(Double number){
-        DecimalFormat decimalFormat = new DecimalFormat(FORMAT_PERCENTAGE);
-        return decimalFormat.format(number);
-    }
-    
     @Override protected void initializePresenter() {
         /* no-op */
     }
