@@ -406,10 +406,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void hidePinShotButton() {
         pinShotMenuItem.setVisible(false);
+        detailAdapter.hidePinToProfileButton();
     }
 
     @Override public void showPinShotButton() {
         pinShotMenuItem.setVisible(true);
+        detailAdapter.showPinToProfileContainer();
     }
 
     //endregion
