@@ -46,6 +46,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
+    private final PinToProfileClickListener onClickListenerPinToProfile;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -60,6 +61,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener,
+      PinToProfileClickListener onClickListenerPinToProfile,
       OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
       Resources resources,
       AndroidTimeUtils timeUtils) {
@@ -68,6 +70,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
+        this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
@@ -277,6 +280,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             setupVideo(shotModel);
             setupReply(shotModel);
             setupNiceButton(shotModel);
+            setupPinToProfileContainer(shotModel);
         }
 
         public void setupReply(ShotModel shotModel) {
@@ -418,6 +422,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 streamTitle.setVisibility(View.GONE);
             }
+        }
+
+        private void setupPinToProfileContainer(final ShotModel shotModel){
+            pinToProfileContainer.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    onClickListenerPinToProfile.onClick(shotModel);
+                }
+            });
         }
 
         public void hidePintToProfileContainer(){
@@ -632,6 +644,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface ImageClickListener {
+
+        void onClick(ShotModel shot);
+    }
+
+    public interface PinToProfileClickListener {
 
         void onClick(ShotModel shot);
     }
