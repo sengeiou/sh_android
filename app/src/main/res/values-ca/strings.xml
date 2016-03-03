@@ -53,6 +53,7 @@
     <string name="block_user_dialog_message">Si fas Ignorar deixaràs de veure els shots d\'aquest usuari.</string>
     <string name="block_user_error">Per ignorar has de deixar de seguir.</string>
     <string name="cancel">Cancel·lar</string>
+    <string name="cancel_hide_shot" formatted="false">Cancel·lar</string>
     <string name="can_shoot_streams">Desfer vet</string>
     <string name="change_password_button_text">FET</string>
     <string name="change_password_logout_message">La contrasenya ha canviat. Reinicia sessió.</string>
@@ -60,6 +61,8 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <!-- Errors -->
     <string name="communication_error">Hi ha un problema de connexió a Internet. Comprova la teva connexió i prova un altre cop.</string>
+    <string name="confirmation_hide_shot_message" formatted="false">Treure del perfil</string>
+    <string name="confirm_hide_shot" formatted="false">Treure</string>
     <string name="connection_lost">S\'ha perdut la connexió</string>
     <string name="copied_to_clipboard">Text copiat al portapapers.</string>
     <string name="current_password_hint">Contrasenya actual</string>
@@ -169,6 +172,7 @@
     <plurals name="listing_favorites">
         <item quantity="one">%d favorit</item>
         <item quantity="other">%d favorits</item>
+        <item quantity="zero"/>
     </plurals>
     <string name="listing_title_favorites">Favorits</string>
     <string name="listing_title_holding">Creats</string>
@@ -200,6 +204,10 @@
     <string name="new_activity_notification">Nova activitat</string>
     <string name="new_password_again_hint">Nova contrasenya altre cop</string>
     <string name="new_password_hint">Nova contrasenya</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="one">%d shot nou</item>
+        <item quantity="other">%d shots nous</item>
+    </plurals>
     <string name="new_shot_discard_message">Descartar foto?</string>
     <string name="new_shot_placeholder">Escriu alguna cosa…</string>
     <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
@@ -234,6 +242,8 @@
     <string name="photo_edit_remove">Esborrar foto</string>
     <string name="photo_edit_remove_confirmation">Esborrar foto?</string>
     <string name="photo_edit_take">Càmera</string>
+    <string name="pinned_shot_activity">Ha fixat al perfil</string>
+    <string name="pinned_shot_activity_with_comment">"Ha fixat al perfil: "</string>
     <string name="profile_all_shots">Tots els shots</string>
     <string name="profile_edit_done_button">Fet</string>
     <string name="profile_edit_profile">Editar perfil</string>
@@ -286,8 +296,14 @@
     <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
     <string name="sign_out_message">Tancant sessió…</string>
     <string name="started_shooting_activity_text_pattern">Ha escrit a (stream)</string>
+    <string name="stream_data_info_favorites">Favorits</string>
+    <string name="stream_data_info_participants">Participants</string>
+    <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
+    <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+    <string name="stream_data_info_shots">Shots</string>
     <string name="stream_detail_edit_menu_title">Editar</string>
     <string name="stream_detail_media">Arxius</string>
+    <string name="stream_detail_menu_data_info">Nombres</string>
     <string name="stream_detail_mute">Silenciar</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
     <string name="stream_favorited_activity_text_pattern">Ha marcat com a favorit (stream)</string>
@@ -317,11 +333,13 @@
     <string name="title_activity_login_email">Iniciar sessió</string>
     <string name="title_activity_registration_email">Registrar-se amb email</string>
     <string name="title_activity_reset_password">Restaurar contrasenya</string>
+    <string name="title_activity_stream_data_info">Nombres</string>
     <string name="title_activity_stream_media">Arxius</string>
     <string name="title_activity_support">Suport</string>
     <plurals name="total_watchers_pattern">
         <item quantity="one">%d participant</item>
         <item quantity="other">%d participants</item>
+        <item quantity="zero"/>
     </plurals>
     <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
     <string name="unfollow_dialog_no">No</string>
@@ -345,17 +363,4 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">Tornem aviat</string>
     <string name="yes">Sí</string>
-    <string name="title_activity_stream_data_info">Nombres</string>
-    <string name="stream_data_info_participants">Participants</string>
-    <string name="stream_data_info_shots">Shots</string>
-    <string name="stream_data_info_favorites">Favorits</string>
-    <string name="stream_detail_menu_data_info">Nombres</string>
-    <string name="pinned_shot_activity">Ha fixat al perfil</string>
-    <string name="pinned_shot_activity_with_comment">Ha fixat al perfil: </string>
-    <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
-    <string name="confirm_hide_shot">Treure</string>
-    <plurals name="new_shots_indicator">
-        <item quantity="one">%d shot nou</item>
-        <item quantity="other">%d shots nous</item>
-    </plurals>
 </resources>
