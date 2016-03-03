@@ -12,7 +12,7 @@ public class StreamPercentageUtils implements PercentageUtils {
 
     @Override public Double getPercentage(Long dividend, Long divider){
         Double result = 0.0;
-        if(divider!=null && dividend != null && divider !=0 ){
+        if(divider!=null && dividend != null && divider > 0 && dividend >= 0 ){
             result = (double)((float) dividend / divider * 100);
         }
         return result;

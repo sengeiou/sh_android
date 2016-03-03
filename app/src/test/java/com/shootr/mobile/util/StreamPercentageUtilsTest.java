@@ -12,6 +12,7 @@ public class StreamPercentageUtilsTest {
     public static final long ONE = 1L;
     public static final long TEN = 10L;
     public static final long ZERO = 0L;
+    public static final long NEGATIVE = -1L;
     public static final double RESULT_ZERO = 0.0;
     StreamPercentageUtils streamPercentageUtils;
 
@@ -66,5 +67,17 @@ public class StreamPercentageUtilsTest {
         String numberFormatted = streamPercentageUtils.formatPercentage(null);
 
         assertThat(numberFormatted).isEmpty();
+    }
+
+    @Test public void shouldReturnZeroWhenDividenIsNegative() throws Exception {
+        Double result = streamPercentageUtils.getPercentage(NEGATIVE, TEN);
+
+        assertThat(result).isEqualTo(RESULT_ZERO);
+    }
+
+    @Test public void shouldReturnZeroWhenDividerIsNegative() throws Exception {
+        Double result = streamPercentageUtils.getPercentage(TEN, NEGATIVE);
+
+        assertThat(result).isEqualTo(RESULT_ZERO);
     }
 }
