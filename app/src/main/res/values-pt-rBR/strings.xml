@@ -53,6 +53,7 @@
   <string name="block_user_dialog_message">Ao ignorar deixará de ver os shots deste usuário</string>
   <string name="block_user_error">Antes de ignorar é necessário primeiro deixar de seguir.</string>
   <string name="cancel">Cancelar</string>
+  <string name="cancel_hide_shot" formatted="false">Cancelar</string>
   <string name="can_shoot_streams">Desfazer banimento</string>
   <string name="change_password_button_text">FEITO</string>
   <string name="change_password_logout_message">A senha foi modificada. Reinicie a sessão</string>
@@ -60,6 +61,8 @@
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- Errors -->
   <string name="communication_error">Há um problema com a conexão à Internet. Comprove sua conexão e tente outra vez.</string>
+  <string name="confirmation_hide_shot_message" formatted="false">Retirar shot</string>
+  <string name="confirm_hide_shot" formatted="false">Retirar</string>
   <string name="connection_lost">Conexão perdida</string>
   <string name="copied_to_clipboard">Texto copiado para a área de transferência</string>
   <string name="current_password_hint">Senha atual</string>
@@ -200,6 +203,10 @@
   <string name="new_activity_notification">Nova atividade</string>
   <string name="new_password_again_hint">Repita a nova senha</string>
   <string name="new_password_hint">Nova senha</string>
+  <plurals name="new_shots_indicator">
+    <item quantity="one">%d shot novo</item>
+    <item quantity="other">%d shots novos</item>
+  </plurals>
   <string name="new_shot_discard_message">Descartar foto?</string>
   <string name="new_shot_placeholder">Escreva algo…</string>
   <string name="new_shot_repeated">Whoops! Você já publicou isso</string>
@@ -212,6 +219,7 @@
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
+    <item quantity="zero"/>
   </plurals>
   <string name="no">Não</string>
   <string name="notification_image">Imagem</string>
@@ -234,6 +242,8 @@
   <string name="photo_edit_remove">Apagar foto</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
+  <string name="pinned_shot_activity">Linkado ao perfil</string>
+  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
   <string name="profile_all_shots">Todos os shots</string>
   <string name="profile_edit_done_button">Feito</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -286,8 +296,14 @@
   <string name="showing_shots_by_holder">Shots do administrador.</string>
   <string name="sign_out_message">Finalizando sessão…</string>
   <string name="started_shooting_activity_text_pattern">Escreveu em (stream)</string>
+  <string name="stream_data_info_favorites">Favoritos</string>
+  <string name="stream_data_info_participants">Participantes</string>
+  <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
+  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+  <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_media">Arquivos</string>
+  <string name="stream_detail_menu_data_info">Estatísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">Marcou como favorito (stream)</string>
@@ -317,6 +333,7 @@
   <string name="title_activity_login_email">Iniciar sessão</string>
   <string name="title_activity_registration_email">Cadastre-se com email</string>
   <string name="title_activity_reset_password">Redefinir senha</string>
+  <string name="title_activity_stream_data_info">Estatísticas</string>
   <string name="title_activity_stream_media">Arquivos</string>
   <string name="title_activity_support">Suporte</string>
   <plurals name="total_watchers_pattern">
@@ -345,16 +362,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="title_activity_stream_data_info" >Estatísticas</string>
-  <string name="stream_data_info_participants">Participantes</string>
-  <string name="stream_data_info_shots">Shots</string>
-  <string name="stream_data_info_favorites">Favoritos</string>
-  <string name="stream_detail_menu_data_info">Estatísticas</string>
-  <string name="pinned_shot_activity">Linkado ao perfil</string>
-  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
-  <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
-  <plurals name="new_shots_indicator">
-    <item quantity="one">%d shot novo</item>
-    <item quantity="other">%d shots novos</item>
-  </plurals>
 </resources>
