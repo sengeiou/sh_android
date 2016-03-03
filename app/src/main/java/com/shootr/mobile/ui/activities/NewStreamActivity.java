@@ -124,7 +124,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setHomeAsUpIndicator(com.shootr.mobile.R.drawable.ic_action_navigation_close);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close_white);
 
         if (idStreamToEdit != null) {
             actionBar.setTitle(R.string.activity_edit_stream_title);
