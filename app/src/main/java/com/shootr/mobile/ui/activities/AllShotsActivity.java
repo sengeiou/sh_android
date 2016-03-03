@@ -56,7 +56,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
     @Bind(com.shootr.mobile.R.id.all_shots_loading) View loadingView;
     @BindString(R.string.shot_shared_message) String shotShared;
-    @BindString(R.string.confirmationMessage) String confirmationMessage;
+    @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
     @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
     @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
 
