@@ -94,7 +94,7 @@ public class ReportShotPresenter implements Presenter {
         }
     }
 
-    public void onShotLongPressed(ShotModel shot, String streamAuthorIdUser) {
+    public void onShotLongPressedWithStreamAuthor(ShotModel shot, String streamAuthorIdUser) {
         if (currentUserIsStreamHolder(streamAuthorIdUser)) {
             handlePinContextMenu(shot);
         } else {

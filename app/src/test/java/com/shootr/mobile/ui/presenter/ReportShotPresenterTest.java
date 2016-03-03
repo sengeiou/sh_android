@@ -4,7 +4,6 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
@@ -30,7 +29,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -108,7 +106,7 @@ public class ReportShotPresenterTest {
     @Test public void shouldShowDeleteShotIfUserIsStreamHolder() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
 
-        presenter.onShotLongPressed(anotherUserShot(), ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ID_USER);
 
         verify(reportShotView).showHolderContextMenu(any(ShotModel.class));
     }
@@ -116,7 +114,7 @@ public class ReportShotPresenterTest {
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
 
-        presenter.onShotLongPressed(anotherUserShot(), ANOTHER_ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ANOTHER_ID_USER);
 
         verify(reportShotView).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
@@ -124,7 +122,7 @@ public class ReportShotPresenterTest {
     @Test public void shouldNotShowDeleteShotIfUserIsShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
 
-        presenter.onShotLongPressed(shotModel(), ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(shotModel(), ID_USER);
 
         verify(reportShotView, never()).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
@@ -182,7 +180,7 @@ public class ReportShotPresenterTest {
         ShotModel shotModel = shotModelWithStreamId();
 
 
-        presenter.onShotLongPressed(shotModel, ANOTHER_ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(shotModel, ANOTHER_ID_USER);
 
         verify(reportShotView).showHolderContextMenu(shotModel);
     }
@@ -191,7 +189,7 @@ public class ReportShotPresenterTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         ShotModel shotModel = shotModelWithStreamId();
 
-        presenter.onShotLongPressed(shotModel,ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
         verify(reportShotView).showAuthorContextMenuWithPin(shotModel);
     }
@@ -202,7 +200,7 @@ public class ReportShotPresenterTest {
         ShotModel shotModel = shotModelWithStreamId();
         shotModel.setHide(HIDE);
 
-        presenter.onShotLongPressed(shotModel,ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
         verify(reportShotView).showAuthorContextMenuWithoutPin(shotModel);
     }
