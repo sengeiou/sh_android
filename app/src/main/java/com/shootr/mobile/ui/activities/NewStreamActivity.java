@@ -13,11 +13,11 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -44,6 +44,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
     @Bind(com.shootr.mobile.R.id.new_stream_short_title) EditText shortTitleView;
     @Bind(com.shootr.mobile.R.id.new_stream_description) EditText descriptionView;
+
+    @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
+    @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
@@ -78,7 +81,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             titleView.setText(editedTitle);
             shortTitleView.setText(editedShortTitle);
         }
-        initializeViews();
+        setupTextViews();
     }
 
     @Override protected void initializePresenter() {
@@ -93,7 +96,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
-    private void initializeViews() {
+    private void setupTextViews() {
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 presenter.titleTextChanged(s.toString());
@@ -131,7 +134,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close_white);
 
         if (idStreamToEdit != null) {
-            actionBar.setTitle(R.string.activity_edit_stream_title);
+            actionBar.setTitle(editStreamTitleActionBar);
+        } else {
+            actionBar.setTitle(newStreamTitleActionBar);
         }
     }
 
