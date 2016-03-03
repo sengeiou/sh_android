@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -66,6 +69,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
         setupActionbar(idStreamToEdit);
+        setupStatusBarColor();
 
         if (savedInstanceState != null) {
             String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
@@ -128,6 +132,13 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
         if (idStreamToEdit != null) {
             actionBar.setTitle(R.string.activity_edit_stream_title);
+        }
+    }
+
+    private void setupStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
         }
     }
 
