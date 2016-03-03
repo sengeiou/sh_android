@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -25,8 +26,10 @@ import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
+import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
+import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
@@ -37,6 +40,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
@@ -44,7 +48,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
+public class ShotDetailActivity extends BaseToolbarDecoratedActivity
+  implements ShotDetailView, NewShotBarView, PinShotView {
 
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
@@ -67,10 +72,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject WritePermissionManager writePermissionManager;
     @Inject BackStackHandler backStackHandler;
     @Inject CrashReportTool crashReportTool;
+    @Inject PinShotPresenter pinShotPresenter;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
+    private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -121,18 +128,20 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected void onResume() {
         super.onResume();
         detailPresenter.resume();
+        pinShotPresenter.resume();
         newShotBarPresenter.resume();
     }
 
     @Override protected void onPause() {
         super.onPause();
         detailPresenter.pause();
+        pinShotPresenter.pause();
         newShotBarPresenter.pause();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(com.shootr.mobile.R.menu.menu_shot_detail, menu);
+        copyShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_copy_text));
         return true;
     }
 
@@ -140,28 +149,26 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
             return true;
-        }else if (item.getItemId() == com.shootr.mobile.R.id.menu_share) {
+        } else if (item.getItemId() == com.shootr.mobile.R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
             openContextualMenu(shotModel);
-        }else if (item.getItemId() == R.id.menu_copy_text) {
+        } else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this)
-          .addAction(com.shootr.mobile.R.string.menu_share_shot_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(com.shootr.mobile.R.string.menu_share_shot_via_shootr,
+          new Runnable() {
               @Override public void run() {
                   detailPresenter.shareShot(shotModel);
               }
-          })
-          .addAction(R.string.menu_share_shot_via, new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          })
-          .show();
+          }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).show();
     }
 
     private void shareShot(ShotModel shotModel) {
@@ -170,49 +177,47 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupAdapter() {
-        detailAdapter = new ShotDetailWithRepliesAdapter(
-          imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-              @Override
-              public void onClick(String userId) {
+        detailAdapter =
+          new ShotDetailWithRepliesAdapter(imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+              @Override public void onClick(String userId) {
                   onShotAvatarClick(userId);
               }
           }, //
-          new ShotDetailWithRepliesAdapter.ImageClickListener() {
-              @Override
-              public void onClick(ShotModel shot) {
-                  onShotImageClick(shot);
-              }
-          }, //
-          new OnVideoClickListener() {
-              @Override
-              public void onVideoClick(String url) {
-                  onShotVideoClick(url);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override
-              public void onUsernameClick(String username) {
-                  onShotUsernameClick(username);
-              }
-          }, //
-          new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-              @Override
-              public void onShown() {
+            new ShotDetailWithRepliesAdapter.ImageClickListener() {
+                @Override public void onClick(ShotModel shot) {
+                    onShotImageClick(shot);
+                }
+            }, //
+            new OnVideoClickListener() {
+                @Override public void onVideoClick(String url) {
+                    onShotVideoClick(url);
+                }
+            }, //
+            new OnUsernameClickListener() {
+                @Override public void onUsernameClick(String username) {
+                    onShotUsernameClick(username);
+                }
+            }, //
+            new ShotDetailWithRepliesAdapter.PinToProfileClickListener() {
+
+                @Override public void onClick(ShotModel shot) {
+                    pinShotPresenter.pinToProfile(shot);
+                }
+            }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
+              @Override public void onShown() {
                   detailList.scrollToPosition(0);
               }
           }, //
-          new OnNiceShotListener() {
-              @Override
-              public void markNice(String idShot) {
-                  detailPresenter.markNiceShot(idShot);
-              }
+            new OnNiceShotListener() {
+                @Override public void markNice(String idShot) {
+                    detailPresenter.markNiceShot(idShot);
+                }
 
-              @Override
-              public void unmarkNice(String idShot) {
-                  detailPresenter.unmarkNiceShot(idShot);
-              }
-          }, //
-          timeFormatter, getResources(), timeUtils);
+                @Override public void unmarkNice(String idShot) {
+                    detailPresenter.unmarkNiceShot(idShot);
+                }
+            }, //
+            timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
     }
@@ -229,18 +234,15 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         photoPickerController = new PhotoPickerController.Builder().onActivity(this)
           .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
-              @Override
-              public void onSelected(File imageFile) {
+              @Override public void onSelected(File imageFile) {
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
-              @Override
-              public void onError(Exception e) {
+              @Override public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override
-              public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           })
@@ -248,8 +250,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     public void setupNewShotBarDelegate(final ShotModel shotModel) {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton,
-          feedbackMessage) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton, feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
@@ -295,10 +296,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         detailPresenter.avatarClick(userId);
     }
 
-    public void onShotUsernameClick(String username){
+    public void onShotUsernameClick(String username) {
         detailPresenter.usernameClick(username);
     }
-
 
     private void onShotVideoClick(String url) {
         Uri uri = Uri.parse(url);
@@ -310,9 +310,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarPresenter.newShotFromTextBox();
     }
 
-
-    @OnClick(com.shootr.mobile.R.id.shot_bar_photo)
-    public void onStartNewShotWithPhoto() {
+    @OnClick(com.shootr.mobile.R.id.shot_bar_photo) public void onStartNewShotWithPhoto() {
         if (writePermissionManager.hasWritePermission()) {
             newShotBarPresenter.newShotFromImage();
         } else {
@@ -328,6 +326,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     //region View methods
     @Override public void renderShot(ShotModel shotModel) {
         detailAdapter.renderMainShot(shotModel);
+        pinShotPresenter.initialize(this, shotModel);
     }
 
     @Override public void renderReplies(List<ShotModel> shotModels) {
@@ -356,14 +355,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         detailAdapter.renderParentShot(parentShot);
     }
 
-    @Override
-    public void startProfileContainerActivity(String username) {
+    @Override public void startProfileContainerActivity(String username) {
         Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
         startActivity(intentForUser);
     }
 
-    @Override
-    public void showError(String errorMessage) {
+    @Override public void showError(String errorMessage) {
         feedbackMessage.show(getView(), errorMessage);
     }
 
@@ -389,6 +386,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
+    }
+
+    @Override public void notifyPinnedShot(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void showPinned() {
+        feedbackMessage.show(getView(), R.string.shot_pinned);
+    }
+
+    @Override public void hidePinShotButton() {
+        detailAdapter.hidePinToProfileButton();
+    }
+
+    @Override public void showPinShotButton() {
+        detailAdapter.showPinToProfileContainer();
     }
 
     //endregion

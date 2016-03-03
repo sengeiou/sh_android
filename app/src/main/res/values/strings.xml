@@ -369,6 +369,9 @@
     <string name="title_activity_stream_data_info">Stats</string>
     <string name="stream_detail_menu_data_info">Stats</string>
     <string name="stream_data_info_participants_with_shots">Sent a shot</string>
+    <string name="confirmation_hide_shot_message">Unpin shot</string>
+    <string name="confirm_hide_shot">Unpin</string>
+    <string name="cancel_hide_shot">Cancel</string>
     <plurals name="new_shots_indicator">
         <item quantity="one">%d new shot</item>
         <item quantity="other">%d new shots</item>

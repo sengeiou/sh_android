@@ -41,6 +41,7 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
+import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
@@ -48,6 +49,7 @@ import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NullNewShotBarView;
 import com.shootr.mobile.ui.views.NullWatchNumberView;
+import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
@@ -73,7 +75,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView,
+  PinShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
@@ -86,6 +89,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
+    @Inject PinShotPresenter pinShotPresenter;
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
@@ -248,6 +252,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
+        pinShotPresenter.initialize(this);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
@@ -651,6 +656,14 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.shot_pinned);
     }
 
+    @Override public void hidePinShotButton() {
+        /* no-op */
+    }
+
+    @Override public void showPinShotButton() {
+        /* no-op */
+    }
+
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
@@ -771,11 +784,12 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.pinToProfile(shotModel);
-            }
-        }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(R.string.menu_pin_shot, new Runnable() {
+              @Override public void run() {
+                  pinShotPresenter.pinToProfile(shotModel);
+              }
+          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 streamTimelinePresenter.shareShot(shotModel);
             }

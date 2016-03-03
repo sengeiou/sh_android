@@ -4,7 +4,6 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -33,7 +32,6 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
-    private final PinShotInteractor pinShotInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
@@ -42,8 +40,7 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
-      PinShotInteractor pinShotInteractor) {
+      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -54,7 +51,6 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
-        this.pinShotInteractor = pinShotInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -256,17 +252,6 @@ public class ReportShotPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
-            }
-        });
-    }
-
-
-    public void pinToProfile(final ShotModel shotModel) {
-        pinShotInteractor.pinShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                shotModel.setHide(0L);
-                reportShotView.notifyPinnedShot(shotModel);
-                reportShotView.showPinned();
             }
         });
     }

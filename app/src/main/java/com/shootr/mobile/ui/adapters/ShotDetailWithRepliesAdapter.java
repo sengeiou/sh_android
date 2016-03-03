@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -44,6 +46,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
+    private final PinToProfileClickListener onClickListenerPinToProfile;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -52,10 +55,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
+    private ShotDetailMainViewHolder mainHolder;
+
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener,
+      PinToProfileClickListener onClickListenerPinToProfile,
       OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
       Resources resources,
       AndroidTimeUtils timeUtils) {
@@ -64,6 +70,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
+        this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
@@ -77,6 +84,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public void renderMainShot(ShotModel mainShot) {
         this.mainShot = mainShot;
         notifyItemChanged(getPositionMainShot());
+    }
+
+    public void hidePinToProfileButton(){
+        if(mainHolder != null) {
+            mainHolder.hidePintToProfileContainer();
+        }
+    }
+
+    public void showPinToProfileContainer(){
+        if(mainHolder != null) {
+            mainHolder.showPintToProfileContainer();
+        }
     }
 
     private boolean hasParent() {
@@ -208,6 +227,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindMainShotViewHolder(ShotDetailMainViewHolder holder) {
         if (mainShot != null) {
+            this.mainHolder = holder;
             holder.bindView(mainShot);
         } else {
             Timber.w("Trying to render null main shot");
@@ -242,6 +262,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;
         @Bind(com.shootr.mobile.R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(com.shootr.mobile.R.id.shot_nice_count) TextView niceCount;
+        @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -259,6 +280,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             setupVideo(shotModel);
             setupReply(shotModel);
             setupNiceButton(shotModel);
+            setupPinToProfileContainer(shotModel);
         }
 
         public void setupReply(ShotModel shotModel) {
@@ -357,8 +379,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.videoTitle.setText(shotModel.getVideoTitle());
             this.videoDuration.setText(shotModel.getVideoDuration());
             this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     videoClickListener.onVideoClick(shotModel.getVideoUrl());
                 }
             });
@@ -401,6 +422,22 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 streamTitle.setVisibility(View.GONE);
             }
+        }
+
+        private void setupPinToProfileContainer(final ShotModel shotModel){
+            pinToProfileContainer.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    onClickListenerPinToProfile.onClick(shotModel);
+                }
+            });
+        }
+
+        public void hidePintToProfileContainer(){
+            pinToProfileContainer.setVisibility(View.GONE);
+        }
+
+        public void showPintToProfileContainer(){
+            pinToProfileContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -607,6 +644,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface ImageClickListener {
+
+        void onClick(ShotModel shot);
+    }
+
+    public interface PinToProfileClickListener {
 
         void onClick(ShotModel shot);
     }
