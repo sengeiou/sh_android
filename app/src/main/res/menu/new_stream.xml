@@ -5,7 +5,7 @@
 
     <item
       android:id="@+id/menu_remove"
-      android:icon="@drawable/ic_action_remove"
+      android:icon="@drawable/ic_action_action_remove_white"
       android:title="@string/remove_stream_label"
       android:visible="false"
       app:showAsAction="always"
@@ -13,7 +13,7 @@
 
     <item
       android:id="@+id/menu_restore"
-      android:icon="@drawable/ic_action_restore"
+      android:icon="@drawable/ic_action_restore_white"
       android:title="@string/restore_stream_label"
       android:visible="false"
       app:showAsAction="always"
@@ -22,7 +22,7 @@
     <item
       android:id="@+id/menu_done"
       android:enabled="false"
-      android:icon="@drawable/ic_action_done"
+      android:icon="@drawable/ic_action_done_new_stream"
       android:title="@string/done_label"
       app:showAsAction="always" />
 </menu>
