@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
@@ -29,6 +30,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -42,6 +44,8 @@ public class ReportShotPresenterTest {
     private static final String ES_LOCALE = "es";
     private static final String SESSION_TOKEN = "session_token";
     private static final String EN_LOCALE = "en";
+    private static final String ID_STREAM = "idStream";
+    public static final Long HIDE = 0L;
     @Mock ReportShotView reportShotView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
@@ -160,7 +164,7 @@ public class ReportShotPresenterTest {
     @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
         ShotModel shotModel = shotModel();
 
-        presenter.reportClicked(ES_LOCALE,SESSION_TOKEN,shotModel);
+        presenter.reportClicked(ES_LOCALE, SESSION_TOKEN, shotModel);
 
         verify(reportShotView).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
     }
@@ -173,6 +177,75 @@ public class ReportShotPresenterTest {
         verify(reportShotView,never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
     }
 
+    @Test public void shouldShowHolderContextMenuWhenIsNotStreamAuthorAndIsNotShotAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+        ShotModel shotModel = shotModelWithStreamId();
+
+
+        presenter.onShotLongPressed(shotModel, ANOTHER_ID_USER);
+
+        verify(reportShotView).showHolderContextMenu(shotModel);
+    }
+
+    @Test public void shouldShowAuthorContextMenuWithPinWhenUserIsStreamHolderAndIsShotAuthorAndIsShotVisible() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        ShotModel shotModel = shotModelWithStreamId();
+
+        presenter.onShotLongPressed(shotModel,ID_USER);
+
+        verify(reportShotView).showAuthorContextMenuWithPin(shotModel);
+    }
+
+    @Test public void shouldShowAuthorContextMenuWithoutPinWhenUserIsStreamHolderAndIsShotAuthorAndIsNotShotVisible()
+      throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        ShotModel shotModel = shotModelWithStreamId();
+        shotModel.setHide(HIDE);
+
+        presenter.onShotLongPressed(shotModel,ID_USER);
+
+        verify(reportShotView).showAuthorContextMenuWithoutPin(shotModel);
+    }
+
+    @Test public void shouldShowAuthorContextMenuWithPinIfcurrentUserIsShotAuthorAndIsShotVisible() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        ShotModel shotModel = shotModel();
+
+        presenter.onShotLongPressed(shotModel);
+
+        verify(reportShotView).showAuthorContextMenuWithPin(shotModel);
+    }
+
+    @Test public void shouldShowAuthorContextMenuWithoutPinIfcurrentUserIsShotAuthorAndIsShotInVisible() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        ShotModel shotModel = shotModel();
+        shotModel.setHide(HIDE);
+
+        presenter.onShotLongPressed(shotModel);
+
+        verify(reportShotView).showAuthorContextMenuWithoutPin(shotModel);
+    }
+
+    @Test public void shouldShowContextMenuWithUnblockWhenCurrentUserIsNotShotAuthorAndIsBlocked() throws Exception {
+        setupGetBlockedIdUsersInteractor();
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        ShotModel shotModel = anotherUserShot();
+
+        presenter.onShotLongPressed(shotModel);
+
+        verify(reportShotView).showContextMenuWithUnblock(shotModel);
+    }
+
+    @Test public void shouldShowContextMenuWhenCurrentUserIsNotShotAuthorAndIsBlocked() throws Exception {
+        setupGetBlockedIdUsersInteractor();
+        when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+        ShotModel shotModel = shotModel();
+
+        presenter.onShotLongPressed(shotModel);
+
+        verify(reportShotView).showContextMenu(shotModel);
+    }
+
     public void setupPinShotCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -183,7 +256,7 @@ public class ReportShotPresenterTest {
             }
         }).when(pinShotInteractor).pinShot(anyString(), any(Interactor.CompletedCallback.class));
     }
-    
+
     private void setupUnbanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -282,6 +355,18 @@ public class ReportShotPresenterTest {
           any(Interactor.ErrorCallback.class));
     }
 
+    private void setupGetBlockedIdUsersInteractor(){
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(blockedUsers());
+                return null;
+            }
+        }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
     private ShotModel shotModel() {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdUser(ID_USER);
@@ -294,5 +379,19 @@ public class ReportShotPresenterTest {
         shotModel.setIdUser(ANOTHER_ID_USER);
         shotModel.setHide(1L);
         return shotModel;
+    }
+
+    private ShotModel shotModelWithStreamId() {
+        ShotModel shotModel = new ShotModel();
+        shotModel.setIdUser(ID_USER);
+        shotModel.setHide(1L);
+        shotModel.setStreamId(ID_STREAM);
+        return shotModel;
+    }
+
+    private ArrayList blockedUsers(){
+        ArrayList usersIds = new ArrayList();
+        usersIds.add(ANOTHER_ID_USER);
+        return usersIds;
     }
 }
