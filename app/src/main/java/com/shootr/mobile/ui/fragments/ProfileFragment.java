@@ -727,6 +727,7 @@ public class ProfileFragment extends BaseFragment
         BottomSheet.Builder menuBuilder = new BottomSheet.Builder(getActivity()) //
           .sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery) //
           .sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take) //
+          .sheet(R.id.menu_photo_watch, R.drawable.ic_stream_author_24_gray50, R.string.watch_profile_photo) //
           .title(R.string.change_photo) //
           .listener(photoDialogListener());
 
