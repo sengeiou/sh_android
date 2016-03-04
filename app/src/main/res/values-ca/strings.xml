@@ -184,7 +184,7 @@
     <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
     <!-- Menu names -->
     <string name="menu_info">Amics</string>
-    <string name="menu_pin_shot">Ancorar al perfil</string>
+    <string name="menu_pin_shot">Fixar al perfil</string>
     <string name="menu_profile_chage_password">Canviar contrasenya</string>
     <string name="menu_remove_favorite">Treure de Favorits</string>
     <string name="menu_save_photo">Desar imatge</string>
