@@ -225,7 +225,7 @@
   <string name="notification_shot_has_stream_removed_subtitle">這stream已清除</string>
   <!-- Notifications -->
   <string name="notification_shot_multiple_title">%d個新的 Shots</string>
-  <string name="notification_shot_sending">Shooting...</string>
+  <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot已發送</string>
   <string name="now">現在</string>
   <string name="no_intent_handler">沒有應用程式可用來處理此行動。
@@ -261,7 +261,7 @@
   </plurals>
   <string name="reply_name_pattern">%1$s回覆%2$s</string>
   <string name="reply_placeholder_pattern">回覆%s…</string>
-  <string name="report_context_menu_block">封鎖...</string>
+  <string name="report_context_menu_block">封鎖…</string>
   <string name="report_context_menu_delete">刪除</string>
   <string name="report_context_menu_report">舉報</string>
   <string name="report_context_menu_unblock">清除忽略</string>
@@ -288,7 +288,7 @@
   <string name="shot_shared_message">已分享shot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
-  <string name="sign_out_message">正在登出...</string>
+  <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
   <string name="stream_data_info_favorites">喜爱</string>
   <string name="stream_data_info_participants">参与者</string>
@@ -311,7 +311,7 @@
   <string name="stream_subtitle">在關注%d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在關注%2$s個參與者中的%1$s個參與者</string>
   <string name="stream_timeline_add_favorite">加入最愛</string>
-  <string name="stream_timeline_empty_message">正在檢查shots...</string>
+  <string name="stream_timeline_empty_message">正在檢查shots…</string>
   <string name="stream_timeline_remove_favorite">從最愛中清除</string>
   <string name="suggested_people_section_title">建議關注</string>
   <string name="support_blog">Blog</string>
