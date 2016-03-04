@@ -11,4 +11,9 @@
       android:icon="@drawable/ic_photo_library"
       android:title="@string/photo_edit_gallery" />
 
+    <item
+      android:id="@+id/menu_photo_watch"
+      android:icon="@drawable/ic_stream_author_24_gray50"
+      android:title="@string/photo_edit_gallery" />
+
 </menu>
