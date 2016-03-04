@@ -153,6 +153,10 @@ public class AllShotsPresenter implements Presenter {
         });
     }
 
+    public void showUnpinShotAlert(String idShot) {
+        allShotsView.showHideShotConfirmation(idShot);
+    }
+
     @Override public void resume() {
         if (hasBeenPaused) {
             loadAllShots();

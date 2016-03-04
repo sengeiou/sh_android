@@ -13,6 +13,20 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.6.0] - 2016-03-04
+
+### Changed
+- Se muestra dialogo de confirmación al ocultar un shot anclado
+
+### Added
+- Pin shot to profile en el detalle de un shot
+- Se añaden porcentajes a la activity de núemeros de un Stream
+
+### Fixed
+- Control de null de listView en el onDestroy de StreamTimelineFragment
+- Se evalua el control de argumentos nulos en el setPosition de StreamTimelineFragment
+- Se cambia la comprobación de la lista local de los usuarios bloqueados y/o baneados
+
 ## [1.5.0] - 2016-02-19
 
 ### Changed

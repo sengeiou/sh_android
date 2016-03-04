@@ -60,6 +60,7 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <!-- Errors -->
     <string name="communication_error">存在网络连接问题。检查你的网络连接再试一次。</string>
+    <string name="confirm_hide_shot" formatted="false">解除钉选</string>
     <string name="connection_lost">网络连接丢失</string>
     <string name="copied_to_clipboard">文章已复制到剪贴板。</string>
     <string name="current_password_hint">当前密码</string>
@@ -179,7 +180,7 @@
     <string name="menu_holding_shots">发送至管理员的shot</string>
     <!-- Menu names -->
     <string name="menu_info">朋友</string>
-    <string name="menu_pin_shot">保存到个人主页</string>
+    <string name="menu_pin_shot">钉选到个人主页</string>
     <string name="menu_profile_chage_password">更改密码</string>
     <string name="menu_remove_favorite">取消喜爱</string>
     <string name="menu_save_photo">保存图片</string>
@@ -199,6 +200,9 @@
     <string name="new_activity_notification">新的动态</string>
     <string name="new_password_again_hint">再次输入新密码</string>
     <string name="new_password_hint">新密码</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="other">%d个新shot</item>
+    </plurals>
     <string name="new_shot_discard_message">取消shot？</string>
     <string name="new_shot_placeholder">消息</string>
     <string name="new_shot_repeated">Whoops!你已经发布过这个shot</string>
@@ -210,6 +214,7 @@
     <string name="niced_shot_activity_with_comment">"赞了你的shot: "</string>
     <plurals name="nice_count_pattern">
         <item quantity="other">%d赞</item>
+        <item quantity="zero"/>
     </plurals>
     <string name="no">不</string>
     <string name="notification_image">图片</string>
@@ -233,6 +238,8 @@
     <string name="photo_edit_remove">清除图片</string>
     <string name="photo_edit_remove_confirmation">清除照片？</string>
     <string name="photo_edit_take">相机</string>
+    <string name="pinned_shot_activity">钉选shot到个人主页</string>
+    <string name="pinned_shot_activity_with_comment">"已钉选到个人主页: "</string>
     <string name="profile_all_shots">所有发送</string>
     <string name="profile_edit_done_button">完成</string>
     <string name="profile_edit_profile">编辑个人主页</string>
@@ -252,6 +259,7 @@
     <string name="remove_stream_listing_context_menu">清除</string>
     <plurals name="replies_header_count_pattern">
         <item quantity="other">%d回复</item>
+        <item quantity="zero"/>
     </plurals>
     <string name="reply_name_pattern">%1$s回复%2$s</string>
     <string name="reply_placeholder_pattern">回复%s…</string>
@@ -284,8 +292,14 @@
     <string name="showing_shots_by_holder">管理员发布了shots。</string>
     <string name="sign_out_message">正在登出…</string>
     <string name="started_shooting_activity_text_pattern">已在(stream)发布信息</string>
+    <string name="stream_data_info_favorites">喜爱</string>
+    <string name="stream_data_info_participants">参与者</string>
+    <string name="stream_data_info_participants_with_shots">发送shot的参与者</string>
+    <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+    <string name="stream_data_info_shots">Shots</string>
     <string name="stream_detail_edit_menu_title">编辑stream</string>
     <string name="stream_detail_media">媒体</string>
+    <string name="stream_detail_menu_data_info">数据</string>
     <string name="stream_detail_mute">静音</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
     <string name="stream_favorited_activity_text_pattern">将(stream)添加到喜爱</string>
@@ -315,6 +329,7 @@
     <string name="title_activity_login_email">登录</string>
     <string name="title_activity_registration_email">使用邮箱注册</string>
     <string name="title_activity_reset_password">重新设置密码</string>
+    <string name="title_activity_stream_data_info">数据</string>
     <string name="title_activity_stream_media">媒体</string>
     <string name="title_activity_support">辅助</string>
     <plurals name="total_watchers_pattern">
@@ -342,16 +357,6 @@
     <string name="whale_retry_button_text">好的</string>
     <string name="whale_title_default">我们将会回来</string>
     <string name="yes">是的</string>
-    <string name="stream_data_info_participants">参与者</string>
-    <string name="stream_data_info_shots">Shots</string>
-    <string name="stream_data_info_favorites">喜爱</string>
-    <string name="title_activity_stream_data_info" >数据</string>
-    <string name="stream_detail_menu_data_info">数据</string>
-    <string name="pinned_shot_activity">分享到个人主页</string>
-    <string name="pinned_shot_activity_with_comment">分享到个人主页: </string>
-    <string name="stream_data_info_participants_with_shots">发送shot的参与者</string>
-    <plurals name="new_shots_indicator">
-        <item quantity="one">%d个新shot</item>
-        <item quantity="other">%d个新shot</item>
-    </plurals>
+    <string name="cancel_hide_shot">取消</string>
+    <string name="confirmation_hide_shot_message">解除钉选</string>
 </resources>

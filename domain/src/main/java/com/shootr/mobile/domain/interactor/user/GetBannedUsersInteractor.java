@@ -42,7 +42,7 @@ public class GetBannedUsersInteractor implements Interactor {
 
     private void tryLoadingLocalUsersAndThenRemote() {
         List<String> blockedIdUsers = localFollowRepository.getBannedIdUsers();
-        if (blockedIdUsers == null) {
+        if (blockedIdUsers.isEmpty()) {
             loadRemoteBannedIdUsers();
         } else {
             notifyResult(blockedIdUsers);

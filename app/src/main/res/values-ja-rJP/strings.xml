@@ -53,6 +53,7 @@
     <string name="block_user_dialog_message">無視すると、このユーザーのショットは全て見られなくなります。</string>
     <string name="block_user_error"> 無視するためにはフォローを解除する必要があります。</string>
     <string name="cancel">キャンセル</string>
+    <string name="cancel_hide_shot" formatted="false">キャンセル</string>
     <string name="can_shoot_streams">禁止を解除</string>
     <string name="change_password_button_text">完了</string>
     <string name="change_password_logout_message">パスワードが変更されました。再度ログインしてください。</string>
@@ -60,6 +61,8 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <!-- Errors -->
     <string name="communication_error">インターネット接続に問題があります。接続をご確認の上、もう一度お試しください。</string>
+    <string name="confirmation_hide_shot_message" formatted="false">ピン留めを解除</string>
+    <string name="confirm_hide_shot" formatted="false">表示を解除</string>
     <string name="connection_lost">接続が中断されました</string>
     <string name="copied_to_clipboard">クリップボードにコピーされました</string>
     <string name="current_password_hint">現在のパスワード</string>
@@ -168,6 +171,7 @@
     <string name="language_support_alert" formatted="false">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
     <plurals name="listing_favorites">
         <item quantity="other">お気に入り登録: %d人</item>
+        <item quantity="zero"/>
     </plurals>
     <string name="listing_title_favorites">お気に入り</string>
     <string name="listing_title_holding">作成したストリーム</string>
@@ -179,7 +183,7 @@
     <string name="menu_holding_shots">作成者のショットを表示する</string>
     <!-- Menu names -->
     <string name="menu_info">友達</string>
-    <string name="menu_pin_shot">ショットをプロフィールに表示する</string>
+    <string name="menu_pin_shot">プロフィールにピン留め</string>
     <string name="menu_profile_chage_password">パスワードを変更</string>
     <string name="menu_remove_favorite">お気に入りから外す</string>
     <string name="menu_save_photo">画像を保存</string>
@@ -199,6 +203,9 @@
     <string name="new_activity_notification">新しいアクティビティ</string>
     <string name="new_password_again_hint">再度入力してください</string>
     <string name="new_password_hint">新しいパスワード</string>
+    <plurals name="new_shots_indicator">
+        <item quantity="other">New: %d件</item>
+    </plurals>
     <string name="new_shot_discard_message">写真を破棄しますか？</string>
     <string name="new_shot_placeholder">入力してください</string>
     <string name="new_shot_repeated">このショットは既に投稿済みです</string>
@@ -232,6 +239,8 @@
     <string name="photo_edit_remove">写真を削除</string>
     <string name="photo_edit_remove_confirmation">写真を削除しますか？</string>
     <string name="photo_edit_take">カメラ</string>
+    <string name="pinned_shot_activity">プロフィールにピン留めしました</string>
+    <string name="pinned_shot_activity_with_comment">プロフィールにピン留め: </string>
     <string name="profile_all_shots">全てのショット</string>
     <string name="profile_edit_done_button">完了</string>
     <string name="profile_edit_profile">プロフィールを編集</string>
@@ -284,8 +293,14 @@
     <string name="showing_shots_by_holder">管理者のショット。</string>
     <string name="sign_out_message">ログアウトしています…</string>
     <string name="started_shooting_activity_text_pattern">(stream)に投稿しました</string>
+    <string name="stream_data_info_favorites">お気に入り</string>
+    <string name="stream_data_info_participants">参加者数</string>
+    <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>
+    <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+    <string name="stream_data_info_shots">ショット</string>
     <string name="stream_detail_edit_menu_title">編集</string>
     <string name="stream_detail_media">ファイル</string>
+    <string name="stream_detail_menu_data_info">統計</string>
     <string name="stream_detail_mute">通知をオフ</string>
     <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
     <string name="stream_favorited_activity_text_pattern">(stream)をお気に入りに登録しました</string>
@@ -315,6 +330,7 @@
     <string name="title_activity_login_email">ログイン</string>
     <string name="title_activity_registration_email">メールアドレスで登録</string>
     <string name="title_activity_reset_password">パスワードをリセット</string>
+    <string name="title_activity_stream_data_info">統計</string>
     <string name="title_activity_stream_media">ファイル</string>
     <string name="title_activity_support">サポート</string>
     <plurals name="total_watchers_pattern">
@@ -342,16 +358,4 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">暫くお待ちください</string>
     <string name="yes">はい</string>
-    <string name="title_activity_stream_data_info" >統計</string>
-    <string name="stream_data_info_participants">参加者数</string>
-    <string name="stream_data_info_shots">ショット</string>
-    <string name="stream_data_info_favorites">お気に入り</string>
-    <string name="stream_detail_menu_data_info">統計</string>
-    <string name="pinned_shot_activity">プロフィールに表示</string>
-    <string name="pinned_shot_activity_with_comment">プロフィールに表示: </string>
-    <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>
-    <plurals name="new_shots_indicator">
-        <item quantity="one">New: %d件</item>
-        <item quantity="other">New: %d件</item>
-    </plurals>
 </resources>

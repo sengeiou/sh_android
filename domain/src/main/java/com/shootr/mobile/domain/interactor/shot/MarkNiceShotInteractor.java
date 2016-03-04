@@ -67,7 +67,11 @@ public class MarkNiceShotInteractor implements Interactor {
                 /* swallow */
             }
         } catch (ServerCommunicationException error) {
-            undoNiceInLocal();
+            try {
+                undoNiceInLocal();
+            }catch (NiceNotMarkedException exception){
+                /* swallow */
+            }
             notifyError(error);
         }
     }

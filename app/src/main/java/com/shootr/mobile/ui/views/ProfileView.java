@@ -109,4 +109,6 @@ public interface ProfileView {
     void confirmUnban(UserModel userModel);
 
     void resetTimelineAdapter();
+
+    void showHideShotConfirmation(final String idShot);
 }

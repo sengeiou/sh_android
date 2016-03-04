@@ -41,6 +41,7 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
+import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
@@ -48,6 +49,7 @@ import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NullNewShotBarView;
 import com.shootr.mobile.ui.views.NullWatchNumberView;
+import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
@@ -73,7 +75,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView,
+  PinShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
@@ -86,6 +89,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
+    @Inject PinShotPresenter pinShotPresenter;
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
@@ -248,6 +252,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
+        pinShotPresenter.initialize(this);
         newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
@@ -339,7 +344,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-        View footerView = LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
+        View footerView =
+          LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, com.shootr.mobile.R.id.loading_progress);
 
         footerProgress.setVisibility(View.GONE);
@@ -398,13 +404,15 @@ public class StreamTimelineFragment extends BaseFragment
             }
 
             @Override public void onScrollIdle() {
-                if (listView.getFirstVisiblePosition() == 0) {
-                    streamTimelinePresenter.setIsFirstShotPosition(true);
-                    hideTimelineIndicator();
-                } else {
-                    streamTimelinePresenter.setIsFirstShotPosition(false);
+                if (listView != null) {
+                    if (listView.getFirstVisiblePosition() == 0) {
+                        streamTimelinePresenter.setIsFirstShotPosition(true);
+                        hideTimelineIndicator();
+                    } else {
+                        streamTimelinePresenter.setIsFirstShotPosition(false);
+                    }
+                    checkIfEndOfListVisible();
                 }
-                checkIfEndOfListVisible();
             }
         });
     }
@@ -455,7 +463,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
-    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline(){
+    @OnClick(R.id.timeline_new_shots_indicator_container) public void goToTopOfTimeline() {
         listView.smoothScrollToPosition(0);
     }
 
@@ -526,18 +534,20 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(shortTitle);
     }
 
-    @Override public Integer getFirstVisiblePosition() {
-        return listView.getFirstVisiblePosition();
-    }
-
-    @Override public void setPosition(int newPosition) {
-        listView.setSelection(newPosition);
+    @Override public void setPosition(Integer oldListSize, Integer shots) {
+        if (oldListSize != null && shots != null && listView != null) {
+            int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
+            listView.setSelection(newPosition);
+        } else {
+            crashReportTool.logException("NullPointerException in setPosition. Old List Size: " + oldListSize + " shots: " + shots + " listView: " + listView);
+        }
     }
 
     @Override public void showTimelineIndicator(Integer numberNewShots) {
         timelineIndicatorContainer.setVisibility(View.VISIBLE);
         timelineIndicator.setVisibility(View.VISIBLE);
-        String indicatorText = getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
+        String indicatorText =
+          getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
         timelineIndicatorText.setText(indicatorText);
     }
 
@@ -646,6 +656,14 @@ public class StreamTimelineFragment extends BaseFragment
         feedbackMessage.show(getView(), R.string.shot_pinned);
     }
 
+    @Override public void hidePinShotButton() {
+        /* no-op */
+    }
+
+    @Override public void showPinShotButton() {
+        /* no-op */
+    }
+
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
@@ -736,8 +754,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    @Override
-    public void goToReport(String sessionToken, ShotModel shotModel){
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
         Intent browserIntent =
           new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
@@ -770,7 +787,7 @@ public class StreamTimelineFragment extends BaseFragment
         new CustomContextMenu.Builder(getActivity())
           .addAction(R.string.menu_pin_shot, new Runnable() {
               @Override public void run() {
-                  reportShotPresenter.pinToProfile(shotModel);
+                  pinShotPresenter.pinToProfile(shotModel);
               }
           }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {

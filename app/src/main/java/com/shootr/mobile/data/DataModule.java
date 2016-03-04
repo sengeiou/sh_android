@@ -55,8 +55,10 @@ import com.shootr.mobile.util.GoogleAnalyticsTool;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.LogTreeFactory;
 import com.shootr.mobile.util.LogTreeFactoryImpl;
+import com.shootr.mobile.util.PercentageUtils;
 import com.shootr.mobile.util.ResourcesLocaleProvider;
 import com.shootr.mobile.util.SnackbarFeedbackMessage;
+import com.shootr.mobile.util.StreamPercentageUtils;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.Version;
 import com.shootr.mobile.util.WritePermissionManager;
@@ -228,5 +230,9 @@ public class DataModule {
     @Provides @Singleton
     QNCache provideQNCache() {
         return new QNCacheBuilder().createQNCache();
+    }
+
+    @Provides @Singleton PercentageUtils providePercentageUtils(StreamPercentageUtils streamPercentageUtils) {
+        return streamPercentageUtils;
     }
 }

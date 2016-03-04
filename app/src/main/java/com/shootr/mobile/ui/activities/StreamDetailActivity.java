@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -44,6 +45,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.StreamDetailPresenter;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
@@ -94,6 +96,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject CrashReportTool crashReportTool;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -315,13 +318,17 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     private void changeToolbarColor() {
-        blurLayout.setBackgroundColor(getResources().getColor(R.color.gray_40));
-        streamPicture.buildDrawingCache();
-        Bitmap bitmap = streamPicture.getDrawingCache();
-        Palette palette = Palette.from(bitmap).generate();
-        collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
-        collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
-        changeStatusBarColor(palette);
+        try {
+            blurLayout.setBackgroundColor(getResources().getColor(R.color.gray_40));
+            streamPicture.buildDrawingCache();
+            Bitmap bitmap = streamPicture.getDrawingCache();
+            Palette palette = Palette.from(bitmap).generate();
+            collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            changeStatusBarColor(palette);
+        }catch (IllegalArgumentException exception){
+            crashReportTool.logException("IllegalArgumentException. Bitmap is not valid");
+        }
     }
 
     private void changeStatusBarColor(Palette palette) {
@@ -523,6 +530,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_SHOTS_NUMBER, streamModel.getTotalShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER, streamModel.getTotalFavorites());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
+        intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
     }
 

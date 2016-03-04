@@ -18,7 +18,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -298,7 +297,7 @@ public class PostNewShotPresenter implements Presenter {
         String shotComment = "";
         Integer position = 0;
         for (String word : words) {
-            if (Objects.equals(position, wordPosition)) {
+            if (equals(position, wordPosition)) {
                 shotComment += "@" +user.getUsername() + " ";
             } else {
                 shotComment += word + " ";
@@ -306,6 +305,10 @@ public class PostNewShotPresenter implements Presenter {
             position++;
         }
         return shotComment;
+    }
+
+    private boolean equals(Integer a, Integer b) {
+        return a != null && a.equals(b);
     }
 
     public void onStopMentioning() {
