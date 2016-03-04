@@ -356,4 +356,6 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="cancel_hide_shot">取消</string>
+  <string name="confirmation_hide_shot_message">解除釘選</string>
 </resources>
