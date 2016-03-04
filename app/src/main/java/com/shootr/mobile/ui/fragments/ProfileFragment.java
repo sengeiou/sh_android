@@ -723,13 +723,13 @@ public class ProfileFragment extends BaseFragment
         startActivity(intentForPhoto);
     }
 
-    @Override public void openEditPhotoMenu(boolean showRemove) {
+    @Override public void openEditPhotoMenu(boolean showRemove, String photo) {
         BottomSheet.Builder menuBuilder = new BottomSheet.Builder(getActivity()) //
+          .sheet(R.id.menu_photo_watch, R.drawable.ic_stream_author_24_gray50, R.string.watch_profile_photo) //
           .sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery) //
           .sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take) //
-          .sheet(R.id.menu_photo_watch, R.drawable.ic_stream_author_24_gray50, R.string.watch_profile_photo) //
           .title(R.string.change_photo) //
-          .listener(photoDialogListener());
+          .listener(photoDialogListener(photo));
 
         if (showRemove) {
             menuBuilder.sheet(R.id.menu_photo_remove, R.drawable.ic_photo_remove, R.string.photo_edit_remove);
@@ -738,7 +738,7 @@ public class ProfileFragment extends BaseFragment
         menuBuilder.show();
     }
 
-    @NonNull public DialogInterface.OnClickListener photoDialogListener() {
+    @NonNull public DialogInterface.OnClickListener photoDialogListener(final String photo) {
         return new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -750,6 +750,9 @@ public class ProfileFragment extends BaseFragment
                         break;
                     case R.id.menu_photo_remove:
                         removePhoto();
+                        break;
+                    case R.id.menu_photo_watch:
+                        openPhoto(photo);
                         break;
                     default:
                         break;
