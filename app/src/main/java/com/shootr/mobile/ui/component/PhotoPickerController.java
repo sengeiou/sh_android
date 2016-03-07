@@ -63,7 +63,7 @@ public class PhotoPickerController {
         }
     }
 
-    private PhotoPickerController(Activity activity, Handler handler, File temporaryFiles) {
+    protected PhotoPickerController(Activity activity, Handler handler, File temporaryFiles) {
         this.activity = activity;
         this.handler = handler;
         this.temporaryFiles = temporaryFiles;
