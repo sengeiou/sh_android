@@ -31,6 +31,7 @@ public class CreateStreamInteractor implements Interactor {
     private String title;
     private String shortTitle;
     private String description;
+    private String topic;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -52,6 +53,19 @@ public class CreateStreamInteractor implements Interactor {
         this.title = title;
         this.shortTitle = shortTitle;
         this.description = description;
+        this.notifyCreation = notifyCreation;
+        this.callback = callback;
+        this.errorCallback = errorCallback;
+        interactorHandler.execute(this);
+    }
+
+    public void sendStreamWithTopic(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
+      Callback callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
+        this.title = title;
+        this.shortTitle = shortTitle;
+        this.description = description;
+        this.topic = topic;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
