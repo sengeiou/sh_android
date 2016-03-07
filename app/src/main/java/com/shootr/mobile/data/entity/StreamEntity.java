@@ -9,6 +9,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String userName;
     private String shortTitle;
     private String description;
+    private String topic;
     private String title;
     private String photo;
     private Integer notifyCreation;
@@ -62,24 +63,30 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o){
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || !(o instanceof StreamEntity)){
+        if (o == null || !(o instanceof StreamEntity)) {
             return false;
         }
         StreamEntity that = (StreamEntity) o;
 
-        if (idStream != null ? !idStream.equals(that.idStream) : that.idStream != null){
+        if (idStream != null ? !idStream.equals(that.idStream) : that.idStream != null) {
             return false;
         }
         return true;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return idStream != null ? idStream.hashCode() : 0;
     }
 
