@@ -12,6 +12,8 @@ public interface NewShotBarView {
 
     void openNewShotViewWithImage(File image);
 
+    void openEditTopicDialog();
+
     void showDraftsButton();
 
     void hideDraftsButton();

@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -297,7 +298,30 @@ public class StreamTimelineFragment extends BaseFragment
                   .build();
                 startActivity(newShotIntent);
             }
+
+            @Override public void openEditTopicDialog() {
+                setupTopicCustomDialog();
+            }
         };
+    }
+
+
+    private void setupTopicCustomDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+
+        dialogBuilder.setTitle("Edit topic");
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //do something with newTopicText.getText().toString();
+            }
+        });
+        AlertDialog customDialogEditTopic = dialogBuilder.create();
+        customDialogEditTopic.show();
     }
 
     private void updateWatchNumberIcon() {
@@ -338,6 +362,10 @@ public class StreamTimelineFragment extends BaseFragment
 
               @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
+              }
+
+              @Override public void openEditTopicDialog() {
+                  newShotBarPresenter.openEditTopicCustomDialog();
               }
           })
           .build();
@@ -686,6 +714,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
+    }
+
+    @Override public void openEditTopicDialog() {
+        newShotBarViewDelegate.openEditTopicDialog();
     }
 
     @Override public void showDraftsButton() {

@@ -20,6 +20,10 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
+    @Override public void openEditTopicDialog() {
+        /* no-op */
+    }
+
     @Override public void showDraftsButton() {
         /* no-op */
     }

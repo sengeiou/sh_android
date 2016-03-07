@@ -108,7 +108,7 @@ public class PhotoPickerController {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_stream_topic:
-                          /* implement */
+                          handler.openEditTopicDialog();
                           break;
                       case R.id.menu_photo_gallery:
                           pickPhotoFromGallery();
@@ -177,5 +177,7 @@ public class PhotoPickerController {
         void onError(Exception e);
 
         void startPickerActivityForResult(Intent intent, int requestCode);
+
+        void openEditTopicDialog();
     }
 }

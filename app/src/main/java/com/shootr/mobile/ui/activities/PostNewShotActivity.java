@@ -166,6 +166,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
               @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
+
+              @Override public void openEditTopicDialog() {
+                  /* no-op */
+              }
           })
           .build();
     }

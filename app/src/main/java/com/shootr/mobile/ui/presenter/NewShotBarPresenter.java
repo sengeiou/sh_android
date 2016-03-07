@@ -109,6 +109,10 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         newShotBarView.openNewShotViewWithImage(image);
     }
 
+    public void openEditTopicCustomDialog(){
+        newShotBarView.openEditTopicDialog();
+    }
+
     private void updateDraftsButtonVisibility() {
         getDraftsInteractor.loadDrafts(new GetDraftsInteractor.Callback() {
             @Override public void onLoaded(List<QueuedShot> drafts) {
