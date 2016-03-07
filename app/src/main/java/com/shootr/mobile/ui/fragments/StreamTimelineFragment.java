@@ -585,6 +585,10 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.setNewShotsNumber(0);
     }
 
+    @Override public void showTopicSnackBar(String topic) {
+        
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
