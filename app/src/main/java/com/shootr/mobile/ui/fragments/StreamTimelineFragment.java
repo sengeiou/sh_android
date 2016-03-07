@@ -253,7 +253,7 @@ public class StreamTimelineFragment extends BaseFragment
     private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         pinShotPresenter.initialize(this);
-        newShotBarPresenter.initialize(this, idStream);
+        newShotBarPresenter.initialize(this, idStream, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
@@ -261,7 +261,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this, idStream);
+        newShotBarPresenter.initialize(this, idStream, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);

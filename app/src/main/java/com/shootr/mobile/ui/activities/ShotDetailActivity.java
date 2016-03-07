@@ -271,7 +271,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void initializeNewShotBarPresenter(String streamId) {
-        newShotBarPresenter.initialize(this, streamId);
+        newShotBarPresenter.initialize(this, streamId, false);
     }
 
     private ShotModel extractShotFromIntent() {
@@ -280,7 +280,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
-        newShotBarPresenter.initialize(this, shotModel.getStreamId());
+        newShotBarPresenter.initialize(this, shotModel.getStreamId(), false);
     }
 
     private void initializePresenter(String idShot) {
