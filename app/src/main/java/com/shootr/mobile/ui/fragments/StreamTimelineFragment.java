@@ -165,9 +165,9 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         setStreamTitleClickListener(idStream);
         if (streamAuthorIdUser != null) {
-            initializePresenters(idStream, streamAuthorIdUser);
+            initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser);
         } else {
-            initializePresenters(idStream);
+            initializePresenters(idStream, streamAuthorIdUser);
         }
 
         streamTimelinePresenter.setIsFirstLoad(true);
@@ -250,18 +250,18 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelineOptionsPresenter.pause();
     }
 
-    private void initializePresenters(String idStream, String streamAuthorIdUser) {
+    private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         pinShotPresenter.initialize(this);
-        newShotBarPresenter.initialize(this, idStream, true);
+        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
 
-    private void initializePresenters(String idStream) {
+    private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this, idStream, true);
+        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
