@@ -9,10 +9,10 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 public class UpdateWatchNumberInteractorTest {
@@ -32,6 +32,7 @@ public class UpdateWatchNumberInteractorTest {
     @Test public void shouldPostInBusPublisher() throws Exception {
         interactor.updateWatchNumber(callback);
 
-        verify(busPublisher).post(any(WatchUpdateRequest.class));
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        verify(busPublisher).post(captor.capture());
     }
 }
