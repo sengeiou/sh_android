@@ -12,6 +12,10 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
+    @Override public void pickTopic() {
+        /* no-op */
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         /* no-op */
     }

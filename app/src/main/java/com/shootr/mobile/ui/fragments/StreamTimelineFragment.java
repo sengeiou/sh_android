@@ -676,6 +676,14 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
+    @Override public void pickTopic() {
+        if (writePermissionManager.hasWritePermission()) {
+            newShotBarViewDelegate.pickTopic();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
     }

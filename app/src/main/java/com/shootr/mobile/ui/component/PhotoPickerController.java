@@ -103,7 +103,7 @@ public class PhotoPickerController {
 
     private void showOptionAuthorSourcePicker(){
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
-          .sheet(R.menu.photo_picker_bottom_sheet)
+          .sheet(R.menu.option_picker_author_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {

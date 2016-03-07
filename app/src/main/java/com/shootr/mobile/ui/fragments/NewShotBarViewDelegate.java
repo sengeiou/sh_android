@@ -55,6 +55,10 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
         photoPickerController.pickPhoto();
     }
 
+    @Override public void pickTopic() {
+        photoPickerController.pickOption();
+    }
+
     @Override public void showDraftsButton() {
         if (draftsButton.getVisibility() == View.VISIBLE) {
             return;

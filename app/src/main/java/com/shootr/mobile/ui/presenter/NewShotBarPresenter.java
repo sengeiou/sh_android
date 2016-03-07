@@ -27,7 +27,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     private String idStreamForShot;
     private boolean isStreamReadOnly = false;
     private boolean hasBeenPaused;
-    private boolean isInStreamTimeline = false;
+    private boolean isInStreamTimeline;
 
     @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
       GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
@@ -46,6 +46,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.setView(newShotBarView);
         this.checkReadOnlyStatus();
         this.updateDraftsButtonVisibility();
+        this.isInStreamTimeline = isInStreamTimeline;
     }
 
     private void checkReadOnlyStatus() {
@@ -77,9 +78,17 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     public void newShotFromImage() {
         if (!isStreamReadOnly) {
-            newShotBarView.pickImage();
+            handleMenuPicker();
         } else {
             this.showReadOnlyError();
+        }
+    }
+
+    private void handleMenuPicker(){
+        if(isInStreamTimeline) {
+            newShotBarView.pickTopic();
+        }else{
+            newShotBarView.pickImage();
         }
     }
 

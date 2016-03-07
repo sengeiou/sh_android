@@ -376,6 +376,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarViewDelegate.pickImage();
     }
 
+    @Override public void pickTopic() {
+        /* no-op */
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
     }
