@@ -317,7 +317,7 @@ public class StreamTimelineFragment extends BaseFragment
         dialogBuilder.setTitle("Edit topic");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //do something with newTopicText.getText().toString();
+                streamTimelinePresenter.editStream(newTopicText.getText().toString());
             }
         });
         AlertDialog customDialogEditTopic = dialogBuilder.create();

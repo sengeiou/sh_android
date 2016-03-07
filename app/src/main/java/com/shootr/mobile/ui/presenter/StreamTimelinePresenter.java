@@ -11,6 +11,8 @@ import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
@@ -43,6 +45,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final Poller poller;
     private final DeleteLocalShotsByStream deleteLocalShotsByStream;
     private final ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
+    private final CreateStreamInteractor createStreamInteractor;
 
     private StreamTimelineView streamTimelineView;
     private String streamId;
@@ -57,6 +60,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isFirstLoad;
     private Integer oldListSize;
     private Integer newShotsNumber;
+    private String streamTitle;
+    private String streamDescription;
+    private String streamSubTitle;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -64,7 +70,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
       GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, Poller poller, DeleteLocalShotsByStream deleteLocalShotsByStream,
-      ReloadStreamTimelineInteractor reloadStreamTimelineInteractor) {
+      ReloadStreamTimelineInteractor reloadStreamTimelineInteractor, CreateStreamInteractor createStreamInteractor) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
@@ -78,6 +84,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.poller = poller;
         this.deleteLocalShotsByStream = deleteLocalShotsByStream;
         this.reloadStreamTimelineInteractor = reloadStreamTimelineInteractor;
+        this.createStreamInteractor = createStreamInteractor;
     }
 
     public void setView(StreamTimelineView streamTimelineView) {
@@ -86,6 +93,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void setIdAuthor(String idAuthor) {
         this.idAuthor = idAuthor;
+    }
+
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
+    }
+
+    public void setStreamDescription(String streamDescription) {
+        this.streamDescription = streamDescription;
+    }
+
+    public void setStreamSubTitle(String streamSubTitle) {
+        this.streamSubTitle = streamSubTitle;
     }
 
     protected void showingHolderShots(boolean showingHoldingShots) {
@@ -99,6 +118,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
+        this.loadStream(streamTimelineView, idStream);
         this.selectStream();
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
@@ -126,6 +146,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         getStreamInteractor.loadStream(idStream, new GetStreamInteractor.Callback() {
             @Override public void onLoaded(Stream stream) {
                 setIdAuthor(stream.getAuthorId());
+                setStreamTitle(stream.getTitle());
+                setStreamSubTitle(stream.getShortTitle());
+                setStreamDescription(stream.getDescription());
                 streamTimelineView.setTitle(stream.getShortTitle());
             }
         });
@@ -271,7 +294,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
             });
         } else {
-            streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId, idAuthor,
+            streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId,
+              idAuthor,
               new Interactor.Callback<Timeline>() {
                   @Override public void onLoaded(Timeline timeline) {
                       loadNewShotsInView(timeline);
@@ -499,5 +523,50 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         bus.unregister(this);
         stopPollingShots();
         hasBeenPaused = true;
+    }
+
+    public void editStream(String topic) {
+        sendStream(topic);
+    }
+
+    private void sendStream(String topic) {
+        String title = filterTitle(streamTitle);
+        String shortTitle = filterShortTitle(streamSubTitle);
+        String description = filterDescription(streamDescription);
+
+        createStreamInteractor.sendStreamWithTopic(streamId,
+          title,
+          shortTitle,
+          description,
+          topic, false,
+          new CreateStreamInteractor.Callback() {
+              @Override public void onLoaded(Stream stream) {
+                  /* notify topci change */
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  /* implement */
+              }
+          });
+    }
+
+    private String filterTitle(String title) {
+        return title.trim();
+    }
+
+    private String filterShortTitle(String shortTitle) {
+        if(shortTitle.length() <= 20){
+            return shortTitle.trim();
+        }else {
+            return shortTitle.substring(0,20).trim();
+        }
+    }
+
+    private String filterDescription(String streamDescription) {
+        if(streamDescription != null){
+            return streamDescription.trim();
+        }
+        return " ";
     }
 }
