@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_margin="8dp"
+  android:animateLayoutChanges="true"
+  android:background="@drawable/floating_rounded_background">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <TextView
+        android:id="@+id/new_shot_char_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/new_shot_title"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:textColor="@color/gray_70"
+        android:text="140"
+        tools:text="140" />
+
+    </RelativeLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+          android:id="@+id/new_topic_text"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/transparent"
+          android:fontFamily="sans-serif-light"
+          android:gravity="top"
+          android:hint="new topic..."
+          android:maxLength="140"
+          android:inputType="text|textCapSentences|textMultiLine"
+          android:padding="16dp" />
+
+      </LinearLayout>
+  </LinearLayout>
+</FrameLayout>
