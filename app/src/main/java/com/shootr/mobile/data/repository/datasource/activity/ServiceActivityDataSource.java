@@ -100,8 +100,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         boolean shouldTriggerSync = false;
         String currentUserId = sessionRepository.getCurrentUserId();
         for (ActivityEntity newActivity : newActivities) {
-            if (isSyncTriggerActivity(newActivity)
-              && isNewerThanLastTrigger(newActivity)
+            if (isNewerThanLastTrigger(newActivity)
               && !newActivity.getIdUser().equals(currentUserId)) {
                 shouldTriggerSync = true;
                 lastTriggerDate = newActivity.getBirth().getTime();
@@ -110,11 +109,6 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         if (shouldTriggerSync) {
             busPublisher.post(new WatchUpdateRequest.Event());
         }
-    }
-
-    private boolean isSyncTriggerActivity(ActivityEntity newActivity) {
-        String type = newActivity.getType();
-        return Arrays.asList(ActivityType.TYPES_SYNC_TRIGGER).contains(type);
     }
 
     private boolean isNewerThanLastTrigger(ActivityEntity newActivity) {

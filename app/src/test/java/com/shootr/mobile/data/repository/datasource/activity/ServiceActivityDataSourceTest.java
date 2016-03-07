@@ -173,7 +173,7 @@ public class ServiceActivityDataSourceTest {
 
     private ActivityApiEntity syncActivityApi() {
         ActivityApiEntity activityApiEntity = new ActivityApiEntity();
-        activityApiEntity.setType(ActivityType.TYPES_SYNC_TRIGGER[0]);
+        activityApiEntity.setType(ActivityType.TYPES_ACTIVITY_SHOWN[0]);
         activityApiEntity.setIdUser(ID_USER_STUB);
         activityApiEntity.setBirth(new Date().getTime());
         activityApiEntity.setModified(new Date().getTime());
@@ -185,7 +185,7 @@ public class ServiceActivityDataSourceTest {
 
     private ActivityEntity syncActivity() {
         ActivityEntity activityEntity = new ActivityEntity();
-        activityEntity.setType(ActivityType.TYPES_SYNC_TRIGGER[0]);
+        activityEntity.setType(ActivityType.TYPES_ACTIVITY_SHOWN[0]);
         activityEntity.setIdUser(ID_USER_STUB);
         activityEntity.setBirth(DATE_NEWER);
         return activityEntity;
