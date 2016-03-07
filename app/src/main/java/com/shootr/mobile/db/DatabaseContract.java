@@ -195,9 +195,10 @@ public class DatabaseContract {
         public static final String HISTORIC_WATCHERS = "historicWatchers";
         public static final String TOTAL_SHOTS = "totalShots";
         public static final String UNIQUE_SHOTS = "uniqueShots";
+        public static final String TOPIC = "topic";
 
         public static final String[] PROJECTION = {
-          ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, SHORT_TITLE, DESCRIPTION, BIRTH,
+          ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, SHORT_TITLE, DESCRIPTION, TOPIC, BIRTH,
           MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS,
           UNIQUE_SHOTS, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
