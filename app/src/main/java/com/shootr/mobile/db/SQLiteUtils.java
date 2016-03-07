@@ -160,6 +160,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.SHORT_TITLE
       +" TEXT NULL,"
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
+            + DatabaseContract.StreamTable.TOPIC +" TEXT NULL,"
             + DatabaseContract.StreamTable.MEDIA_COUNT +" INTEGER NULL,"
             + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
             + DatabaseContract.StreamTable.TOTAL_FAVORITES +" INTEGER NOT NULL,"
