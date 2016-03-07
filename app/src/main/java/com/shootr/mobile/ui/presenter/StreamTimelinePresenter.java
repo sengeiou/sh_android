@@ -63,6 +63,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private String streamTitle;
     private String streamDescription;
     private String streamSubTitle;
+    private String streamTopic;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -101,6 +102,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void setStreamDescription(String streamDescription) {
         this.streamDescription = streamDescription;
+    }
+
+    public void setStreamTopic(String streamTopic) {
+        this.streamTopic = streamTopic;
     }
 
     public void setStreamSubTitle(String streamSubTitle) {
@@ -149,7 +154,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 setStreamTitle(stream.getTitle());
                 setStreamSubTitle(stream.getShortTitle());
                 setStreamDescription(stream.getDescription());
+                setStreamTopic(stream.getTopic());
                 streamTimelineView.setTitle(stream.getShortTitle());
+                if (streamTopic != null && !streamTopic.isEmpty()) {
+                    streamTimelineView.showTopicSnackBar(streamTopic);
+                }
             }
         });
     }
@@ -541,7 +550,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           topic, false,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
-                  /* notify topci change */
+                  if(stream.getTopic() != null && !stream.getTopic().isEmpty())
+                  streamTimelineView.showTopicSnackBar(stream.getTopic());
               }
           },
           new Interactor.ErrorCallback() {

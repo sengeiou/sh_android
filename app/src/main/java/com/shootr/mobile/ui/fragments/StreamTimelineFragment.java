@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -586,7 +587,15 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        
+        Snackbar snackbar = Snackbar
+          .make(getView(), topic, Snackbar.LENGTH_INDEFINITE)
+          .setAction("CLOSE", new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+              }
+          });
+
+        snackbar.show();
     }
 
     @Override public void showEmpty() {
