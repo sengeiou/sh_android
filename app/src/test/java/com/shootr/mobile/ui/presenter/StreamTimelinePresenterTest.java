@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
+import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -71,6 +72,7 @@ public class StreamTimelinePresenterTest {
     @Mock DeleteLocalShotsByStream deleteLocalShotsByStream;
     @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
+    @Mock UpdateWatchNumberInteractor updateWatchNumberInteractor;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -90,7 +92,7 @@ public class StreamTimelinePresenterTest {
           errorMessageFactory,
           poller,
           deleteLocalShotsByStream,
-          reloadStreamTimelineInteractor);
+          reloadStreamTimelineInteractor, updateWatchNumberInteractor);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }
@@ -519,6 +521,18 @@ public class StreamTimelinePresenterTest {
         presenter.resume();
 
         verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
+    }
+
+    @Test public void shouldCallPollerWhenInitializeWithIdStreamAndAuthor() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        verify(poller).init(anyLong(), any(Runnable.class));
+    }
+
+    @Test public void shouldCallPollerWhenInitializeWithIdStream() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM);
+
+        verify(poller).init(anyLong(), any(Runnable.class));
     }
 
     //region Matchers
