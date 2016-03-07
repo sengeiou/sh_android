@@ -45,9 +45,6 @@ public interface StreamApiService {
 
     @GET("/stream/favoriteCount/") List<FavoritesApiEntity> getHolderFavorites(@Query("idUser") String idUser) throws IOException, ApiException;
 
-    @PUT("/user/checkin/{idStream}")
-    Response checkIn(@Path("idStream") String idStream) throws IOException, ApiException;
-
     @PUT("/stream/{idStream}/remove")
     Response removeStream(@Path("idStream") String idStream) throws IOException, ApiException;
 

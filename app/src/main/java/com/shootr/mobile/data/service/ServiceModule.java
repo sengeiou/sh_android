@@ -2,7 +2,6 @@ package com.shootr.mobile.data.service;
 
 import com.shootr.mobile.domain.service.shot.ShotGateway;
 import com.shootr.mobile.domain.service.user.ChangePasswordGateway;
-import com.shootr.mobile.domain.service.user.CheckinGateway;
 import com.shootr.mobile.domain.service.user.ConfirmEmailGateway;
 import com.shootr.mobile.domain.service.user.CreateAccountGateway;
 import com.shootr.mobile.domain.service.user.LoginGateway;
@@ -16,10 +15,6 @@ import dagger.Provides;
   library = true
 )
 public class ServiceModule {
-
-    @Provides CheckinGateway provideCheckinGateway(ServiceCheckinGateway serviceCheckinGateway) {
-        return serviceCheckinGateway;
-    }
 
     @Provides ChangePasswordGateway provideChangePasswordGateway(ServiceChangePasswordGateway serviceChangePasswordGateway) {
         return serviceChangePasswordGateway;
