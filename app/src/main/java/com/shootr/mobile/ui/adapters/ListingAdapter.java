@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
-import android.support.annotation.IntegerRes;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +85,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         }
     }
 
-    @IntegerRes
+    @StringRes
     private int getTitleForSection(int section) {
         if (section == 0) {
             return R.string.listing_title_holding;
