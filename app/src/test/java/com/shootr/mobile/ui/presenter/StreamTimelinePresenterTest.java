@@ -575,12 +575,16 @@ public class StreamTimelinePresenterTest {
     }
 
     @Test public void shouldsetRemainingCharactersCountWhenTextChanged() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
         presenter.textChanged(anyString());
 
         verify(streamTimelineView).setRemainingCharactersCount(anyInt());
     }
 
     @Test public void shouldSetRemainingCharactersColorValidWhenTextChanged() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
         presenter.textChanged(anyString());
 
         verify(streamTimelineView).setRemainingCharactersColorValid();
