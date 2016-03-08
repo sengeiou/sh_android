@@ -114,40 +114,40 @@ public class NewShotBarPresenterTest {
         assertThat(annotationPresent).isTrue();
     }
 
-    @Test public void shouldPickTopicWhenIsInStreamTimelineAndIsStreamHolder() throws Exception {
+    @Test public void shouldShowHolderOptionsWhenIsInStreamTimelineAndIsStreamHolder() throws Exception {
         presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
 
-        verify(newShotBarView).pickTopic();
+        verify(newShotBarView).showHolderOptions();
     }
 
-    @Test public void shouldNotPickTopicWhenIsNotInStreamTimelineAndIsStreamHolder() throws Exception {
+    @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder() throws Exception {
         presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS__NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).pickTopic();
+        verify(newShotBarView, never()).showHolderOptions();
     }
 
-    @Test public void shouldNotPickTopicWhenIsInStreamTimelineAndIsNotStreamHolder() throws Exception {
+    @Test public void shouldNotShowHolderOptionsWhenIsInStreamTimelineAndIsNotStreamHolder() throws Exception {
         presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).pickTopic();
+        verify(newShotBarView, never()).showHolderOptions();
     }
 
-    @Test public void shouldNotPickTopicWhenIsNotInStreamTimelineAndIsNotStreamHolder() throws Exception {
+    @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsNotStreamHolder() throws Exception {
         presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS__NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).pickTopic();
+        verify(newShotBarView, never()).showHolderOptions();
     }
 
     private List<QueuedShot> draftsList() {

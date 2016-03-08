@@ -384,7 +384,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarViewDelegate.pickImage();
     }
 
-    @Override public void pickTopic() {
+    @Override public void showHolderOptions() {
         /* no-op */
     }
 

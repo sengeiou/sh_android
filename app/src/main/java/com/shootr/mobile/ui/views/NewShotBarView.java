@@ -8,7 +8,7 @@ public interface NewShotBarView {
 
     void pickImage();
 
-    void pickTopic();
+    void showHolderOptions();
 
     void openNewShotViewWithImage(File image);
 

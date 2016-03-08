@@ -99,7 +99,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     private void handleMenuPicker(){
         if(isInStreamTimeline && currentUserIsStreamHolder(idStreamAuthor)) {
-            newShotBarView.pickTopic();
+            newShotBarView.showHolderOptions();
         }else{
             newShotBarView.pickImage();
         }

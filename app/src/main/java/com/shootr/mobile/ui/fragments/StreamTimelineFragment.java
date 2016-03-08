@@ -773,9 +773,9 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override public void pickTopic() {
+    @Override public void showHolderOptions() {
         if (writePermissionManager.hasWritePermission()) {
-            newShotBarViewDelegate.pickTopic();
+            newShotBarViewDelegate.showHolderOptions();
         } else {
             writePermissionManager.requestWritePermissionToUser();
         }

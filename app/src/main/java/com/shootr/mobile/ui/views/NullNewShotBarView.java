@@ -12,7 +12,7 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
-    @Override public void pickTopic() {
+    @Override public void showHolderOptions() {
         /* no-op */
     }
 
