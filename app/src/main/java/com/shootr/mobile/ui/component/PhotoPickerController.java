@@ -74,14 +74,14 @@ public class PhotoPickerController {
     }
 
     public void pickPhoto() {
-        showPhotoSourcePicker();
+        pickPhotoOption();
     }
 
     public void pickOption(){
-        showOptionAuthorSourcePicker();
+        pickHolderOptions();
     }
 
-    private void showPhotoSourcePicker() {
+    private void pickPhotoOption() {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
           .sheet(R.menu.photo_picker_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
@@ -101,7 +101,7 @@ public class PhotoPickerController {
         builder.show();
     }
 
-    private void showOptionAuthorSourcePicker(){
+    private void pickHolderOptions(){
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
           .sheet(R.menu.option_picker_author_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
