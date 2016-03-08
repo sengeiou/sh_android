@@ -30,7 +30,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     private String idStreamAuthor;
     private boolean isStreamReadOnly = false;
     private boolean hasBeenPaused;
-    private boolean isInStreamTimeline;
+    private Boolean isInStreamTimeline;
 
     @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
       GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus, SessionRepository sessionRepository) {
@@ -45,7 +45,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.newShotBarView = newShotBarView;
     }
 
-    public void initialize(NewShotBarView newShotBarView, String idStreamForShot, boolean isInStreamTimeline) {
+    public void initialize(NewShotBarView newShotBarView, String idStreamForShot, Boolean isInStreamTimeline) {
         this.idStreamForShot = idStreamForShot;
         this.setView(newShotBarView);
         this.checkReadOnlyStatus();
@@ -53,7 +53,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.isInStreamTimeline = isInStreamTimeline;
     }
 
-    public void initializeWithIdStreamAuthor(NewShotBarView newShotBarView, String idStreamForShot, String idStreamAuthor, boolean isInStreamTimeline) {
+    public void initializeWithIdStreamAuthor(NewShotBarView newShotBarView, String idStreamForShot, String idStreamAuthor, Boolean isInStreamTimeline) {
         this.idStreamForShot = idStreamForShot;
         this.idStreamAuthor = idStreamAuthor;
         this.setView(newShotBarView);
