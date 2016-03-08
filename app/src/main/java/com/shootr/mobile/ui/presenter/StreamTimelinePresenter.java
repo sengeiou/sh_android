@@ -31,6 +31,7 @@ import javax.inject.Inject;
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+    private static final int MAX_LENGTH = 140;
 
     private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     private final StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
@@ -64,6 +65,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private String streamDescription;
     private String streamSubTitle;
     private String streamTopic;
+    private boolean isInitialized = false;
+    private String currentTextWritten = "";
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -89,7 +92,12 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void setView(StreamTimelineView streamTimelineView) {
+        isInitialized = true;
         this.streamTimelineView = streamTimelineView;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     protected void setIdAuthor(String idAuthor) {
@@ -547,11 +555,12 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           title,
           shortTitle,
           description,
-          topic, false,
+          topic,
+          false,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
-                  if(stream.getTopic() != null && !stream.getTopic().isEmpty())
-                  streamTimelineView.showTopicSnackBar(stream.getTopic());
+                  if (stream.getTopic() != null && !stream.getTopic().isEmpty())
+                      streamTimelineView.showTopicSnackBar(stream.getTopic());
               }
           },
           new Interactor.ErrorCallback() {
@@ -578,5 +587,30 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             return streamDescription.trim();
         }
         return " ";
+    }
+
+    public void textChanged(String currentText) {
+        currentTextWritten = filterText(currentText);
+        updateCharCounter(currentTextWritten);
+    }
+
+    private void updateCharCounter(String filteredText) {
+        int remainingLength = MAX_LENGTH - filteredText.length();
+        streamTimelineView.setRemainingCharactersCount(remainingLength);
+
+        boolean isValidShot = remainingLength > 0;
+        if (isValidShot) {
+            streamTimelineView.setRemainingCharactersColorValid();
+        } else {
+            streamTimelineView.setRemainingCharactersColorInvalid();
+        }
+    }
+
+    private String filterText(String originalText) {
+        String trimmed = originalText.trim();
+        while (trimmed.contains("\n\n\n")) {
+            trimmed = trimmed.replace("\n\n\n", "\n\n");
+        }
+        return trimmed;
     }
 }

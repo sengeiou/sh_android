@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -133,6 +135,10 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
+    private int charCounterColorError;
+    private int charCounterColorNormal;
+    private EditText newTopicText;
+    private TextView topicCharCounter;
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -312,8 +318,24 @@ public class StreamTimelineFragment extends BaseFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
         dialogBuilder.setView(dialogView);
+        newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+        topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
 
-        final EditText newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+       newTopicText.addTextChangedListener(new TextWatcher() {
+           @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+           }
+
+           @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+               if (streamTimelinePresenter.isInitialized()) {
+                   streamTimelinePresenter.textChanged(charSequence.toString());
+               }
+           }
+
+           @Override public void afterTextChanged(Editable editable) {
+
+           }
+       });
 
         dialogBuilder.setTitle("Edit topic");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
@@ -333,6 +355,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     //region Views manipulation
     private void initializeViews() {
+        charCounterColorError = getResources().getColor(R.color.error);
+        charCounterColorNormal = getResources().getColor(R.color.gray_70);
         writePermissionManager.init(getActivity());
         setupListAdapter();
         setupSwipeRefreshLayout();
@@ -599,6 +623,24 @@ public class StreamTimelineFragment extends BaseFragment
           });
 
         snackbar.show();
+    }
+
+    @Override public void setRemainingCharactersCount(int remainingCharacters) {
+        if(topicCharCounter != null) {
+            topicCharCounter.setText(String.valueOf(remainingCharacters));
+        }
+    }
+
+    @Override public void setRemainingCharactersColorValid() {
+        if(topicCharCounter != null){
+            topicCharCounter.setTextColor(charCounterColorNormal);
+        }
+    }
+
+    @Override public void setRemainingCharactersColorInvalid() {
+        if(topicCharCounter != null){
+            topicCharCounter.setTextColor(charCounterColorError);
+        }
     }
 
     @Override public void showEmpty() {
