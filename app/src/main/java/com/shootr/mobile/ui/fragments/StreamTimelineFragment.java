@@ -139,6 +139,7 @@ public class StreamTimelineFragment extends BaseFragment
     private int charCounterColorNormal;
     private EditText newTopicText;
     private TextView topicCharCounter;
+    private Snackbar topicSnackbar;
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -321,23 +322,23 @@ public class StreamTimelineFragment extends BaseFragment
         newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
         topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
 
-       newTopicText.addTextChangedListener(new TextWatcher() {
-           @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        newTopicText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-           }
+            }
 
-           @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-               if (streamTimelinePresenter.isInitialized()) {
-                   streamTimelinePresenter.textChanged(charSequence.toString());
-               }
-           }
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (streamTimelinePresenter.isInitialized()) {
+                    streamTimelinePresenter.textChanged(charSequence.toString());
+                }
+            }
 
-           @Override public void afterTextChanged(Editable editable) {
+            @Override public void afterTextChanged(Editable editable) {
 
-           }
-       });
+            }
+        });
 
-        if(streamTimelinePresenter.getStreamTopic() != null){
+        if (streamTimelinePresenter.getStreamTopic() != null) {
             newTopicText.setText(streamTimelinePresenter.getStreamTopic());
         }
 
@@ -620,29 +621,35 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        Snackbar snackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE)
+        topicSnackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE)
           .setAction("CLOSE", new View.OnClickListener() {
               @Override public void onClick(View view) {
               }
           });
 
-        snackbar.show();
+        topicSnackbar.show();
+    }
+
+    @Override public void hideTopicSnackBar() {
+        if(topicSnackbar != null && topicSnackbar.isShown()){
+            topicSnackbar.dismiss();
+        }
     }
 
     @Override public void setRemainingCharactersCount(int remainingCharacters) {
-        if(topicCharCounter != null) {
+        if (topicCharCounter != null) {
             topicCharCounter.setText(String.valueOf(remainingCharacters));
         }
     }
 
     @Override public void setRemainingCharactersColorValid() {
-        if(topicCharCounter != null){
+        if (topicCharCounter != null) {
             topicCharCounter.setTextColor(charCounterColorNormal);
         }
     }
 
     @Override public void setRemainingCharactersColorInvalid() {
-        if(topicCharCounter != null){
+        if (topicCharCounter != null) {
             topicCharCounter.setTextColor(charCounterColorError);
         }
     }

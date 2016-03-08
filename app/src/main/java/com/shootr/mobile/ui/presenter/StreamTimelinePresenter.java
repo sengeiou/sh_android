@@ -131,7 +131,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor) {
         this.streamId = idStream;
         this.oldListSize = 0;
-        this.newShotsNumber=0;
+        this.newShotsNumber = 0;
         setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
@@ -147,7 +147,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void initialize(final StreamTimelineView streamTimelineView, String idStream) {
         this.streamId = idStream;
         this.oldListSize = 0;
-        this.newShotsNumber=0;
+        this.newShotsNumber = 0;
         this.setView(streamTimelineView);
         this.loadStream(streamTimelineView, idStream);
         this.streamTimelineView.showHoldingShots();
@@ -233,16 +233,16 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         loadNewShots();
     }
 
-    private void calculeNewShotsNumberAndShowTimeLineIndicator(List<ShotModel> shotModels){
+    private void calculeNewShotsNumberAndShowTimeLineIndicator(List<ShotModel> shotModels) {
         newShotsNumber += Math.abs(oldListSize - shotModels.size());
-        if(newShotsNumber != null && newShotsNumber > 0) {
+        if (newShotsNumber != null && newShotsNumber > 0) {
             streamTimelineView.showTimelineIndicator(newShotsNumber);
         } else {
             streamTimelineView.hideTimelineIndicator();
         }
     }
 
-    private void setShotsWithoutReposition(List<ShotModel> shotModels){
+    private void setShotsWithoutReposition(List<ShotModel> shotModels) {
         streamTimelineView.setShots(shotModels);
         isEmpty = shotModels.isEmpty();
         streamTimelineView.hideCheckingForShots();
@@ -254,7 +254,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         streamTimelineView.setPosition(oldListSize, shotModels.size());
     }
 
-    private void handleStreamTimeLineVisibility(){
+    private void handleStreamTimeLineVisibility() {
         if (isEmpty) {
             streamTimelineView.showEmpty();
             streamTimelineView.hideShots();
@@ -295,7 +295,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
               @Override public void onLoaded(Timeline timeline) {
                   loadNewShotsInView(timeline);
               }
-          }, new Interactor.ErrorCallback() {
+          },
+          new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                   showErrorLoadingNewShots();
               }
@@ -536,7 +537,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    private void handleVisibilityTimelineIndicatorInResume(){
+    private void handleVisibilityTimelineIndicatorInResume() {
         streamTimelineView.hideTimelineIndicator();
     }
 
@@ -563,13 +564,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           false,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
-                  if (stream.getTopic() != null && !stream.getTopic().isEmpty())
-                      streamTimelineView.showTopicSnackBar(stream.getTopic());
+                  streamTopic = stream.getTopic();
+                  if (streamTopic!= null && !streamTopic.isEmpty()) {
+                      streamTimelineView.showTopicSnackBar(streamTopic);
+                  } else {
+                      streamTimelineView.hideTopicSnackBar();
+                  }
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  /* implement */
+                  streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
               }
           });
     }
@@ -579,15 +584,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private String filterShortTitle(String shortTitle) {
-        if(shortTitle.length() <= 20){
+        if (shortTitle.length() <= 20) {
             return shortTitle.trim();
-        }else {
-            return shortTitle.substring(0,20).trim();
+        } else {
+            return shortTitle.substring(0, 20).trim();
         }
     }
 
     private String filterDescription(String streamDescription) {
-        if(streamDescription != null){
+        if (streamDescription != null) {
             return streamDescription.trim();
         }
         return " ";
