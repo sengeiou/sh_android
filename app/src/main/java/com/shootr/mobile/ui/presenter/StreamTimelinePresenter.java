@@ -116,6 +116,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.streamTopic = streamTopic;
     }
 
+    public String getStreamTopic() {
+        return streamTopic;
+    }
+
     public void setStreamSubTitle(String streamSubTitle) {
         this.streamSubTitle = streamSubTitle;
     }

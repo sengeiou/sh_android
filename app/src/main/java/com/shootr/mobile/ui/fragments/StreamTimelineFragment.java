@@ -337,6 +337,10 @@ public class StreamTimelineFragment extends BaseFragment
            }
        });
 
+        if(streamTimelinePresenter.getStreamTopic() != null){
+            newTopicText.setText(streamTimelinePresenter.getStreamTopic());
+        }
+
         dialogBuilder.setTitle("Edit topic");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
