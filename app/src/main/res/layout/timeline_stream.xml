@@ -10,9 +10,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true"
-      android:visibility="gone"/>
+      android:visibility="gone" />
 
-    <FrameLayout android:id="@+id/timeline_list_container"
+    <android.support.design.widget.CoordinatorLayout android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/timeline_new_shot_bar"
@@ -50,7 +50,7 @@
           android:visibility="gone"
           tools:visibility="visible" />
 
-    </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <include android:id="@+id/timeline_new_shot_bar"
       layout="@layout/include_new_shot_bar"

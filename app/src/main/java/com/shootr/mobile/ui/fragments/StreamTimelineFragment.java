@@ -113,6 +113,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
     @Bind(R.id.timeline_new_shots_indicator) LinearLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
+    @Bind(R.id.timeline_list_container) View timelineListContainer;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
@@ -306,8 +307,7 @@ public class StreamTimelineFragment extends BaseFragment
         };
     }
 
-
-    private void setupTopicCustomDialog(){
+    private void setupTopicCustomDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
@@ -568,7 +568,12 @@ public class StreamTimelineFragment extends BaseFragment
             int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
             listView.setSelection(newPosition);
         } else {
-            crashReportTool.logException("NullPointerException in setPosition. Old List Size: " + oldListSize + " shots: " + shots + " listView: " + listView);
+            crashReportTool.logException("NullPointerException in setPosition. Old List Size: "
+              + oldListSize
+              + " shots: "
+              + shots
+              + " listView: "
+              + listView);
         }
     }
 
@@ -587,11 +592,9 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        Snackbar snackbar = Snackbar
-          .make(getView(), topic, Snackbar.LENGTH_INDEFINITE)
+        Snackbar snackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE)
           .setAction("CLOSE", new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
+              @Override public void onClick(View view) {
               }
           });
 
@@ -837,12 +840,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(R.string.menu_pin_shot, new Runnable() {
-              @Override public void run() {
-                  pinShotPresenter.pinToProfile(shotModel);
-              }
-          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
+            @Override public void run() {
+                pinShotPresenter.pinToProfile(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 streamTimelinePresenter.shareShot(shotModel);
             }
