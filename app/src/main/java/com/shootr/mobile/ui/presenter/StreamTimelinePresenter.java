@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
@@ -66,7 +65,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private String streamSubTitle;
     private String streamTopic;
     private boolean isInitialized = false;
-    private String currentTextWritten = "";
+    private String currentTextWritten;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
