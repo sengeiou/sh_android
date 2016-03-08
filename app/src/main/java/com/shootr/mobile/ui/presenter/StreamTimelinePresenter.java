@@ -595,7 +595,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         if (streamDescription != null) {
             return streamDescription.trim();
         }
-        return " ";
+        return null;
     }
 
     public void textChanged(String currentText) {
@@ -607,8 +607,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         int remainingLength = MAX_LENGTH - filteredText.length();
         streamTimelineView.setRemainingCharactersCount(remainingLength);
 
-        boolean isValidShot = remainingLength > 0;
-        if (isValidShot) {
+        boolean isValidTopic = remainingLength > 0;
+        if (isValidTopic) {
             streamTimelineView.setRemainingCharactersColorValid();
         } else {
             streamTimelineView.setRemainingCharactersColorInvalid();
