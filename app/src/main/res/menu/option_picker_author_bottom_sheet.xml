@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+      android:id="@+id/menu_stream_topic"
+      android:icon="@drawable/ic_photo_library"
+      android:title="@string/pin_topic" />
+
+    <item
       android:id="@+id/menu_photo_take"
       android:icon="@drawable/ic_photo_camera"
       android:title="@string/photo_edit_take" />
@@ -10,10 +15,5 @@
       android:id="@+id/menu_photo_gallery"
       android:icon="@drawable/ic_photo_library"
       android:title="@string/photo_edit_gallery" />
-
-    <item
-      android:id="@+id/menu_stream_topic"
-      android:icon="@drawable/ic_photo_library"
-      android:title="Edit topic" />
 
 </menu>

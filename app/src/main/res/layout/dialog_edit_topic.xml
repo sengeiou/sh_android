@@ -40,7 +40,7 @@
           android:background="@color/transparent"
           android:fontFamily="sans-serif-light"
           android:gravity="top"
-          android:hint="new topic..."
+          android:hint="@string/new_topic"
           android:maxLength="140"
           android:inputType="text|textCapSentences|textMultiLine"
           android:padding="16dp" />
