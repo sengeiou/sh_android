@@ -99,8 +99,9 @@ public class PinShotPresenterTest {
     @Test public void shouldNotGetShotDetailWhenResumeIfHasNotBeenPaused() throws Exception {
         presenter.resume();
 
-        verify(getShotDetailInteractor, never()).loadShotDetail(anyString(), any(Interactor.Callback.class), any(
-          Interactor.ErrorCallback.class));
+        verify(getShotDetailInteractor, never()).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldShowPinButtonIfShotModelIsHiddenWhenResumed() throws Exception {
@@ -124,6 +125,24 @@ public class PinShotPresenterTest {
 
         verify(pinShotView).hidePinShotButton();
 
+    }
+
+    @Test public void shouldNotShowPinShotButtonWhenCallResumeAndShotModelIsNull() throws Exception {
+        presenter.pause();
+        presenter.setShot(null);
+
+        presenter.resume();
+
+        verify(pinShotView, never()).showPinShotButton();
+    }
+
+    @Test public void shouldNotHidePinShotButtonWhenCallResumeAndShotModelIsNull() throws Exception {
+        presenter.pause();
+        presenter.setShot(null);
+
+        presenter.resume();
+
+        verify(pinShotView, never()).hidePinShotButton();
     }
 
     public void setupPinShotCallback() {

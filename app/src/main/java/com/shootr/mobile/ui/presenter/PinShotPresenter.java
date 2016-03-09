@@ -22,9 +22,9 @@ public class PinShotPresenter implements Presenter {
     private ShotModel shotModel;
     private boolean hasBeenPaused;
 
-    @Inject public PinShotPresenter(PinShotInteractor pinShotInteractor,
-      GetShotDetailInteractor getShotDetailInteractor, SessionRepository sessionRepository,
-      ShotModelMapper shotModelMapper) {
+    @Inject
+    public PinShotPresenter(PinShotInteractor pinShotInteractor, GetShotDetailInteractor getShotDetailInteractor,
+      SessionRepository sessionRepository, ShotModelMapper shotModelMapper) {
         this.pinShotInteractor = pinShotInteractor;
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.sessionRepository = sessionRepository;
@@ -50,7 +50,7 @@ public class PinShotPresenter implements Presenter {
     }
 
     private void setupPinShotButton() {
-        if(canShotBePinned()) {
+        if (canShotBePinned()) {
             pinShotView.showPinShotButton();
         } else {
             pinShotView.hidePinShotButton();
@@ -74,16 +74,18 @@ public class PinShotPresenter implements Presenter {
 
     @Override public void resume() {
         if (hasBeenPaused) {
-            getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
-                @Override public void onLoaded(ShotDetail shotDetail) {
-                    setShot(shotModelMapper.transform(shotDetail.getShot()));
-                    setupPinShotButton();
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
+            if (shotModel != null) {
+                getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
+                    @Override public void onLoaded(ShotDetail shotDetail) {
+                        setShot(shotModelMapper.transform(shotDetail.getShot()));
+                        setupPinShotButton();
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
                     /* no - op */
-                }
-            });
+                    }
+                });
+            }
             hasBeenPaused = false;
         }
     }
