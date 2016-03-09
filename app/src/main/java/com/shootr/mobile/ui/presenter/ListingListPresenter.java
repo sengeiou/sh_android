@@ -165,7 +165,9 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle(), stream.getStreamModel().getAuthorId());
+        selectStream(stream.getStreamModel().getIdStream(),
+          stream.getStreamModel().getShortTitle(),
+          stream.getStreamModel().getAuthorId());
     }
 
     private void selectStream(final String idStream, String treamTag, String authorId) {
@@ -196,7 +198,11 @@ public class ListingListPresenter implements Presenter{
         if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel().isRemoved()) {
             listingView.showCurrentUserContextMenu(stream);
         } else {
-            listingView.showContextMenu(stream);
+            if (favoriteStreams.contains(stream)) {
+                listingView.showContextMenuWithoutAddFavorite(stream);
+            } else {
+                listingView.showContextMenuWithAddFavorite(stream);
+            }
         }
     }
 
