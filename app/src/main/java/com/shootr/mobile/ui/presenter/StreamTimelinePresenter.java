@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
+import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -43,6 +44,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final Poller poller;
     private final DeleteLocalShotsByStream deleteLocalShotsByStream;
     private final ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
+    private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
 
     private StreamTimelineView streamTimelineView;
     private String streamId;
@@ -64,7 +66,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
       GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, Poller poller, DeleteLocalShotsByStream deleteLocalShotsByStream,
-      ReloadStreamTimelineInteractor reloadStreamTimelineInteractor) {
+      ReloadStreamTimelineInteractor reloadStreamTimelineInteractor,
+      UpdateWatchNumberInteractor updateWatchNumberInteractor) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
@@ -78,6 +81,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.poller = poller;
         this.deleteLocalShotsByStream = deleteLocalShotsByStream;
         this.reloadStreamTimelineInteractor = reloadStreamTimelineInteractor;
+        this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     }
 
     public void setView(StreamTimelineView streamTimelineView) {
@@ -100,11 +104,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
         this.selectStream();
-        this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
-            @Override public void run() {
-                loadNewShots();
-            }
-        });
+        setupPoller();
     }
 
     public void initialize(final StreamTimelineView streamTimelineView, String idStream) {
@@ -115,9 +115,22 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.loadStream(streamTimelineView, idStream);
         this.streamTimelineView.showHoldingShots();
         this.selectStream();
+        setupPoller();
+    }
+
+    private void setupPoller() {
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
                 loadNewShots();
+                postWatchNumberEvent();
+            }
+        });
+    }
+
+    private void postWatchNumberEvent() {
+        updateWatchNumberInteractor.updateWatchNumber(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
             }
         });
     }

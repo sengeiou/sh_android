@@ -137,16 +137,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         return new GenericActivityViewHolder(view, imageLoader, timeUtils, avatarClickListener);
     }
 
-    private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent) {
-        return new CheckinViewHolder(createActivityView(parent),
-          imageLoader,
-          timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener,
-          onUsernameClickListener,
-          streamTitleClickListener);
-    }
-
     private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent) {
         return new OpenedViewHolder(createActivityView(parent),
           imageLoader,
