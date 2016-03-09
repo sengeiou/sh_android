@@ -196,7 +196,11 @@ public class ListingListPresenter implements Presenter{
 
     public void openContextualMenu(StreamResultModel stream) {
         if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel().isRemoved()) {
-            listingView.showCurrentUserContextMenu(stream);
+            if (favoriteStreams.contains(stream)) {
+                listingView.showCurrentUserContextMenuWithoutAddFavorite(stream);
+            } else {
+                listingView.showCurrentUserContextMenuWithAddFavorite(stream);
+            }
         } else {
             if (favoriteStreams.contains(stream)) {
                 listingView.showContextMenuWithoutAddFavorite(stream);

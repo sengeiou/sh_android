@@ -62,21 +62,6 @@ public class StreamModel implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        StreamModel that = (StreamModel) o;
-
-        return idStream.equals(that.idStream);
-    }
-
-    @Override
     public int hashCode() {
         return idStream.hashCode();
     }
@@ -167,5 +152,20 @@ public class StreamModel implements Serializable {
 
     public void setUniqueShots(Long uniqueShots) {
         this.uniqueShots = uniqueShots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        StreamModel that = (StreamModel) o;
+
+        return idStream.equals(that.idStream);
     }
 }

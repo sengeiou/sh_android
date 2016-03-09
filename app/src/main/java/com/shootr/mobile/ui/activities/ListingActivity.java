@@ -127,7 +127,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override
     protected void onPause() {
         super.onPause();
-        analyticsTool.analyticsStop(getBaseContext(),this);
+        analyticsTool.analyticsStop(getBaseContext(), this);
         presenter.pause();
     }
 
@@ -222,7 +222,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         }).show();
     }
 
-    @Override public void showCurrentUserContextMenu(final StreamResultModel stream) {
+    @Override public void showCurrentUserContextMenuWithAddFavorite(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
         builder.addAction(com.shootr.mobile.R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
@@ -231,6 +231,30 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
             }
         });
         addBaseContextMenuOptions(builder, stream);
+        builder.addAction(com.shootr.mobile.R.string.remove_stream_listing_context_menu, new Runnable() {
+            @Override public void run() {
+                presenter.remove(stream.getStreamModel().getIdStream());
+            }
+        }).show();
+    }
+
+    @Override public void showCurrentUserContextMenuWithoutAddFavorite(final StreamResultModel stream) {
+        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
+        builder.addAction(com.shootr.mobile.R.string.edit_stream_listing_context_menu, new Runnable() {
+            @Override public void run() {
+                Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                startActivity(intent);
+            }
+        });
+        builder.addAction(com.shootr.mobile.R.string.share_via_shootr, new Runnable() {
+            @Override public void run() {
+                presenter.shareStream(stream);
+            }
+        }).addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+            @Override public void run() {
+                shareStream(stream);
+            }
+        });
         builder.addAction(com.shootr.mobile.R.string.remove_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 presenter.remove(stream.getStreamModel().getIdStream());

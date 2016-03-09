@@ -38,15 +38,6 @@ public class StreamResultModel implements Serializable {
 
         StreamResultModel that = (StreamResultModel) o;
 
-        if (watchers != that.watchers) return false;
-        if (isWatching != that.isWatching) return false;
-        return !(streamModel != null ? !streamModel.equals(that.streamModel) : that.streamModel != null);
-    }
-
-    @Override public int hashCode() {
-        int result = streamModel != null ? streamModel.hashCode() : 0;
-        result = 31 * result + watchers;
-        result = 31 * result + (isWatching ? 1 : 0);
-        return result;
+        return (streamModel != null && streamModel.getIdStream().equals(that.getStreamModel().getIdStream()));
     }
 }

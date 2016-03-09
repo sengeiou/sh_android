@@ -24,7 +24,7 @@ public interface ListingView extends LoadDataView {
 
     void showSectionTitles();
 
-    void showCurrentUserContextMenu(StreamResultModel stream);
+    void showCurrentUserContextMenuWithoutAddFavorite(StreamResultModel stream);
 
     void showContextMenuWithAddFavorite(StreamResultModel stream);
 
@@ -37,4 +37,6 @@ public interface ListingView extends LoadDataView {
     void hideAddStream();
 
     void showContextMenuWithoutAddFavorite(StreamResultModel stream);
+
+    void showCurrentUserContextMenuWithAddFavorite(StreamResultModel stream);
 }

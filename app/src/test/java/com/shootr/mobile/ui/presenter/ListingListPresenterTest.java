@@ -171,13 +171,23 @@ public class ListingListPresenterTest {
           anyString());
     }
 
-    @Test public void shouldShowCurrentUserContextMenuIfIsCurrentUserAndItsMyStream() throws Exception {
-        setupUserWithoutListingCallback();
+    @Test public void shouldShowCurrentUserContextMenuWithAddFavoriteIfIsCurrentUserAndItsMyStreamAndIsFavorite() throws Exception {
+        setupGetUserWithFavoritesListingCallback();
+        setupFavoritesInteractorCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
         listingListPresenter.openContextualMenu(streamResultModel());
 
-        verify(listingView).showCurrentUserContextMenu(any(StreamResultModel.class));
+        verify(listingView).showCurrentUserContextMenuWithoutAddFavorite(any(StreamResultModel.class));
+    }
+
+    @Test public void shouldShowCurrentUserContextMenuWithouAddFavoriteIfIsCurrentUserAndItsNotMyStreamAndIsFavorite() throws Exception {
+        setupGetUserWithFavoritesListingCallback();
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
+        listingListPresenter.openContextualMenu(streamResultModel());
+
+        verify(listingView).showCurrentUserContextMenuWithAddFavorite(any(StreamResultModel.class));
     }
 
     @Test public void shouldShowContextMenuWithAddFavoriteIfIsCurrentUserAndItsNotMyStream() throws Exception {
