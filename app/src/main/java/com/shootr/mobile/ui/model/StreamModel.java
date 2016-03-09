@@ -73,11 +73,7 @@ public class StreamModel implements Serializable {
 
         StreamModel that = (StreamModel) o;
 
-        if (!idStream.equals(that.idStream)) {
-            return false;
-        }
-
-        return true;
+        return idStream.equals(that.idStream);
     }
 
     @Override
