@@ -13,6 +13,20 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.6.1] - 2016-03-09
+
+### Changed
+- Se muestra dialogo de confirmación al ocultar un shot anclado
+
+### Added
+- Emoji shortcut en el teclado
+
+### Fixed
+- Share Stream Link
+- Refactor de Context menu al mantener presionado un shot
+- Usado StringReference para obtener el título de las secciones de Listing
+
+
 ## [1.6.0] - 2016-03-04
 
 ### Changed
