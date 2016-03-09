@@ -342,7 +342,7 @@ public class StreamTimelineFragment extends BaseFragment
             newTopicText.setText(streamTimelinePresenter.getStreamTopic());
         }
 
-        dialogBuilder.setTitle(getString(R.string.pin_topic));
+        dialogBuilder.setTitle(getString(R.string.topic));
         dialogBuilder.setPositiveButton(getString(R.string.done_pin_topic), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 streamTimelinePresenter.editStream(newTopicText.getText().toString());
