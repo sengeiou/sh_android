@@ -555,7 +555,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
 
-        createStreamInteractor.sendStreamWithTopic(streamId,
+        createStreamInteractor.sendStream(streamId,
           title,
           shortTitle,
           description,

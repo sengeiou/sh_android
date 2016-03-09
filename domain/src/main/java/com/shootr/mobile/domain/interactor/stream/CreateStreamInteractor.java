@@ -47,19 +47,7 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String shortTitle, String description, boolean notifyCreation,
-      Callback callback, ErrorCallback errorCallback) {
-        this.idStream = idStream;
-        this.title = title;
-        this.shortTitle = shortTitle;
-        this.description = description;
-        this.notifyCreation = notifyCreation;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
-    }
-
-    public void sendStreamWithTopic(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
+    public void sendStream(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
       Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
