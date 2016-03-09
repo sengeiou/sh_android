@@ -39,6 +39,6 @@
     android:background="?selectableItemBackground"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:src="@drawable/ic_shot_camera" />
+    android:src="@drawable/ic_editor_attach_file" />
 
 </RelativeLayout>

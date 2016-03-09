@@ -78,6 +78,26 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void showTopicSnackBar(String topic) {
+        /* no-op */
+    }
+
+    @Override public void hideTopicSnackBar() {
+        /* no-op */
+    }
+
+    @Override public void setRemainingCharactersCount(int remainingCharacters) {
+        /* no-op */
+    }
+
+    @Override public void setRemainingCharactersColorValid() {
+        /* no-op */
+    }
+
+    @Override public void setRemainingCharactersColorInvalid() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

@@ -28,6 +28,7 @@ public class StreamEntityMapper {
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setCountry(streamEntity.getCountry());
         stream.setDescription(streamEntity.getDescription());
+        stream.setTopic(streamEntity.getTopic());
         stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
         stream.setRemoved(streamEntity.getRemoved() == 1);
         if (streamEntity.getWatchers() != null) {
@@ -66,6 +67,7 @@ public class StreamEntityMapper {
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setCountry(stream.getCountry());
         entityTemplate.setDescription(stream.getDescription());
+        entityTemplate.setTopic(stream.getTopic());
         entityTemplate.setMediaCountByRelatedUsers(stream.getMediaCount());
 
         entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);

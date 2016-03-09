@@ -31,6 +31,7 @@ public class CreateStreamInteractor implements Interactor {
     private String title;
     private String shortTitle;
     private String description;
+    private String topic;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -46,12 +47,13 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String shortTitle, String description, boolean notifyCreation,
+    public void sendStream(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
       Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
         this.shortTitle = shortTitle;
         this.description = description;
+        this.topic = topic;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -81,6 +83,7 @@ public class CreateStreamInteractor implements Interactor {
         stream.setTitle(title);
         stream.setShortTitle(shortTitle);
         stream.setDescription(removeDescriptionLineBreaks(description));
+        stream.setTopic(topic);
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
         stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());

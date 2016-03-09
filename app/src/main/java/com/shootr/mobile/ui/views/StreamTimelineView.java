@@ -41,4 +41,14 @@ public interface StreamTimelineView extends LoadDataView{
     void showTimelineIndicator(Integer numberNewShots);
 
     void hideTimelineIndicator();
+
+    void showTopicSnackBar(String topic);
+
+    void hideTopicSnackBar();
+
+    void setRemainingCharactersCount(int remainingCharacters);
+
+    void setRemainingCharactersColorValid();
+
+    void setRemainingCharactersColorInvalid();
 }

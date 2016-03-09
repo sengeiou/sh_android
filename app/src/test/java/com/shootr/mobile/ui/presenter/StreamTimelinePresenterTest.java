@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
@@ -38,6 +39,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
@@ -58,6 +60,11 @@ public class StreamTimelinePresenterTest {
     private static final Integer OLD_LIST_SIZE = 10;
     public static final Integer NEW_SHOTS_NUMBER = 10;
     private static final Integer ZERO_NEW_SHOTS = 0;
+    private static final String TOPIC = "topic";
+    private static final String TITLE = "title";
+    private static final String SHORT_TITLE = "shortTitle";
+    private static final String DESCRIPTION = "description";
+    private static final String EMPTY_TOPIC = "emptyTopic";
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -73,6 +80,7 @@ public class StreamTimelinePresenterTest {
     @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
     @Mock UpdateWatchNumberInteractor updateWatchNumberInteractor;
+    @Mock CreateStreamInteractor createStreamInteractor;
 
     private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -92,7 +100,9 @@ public class StreamTimelinePresenterTest {
           errorMessageFactory,
           poller,
           deleteLocalShotsByStream,
-          reloadStreamTimelineInteractor, updateWatchNumberInteractor);
+          updateWatchNumberInteractor,
+          reloadStreamTimelineInteractor,
+          createStreamInteractor);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }
@@ -535,6 +545,66 @@ public class StreamTimelinePresenterTest {
         verify(poller).init(anyLong(), any(Runnable.class));
     }
 
+    @Test public void shouldShowSnackBarWhenInitializeAndStreamTopicIsNotNullAndIsNotEmpty() throws Exception {
+        setupGetStreamInteractorCallback();
+
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        verify(streamTimelineView).showTopicSnackBar(anyString());
+    }
+
+    @Test public void shouldNotShowSnackBarWhenInitializeAndStreamTopicIsNull() throws Exception {
+        setupGetStreamInteractorCallbackWithoutTopic();
+
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+    }
+
+    @Test public void shouldNotShowSnackBarWhenInitializeAndStreamTopicIsEmpty() throws Exception {
+        setupGetStreamInteractorCallbackWithEmptyTopic();
+
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+    }
+
+    @Test public void shouldShowSnackBarWhenEditStreamAndStreamTopicIsNotEmpty() throws Exception {
+        setupCreateStreamInteractorCallbackWithTopic();
+        setupGetStreamInteractorCallback();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.editStream(TOPIC);
+
+        verify(streamTimelineView, times(2)).showTopicSnackBar(anyString());
+    }
+
+    @Test public void shouldNotShowSnackBarWhenEditStreamAndStreamTopicIsEmpty() throws Exception {
+        setupCreateStreamInteractorCallbackWithEmptyTopic();
+        setupGetStreamInteractorCallbackWithEmptyTopic();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.editStream(EMPTY_TOPIC);
+
+        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+    }
+
+    @Test public void shouldSetRemainingCharactersCountWhenTextChanged() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.textChanged(anyString());
+
+        verify(streamTimelineView).setRemainingCharactersCount(anyInt());
+    }
+
+    @Test public void shouldSetRemainingCharactersColorValidWhenTextChanged() throws Exception {
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.textChanged(anyString());
+
+        verify(streamTimelineView).setRemainingCharactersColorValid();
+    }
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
@@ -581,6 +651,22 @@ public class StreamTimelinePresenterTest {
     private Stream selectedStream() {
         Stream stream = new Stream();
         stream.setId(SELECTED_STREAM_ID);
+        stream.setTopic(TOPIC);
+        stream.setTitle(TITLE);
+        stream.setShortTitle(SHORT_TITLE);
+        stream.setDescription(DESCRIPTION);
+        return stream;
+    }
+
+    private Stream selectedStreamWithoutTopic() {
+        Stream stream = new Stream();
+        stream.setId(SELECTED_STREAM_ID);
+        return stream;
+    }
+
+    private Stream selectedStreamWithEmptyTopic() {
+        Stream stream = selectedStream();
+        stream.setTopic("");
         return stream;
     }
 
@@ -668,6 +754,49 @@ public class StreamTimelinePresenterTest {
                 return null;
             }
         }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    private void setupGetStreamInteractorCallbackWithoutTopic() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStreamWithoutTopic());
+                return null;
+            }
+        }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    private void setupGetStreamInteractorCallbackWithEmptyTopic() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStreamWithEmptyTopic());
+                return null;
+            }
+        }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }
+
+    private void setupCreateStreamInteractorCallbackWithTopic() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStream());
+                return null;
+            }
+        }).when(createStreamInteractor).sendStream(anyString(),
+          anyString(),
+          anyString(),
+          anyString(),
+          anyString(),
+          anyBoolean(),
+          any(CreateStreamInteractor.Callback.class),
+          anyErrorCallback());
+    }
+
+    private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStreamWithEmptyTopic());
+                return null;
+            }
+        }).when(createStreamInteractor).sendStream(anyString(), anyString(), anyString(), anyString(),anyString(), anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
     }
 
     private void setupFirstShotPosition() {

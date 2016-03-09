@@ -245,6 +245,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
               @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
+
+              @Override public void openEditTopicDialog() {
+                  /* no-op */
+              }
           })
           .build();
     }
@@ -267,11 +271,15 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                   .build();
                 startActivity(newShotIntent);
             }
+
+            @Override public void openEditTopicDialog() {
+                /* no-op */
+            }
         };
     }
 
     @Override public void initializeNewShotBarPresenter(String streamId) {
-        newShotBarPresenter.initialize(this, streamId);
+        newShotBarPresenter.initialize(this, streamId, false);
     }
 
     private ShotModel extractShotFromIntent() {
@@ -280,7 +288,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
-        newShotBarPresenter.initialize(this, shotModel.getStreamId());
+        newShotBarPresenter.initialize(this, shotModel.getStreamId(), false);
     }
 
     private void initializePresenter(String idShot) {
@@ -376,8 +384,16 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarViewDelegate.pickImage();
     }
 
+    @Override public void showHolderOptions() {
+        /* no-op */
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
+    }
+
+    @Override public void openEditTopicDialog() {
+        /* no-op */
     }
 
     @Override public void showDraftsButton() {

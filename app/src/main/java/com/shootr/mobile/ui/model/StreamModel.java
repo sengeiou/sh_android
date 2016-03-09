@@ -11,6 +11,7 @@ public class StreamModel implements Serializable {
     private String picture;
     private String shortTitle;
     private String description;
+    private String topic;
     private boolean amIAuthor;
     private Integer mediaCount;
     private Boolean removed;
@@ -50,6 +51,14 @@ public class StreamModel implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     @Override

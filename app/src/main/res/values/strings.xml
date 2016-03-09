@@ -377,4 +377,9 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
+    <string name="pin_topic">Pin topic</string>
+    <string name="done_pin_topic">Pin</string>
+    <string name="new_topic">New topic…</string>
+    <string name="close_topic_snackbar">CLOSE</string>
+    <string name="topic">Topic</string>
 </resources>
