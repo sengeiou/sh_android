@@ -76,7 +76,7 @@
                   android:fontFamily="sans-serif-light"
                   android:gravity="top"
                   android:hint="@string/new_shot_placeholder"
-                  android:inputType="text|textCapSentences|textMultiLine"
+                  android:inputType="text|textCapSentences|textMultiLine|textShortMessage"
                   android:padding="16dp" />
 
                 <FrameLayout
