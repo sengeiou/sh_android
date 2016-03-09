@@ -732,7 +732,7 @@ public class ProfileFragment extends BaseFragment
         }
         menuBuilder.sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery);
         menuBuilder.sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take);
-        menuBuilder.title(R.string.change_photo);
+        menuBuilder.title(R.string.title_menu_photo);
         menuBuilder.listener(photoDialogListener(photo));
 
         if (showRemove) {

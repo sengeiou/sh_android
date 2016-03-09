@@ -238,7 +238,6 @@
     <string name="opened_activity_text_pattern">Ha creado (stream)</string>
     <string name="participants_list_empty">No hay participantes</string>
     <string name="photo_edit_gallery">Galería</string>
-    <string name="photo_edit_remove">Borrar foto</string>
     <string name="photo_edit_remove_confirmation">¿Borrar foto?</string>
     <string name="photo_edit_take">Cámara</string>
     <string name="pinned_shot_activity">Ha anclado al perfil</string>

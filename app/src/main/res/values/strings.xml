@@ -246,7 +246,7 @@
     <string name="opened_activity_text_pattern">Opened (stream)</string>
     <string name="participants_list_empty">No participants</string>
     <string name="photo_edit_gallery">Gallery</string>
-    <string name="photo_edit_remove">Remove photo</string>
+    <string name="photo_edit_remove">Remove</string>
     <string name="photo_edit_remove_confirmation">Remove photo?</string>
     <string name="photo_edit_take">Camera</string>
     <string name="pinned_shot_activity">Pinned a shot to profile</string>
@@ -377,5 +377,6 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
-    <string name="watch_profile_photo">Watch profile photo</string>
+    <string name="watch_profile_photo">View</string>
+    <string name="title_menu_photo">Photo</string>
 </resources>

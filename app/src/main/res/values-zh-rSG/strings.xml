@@ -235,7 +235,6 @@
     <string name="opened_activity_text_pattern">建立了(stream)</string>
     <string name="participants_list_empty">没有参与者</string>
     <string name="photo_edit_gallery">相册</string>
-    <string name="photo_edit_remove">清除图片</string>
     <string name="photo_edit_remove_confirmation">清除照片？</string>
     <string name="photo_edit_take">相机</string>
     <string name="pinned_shot_activity">钉选shot到个人主页</string>
