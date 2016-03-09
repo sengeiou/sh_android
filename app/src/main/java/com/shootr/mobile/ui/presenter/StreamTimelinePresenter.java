@@ -551,9 +551,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void sendStream(String topic) {
-        String title = filterTitle(streamTitle);
+        String title = filterTitleOrTopic(streamTitle);
         String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
+        topic = filterTitleOrTopic(topic);
 
         createStreamInteractor.sendStream(streamId,
           title,
@@ -578,8 +579,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           });
     }
 
-    private String filterTitle(String title) {
-        return title.trim();
+    private String filterTitleOrTopic(String titleOrTopic) {
+        return titleOrTopic.trim();
     }
 
     private String filterShortTitle(String shortTitle) {
