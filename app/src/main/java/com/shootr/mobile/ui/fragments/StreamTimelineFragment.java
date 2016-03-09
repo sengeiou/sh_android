@@ -622,8 +622,9 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showTopicSnackBar(String topic) {
         topicSnackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE)
-          .setAction("CLOSE", new View.OnClickListener() {
+          .setAction(getString(R.string.close_topic_snackbar), new View.OnClickListener() {
               @Override public void onClick(View view) {
+                  /* no - op */
               }
           });
 

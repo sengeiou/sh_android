@@ -379,5 +379,6 @@
     <string name="yes">Yes</string>
     <string name="pin_topic">Pin Topic</string>
     <string name="done_pin_topic">Done</string>
-    <string name="new_topic">New topic...</string>
+    <string name="new_topic">New topic…</string>
+    <string name="close_topic_snackbar">CLOSE</string>
 </resources>
