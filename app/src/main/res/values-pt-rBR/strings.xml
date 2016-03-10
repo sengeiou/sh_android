@@ -239,7 +239,6 @@
   <string name="opened_activity_text_pattern">Criou (stream)</string>
   <string name="participants_list_empty">Nenhum participante</string>
   <string name="photo_edit_gallery">Galeria</string>
-  <string name="photo_edit_remove">Apagar foto</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
   <string name="pinned_shot_activity">Linkado ao perfil</string>

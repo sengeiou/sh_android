@@ -246,7 +246,7 @@
     <string name="opened_activity_text_pattern">Opened (stream)</string>
     <string name="participants_list_empty">No participants</string>
     <string name="photo_edit_gallery">Gallery</string>
-    <string name="photo_edit_remove">Remove photo</string>
+    <string name="photo_edit_remove">Remove</string>
     <string name="photo_edit_remove_confirmation">Remove photo?</string>
     <string name="photo_edit_take">Camera</string>
     <string name="pinned_shot_activity">Pinned a shot to profile</string>
@@ -382,4 +382,6 @@
     <string name="new_topic">New topic…</string>
     <string name="close_topic_snackbar">CLOSE</string>
     <string name="topic">Topic</string>
+    <string name="watch_profile_photo">View</string>
+    <string name="title_menu_photo">Photo</string>
 </resources>

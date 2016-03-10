@@ -642,10 +642,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showBlockedMenu(UserModel userModel) {
         new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_unblock_user, new Runnable() {
-              @Override public void run() {
-                  profilePresenter.unblockUserClicked();
-              }
-          }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.unblockUserClicked();
+            }
+        }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
             @Override public void run() {
                 profilePresenter.banUserClicked();
             }
@@ -654,10 +654,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showBannedMenu(UserModel userModel) {
         new CustomContextMenu.Builder(getActivity()).addAction(R.string.block_ignore_user, new Runnable() {
-              @Override public void run() {
-                  profilePresenter.blockUserClicked();
-              }
-          }).addAction(R.string.can_shoot_streams, new Runnable() {
+            @Override public void run() {
+                profilePresenter.blockUserClicked();
+            }
+        }).addAction(R.string.can_shoot_streams, new Runnable() {
             @Override public void run() {
                 profilePresenter.unbanUserClicked();
             }
@@ -723,12 +723,17 @@ public class ProfileFragment extends BaseFragment
         startActivity(intentForPhoto);
     }
 
-    @Override public void openEditPhotoMenu(boolean showRemove) {
-        BottomSheet.Builder menuBuilder = new BottomSheet.Builder(getActivity()) //
-          .sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery) //
-          .sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take) //
-          .title(R.string.change_photo) //
-          .listener(photoDialogListener());
+    @Override public void openEditPhotoMenu(boolean showRemove, String photo) {
+        BottomSheet.Builder menuBuilder = new BottomSheet.Builder(getActivity());
+        if (showRemove) {
+            menuBuilder.sheet(R.id.menu_photo_watch,
+              R.drawable.ic_stream_author_24_gray50,
+              R.string.watch_profile_photo);
+        }
+        menuBuilder.sheet(R.id.menu_photo_gallery, R.drawable.ic_photo_library, R.string.photo_edit_gallery);
+        menuBuilder.sheet(R.id.menu_photo_take, R.drawable.ic_photo_camera, R.string.photo_edit_take);
+        menuBuilder.title(R.string.title_menu_photo);
+        menuBuilder.listener(photoDialogListener(photo));
 
         if (showRemove) {
             menuBuilder.sheet(R.id.menu_photo_remove, R.drawable.ic_photo_remove, R.string.photo_edit_remove);
@@ -737,7 +742,7 @@ public class ProfileFragment extends BaseFragment
         menuBuilder.show();
     }
 
-    @NonNull public DialogInterface.OnClickListener photoDialogListener() {
+    @NonNull public DialogInterface.OnClickListener photoDialogListener(final String photo) {
         return new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -749,6 +754,9 @@ public class ProfileFragment extends BaseFragment
                         break;
                     case R.id.menu_photo_remove:
                         removePhoto();
+                        break;
+                    case R.id.menu_photo_watch:
+                        openPhoto(photo);
                         break;
                     default:
                         break;
@@ -941,10 +949,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
-              @Override public void run() {
-                  openDeleteShotConfirmation(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                openDeleteShotConfirmation(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
@@ -993,10 +1001,10 @@ public class ProfileFragment extends BaseFragment
 
     @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete, new Runnable() {
-              @Override public void run() {
-                  openDeleteShotConfirmation(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                openDeleteShotConfirmation(shotModel);
+            }
+        }).show();
     }
 
     @Override public void notifyPinnedShot(ShotModel shotModel) {

@@ -236,7 +236,6 @@
     <string name="opened_activity_text_pattern">(stream)を作成しました</string>
     <string name="participants_list_empty">参加者はいません</string>
     <string name="photo_edit_gallery">ギャラリー</string>
-    <string name="photo_edit_remove">写真を削除</string>
     <string name="photo_edit_remove_confirmation">写真を削除しますか？</string>
     <string name="photo_edit_take">カメラ</string>
     <string name="pinned_shot_activity">プロフィールにピン留めしました</string>
