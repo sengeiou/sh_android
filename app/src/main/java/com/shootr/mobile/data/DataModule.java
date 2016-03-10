@@ -30,7 +30,6 @@ import com.shootr.mobile.service.ApiModule;
 import com.shootr.mobile.task.jobs.ShootrBaseJob;
 import com.shootr.mobile.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.mobile.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.mobile.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
@@ -85,8 +84,6 @@ import static android.content.Context.MODE_PRIVATE;
     ShootrBaseJob.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
-
-    UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
