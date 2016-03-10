@@ -32,6 +32,8 @@ public class ProfileEditPresenterTest {
     private static final String USERNAME = "userName";
     private static final String BIO = "BIO";
     private static final String LONG_BIO = "BIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
+    private static final java.lang.String NAME = "name";
+    public static final String WRONG_WEBSITE = "www";
     @Mock SessionRepository sessionRepository;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -65,7 +67,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("");
         when(profileEditView.getUsername()).thenReturn("USERNAME");
-        when(profileEditView.getName()).thenReturn("NAME");
+        when(profileEditView.getName()).thenReturn(NAME);
 
         presenter.initialize(profileEditView, objectGraph);
 
@@ -82,7 +84,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("");
         when(profileEditView.getUsername()).thenReturn("");
-        when(profileEditView.getName()).thenReturn("NAME");
+        when(profileEditView.getName()).thenReturn(NAME);
 
         presenter.initialize(profileEditView,objectGraph);
         presenter.done();
@@ -96,9 +98,9 @@ public class ProfileEditPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(user());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
-        when(profileEditView.getWebsite()).thenReturn("frff");
+        when(profileEditView.getWebsite()).thenReturn(WRONG_WEBSITE);
         when(profileEditView.getUsername()).thenReturn("USERNAME");
-        when(profileEditView.getName()).thenReturn("NAME");
+        when(profileEditView.getName()).thenReturn(NAME);
 
         presenter.initialize(profileEditView,objectGraph);
         presenter.done();
@@ -114,7 +116,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
         when(profileEditView.getUsername()).thenReturn("USERNAME");
-        when(profileEditView.getName()).thenReturn("NAME");
+        when(profileEditView.getName()).thenReturn(NAME);
 
         presenter.initialize(profileEditView,objectGraph);
         presenter.done();
@@ -130,7 +132,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
         when(profileEditView.getUsername()).thenReturn("USERNAME");
-        when(profileEditView.getName()).thenReturn("NAME");
+        when(profileEditView.getName()).thenReturn(NAME);
 
         presenter.initialize(profileEditView,objectGraph);
         presenter.done();
@@ -168,6 +170,38 @@ public class ProfileEditPresenterTest {
         presenter.done();
 
         verify(profileEditView, never()).showUpdatedSuccessfulAlert();
+    }
+
+    @Test public void shouldShowUserNameValidationErrorWhenUserNameIsNotValid() throws Exception {
+        setupUpdateUserProfileInteractor();
+        setUpGetUserByIdInteractor();
+        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(profileEditView.getBio()).thenReturn(LONG_BIO);
+        when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
+        when(profileEditView.getUsername()).thenReturn("");
+        when(profileEditView.getName()).thenReturn(NAME);
+
+        presenter.initialize(profileEditView, objectGraph);
+        presenter.done();
+
+        verify(profileEditView).showUsernameValidationError(anyString());
+    }
+
+    @Test public void shouldShowWebsiteValidationErrorWhenWebsiteIsNotValid() throws Exception {
+        setupUpdateUserProfileInteractor();
+        setUpGetUserByIdInteractor();
+        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(profileEditView.getBio()).thenReturn(LONG_BIO);
+        when(profileEditView.getWebsite()).thenReturn(WRONG_WEBSITE);
+        when(profileEditView.getUsername()).thenReturn("");
+        when(profileEditView.getName()).thenReturn(NAME);
+
+        presenter.initialize(profileEditView, objectGraph);
+        presenter.done();
+
+        verify(profileEditView).showWebsiteValidationError(anyString());
     }
 
     private void setupUpdateUserProfileInteractor(){
