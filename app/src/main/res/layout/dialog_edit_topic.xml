@@ -41,7 +41,7 @@
           android:fontFamily="sans-serif-light"
           android:gravity="top"
           android:hint="@string/new_topic"
-          android:maxLength="140"
+          android:maxLength="40"
           android:inputType="text|textCapSentences|textMultiLine"
           android:padding="16dp" />
 
