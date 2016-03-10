@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -10,7 +9,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UpdateUserProfileInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.task.validation.FieldValidationError;
 import com.shootr.mobile.task.validation.profile.BioValidator;
 import com.shootr.mobile.task.validation.profile.NameValidator;
@@ -20,7 +18,6 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +28,10 @@ public class ProfileEditPresenter implements Presenter {
 
     private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
     private ProfileEditView profileEditView;
-    private ObjectGraph objectGraph;
 
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
-    private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final InteractorHandler interactorHandler;
     private final GetUserByIdInteractor getUserByIdInteractor;
     private final UpdateUserProfileInteractor updateUserProfileInteractor;
 
@@ -47,15 +41,12 @@ public class ProfileEditPresenter implements Presenter {
 
     private final List<FieldValidationError> fieldValidationErrors;
 
-    @Inject
-    public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
+    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler,
       GetUserByIdInteractor getUserByIdInteractor, UpdateUserProfileInteractor updateUserProfileInteractor) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
-        this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.interactorHandler = interactorHandler;
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.updateUserProfileInteractor = updateUserProfileInteractor;
         this.fieldValidationErrors = new ArrayList<>();
@@ -63,7 +54,6 @@ public class ProfileEditPresenter implements Presenter {
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
         this.profileEditView = profileEditView;
-        this.objectGraph = objectGraph;
         this.fillCurrentUserData();
         this.profileEditView.hideKeyboard();
     }
@@ -294,14 +284,12 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        bus.register(this);
         if (hasBeenPaused) {
             fillCurrentUserData();
         }
     }
 
     @Override public void pause() {
-        bus.unregister(this);
         hasBeenPaused = true;
     }
 

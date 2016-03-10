@@ -35,7 +35,6 @@ public class ProfileEditPresenterTest {
     private static final java.lang.String NAME = "name";
     public static final String WRONG_WEBSITE = "www";
     @Mock SessionRepository sessionRepository;
-    @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock InteractorHandler interactorHandler;
     @Mock GetUserByIdInteractor getUserByIdInteractor;
@@ -52,7 +51,6 @@ public class ProfileEditPresenterTest {
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new ProfileEditPresenter(sessionRepository,
           userModelMapper,
-          bus,
           errorMessageFactory,
           interactorHandler,
           getUserByIdInteractor,
