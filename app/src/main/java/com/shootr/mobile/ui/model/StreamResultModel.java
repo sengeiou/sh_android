@@ -32,4 +32,12 @@ public class StreamResultModel implements Serializable {
         this.isWatching = isWatching;
     }
 
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StreamResultModel)) return false;
+
+        StreamResultModel that = (StreamResultModel) o;
+
+        return (streamModel != null && streamModel.getIdStream().equals(that.getStreamModel().getIdStream()));
+    }
 }
