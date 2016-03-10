@@ -167,7 +167,7 @@ public class ProfileEditPresenter implements Presenter {
         if (trimmedText != null) {
             trimmedText = trimmedText.trim();
             if (trimmedText.isEmpty()) {
-                return null;
+                trimmedText = null;
             }
         }
         return trimmedText;
@@ -328,5 +328,6 @@ public class ProfileEditPresenter implements Presenter {
         for (FieldValidationError fieldValidationError : fieldValidationErrors) {
             showValidationError(fieldValidationError);
         }
+        fieldValidationErrors.clear();
     }
 }
