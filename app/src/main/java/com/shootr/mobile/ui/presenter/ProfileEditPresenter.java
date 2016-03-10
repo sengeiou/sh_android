@@ -10,9 +10,12 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
 import com.shootr.mobile.task.events.profile.UpdateUserProfileEvent;
-import com.shootr.mobile.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.mobile.task.validation.FieldValidationError;
 import com.shootr.mobile.task.validation.FieldValidationErrorEvent;
+import com.shootr.mobile.task.validation.profile.BioValidator;
+import com.shootr.mobile.task.validation.profile.NameValidator;
+import com.shootr.mobile.task.validation.profile.UsernameValidator;
+import com.shootr.mobile.task.validation.profile.WebsiteValidator;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
@@ -20,6 +23,7 @@ import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -40,7 +44,10 @@ public class ProfileEditPresenter implements Presenter {
     private boolean hasBeenPaused = false;
     private boolean discardConfirmEmailAlert = false;
 
-    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
+    private final List<FieldValidationError> fieldValidationErrors;
+
+    @Inject
+    public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler,
       GetUserByIdInteractor getUserByIdInteractor) {
         this.sessionRepository = sessionRepository;
@@ -49,6 +56,7 @@ public class ProfileEditPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
         this.interactorHandler = interactorHandler;
         this.getUserByIdInteractor = getUserByIdInteractor;
+        this.fieldValidationErrors = new ArrayList<>();
     }
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
@@ -75,7 +83,7 @@ public class ProfileEditPresenter implements Presenter {
             @Override public void onLoaded(User user) {
                 currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
                 profileEditView.renderUserInfo(currentUserModel);
-                if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
+                if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
                     profileEditView.showEmailNotConfirmedError();
                 }
             }
@@ -115,9 +123,12 @@ public class ProfileEditPresenter implements Presenter {
     private boolean hasChangedData() {
         UserModel updatedUserData = getUpdatedUserData();
         boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
-        boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null : !currentUserModel.getName().equals(updatedUserData.getName());
-        boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null : !currentUserModel.getBio().equals(updatedUserData.getBio());
-        boolean changedWebsite = currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
+        boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null
+          : !currentUserModel.getName().equals(updatedUserData.getName());
+        boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null
+          : !currentUserModel.getBio().equals(updatedUserData.getBio());
+        boolean changedWebsite = currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null
+          : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
         return changedName || changedUsername || changedWebsite || changedBio;
     }
 
@@ -169,20 +180,32 @@ public class ProfileEditPresenter implements Presenter {
     private void saveUpdatedProfile(UserModel updatedUserModel) {
         //TODO: use interactor, create a User with userModel's attributes and do local validation before
         // sending to the interactorS, saying?
-        UpdateUserProfileJob job = objectGraph.get(UpdateUserProfileJob.class);
-        job.init(updatedUserModel);
-        interactorHandler.execute(job);
-        this.showLoading();
+        localValidation(updatedUserModel);
+
+        if (hasLocalErrors()) {
+            postValidationErrors();
+            return;
+        }
+        User user = updateUserWithValues(updatedUserModel);
     }
 
-    @Subscribe
-    public void onUserProfileUpdated(UpdateUserProfileEvent event) {
+    private User updateUserWithValues(UserModel updatedUserModel) {
+        User user = new User();
+        user.setUsername(updatedUserModel.getUsername());
+        user.setName(updatedUserModel.getName());
+        user.setBio(updatedUserModel.getBio());
+        user.setWebsite(updatedUserModel.getWebsite());
+        user.setEmail(updatedUserModel.getEmail());
+        user.setEmailConfirmed(updatedUserModel.isEmailConfirmed());
+        return user;
+    }
+
+    @Subscribe public void onUserProfileUpdated(UpdateUserProfileEvent event) {
         profileEditView.showUpdatedSuccessfulAlert();
         profileEditView.closeScreen();
     }
 
-    @Subscribe
-    public void onValidationErrors(FieldValidationErrorEvent event) {
+    @Subscribe public void onValidationErrors(FieldValidationErrorEvent event) {
         this.hideLoading();
         List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
         for (FieldValidationError validationError : fieldValidationErrors) {
@@ -237,14 +260,13 @@ public class ProfileEditPresenter implements Presenter {
     private void hideLoading() {
         profileEditView.hideLoadingIndicator();
     }
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+
+    @Subscribe public void onCommunicationError(CommunicationErrorEvent event) {
         this.hideLoading();
         this.profileEditView.alertComunicationError();
     }
 
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    @Subscribe public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         this.hideLoading();
         this.profileEditView.alertConnectionNotAvailable();
     }
@@ -267,5 +289,44 @@ public class ProfileEditPresenter implements Presenter {
         }
         discardConfirmEmailAlert = true;
         profileEditView.navigateToEditEmail();
+    }
+
+    private void localValidation(UserModel user) {
+        validateUsername(user);
+        validateName(user);
+        validateWebsite(user);
+        validateBio(user);
+    }
+
+    private void validateWebsite(UserModel user) {
+        addErrorsIfAny(new WebsiteValidator(user).validate());
+    }
+
+    private void validateUsername(UserModel user) {
+        addErrorsIfAny(new UsernameValidator(user).validate());
+    }
+
+    private void validateName(UserModel user) {
+        addErrorsIfAny(new NameValidator(user).validate());
+    }
+
+    private void validateBio(UserModel user) {
+        addErrorsIfAny(new BioValidator(user).validate());
+    }
+
+    private void addErrorsIfAny(List<FieldValidationError> validationResult) {
+        if (validationResult != null && !validationResult.isEmpty()) {
+            fieldValidationErrors.addAll(validationResult);
+        }
+    }
+
+    private boolean hasLocalErrors() {
+        return !fieldValidationErrors.isEmpty();
+    }
+
+    private void postValidationErrors() {
+        for (FieldValidationError fieldValidationError : fieldValidationErrors) {
+            showValidationError(fieldValidationError);
+        }
     }
 }
