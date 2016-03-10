@@ -167,6 +167,8 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void saveUpdatedProfile(UserModel updatedUserModel) {
+        //TODO: use interactor, create a User with userModel's attributes and do local validation before
+        // sending to the interactorS, saying?
         UpdateUserProfileJob job = objectGraph.get(UpdateUserProfileJob.class);
         job.init(updatedUserModel);
         interactorHandler.execute(job);
