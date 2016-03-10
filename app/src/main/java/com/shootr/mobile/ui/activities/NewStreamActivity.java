@@ -34,7 +34,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final String KEY_STREAM_ID = "stream_id";
 
     private static final String EXTRA_EDITED_TITLE = "title";
-    private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
+    private static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -89,8 +89,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         initializePresenter(idStreamToEdit);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_EDITED_TITLE, titleView.getText().toString());
         outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
@@ -134,9 +133,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close_white);
 
         if (idStreamToEdit != null) {
-            actionBar.setTitle(editStreamTitleActionBar);
+            getToolbarDecorator().setTitle(editStreamTitleActionBar);
         } else {
-            actionBar.setTitle(newStreamTitleActionBar);
+            getToolbarDecorator().setTitle(newStreamTitleActionBar);
         }
     }
 
@@ -168,10 +167,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         } else if (item.getItemId() == com.shootr.mobile.R.id.menu_done) {
             presenter.done();
             return true;
-        }else if (item.getItemId() == com.shootr.mobile.R.id.menu_remove) {
+        } else if (item.getItemId() == com.shootr.mobile.R.id.menu_remove) {
             presenter.remove();
             return true;
-        }else if (item.getItemId() == R.id.menu_restore) {
+        } else if (item.getItemId() == R.id.menu_restore) {
             presenter.restore();
             return true;
         } else {
@@ -201,8 +200,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         finish();
     }
 
-    @Override
-    public void closeScreenWithExitStream() {
+    @Override public void closeScreenWithExitStream() {
         setResult(RESULT_EXIT_STREAM);
         finish();
     }
@@ -217,28 +215,28 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     @Override public void showNotificationConfirmation() {
-        new AlertDialog.Builder(this)
-          .setMessage(getString(com.shootr.mobile.R.string.stream_notification_confirmation_message))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_yes), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmNotify(true);
-              }
-          })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_no), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmNotify(false);
-              }
-          })
-          .create().show();
+        new AlertDialog.Builder(this).setMessage(getString(com.shootr.mobile.R.string.stream_notification_confirmation_message))
+          .setPositiveButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_yes),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    presenter.confirmNotify(true);
+                }
+            })
+          .setNegativeButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_no),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    presenter.confirmNotify(false);
+                }
+            })
+          .create()
+          .show();
     }
 
-    @Override
-    public void showRemoveStreamButton() {
+    @Override public void showRemoveStreamButton() {
         removeMenuItem.setVisible(true);
     }
 
-    @Override
-    public void askRemoveStreamConfirmation() {
+    @Override public void askRemoveStreamConfirmation() {
         new AlertDialog.Builder(this).setMessage(com.shootr.mobile.R.string.remove_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
