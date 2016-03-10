@@ -89,6 +89,15 @@ public class UpdateUserProfileInteractorTest {
         verify(errorCallback).onError(any(DomainValidationException.class));
     }
 
+    @Test public void shouldNotifyLoadedWhenUserUpdatedSucessfully() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
+
+        interactor.updateProfile(user(), completedCallback, errorCallback);
+
+        verify(completedCallback).onCompleted();
+    }
+
     private User user() {
         User user = new User();
         user.setIdUser(ID_USER);

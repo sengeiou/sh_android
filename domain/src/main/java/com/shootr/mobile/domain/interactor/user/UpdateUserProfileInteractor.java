@@ -56,6 +56,7 @@ public class UpdateUserProfileInteractor implements Interactor {
             User updatedUserEntity = updateEntityWithValues(user);
             remoteUserRepository.updateUserProfile(updatedUserEntity);
             sessionRepository.setCurrentUser(localUserRepository.getUserById(sessionRepository.getCurrentUserId()));
+            notifyLoaded();
         } catch (EmailAlreadyExistsException e) {
             handleServerError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);
         } catch (UsernameAlreadyExistsException e) {
