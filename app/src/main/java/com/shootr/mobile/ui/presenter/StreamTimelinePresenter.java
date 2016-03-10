@@ -31,7 +31,7 @@ import javax.inject.Inject;
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-    private static final int MAX_LENGTH = 140;
+    private static final int MAX_LENGTH = 40;
 
     private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     private final StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
