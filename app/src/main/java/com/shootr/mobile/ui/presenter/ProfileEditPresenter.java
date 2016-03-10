@@ -42,7 +42,7 @@ public class ProfileEditPresenter implements Presenter {
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory, InteractorHandler interactorHandler,
+      ErrorMessageFactory errorMessageFactory,
       GetUserByIdInteractor getUserByIdInteractor, UpdateUserProfileInteractor updateUserProfileInteractor) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
@@ -52,7 +52,7 @@ public class ProfileEditPresenter implements Presenter {
         this.fieldValidationErrors = new ArrayList<>();
     }
 
-    public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
+    public void initialize(ProfileEditView profileEditView) {
         this.profileEditView = profileEditView;
         this.fillCurrentUserData();
         this.profileEditView.hideKeyboard();

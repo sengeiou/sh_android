@@ -36,11 +36,9 @@ public class ProfileEditPresenterTest {
     public static final String WRONG_WEBSITE = "www";
     @Mock SessionRepository sessionRepository;
     @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock InteractorHandler interactorHandler;
     @Mock GetUserByIdInteractor getUserByIdInteractor;
     @Mock UpdateUserProfileInteractor updateUserProfileInteractor;
     @Mock ProfileEditView profileEditView;
-    @Mock ObjectGraph objectGraph;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
 
     private ProfileEditPresenter presenter;
@@ -52,7 +50,6 @@ public class ProfileEditPresenterTest {
         presenter = new ProfileEditPresenter(sessionRepository,
           userModelMapper,
           errorMessageFactory,
-          interactorHandler,
           getUserByIdInteractor,
           updateUserProfileInteractor);
     }
@@ -67,7 +64,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView, objectGraph);
+        presenter.initialize(profileEditView);
 
         presenter.done();
 
@@ -84,7 +81,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView, never()).showUpdatedSuccessfulAlert();
@@ -100,7 +97,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView, never()).showUpdatedSuccessfulAlert();
@@ -116,7 +113,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView).showUpdatedSuccessfulAlert();
@@ -132,7 +129,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView).showUpdatedSuccessfulAlert();
@@ -148,7 +145,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn("");
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView).showUpdatedSuccessfulAlert();
@@ -164,7 +161,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn("");
 
-        presenter.initialize(profileEditView,objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView, never()).showUpdatedSuccessfulAlert();
@@ -180,7 +177,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView, objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView).showUsernameValidationError(anyString());
@@ -196,7 +193,7 @@ public class ProfileEditPresenterTest {
         when(profileEditView.getUsername()).thenReturn("");
         when(profileEditView.getName()).thenReturn(NAME);
 
-        presenter.initialize(profileEditView, objectGraph);
+        presenter.initialize(profileEditView);
         presenter.done();
 
         verify(profileEditView).showWebsiteValidationError(anyString());
