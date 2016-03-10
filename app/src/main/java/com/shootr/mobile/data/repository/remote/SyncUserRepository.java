@@ -18,7 +18,9 @@ import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.mobile.domain.SuggestedPeople;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.bus.WatchUpdateRequest;
+import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -219,6 +221,20 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public List<User> getUsersForMention(String idUser) {
         throw new IllegalArgumentException("No remote implementation");
+    }
+
+    @Override public User updateUserProfile(User updatedUserEntity)
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(updatedUserEntity);
+        try {
+            UserEntity remoteWatchEntity = remoteUserDataSource.updateUser(currentOrNewUserEntity);
+            markEntitySynchronized(remoteWatchEntity);
+            localUserDataSource.putUser(remoteWatchEntity);
+            return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
+        } catch (ServerCommunicationException e) {
+            queueUpload(currentOrNewUserEntity, e);
+            return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
+        }
     }
 
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {

@@ -2,10 +2,13 @@ package com.shootr.mobile.data.repository.datasource.user;
 
 import com.shootr.mobile.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.entity.UserEntity;
+import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserNotFoundException;
+import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import java.io.IOException;
 import java.util.List;
@@ -119,6 +122,23 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public List<UserEntity> getUsersForMentions(String idUser) {
         throw new RuntimeException("Server DataSource can't access to this");
+    }
+
+    @Override public UserEntity updateUser(UserEntity currentUserEntity)
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+        try {
+            return userApiService.putUser(userApiEntityMapper.transform(currentUserEntity));
+        } catch (ApiException apiException) {
+            if (ErrorInfo.EmailAlreadyExistsException == apiException.getErrorInfo()) {
+                throw new EmailAlreadyExistsException(apiException);
+            } else if (ErrorInfo.UserNameAlreadyExistsException == apiException.getErrorInfo()) {
+                throw new UsernameAlreadyExistsException(apiException);
+            } else {
+                throw new ServerCommunicationException(apiException);
+            }
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
