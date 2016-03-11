@@ -47,8 +47,8 @@ public class FindFriendsInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(localUserRepository.getUsersForSearch(search, currentPage, localeProvider.getLocale() ));
-            notifyLoaded(remoteUserRepository.getUsersForSearch(search, currentPage, localeProvider.getLocale()));
+            notifyLoaded(localUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
+            notifyLoaded(remoteUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }

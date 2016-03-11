@@ -37,5 +37,5 @@ public interface UserRepository {
 
     User updateUserProfile(User updatedUserEntity) throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
-    List<User> getUsersForSearch(String searchString, Integer pageOffset, String locale) throws IOException;
+    List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
 }

@@ -110,7 +110,7 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
-    @Override public List<User> getUsersForSearch(String searchString, Integer pageOffset, String locale)
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
       throws IOException {
         return transformUserEntitiesForPeople(localUserDataSource.findFriends(searchString, pageOffset, locale));
     }

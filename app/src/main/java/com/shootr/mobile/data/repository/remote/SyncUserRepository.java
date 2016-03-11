@@ -233,7 +233,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         }
     }
 
-    @Override public List<User> getUsersForSearch(String searchString, Integer pageOffset, String locale)
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
       throws IOException {
         return transformUserEntitiesForPeople(remoteUserDataSource.findFriends(searchString, pageOffset, locale));
     }
