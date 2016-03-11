@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -232,5 +233,11 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     private void setLoading(boolean loading) {
         progressViewContent.setVisibility(loading ? View.VISIBLE : View.GONE);
+    }
+
+    @OnItemClick(R.id.find_friends_search_results_list)
+    public void openUserProfile(int position) {
+        UserModel user = adapter.getItem(position);
+        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
     }
 }
