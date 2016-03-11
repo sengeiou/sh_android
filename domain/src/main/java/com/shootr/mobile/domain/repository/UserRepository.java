@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.SuggestedPeople;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserRepository {
@@ -35,4 +36,6 @@ public interface UserRepository {
     List<User> getUsersForMention(String idUser);
 
     User updateUserProfile(User updatedUserEntity) throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
+
+    List<User> getUsersForSearch(String searchString, Integer pageOffset, String locale) throws IOException;
 }
