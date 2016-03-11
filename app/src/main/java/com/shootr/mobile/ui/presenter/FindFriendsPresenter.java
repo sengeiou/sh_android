@@ -1,9 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.FindParticipantsInteractor;
+import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.UserModel;
@@ -16,7 +17,7 @@ import javax.inject.Inject;
 
 public class FindFriendsPresenter implements Presenter {
 
-    private final FindParticipantsInteractor findParticipantsInteractor;
+    private final FindFriendsInteractor findFriendsInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final UserModelMapper userModelMapper;
@@ -27,10 +28,10 @@ public class FindFriendsPresenter implements Presenter {
     private String query;
     private Boolean hasBeenPaused = false;
 
-    @Inject public FindFriendsPresenter(FindParticipantsInteractor findParticipantsInteractor,
+    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
-        this.findParticipantsInteractor = findParticipantsInteractor;
+        this.findFriendsInteractor = findFriendsInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.userModelMapper = userModelMapper;
@@ -53,44 +54,42 @@ public class FindFriendsPresenter implements Presenter {
         findFriendsView.hideKeyboard();
         findFriendsView.showLoading();
         findFriendsView.setCurrentQuery(query);
-        //TODO same logic with the new interactor
-        //findParticipantsInteractor.obtainAllParticipants(query, new Interactor.Callback<List<User>>() {
-        //    @Override public void onLoaded(List<User> users) {
-        //        findFriendsView.hideLoading();
-        //        friends = userModelMapper.transform(users);
-        //        if (!friends.isEmpty()) {
-        //            findFriendsView.showContent();
-        //            findFriendsView.renderFriends(friends);
-        //        } else {
-        //            findFriendsView.showEmpty();
-        //        }
-        //    }
-        //}, new Interactor.ErrorCallback() {
-        //    @Override public void onError(ShootrException error) {
-        //        findFriendsView.hideLoading();
-        //        findFriendsView.showError(errorMessageFactory.getMessageForError(error));
-        //    }
-        //});
+        findFriendsInteractor.FindFriends(query, 0, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                findFriendsView.hideLoading();
+                friends = userModelMapper.transform(users);
+                if (!friends.isEmpty()) {
+                    findFriendsView.showContent();
+                    findFriendsView.renderFriends(friends);
+                } else {
+                    findFriendsView.showEmpty();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                findFriendsView.hideLoading();
+                findFriendsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
     public void refreshFriends() {
         findFriendsView.hideEmpty();
-        //TODO same logic with the new interactor
-        //findParticipantsInteractor.obtainAllParticipants(query, new Interactor.Callback<List<User>>() {
-        //    @Override public void onLoaded(List<User> users) {
-        //        friends = userModelMapper.transform(users);
-        //        if (!friends.isEmpty()) {
-        //            findFriendsView.renderFriends(friends);
-        //        } else {
-        //            findFriendsView.showEmpty();
-        //        }
-        //    }
-        //}, new Interactor.ErrorCallback() {
-        //    @Override public void onError(ShootrException error) {
-        //        findFriendsView.hideLoading();
-        //        findFriendsView.showError(errorMessageFactory.getMessageForError(error));
-        //    }
-        //});
+        findFriendsInteractor.FindFriends(query, 0,new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                friends = userModelMapper.transform(users);
+                if (!friends.isEmpty()) {
+                    findFriendsView.renderFriends(friends);
+                } else {
+                    findFriendsView.showEmpty();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                findFriendsView.hideLoading();
+                findFriendsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
     public void followUser(final UserModel userModel) {
