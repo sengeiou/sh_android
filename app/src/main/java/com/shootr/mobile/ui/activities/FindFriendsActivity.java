@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FindFriendsPresenter;
 import com.shootr.mobile.ui.views.FindFriendsView;
+import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -32,13 +34,15 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindFriendsPresenter findFriendsPresenter;
 
-    private SearchView searchView;
-
     @Bind(com.shootr.mobile.R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
     @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
 
+    private View progressViewContent;
+    private View progressView;
+    private SearchView searchView;
     private UserListAdapter adapter;
+    private boolean hasMoreItemsToLoad;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -59,11 +63,35 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void setupViews() {
+        progressView = getLoadingView();
+        progressView.setVisibility(View.GONE);
+        progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
+        resultsListView.addFooterView(progressView, null, false);
+
         if (adapter == null) {
             adapter = new UserListAdapter(this, imageLoader);
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);
+        new ListViewScrollObserver(resultsListView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                /* no - op */
+            }
+
+            @Override public void onScrollIdle() {
+                int lastVisiblePosition = resultsListView.getLastVisiblePosition();
+                int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
+                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                if (shouldStartLoadingMore && hasMoreItemsToLoad) {
+                    progressView.setVisibility(View.VISIBLE);
+                    findFriendsPresenter.makeNextRemoteSearch();
+                }
+            }
+        });
+    }
+
+    private View getLoadingView() {
+        return LayoutInflater.from(this).inflate(R.layout.item_list_loading, resultsListView, false);
     }
 
     private void setupActionBar() {
@@ -100,6 +128,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
+                hasMoreItemsToLoad = true;
                 findFriendsPresenter.searchFriends(queryText);
                 return true;
             }
@@ -150,6 +179,20 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         resultsListView.setVisibility(View.GONE);
     }
 
+    @Override public void setHasMoreItemsToLoad(Boolean hasMoreItems) {
+        this.hasMoreItemsToLoad = hasMoreItems;
+    }
+
+    @Override public void addFriends(List<UserModel> friends) {
+        adapter.addItems(friends);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override public void hideProgress() {
+        setLoading(false);
+        progressView.setVisibility(View.GONE);
+    }
+
     @Override public void follow(int position) {
         findFriendsPresenter.followUser(adapter.getItem(position));
     }
@@ -185,5 +228,9 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showError(String message) {
         feedbackMessage.show(getView(), message);
+    }
+
+    private void setLoading(boolean loading) {
+        progressViewContent.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 }

@@ -27,6 +27,7 @@ public class FindFriendsPresenter implements Presenter {
     private List<UserModel> friends;
     private String query;
     private Boolean hasBeenPaused = false;
+    private int currentPage;
 
     @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
@@ -45,6 +46,7 @@ public class FindFriendsPresenter implements Presenter {
     public void initialize(FindFriendsView findFriendsView) {
         this.setView(findFriendsView);
         this.friends = new ArrayList<>();
+        this.currentPage = 0;
     }
 
     public void searchFriends(String query) {
@@ -54,7 +56,7 @@ public class FindFriendsPresenter implements Presenter {
         findFriendsView.hideKeyboard();
         findFriendsView.showLoading();
         findFriendsView.setCurrentQuery(query);
-        findFriendsInteractor.FindFriends(query, 0, new Interactor.Callback<List<User>>() {
+        findFriendsInteractor.FindFriends(query, currentPage, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 findFriendsView.hideLoading();
                 friends = userModelMapper.transform(users);
@@ -64,6 +66,7 @@ public class FindFriendsPresenter implements Presenter {
                 } else {
                     findFriendsView.showEmpty();
                 }
+                currentPage++;
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -75,7 +78,7 @@ public class FindFriendsPresenter implements Presenter {
 
     public void refreshFriends() {
         findFriendsView.hideEmpty();
-        findFriendsInteractor.FindFriends(query, 0,new Interactor.Callback<List<User>>() {
+        findFriendsInteractor.FindFriends(query, currentPage,new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 friends = userModelMapper.transform(users);
                 if (!friends.isEmpty()) {
@@ -134,5 +137,25 @@ public class FindFriendsPresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public void makeNextRemoteSearch() {
+        findFriendsInteractor.FindFriends(query, currentPage, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                friends = userModelMapper.transform(users);
+                if (!friends.isEmpty()) {
+                    findFriendsView.hideProgress();
+                    findFriendsView.addFriends(friends);
+                } else {
+                    findFriendsView.setHasMoreItemsToLoad(false);
+                }
+                currentPage++;
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                findFriendsView.hideLoading();
+                findFriendsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 }
