@@ -27,9 +27,6 @@ import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.interactor.InteractorModule;
 import com.shootr.mobile.notifications.gcm.GCMIntentService;
 import com.shootr.mobile.service.ApiModule;
-import com.shootr.mobile.task.jobs.ShootrBaseJob;
-import com.shootr.mobile.task.jobs.follows.SearchPeopleLocalJob;
-import com.shootr.mobile.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
@@ -81,11 +78,9 @@ import static android.content.Context.MODE_PRIVATE;
 
     BaseSignedInActivity.class,
 
-    ShootrBaseJob.class,
-
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
-    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
+    ShotManager.class,
 
     UserManager.class, DeviceManager.class,
 

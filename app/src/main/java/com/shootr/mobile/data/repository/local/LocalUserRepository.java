@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -107,6 +108,11 @@ public class LocalUserRepository implements UserRepository {
 
     @Override public User updateUserProfile(User updatedUserEntity) {
         throw new IllegalArgumentException("this method has no local implementation");
+    }
+
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
+      throws IOException {
+        return transformUserEntitiesForPeople(localUserDataSource.findFriends(searchString, pageOffset, locale));
     }
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {

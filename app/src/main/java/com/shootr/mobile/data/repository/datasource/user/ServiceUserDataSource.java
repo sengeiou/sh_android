@@ -141,6 +141,15 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
+    @Override public List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale)
+      throws IOException {
+        try {
+            return userApiService.search(searchString, pageOffset, locale);
+        } catch (ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }
