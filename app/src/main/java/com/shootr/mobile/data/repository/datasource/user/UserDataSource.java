@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserDataSource  extends SyncableDataSource<UserEntity>{
@@ -34,4 +35,6 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
     UserEntity updateUser(UserEntity currentOrNewUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
+
+    List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
 }
