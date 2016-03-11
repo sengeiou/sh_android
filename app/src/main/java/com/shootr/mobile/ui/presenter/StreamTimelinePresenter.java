@@ -564,10 +564,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void sendStream(String topic) {
-        String title = filterTitleOrTopic(streamTitle);
+        String title = filterTitle(streamTitle);
         String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
-        topic = filterTitleOrTopic(topic);
+        topic = trimTopicAndNullWhenEmpty(topic);
 
         createStreamInteractor.sendStream(streamId,
           title,
@@ -578,7 +578,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   streamTopic = stream.getTopic();
-                  if (streamTopic!= null && !streamTopic.isEmpty()) {
+                  if (streamTopic != null && !streamTopic.isEmpty()) {
                       streamTimelineView.showTopicSnackBar(streamTopic);
                   } else {
                       streamTimelineView.hideTopicSnackBar();
@@ -592,8 +592,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           });
     }
 
-    private String filterTitleOrTopic(String titleOrTopic) {
-        return titleOrTopic.trim();
+    private String trimTopicAndNullWhenEmpty(String streamTopic) {
+        String trimmedText = streamTopic;
+        if (trimmedText != null) {
+            trimmedText = trimmedText.trim();
+            if (trimmedText.isEmpty()) {
+                trimmedText = null;
+            }
+        }
+        return trimmedText;
+    }
+
+    private String filterTitle(String title) {
+        return title.trim();
     }
 
     private String filterShortTitle(String shortTitle) {
