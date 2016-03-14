@@ -81,13 +81,6 @@ public class MarkNiceShotInteractor implements Interactor {
         return shot;
     }
 
-    private void undoNiceInLocal() throws NiceNotMarkedException {
-        localNiceShotRepository.unmark(idShot);
-        Shot shot = localShotRepository.getShot(idShot);
-        shot.setNiceCount(shot.getNiceCount() - 1);
-        localShotRepository.putShot(shot);
-    }
-
     private void notifyCompleted() {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {

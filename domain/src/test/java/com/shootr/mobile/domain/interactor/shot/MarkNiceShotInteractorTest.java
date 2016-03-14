@@ -82,24 +82,6 @@ public class MarkNiceShotInteractorTest {
         verify(callback).onCompleted();
     }
 
-    @Test public void shouldUnmarkNiceWhenServerFails() throws Exception {
-        setupLocalShot();
-        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
-
-        interactor.markNiceShot(SHOT_ID, callback, errorCallback);
-
-        verify(niceShotRepository).unmark(SHOT_ID);
-    }
-
-    @Test public void shouldUpdateShotInLocalWhenServerFails() throws Exception {
-        setupLocalShot();
-        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
-
-        interactor.markNiceShot(SHOT_ID, callback, errorCallback);
-
-        verify(localShotRepository, times(2)).putShot(shot());
-    }
-
     @Test public void shouldNotifyErrorNiceWhenServerFails() throws Exception {
         setupLocalShot();
         doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
@@ -109,13 +91,13 @@ public class MarkNiceShotInteractorTest {
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
-    @Test public void shouldNotSendToServiceWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
+    @Test public void shouldNotifyErrorWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
         setupLocalShot();
         doThrow(new NiceAlreadyMarkedException()).when(niceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback, errorCallback);
 
-        verify(remoteNiceShotRepository, never()).mark(anyString());
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     private void setupLocalShot() {
