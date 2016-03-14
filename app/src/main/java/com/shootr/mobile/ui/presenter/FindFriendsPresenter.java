@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
+import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.UserModel;
@@ -22,6 +23,7 @@ public class FindFriendsPresenter implements Presenter {
     private final UnfollowInteractor unfollowInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
+    private final FindFriendsServerInteractor findFriendsServerInteractor;
 
     private FindFriendsView findFriendsView;
     private List<UserModel> friends;
@@ -29,10 +31,11 @@ public class FindFriendsPresenter implements Presenter {
     private Boolean hasBeenPaused = false;
     private int currentPage;
 
-    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
+    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor, FindFriendsServerInteractor findFriendsServerInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findFriendsInteractor = findFriendsInteractor;
+        this.findFriendsServerInteractor = findFriendsServerInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.userModelMapper = userModelMapper;
@@ -140,13 +143,15 @@ public class FindFriendsPresenter implements Presenter {
     }
 
     public void makeNextRemoteSearch() {
-        findFriendsInteractor.findFriends(query, currentPage, new Interactor.Callback<List<User>>() {
+        findFriendsServerInteractor.findFriends(query, currentPage, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
+                findFriendsView.hideLoading();
                 friends = userModelMapper.transform(users);
                 if (!friends.isEmpty()) {
                     findFriendsView.hideProgress();
                     findFriendsView.addFriends(friends);
                 } else {
+                    findFriendsView.hideProgress();
                     findFriendsView.setHasMoreItemsToLoad(false);
                 }
                 currentPage++;
