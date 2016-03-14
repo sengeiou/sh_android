@@ -36,7 +36,7 @@ public class FindFriendsInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void FindFriends(String search, Integer currentPage, Callback<List<User>> callback,
+    public void findFriends(String search, Integer currentPage, Callback<List<User>> callback,
       ErrorCallback errorCallback) {
         this.search = search;
         this.currentPage = currentPage;
@@ -47,10 +47,9 @@ public class FindFriendsInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(localUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
             notifyLoaded(remoteUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
         } catch (ServerCommunicationException error) {
-            notifyError(error);
+            notifyLoaded(localUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
         }
     }
 

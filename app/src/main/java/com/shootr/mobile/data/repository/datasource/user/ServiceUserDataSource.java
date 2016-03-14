@@ -141,11 +141,10 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale)
-      throws IOException {
+    @Override public List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) {
         try {
             return userApiService.search(searchString, pageOffset, locale);
-        } catch (ApiException e) {
+        } catch (ApiException  | IOException e ) {
             throw new ServerCommunicationException(e);
         }
     }

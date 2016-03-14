@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.anyList;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,18 +49,18 @@ public class FindFriendsInteractorTest {
         when(remoteUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
         when(localUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
 
-        interactor.FindFriends(SEARCH, PAGE, callback, errorCallback);
+        interactor.findFriends(SEARCH, PAGE, callback, errorCallback);
 
-        verify(callback,times(2)).onLoaded(anyList());
+        verify(callback).onLoaded(anyList());
     }
 
     @Test public void shouldOnLoadLocalUsersWhenServerComunicationException() throws Exception {
         when(remoteUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenThrow(ServerCommunicationException.class);
         when(localUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
 
-        interactor.FindFriends(SEARCH, PAGE, callback, errorCallback);
+        interactor.findFriends(SEARCH, PAGE, callback, errorCallback);
 
-        verify(callback,times(2)).onLoaded(anyList());
+        verify(callback).onLoaded(anyList());
     }
 
     private List<User> userList(){

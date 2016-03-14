@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.remote;
 
-import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
@@ -233,8 +232,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         }
     }
 
-    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
-      throws IOException {
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException {
         return transformUserEntitiesForPeople(remoteUserDataSource.findFriends(searchString, pageOffset, locale));
     }
 
