@@ -1,8 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -28,9 +26,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class FindFriendsPresenterTest {
 
@@ -152,6 +148,16 @@ public class FindFriendsPresenterTest {
         verify(findFriendsView, atLeast(1)).renderFriends(anyList());
     }
 
+    @Test public void shouldSearchFriendsWhenHaveBeenPausedAndIsInOnResume() throws Exception {
+        setupFindFriendsInteractorWithUsers();
+        presenter.pause();
+        presenter.resume();
+
+        presenter.searchFriends(QUERY);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
     private void setupFollowInteractor(){
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -184,7 +190,7 @@ public class FindFriendsPresenterTest {
                 callback.onLoaded(users());
                 return null;
             }
-        }).when(findFriendsInteractor).FindFriends(anyString(),
+        }).when(findFriendsInteractor).findFriends(anyString(),
           anyInt(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
@@ -198,7 +204,10 @@ public class FindFriendsPresenterTest {
                 callback.onLoaded(emptyUsers());
                 return null;
             }
-        }).when(findFriendsInteractor).FindFriends(anyString(), anyInt(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(findFriendsInteractor).findFriends(anyString(),
+          anyInt(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     private List<User> emptyUsers(){
