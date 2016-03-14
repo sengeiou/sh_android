@@ -46,12 +46,8 @@ public class UnmarkNiceShotInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        try {
-            unmarkNiceInLocal();
-            sendUndoNiceToRemote();
-        } catch (NiceNotMarkedException e) {
-            /* Ignore error and notify callback */
-        }
+
+        sendUndoNiceToRemote();
         notifyCompleted();
     }
 
@@ -73,13 +69,9 @@ public class UnmarkNiceShotInteractor implements Interactor {
     protected void sendUndoNiceToRemote() {
         try {
             remoteNiceShotRepository.unmark(idShot);
+            unmarkNiceInLocal();
         } catch (ShootrException | NiceNotMarkedException e) {
             notifyError(new ShootrException() {});
-            try {
-                redoNiceInLocal();
-            } catch (NiceAlreadyMarkedException error) {
-                /* swallow */
-            }
         }
     }
 
