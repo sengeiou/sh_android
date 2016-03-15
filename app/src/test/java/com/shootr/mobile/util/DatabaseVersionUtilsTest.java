@@ -28,6 +28,7 @@ public class DatabaseVersionUtilsTest {
     @Mock SQLiteOpenHelper dbOpenHelper;
     @Mock FacebookController facebookController;
     @Mock BooleanPreference shouldShowIntro;
+    @Mock CacheUtils cacheUtils;
 
     private DatabaseVersionUtils databaseVersionUtils;
 
@@ -35,7 +36,7 @@ public class DatabaseVersionUtilsTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         databaseVersionUtils = new DatabaseVersionUtils(context, preferencesDatabaseVersion, version,
-          dbOpenHelper, shouldShowIntro);
+          dbOpenHelper, shouldShowIntro, cacheUtils);
     }
 
     @Test
