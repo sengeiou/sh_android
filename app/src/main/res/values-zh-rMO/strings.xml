@@ -358,4 +358,11 @@
     <string name="yes">是的</string>
     <string name="cancel_hide_shot">取消</string>
     <string name="confirmation_hide_shot_message">解除钉选</string>
+    <string name="photo_edit_remove">清除</string>
+    <string name="pin_topic">钉选信息</string>
+    <string name="done_pin_topic">钉选</string>
+    <string name="new_topic">新的消息…</string>
+    <string name="topic">信息</string>
+    <string name="watch_profile_photo">点开</string>
+    <string name="title_menu_photo">照片</string>
 </resources>

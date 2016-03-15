@@ -357,4 +357,11 @@
   <string name="yes">是</string>
   <string name="cancel_hide_shot">取消</string>
   <string name="confirmation_hide_shot_message">解除釘選</string>
+  <string name="photo_edit_remove">清除</string>
+  <string name="pin_topic">釘選訊息</string>
+  <string name="done_pin_topic">釘選</string>
+  <string name="new_topic">新的消息…</string>
+  <string name="topic">訊息</string>
+  <string name="watch_profile_photo">點開</string>
+  <string name="title_menu_photo">照片</string>
 </resources>

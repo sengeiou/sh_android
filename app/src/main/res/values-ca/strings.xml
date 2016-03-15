@@ -362,4 +362,11 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">Tornem aviat</string>
     <string name="yes">Sí</string>
+    <string name="photo_edit_remove">Treure</string>
+    <string name="pin_topic">Fixar un missatge</string>
+    <string name="done_pin_topic">OK</string>
+    <string name="new_topic">Nou missatge…</string>
+    <string name="topic">Missatge</string>
+    <string name="watch_profile_photo">Veure</string>
+    <string name="title_menu_photo">Foto</string>
 </resources>

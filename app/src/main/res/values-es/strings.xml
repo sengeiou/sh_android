@@ -360,4 +360,11 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">Volvemos pronto</string>
     <string name="yes">Sí</string>
+    <string name="photo_edit_remove">Quitar</string>
+    <string name="pin_topic">Anclar mensaje</string>
+    <string name="done_pin_topic">OK</string>
+    <string name="new_topic">Nuevo mensaje…</string>
+    <string name="topic">Mensaje</string>
+    <string name="watch_profile_photo">Ver</string>
+    <string name="title_menu_photo">Foto</string>
 </resources>
