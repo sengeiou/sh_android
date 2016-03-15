@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -34,17 +35,25 @@ public class GetStreamInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        Stream localStream = localStreamRepository.getStreamById(idStream);
-        if (localStream != null) {
-            notifyLoaded(localStream);
-        } else {
-            Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
-            if (remoteStream != null) {
-                notifyLoaded(remoteStream);
-            } else {
-                //TODO notify error...
-            }
+        try {
+            loadRemoteStream();
+        }catch (ServerCommunicationException error){
+            loadLocalStream();
         }
+    }
+
+    private void loadRemoteStream(){
+        Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
+        if (remoteStream != null) {
+            notifyLoaded(remoteStream);
+        }else{
+            // TODO: Notify error
+        }
+    }
+
+    private void loadLocalStream(){
+        Stream localStream = localStreamRepository.getStreamById(idStream);
+        notifyLoaded(localStream);
     }
 
     private void notifyLoaded(final Stream stream) {
