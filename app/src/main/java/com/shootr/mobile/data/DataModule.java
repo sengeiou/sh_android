@@ -43,6 +43,8 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.BackStackHandlerTool;
 import com.shootr.mobile.util.BitmapImageResizer;
+import com.shootr.mobile.util.CacheDataUtils;
+import com.shootr.mobile.util.CacheUtils;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -197,6 +199,11 @@ public class DataModule {
 
     @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
         return new GoogleAnalyticsTool();
+    }
+
+    @Provides @Singleton
+    CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
+        return new CacheDataUtils(crashReportTool);
     }
 
     @Provides @Singleton BackStackHandler provideBackStackHandler() {

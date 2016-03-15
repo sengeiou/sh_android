@@ -35,7 +35,7 @@ public class DatabaseVersionUtilsTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         databaseVersionUtils = new DatabaseVersionUtils(context, preferencesDatabaseVersion, version,
-          dbOpenHelper, shouldShowIntro);
+          dbOpenHelper, shouldShowIntro, cacheUtils);
     }
 
     @Test
