@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
@@ -15,11 +16,10 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,33 +80,13 @@ public class UnmarkNiceShotInteractorTest {
         verify(callback).onCompleted();
     }
 
-    @Test public void shouldUnmarkNiceWhenServerFails() throws Exception {
-        setupLocalShot();
-        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).unmark(anyString());
-
-        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
-
-        verify(niceShotRepository).unmark(SHOT_ID);
-    }
-
-    @Test public void shouldIncrementNiceWhenServerFails() throws Exception {
-        setupLocalShot();
-        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).unmark(anyString());
-
-        interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
-
-        Shot shot = shot();
-        shot.setNiceCount(1);
-        verify(localShotRepository, times(2)).putShot(shot);
-    }
-
-    @Test public void shouldNotSendToServiceWhenRepositoryFailsWithNiceNotMarked() throws Exception {
+    @Test public void shouldNotifyErrorWhenRepositoryFailsWithNiceNotMarked() throws Exception {
         setupLocalShot();
         doThrow(new NiceNotMarkedException()).when(niceShotRepository).unmark(anyString());
 
         interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 
-        verify(remoteNiceShotRepository, never()).unmark(anyString());
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     private void setupLocalShot() {

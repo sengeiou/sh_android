@@ -47,7 +47,6 @@ public class GetLastShotsInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        loadLastShotsFromLocal();
         loadLastShotsFromRemote();
     }
 
@@ -62,6 +61,7 @@ public class GetLastShotsInteractor implements Interactor {
             notifyLoaded(remoteShots);
             saveShotsForCurrentUserAndFollowing(remoteShots);
         } catch (ServerCommunicationException error) {
+            loadLastShotsFromLocal();
             notifyError(error);
         }
     }

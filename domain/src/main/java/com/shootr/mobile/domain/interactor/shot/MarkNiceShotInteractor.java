@@ -47,32 +47,16 @@ public class MarkNiceShotInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        try {
-            markNiceInLocal();
-            sendNiceToServer();
-        } catch (NiceAlreadyMarkedException e) {
-            /* Ignore error and notify callback */
-        }
+        sendNiceToServer();
         notifyCompleted();
     }
 
     private void sendNiceToServer() throws NiceNotMarkedException {
         try {
             remoteNiceShotRepository.mark(idShot);
-        } catch (NiceAlreadyMarkedException e) {
+            markNiceInLocal();
+        } catch (ServerCommunicationException | NiceAlreadyMarkedException error) {
             notifyError(new ShootrException() {});
-            try {
-                undoNiceInLocal();
-            } catch (NiceNotMarkedException error) {
-                /* swallow */
-            }
-        } catch (ServerCommunicationException error) {
-            try {
-                undoNiceInLocal();
-            }catch (NiceNotMarkedException exception){
-                /* swallow */
-            }
-            notifyError(error);
         }
     }
 
@@ -95,13 +79,6 @@ public class MarkNiceShotInteractor implements Interactor {
             shot = remoteShotRepository.getShot(idShot);
         }
         return shot;
-    }
-
-    private void undoNiceInLocal() throws NiceNotMarkedException {
-        localNiceShotRepository.unmark(idShot);
-        Shot shot = localShotRepository.getShot(idShot);
-        shot.setNiceCount(shot.getNiceCount() - 1);
-        localShotRepository.putShot(shot);
     }
 
     private void notifyCompleted() {
