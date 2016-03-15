@@ -20,7 +20,7 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class FindFriendsInteractorTest {
+public class FindFriendsServerInteractorTest {
 
     private static final String SEARCH = "search";
     private static final Integer PAGE = 3;
@@ -30,24 +30,22 @@ public class FindFriendsInteractorTest {
     private static final String STREAM = "stream";
     @Mock InteractorHandler interactorHandler;
     @Mock UserRepository remoteUserRepository;
-    @Mock UserRepository localUserRepository;
     @Mock PostExecutionThread postExecutionThread;
     @Mock LocaleProvider localeProvider;
     @Mock Interactor.Callback<List<User>> callback;
     @Mock Interactor.ErrorCallback errorCallback;
 
-    private FindFriendsInteractor interactor;
+    private FindFriendsServerInteractor interactor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new FindFriendsInteractor(interactorHandler, localUserRepository, remoteUserRepository, postExecutionThread, localeProvider);
+        interactor = new FindFriendsServerInteractor(interactorHandler, remoteUserRepository, postExecutionThread, localeProvider);
     }
 
     @Test public void shouldOnLoadUsersWhenFindFriends() throws Exception {
         when(remoteUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
-        when(localUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
 
         interactor.findFriends(SEARCH, PAGE, callback, errorCallback);
 
@@ -56,7 +54,6 @@ public class FindFriendsInteractorTest {
 
     @Test public void shouldOnLoadLocalUsersWhenServerComunicationException() throws Exception {
         when(remoteUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenThrow(ServerCommunicationException.class);
-        when(localUserRepository.findFriends(SEARCH, PAGE, LOCALE)).thenReturn(userList());
 
         interactor.findFriends(SEARCH, PAGE, callback, errorCallback);
 
@@ -80,4 +77,5 @@ public class FindFriendsInteractorTest {
 
         return user;
     }
+
 }

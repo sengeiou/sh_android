@@ -1,10 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
+import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
@@ -28,9 +27,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class FindFriendsPresenterTest {
 
@@ -44,6 +41,7 @@ public class FindFriendsPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock FindFriendsView findFriendsView;
+    @Mock FindFriendsServerInteractor findFriendsServerInteractor;
 
     private FindFriendsPresenter presenter;
 
@@ -51,6 +49,7 @@ public class FindFriendsPresenterTest {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new FindFriendsPresenter(findFriendsInteractor,
+          findFriendsServerInteractor,
           followInteractor,
           unfollowInteractor,
           userModelMapper,
@@ -152,7 +151,26 @@ public class FindFriendsPresenterTest {
         verify(findFriendsView, atLeast(1)).renderFriends(anyList());
     }
 
-    private void setupFollowInteractor(){
+    @Test public void shouldSearchFriendsWhenHaveBeenPausedAndIsInOnResume() throws Exception {
+        setupFindFriendsInteractorWithUsers();
+        presenter.pause();
+        presenter.resume();
+
+        presenter.searchFriends(QUERY);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldAddFriendsWhenMakeTheNextRemoteSearch() throws Exception {
+        setupFindFriendsServerInteractorWithUsers();
+        presenter.initialize(findFriendsView);
+
+        presenter.makeNextRemoteSearch();
+
+        verify(findFriendsView).addFriends(anyList());
+    }
+    
+    private void setupFollowInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.CompletedCallback callback =
@@ -160,12 +178,11 @@ public class FindFriendsPresenterTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(followInteractor).follow(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(followInteractor)
+          .follow(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupUnFollowInteractor(){
+    private void setupUnFollowInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.CompletedCallback callback =
@@ -176,42 +193,50 @@ public class FindFriendsPresenterTest {
         }).when(unfollowInteractor).unfollow(anyString(), any(Interactor.CompletedCallback.class));
     }
 
-    private void setupFindFriendsInteractorWithUsers(){
+    private void setupFindFriendsInteractorWithUsers() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                FindFriendsInteractor.Callback callback =
-                  (FindFriendsInteractor.Callback) invocation.getArguments()[2];
+                FindFriendsInteractor.Callback callback = (FindFriendsInteractor.Callback) invocation.getArguments()[2];
                 callback.onLoaded(users());
                 return null;
             }
-        }).when(findFriendsInteractor).FindFriends(anyString(),
-          anyInt(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(findFriendsInteractor)
+          .findFriends(anyString(), anyInt(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupFindFriendsInteractorWithoutUsers(){
+    private void setupFindFriendsInteractorWithoutUsers() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                FindFriendsInteractor.Callback callback =
-                  (FindFriendsInteractor.Callback) invocation.getArguments()[2];
+                FindFriendsInteractor.Callback callback = (FindFriendsInteractor.Callback) invocation.getArguments()[2];
                 callback.onLoaded(emptyUsers());
                 return null;
             }
-        }).when(findFriendsInteractor).FindFriends(anyString(), anyInt(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(findFriendsInteractor)
+          .findFriends(anyString(), anyInt(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private List<User> emptyUsers(){
+    private void setupFindFriendsServerInteractorWithUsers() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                FindFriendsServerInteractor.Callback callback = (FindFriendsServerInteractor.Callback) invocation.getArguments()[2];
+                callback.onLoaded(users());
+                return null;
+            }
+        }).when(findFriendsServerInteractor)
+          .findFriends(anyString(), anyInt(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    private List<User> emptyUsers() {
         return new ArrayList<>();
     }
 
-    private List<User> users(){
+    private List<User> users() {
         ArrayList<User> users = new ArrayList<>();
         users.add(user());
         return users;
     }
 
-    private User user(){
+    private User user() {
         User user = new User();
         user.setIdUser(USER_ID);
         user.setUsername(USERNAME);
@@ -219,7 +244,7 @@ public class FindFriendsPresenterTest {
         return user;
     }
 
-    private UserModel userModel(){
+    private UserModel userModel() {
         UserModel userModel = new UserModel();
         userModel.setIdUser(USER_ID);
         userModel.setUsername(USERNAME);
