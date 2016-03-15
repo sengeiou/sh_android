@@ -28,6 +28,7 @@ public class DatabaseVersionUtilsTest {
     @Mock SQLiteOpenHelper dbOpenHelper;
     @Mock FacebookController facebookController;
     @Mock BooleanPreference shouldShowIntro;
+    @Mock CacheUtils cacheUtils;
 
     private DatabaseVersionUtils databaseVersionUtils;
 
