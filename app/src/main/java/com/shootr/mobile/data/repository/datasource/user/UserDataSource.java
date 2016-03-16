@@ -31,7 +31,7 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
     List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize);
 
-    List<UserEntity> getLocalUsers(String idUser);
+    List<UserEntity> getRelatedUsers(String idUser);
 
     UserEntity updateUser(UserEntity currentOrNewUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;

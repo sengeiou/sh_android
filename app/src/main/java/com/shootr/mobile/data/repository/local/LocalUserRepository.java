@@ -103,7 +103,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getLocalPeople(String idUser) {
-        return transformUserEntitiesForPeople(localUserDataSource.getLocalUsers(idUser));
+        return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsers(idUser));
     }
 
     @Override public User updateUserProfile(User updatedUserEntity) {

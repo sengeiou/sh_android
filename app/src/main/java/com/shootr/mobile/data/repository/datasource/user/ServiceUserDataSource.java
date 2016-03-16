@@ -120,7 +120,7 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getLocalUsers(String idUser) {
+    @Override public List<UserEntity> getRelatedUsers(String idUser) {
         throw new RuntimeException("Server DataSource can't access to this");
     }
 
