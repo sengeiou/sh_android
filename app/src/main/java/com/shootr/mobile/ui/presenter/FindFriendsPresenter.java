@@ -35,9 +35,11 @@ public class FindFriendsPresenter implements Presenter {
     private Boolean hasBeenPaused = false;
     private int currentPage;
     private boolean hasSearchedInRemote;
+    private boolean restoreEstats;
 
-    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor, FindFriendsServerInteractor findFriendsServerInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor,
+    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
+      FindFriendsServerInteractor findFriendsServerInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor,
       GetLocalPeopleInteractor getLocalPeopleInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findFriendsInteractor = findFriendsInteractor;
@@ -54,21 +56,23 @@ public class FindFriendsPresenter implements Presenter {
         this.findFriendsView = findFriendsView;
     }
 
-    public void initialize(FindFriendsView findFriendsView) {
+    public void initialize(FindFriendsView findFriendsView, Boolean restoreEstats) {
+        this.restoreEstats = restoreEstats;
         this.setView(findFriendsView);
         initializeReactiveSearch();
         this.friends = new ArrayList<>();
     }
 
     private void initializeReactiveSearch() {
-        getLocalPeopleInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                friends = userModelMapper.transform(users);
-                findFriendsView.showContent();
-                findFriendsView.renderFriends(friends);
-            }
-        });
-
+        if(!restoreEstats) {
+            getLocalPeopleInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    friends = userModelMapper.transform(users);
+                    findFriendsView.showContent();
+                    findFriendsView.renderFriends(friends);
+                }
+            });
+        }
     }
 
     public void searchFriends(String query) {
@@ -154,9 +158,9 @@ public class FindFriendsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if(!hasSearchedInRemote){
-            initializeReactiveSearch();
-        }else if (hasBeenPaused && query != null) {
+        if (!hasSearchedInRemote && query != null) {
+            queryTextChanged(query);
+        } else if (hasBeenPaused && query != null) {
             searchFriends(query);
         }
     }
@@ -187,20 +191,29 @@ public class FindFriendsPresenter implements Presenter {
         });
     }
 
-    public void queryTextChanged(String query) {
-        if(!hasSearchedInRemote){
+    public void queryTextChanged(final String query) {
+        if (!hasSearchedInRemote) {
+            this.query = query;
             reactiveSearchPeopleInteractor.obtainPeople(query, new Interactor.Callback<List<User>>() {
                 @Override public void onLoaded(List<User> users) {
                     friends = userModelMapper.transform(users);
-                    if(!friends.isEmpty()){
+                    if (!friends.isEmpty()) {
                         findFriendsView.showContent();
                         findFriendsView.renderFriends(friends);
-                    }else{
+                    } else {
                         findFriendsView.hideEmpty();
                         findFriendsView.hideContent();
+                        searchFriends(query);
                     }
                 }
             });
+        }
+    }
+
+    public void restoreFriends(List<UserModel> restoredResults) {
+        if (restoredResults != null) {
+            findFriendsView.showContent();
+            findFriendsView.renderFriends(restoredResults);
         }
     }
 }

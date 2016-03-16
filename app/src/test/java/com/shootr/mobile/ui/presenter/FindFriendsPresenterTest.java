@@ -37,6 +37,7 @@ public class FindFriendsPresenterTest {
     private static final String USERNAME = "username";
     private static final String STREAM = "streamId";
     private static final String QUERY = "query";
+    private static final Boolean NORMAL_INIT = false;
     @Mock FindFriendsInteractor findFriendsInteractor;
     @Mock FollowInteractor followInteractor;
     @Mock UnfollowInteractor unfollowInteractor;
@@ -63,14 +64,22 @@ public class FindFriendsPresenterTest {
     @Test public void shouldRenderLocalFriendsWhenInitialize() throws Exception {
         setupGetLocalPeopleInteractorWithUsers();
 
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         verify(findFriendsView).renderFriends(anyList());
     }
 
+    @Test public void shouldNotObtainLocalPeopleWhenInitializeWithRestore() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+
+        presenter.initialize(findFriendsView, NORMAL_INIT);
+
+        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(), any(Interactor.Callback.class));
+    }
+
     @Test public void shouldRenderLocalPeopleWhenQueryTextChanged() throws Exception {
         setupGetLocalPeopleInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.queryTextChanged(QUERY);
 
@@ -79,7 +88,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldObtainLocalPeopleWhenQueryTextChanged() throws Exception {
         setupGetLocalPeopleInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.queryTextChanged(QUERY);
 
@@ -88,7 +97,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotObtainLocalPeopleWhenQueryTextChangedAndHasSearchedInRemote() throws Exception {
         setupGetLocalPeopleInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
         presenter.searchFriends(QUERY);
 
         presenter.queryTextChanged(QUERY);
@@ -98,7 +107,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldHideEmptyWhenQueryTextChangedAndLocalPeopleIsEmpty() throws Exception {
         setupGetLocalPeopleInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.queryTextChanged(QUERY);
 
@@ -107,7 +116,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldShowContentWhenSearchFriendsAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -116,7 +125,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotShowContentWhenSearchFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -125,7 +134,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldRenderFriendsWhenSearchFriendsAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -134,7 +143,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotRenderFriendsWhenSearchFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -143,7 +152,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldShowEmptyWhenSearFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -152,7 +161,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldHideEmptyWhenRefreshFriends() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.refreshFriends();
 
@@ -161,7 +170,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotRenderFriendsWhenRefreshAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.refreshFriends();
 
@@ -170,7 +179,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldRenderFriendsWhenRefreshAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.refreshFriends();
 
@@ -180,7 +189,7 @@ public class FindFriendsPresenterTest {
     @Test public void shouldRenderFriendWhenFollowUser() throws Exception {
         setupFollowInteractor();
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
         presenter.searchFriends(QUERY);
 
         presenter.followUser(userModel());
@@ -191,7 +200,7 @@ public class FindFriendsPresenterTest {
     @Test public void shouldRenderFriendWhenUnFollowUser() throws Exception {
         setupUnFollowInteractor();
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
         presenter.searchFriends(QUERY);
 
         presenter.followUser(userModel());
@@ -211,7 +220,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldAddFriendsWhenMakeTheNextRemoteSearch() throws Exception {
         setupFindFriendsServerInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, NORMAL_INIT);
 
         presenter.makeNextRemoteSearch();
 
