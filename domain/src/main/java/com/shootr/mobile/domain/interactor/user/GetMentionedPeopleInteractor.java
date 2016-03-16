@@ -46,7 +46,7 @@ public class GetMentionedPeopleInteractor implements Interactor {
     }
 
     private void obtainLocalPeopleThenFallbackToRemote() {
-        List<User> userList = localUserRepository.getUsersForMention(sessionRepository.getCurrentUserId());
+        List<User> userList = localUserRepository.getLocalPeople(sessionRepository.getCurrentUserId());
         if (!userList.isEmpty()) {
             notifyResult(getUsersPossiblyMentioned(userList));
         } else {

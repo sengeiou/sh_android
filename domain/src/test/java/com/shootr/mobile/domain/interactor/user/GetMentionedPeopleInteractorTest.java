@@ -40,12 +40,12 @@ public class GetMentionedPeopleInteractorTest {
     @Test public void shouldLoadMentionedPeopleFromLocal() throws Exception {
         interactor.obtainMentionedPeople(MENTION, callback);
 
-        verify(localUserRepository).getUsersForMention(anyString());
+        verify(localUserRepository).getLocalPeople(anyString());
     }
 
     @Test public void shouldNotLoadFromRemoteIfThereArePeopleInLocal() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        when(localUserRepository.getUsersForMention(ID_USER)).thenReturn(Collections.singletonList(user()));
+        when(localUserRepository.getLocalPeople(ID_USER)).thenReturn(Collections.singletonList(user()));
 
         interactor.obtainMentionedPeople(MENTION, callback);
 

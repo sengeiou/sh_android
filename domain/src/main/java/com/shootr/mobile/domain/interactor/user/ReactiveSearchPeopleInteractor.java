@@ -45,7 +45,7 @@ public class ReactiveSearchPeopleInteractor implements Interactor {
     }
 
     private void obtainLocalPeople() {
-        List<User> userList = localUserRepository.getUsersForMention(sessionRepository.getCurrentUserId());
+        List<User> userList = localUserRepository.getLocalPeople(sessionRepository.getCurrentUserId());
         notifyResult(getUsersPossiblyMentioned(userList));
     }
 
