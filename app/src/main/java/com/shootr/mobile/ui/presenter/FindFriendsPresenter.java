@@ -30,6 +30,7 @@ public class FindFriendsPresenter implements Presenter {
     private String query;
     private Boolean hasBeenPaused = false;
     private int currentPage;
+    private boolean hasSearchedInRemote;
 
     @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor, FindFriendsServerInteractor findFriendsServerInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
@@ -48,10 +49,16 @@ public class FindFriendsPresenter implements Presenter {
 
     public void initialize(FindFriendsView findFriendsView) {
         this.setView(findFriendsView);
+        intializeReactiveSearch();
         this.friends = new ArrayList<>();
     }
 
+    private void intializeReactiveSearch() {
+        //TODO: mostrar lista de friends (la tienes de local)
+    }
+
     public void searchFriends(String query) {
+        this.hasSearchedInRemote = true;
         this.query = query;
         findFriendsView.hideEmpty();
         findFriendsView.hideContent();
@@ -162,5 +169,13 @@ public class FindFriendsPresenter implements Presenter {
                 findFriendsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void queryTextChanged(String s) {
+        //TODO crear un interactor como el de menciones que obtenga users solo de local
+        //TODO mismo comportamiento al cargar usuarios que en el search
+        //TODO si la lista de users que se obtiene es empty -> dejar pantalla en blanco, no mostrar empty
+        //TODO evaluar el flag (hasSearchedInRemote) para no hacer ninguna peticion si se ha buscado en remoto
+        //TODO rename el parametro que se le pasa.
     }
 }

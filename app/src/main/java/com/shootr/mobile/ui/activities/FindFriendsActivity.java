@@ -135,6 +135,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
             }
 
             @Override public boolean onQueryTextChange(String s) {
+                findFriendsPresenter.queryTextChanged(s);
                 return false;
             }
         });
