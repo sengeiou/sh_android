@@ -58,7 +58,7 @@ public class SyncFollowRepositoryTest {
         verify(syncTrigger).notifyNeedsSync(any(SyncableRepository.class));
     }
 
-    @Test public void shouldNotInvalidatePeopleWhenUNfollowAndThrowServerComunicationException() throws Exception {
+    @Test public void shouldNotInvalidatePeopleWhenUnfollowAndThrowServerComunicationException() throws Exception {
         doThrow(ServerCommunicationException.class).when(remoteFollowDataSource).removeFollow(anyString());
 
         syncFollowRepository.unfollow(ID_USER);
