@@ -7,6 +7,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetLocalPeopleInteractor;
+import com.shootr.mobile.domain.interactor.user.ReactiveSearchPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -24,6 +26,8 @@ public class FindFriendsPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final FindFriendsServerInteractor findFriendsServerInteractor;
+    private final ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
+    private final GetLocalPeopleInteractor getLocalPeopleInteractor;
 
     private FindFriendsView findFriendsView;
     private List<UserModel> friends;
@@ -33,12 +37,15 @@ public class FindFriendsPresenter implements Presenter {
     private boolean hasSearchedInRemote;
 
     @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor, FindFriendsServerInteractor findFriendsServerInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor,
+      GetLocalPeopleInteractor getLocalPeopleInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findFriendsInteractor = findFriendsInteractor;
         this.findFriendsServerInteractor = findFriendsServerInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
+        this.reactiveSearchPeopleInteractor = reactiveSearchPeopleInteractor;
+        this.getLocalPeopleInteractor = getLocalPeopleInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -49,12 +56,19 @@ public class FindFriendsPresenter implements Presenter {
 
     public void initialize(FindFriendsView findFriendsView) {
         this.setView(findFriendsView);
-        intializeReactiveSearch();
+        initializeReactiveSearch();
         this.friends = new ArrayList<>();
     }
 
-    private void intializeReactiveSearch() {
-        //TODO: mostrar lista de friends (la tienes de local)
+    private void initializeReactiveSearch() {
+        getLocalPeopleInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                friends = userModelMapper.transform(users);
+                findFriendsView.showContent();
+                findFriendsView.renderFriends(friends);
+            }
+        });
+
     }
 
     public void searchFriends(String query) {
@@ -140,7 +154,9 @@ public class FindFriendsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if (hasBeenPaused && query != null) {
+        if(!hasSearchedInRemote){
+            initializeReactiveSearch();
+        }else if (hasBeenPaused && query != null) {
             searchFriends(query);
         }
     }
@@ -171,11 +187,20 @@ public class FindFriendsPresenter implements Presenter {
         });
     }
 
-    public void queryTextChanged(String s) {
-        //TODO crear un interactor como el de menciones que obtenga users solo de local
-        //TODO mismo comportamiento al cargar usuarios que en el search
-        //TODO si la lista de users que se obtiene es empty -> dejar pantalla en blanco, no mostrar empty
-        //TODO evaluar el flag (hasSearchedInRemote) para no hacer ninguna peticion si se ha buscado en remoto
-        //TODO rename el parametro que se le pasa.
+    public void queryTextChanged(String query) {
+        if(!hasSearchedInRemote){
+            reactiveSearchPeopleInteractor.obtainPeople(query, new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    friends = userModelMapper.transform(users);
+                    if(!friends.isEmpty()){
+                        findFriendsView.showContent();
+                        findFriendsView.renderFriends(friends);
+                    }else{
+                        findFriendsView.hideEmpty();
+                        findFriendsView.hideContent();
+                    }
+                }
+            });
+        }
     }
 }

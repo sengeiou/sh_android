@@ -5,6 +5,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetLocalPeopleInteractor;
+import com.shootr.mobile.domain.interactor.user.ReactiveSearchPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -42,6 +44,8 @@ public class FindFriendsPresenterTest {
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock FindFriendsView findFriendsView;
     @Mock FindFriendsServerInteractor findFriendsServerInteractor;
+    @Mock ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
+    @Mock GetLocalPeopleInteractor getLocalPeopleInteractor;
 
     private FindFriendsPresenter presenter;
 
@@ -51,10 +55,54 @@ public class FindFriendsPresenterTest {
         presenter = new FindFriendsPresenter(findFriendsInteractor,
           findFriendsServerInteractor,
           followInteractor,
-          unfollowInteractor,
-          userModelMapper,
+          unfollowInteractor, reactiveSearchPeopleInteractor, getLocalPeopleInteractor, userModelMapper,
           errorMessageFactory);
         presenter.setView(findFriendsView);
+    }
+
+    @Test public void shouldRenderLocalFriendsWhenInitialize() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+
+        presenter.initialize(findFriendsView);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldRenderLocalPeopleWhenQueryTextChanged() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldObtainLocalPeopleWhenQueryTextChanged() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor).obtainPeople(anyString(), any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldNotObtainLocalPeopleWhenQueryTextChangedAndHasSearchedInRemote() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView);
+        presenter.searchFriends(QUERY);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(),any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldHideEmptyWhenQueryTextChangedAndLocalPeopleIsEmpty() throws Exception {
+        setupGetLocalPeopleInteractorWithoutUsers();
+        presenter.initialize(findFriendsView);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor).obtainPeople(anyString(), any(Interactor.Callback.class));
     }
 
     @Test public void shouldShowContentWhenSearchFriendsAndFriendsIsNotEmpty() throws Exception {
@@ -191,6 +239,26 @@ public class FindFriendsPresenterTest {
                 return null;
             }
         }).when(unfollowInteractor).unfollow(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    private void setupGetLocalPeopleInteractorWithUsers() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(users());
+                return null;
+            }
+        }).when(getLocalPeopleInteractor).obtainPeople(any(Interactor.Callback.class));
+    }
+
+    private void setupGetLocalPeopleInteractorWithoutUsers() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(new ArrayList<User>());
+                return null;
+            }
+        }).when(getLocalPeopleInteractor).obtainPeople(any(Interactor.Callback.class));
     }
 
     private void setupFindFriendsInteractorWithUsers() {
