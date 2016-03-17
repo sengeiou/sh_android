@@ -267,10 +267,6 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
     }
 
-    @Override public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-
-    }
-
     @Override protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
