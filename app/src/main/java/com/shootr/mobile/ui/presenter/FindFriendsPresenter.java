@@ -56,8 +56,8 @@ public class FindFriendsPresenter implements Presenter {
         this.findFriendsView = findFriendsView;
     }
 
-    public void initialize(FindFriendsView findFriendsView, Boolean restoreEstats) {
-        this.restoreEstats = restoreEstats;
+    public void initialize(FindFriendsView findFriendsView, Boolean restoreState) {
+        this.restoreEstats = restoreState;
         this.setView(findFriendsView);
         initializeReactiveSearch();
         this.friends = new ArrayList<>();
