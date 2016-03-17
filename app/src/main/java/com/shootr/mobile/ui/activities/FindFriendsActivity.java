@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
@@ -215,7 +214,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
         progressView.setVisibility(View.GONE);
     }
 
-    @Override public void restoreEstats() {
+    @Override public void restoreState() {
         findFriendsPresenter.initialize(this, true);
     }
 
@@ -275,7 +274,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
 
     @Override protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        restoreEstats();
+        restoreState();
         currentSearchQuery = savedInstanceState.getString(EXTRA_QUERY);
         List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
         findFriendsPresenter.restoreFriends(restoredResults);

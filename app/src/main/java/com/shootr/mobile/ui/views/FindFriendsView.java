@@ -22,5 +22,5 @@ public interface FindFriendsView extends LoadDataView {
 
     void hideProgress();
 
-    void restoreEstats();
+    void restoreState();
 }
