@@ -35,7 +35,7 @@ public class FindFriendsPresenter implements Presenter {
     private Boolean hasBeenPaused = false;
     private int currentPage;
     private boolean hasSearchedInRemote;
-    private boolean restoreEstats;
+    private boolean restoreState;
 
     @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
       FindFriendsServerInteractor findFriendsServerInteractor, FollowInteractor followInteractor,
@@ -57,14 +57,14 @@ public class FindFriendsPresenter implements Presenter {
     }
 
     public void initialize(FindFriendsView findFriendsView, Boolean restoreState) {
-        this.restoreEstats = restoreState;
+        this.restoreState = restoreState;
         this.setView(findFriendsView);
         initializeReactiveSearch();
         this.friends = new ArrayList<>();
     }
 
     private void initializeReactiveSearch() {
-        if(!restoreEstats) {
+        if(!restoreState) {
             getLocalPeopleInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
                 @Override public void onLoaded(List<User> users) {
                     friends = userModelMapper.transform(users);

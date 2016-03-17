@@ -38,7 +38,6 @@ public class FindFriendsPresenterTest {
     private static final String STREAM = "streamId";
     private static final String QUERY = "query";
     private static final Boolean FIRST_INIT = false;
-    public static final boolean RESTORE_STATE = true;
     @Mock FindFriendsInteractor findFriendsInteractor;
     @Mock FollowInteractor followInteractor;
     @Mock UnfollowInteractor unfollowInteractor;
