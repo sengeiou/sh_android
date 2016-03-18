@@ -27,10 +27,6 @@ import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.interactor.InteractorModule;
 import com.shootr.mobile.notifications.gcm.GCMIntentService;
 import com.shootr.mobile.service.ApiModule;
-import com.shootr.mobile.task.jobs.ShootrBaseJob;
-import com.shootr.mobile.task.jobs.follows.SearchPeopleLocalJob;
-import com.shootr.mobile.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.mobile.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
@@ -47,6 +43,8 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.BackStackHandlerTool;
 import com.shootr.mobile.util.BitmapImageResizer;
+import com.shootr.mobile.util.CacheDataUtils;
+import com.shootr.mobile.util.CacheUtils;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -82,13 +80,9 @@ import static android.content.Context.MODE_PRIVATE;
 
     BaseSignedInActivity.class,
 
-    ShootrBaseJob.class,
-
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
-    UpdateUserProfileJob.class,
-
-    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
+    ShotManager.class,
 
     UserManager.class, DeviceManager.class,
 
@@ -205,6 +199,11 @@ public class DataModule {
 
     @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
         return new GoogleAnalyticsTool();
+    }
+
+    @Provides @Singleton
+    CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
+        return new CacheDataUtils(crashReportTool);
     }
 
     @Provides @Singleton BackStackHandler provideBackStackHandler() {

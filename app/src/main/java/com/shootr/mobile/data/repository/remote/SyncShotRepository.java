@@ -12,25 +12,22 @@ import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.List;
 import javax.inject.Inject;
 
 public class SyncShotRepository implements ShotRepository, SyncableRepository {
 
-    private final SessionRepository sessionRepository;
     private final ShotDataSource remoteShotDataSource;
     private final ShotDataSource localShotDataSource;
     private final ShotEntityMapper shotEntityMapper;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncShotRepository(SessionRepository sessionRepository,@Remote ShotDataSource remoteShotDataSource, @Local ShotDataSource localShotDataSource,
+    @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource, @Local ShotDataSource localShotDataSource,
       ShotEntityMapper shotEntityMapper, SyncTrigger syncTrigger) {
         this.remoteShotDataSource = remoteShotDataSource;
         this.localShotDataSource = localShotDataSource;
         this.shotEntityMapper = shotEntityMapper;
-        this.sessionRepository=sessionRepository;
         this.syncTrigger=syncTrigger;
     }
 

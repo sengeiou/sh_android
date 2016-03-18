@@ -12,7 +12,15 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
+    @Override public void showHolderOptions() {
+        /* no-op */
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
+        /* no-op */
+    }
+
+    @Override public void openEditTopicDialog() {
         /* no-op */
     }
 

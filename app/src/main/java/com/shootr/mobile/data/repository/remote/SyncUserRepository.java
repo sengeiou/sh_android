@@ -18,13 +18,16 @@ import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.mobile.domain.SuggestedPeople;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.bus.WatchUpdateRequest;
+import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -46,17 +49,13 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final Bus bus;
     private final UserCache userCache;
 
-    @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
-      @Remote UserDataSource remoteUserDataSource,
-      SessionRepository sessionRepository,
-      @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
-      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
-      @Local FollowDataSource localFollowDataSource,
-      UserEntityMapper userEntityMapper,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory,
-      SyncTrigger syncTrigger,
-      @Default Bus bus, UserCache userCache) {
+    @Inject
+    public SyncUserRepository(@Local UserDataSource localUserDataSource, @Remote UserDataSource remoteUserDataSource,
+      SessionRepository sessionRepository, @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
+      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, @Local FollowDataSource localFollowDataSource,
+      UserEntityMapper userEntityMapper, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus,
+      UserCache userCache) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
@@ -125,8 +124,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return entityToDomain(remoteUser);
     }
 
-    @Override
-    public User getUserByUsername(String username){
+    @Override public User getUserByUsername(String username) {
         UserEntity user = remoteUserDataSource.getUserByUsername(username);
         return entityToDomain(user);
     }
@@ -196,8 +194,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return transformParticipantsEntities(allParticipants);
     }
 
-    @Override
-    public void updateWatch(User user) {
+    @Override public void updateWatch(User user) {
         //HEY: Esta entity no tiene por que estar bien actualizada ni nada. No se usa syncableEntityFactory porque modifica el synchronized normal, y no queremos eso. De todos modos solo se usaran los 3 campos del watch. Si se guarda el user entero puede dejar de funcionar bien.
         UserEntity entityWithWatchValues = userEntityMapper.transform(user);
         try {
@@ -219,6 +216,24 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public List<User> getUsersForMention(String idUser) {
         throw new IllegalArgumentException("No remote implementation");
+    }
+
+    @Override public User updateUserProfile(User updatedUserEntity)
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(updatedUserEntity);
+        try {
+            UserEntity remoteWatchEntity = remoteUserDataSource.updateUser(currentOrNewUserEntity);
+            markEntitySynchronized(remoteWatchEntity);
+            localUserDataSource.putUser(remoteWatchEntity);
+            return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
+        } catch (ServerCommunicationException e) {
+            queueUpload(currentOrNewUserEntity, e);
+            return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
+        }
+    }
+
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException {
+        return transformUserEntitiesForPeople(remoteUserDataSource.findFriends(searchString, pageOffset, locale));
     }
 
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
@@ -255,13 +270,15 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     private boolean isEntityReadyForSync(UserEntity userEntity) {
-        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_NEW.equals(
-          userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
+        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_NEW.equals(userEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
     }
 
     private boolean isWatchReadyForSync(UserEntity userEntity) {
-        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getWatchSynchronizedStatus()) || LocalSynchronized.SYNC_NEW.equals(
-          userEntity.getWatchSynchronizedStatus()) || LocalSynchronized.SYNC_DELETED.equals(userEntity.getWatchSynchronizedStatus());
+        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getWatchSynchronizedStatus())
+          || LocalSynchronized.SYNC_NEW.equals(userEntity.getWatchSynchronizedStatus())
+          || LocalSynchronized.SYNC_DELETED.equals(userEntity.getWatchSynchronizedStatus());
     }
 
     @Override public void dispatchSync() {
@@ -305,8 +322,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         localUserDataSource.putUser(me);
     }
 
-    @Subscribe
-    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+    @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         try {
             forceUpdatePeopleAndMe();
         } catch (ServerCommunicationException networkError) {

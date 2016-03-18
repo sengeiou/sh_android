@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -111,6 +115,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
     @Bind(R.id.timeline_new_shots_indicator) LinearLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
+    @Bind(R.id.timeline_list_container) View timelineListContainer;
 
     @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
     @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
@@ -130,6 +135,11 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
+    private int charCounterColorError;
+    private int charCounterColorNormal;
+    private EditText newTopicText;
+    private TextView topicCharCounter;
+    private Snackbar topicSnackbar;
     //endregion
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -165,9 +175,9 @@ public class StreamTimelineFragment extends BaseFragment
         setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
         setStreamTitleClickListener(idStream);
         if (streamAuthorIdUser != null) {
-            initializePresenters(idStream, streamAuthorIdUser);
+            initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser);
         } else {
-            initializePresenters(idStream);
+            initializePresenters(idStream, streamAuthorIdUser);
         }
 
         streamTimelinePresenter.setIsFirstLoad(true);
@@ -250,18 +260,18 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelineOptionsPresenter.pause();
     }
 
-    private void initializePresenters(String idStream, String streamAuthorIdUser) {
+    private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
         pinShotPresenter.initialize(this);
-        newShotBarPresenter.initialize(this, idStream);
+        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
 
-    private void initializePresenters(String idStream) {
+    private void initializePresenters(String idStream, String streamAuthorIdUser) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this, idStream);
+        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
         watchNumberPresenter.initialize(this, idStream);
         streamTimelineOptionsPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
@@ -297,7 +307,49 @@ public class StreamTimelineFragment extends BaseFragment
                   .build();
                 startActivity(newShotIntent);
             }
+
+            @Override public void openEditTopicDialog() {
+                setupTopicCustomDialog();
+            }
         };
+    }
+
+    private void setupTopicCustomDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
+        dialogBuilder.setView(dialogView);
+        newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+        topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
+
+        newTopicText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no - op */
+            }
+
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (streamTimelinePresenter.isInitialized()) {
+                    streamTimelinePresenter.textChanged(charSequence.toString());
+                }
+            }
+
+            @Override public void afterTextChanged(Editable editable) {
+                /* no-op */
+            }
+        });
+
+        if (streamTimelinePresenter.getStreamTopic() != null) {
+            newTopicText.setText(streamTimelinePresenter.getStreamTopic());
+        }
+
+        dialogBuilder.setTitle(getString(R.string.topic));
+        dialogBuilder.setPositiveButton(getString(R.string.done_pin_topic), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                streamTimelinePresenter.editStream(newTopicText.getText().toString());
+            }
+        });
+        AlertDialog customDialogEditTopic = dialogBuilder.create();
+        customDialogEditTopic.show();
     }
 
     private void updateWatchNumberIcon() {
@@ -308,6 +360,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     //region Views manipulation
     private void initializeViews() {
+        charCounterColorError = getResources().getColor(R.color.error);
+        charCounterColorNormal = getResources().getColor(R.color.gray_70);
         writePermissionManager.init(getActivity());
         setupListAdapter();
         setupSwipeRefreshLayout();
@@ -338,6 +392,10 @@ public class StreamTimelineFragment extends BaseFragment
 
               @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
+              }
+
+              @Override public void openEditTopicDialog() {
+                  newShotBarPresenter.openEditTopicCustomDialog();
               }
           })
           .build();
@@ -539,7 +597,12 @@ public class StreamTimelineFragment extends BaseFragment
             int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
             listView.setSelection(newPosition);
         } else {
-            crashReportTool.logException("NullPointerException in setPosition. Old List Size: " + oldListSize + " shots: " + shots + " listView: " + listView);
+            crashReportTool.logException("NullPointerException in setPosition. Old List Size: "
+              + oldListSize
+              + " shots: "
+              + shots
+              + " listView: "
+              + listView);
         }
     }
 
@@ -555,6 +618,35 @@ public class StreamTimelineFragment extends BaseFragment
         timelineIndicatorContainer.setVisibility(View.GONE);
         timelineIndicator.setVisibility(View.GONE);
         streamTimelinePresenter.setNewShotsNumber(0);
+    }
+
+    @Override public void showTopicSnackBar(String topic) {
+        topicSnackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE);
+        topicSnackbar.show();
+    }
+
+    @Override public void hideTopicSnackBar() {
+        if(topicSnackbar != null && topicSnackbar.isShown()){
+            topicSnackbar.dismiss();
+        }
+    }
+
+    @Override public void setRemainingCharactersCount(int remainingCharacters) {
+        if (topicCharCounter != null) {
+            topicCharCounter.setText(String.valueOf(remainingCharacters));
+        }
+    }
+
+    @Override public void setRemainingCharactersColorValid() {
+        if (topicCharCounter != null) {
+            topicCharCounter.setTextColor(charCounterColorNormal);
+        }
+    }
+
+    @Override public void setRemainingCharactersColorInvalid() {
+        if (topicCharCounter != null) {
+            topicCharCounter.setTextColor(charCounterColorError);
+        }
     }
 
     @Override public void showEmpty() {
@@ -676,8 +768,20 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
+    @Override public void showHolderOptions() {
+        if (writePermissionManager.hasWritePermission()) {
+            newShotBarViewDelegate.showHolderOptions();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
+    }
+
+    @Override public void openEditTopicDialog() {
+        newShotBarViewDelegate.openEditTopicDialog();
     }
 
     @Override public void showDraftsButton() {
@@ -784,12 +888,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(R.string.menu_pin_shot, new Runnable() {
-              @Override public void run() {
-                  pinShotPresenter.pinToProfile(shotModel);
-              }
-          }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
+            @Override public void run() {
+                pinShotPresenter.pinToProfile(shotModel);
+            }
+        }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 streamTimelinePresenter.shareShot(shotModel);
             }

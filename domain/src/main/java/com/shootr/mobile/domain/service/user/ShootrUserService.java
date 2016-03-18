@@ -24,7 +24,6 @@ public class ShootrUserService {
 
     private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
-    private final CheckinGateway checkinGateway;
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
@@ -36,14 +35,13 @@ public class ShootrUserService {
     private final DatabaseUtils databaseUtils;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
-      CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
+      CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
       ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway,
       ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
       @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
       DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
-        this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
         this.resetPasswordGateway = resetPasswordGateway;
@@ -53,10 +51,6 @@ public class ShootrUserService {
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
         this.databaseUtils = databaseUtils;
-    }
-
-    public void checkInStream(String idEvent) {
-        checkinGateway.performCheckin(idEvent);
     }
 
     public void createAccount(String username, String email, String password, String locale)

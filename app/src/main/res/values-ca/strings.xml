@@ -239,7 +239,6 @@
     <string name="opened_activity_text_pattern">Ha creat (stream)</string>
     <string name="participants_list_empty">No hi ha participants</string>
     <string name="photo_edit_gallery">Galeria</string>
-    <string name="photo_edit_remove">Esborrar foto</string>
     <string name="photo_edit_remove_confirmation">Esborrar foto?</string>
     <string name="photo_edit_take">Càmera</string>
     <string name="pinned_shot_activity">Ha fixat al perfil</string>
@@ -363,4 +362,11 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">Tornem aviat</string>
     <string name="yes">Sí</string>
+    <string name="photo_edit_remove">Treure</string>
+    <string name="pin_topic">Fixar un missatge</string>
+    <string name="done_pin_topic">OK</string>
+    <string name="new_topic">Nou missatge…</string>
+    <string name="topic">Missatge</string>
+    <string name="watch_profile_photo">Veure</string>
+    <string name="title_menu_photo">Foto</string>
 </resources>

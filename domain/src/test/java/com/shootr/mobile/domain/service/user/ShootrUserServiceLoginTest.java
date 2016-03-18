@@ -26,7 +26,6 @@ public class ShootrUserServiceLoginTest {
     private static final String PASSWORD_STUB = "password";
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock CheckinGateway checkinGateway;
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
@@ -43,7 +42,6 @@ public class ShootrUserServiceLoginTest {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository,
           sessionRepository,
-          checkinGateway,
           createAccountGateway,
           loginGateway,
           resetPasswordGateway,

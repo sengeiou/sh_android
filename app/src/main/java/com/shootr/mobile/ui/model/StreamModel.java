@@ -11,6 +11,7 @@ public class StreamModel implements Serializable {
     private String picture;
     private String shortTitle;
     private String description;
+    private String topic;
     private boolean amIAuthor;
     private Integer mediaCount;
     private Boolean removed;
@@ -52,23 +53,12 @@ public class StreamModel implements Serializable {
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
+    public String getTopic() {
+        return topic;
+    }
 
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        StreamModel that = (StreamModel) o;
-
-        if (!idStream.equals(that.idStream)) {
-            return false;
-        }
-
-        return true;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     @Override
@@ -162,5 +152,20 @@ public class StreamModel implements Serializable {
 
     public void setUniqueShots(Long uniqueShots) {
         this.uniqueShots = uniqueShots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        StreamModel that = (StreamModel) o;
+
+        return idStream.equals(that.idStream);
     }
 }

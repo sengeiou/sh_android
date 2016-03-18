@@ -46,6 +46,7 @@ public class DraftItemView extends FrameLayout {
     }
 
     @Override protected void onFinishInflate() {
+        super.onFinishInflate();
         init();
     }
 

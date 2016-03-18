@@ -235,7 +235,6 @@
     <string name="opened_activity_text_pattern">建立了(stream)</string>
     <string name="participants_list_empty">没有参与者</string>
     <string name="photo_edit_gallery">相册</string>
-    <string name="photo_edit_remove">清除图片</string>
     <string name="photo_edit_remove_confirmation">清除照片？</string>
     <string name="photo_edit_take">相机</string>
     <string name="pinned_shot_activity">钉选shot到个人主页</string>
@@ -359,4 +358,11 @@
     <string name="yes">是的</string>
     <string name="cancel_hide_shot">取消</string>
     <string name="confirmation_hide_shot_message">解除钉选</string>
+    <string name="photo_edit_remove">清除</string>
+    <string name="pin_topic">钉选信息</string>
+    <string name="done_pin_topic">钉选</string>
+    <string name="new_topic">新的消息…</string>
+    <string name="topic">信息</string>
+    <string name="watch_profile_photo">点开</string>
+    <string name="title_menu_photo">照片</string>
 </resources>

@@ -14,6 +14,7 @@ public class Stream {
     private String picture;
     private String shortTitle;
     private String description;
+    private String topic;
     private String country;
     private Integer mediaCount;
     private boolean removed;
@@ -38,6 +39,14 @@ public class Stream {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getCountry() {

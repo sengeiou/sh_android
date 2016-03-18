@@ -72,25 +72,25 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     }
 
     @Override
-    public Favorite getFavoriteByStream(String eventId) {
-        FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdStream(eventId);
+    public Favorite getFavoriteByStream(String streamId) {
+        FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdStream(streamId);
         return favoriteEntityMapper.transform(favoriteEntity);
     }
 
     @Override
-    public void removeFavoriteByStream(String eventId) {
+    public void removeFavoriteByStream(String streamId) {
         try {
             syncTrigger.triggerSync();
-            remoteFavoriteDataSource.removeFavoriteByIdStream(eventId);
-            localFavoriteDataSource.removeFavoriteByIdStream(eventId);
+            remoteFavoriteDataSource.removeFavoriteByIdStream(streamId);
+            localFavoriteDataSource.removeFavoriteByIdStream(streamId);
         } catch (ServerCommunicationException error) {
-            queueUpload(buildDeletedEntity(eventId), error);
+            queueUpload(buildDeletedEntity(streamId), error);
         }
     }
 
-    private FavoriteEntity buildDeletedEntity(String eventId) {
+    private FavoriteEntity buildDeletedEntity(String streamId) {
         FavoriteEntity deletedEntity = new FavoriteEntity();
-        deletedEntity.setIdStream(eventId);
+        deletedEntity.setIdStream(streamId);
         deletedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_DELETED);
         return deletedEntity;
     }

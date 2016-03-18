@@ -284,7 +284,7 @@ public class ProfilePresenter implements Presenter {
             profileView.openPhoto(userModel.getPhoto());
         } else if (userModel != null && isCurrentUser) {
             boolean shouldShowRemovePhoto = userModel.getPhoto() != null;
-            profileView.openEditPhotoMenu(shouldShowRemovePhoto);
+            profileView.openEditPhotoMenu(shouldShowRemovePhoto, userModel.getPhoto());
         }
     }
 

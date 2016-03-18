@@ -13,6 +13,33 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.7.0] - 2016-03-18
+
+### Changed
+- Cambiado el máximo de watchers a mostrar
+- Cambiamos el length del message de 140 a 40 caracteres
+- Refactor de la actividad de buscar amigos
+- Cambio del actionBar del activty newStream
+
+### Added
+- Stream topic
+- Puedo ver mi foto de perfil
+
+### Fixed
+- corregido link share stream
+- El titulo de las secciones del listing se anotan con @StringReference
+- La opción de Añadir a Favoritos no aparece en tus favoritos en Listing
+- Control de null shotModel en resume de PinShotPresenter
+- Se envia null topic si este está vacio (antes se enviaba "")
+- Se controla el salto al darle nice a un shot dentro del perfil de un usuario
+- El message de un Stream siempre estará actualizado
+- Se elimina la caché al hacer logout
+- Control del memory error
+
+### Removed
+- Activities invisibles
+
+
 ## [1.6.1] - 2016-03-09
 
 ### Changed

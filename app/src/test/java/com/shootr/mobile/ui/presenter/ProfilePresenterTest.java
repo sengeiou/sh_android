@@ -49,6 +49,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ProfilePresenterTest {
 
@@ -240,7 +241,7 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
         profilePresenter.avatarClicked();
 
-        verify(profileView).openEditPhotoMenu(anyBoolean());
+        verify(profileView).openEditPhotoMenu(anyBoolean(), anyString());
     }
 
     @Test public void shouldShowRemoveInPhotoMenuWhenAvatarClickedAndCurrentUserHasPhoto() throws Exception {
@@ -252,7 +253,7 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
         profilePresenter.avatarClicked();
 
-        verify(profileView).openEditPhotoMenu(true);
+        verify(profileView).openEditPhotoMenu(true, "photo");
     }
 
     @Test public void shouldNotShowRemoveInPhotoMenuWhenAvatarClickedAndCurrentUserHasPhoto() throws Exception {
@@ -264,9 +265,9 @@ public class ProfilePresenterTest {
         profilePresenter.initializeWithIdUser(profileView, ID_USER);
         profilePresenter.avatarClicked();
 
-        verify(profileView).openEditPhotoMenu(false);
+        verify(profileView).openEditPhotoMenu(false, null);
     }
-
+    
     @Test public void shouldShowLogoutInProgressWhenLogoutSelected() {
         profilePresenter.logoutSelected();
 

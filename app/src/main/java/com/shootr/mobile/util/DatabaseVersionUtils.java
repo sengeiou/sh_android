@@ -2,6 +2,7 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -9,24 +10,27 @@ import com.shootr.mobile.data.prefs.LastDatabaseVersion;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
+
 import javax.inject.Inject;
 
-public class DatabaseVersionUtils implements DatabaseUtils{
+public class DatabaseVersionUtils implements DatabaseUtils {
 
     private final IntPreference lastDatabaseVersion;
     private final Version currentVersion;
     private final SQLiteOpenHelper dbOpenHelper;
     private final Context context;
     private final BooleanPreference shouldShowIntro;
+    private final CacheUtils cacheUtils;
 
     @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
-      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
-      @ShouldShowIntro BooleanPreference shouldShowIntro) {
+                                        @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
+                                        @ShouldShowIntro BooleanPreference shouldShowIntro, CacheUtils cacheUtils) {
         this.lastDatabaseVersion = lastDatabaseVersion;
         this.currentVersion = currentVersion;
         this.context = context;
         this.dbOpenHelper = dbOpenHelper;
         this.shouldShowIntro = shouldShowIntro;
+        this.cacheUtils = cacheUtils;
     }
 
     public void clearDataOnNewerVersion() {
@@ -38,6 +42,7 @@ public class DatabaseVersionUtils implements DatabaseUtils{
     @Override
     public void clearDataOnLogout() {
         resetAppData();
+        deleteCache();
     }
 
     protected void resetAppData() {
@@ -61,5 +66,9 @@ public class DatabaseVersionUtils implements DatabaseUtils{
         int lastVersion = this.lastDatabaseVersion.get();
         int currentDatabaseVersion = currentVersion.getDatabaseVersion();
         return lastVersion < currentDatabaseVersion;
+    }
+
+    private void deleteCache() {
+        cacheUtils.deleteCache(context);
     }
 }

@@ -8,7 +8,11 @@ public interface NewShotBarView {
 
     void pickImage();
 
+    void showHolderOptions();
+
     void openNewShotViewWithImage(File image);
+
+    void openEditTopicDialog();
 
     void showDraftsButton();
 

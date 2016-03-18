@@ -43,6 +43,7 @@ public class NewStreamPresenter implements Presenter {
     private String currentShortTitle;
     private boolean notifyCreation;
     private boolean shortTitleEditedManually;
+    private String currentStreamTopic;
 
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
@@ -95,6 +96,7 @@ public class NewStreamPresenter implements Presenter {
             newStreamView.setStreamTitle(preloadedTitle);
             bindShortTitleToTitleIfMatches();
         }
+        this.currentStreamTopic = streamModel.getTopic();
     }
     //endregion
 
@@ -181,6 +183,7 @@ public class NewStreamPresenter implements Presenter {
           title,
           shortTitle,
           description,
+          currentStreamTopic,
           notifyCreation,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {

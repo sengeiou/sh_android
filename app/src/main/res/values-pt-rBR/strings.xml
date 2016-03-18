@@ -239,7 +239,6 @@
   <string name="opened_activity_text_pattern">Criou (stream)</string>
   <string name="participants_list_empty">Nenhum participante</string>
   <string name="photo_edit_gallery">Galeria</string>
-  <string name="photo_edit_remove">Apagar foto</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
   <string name="pinned_shot_activity">Linkado ao perfil</string>
@@ -362,4 +361,11 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="photo_edit_remove">Apagar</string>
+  <string name="pin_topic">Linkar mensagem</string>
+  <string name="done_pin_topic">Linkar</string>
+  <string name="new_topic">Nova mensagem…</string>
+  <string name="topic">Mensagem</string>
+  <string name="watch_profile_photo">Ver</string>
+  <string name="title_menu_photo">Foto</string>
 </resources>

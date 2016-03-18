@@ -4,16 +4,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -30,7 +34,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final String KEY_STREAM_ID = "stream_id";
 
     private static final String EXTRA_EDITED_TITLE = "title";
-    private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
+    private static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -40,6 +44,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
     @Bind(com.shootr.mobile.R.id.new_stream_short_title) EditText shortTitleView;
     @Bind(com.shootr.mobile.R.id.new_stream_description) EditText descriptionView;
+
+    @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
+    @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
@@ -65,6 +72,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
         setupActionbar(idStreamToEdit);
+        setupStatusBarColor();
 
         if (savedInstanceState != null) {
             String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
@@ -73,7 +81,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             titleView.setText(editedTitle);
             shortTitleView.setText(editedShortTitle);
         }
-        initializeViews();
+        setupTextViews();
     }
 
     @Override protected void initializePresenter() {
@@ -81,14 +89,13 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         initializePresenter(idStreamToEdit);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_EDITED_TITLE, titleView.getText().toString());
         outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
-    private void initializeViews() {
+    private void setupTextViews() {
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 presenter.titleTextChanged(s.toString());
@@ -120,12 +127,22 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
     private void setupActionbar(String idStreamToEdit) {
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setHomeAsUpIndicator(com.shootr.mobile.R.drawable.ic_action_navigation_close);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close_white);
 
         if (idStreamToEdit != null) {
-            actionBar.setTitle(R.string.activity_edit_stream_title);
+            getToolbarDecorator().setTitle(editStreamTitleActionBar);
+        } else {
+            getToolbarDecorator().setTitle(newStreamTitleActionBar);
+        }
+    }
+
+    private void setupStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
         }
     }
 
@@ -150,10 +167,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         } else if (item.getItemId() == com.shootr.mobile.R.id.menu_done) {
             presenter.done();
             return true;
-        }else if (item.getItemId() == com.shootr.mobile.R.id.menu_remove) {
+        } else if (item.getItemId() == com.shootr.mobile.R.id.menu_remove) {
             presenter.remove();
             return true;
-        }else if (item.getItemId() == R.id.menu_restore) {
+        } else if (item.getItemId() == R.id.menu_restore) {
             presenter.restore();
             return true;
         } else {
@@ -183,8 +200,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         finish();
     }
 
-    @Override
-    public void closeScreenWithExitStream() {
+    @Override public void closeScreenWithExitStream() {
         setResult(RESULT_EXIT_STREAM);
         finish();
     }
@@ -199,28 +215,28 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     @Override public void showNotificationConfirmation() {
-        new AlertDialog.Builder(this)
-          .setMessage(getString(com.shootr.mobile.R.string.stream_notification_confirmation_message))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_yes), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmNotify(true);
-              }
-          })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_no), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmNotify(false);
-              }
-          })
-          .create().show();
+        new AlertDialog.Builder(this).setMessage(getString(com.shootr.mobile.R.string.stream_notification_confirmation_message))
+          .setPositiveButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_yes),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    presenter.confirmNotify(true);
+                }
+            })
+          .setNegativeButton(getString(com.shootr.mobile.R.string.stream_notification_confirmation_no),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    presenter.confirmNotify(false);
+                }
+            })
+          .create()
+          .show();
     }
 
-    @Override
-    public void showRemoveStreamButton() {
+    @Override public void showRemoveStreamButton() {
         removeMenuItem.setVisible(true);
     }
 
-    @Override
-    public void askRemoveStreamConfirmation() {
+    @Override public void askRemoveStreamConfirmation() {
         new AlertDialog.Builder(this).setMessage(com.shootr.mobile.R.string.remove_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {

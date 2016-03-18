@@ -94,7 +94,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override
     public void initializePresenter() {
-        presenter.initialize(this, getObjectGraph());
+        presenter.initialize(this);
     }
 
     @Override protected void onResume() {

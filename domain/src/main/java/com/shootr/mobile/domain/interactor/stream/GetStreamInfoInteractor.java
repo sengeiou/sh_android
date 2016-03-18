@@ -24,7 +24,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 public class GetStreamInfoInteractor implements Interactor {
 
     public static final int MAX_WATCHERS_VISIBLE = 50;
-    public static final int MAX_WATCHERS_TO_SHOW = 25;
+    public static final int MAX_WATCHERS_TO_SHOW = 50;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;

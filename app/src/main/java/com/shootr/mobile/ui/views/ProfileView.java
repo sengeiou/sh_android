@@ -46,7 +46,7 @@ public interface ProfileView {
 
     void openPhoto(String photo);
 
-    void openEditPhotoMenu(boolean showRemove);
+    void openEditPhotoMenu(boolean showRemove, String photo);
 
     void goToWebsite(String website);
 
