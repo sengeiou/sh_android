@@ -5,6 +5,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetLocalPeopleInteractor;
+import com.shootr.mobile.domain.interactor.user.ReactiveSearchPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -35,6 +37,7 @@ public class FindFriendsPresenterTest {
     private static final String USERNAME = "username";
     private static final String STREAM = "streamId";
     private static final String QUERY = "query";
+    private static final Boolean FIRST_INIT = false;
     @Mock FindFriendsInteractor findFriendsInteractor;
     @Mock FollowInteractor followInteractor;
     @Mock UnfollowInteractor unfollowInteractor;
@@ -42,6 +45,8 @@ public class FindFriendsPresenterTest {
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock FindFriendsView findFriendsView;
     @Mock FindFriendsServerInteractor findFriendsServerInteractor;
+    @Mock ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
+    @Mock GetLocalPeopleInteractor getLocalPeopleInteractor;
 
     private FindFriendsPresenter presenter;
 
@@ -51,15 +56,75 @@ public class FindFriendsPresenterTest {
         presenter = new FindFriendsPresenter(findFriendsInteractor,
           findFriendsServerInteractor,
           followInteractor,
-          unfollowInteractor,
-          userModelMapper,
+          unfollowInteractor, reactiveSearchPeopleInteractor, getLocalPeopleInteractor, userModelMapper,
           errorMessageFactory);
         presenter.setView(findFriendsView);
     }
 
+    @Test public void shouldRenderLocalFriendsWhenInitialize() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+
+        presenter.initialize(findFriendsView, FIRST_INIT);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldRenderFriendsWhenRestoreState() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+
+        presenter.restoreFriends(userModels());
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldNotObtainLocalPeopleWhenInitializeWithRestore() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+
+        presenter.initialize(findFriendsView, FIRST_INIT);
+
+        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(), any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldRenderLocalPeopleWhenQueryTextChanged() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView, FIRST_INIT);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(findFriendsView).renderFriends(anyList());
+    }
+
+    @Test public void shouldObtainLocalPeopleWhenQueryTextChanged() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView, FIRST_INIT);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor).obtainPeople(anyString(), any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldNotObtainLocalPeopleWhenQueryTextChangedAndHasSearchedInRemote() throws Exception {
+        setupGetLocalPeopleInteractorWithUsers();
+        presenter.initialize(findFriendsView, FIRST_INIT);
+        presenter.searchFriends(QUERY);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(),any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldHideEmptyWhenQueryTextChangedAndLocalPeopleIsEmpty() throws Exception {
+        setupGetLocalPeopleInteractorWithoutUsers();
+        presenter.initialize(findFriendsView, FIRST_INIT);
+
+        presenter.queryTextChanged(QUERY);
+
+        verify(reactiveSearchPeopleInteractor).obtainPeople(anyString(), any(Interactor.Callback.class));
+    }
+
     @Test public void shouldShowContentWhenSearchFriendsAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -68,7 +133,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotShowContentWhenSearchFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -77,7 +142,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldRenderFriendsWhenSearchFriendsAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -86,7 +151,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotRenderFriendsWhenSearchFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -95,7 +160,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldShowEmptyWhenSearFriendsAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.searchFriends(QUERY);
 
@@ -104,7 +169,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldHideEmptyWhenRefreshFriends() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.refreshFriends();
 
@@ -113,7 +178,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldNotRenderFriendsWhenRefreshAndFriendsIsEmpty() throws Exception {
         setupFindFriendsInteractorWithoutUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.refreshFriends();
 
@@ -122,7 +187,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldRenderFriendsWhenRefreshAndFriendsIsNotEmpty() throws Exception {
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.refreshFriends();
 
@@ -132,7 +197,7 @@ public class FindFriendsPresenterTest {
     @Test public void shouldRenderFriendWhenFollowUser() throws Exception {
         setupFollowInteractor();
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
         presenter.searchFriends(QUERY);
 
         presenter.followUser(userModel());
@@ -143,7 +208,7 @@ public class FindFriendsPresenterTest {
     @Test public void shouldRenderFriendWhenUnFollowUser() throws Exception {
         setupUnFollowInteractor();
         setupFindFriendsInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
         presenter.searchFriends(QUERY);
 
         presenter.followUser(userModel());
@@ -163,7 +228,7 @@ public class FindFriendsPresenterTest {
 
     @Test public void shouldAddFriendsWhenMakeTheNextRemoteSearch() throws Exception {
         setupFindFriendsServerInteractorWithUsers();
-        presenter.initialize(findFriendsView);
+        presenter.initialize(findFriendsView, FIRST_INIT);
 
         presenter.makeNextRemoteSearch();
 
@@ -191,6 +256,26 @@ public class FindFriendsPresenterTest {
                 return null;
             }
         }).when(unfollowInteractor).unfollow(anyString(), any(Interactor.CompletedCallback.class));
+    }
+
+    private void setupGetLocalPeopleInteractorWithUsers() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(users());
+                return null;
+            }
+        }).when(getLocalPeopleInteractor).obtainPeople(any(Interactor.Callback.class));
+    }
+
+    private void setupGetLocalPeopleInteractorWithoutUsers() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(new ArrayList<User>());
+                return null;
+            }
+        }).when(getLocalPeopleInteractor).obtainPeople(any(Interactor.Callback.class));
     }
 
     private void setupFindFriendsInteractorWithUsers() {
@@ -250,5 +335,11 @@ public class FindFriendsPresenterTest {
         userModel.setUsername(USERNAME);
         userModel.setStreamWatchingId(STREAM);
         return userModel;
+    }
+
+    private List<UserModel> userModels(){
+        ArrayList<UserModel> userModels = new ArrayList<>();
+        userModels.add(userModel());
+        return userModels;
     }
 }

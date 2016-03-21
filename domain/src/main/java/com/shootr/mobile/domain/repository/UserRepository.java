@@ -33,7 +33,7 @@ public interface UserRepository {
 
     List<User> getFollowers(String idUser, Integer page, Integer pageSize);
 
-    List<User> getUsersForMention(String idUser);
+    List<User> getLocalPeople(String idUser);
 
     User updateUserProfile(User updatedUserEntity) throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 

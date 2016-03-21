@@ -21,4 +21,6 @@ public interface FindFriendsView extends LoadDataView {
     void addFriends(List<UserModel> friends);
 
     void hideProgress();
+
+    void restoreState();
 }

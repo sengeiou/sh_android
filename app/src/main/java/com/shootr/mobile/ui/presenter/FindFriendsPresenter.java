@@ -7,6 +7,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetLocalPeopleInteractor;
+import com.shootr.mobile.domain.interactor.user.ReactiveSearchPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -24,20 +26,28 @@ public class FindFriendsPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final FindFriendsServerInteractor findFriendsServerInteractor;
+    private final ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
+    private final GetLocalPeopleInteractor getLocalPeopleInteractor;
 
     private FindFriendsView findFriendsView;
     private List<UserModel> friends;
     private String query;
     private Boolean hasBeenPaused = false;
     private int currentPage;
+    private boolean hasSearchedInRemote;
+    private boolean restoreState;
 
-    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor, FindFriendsServerInteractor findFriendsServerInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
+    @Inject public FindFriendsPresenter(FindFriendsInteractor findFriendsInteractor,
+      FindFriendsServerInteractor findFriendsServerInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor,
+      GetLocalPeopleInteractor getLocalPeopleInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findFriendsInteractor = findFriendsInteractor;
         this.findFriendsServerInteractor = findFriendsServerInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
+        this.reactiveSearchPeopleInteractor = reactiveSearchPeopleInteractor;
+        this.getLocalPeopleInteractor = getLocalPeopleInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -46,12 +56,27 @@ public class FindFriendsPresenter implements Presenter {
         this.findFriendsView = findFriendsView;
     }
 
-    public void initialize(FindFriendsView findFriendsView) {
+    public void initialize(FindFriendsView findFriendsView, Boolean restoreState) {
+        this.restoreState = restoreState;
         this.setView(findFriendsView);
+        initializeReactiveSearch();
         this.friends = new ArrayList<>();
     }
 
+    private void initializeReactiveSearch() {
+        if(!restoreState) {
+            getLocalPeopleInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    friends = userModelMapper.transform(users);
+                    findFriendsView.showContent();
+                    findFriendsView.renderFriends(friends);
+                }
+            });
+        }
+    }
+
     public void searchFriends(String query) {
+        this.hasSearchedInRemote = true;
         this.query = query;
         findFriendsView.hideEmpty();
         findFriendsView.hideContent();
@@ -133,7 +158,9 @@ public class FindFriendsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if (hasBeenPaused && query != null) {
+        if (!hasSearchedInRemote && query != null) {
+            queryTextChanged(query);
+        } else if (hasBeenPaused && query != null) {
             searchFriends(query);
         }
     }
@@ -162,5 +189,31 @@ public class FindFriendsPresenter implements Presenter {
                 findFriendsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void queryTextChanged(final String query) {
+        if (!hasSearchedInRemote) {
+            this.query = query;
+            reactiveSearchPeopleInteractor.obtainPeople(query, new Interactor.Callback<List<User>>() {
+                @Override public void onLoaded(List<User> users) {
+                    friends = userModelMapper.transform(users);
+                    if (!friends.isEmpty()) {
+                        findFriendsView.showContent();
+                        findFriendsView.renderFriends(friends);
+                    } else {
+                        findFriendsView.hideEmpty();
+                        findFriendsView.hideContent();
+                        searchFriends(query);
+                    }
+                }
+            });
+        }
+    }
+
+    public void restoreFriends(List<UserModel> restoredResults) {
+        if (restoredResults != null) {
+            findFriendsView.showContent();
+            findFriendsView.renderFriends(restoredResults);
+        }
     }
 }

@@ -194,7 +194,7 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
-    public List<UserEntity> getUsersForMention(String idUser) {
+    public List<UserEntity> getRelatedUsers(String idUser) {
         String whereClause = DatabaseContract.UserTable.ID + "<> ?";
         String[] whereArguments = new String[] { idUser };
 
