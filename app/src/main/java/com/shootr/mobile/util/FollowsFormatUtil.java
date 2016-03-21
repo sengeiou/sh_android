@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-public class FollowNumbersFormatUtils implements FormatNumberUtils {
+public class FollowsFormatUtil implements FormatNumberUtils {
 
     private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
     public static final String FORMAT = "%.1f%c";

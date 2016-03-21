@@ -72,6 +72,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
+import com.shootr.mobile.util.FollowsFormatUtil;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -155,6 +156,7 @@ public class ProfileFragment extends BaseFragment
     private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
+    private FollowsFormatUtil followsFormatUtil = new FollowsFormatUtil();
 
     //region Construction
     public static ProfileFragment newInstance(String idUser) {
@@ -554,8 +556,8 @@ public class ProfileFragment extends BaseFragment
         renderWebsite(userModel);
         renderBio(userModel);
         imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
-        followersTextView.setText(String.valueOf(userModel.getNumFollowers()));
-        followingTextView.setText(String.valueOf(userModel.getNumFollowings()));
+        followersTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowers()));
+        followingTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowings()));
     }
 
     @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
