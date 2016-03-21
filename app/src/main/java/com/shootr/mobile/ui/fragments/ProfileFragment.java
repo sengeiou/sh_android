@@ -142,6 +142,7 @@ public class ProfileFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject FollowsFormatUtil followsFormatUtil;
 
     //endregion
 
@@ -156,7 +157,6 @@ public class ProfileFragment extends BaseFragment
     private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
-    private FollowsFormatUtil followsFormatUtil = new FollowsFormatUtil();
 
     //region Construction
     public static ProfileFragment newInstance(String idUser) {

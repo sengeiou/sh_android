@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import javax.inject.Inject;
 
 public class FollowsFormatUtil implements FormatNumberUtils {
 
@@ -15,6 +16,9 @@ public class FollowsFormatUtil implements FormatNumberUtils {
     static {
         suffixes.put(1000L, "K");
         suffixes.put(1000000L, "M");
+    }
+
+    @Inject public FollowsFormatUtil() {
     }
 
     @Override public String formatNumbers(Long number) {
