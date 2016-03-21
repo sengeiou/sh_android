@@ -25,6 +25,7 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -322,7 +323,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         if (!showingHoldingShots) {
             timelineInteractorWrapper.refreshTimeline(streamId, lastRefreshDate, hasBeenPaused, new Interactor.Callback<Timeline>() {
                 @Override public void onLoaded(Timeline timeline) {
-                    hasBeenPaused = false;
+                    updateTimelineLiveSettings();
                     loadNewShotsInView(timeline);
                 }
             }, new Interactor.ErrorCallback() {
@@ -336,7 +337,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
               idAuthor, lastRefreshDate, hasBeenPaused,
               new Interactor.Callback<Timeline>() {
                   @Override public void onLoaded(Timeline timeline) {
-                      hasBeenPaused = false;
+                      updateTimelineLiveSettings();
                       loadNewShotsInView(timeline);
                   }
               },
@@ -347,6 +348,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                   }
               });
         }
+    }
+
+    private void updateTimelineLiveSettings() {
+        hasBeenPaused = false;
+        lastRefreshDate = new Date().getTime();
     }
 
     private void showErrorLoadingNewShots() {
