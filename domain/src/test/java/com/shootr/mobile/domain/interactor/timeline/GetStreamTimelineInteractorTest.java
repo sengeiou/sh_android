@@ -28,21 +28,20 @@ import org.mockito.Spy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetStreamTimelineInteractorTest {
 
-    private static final String ID_SHOT_WITHOUT_STREAM = "shot_without_stream";
     private static final String WATCHING_STREAM_ID = "watching_stream";
-    private static final String ID_SHOT_WITH_STREAM = "shot_with_stream";
     private static final String STREAM_AUTHOR_ID = "stream_author";
-    private static final String ID_SHOT_FROM_AUTHOR = "shot_from_author";
     private static final String ID_CURRENT_USER = "current_user";
     private static final String STREAM_ID = "stream";
 
     private static final Long DATE_OLDER = 1000L;
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
+    private static final Boolean NOT_PAUSED = false;
 
     @Mock ShotRepository localShotRepository;
     @Mock UserRepository localUserRepository;
@@ -69,7 +68,7 @@ public class GetStreamTimelineInteractorTest {
         when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(
           unorderedShots());
 
-        interactor.loadStreamTimeline(STREAM_ID, spyCallback);
+        interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());

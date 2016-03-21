@@ -25,6 +25,7 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
     private String idUser;
+    private Boolean goneBackground;
 
     @Inject public GetStreamHoldingTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
@@ -36,10 +37,11 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadStreamHoldingTimeline(String idStream, String idUser, Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadStreamHoldingTimeline(String idStream, String idUser, Boolean goneBackground, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.idUser = idUser;
         this.callback = callback;
+        this.goneBackground = goneBackground;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
@@ -67,7 +69,7 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
     }
 
     private StreamTimelineParameters buildParameters() {
-        return StreamTimelineParameters.builder().forStream(idStream).forUser(idUser).build();
+        return StreamTimelineParameters.builder().forStream(idStream).forUser(idUser).realTime(!goneBackground).build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {

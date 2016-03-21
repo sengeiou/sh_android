@@ -55,7 +55,8 @@ public class ServiceShotDatasource implements ShotDataSource {
             List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
-              parameters.getMaxDate());
+              parameters.getMaxDate(),
+              parameters.isRealTime());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
@@ -174,7 +175,8 @@ public class ServiceShotDatasource implements ShotDataSource {
     @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
         try {
             List<ShotApiEntity> shots = shotApiService.getAllShotsFromUserInStream(timelineParameters.getUserId(),
-              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate());
+              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate(),
+              timelineParameters.isRealTime());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);

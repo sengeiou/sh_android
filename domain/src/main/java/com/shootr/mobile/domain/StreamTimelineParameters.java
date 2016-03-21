@@ -8,6 +8,8 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     private String userId;
 
+    private Boolean isRealTime;
+
     private StreamTimelineParameters() {
         /* private constructor, use builder */
     }
@@ -26,6 +28,14 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     public String getUserId() {
         return userId;
+    }
+
+    public Boolean isRealTime() {
+        return isRealTime;
+    }
+
+    public void setIsRealTime(Boolean isRealTime) {
+        this.isRealTime = isRealTime;
     }
 
     public static class Builder {
@@ -64,6 +74,11 @@ public class StreamTimelineParameters extends TimelineParameters {
 
         public Builder maxDate(Long maxDate) {
             parameters.maxDate = maxDate;
+            return this;
+        }
+
+        public Builder realTime(Boolean isRealTime) {
+            parameters.isRealTime = isRealTime;
             return this;
         }
 

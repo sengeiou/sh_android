@@ -7,9 +7,12 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+import java.util.Date;
 import javax.inject.Inject;
 
 public class RefreshStreamTimelineInteractor implements Interactor {
+
+    private static final Long REAL_TIME_INTERVAL = 60 * 1000L;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -19,6 +22,8 @@ public class RefreshStreamTimelineInteractor implements Interactor {
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
     private String idStream;
+    private Long lastRefreshDate;
+    private Boolean goneBackground;
 
     @Inject
     public RefreshStreamTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -29,10 +34,12 @@ public class RefreshStreamTimelineInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void refreshStreamTimeline(String streamId, Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void refreshStreamTimeline(String streamId, Long lastRefreshDate, Boolean goneBackground, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         this.idStream = streamId;
+        this.lastRefreshDate = lastRefreshDate;
+        this.goneBackground = goneBackground;
         interactorHandler.execute(this);
     }
 
@@ -42,7 +49,9 @@ public class RefreshStreamTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream);
+            long timestamp = new Date().getTime();
+            Boolean isRealTime = !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
+            Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, isRealTime);
             notifyLoaded(timeline);
             shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
         } catch (ShootrException error) {

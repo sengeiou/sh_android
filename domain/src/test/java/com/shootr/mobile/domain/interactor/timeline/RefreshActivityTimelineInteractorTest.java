@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -29,6 +30,7 @@ public class RefreshActivityTimelineInteractorTest {
 
     public static final String ID_WATCHING_STREAM = "idWatchingStream";
     public static final String ID_USER = "idUser";
+    private static final Boolean NOT_PAUSED = false;
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
@@ -64,7 +66,7 @@ public class RefreshActivityTimelineInteractorTest {
 
         interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
 
-        verify(shootrTimelineService).refreshTimelinesForStream(anyString());
+        verify(shootrTimelineService).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
     @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStream() throws Exception {
@@ -74,7 +76,7 @@ public class RefreshActivityTimelineInteractorTest {
 
         interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
 
-        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString());
+        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
     @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsNullUser() throws Exception {
@@ -84,7 +86,7 @@ public class RefreshActivityTimelineInteractorTest {
 
         interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
 
-        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString());
+        verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
     private User user() {

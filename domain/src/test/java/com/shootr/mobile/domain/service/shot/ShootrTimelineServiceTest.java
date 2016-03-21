@@ -44,6 +44,7 @@ public class ShootrTimelineServiceTest {
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
     public static final String LANGUAGE = "LANGUAGE";
+    private static final Boolean NOT_PAUSED = false;
     @Mock ShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
@@ -64,7 +65,7 @@ public class ShootrTimelineServiceTest {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(
           streamShotListWithMultipleShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         assertThat(resultTimeline.getShots()).isEqualTo(streamShotListWithMultipleShots());
     }
@@ -98,7 +99,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldRequestTimelineWithStreamIdWhenWatchingStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
-        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         assertThat(captureTimelineParameters()).hasStreamId(ID_STREAM);
     }
@@ -107,7 +108,7 @@ public class ShootrTimelineServiceTest {
         when(timelineSynchronizationRepository.getStreamTimelineRefreshDate(WATCHING_STREAM_ID)).thenReturn(
           WATCHING_STREAM_REFRESH_DATE);
 
-        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_STREAM_REFRESH_DATE);
     }
@@ -117,7 +118,7 @@ public class ShootrTimelineServiceTest {
           shotWithDate(2L),
           shotWithDate(1L)));
 
-        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         verify(timelineSynchronizationRepository).setStreamTimelineRefreshDate(WATCHING_STREAM_ID, 2L);
     }
@@ -125,7 +126,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
 
-        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         verify(timelineSynchronizationRepository, never()).setStreamTimelineRefreshDate(anyString(), anyLong());
     }
@@ -133,7 +134,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
@@ -141,7 +142,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldReturnVisibleActivityTypesIfIsThereWasLocalActivity() {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activitiesList());
 
-        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);
