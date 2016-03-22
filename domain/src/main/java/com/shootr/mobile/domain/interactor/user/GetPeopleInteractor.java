@@ -24,8 +24,8 @@ public class GetPeopleInteractor implements Interactor {
     private Callback<UserList> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetPeopleInteractor(InteractorHandler interactorHandler, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
+    @Inject public GetPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;

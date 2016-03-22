@@ -36,7 +36,7 @@ public class GetPeopleInteractorTest {
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
         getPeopleInteractor =
-          new GetPeopleInteractor(interactorHandler, remoteUserRepository, localUserRepository, postExecutionThread);
+          new GetPeopleInteractor(interactorHandler, postExecutionThread, remoteUserRepository, localUserRepository);
     }
 
     @Test public void resultsAreSortedByUsername() throws Exception {
