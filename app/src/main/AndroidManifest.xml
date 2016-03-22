@@ -244,7 +244,10 @@
         <activity
           android:name=".ui.activities.NicersActivity"
           android:label="@string/nicers" />
-        <activity android:name=".ui.activities.ContributorsActivity"
-          android:label="@string/title_activity_contributors"></activity>
+        <activity
+          android:name=".ui.activities.ContributorsActivity"
+          android:label="@string/title_activity_contributors"/>
+        <activity
+          android:name=".ui.activities.FindContributorsActivity"/>
     </application>
 </manifest>
