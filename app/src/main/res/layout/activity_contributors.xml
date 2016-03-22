@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <ListView android:id="@+id/contributors_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:divider="@null"
+      android:dividerHeight="0dp"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
+    <ProgressBar android:id="@+id/contributors_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true" />
+
+    <TextView android:id="@+id/contributors_empty"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:textColor="@color/gray_50"
+      android:textSize="20sp"
+      android:visibility="gone"
+      tools:text="@string/contributors_empty"
+      tools:visibility="visible" />
+
+</FrameLayout>
