@@ -33,9 +33,8 @@ public class FindContributorsPresenter implements Presenter {
         this.findContributorsView = findContributorsView;
     }
 
-    public void initialize(FindContributorsView findContributorsView, String query) {
+    public void initialize(FindContributorsView findContributorsView) {
         this.setView(findContributorsView);
-        this.query = query;
         this.contributors = new ArrayList<>();
     }
 
@@ -64,7 +63,7 @@ public class FindContributorsPresenter implements Presenter {
             }
         });
     }
-    
+
     @Override public void resume() {
 
     }
