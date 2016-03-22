@@ -18,9 +18,9 @@ import javax.inject.Inject;
 public class GetPeopleInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
-    private final PostExecutionThread postExecutionThread;
     private Callback<UserList> callback;
     private ErrorCallback errorCallback;
 
