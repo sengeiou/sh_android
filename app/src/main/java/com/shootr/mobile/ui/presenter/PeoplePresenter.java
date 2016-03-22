@@ -53,7 +53,7 @@ public class PeoplePresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                peopleView.hideLoading();
+                hideViewLoading();
                 peopleView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
