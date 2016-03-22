@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,13 +50,13 @@ public class GetPeopleInteractorTest {
         assertThat(argumentCaptor.getValue().getUsers()).isSortedAccordingTo(new TestUsernameComparator());
     }
 
-    @Test public void shouldNeverCallbackWhenNoPeopleReturned() throws Exception {
+    @Test public void shouldOnlyCallbackWhenNoPeopleReturned() throws Exception {
         when(localUserRepository.getPeople()).thenReturn(emptyUserList());
         when(remoteUserRepository.getPeople()).thenReturn(emptyUserList());
 
         getPeopleInteractor.obtainPeople(callback, errorCallback);
 
-        verify(callback, never()).onLoaded(any(UserList.class));
+        verify(callback, only()).onLoaded(any(UserList.class));
     }
 
     private List<User> emptyUserList() {
