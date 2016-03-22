@@ -395,5 +395,6 @@
     <string name="niced_by">"Niced by "</string>
     <string name="contributors_empty">No contributors</string>
     <string name="add_contributor_button">Add contributor</string>
+    <string name="title_activity_contributors">Contributors</string>
 </resources>
 

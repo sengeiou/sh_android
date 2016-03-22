@@ -239,13 +239,12 @@
         </activity>
         <activity
           android:name=".ui.activities.StreamDataInfoActivity"
-
           android:label="@string/title_activity_stream_data_info" />
         <activity android:name=".ui.activities.EasterEggActivity" />
         <activity
           android:name=".ui.activities.NicersActivity"
           android:label="@string/nicers" />
-        <activity android:name=".ui.activities.ContributorsActivity"></activity>
+        <activity android:name=".ui.activities.ContributorsActivity"
+          android:label="@string/title_activity_contributors"></activity>
     </application>
-
 </manifest>

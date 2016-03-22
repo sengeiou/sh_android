@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -47,7 +48,12 @@ public class GetContributorsInteractor implements Interactor {
     }
 
     private List<User> obtainRemoteContributors() {
-        return Collections.emptyList();
+        User user = new User();
+        user.setIdUser("idUser");
+        user.setName("culirrotos de backend");
+        user.setUsername("mamahuevos");
+        user.setEmail("unamierda");
+        return Arrays.asList(user);
     }
 
     private List<User> obtainLocalContributors() {

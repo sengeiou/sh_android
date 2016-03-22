@@ -172,7 +172,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @OnClick(R.id.stream_share_button) public void onShareClick() {
-        openContextualMenuForSharing();
+        String idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
+        Intent intent = ContributorsActivity.newIntent(this, idStream);
+        startActivity(intent);
     }
 
     private void openContextualMenuForSharing() {

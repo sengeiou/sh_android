@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -10,9 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.ContributorsAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
@@ -63,14 +64,24 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
 
     private ListAdapter getContributorsAdapter() {
         if (adapter == null) {
-            adapter = new ContributorsAdapter(this, imageLoader, new OnUserClickListener() {
-                @Override public void onUserClick(String idUser) {
-                    openUserProfile(idUser);
-                }
-            });
+            adapter = new ContributorsAdapter(this, imageLoader);
             //TODO adapter.setCallback(this);
         }
         return adapter;
+    }
+
+    @OnItemClick(R.id.contributors_list)
+    public void onUserClick(int position) {
+        if (position == 0) {
+            onAddContributorClick();
+        } else {
+            UserModel user = adapter.getItem(position);
+            openUserProfile(user.getIdUser());
+        }
+    }
+
+    private void onAddContributorClick() {
+        // TODO
     }
 
     private void openUserProfile(String idUser) {
@@ -79,7 +90,19 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     }
 
     //region View methods
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override public void showEmpty() {
+        adapter.removeItems();
+        adapter.notifyDataSetChanged();
         emptyTextView.setVisibility(View.VISIBLE);
     }
 

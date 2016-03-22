@@ -6,6 +6,7 @@ import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
+import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -88,7 +89,8 @@ import javax.inject.Singleton;
     ErrorActivity.class,
     StreamDataInfoActivity.class,
     MeActivityTimelineFragment.class,
-    NicersActivity.class
+    NicersActivity.class,
+    ContributorsActivity.class
   },
   complete = false) public class UiModule {
 

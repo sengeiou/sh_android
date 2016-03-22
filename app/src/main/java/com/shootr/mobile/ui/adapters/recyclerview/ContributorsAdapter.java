@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
-import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -15,11 +14,8 @@ public class ContributorsAdapter extends UserListAdapter {
     private static final int DEFAULT_TYPE = 0;
     private static final int INVITE_CONTRIBUTORS_TYPE = 1;
 
-    private OnUserClickListener onUserClickListener;
-
-    public ContributorsAdapter(Context context, ImageLoader imageLoader, OnUserClickListener onUserClickListener) {
+    public ContributorsAdapter(Context context, ImageLoader imageLoader) {
         super(context, imageLoader);
-        this.onUserClickListener = onUserClickListener;
     }
 
     @Override public boolean isFollowButtonVisible() {
@@ -46,16 +42,12 @@ public class ContributorsAdapter extends UserListAdapter {
         }
     }
 
-    private boolean isSuggestedPeopleView(int position) {
-        return position == super.getCount()+1;
-    }
-
     @Override public int getViewTypeCount() {
-        return 3;
+        return 2;
     }
 
     @Override public int getCount() {
-        return super.getCount()+2;
+        return super.getCount()+1;
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
@@ -80,11 +72,11 @@ public class ContributorsAdapter extends UserListAdapter {
 
     @Override public UserModel getItem(int layoutPosition) {
         int userPosition = layoutPosition - 1;
-        return layoutPosition == 0 || isSuggestedPeopleView(layoutPosition) ? null : super.getItem(userPosition);
+        return layoutPosition == 0 ? null : super.getItem(userPosition);
     }
 
     @Override
     public boolean isEnabled(int position) {
-        return !isSuggestedPeopleView(position);
+        return false;
     }
 }
