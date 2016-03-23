@@ -245,6 +245,27 @@
         <item name="android:text">@string/profile_edit_profile</item>
     </style>
 
+    <!-- Add Contributor -->
+    <style name="FollowButton.Add">
+        <item name="android:background">@drawable/btn_follow</item>
+    </style>
+
+    <style name="FollowButtonText.Add">
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
+        <item name="android:text">@string/add_contributor</item>
+    </style>
+
+    <!-- Added Contributor -->
+    <style name="FollowButton.Added">
+        <item name="android:background">@drawable/btn_following</item>
+    </style>
+
+    <style name="FollowButtonText.Added">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawableLeft">@drawable/ic_check</item>
+        <item name="android:text">@string/added_contributor</item>
+    </style>
+
     <!-- Menú drawer -->
 
     <style name="MenuDrawer" />
@@ -356,4 +377,6 @@
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <string name="add_contributor">Add</string>
+    <string name="added_contributor">Added</string>
 </resources>

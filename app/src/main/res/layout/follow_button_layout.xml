@@ -39,4 +39,34 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center" />
     </FrameLayout>
+
+  <FrameLayout
+    android:id="@+id/add_contributor"
+    style="@style/FollowButton.Add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:visibility="gone">
+
+    <TextView
+      style="@style/FollowButtonText.Add"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center" />
+  </FrameLayout>
+
+  <FrameLayout
+    android:id="@+id/added_contributor"
+    style="@style/FollowButton.Added"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:visibility="gone">
+
+    <TextView
+      style="@style/FollowButtonText.Added"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center" />
+  </FrameLayout>
 </merge>
