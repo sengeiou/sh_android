@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
@@ -22,7 +21,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -57,6 +55,24 @@ public class ContributorsPresenterTest {
         presenter.initialize(contributorsView, ID_STREAM);
 
         verify(contributorsView, never()).renderAllContributors(anyList());
+    }
+
+    @Test public void shouldShowLimitContributorSnackbarWhenAddContributorsAndCountIsGreaterThanOneHundred()
+      throws Exception {
+        presenter.initialize(contributorsView, ID_STREAM);
+
+        presenter.onAddContributorClick(102);
+
+        verify(contributorsView).showContributorsLimitSnackbar();
+    }
+
+    @Test public void shouldNotShowLimitContributorSnackbarWhenAddContributorsAndCountIsNotGreaterThanOneHundred()
+      throws Exception {
+        presenter.initialize(contributorsView, ID_STREAM);
+
+        presenter.onAddContributorClick(0);
+
+        verify(contributorsView, never()).showContributorsLimitSnackbar();
     }
 
     private void setupGetContributorsInteractor(){

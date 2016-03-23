@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -28,13 +30,17 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
 
     private ContributorsAdapter adapter;
+    private Snackbar limitContributorsSnackbar;
 
     @Bind(R.id.contributors_list) ListView contributorsListView;
     @Bind(R.id.contributors_progress) ProgressBar progressBar;
     @Bind(R.id.contributors_empty) TextView emptyTextView;
 
+    @BindString(R.string.contributors_limit) String limitContributorsText;
+
     @Inject ContributorsPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, ContributorsActivity.class);
@@ -73,16 +79,11 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     @OnItemClick(R.id.contributors_list)
     public void onUserClick(int position) {
         if (position == 0) {
-            onAddContributorClick();
+            presenter.onAddContributorClick(adapter.getCount());
         } else {
             UserModel user = adapter.getItem(position);
             openUserProfile(user.getIdUser());
         }
-    }
-
-    private void onAddContributorClick() {
-        Intent intent = FindContributorsActivity.newIntent(this);
-        startActivity(intent);
     }
 
     private void openUserProfile(String idUser) {
@@ -133,7 +134,13 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     }
 
     @Override public void goToSearchContributors() {
-        //TODO
+        Intent intent = FindContributorsActivity.newIntent(this);
+        startActivity(intent);
+    }
+
+    @Override public void showContributorsLimitSnackbar() {
+        limitContributorsSnackbar = Snackbar.make(getView(), limitContributorsText, Snackbar.LENGTH_LONG);
+        limitContributorsSnackbar.show();
     }
     //endregion
 }

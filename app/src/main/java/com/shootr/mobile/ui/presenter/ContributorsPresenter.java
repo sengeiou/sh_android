@@ -66,6 +66,14 @@ public class ContributorsPresenter implements Presenter {
         }
     }
 
+    public void onAddContributorClick(Integer countContributors) {
+        if(countContributors - 1 >100){
+            view.showContributorsLimitSnackbar();
+        }else{
+            view.goToSearchContributors();
+        }
+    }
+
     @Override public void resume() {
 
     }

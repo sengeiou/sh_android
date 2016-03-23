@@ -397,4 +397,5 @@
     <string name="add_contributor_button">Add contributor</string>
     <string name="title_activity_contributors">Contributors</string>
     <string name="activity_find_contributors_hint">Find contributors</string>
+    <string name="contributors_limit">Cannot add more than 100 contributors</string>
 </resources>
