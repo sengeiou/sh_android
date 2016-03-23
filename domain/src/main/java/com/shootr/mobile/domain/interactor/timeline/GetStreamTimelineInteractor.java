@@ -53,7 +53,7 @@ public class GetStreamTimelineInteractor implements Interactor {
     }
 
     private StreamTimelineParameters buildParameters() {
-        return StreamTimelineParameters.builder().forStream(idStream).realTime(!goneBackground).build();
+        return StreamTimelineParameters.builder().forStream(idStream).realTime(goneBackground).build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {

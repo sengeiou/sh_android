@@ -56,6 +56,8 @@ public class RefreshStreamTimelineInteractorTest {
     }
 
     @Test public void shouldRefreshTimelineForStreamAndWhitRealTime() throws Exception {
+        interactor.incrementCalls();
+
         interactor.refreshStreamTimeline(ID_STREAM, new Date().getTime(), NOT_PAUSED, spyCallback, errorCallback);
 
         verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);
@@ -68,12 +70,16 @@ public class RefreshStreamTimelineInteractorTest {
     }
 
     @Test public void shouldRefreshTimelineForStreamWhenNotPausedWithRealTime() throws Exception {
+        interactor.incrementCalls();
+
         interactor.refreshStreamTimeline(ID_STREAM, 0L, NOT_PAUSED, spyCallback, errorCallback);
 
         verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);
     }
 
     @Test public void shouldRefreshTimelineForStreamWhenPausedWithRealTime() throws Exception {
+        interactor.incrementCalls();
+
         interactor.refreshStreamTimeline(ID_STREAM, new Date().getTime(), PAUSED, spyCallback, errorCallback);
 
         verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);

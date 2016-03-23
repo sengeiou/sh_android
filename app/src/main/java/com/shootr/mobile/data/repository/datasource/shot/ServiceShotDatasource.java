@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -52,12 +53,18 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         try {
-            List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
-              parameters.getLimit(),
-              parameters.getSinceDate(),
-              parameters.getMaxDate(),
-              parameters.isRealTime());
-            return shotApiEntityMapper.transform(shots);
+            if (parameters.isRealTime()) {
+                List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
+                  parameters.getLimit(),
+                  parameters.getSinceDate(),
+                  parameters.getMaxDate());
+                return shotApiEntityMapper.transform(shots);
+            } else {
+                List<ShotApiEntity> shots = shotApiService.getStreamTimlinefirstCall(parameters.getStreamId(),
+                  Collections.singletonList("COMMENT"),
+                  parameters.getSinceDate());
+                return shotApiEntityMapper.transform(shots);
+            }
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -175,8 +182,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
         try {
             List<ShotApiEntity> shots = shotApiService.getAllShotsFromUserInStream(timelineParameters.getUserId(),
-              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate(),
-              timelineParameters.isRealTime());
+              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);

@@ -24,6 +24,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
     private String idStream;
     private Long lastRefreshDate;
     private Boolean goneBackground;
+    private Integer calls = 0;
 
     @Inject
     public RefreshStreamTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -50,13 +51,18 @@ public class RefreshStreamTimelineInteractor implements Interactor {
     private synchronized void executeSynchronized() {
         try {
             long timestamp = new Date().getTime();
-            Boolean isRealTime = !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
+            Boolean isRealTime = calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
             Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, isRealTime);
             notifyLoaded(timeline);
             shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
+            incrementCalls();
         } catch (ShootrException error) {
             notifyError(error);
         }
+    }
+
+    protected void incrementCalls() {
+        calls++;
     }
 
     //region Result
