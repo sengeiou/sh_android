@@ -5,21 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.UserListAdapter;
+import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 
-public class ContributorsAdapter extends UserListAdapter {
+public class ContributorsAdapter extends ContributorsListAdapter {
 
     private static final int DEFAULT_TYPE = 0;
     private static final int INVITE_CONTRIBUTORS_TYPE = 1;
 
     public ContributorsAdapter(Context context, ImageLoader imageLoader) {
         super(context, imageLoader);
-    }
-
-    @Override public boolean isFollowButtonVisible() {
-        return false;
     }
 
     @Override protected boolean showSubtitle(UserModel item) {
@@ -77,6 +73,6 @@ public class ContributorsAdapter extends UserListAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        return false;
+        return true;
     }
 }

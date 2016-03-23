@@ -81,7 +81,8 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     }
 
     private void onAddContributorClick() {
-        // TODO
+        Intent intent = FindContributorsActivity.newIntent(this);
+        startActivity(intent);
     }
 
     private void openUserProfile(String idUser) {

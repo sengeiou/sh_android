@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-  package="com.shootr.mobile"
+<manifest package="com.shootr.mobile"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -182,7 +181,6 @@
         <activity
           android:name=".ui.activities.registro.ResetPasswordActivity"
           android:configChanges="orientation|screenSize"
-
           android:label="@string/title_activity_reset_password" />
         <activity
           android:name=".ui.activities.ListingActivity"
@@ -246,10 +244,10 @@
           android:label="@string/nicers" />
         <activity
           android:name=".ui.activities.ContributorsActivity"
-          android:label="@string/title_activity_contributors"/>
+          android:label="@string/title_activity_contributors" />
         <activity
           android:name=".ui.activities.FindContributorsActivity"
           android:label="@string/title_activity_contributors"
-          android:theme="@style/ShootrTheme.Closable"/>
+          android:theme="@style/ShootrTheme.Closable" />
     </application>
 </manifest>
