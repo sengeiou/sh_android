@@ -14,8 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FindContributorsPresenter;
 import com.shootr.mobile.ui.views.FindContributorsView;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
 public class FindContributorsActivity extends BaseToolbarDecoratedActivity implements FindContributorsView {
 
     private SearchView searchView;
+    private ContributorsListAdapter adapter;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
@@ -56,7 +59,11 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     private void setupViews() {
-        //TODO: Init adapter
+        if (adapter == null) {
+            adapter = new ContributorsListAdapter(this, imageLoader);
+            //TODO: set callback
+        }
+        resultsListView.setAdapter(adapter);
     }
 
     private void setupActionBar() {
@@ -105,7 +112,8 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public void renderContributors(List<UserModel> contributors) {
-        //TODO: set items in adapter
+        adapter.setItems(contributors);
+        adapter.notifyDataSetChanged();
     }
 
     @Override public void setCurrentQuery(String query) {
@@ -144,5 +152,11 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
 
     @Override public void showError(String message) {
         feedbackMessage.show(getView(), message);
+    }
+
+    @OnItemClick(R.id.find_contributors_search_results_list)
+    public void openUserProfile(int position) {
+        UserModel user = adapter.getItem(position);
+        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
     }
 }

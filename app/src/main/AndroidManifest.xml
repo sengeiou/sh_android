@@ -248,6 +248,8 @@
           android:name=".ui.activities.ContributorsActivity"
           android:label="@string/title_activity_contributors"/>
         <activity
-          android:name=".ui.activities.FindContributorsActivity"/>
+          android:name=".ui.activities.FindContributorsActivity"
+          android:label="@string/title_activity_contributors"
+          android:theme="@style/ShootrTheme.Closable"/>
     </application>
 </manifest>
