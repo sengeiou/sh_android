@@ -100,6 +100,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder contributorsMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -197,6 +198,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
+        contributorsMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_contributors));
         dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
         dataInfoMenuItem.setVisible(true);
         return true;
@@ -542,6 +544,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
+    }
+
+    @Override public void showContributorsButton() {
+        contributorsMenuItem.setVisible(true);
+    }
+
+    @Override public void goToContributorsActivity() {
+
     }
 
     @Override public void showLoading() {

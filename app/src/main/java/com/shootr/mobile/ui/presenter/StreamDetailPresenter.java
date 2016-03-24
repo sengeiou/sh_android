@@ -230,6 +230,7 @@ public class StreamDetailPresenter implements Presenter {
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
             showEditPicturePlaceholderIfEmpty();
+            streamDetailView.showContributorsButton();
         }
 
         streamMediaCount = streamModel.getMediaCount();

@@ -223,6 +223,24 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
     }
 
+    @Test public void shouldShowContributorsButtonIfIAmAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView).showContributorsButton();
+    }
+
+    @Test public void shouldNeverShowContributorsButtonIfIAmNotAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView, never()).showContributorsButton();
+    }
+
     public void setupNoStreamMutedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
