@@ -350,6 +350,10 @@ public class StreamDetailPresenter implements Presenter {
         streamDetailView.goToStreamDataInfo(streamModel);
     }
 
+    public void contributorsClicked() {
+        streamDetailView.goToContributorsActivity(streamModel.getIdStream());
+    }
+
     @Override public void resume() {
         if (hasBeenPaused) {
             selectStream();

@@ -173,9 +173,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @OnClick(R.id.stream_share_button) public void onShareClick() {
-        String idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
-        Intent intent = ContributorsActivity.newIntent(this, idStream);
-        startActivity(intent);
+        openContextualMenuForSharing();
     }
 
     private void openContextualMenuForSharing() {
@@ -214,6 +212,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return true;
             case R.id.stream_detail_menu_data_info:
                 streamDetailPresenter.dataInfoClicked();
+                return true;
+            case R.id.stream_detail_contributors:
+                streamDetailPresenter.contributorsClicked();
                 return true;
             default:
                 return false;
@@ -550,8 +551,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         contributorsMenuItem.setVisible(true);
     }
 
-    @Override public void goToContributorsActivity() {
-
+    @Override public void goToContributorsActivity(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream));
     }
 
     @Override public void showLoading() {

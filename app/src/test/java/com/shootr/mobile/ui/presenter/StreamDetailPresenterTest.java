@@ -241,6 +241,15 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView, never()).showContributorsButton();
     }
 
+    @Test public void shouldGoToContributorsActivityOnToolbarClicked() throws Exception {
+        setupStreamInfoCallback();
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        presenter.contributorsClicked();
+
+        verify(streamDetailView).goToContributorsActivity(anyString());
+    }
+
     public void setupNoStreamMutedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
