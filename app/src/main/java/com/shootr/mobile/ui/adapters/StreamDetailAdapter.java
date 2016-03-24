@@ -31,14 +31,15 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkPositionIndex;
 public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_AUTHOR = 1;
-    private static final int TYPE_MEDIA = 2;
-    private static final int TYPE_MUTE = 3;
-    private static final int TYPE_PARTICIPANTS_TITLE = 4;
-    private static final int TYPE_PARTICIPANT = 5;
-    private static final int TYPE_DESCRIPTION = 6;
-    private static final int TYPE_ALL_PARTICIPANTS = 7;
+    private static final int TYPE_CONTRIBUTOR = 2;
+    private static final int TYPE_MEDIA = 3;
+    private static final int TYPE_MUTE = 4;
+    private static final int TYPE_PARTICIPANTS_TITLE = 5;
+    private static final int TYPE_PARTICIPANT = 6;
+    private static final int TYPE_DESCRIPTION = 7;
+    private static final int TYPE_ALL_PARTICIPANTS = 8;
 
-    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 5;
+    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 6;
 
     private final View.OnClickListener onAuthorClickListener;
     private final View.OnClickListener onMediaClickListener;
@@ -49,6 +50,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
     private ActionViewHolder authorViewHolder;
     private ActionViewHolder mediaViewHolder;
+    private ActionViewHolder contributorViewHolder;
     private SwitchViewHolder muteViewHolder;
     private AllParticipantsViewHolder allParticipantsViewHolder;
 
@@ -105,10 +107,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case 1:
                 return TYPE_AUTHOR;
             case 2:
-                return TYPE_MEDIA;
+                return TYPE_CONTRIBUTOR;
             case 3:
-                return TYPE_MUTE;
+                return TYPE_MEDIA;
             case 4:
+                return TYPE_MUTE;
+            case 5:
                 return TYPE_PARTICIPANTS_TITLE;
             default:
                 return TYPE_PARTICIPANT;
@@ -132,6 +136,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     authorViewHolder = new ActionViewHolder(v);
                 }
                 return authorViewHolder;
+            case TYPE_CONTRIBUTOR:
+                if (contributorViewHolder == null) {
+                    v = inflater.inflate(com.shootr.mobile.R.layout.item_menu_action, parent, false);
+                    v.setOnClickListener(onAuthorClickListener);
+                    contributorViewHolder = new ActionViewHolder(v);
+                }
+                return contributorViewHolder;
             case TYPE_MEDIA:
                 if (mediaViewHolder == null) {
                     v = inflater.inflate(R.layout.item_menu_action, parent, false);
@@ -175,6 +186,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_AUTHOR:
                 authorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
                 authorViewHolder.setName(authorName);
+                break;
+            case TYPE_CONTRIBUTOR:
+                contributorViewHolder.setIcon(com.shootr.mobile.R.drawable.ic_stream_author_24_gray50);
+                contributorViewHolder.setName(com.shootr.mobile.R.string.stream_contributors);
                 break;
             case TYPE_MEDIA:
                 mediaViewHolder.setIcon(R.drawable.ic_action_stream_gallery_gray_24);
