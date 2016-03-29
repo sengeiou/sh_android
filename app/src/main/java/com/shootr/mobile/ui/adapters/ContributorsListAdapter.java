@@ -21,12 +21,17 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private List<UserModel> users;
     private ImageLoader imageLoader;
     private Boolean isHolder;
+    private AddRemoveContributorAdapterCallback callback;
 
     public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder){
         super(context);
         this.imageLoader = imageLoader;
         this.isHolder = isHolder;
         this.users = new ArrayList<>(0);
+    }
+
+    public void setCallback(AddRemoveContributorAdapterCallback callback) {
+        this.callback = callback;
     }
 
     public void setItems(List<UserModel> users) {
@@ -59,7 +64,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         return rowView;
     }
 
-    @Override public void bindView(UserModel item, int position, View view) {
+    @Override public void bindView(UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.title.setText(item.getName());
 
@@ -80,10 +85,26 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
-        //TODO: contributorButton logic
+
         if(isHolder) {
+            //TODO logic visibility
             viewHolder.contributorButton.setVisibility(View.VISIBLE);
-            viewHolder.contributorButton.setAddContributor(false);
+            viewHolder.contributorButton.setAddContributor(true);
+
+            viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (viewHolder.contributorButton.isAddContributor()) {
+                        if (callback != null) {
+                            callback.remove(position);
+                        }
+                    } else {
+                        if (callback != null) {
+                            callback.add(position);
+                        }
+                    }
+                }
+            });
+
         }else{
             viewHolder.contributorButton.setVisibility(View.GONE);
         }

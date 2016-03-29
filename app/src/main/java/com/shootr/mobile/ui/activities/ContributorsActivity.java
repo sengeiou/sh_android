@@ -26,7 +26,8 @@ import com.shootr.mobile.util.FeedbackMessage;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ContributorsActivity extends BaseToolbarDecoratedActivity implements ContributorsView {
+public class ContributorsActivity extends BaseToolbarDecoratedActivity implements ContributorsView,
+  ContributorsListAdapter.AddRemoveContributorAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
@@ -84,7 +85,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
         if (adapter == null) {
             Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
             adapter = new ContributorsListAdapter(this, imageLoader, isHolder);
-            //TODO adapter.setCallback(this);
+            adapter.setCallback(this);
         }
         return adapter;
     }
@@ -155,6 +156,14 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
 
     @Override public void hideAddContributorsText() {
         addContributorText.setVisibility(View.GONE);
+    }
+
+    @Override public void add(int position) {
+        presenter.addContributor(adapter.getItem(position));
+    }
+
+    @Override public void remove(int position) {
+        presenter.removeContributor(adapter.getItem(position));
     }
     //endregion
 }

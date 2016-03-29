@@ -2,7 +2,9 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.AddContributorInteractor;
 import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.RemoveContributorInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ContributorsView;
@@ -34,13 +36,16 @@ public class ContributorsPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ContributorsView contributorsView;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
+    @Mock AddContributorInteractor addContributorInteractor;
+    @Mock RemoveContributorInteractor removeContributorInteractor;
 
     private ContributorsPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new ContributorsPresenter(getContributorsInteractor, errorMessageFactory, userModelMapper);
+        presenter = new ContributorsPresenter(getContributorsInteractor,
+          addContributorInteractor, removeContributorInteractor, errorMessageFactory, userModelMapper);
     }
 
     @Test public void shouldHideAddContributorButtonWhenIsNotHolder() throws Exception {
