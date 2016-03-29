@@ -230,7 +230,6 @@ public class StreamDetailPresenter implements Presenter {
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
             showEditPicturePlaceholderIfEmpty();
-            streamDetailView.showContributorsButton();
         }
 
         streamMediaCount = streamModel.getMediaCount();
@@ -351,7 +350,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void contributorsClicked() {
-        streamDetailView.goToContributorsActivity(streamModel.getIdStream());
+        streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
     }
 
     @Override public void resume() {

@@ -59,7 +59,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void goToStreamDataInfo(StreamModel streamModel);
 
-    void showContributorsButton();
+    void goToContributorsActivityAsHolder(String idStream);
 
     void goToContributorsActivity(String idStream);
 }

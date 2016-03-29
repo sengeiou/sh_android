@@ -547,12 +547,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         startActivity(intent);
     }
 
-    @Override public void showContributorsButton() {
-        contributorsMenuItem.setVisible(true);
+    @Override public void goToContributorsActivityAsHolder(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream));
     }
 
     @Override public void goToContributorsActivity(String idStream) {
-        startActivity(ContributorsActivity.newIntent(this, idStream));
+        /* no -op */
     }
 
     @Override public void showLoading() {

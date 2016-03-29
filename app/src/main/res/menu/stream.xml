@@ -11,7 +11,7 @@
     <item
       android:id="@+id/stream_detail_contributors"
       android:title="@string/title_activity_contributors"
-      android:visible="false"
+      android:visible="true"
       app:showAsAction="never" />
 
     <item
