@@ -15,4 +15,6 @@ public interface ContributorsView extends LoadDataView {
     void showContributorsLimitSnackbar();
 
     void hideAddContributorsButton();
+
+    void hideAddContributorsText();
 }

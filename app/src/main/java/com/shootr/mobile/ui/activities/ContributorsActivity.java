@@ -39,6 +39,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     @Bind(R.id.contributors_progress) ProgressBar progressBar;
     @Bind(R.id.contributors_empty) TextView emptyTextView;
     @Bind(R.id.add_contributor) FrameLayout addContributor;
+    @Bind(R.id.add_contributor_text) TextView addContributorText;
 
     @BindString(R.string.contributors_limit) String limitContributorsText;
 
@@ -150,6 +151,10 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
 
     @Override public void hideAddContributorsButton() {
         addContributor.setVisibility(View.GONE);
+    }
+
+    @Override public void hideAddContributorsText() {
+        addContributorText.setVisibility(View.GONE);
     }
     //endregion
 }

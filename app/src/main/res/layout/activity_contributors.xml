@@ -4,10 +4,23 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <TextView android:id="@+id/add_contributor_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/keyline_1"
+    android:paddingRight="16dp"
+    android:paddingTop="14dp"
+    android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+    android:textColor="@color/watching"
+    android:textSize="14sp"
+    android:text="@string/add_contributor_text"/>
+
     <include android:id="@+id/add_contributor"
       layout="@layout/include_add_contributor"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/add_contributor_text"/>
 
     <ListView android:id="@+id/contributors_list"
       android:layout_width="match_parent"

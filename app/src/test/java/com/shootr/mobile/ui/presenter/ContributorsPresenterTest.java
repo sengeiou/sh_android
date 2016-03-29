@@ -59,6 +59,22 @@ public class ContributorsPresenterTest {
         verify(contributorsView, never()).hideAddContributorsButton();
     }
 
+    @Test public void shouldHideAddContributorTextWhenIsNotHolder() throws Exception {
+        setupGetContributorsInteractor();
+
+        presenter.initialize(contributorsView, ID_STREAM, IS_NOT_HOLDER);
+
+        verify(contributorsView).hideAddContributorsText();
+    }
+
+    @Test public void shouldNotHideAddContributorTextWhenIsHolder() throws Exception {
+        setupGetContributorsInteractor();
+
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
+
+        verify(contributorsView, never()).hideAddContributorsText();
+    }
+
     @Test public void shouldRenderAllContributorsWhenContributorsModelsIsNotEmpty() throws Exception {
         setupGetContributorsInteractor();
 

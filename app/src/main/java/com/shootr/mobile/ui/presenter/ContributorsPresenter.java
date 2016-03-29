@@ -51,6 +51,7 @@ public class ContributorsPresenter implements Presenter {
     public void handleAddContributorsVisibility(){
         if(!isHolder) {
             view.hideAddContributorsButton();
+            view.hideAddContributorsText();
         }
     }
 
