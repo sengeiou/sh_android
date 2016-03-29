@@ -223,13 +223,24 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
     }
 
-    @Test public void shouldGoToContributorsActivityOnToolbarClicked() throws Exception {
+    @Test public void shouldGoToContributorsActivityAsHolderOncontributorsClicked() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
         setupStreamInfoCallback();
         presenter.initialize(streamDetailView, ID_STREAM);
 
         presenter.contributorsClicked();
 
         verify(streamDetailView).goToContributorsActivityAsHolder(anyString());
+    }
+
+    @Test public void shouldGoToContributorsActivityOncontributorsClicked() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallback();
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        presenter.contributorsClicked();
+
+        verify(streamDetailView).goToContributorsActivity(anyString());
     }
 
     public void setupNoStreamMutedCallback() {

@@ -350,7 +350,11 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void contributorsClicked() {
-        streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
+        if(streamModel.amIAuthor()) {
+            streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
+        }else {
+            streamDetailView.goToContributorsActivity(streamModel.getIdStream());
+        }
     }
 
     @Override public void resume() {

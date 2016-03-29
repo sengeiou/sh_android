@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
 import com.shootr.mobile.ui.adapters.recyclerview.ContributorsAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
@@ -28,23 +30,25 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
 
     private static final String EXTRA_STREAM = "stream";
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
+    public static final String IS_HOLDER = "isHolder";
 
-    private ContributorsAdapter adapter;
+    private ContributorsListAdapter adapter;
     private Snackbar limitContributorsSnackbar;
 
     @Bind(R.id.contributors_list) ListView contributorsListView;
     @Bind(R.id.contributors_progress) ProgressBar progressBar;
     @Bind(R.id.contributors_empty) TextView emptyTextView;
+    @Bind(R.id.add_contributor) FrameLayout addContributor;
 
     @BindString(R.string.contributors_limit) String limitContributorsText;
 
     @Inject ContributorsPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
 
-
-    public static Intent newIntent(Context context, String idStream) {
+    public static Intent newIntent(Context context, String idStream, Boolean isHolder) {
         Intent intent = new Intent(context, ContributorsActivity.class);
         intent.putExtra(EXTRA_STREAM, idStream);
+        intent.putExtra(IS_HOLDER, isHolder);
         return intent;
     }
 
@@ -60,41 +64,42 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         contributorsListView.setAdapter(getContributorsAdapter());
+        addContributor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                presenter.onAddContributorClick(adapter.getCount());
+            }
+        });
     }
 
     @Override protected void initializePresenter() {
+        Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
-        presenter.initialize(this, idStream);
+        presenter.initialize(this, idStream, isHolder);
+
     }
     //endregion
 
     private ListAdapter getContributorsAdapter() {
         if (adapter == null) {
-            adapter = new ContributorsAdapter(this, imageLoader);
+            Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
+            adapter = new ContributorsListAdapter(this, imageLoader);
             //TODO adapter.setCallback(this);
         }
         return adapter;
     }
 
-    @OnItemClick(R.id.contributors_list)
-    public void onUserClick(int position) {
-        if (position == 0) {
-            presenter.onAddContributorClick(adapter.getCount());
-        } else {
-            UserModel user = adapter.getItem(position);
-            openUserProfile(user.getIdUser());
-        }
+    @OnItemClick(R.id.contributors_list) public void onUserClick(int position) {
+        UserModel user = adapter.getItem(position);
+        openUserProfile(user.getIdUser());
     }
 
     private void openUserProfile(String idUser) {
-        startActivityForResult(ProfileContainerActivity.getIntent(this, idUser),
-          REQUEST_CAN_CHANGE_DATA);
+        startActivityForResult(ProfileContainerActivity.getIntent(this, idUser), REQUEST_CAN_CHANGE_DATA);
     }
 
     //region View methods
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         } else {
@@ -141,6 +146,10 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     @Override public void showContributorsLimitSnackbar() {
         limitContributorsSnackbar = Snackbar.make(getView(), limitContributorsText, Snackbar.LENGTH_LONG);
         limitContributorsSnackbar.show();
+    }
+
+    @Override public void hideAddContributorsButton() {
+        addContributor.setVisibility(View.GONE);
     }
     //endregion
 }

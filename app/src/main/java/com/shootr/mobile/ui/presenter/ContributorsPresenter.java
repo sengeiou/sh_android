@@ -19,6 +19,7 @@ public class ContributorsPresenter implements Presenter {
 
     private ContributorsView view;
     private String idStream;
+    private Boolean isHolder;
 
     @Inject public ContributorsPresenter(GetContributorsInteractor getContributorsInteractor,
       ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
@@ -35,10 +36,22 @@ public class ContributorsPresenter implements Presenter {
         this.idStream = idStream;
     }
 
-    public void initialize(ContributorsView contributorsView, String idStream) {
+    private void setIsHolder(Boolean isHolder) {
+        this.isHolder = isHolder;
+    }
+
+    public void initialize(ContributorsView contributorsView, String idStream, Boolean isHolder) {
         setView(contributorsView);
         setIdStream(idStream);
+        setIsHolder(isHolder);
+        handleAddContributorsVisibility();
         loadContributors();
+    }
+
+    public void handleAddContributorsVisibility(){
+        if(!isHolder) {
+            view.hideAddContributorsButton();
+        }
     }
 
     private void loadContributors() {

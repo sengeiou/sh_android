@@ -28,6 +28,8 @@ public class ContributorsPresenterTest {
 
     public static final String ID_STREAM = "idStream";
     private static final String ID_USER = "idUser";
+    public static final boolean IS_HOLDER = true;
+    public static final boolean IS_NOT_HOLDER = false;
     @Mock GetContributorsInteractor getContributorsInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ContributorsView contributorsView;
@@ -41,10 +43,26 @@ public class ContributorsPresenterTest {
         presenter = new ContributorsPresenter(getContributorsInteractor, errorMessageFactory, userModelMapper);
     }
 
+    @Test public void shouldHideAddContributorButtonWhenIsNotHolder() throws Exception {
+        setupGetContributorsInteractor();
+
+        presenter.initialize(contributorsView, ID_STREAM, IS_NOT_HOLDER);
+
+        verify(contributorsView).hideAddContributorsButton();
+    }
+
+    @Test public void shouldNotHideAddContributorButtonWhenIsHolder() throws Exception {
+        setupGetContributorsInteractor();
+
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
+
+        verify(contributorsView, never()).hideAddContributorsButton();
+    }
+
     @Test public void shouldRenderAllContributorsWhenContributorsModelsIsNotEmpty() throws Exception {
         setupGetContributorsInteractor();
 
-        presenter.initialize(contributorsView, ID_STREAM);
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
 
         verify(contributorsView).renderAllContributors(anyList());
     }
@@ -52,14 +70,14 @@ public class ContributorsPresenterTest {
     @Test public void shouldNotRenderAllContributorsWhenContributorsModelsIsEmpty() throws Exception {
         setupGetContributorsInteractorWithEmptyList();
 
-        presenter.initialize(contributorsView, ID_STREAM);
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
 
         verify(contributorsView, never()).renderAllContributors(anyList());
     }
 
     @Test public void shouldShowLimitContributorSnackbarWhenAddContributorsAndCountIsGreaterThanOneHundred()
       throws Exception {
-        presenter.initialize(contributorsView, ID_STREAM);
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
 
         presenter.onAddContributorClick(102);
 
@@ -68,7 +86,7 @@ public class ContributorsPresenterTest {
 
     @Test public void shouldNotShowLimitContributorSnackbarWhenAddContributorsAndCountIsNotGreaterThanOneHundred()
       throws Exception {
-        presenter.initialize(contributorsView, ID_STREAM);
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
 
         presenter.onAddContributorClick(0);
 

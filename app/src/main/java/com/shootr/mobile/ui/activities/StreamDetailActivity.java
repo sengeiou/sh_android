@@ -548,11 +548,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void goToContributorsActivityAsHolder(String idStream) {
-        startActivity(ContributorsActivity.newIntent(this, idStream));
+        startActivity(ContributorsActivity.newIntent(this, idStream, true));
     }
 
     @Override public void goToContributorsActivity(String idStream) {
-        /* no -op */
+        startActivity(ContributorsActivity.newIntent(this, idStream, false));
     }
 
     @Override public void showLoading() {
