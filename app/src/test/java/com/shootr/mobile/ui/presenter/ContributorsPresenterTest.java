@@ -100,7 +100,7 @@ public class ContributorsPresenterTest {
       throws Exception {
         presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
 
-        presenter.onAddContributorClick(102);
+        presenter.onAddContributorClick(101);
 
         verify(contributorsView).showContributorsLimitSnackbar();
     }
