@@ -26,8 +26,10 @@ import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindContributorsActivity extends BaseToolbarDecoratedActivity implements FindContributorsView {
+public class FindContributorsActivity extends BaseToolbarDecoratedActivity implements FindContributorsView,
+  ContributorsListAdapter.AddRemoveContributorAdapterCallback{
 
+    public static final String ID_STREAM = "idStream";
     private SearchView searchView;
     private ContributorsListAdapter adapter;
 
@@ -39,8 +41,9 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     @Bind(R.id.find_contributors_search_results_empty) TextView emptyOrErrorView;
     @Bind(R.id.contributorslist_progress) ProgressBar progressBar;
 
-    public static Intent newIntent(Context context) {
+    public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, FindContributorsActivity.class);
+        intent.putExtra(ID_STREAM, idStream);
         return intent;
     }
 
@@ -73,7 +76,8 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override protected void initializePresenter() {
-        findContributorsPresenter.initialize(this);
+        String idStream = getIntent().getStringExtra(ID_STREAM);
+        findContributorsPresenter.initialize(this, idStream);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,5 +162,13 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+    }
+
+    @Override public void add(int position) {
+        findContributorsPresenter.addContributor(adapter.getItem(position));
+    }
+
+    @Override public void remove(int position) {
+        findContributorsPresenter.removeContributor(adapter.getItem(position));
     }
 }

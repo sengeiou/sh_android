@@ -3,7 +3,9 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.AddContributorInteractor;
 import com.shootr.mobile.domain.interactor.user.FindContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.RemoveContributorInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.FindContributorsView;
@@ -15,16 +17,22 @@ import javax.inject.Inject;
 public class FindContributorsPresenter implements Presenter {
 
     private final FindContributorsInteractor findContributorsInteractor;
+    private final AddContributorInteractor addContributorInteractor;
+    private final RemoveContributorInteractor removeContributorInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private FindContributorsView findContributorsView;
     private List<UserModel> contributors;
     private String query;
+    private String idStream;
 
-    @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+    @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor,
+      AddContributorInteractor addContributorInteractor, RemoveContributorInteractor removeContributorInteractor,
+      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.findContributorsInteractor = findContributorsInteractor;
+        this.addContributorInteractor = addContributorInteractor;
+        this.removeContributorInteractor = removeContributorInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -33,9 +41,10 @@ public class FindContributorsPresenter implements Presenter {
         this.findContributorsView = findContributorsView;
     }
 
-    public void initialize(FindContributorsView findContributorsView) {
+    public void initialize(FindContributorsView findContributorsView, String idStream) {
         this.setView(findContributorsView);
         this.contributors = new ArrayList<>();
+        this.idStream = idStream;
     }
 
     public void searchContributors(String query) {
@@ -62,6 +71,33 @@ public class FindContributorsPresenter implements Presenter {
                 findContributorsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void addContributor(UserModel userModel){
+        addContributorInteractor.addContributor(idStream, userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                //TODO: refresh list
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO: show error
+            }
+        });
+    }
+
+    public void removeContributor(UserModel userModel){
+        removeContributorInteractor.removeContributor(idStream,
+          userModel.getIdUser(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  //TODO: refresh list
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  //TODO: show error
+              }
+          });
     }
 
     @Override public void resume() {

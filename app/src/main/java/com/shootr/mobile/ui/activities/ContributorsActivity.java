@@ -141,7 +141,8 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     }
 
     @Override public void goToSearchContributors() {
-        Intent intent = FindContributorsActivity.newIntent(this);
+        String idStream = getIntent().getStringExtra(EXTRA_STREAM);
+        Intent intent = FindContributorsActivity.newIntent(this, idStream);
         startActivity(intent);
     }
 
