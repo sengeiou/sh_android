@@ -48,6 +48,8 @@ import com.shootr.mobile.util.CacheUtils;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.FollowsFormatUtil;
+import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.GlideImageLoader;
 import com.shootr.mobile.util.GoogleAnalyticsTool;
 import com.shootr.mobile.util.ImageLoader;
@@ -233,5 +235,9 @@ public class DataModule {
 
     @Provides @Singleton PercentageUtils providePercentageUtils(StreamPercentageUtils streamPercentageUtils) {
         return streamPercentageUtils;
+    }
+
+    @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(FollowsFormatUtil followsFormatUtil) {
+        return followsFormatUtil;
     }
 }
