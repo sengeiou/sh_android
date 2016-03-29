@@ -15,7 +15,7 @@ public class ContributorsAdapter extends ContributorsListAdapter {
     private static final int INVITE_CONTRIBUTORS_TYPE = 1;
 
     public ContributorsAdapter(Context context, ImageLoader imageLoader) {
-        super(context, imageLoader);
+        super(context, imageLoader, false);
     }
 
     @Override protected boolean showSubtitle(UserModel item) {

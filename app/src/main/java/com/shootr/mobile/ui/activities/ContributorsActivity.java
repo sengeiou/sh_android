@@ -82,7 +82,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
     private ListAdapter getContributorsAdapter() {
         if (adapter == null) {
             Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
-            adapter = new ContributorsListAdapter(this, imageLoader);
+            adapter = new ContributorsListAdapter(this, imageLoader, isHolder);
             //TODO adapter.setCallback(this);
         }
         return adapter;

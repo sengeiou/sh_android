@@ -20,10 +20,12 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     private List<UserModel> users;
     private ImageLoader imageLoader;
+    private Boolean isHolder;
 
-    public ContributorsListAdapter(Context context, ImageLoader imageLoader){
+    public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder){
         super(context);
         this.imageLoader = imageLoader;
+        this.isHolder = isHolder;
         this.users = new ArrayList<>(0);
     }
 
@@ -79,8 +81,12 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
         //TODO: contributorButton logic
-        viewHolder.contributorButton.setVisibility(View.VISIBLE);
-        viewHolder.contributorButton.setAddContributor(false);
+        if(isHolder) {
+            viewHolder.contributorButton.setVisibility(View.VISIBLE);
+            viewHolder.contributorButton.setAddContributor(false);
+        }else{
+            viewHolder.contributorButton.setVisibility(View.GONE);
+        }
 
     }
 
