@@ -21,8 +21,8 @@ import javax.inject.Inject;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
 
-    @Bind(com.shootr.mobile.R.id.email_confirmation_email) TextView email;
-    @Bind(com.shootr.mobile.R.id.email_confirmation_confirm_button) View confirmButton;
+    @Bind(R.id.email_confirmation_email) TextView email;
+    @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
 
     @Inject EmailConfirmationPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -40,7 +40,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_email_confirmation;
+        return R.layout.activity_email_confirmation;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -62,12 +62,12 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         }
     }
 
-    @OnTextChanged(com.shootr.mobile.R.id.email_confirmation_email)
+    @OnTextChanged(R.id.email_confirmation_email)
     public void onEmailChanged(CharSequence email) {
         presenter.onEmailEdited(email.toString());
     }
 
-    @OnClick(com.shootr.mobile.R.id.email_confirmation_confirm_button)
+    @OnClick(R.id.email_confirmation_confirm_button)
     public void onDoneButtonClick() {
         presenter.done(email.getText().toString());
     }
@@ -78,7 +78,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
               .setMessage(getString(R.string.email_confirmation_message_content, email)) //
-              .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
                   @Override
                   public void onClick(DialogInterface dialog, int which) {
                       if (alertCallback != null) {

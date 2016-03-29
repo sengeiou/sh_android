@@ -909,7 +909,7 @@ public class ProfileFragment extends BaseFragment
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+          .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);

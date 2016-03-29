@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -129,7 +130,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private View createActivityView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_list_activity, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
     }
 
     private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent) {
@@ -220,7 +221,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-        View footer = LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_list_loading, parent, false);
+        View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
         return new RecyclerView.ViewHolder(footer) {
             /* empty implementation */
         };

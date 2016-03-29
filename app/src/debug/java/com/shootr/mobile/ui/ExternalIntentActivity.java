@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.Truss;
 import java.lang.reflect.Field;
@@ -30,21 +31,21 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
         return intent;
     }
 
-    @Bind(com.shootr.mobile.R.id.toolbar) Toolbar toolbarView;
-    @Bind(com.shootr.mobile.R.id.action) TextView actionView;
-    @Bind(com.shootr.mobile.R.id.data) TextView dataView;
-    @Bind(com.shootr.mobile.R.id.extras) TextView extrasView;
-    @Bind(com.shootr.mobile.R.id.flags) TextView flagsView;
+    @Bind(R.id.toolbar) Toolbar toolbarView;
+    @Bind(R.id.action) TextView actionView;
+    @Bind(R.id.data) TextView dataView;
+    @Bind(R.id.extras) TextView extrasView;
+    @Bind(R.id.flags) TextView flagsView;
 
     private Intent baseIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.shootr.mobile.R.layout.debug_external_intent_activity);
+        setContentView(R.layout.debug_external_intent_activity);
         ButterKnife.bind(this);
 
-        toolbarView.inflateMenu(com.shootr.mobile.R.menu.debug_external_intent);
+        toolbarView.inflateMenu(R.menu.debug_external_intent);
         toolbarView.setOnMenuItemClickListener(this);
 
         baseIntent = getIntent().getParcelableExtra(EXTRA_BASE_INTENT);
@@ -57,7 +58,7 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case com.shootr.mobile.R.id.debug_launch:
+            case R.id.debug_launch:
                 if (Intents.maybeStartActivity(this, baseIntent)) {
                     finish();
                 }

@@ -37,11 +37,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     private static final String EXTRA_IS_CURRENT_USER = "is_current_user";
     public static final int REQUEST_NEW_STREAM = 3;
 
-    @Bind(com.shootr.mobile.R.id.listing_list) RecyclerView listingList;
-    @Bind(com.shootr.mobile.R.id.listing_loading) View loadingView;
-    @Bind(com.shootr.mobile.R.id.listing_empty_title) View emptyView;
-    @Bind(com.shootr.mobile.R.id.listing_add_stream) FloatingActionButton addStream;
-    @BindString(com.shootr.mobile.R.string.shared_stream_notification) String sharedStream;
+    @Bind(R.id.listing_list) RecyclerView listingList;
+    @Bind(R.id.listing_loading) View loadingView;
+    @Bind(R.id.listing_empty_title) View emptyView;
+    @Bind(R.id.listing_add_stream) FloatingActionButton addStream;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_user_streams) String analyticsScreenuserStreams;
 
     @Inject ListingListPresenter presenter;
@@ -59,7 +59,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_listing;
+        return R.layout.activity_listing;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -187,13 +187,13 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override
     public void askRemoveStreamConfirmation() {
-        new AlertDialog.Builder(this).setMessage(com.shootr.mobile.R.string.remove_stream_confirmation)
-          .setPositiveButton(com.shootr.mobile.R.string.ok, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                  presenter.removeStream();
               }
           })
-          .setNegativeButton(com.shootr.mobile.R.string.cancel, null)
+          .setNegativeButton(R.string.cancel, null)
           .show();
     }
 
@@ -211,11 +211,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showContextMenuWithoutAddFavorite(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
-        builder.addAction(com.shootr.mobile.R.string.share_via_shootr, new Runnable() {
+        builder.addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }
-        }).addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+        }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 shareStream(stream);
             }
@@ -224,14 +224,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showCurrentUserContextMenuWithAddFavorite(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
-        builder.addAction(com.shootr.mobile.R.string.edit_stream_listing_context_menu, new Runnable() {
+        builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
             }
         });
         addBaseContextMenuOptions(builder, stream);
-        builder.addAction(com.shootr.mobile.R.string.remove_stream_listing_context_menu, new Runnable() {
+        builder.addAction(R.string.remove_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 presenter.remove(stream.getStreamModel().getIdStream());
             }
@@ -240,22 +240,22 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showCurrentUserContextMenuWithoutAddFavorite(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
-        builder.addAction(com.shootr.mobile.R.string.edit_stream_listing_context_menu, new Runnable() {
+        builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
             }
         });
-        builder.addAction(com.shootr.mobile.R.string.share_via_shootr, new Runnable() {
+        builder.addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }
-        }).addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+        }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 shareStream(stream);
             }
         });
-        builder.addAction(com.shootr.mobile.R.string.remove_stream_listing_context_menu, new Runnable() {
+        builder.addAction(R.string.remove_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
                 presenter.remove(stream.getStreamModel().getIdStream());
             }
@@ -269,16 +269,16 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     private void addBaseContextMenuOptions(CustomContextMenu.Builder builder, final StreamResultModel stream) {
-        builder.addAction(com.shootr.mobile.R.string.add_to_favorites_menu_title,
+        builder.addAction(R.string.add_to_favorites_menu_title,
           new Runnable() {
               @Override public void run() {
                   presenter.addToFavorite(stream);
               }
-          }).addAction(com.shootr.mobile.R.string.share_via_shootr, new Runnable() {
+          }).addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }
-        }).addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+        }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 shareStream(stream);
             }
@@ -289,7 +289,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         listingList.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(com.shootr.mobile.R.id.listing_add_stream) public void onAddStream() {
+    @OnClick(R.id.listing_add_stream) public void onAddStream() {
         startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
     }
 

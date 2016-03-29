@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.shootr.mobile.R;
 
 /**
  * Layout which an {@link android.widget.EditText} to show a floating label when the hint is hidden
@@ -56,16 +57,16 @@ public final class FloatLabelLayout extends FrameLayout {
     public FloatLabelLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        final TypedArray a = context.obtainStyledAttributes(attrs, com.shootr.mobile.R.styleable.FloatLabelLayout);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatLabelLayout);
 
-        final int sidePadding = a.getDimensionPixelSize(com.shootr.mobile.R.styleable.FloatLabelLayout_floatLabelSidePadding,
+        final int sidePadding = a.getDimensionPixelSize(R.styleable.FloatLabelLayout_floatLabelSidePadding,
           dipsToPix(DEFAULT_PADDING_LEFT_RIGHT_DP));
         mLabel = new TextView(context);
         mLabel.setPadding(sidePadding, 0, sidePadding, 0);
         mLabel.setVisibility(INVISIBLE);
 
         mLabel.setTextAppearance(context,
-          a.getResourceId(com.shootr.mobile.R.styleable.FloatLabelLayout_floatLabelTextAppearance, android.R.style.TextAppearance_Small));
+          a.getResourceId(R.styleable.FloatLabelLayout_floatLabelTextAppearance, android.R.style.TextAppearance_Small));
 
         addView(mLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 

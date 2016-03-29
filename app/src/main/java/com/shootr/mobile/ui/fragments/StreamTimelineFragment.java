@@ -105,21 +105,21 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject WritePermissionManager writePermissionManager;
     @Inject CrashReportTool crashReportTool;
 
-    @Bind(com.shootr.mobile.R.id.timeline_shot_list) ListView listView;
-    @Bind(com.shootr.mobile.R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.timeline_shot_list) ListView listView;
+    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
-    @Bind(com.shootr.mobile.R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-    @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View draftsButton;
+    @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
+    @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
     @Bind(R.id.timeline_new_shots_indicator) LinearLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
     @Bind(R.id.timeline_list_container) View timelineListContainer;
 
-    @BindString(com.shootr.mobile.R.string.report_base_url) String reportBaseUrl;
-    @BindString(com.shootr.mobile.R.string.added_to_favorites) String addToFavorites;
-    @BindString(com.shootr.mobile.R.string.shot_shared_message) String shotShared;
+    @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.added_to_favorites) String addToFavorites;
+    @BindString(R.string.shot_shared_message) String shotShared;
 
     @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
 
@@ -151,7 +151,7 @@ public class StreamTimelineFragment extends BaseFragment
     //region Lifecycle methods
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(com.shootr.mobile.R.layout.timeline_stream, container, false);
+        View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
@@ -200,16 +200,16 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(com.shootr.mobile.R.menu.timeline, menu);
+        inflater.inflate(R.menu.timeline, menu);
 
-        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_showing_holding_shots));
+        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
         showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_showing_all_shots));
+        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
         showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_add_favorite));
-        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(com.shootr.mobile.R.id.menu_stream_remove_favorite));
+        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
 
         muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
         unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
@@ -221,16 +221,16 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case com.shootr.mobile.R.id.menu_showing_holding_shots:
+            case R.id.menu_showing_holding_shots:
                 streamTimelinePresenter.onHoldingShotsClick();
                 return true;
-            case com.shootr.mobile.R.id.menu_showing_all_shots:
+            case R.id.menu_showing_all_shots:
                 streamTimelinePresenter.onAllStreamShotsClick();
                 return true;
-            case com.shootr.mobile.R.id.menu_stream_add_favorite:
+            case R.id.menu_stream_add_favorite:
                 streamTimelineOptionsPresenter.addToFavorites();
                 return true;
-            case com.shootr.mobile.R.id.menu_stream_remove_favorite:
+            case R.id.menu_stream_remove_favorite:
                 streamTimelineOptionsPresenter.removeFromFavorites();
                 return true;
             case R.id.menu_mute_stream:
@@ -403,8 +403,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListAdapter() {
         View footerView =
-          LayoutInflater.from(getActivity()).inflate(com.shootr.mobile.R.layout.item_list_loading, listView, false);
-        footerProgress = ButterKnife.findById(footerView, com.shootr.mobile.R.id.loading_progress);
+          LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+        footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
         footerProgress.setVisibility(View.GONE);
 
@@ -447,10 +447,10 @@ public class StreamTimelineFragment extends BaseFragment
                 streamTimelinePresenter.refresh();
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(com.shootr.mobile.R.color.refresh_1,
-          com.shootr.mobile.R.color.refresh_2,
-          com.shootr.mobile.R.color.refresh_3,
-          com.shootr.mobile.R.color.refresh_4);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
+          R.color.refresh_2,
+          R.color.refresh_3,
+          R.color.refresh_4);
     }
 
     private void setupListScrollListeners() {
@@ -509,15 +509,15 @@ public class StreamTimelineFragment extends BaseFragment
         Clipboard.copyShotComment(getActivity(), shotModel);
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_text) public void startNewShot() {
+    @OnClick(R.id.shot_bar_text) public void startNewShot() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_photo) public void startNewShotWithPhoto() {
+    @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
         newShotBarPresenter.newShotFromImage();
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_drafts) public void openDraftsClicked() {
+    @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
@@ -577,7 +577,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showAllStreamShots() {
         showAllShotsMenuItem.setVisible(true);
-        feedbackMessage.show(getView(), com.shootr.mobile.R.string.showing_shots_by_holder);
+        feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
     }
 
     @Override public void showHoldingShots() {
@@ -686,7 +686,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(com.shootr.mobile.R.string.report_context_menu_unblock,
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock,
           new Runnable() {
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
@@ -695,26 +695,26 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showBlockFollowingUserAlert() {
-        feedbackMessage.showLong(getView(), com.shootr.mobile.R.string.block_user_error);
+        feedbackMessage.showLong(getView(), R.string.block_user_error);
     }
 
     @Override public void showUserBlocked() {
-        feedbackMessage.show(getView(), com.shootr.mobile.R.string.user_blocked);
+        feedbackMessage.show(getView(), R.string.user_blocked);
     }
 
     @Override public void showUserUnblocked() {
-        feedbackMessage.show(getView(), com.shootr.mobile.R.string.user_unblocked);
+        feedbackMessage.show(getView(), R.string.user_unblocked);
     }
 
     @Override public void showBlockUserConfirmation() {
-        new AlertDialog.Builder(getActivity()).setMessage(com.shootr.mobile.R.string.block_user_dialog_message)
-          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block),
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
+          .setPositiveButton(getString(R.string.block_user_dialog_block),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     reportShotPresenter.confirmBlock();
                 }
             })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.block_user_dialog_cancel), null)
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
           .create()
           .show();
     }
@@ -830,7 +830,7 @@ public class StreamTimelineFragment extends BaseFragment
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+          .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);
@@ -867,20 +867,20 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void showEmailNotConfirmedError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage(getActivity().getString(com.shootr.mobile.R.string.alert_report_confirmed_email_message))
-          .setTitle(getActivity().getString(com.shootr.mobile.R.string.alert_report_confirmed_email_title))
-          .setPositiveButton(getActivity().getString(com.shootr.mobile.R.string.alert_report_confirmed_email_ok), null);
+        builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
+          .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
+          .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
 
         builder.create().show();
     }
 
     @Override public void showContextMenu(final ShotModel shotModel) {
         CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(com.shootr.mobile.R.string.report_context_menu_report, new Runnable() {
+        builder.addAction(R.string.report_context_menu_report, new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
-        }).addAction(com.shootr.mobile.R.string.report_context_menu_block, new Runnable() {
+        }).addAction(R.string.report_context_menu_block, new Runnable() {
             @Override public void run() {
                 reportShotPresenter.blockUserClicked(shotModel);
             }
@@ -914,13 +914,13 @@ public class StreamTimelineFragment extends BaseFragment
     private void openDeleteConfirmation(final ShotModel shotModel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
-        alertDialogBuilder.setMessage(com.shootr.mobile.R.string.delete_shot_confirmation_message);
-        alertDialogBuilder.setPositiveButton(com.shootr.mobile.R.string.ok, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 reportShotPresenter.deleteShot(shotModel);
             }
         });
-        alertDialogBuilder.setNegativeButton(com.shootr.mobile.R.string.cancel, null);
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
@@ -948,13 +948,13 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.onShotDeleted(adapter.getCount());
     }
 
-    @OnItemClick(com.shootr.mobile.R.id.timeline_shot_list) public void openShot(int position) {
+    @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
         Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(intent);
     }
 
-    @OnItemLongClick(com.shootr.mobile.R.id.timeline_shot_list) public boolean openContextMenu(int position) {
+    @OnItemLongClick(R.id.timeline_shot_list) public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
@@ -96,7 +97,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         View view = null;
         switch (getItemViewType(position)) {
             case 0: // Shot
-                view = inflater.inflate(com.shootr.mobile.R.layout.item_list_shot, container, false);
+                view = inflater.inflate(R.layout.item_list_shot, container, false);
                 view.setTag(new ShotViewHolder(view, avatarClickListener, videoClickListener,
                   onNiceShotListener,
                   onHideClickListener,

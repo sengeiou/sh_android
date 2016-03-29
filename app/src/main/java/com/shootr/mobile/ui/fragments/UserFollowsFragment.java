@@ -48,7 +48,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Bind(R.id.userlist_list) ListView userList;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
-    @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
+    @Bind(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
     @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
 
@@ -93,7 +93,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(com.shootr.mobile.R.layout.activity_userlist, container, false);
+        return inflater.inflate(R.layout.activity_userlist, container, false);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -194,8 +194,8 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void unFollow(int position) {
         final UserModel userModel = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   unfollowUser(userModel);
               }

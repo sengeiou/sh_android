@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.model.ShotModel;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
     }
 
     public String getTitle() {
-        return getResources().getString(com.shootr.mobile.R.string.notification_shot_multiple_title, shots.size());
+        return getResources().getString(R.string.notification_shot_multiple_title, shots.size());
     }
 
     @Override
@@ -63,7 +64,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     private String getShotTitle(ShotModel shot) {
         if (shot.isReply()) {
-            return getResources().getString(com.shootr.mobile.R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
+            return getResources().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
         } else {
             return shot.getUsername();
         }

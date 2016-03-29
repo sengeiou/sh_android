@@ -40,9 +40,9 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindFriendsPresenter findFriendsPresenter;
 
-    @Bind(com.shootr.mobile.R.id.find_friends_search_results_list) ListView resultsListView;
+    @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
-    @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     private View progressViewContent;
     private View progressView;
@@ -127,7 +127,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
 
         SearchView.SearchAutoComplete searchAutoComplete =
           (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(com.shootr.mobile.R.color.hint_black));
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
 
         return true;
     }
@@ -224,15 +224,15 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
-        new AlertDialog.Builder(this).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message),
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
           userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes),
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     findFriendsPresenter.unfollowUser(userModel);
                 }
             })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.unfollow_dialog_no), null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }

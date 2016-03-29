@@ -38,15 +38,15 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(com.shootr.mobile.R.id.scroll) ScrollView scroll;
-    @Bind(com.shootr.mobile.R.id.profile_edit_name) TextView name;
+    @Bind(R.id.scroll) ScrollView scroll;
+    @Bind(R.id.profile_edit_name) TextView name;
     @Bind(R.id.profile_edit_username) TextView username;
-    @Bind(com.shootr.mobile.R.id.profile_edit_website) TextView website;
-    @Bind(com.shootr.mobile.R.id.profile_edit_bio) TextView bio;
-    @Bind(com.shootr.mobile.R.id.profile_edit_email) TextView email;
+    @Bind(R.id.profile_edit_website) TextView website;
+    @Bind(R.id.profile_edit_bio) TextView bio;
+    @Bind(R.id.profile_edit_email) TextView email;
     @BindString(R.string.profile_updated) String profileUpdated;
-    @BindString(com.shootr.mobile.R.string.communication_error) String communicationError;
-    @BindString(com.shootr.mobile.R.string.connection_lost) String connectionLost;
+    @BindString(R.string.communication_error) String communicationError;
+    @BindString(R.string.connection_lost) String connectionLost;
     @BindString(R.string.analytics_screen_edit_profile) String analyticsScreenEditProfile;
 
     private MenuItem menuItemDone;
@@ -164,7 +164,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showDiscardConfirmation() {
         new AlertDialog.Builder(this).setMessage(R.string.discard_profile_confirmation)
-          .setPositiveButton(com.shootr.mobile.R.string.discard, new DialogInterface.OnClickListener() {
+          .setPositiveButton(R.string.discard, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmDiscard();
               }
@@ -174,7 +174,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showLoadingIndicator() {
-        menuItemDone.setActionView(com.shootr.mobile.R.layout.item_list_loading);
+        menuItemDone.setActionView(R.layout.item_list_loading);
     }
 
     @Override public void hideLoadingIndicator() {
@@ -209,7 +209,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.profile_edit, menu);
+        getMenuInflater().inflate(R.menu.profile_edit, menu);
         menuItemDone = menu.findItem(R.id.menu_done);
         return true;
     }

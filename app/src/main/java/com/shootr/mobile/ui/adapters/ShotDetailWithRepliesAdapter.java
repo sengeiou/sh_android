@@ -77,7 +77,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.timeUtils = timeUtils;
         this.onNiceShotListener = onNiceShotListener;
         this.replies = new ArrayList<>();
-        this.itemElevation = resources.getDimension(com.shootr.mobile.R.dimen.card_elevation);
+        this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -173,17 +173,17 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         View itemView;
         switch (viewType) {
             case TYPE_PARENT_SHOT:
-                itemView = layoutInflater.inflate(com.shootr.mobile.R.layout.include_shot_detail_parent, parent, false);
+                itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
                 return new ShotDetailParentViewHolder(itemView);
             case TYPE_MAIN_SHOT:
-                itemView = layoutInflater.inflate(com.shootr.mobile.R.layout.include_shot_detail, parent, false);
+                itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
                 ViewCompat.setElevation(itemView, itemElevation);
                 return new ShotDetailMainViewHolder(itemView);
             case TYPE_REPLIES_HEADER:
-                itemView = layoutInflater.inflate(com.shootr.mobile.R.layout.item_list_replies_header, parent, false);
+                itemView = layoutInflater.inflate(R.layout.item_list_replies_header, parent, false);
                 return new ShotDetailRepliesHeaderHolder(itemView);
             case TYPE_REPLY:
-                itemView = layoutInflater.inflate(com.shootr.mobile.R.layout.item_list_shot_reply, parent, false);
+                itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
                 ViewCompat.setElevation(itemView, itemElevation);
                 return new ShotDetailReplyHolder(itemView);
             default:
@@ -221,7 +221,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindRepliesHeaderHolder(ShotDetailRepliesHeaderHolder holder) {
         String repliesCountText = holder.itemView.getResources()
-          .getQuantityString(com.shootr.mobile.R.plurals.replies_header_count_pattern, replies.size(), replies.size());
+          .getQuantityString(R.plurals.replies_header_count_pattern, replies.size(), replies.size());
         ((TextView) holder.itemView).setText(repliesCountText);
     }
 
@@ -250,18 +250,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        @Bind(com.shootr.mobile.R.id.shot_detail_avatar) ImageView avatar;
-        @Bind(com.shootr.mobile.R.id.shot_detail_user_name) TextView username;
-        @Bind(com.shootr.mobile.R.id.shot_detail_timestamp) TextView timestamp;
-        @Bind(com.shootr.mobile.R.id.shot_detail_text) ClickableTextView shotText;
-        @Bind(com.shootr.mobile.R.id.shot_detail_image) ImageView shotImage;
-        @Bind(com.shootr.mobile.R.id.shot_detail_stream_title) TextView streamTitle;
-        @Bind(com.shootr.mobile.R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
-        @Bind(com.shootr.mobile.R.id.shot_video_frame) View videoFrame;
-        @Bind(com.shootr.mobile.R.id.shot_video_title) TextView videoTitle;
-        @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;
-        @Bind(com.shootr.mobile.R.id.shot_nice_button) NiceButtonView niceButton;
-        @Bind(com.shootr.mobile.R.id.shot_nice_count) TextView niceCount;
+        @Bind(R.id.shot_detail_avatar) ImageView avatar;
+        @Bind(R.id.shot_detail_user_name) TextView username;
+        @Bind(R.id.shot_detail_timestamp) TextView timestamp;
+        @Bind(R.id.shot_detail_text) ClickableTextView shotText;
+        @Bind(R.id.shot_detail_image) ImageView shotImage;
+        @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
+        @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+        @Bind(R.id.shot_nice_count) TextView niceCount;
         @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -353,7 +353,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setNiceCount(Integer niceCount) {
             this.niceCount.setVisibility(View.VISIBLE);
             this.niceCount.setText(context.getResources()
-              .getQuantityString(com.shootr.mobile.R.plurals.nice_count_pattern, niceCount, niceCount));
+              .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
         }
 
         public void setComment(String comment) {
@@ -391,10 +391,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override public void onClick(View v) {
                     if (isShowingParent()) {
                         hideParent();
-                        parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_down_24_gray50);
+                        parentToggleButton.setImageResource(R.drawable.ic_arrow_down_24_gray50);
                     } else {
                         showParent();
-                        parentToggleButton.setImageResource(com.shootr.mobile.R.drawable.ic_arrow_up_24_gray50);
+                        parentToggleButton.setImageResource(R.drawable.ic_arrow_up_24_gray50);
                     }
                 }
             });
@@ -402,7 +402,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private String getUsernameTitle(ShotModel shotModel) {
             if (shotModel.isReply()) {
-                return resources.getString(com.shootr.mobile.R.string.reply_name_pattern,
+                return resources.getString(R.string.reply_name_pattern,
                   shotModel.getUsername(),
                   shotModel.getReplyUsername());
             } else {
@@ -445,18 +445,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private Context context;
 
-        @Bind(com.shootr.mobile.R.id.shot_detail_parent_progress) View progress;
-        @Bind(com.shootr.mobile.R.id.shot_detail_parent_shot) View shot;
+        @Bind(R.id.shot_detail_parent_progress) View progress;
+        @Bind(R.id.shot_detail_parent_shot) View shot;
 
-        @Bind(com.shootr.mobile.R.id.shot_avatar) public ImageView avatar;
-        @Bind(com.shootr.mobile.R.id.shot_user_name) public TextView name;
-        @Bind(com.shootr.mobile.R.id.shot_timestamp) public TextView timestamp;
-        @Bind(com.shootr.mobile.R.id.shot_text) public ClickableTextView text;
-        @Bind(com.shootr.mobile.R.id.shot_image) public ImageView image;
-        @Bind(com.shootr.mobile.R.id.shot_video_frame) View videoFrame;
-        @Bind(com.shootr.mobile.R.id.shot_video_title) TextView videoTitle;
-        @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;
-        @Bind(com.shootr.mobile.R.id.shot_nice_button) CheckableImageView niceButton;
+        @Bind(R.id.shot_avatar) public ImageView avatar;
+        @Bind(R.id.shot_user_name) public TextView name;
+        @Bind(R.id.shot_timestamp) public TextView timestamp;
+        @Bind(R.id.shot_text) public ClickableTextView text;
+        @Bind(R.id.shot_image) public ImageView image;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -538,7 +538,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private String getUsernameTitle(ShotModel shotModel) {
             if (shotModel.isReply()) {
-                return resources.getString(com.shootr.mobile.R.string.reply_name_pattern,
+                return resources.getString(R.string.reply_name_pattern,
                   shotModel.getUsername(),
                   shotModel.getReplyUsername());
             } else {
@@ -556,15 +556,15 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.shot_avatar) public ImageView avatar;
-        @Bind(com.shootr.mobile.R.id.shot_user_name) public TextView name;
-        @Bind(com.shootr.mobile.R.id.shot_timestamp) public TextView timestamp;
-        @Bind(com.shootr.mobile.R.id.shot_text) public ClickableTextView text;
-        @Bind(com.shootr.mobile.R.id.shot_image) public ImageView image;
-        @Bind(com.shootr.mobile.R.id.shot_video_frame) View videoFrame;
-        @Bind(com.shootr.mobile.R.id.shot_video_title) TextView videoTitle;
-        @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;
-        @Bind(com.shootr.mobile.R.id.shot_nice_button) NiceButtonView niceButton;
+        @Bind(R.id.shot_avatar) public ImageView avatar;
+        @Bind(R.id.shot_user_name) public TextView name;
+        @Bind(R.id.shot_timestamp) public TextView timestamp;
+        @Bind(R.id.shot_text) public ClickableTextView text;
+        @Bind(R.id.shot_image) public ImageView image;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_title) TextView videoTitle;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);

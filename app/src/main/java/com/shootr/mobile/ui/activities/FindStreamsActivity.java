@@ -39,11 +39,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     private String currentSearchQuery;
     private StreamsListAdapter adapter;
 
-    @Bind(com.shootr.mobile.R.id.find_streams_list) RecyclerView streamsList;
-    @Bind(com.shootr.mobile.R.id.find_streams_empty) View emptyView;
-    @Bind(com.shootr.mobile.R.id.find_streams_loading) View loadingView;
-    @BindString(com.shootr.mobile.R.string.added_to_favorites) String addedToFavorites;
-    @BindString(com.shootr.mobile.R.string.shared_stream_notification) String sharedStream;
+    @Bind(R.id.find_streams_list) RecyclerView streamsList;
+    @Bind(R.id.find_streams_empty) View emptyView;
+    @Bind(R.id.find_streams_loading) View loadingView;
+    @BindString(R.string.added_to_favorites) String addedToFavorites;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -109,7 +109,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
                 findStreamsPresenter.shareStream(stream);
             }
         })
-          .addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+          .addAction(R.string.share_via, new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
@@ -127,7 +127,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     //region Lifecycle methods
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_find_streams;
+        return R.layout.activity_find_streams;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -153,7 +153,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
-        MenuItem searchItem = menu.findItem(com.shootr.mobile.R.id.menu_search);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
 
         setupQueryTextListener();
@@ -198,7 +198,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void finish() {
         super.finish();
-        overridePendingTransition(com.shootr.mobile.R.anim.abc_fade_in, R.anim.abc_fade_out);
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
     //endregion
 

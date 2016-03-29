@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.adapters;
 import android.view.View;
 import android.widget.ImageView;
 import butterknife.Bind;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.model.StreamResultModel;
@@ -13,12 +14,12 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
-    public static final int FAVORITE_ADDED_IMAGE = com.shootr.mobile.R.drawable.ic_favorite_added_28_gray50;
-    public static final int FAVORITE_NOT_ADDED_IMAGE = com.shootr.mobile.R.drawable.ic_favorite_not_added_28_gray50;
+    public static final int FAVORITE_ADDED_IMAGE = R.drawable.ic_favorite_added_28_gray50;
+    public static final int FAVORITE_NOT_ADDED_IMAGE = R.drawable.ic_favorite_not_added_28_gray50;
 
     private final OnFavoriteClickListener onFavoriteClickListener;
 
-    @Bind(com.shootr.mobile.R.id.favorite_stream_indicator) ImageView favoriteIndicator;
+    @Bind(R.id.favorite_stream_indicator) ImageView favoriteIndicator;
     private Boolean isFavorite;
 
     public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,

@@ -144,62 +144,62 @@ public class DebugAppContainer implements AppContainer {
         this.app = app;
     }
 
-    @Bind(com.shootr.mobile.R.id.debug_drawer_layout) DrawerLayout drawerLayout;
-    @Bind(com.shootr.mobile.R.id.debug_content) ViewGroup content;
+    @Bind(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
+    @Bind(R.id.debug_content) ViewGroup content;
 
-    @Bind(com.shootr.mobile.R.id.debug_contextual_title) View contextualTitleView;
+    @Bind(R.id.debug_contextual_title) View contextualTitleView;
     @Bind(R.id.debug_contextual_list) LinearLayout contextualListView;
 
     @Bind(R.id.debug_network_endpoint) Spinner endpointView;
     @Bind(R.id.debug_network_endpoint_edit) View endpointEditView;
-    @Bind(com.shootr.mobile.R.id.debug_network_debugmode) Switch debugModeView;
+    @Bind(R.id.debug_network_debugmode) Switch debugModeView;
     @Bind(R.id.debug_network_enabled) Switch networkEnabledView;
-    @Bind(com.shootr.mobile.R.id.debug_network_delay) Spinner networkDelayView;
+    @Bind(R.id.debug_network_delay) Spinner networkDelayView;
     @Bind(R.id.debug_network_variance) Spinner networkVarianceView;
-    @Bind(com.shootr.mobile.R.id.debug_network_error) Spinner networkErrorView;
-    @Bind(com.shootr.mobile.R.id.debug_network_proxy) Spinner networkProxyView;
+    @Bind(R.id.debug_network_error) Spinner networkErrorView;
+    @Bind(R.id.debug_network_proxy) Spinner networkProxyView;
     @Bind(R.id.debug_network_poller) Switch networkPollerView;
 
     @Bind(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
 
     @Bind(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
-    @Bind(com.shootr.mobile.R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
+    @Bind(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
     @Bind(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
-    @Bind(com.shootr.mobile.R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
+    @Bind(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
     @Bind(R.id.debug_ui_scalpel) Switch uiScalpelView;
-    @Bind(com.shootr.mobile.R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
-    @Bind(com.shootr.mobile.R.id.debug_capture_intents) Switch uiCaptureIntents;
+    @Bind(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
+    @Bind(R.id.debug_capture_intents) Switch uiCaptureIntents;
 
     @Bind(R.id.debug_build_name) TextView buildNameView;
     @Bind(R.id.debug_build_code) TextView buildCodeView;
     @Bind(R.id.debug_build_sha) TextView buildShaView;
     @Bind(R.id.debug_build_branch) TextView buildBranchView;
 
-    @Bind(com.shootr.mobile.R.id.debug_device_make) TextView deviceMakeView;
+    @Bind(R.id.debug_device_make) TextView deviceMakeView;
     @Bind(R.id.debug_device_model) TextView deviceModelView;
     @Bind(R.id.debug_device_resolution) TextView deviceResolutionView;
-    @Bind(com.shootr.mobile.R.id.debug_device_density) TextView deviceDensityView;
-    @Bind(com.shootr.mobile.R.id.debug_device_release) TextView deviceReleaseView;
+    @Bind(R.id.debug_device_density) TextView deviceDensityView;
+    @Bind(R.id.debug_device_release) TextView deviceReleaseView;
     @Bind(R.id.debug_device_api) TextView deviceApiView;
     @Bind(R.id.debug_logs_show) TextView deviceLogView;
-    @Bind(com.shootr.mobile.R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
+    @Bind(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
     @Override
     public ViewGroup get(final Activity activity) {
         this.activity = activity;
         drawerContext = activity;
 
-        activity.setContentView(com.shootr.mobile.R.layout.debug_activity_frame);
+        activity.setContentView(R.layout.debug_activity_frame);
 
         // Manually find the debug drawer and inflate the drawer layout inside of it.
         ViewGroup drawer = findById(activity, R.id.debug_drawer);
-        LayoutInflater.from(drawerContext).inflate(com.shootr.mobile.R.layout.debug_drawer_content, drawer);
+        LayoutInflater.from(drawerContext).inflate(R.layout.debug_drawer_content, drawer);
 
         // Inject after inflating the drawer layout so its views are available to inject.
         ButterKnife.bind(this, activity);
 
-        drawerLayout.setDrawerShadow(com.shootr.mobile.R.drawable.debug_drawer_shadow, Gravity.END);
+        drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -405,7 +405,7 @@ public class DebugAppContainer implements AppContainer {
         });
     }
 
-    @OnClick(com.shootr.mobile.R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
+    @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
         //    Timber.d("Prompting to edit custom endpoint URL.");
         // Pass in the currently selected position since we are merely editing.
         showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
@@ -426,7 +426,7 @@ public class DebugAppContainer implements AppContainer {
         ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(VersionOutdatedErrorInterceptor.CODE_OUTDATED_VERSION));
     }
 
-    @OnClick(com.shootr.mobile.R.id.debug_fake_server_down)
+    @OnClick(R.id.debug_fake_server_down)
     public void onFakeServerDownRequest() {
         ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(ServerDownErrorInterceptor.CODE_SERVER_DOWN));
     }
@@ -555,7 +555,7 @@ public class DebugAppContainer implements AppContainer {
         deviceApiView.setText(String.valueOf(Build.VERSION.SDK_INT));
     }
 
-    @OnClick(com.shootr.mobile.R.id.debug_logs_show)
+    @OnClick(R.id.debug_logs_show)
     public void openLog() {
         Intent lynxActivityIntent = LynxActivity.getIntent(drawerContext);
         drawerContext.startActivity(lynxActivityIntent);
@@ -633,7 +633,7 @@ public class DebugAppContainer implements AppContainer {
     private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
         final int originalSelection = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
 
-        View view = LayoutInflater.from(activity).inflate(com.shootr.mobile.R.layout.debug_drawer_network_proxy, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_proxy, null);
         final EditText host = findById(view, R.id.debug_drawer_network_proxy_host);
 
         new AlertDialog.Builder(activity) //
@@ -670,8 +670,8 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
-        View view = LayoutInflater.from(activity).inflate(com.shootr.mobile.R.layout.debug_drawer_network_endpoint, null);
-        final EditText url = findById(view, com.shootr.mobile.R.id.debug_drawer_network_endpoint_url);
+        View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_endpoint, null);
+        final EditText url = findById(view, R.id.debug_drawer_network_endpoint_url);
         url.setText(defaultUrl);
         url.setSelection(url.length());
 

@@ -52,9 +52,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
 
-    @Bind(com.shootr.mobile.R.id.all_shots_list) ListView listView;
-    @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
-    @Bind(com.shootr.mobile.R.id.all_shots_loading) View loadingView;
+    @Bind(R.id.all_shots_list) ListView listView;
+    @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.all_shots_loading) View loadingView;
     @BindString(R.string.shot_shared_message) String shotShared;
     @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
     @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
@@ -225,7 +225,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenu(shotModel).addAction(com.shootr.mobile.R.string.report_context_menu_unblock, new Runnable() {
+        getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
               }
@@ -241,18 +241,18 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showUserUnblocked() {
-        feedbackMessage.show(getView(), com.shootr.mobile.R.string.user_unblocked);
+        feedbackMessage.show(getView(), R.string.user_unblocked);
     }
 
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(this).setMessage(R.string.block_user_dialog_message)
-          .setPositiveButton(getString(com.shootr.mobile.R.string.block_user_dialog_block),
+          .setPositiveButton(getString(R.string.block_user_dialog_block),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     reportShotPresenter.confirmBlock();
                 }
             })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.block_user_dialog_cancel), null)
+          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
           .create()
           .show();
     }
@@ -351,7 +351,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+          .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);
@@ -385,7 +385,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(getString(R.string.alert_report_confirmed_email_message))
-          .setTitle(getString(com.shootr.mobile.R.string.alert_report_confirmed_email_title))
+          .setTitle(getString(R.string.alert_report_confirmed_email_title))
           .setPositiveButton(getString(R.string.alert_report_confirmed_email_ok), null);
 
         builder.create().show();
@@ -416,7 +416,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             @Override public void run() {
                 presenter.shareShot(shotModel);
             }
-        }).addAction(com.shootr.mobile.R.string.menu_share_shot_via, new Runnable() {
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 shareShot(shotModel);
             }
