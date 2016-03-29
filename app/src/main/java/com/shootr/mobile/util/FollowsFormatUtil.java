@@ -22,11 +22,11 @@ public class FollowsFormatUtil implements FormatNumberUtils {
     }
 
     @Override public String formatNumbers(Long number) {
-        if (number > 100000 || number<0){
+        if (number >= 100000 || number<0){
             return formatNumbersBiggerThanHundredThousand(number);
         }
 
-        if (number < 1000) return number.toString();
+        if (number < 10000) return number.toString();
 
         int exp = (int) (Math.log(number) / Math.log(1000));
         String result = formatString(number, exp);
@@ -41,15 +41,14 @@ public class FollowsFormatUtil implements FormatNumberUtils {
     @Override public String formatNumbersBiggerThanHundredThousand(Long number) {
         if (number == Long.MIN_VALUE) return formatNumbersBiggerThanHundredThousand(Long.MIN_VALUE + 1);
         if (number < 0) return "-" + formatNumbersBiggerThanHundredThousand(-number);
-        if (number < 1000) return Long.toString(number);
+        if (number < 10000) return Long.toString(number);
 
         Map.Entry<Long, String> e = suffixes.floorEntry(number);
         Long divideBy = e.getKey();
         String suffix = e.getValue();
 
         long truncated = number / (divideBy / 10);
-        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
-        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+        return (truncated / 10d) + suffix;
     }
 
     private String formatString(Long number, Integer exp) {

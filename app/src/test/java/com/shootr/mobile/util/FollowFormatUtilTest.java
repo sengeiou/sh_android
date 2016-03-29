@@ -16,52 +16,28 @@ public class FollowFormatUtilTest {
         followsFormatUtil = new FollowsFormatUtil();
     }
 
-    @Test public void shouldReturnStringWithoutFormatWhenNumberIsLowerThanOneThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(999L);
+    @Test public void shouldReturnStringWithoutFormatWhenNumberIsLowerThanTenThousand() throws Exception {
+        String result = followsFormatUtil.formatNumbers(1580L);
 
-        assertThat(result).isEqualTo("999");
+        assertThat(result).isEqualTo("1580");
     }
 
-    @Test public void shouldReturnStringWithKSuffixWhenNumberIsGreaterOrEqualsThanOneThousandAndLowerThanOneMillion() throws Exception {
-        String result = followsFormatUtil.formatNumbers(1000L);
+    @Test public void shouldReturnStringWithKSuffixWhenNumberIsGreaterOrEqualsThanTenThousand() throws Exception {
+        String result = followsFormatUtil.formatNumbers(45000L);
 
-        assertThat(result).isEqualTo("1.0K");
+        assertThat(result).isEqualTo("45.0K");
     }
 
-    @Test public void shouldReturnStringWithoutDotWhenNumberIsGreaterThanOneHundredThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(100001L);
+    @Test public void shouldReturnStringWithoutDotWhenNumberIsLowerThanTenThousand() throws Exception {
+        String result = followsFormatUtil.formatNumbers(9999L);
 
         assertThat(result).doesNotContain(DOT);
-    }
-
-    @Test public void shouldReturnStringWithDotWhenNumberIsLowerOrEqualThanOneHundredThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(100000L);
-
-        assertThat(result).contains(DOT);
     }
 
     @Test public void shouldReturnStringWithMSuffixWhenNumberIsGreaterOrEqualsThanOneMillion() throws Exception {
-        String result = followsFormatUtil.formatNumbers(1000000L);
-
-        assertThat(result).isEqualTo("1M");
-    }
-
-    @Test public void shouldReturnStringWithoutDotWhenNumberIsGreaterOrEqualsThanOneMillionAndNumberUnitsAreLowerThanHundredThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(1099999L);
-
-        assertThat(result).doesNotContain(DOT);
-    }
-
-    @Test public void shouldReturnStringWithDotWhenNumberIsGreaterOrEqualsThanOneMillionAndLowerThanTenMillionAndNumberUnitsAreGreaterThanOneHundredThousand() throws Exception {
         String result = followsFormatUtil.formatNumbers(1500000L);
 
-        assertThat(result).contains(DOT);
-    }
-
-    @Test public void shouldReturnStringWithoutDotWhenNumberIsGreaterOrEqualsThanThanTenMillionAndNumberUnitsAreGreaterThanOneHundredThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(15500000L);
-
-        assertThat(result).doesNotContain(DOT);
+        assertThat(result).isEqualTo("1.5M");
     }
 
     @Test public void shouldReturnStringZeroWhenNumberIsZero() throws Exception {
@@ -73,6 +49,6 @@ public class FollowFormatUtilTest {
     @Test public void shouldReturnNegativeNumberFormatWhenNumberIsNegative() throws Exception {
         String result = followsFormatUtil.formatNumbers(-200000L);
 
-        assertThat(result).isEqualTo("-200K");
+        assertThat(result).isEqualTo("-200.0K");
     }
 }
