@@ -22,12 +22,12 @@ public class StreamHoldingTimelineInteractorsWrapper {
         this.getOlderHoldingStreamTimelineInteractor = getOlderHoldingStreamTimelineInteractor;
     }
 
-    public void loadTimeline(String idStream, String idUser, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        getStreamHoldingTimelineInteractor.loadStreamHoldingTimeline(idStream, idUser, callback, errorCallback);
+    public void loadTimeline(String idStream, String idUser, Boolean hasBeenPaused, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+        getStreamHoldingTimelineInteractor.loadStreamHoldingTimeline(idStream, idUser, hasBeenPaused, callback, errorCallback);
     }
 
-    public void refreshTimeline(String streamId, String idUser, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshHoldingStreamTimelineInteractor.refreshHoldingStreamTimeline(streamId, idUser, callback, errorCallback);
+    public void refreshTimeline(String streamId, String idUser, Long lastRefreshDate, Boolean hasBeenPaused, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+        refreshHoldingStreamTimelineInteractor.refreshHoldingStreamTimeline(streamId, idUser, lastRefreshDate, hasBeenPaused, callback, errorCallback);
     }
 
     public void obtainOlderTimeline(long currentOldestDate, String idUser, Interactor.Callback<Timeline> callback,
