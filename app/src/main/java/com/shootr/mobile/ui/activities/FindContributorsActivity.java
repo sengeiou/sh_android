@@ -81,11 +81,11 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.search, menu);
-        MenuItem searchItem = menu.findItem(com.shootr.mobile.R.id.menu_search);
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
         createSearchView(searchItem);
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(com.shootr.mobile.R.color.hint_black));
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
         return true;
     }
 
@@ -101,7 +101,7 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
                 return false;
             }
         });
-        searchView.setQueryHint(getString(com.shootr.mobile.R.string.activity_find_contributors_hint));
+        searchView.setQueryHint(getString(R.string.activity_find_contributors_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
     }
