@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 public class ContributorsPresenter implements Presenter {
 
+    public static final int CONTRIBUTORS_LIMIT = 100;
     private final GetContributorsInteractor getContributorsInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
@@ -88,7 +89,7 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void onAddContributorClick(Integer countContributors) {
-        if(countContributors > 100){
+        if(countContributors > CONTRIBUTORS_LIMIT){
             view.showContributorsLimitSnackbar();
         }else{
             view.goToSearchContributors();
