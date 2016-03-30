@@ -47,7 +47,6 @@ public class FindContributorsInteractor implements Interactor {
         user.setUsername("mamahuevos");
         user.setEmail("unamierda");
         return Arrays.asList(user);
-        //return Collections.emptyList();
     }
 
     private void notifyLoaded(final List<User> results) {
