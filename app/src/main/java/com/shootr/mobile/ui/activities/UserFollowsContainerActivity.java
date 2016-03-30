@@ -33,7 +33,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
             return;
         }
 
-        setContainerContent(com.shootr.mobile.R.layout.activity_fragment_container);
+        setContainerContent(R.layout.activity_fragment_container);
         getIntentExtras();
         setScreenTitle();
         setupActionBar();

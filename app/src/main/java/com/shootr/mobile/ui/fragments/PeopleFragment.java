@@ -51,7 +51,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
-    @Bind(com.shootr.mobile.R.id.userlist_empty) TextView emptyTextView;
+    @Bind(R.id.userlist_empty) TextView emptyTextView;
 
     @BindString(R.string.analytics_screen_friends) String analyticsScreenFriends;
 
@@ -130,7 +130,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent,
-          getActivity().getString(com.shootr.mobile.R.string.invite_friends_title)));
+          getActivity().getString(R.string.invite_friends_title)));
     }
 
     @Override
@@ -155,7 +155,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     private void setEmptyMessageForPeople() {
-        emptyTextView.setText(com.shootr.mobile.R.string.following_list_empty);
+        emptyTextView.setText(R.string.following_list_empty);
     }
 
     private FriendsAdapter getPeopleAdapter() {
@@ -223,8 +223,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void unFollow(final int position) {
         final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   suggestedPeoplePresenter.unfollowUser(userModel);
               }

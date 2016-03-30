@@ -43,7 +43,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     View progressView;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
-    @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
 
@@ -105,7 +105,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
         if(item.getItemId() == android.R.id.home){
             finish();
             return true;
-        }else if (item.getItemId() == com.shootr.mobile.R.id.menu_search) {
+        }else if (item.getItemId() == R.id.menu_search) {
             allParticipantsPresenter.searchClicked();
             return true;
         } else {
@@ -170,7 +170,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Override public void goToSearchParticipants() {
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
         startActivity(FindParticipantsActivity.newIntent(this, idStream));
-        overridePendingTransition(com.shootr.mobile.R.anim.abc_fade_in, R.anim.abc_fade_out);
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     @Override public void renderParticipantsBelow(List<UserModel> userModels) {
@@ -194,8 +194,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
 
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
-        new AlertDialog.Builder(this).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   allParticipantsPresenter.unfollowUser(userModel);
               }

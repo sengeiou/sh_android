@@ -14,15 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 
 public class DraftItemView extends FrameLayout {
 
-    @Bind(com.shootr.mobile.R.id.shot_avatar) ImageView avatar;
-    @Bind(com.shootr.mobile.R.id.shot_user_name) TextView name;
-    @Bind(com.shootr.mobile.R.id.shot_text) ClickableTextView text;
-    @Bind(com.shootr.mobile.R.id.shot_image) ImageView image;
-    @Bind(com.shootr.mobile.R.id.shot_draft_buttons) View draftButtons;
-    @Bind(com.shootr.mobile.R.id.shot_separator) View separator;
+    @Bind(R.id.shot_avatar) ImageView avatar;
+    @Bind(R.id.shot_user_name) TextView name;
+    @Bind(R.id.shot_text) ClickableTextView text;
+    @Bind(R.id.shot_image) ImageView image;
+    @Bind(R.id.shot_draft_buttons) View draftButtons;
+    @Bind(R.id.shot_separator) View separator;
 
     private boolean isExpanded;
     private float expandedElevation;
@@ -52,14 +53,14 @@ public class DraftItemView extends FrameLayout {
 
     public void init() {
         ButterKnife.bind(this, this);
-        expandedBackgroundColor = getResources().getColor(com.shootr.mobile.R.color.white);
-        collapsedBackgroundColor = getResources().getColor(com.shootr.mobile.R.color.transparent);
+        expandedBackgroundColor = getResources().getColor(R.color.white);
+        collapsedBackgroundColor = getResources().getColor(R.color.transparent);
 
-        expandedElevation = getResources().getDimension(com.shootr.mobile.R.dimen.card_elevation);
-        fadeInStartDelay = getResources().getInteger(com.shootr.mobile.R.integer.draft_buttons_fade_in_start);
-        fadeInDuration = getResources().getInteger(com.shootr.mobile.R.integer.draft_buttons_fade_in_duration);
-        fadeOutDuration = getResources().getInteger(com.shootr.mobile.R.integer.draft_buttons_fade_out_duration);
-        expandCollapseDuration = getResources().getInteger(com.shootr.mobile.R.integer.draft_expand_collapse_duration);
+        expandedElevation = getResources().getDimension(R.dimen.card_elevation);
+        fadeInStartDelay = getResources().getInteger(R.integer.draft_buttons_fade_in_start);
+        fadeInDuration = getResources().getInteger(R.integer.draft_buttons_fade_in_duration);
+        fadeOutDuration = getResources().getInteger(R.integer.draft_buttons_fade_out_duration);
+        expandCollapseDuration = getResources().getInteger(R.integer.draft_expand_collapse_duration);
     }
 
     public void collapse(boolean animate) {

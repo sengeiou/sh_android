@@ -27,6 +27,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+import com.shootr.mobile.R;
 
 public class ForegroundRelativeLayout extends RelativeLayout {
 
@@ -51,12 +52,12 @@ public class ForegroundRelativeLayout extends RelativeLayout {
   public ForegroundRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
 
-    final TypedArray a = context.obtainStyledAttributes(attrs, com.shootr.mobile.R.styleable.ForegroundLayout, defStyle, 0);
+    final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ForegroundLayout, defStyle, 0);
 
-    final Drawable d = a.getDrawable(com.shootr.mobile.R.styleable.ForegroundLayout_foreground);
-    foregroundPadding = a.getBoolean(com.shootr.mobile.R.styleable.ForegroundLayout_foregroundInsidePadding, false);
+    final Drawable d = a.getDrawable(R.styleable.ForegroundLayout_foreground);
+    foregroundPadding = a.getBoolean(R.styleable.ForegroundLayout_foregroundInsidePadding, false);
 
-    backgroundAsForeground = a.getBoolean(com.shootr.mobile.R.styleable.ForegroundLayout_backgroundAsForeground, false);
+    backgroundAsForeground = a.getBoolean(R.styleable.ForegroundLayout_backgroundAsForeground, false);
 
     // Apply foreground padding for ninepatches automatically
     if (!foregroundPadding && getBackground() instanceof NinePatchDrawable) {

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -39,9 +40,9 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
 
-    @Bind(com.shootr.mobile.R.id.find_participants_search_results_list) ListView resultsListView;
-    @Bind(com.shootr.mobile.R.id.find_participants_search_results_empty) TextView emptyOrErrorView;
-    @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.find_participants_search_results_list) ListView resultsListView;
+    @Bind(R.id.find_participants_search_results_empty) TextView emptyOrErrorView;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, FindParticipantsActivity.class);
@@ -50,7 +51,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_find_participants;
+        return R.layout.activity_find_participants;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -79,11 +80,11 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.search, menu);
-        MenuItem searchItem = menu.findItem(com.shootr.mobile.R.id.menu_search);
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
         createSearchView(searchItem);
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(com.shootr.mobile.R.color.hint_black));
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
         return true;
     }
 
@@ -99,7 +100,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
                 return false;
             }
         });
-        searchView.setQueryHint(getString(com.shootr.mobile.R.string.activity_find_participants_hint));
+        searchView.setQueryHint(getString(R.string.activity_find_participants_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
     }
@@ -125,7 +126,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
 
     @Override public void finish() {
         super.finish();
-        overridePendingTransition(com.shootr.mobile.R.anim.abc_fade_in, com.shootr.mobile.R.anim.abc_fade_out);
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     @Override public void follow(int position) {
@@ -134,13 +135,13 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
 
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
-        new AlertDialog.Builder(this).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   findParticipantsPresenter.unfollowUser(userModel);
               }
           })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.unfollow_dialog_no), null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
@@ -188,7 +189,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
         resultsListView.setVisibility(View.GONE);
     }
 
-    @OnItemClick(com.shootr.mobile.R.id.find_participants_search_results_list)
+    @OnItemClick(R.id.find_participants_search_results_list)
     public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);

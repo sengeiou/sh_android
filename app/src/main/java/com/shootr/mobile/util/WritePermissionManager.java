@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import com.shootr.mobile.R;
 
 public class WritePermissionManager {
 
@@ -25,14 +26,14 @@ public class WritePermissionManager {
     public void requestWritePermissionToUser() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
           Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(activity).setMessage(com.shootr.mobile.R.string.download_photo_permission_explaination)
-              .setPositiveButton(com.shootr.mobile.R.string.ok, new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(activity).setMessage(R.string.download_photo_permission_explaination)
+              .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                   @Override
                   public void onClick(DialogInterface dialog, int which) {
                       requestWritePermission();
                   }
               })
-              .setNegativeButton(com.shootr.mobile.R.string.cancel, null)
+              .setNegativeButton(R.string.cancel, null)
               .show();
         } else {
             requestWritePermission();

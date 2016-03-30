@@ -10,6 +10,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
@@ -20,10 +21,10 @@ import javax.inject.Inject;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
 
-    @Bind(com.shootr.mobile.R.id.email_login_username_email) public EditText emailUsername;
-    @Bind(com.shootr.mobile.R.id.email_login_password) public EditText password;
-    @Bind(com.shootr.mobile.R.id.email_login_button) TextView loginButton;
-    @Bind(com.shootr.mobile.R.id.login_loading) View loadingView;
+    @Bind(R.id.email_login_username_email) public EditText emailUsername;
+    @Bind(R.id.email_login_password) public EditText password;
+    @Bind(R.id.email_login_button) TextView loginButton;
+    @Bind(R.id.login_loading) View loadingView;
 
     @Inject EmailLoginPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -40,7 +41,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_login_email;
+        return R.layout.activity_login_email;
     }
 
     @Override protected void initializePresenter() {
@@ -55,19 +56,19 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-    @OnTextChanged({ com.shootr.mobile.R.id.email_login_username_email, com.shootr.mobile.R.id.email_login_password})
+    @OnTextChanged({ R.id.email_login_username_email, R.id.email_login_password})
     public void inputTextChanged() {
         if (presenter.isInitialized()) {
             presenter.inputTextChanged();
         }
     }
 
-    @OnClick(com.shootr.mobile.R.id.email_login_button)
+    @OnClick(R.id.email_login_button)
     public void onLoginWithEmailButtonClick(){
         presenter.attempLogin();
     }
 
-    @OnClick(com.shootr.mobile.R.id.email_login_forgot)
+    @OnClick(R.id.email_login_forgot)
     public void onLoginForgotButtonClick(){
         Intent resetPasswordIntent = new Intent(this, ResetPasswordActivity.class);
         startActivity(resetPasswordIntent);

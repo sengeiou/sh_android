@@ -57,13 +57,13 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
 
     @Override
     protected HeaderViewHolder onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType) {
-        View text = LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_card_title_separator, parent, false);
+        View text = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_title_separator, parent, false);
         return new HeaderViewHolder(text, android.R.id.text1);
     }
 
     @Override
     protected StreamResultViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_list_stream, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
 
         ListingStreamResultViewHolder listingStreamResultViewHolder =
           new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);

@@ -75,8 +75,8 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
 
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.drafts, menu);
-        shootAllMenuItem = menu.findItem(com.shootr.mobile.R.id.menu_shoot_all);
+        getMenuInflater().inflate(R.menu.drafts, menu);
+        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
         updateShootAllVisibility();
         return true;
     }
