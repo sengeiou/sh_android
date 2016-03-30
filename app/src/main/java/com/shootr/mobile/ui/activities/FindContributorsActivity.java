@@ -64,7 +64,7 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
     private void setupViews() {
         if (adapter == null) {
             adapter = new ContributorsListAdapter(this, imageLoader, true);
-            //TODO: set callback
+            adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);
     }
