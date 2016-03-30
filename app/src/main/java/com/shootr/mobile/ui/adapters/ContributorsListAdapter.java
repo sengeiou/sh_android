@@ -10,6 +10,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.widgets.ContributorButton;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
@@ -91,19 +92,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
             viewHolder.contributorButton.setVisibility(View.VISIBLE);
             viewHolder.contributorButton.setAddContributor(true);
 
-            viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if (viewHolder.contributorButton.isAddContributor()) {
-                        if (callback != null) {
-                            callback.remove(position);
-                        }
-                    } else {
-                        if (callback != null) {
-                            callback.add(position);
-                        }
-                    }
-                }
-            });
+            //TODO button click listener to add/remove contributor
 
         }else{
             viewHolder.contributorButton.setVisibility(View.GONE);
@@ -140,7 +129,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         @Bind(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
         @Bind(R.id.user_name) TextView title;
         @Bind(R.id.user_username) TextView subtitle;
-        @Bind(R.id.contributor_button) FollowButton contributorButton;
+        @Bind(R.id.contributor_button) ContributorButton contributorButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
