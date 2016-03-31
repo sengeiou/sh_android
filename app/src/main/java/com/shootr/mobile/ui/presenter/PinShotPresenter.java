@@ -58,7 +58,7 @@ public class PinShotPresenter implements Presenter {
     }
 
     private boolean canShotBePinned() {
-        return shotModel.getHide() != null && shotModel.getIdUser().equals(sessionRepository.getCurrentUserId());
+        return shotModel.getHide() != null && shotModel.getHide() != 0 && shotModel.getIdUser().equals(sessionRepository.getCurrentUserId());
     }
 
     public void pinToProfile(final ShotModel shotModel) {

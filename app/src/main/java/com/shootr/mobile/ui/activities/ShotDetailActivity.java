@@ -405,7 +405,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void notifyPinnedShot(ShotModel shotModel) {
-        /* no-op */
+        detailPresenter.initialize(this, shotModel);
     }
 
     @Override public void showPinned() {
