@@ -147,8 +147,8 @@ dependencies {
     compile 'com.android.support:customtabs:23.0.1'
     compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.1.0'
+    compile 'com.google.android.gms:play-services-analytics:8.1.0'
 
     compile 'com.sloydev:jsonadapters-core:0.1.0'
     compile 'com.sloydev:jsonadapters-gson:0.1.1'
