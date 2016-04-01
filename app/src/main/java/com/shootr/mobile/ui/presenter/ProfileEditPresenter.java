@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UpdateUserProfileInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -18,7 +17,6 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import dagger.ObjectGraph;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -73,7 +71,7 @@ public class ProfileEditPresenter implements Presenter {
     private void loadProfileData() {
         getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
-                currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+                currentUserModel = userModelMapper.transform(user);
                 profileEditView.renderUserInfo(currentUserModel);
                 if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
                     profileEditView.showEmailNotConfirmedError();

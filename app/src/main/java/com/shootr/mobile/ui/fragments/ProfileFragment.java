@@ -72,6 +72,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
+import com.shootr.mobile.util.FollowsFormatUtil;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -141,6 +142,7 @@ public class ProfileFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
+    @Inject FollowsFormatUtil followsFormatUtil;
 
     //endregion
 
@@ -554,8 +556,8 @@ public class ProfileFragment extends BaseFragment
         renderWebsite(userModel);
         renderBio(userModel);
         imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
-        followersTextView.setText(String.valueOf(userModel.getNumFollowers()));
-        followingTextView.setText(String.valueOf(userModel.getNumFollowings()));
+        followersTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowers()));
+        followingTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowings()));
     }
 
     @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
@@ -907,7 +909,7 @@ public class ProfileFragment extends BaseFragment
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok),
+          .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);

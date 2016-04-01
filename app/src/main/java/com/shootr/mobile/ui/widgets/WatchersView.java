@@ -122,7 +122,7 @@ public class WatchersView extends LinearLayout{
     }
 
     private WatcherViewHolder createViewHolder() {
-        View itemView = layoutInflater.inflate(com.shootr.mobile.R.layout.item_list_stream_watcher, this, false);
+        View itemView = layoutInflater.inflate(R.layout.item_list_stream_watcher, this, false);
         return new WatcherViewHolder(itemView);
     }
 

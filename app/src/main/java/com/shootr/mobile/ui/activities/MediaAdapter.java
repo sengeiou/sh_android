@@ -45,7 +45,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @NonNull private RecyclerView.ViewHolder onCreateMediaViewHolder(ViewGroup viewGroup) {
-        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(com.shootr.mobile.R.layout.stream_media_layout, viewGroup, false);
+        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.stream_media_layout, viewGroup, false);
         return new ViewHolder(layoutView, new OnVideoClickListener() {
             @Override
             public void onVideoClick(String url) {
@@ -55,7 +55,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
-        View footer = LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_list_loading, parent, false);
+        View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
         return new RecyclerView.ViewHolder(footer) {
             /* no-op */
         };
@@ -128,7 +128,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private ShotModel shotModel;
 
         @Bind(R.id.shot_video_frame) View videoFrame;
-        @Bind(com.shootr.mobile.R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.stream_media_item) ImageView mediaImage;
 
         private OnVideoClickListener videoClickListener;

@@ -54,17 +54,18 @@ public class ShootrTimelineService {
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, language);
     }
 
-    public Timeline refreshTimelinesForStream(String idStream) {
-        List<Shot> shotsForStream = refreshStreamShots(idStream);
+    public Timeline refreshTimelinesForStream(String idStream, Boolean isRealTime) {
+        List<Shot> shotsForStream = refreshStreamShots(idStream, isRealTime);
         return buildSortedTimeline(shotsForStream);
     }
 
-    private List<Shot> refreshStreamShots(String idStream) {
+    private List<Shot> refreshStreamShots(String idStream, Boolean isRealTime) {
         Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(idStream);
 
         StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forStream(idStream) //
           .since(streamRefreshDateSince) //
+          .realTime(isRealTime) //
           .build();
 
         List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
@@ -97,13 +98,14 @@ public class ShootrTimelineService {
         return remoteActivities;
     }
 
-    public Timeline refreshHoldingTimelineForStream(String idStream, String idUser) {
+    public Timeline refreshHoldingTimelineForStream(String idStream, String idUser, Boolean isRealTime) {
         Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(idStream);
 
         StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forStream(idStream) //
           .forUser(idUser) //
           .since(streamRefreshDateSince) //
+          .realTime(isRealTime) //
           .build();
 
         List<Shot> newShots = remoteShotRepository.getUserShotsForStreamTimeline(streamTimelineParameters);

@@ -139,7 +139,7 @@ public class LoginSelectionActivity extends BaseActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), onClickListener).show();
+          .setPositiveButton(getString(R.string.email_confirmation_ok), onClickListener).show();
     }
 
     private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder, String patternText,

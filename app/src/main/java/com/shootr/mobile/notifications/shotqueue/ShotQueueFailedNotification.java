@@ -21,7 +21,7 @@ public class ShotQueueFailedNotification extends CommonNotification {
     public ShotQueueFailedNotification(Context context, NotificationBuilderFactory builderFactory, QueuedShot shot) {
         super(context, builderFactory);
         this.shot = shot;
-        this.titleText = context.getResources().getString(com.shootr.mobile.R.string.notification_shot_failed);
+        this.titleText = context.getResources().getString(R.string.notification_shot_failed);
         this.subtitleTextPattern = context.getResources().getString(R.string.notification_shot_failed_subtitle_pattern);
         this.subtitleTextPatternWithoutComment = context.getResources().getString(R.string.notification_shot_failed_subtitle_pattern_no_comment);
     }

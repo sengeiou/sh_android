@@ -42,7 +42,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     @Override public DraftViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(com.shootr.mobile.R.layout.item_list_shot_draft, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_shot_draft, parent, false);
         return new DraftViewHolder(itemView);
     }
 
@@ -146,12 +146,12 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     class DraftViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.shot_avatar) ImageView avatar;
-        @Bind(com.shootr.mobile.R.id.shot_user_name) TextView name;
-        @Bind(com.shootr.mobile.R.id.shot_text) ClickableTextView text;
-        @Bind(com.shootr.mobile.R.id.shot_image) ImageView image;
-        @Bind(com.shootr.mobile.R.id.shot_draft_buttons) View draftButtons;
-        @Bind(com.shootr.mobile.R.id.shot_separator) View separator;
+        @Bind(R.id.shot_avatar) ImageView avatar;
+        @Bind(R.id.shot_user_name) TextView name;
+        @Bind(R.id.shot_text) ClickableTextView text;
+        @Bind(R.id.shot_image) ImageView image;
+        @Bind(R.id.shot_draft_buttons) View draftButtons;
+        @Bind(R.id.shot_separator) View separator;
         DraftItemView draftItemView;
 
         public DraftViewHolder(View itemView) {
@@ -167,12 +167,12 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             });
         }
 
-        @OnClick(com.shootr.mobile.R.id.shot_draft_shoot)
+        @OnClick(R.id.shot_draft_shoot)
         public void shoot() {
             draftActionListener.onShootDraft(getDraftForThisPosition());
         }
 
-        @OnClick(com.shootr.mobile.R.id.shot_draft_delete)
+        @OnClick(R.id.shot_draft_delete)
         public void delete() {
             draftActionListener.onDeleteDraft(getDraftForThisPosition());
         }

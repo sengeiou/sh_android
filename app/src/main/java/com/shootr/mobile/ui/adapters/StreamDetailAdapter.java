@@ -122,20 +122,20 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (viewType) {
             case TYPE_DESCRIPTION:
                 if (descriptionViewHolder == null) {
-                    v = inflater.inflate(com.shootr.mobile.R.layout.item_menu_text, parent, false);
+                    v = inflater.inflate(R.layout.item_menu_text, parent, false);
                     descriptionViewHolder = new TextViewHolder(v);
                 }
                 return descriptionViewHolder;
             case TYPE_AUTHOR:
                 if (authorViewHolder == null) {
-                    v = inflater.inflate(com.shootr.mobile.R.layout.item_menu_action, parent, false);
+                    v = inflater.inflate(R.layout.item_menu_action, parent, false);
                     v.setOnClickListener(onAuthorClickListener);
                     authorViewHolder = new ActionViewHolder(v);
                 }
                 return authorViewHolder;
             case TYPE_MEDIA:
                 if (mediaViewHolder == null) {
-                    v = inflater.inflate(com.shootr.mobile.R.layout.item_menu_action, parent, false);
+                    v = inflater.inflate(R.layout.item_menu_action, parent, false);
                     v.setOnClickListener(onMediaClickListener);
                     mediaViewHolder = new ActionViewHolder(v);
                 }
@@ -147,14 +147,14 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
                 return muteViewHolder;
             case TYPE_PARTICIPANTS_TITLE:
-                v = inflater.inflate(com.shootr.mobile.R.layout.item_card_title_separator, parent, false);
+                v = inflater.inflate(R.layout.item_card_title_separator, parent, false);
                 return new SeparatorViewHolder(v);
             case TYPE_PARTICIPANT:
-                v = inflater.inflate(com.shootr.mobile.R.layout.item_list_stream_watcher, parent, false);
+                v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
                 return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener, keepFollowButtonIds);
             case TYPE_ALL_PARTICIPANTS:
                 if (allParticipantsViewHolder == null) {
-                    v = inflater.inflate(com.shootr.mobile.R.layout.include_all_participants_button, parent, false);
+                    v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
                     allParticipantsViewHolder = new AllParticipantsViewHolder(v);
                     v.setOnClickListener(onAllParticipantsClickListener);
                 }
@@ -171,12 +171,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 descriptionViewHolder.setText(description);
                 break;
             case TYPE_AUTHOR:
-                authorViewHolder.setIcon(com.shootr.mobile.R.drawable.ic_stream_author_24_gray50);
+                authorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
                 authorViewHolder.setName(authorName);
                 break;
             case TYPE_MEDIA:
-                mediaViewHolder.setIcon(com.shootr.mobile.R.drawable.ic_action_stream_gallery_gray_24);
-                mediaViewHolder.setName(com.shootr.mobile.R.string.stream_detail_media);
+                mediaViewHolder.setIcon(R.drawable.ic_action_stream_gallery_gray_24);
+                mediaViewHolder.setName(R.string.stream_detail_media);
                 break;
             case TYPE_MUTE:
                 muteViewHolder.setName(R.string.stream_detail_mute);
@@ -214,7 +214,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class TextViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.text) TextView text;
+        @Bind(R.id.text) TextView text;
 
         public TextViewHolder(View itemView) {
             super(itemView);
@@ -229,9 +229,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class ActionViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.action_icon) ImageView icon;
-        @Bind(com.shootr.mobile.R.id.action_name) TextView name;
-        @Bind(com.shootr.mobile.R.id.action_number) TextView optionalNumber;
+        @Bind(R.id.action_icon) ImageView icon;
+        @Bind(R.id.action_name) TextView name;
+        @Bind(R.id.action_number) TextView optionalNumber;
 
         public ActionViewHolder(View itemView) {
             super(itemView);
@@ -311,10 +311,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private final OnFollowUnfollowListener onFollowUnfollowListener;
         private final Set<String> keepFollowButtonIds;
 
-        @Bind(com.shootr.mobile.R.id.watcher_user_avatar) ImageView avatar;
-        @Bind(com.shootr.mobile.R.id.watcher_user_name) TextView name;
-        @Bind(com.shootr.mobile.R.id.watcher_user_watching) TextView watchingText;
-        @Bind(com.shootr.mobile.R.id.user_follow_button) FollowButton followButton;
+        @Bind(R.id.watcher_user_avatar) ImageView avatar;
+        @Bind(R.id.watcher_user_name) TextView name;
+        @Bind(R.id.watcher_user_watching) TextView watchingText;
+        @Bind(R.id.user_follow_button) FollowButton followButton;
 
         private String userId;
 
@@ -390,7 +390,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class AllParticipantsViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.all_participants_button) TextView button;
+        @Bind(R.id.all_participants_button) TextView button;
 
         public AllParticipantsViewHolder(View itemView) {
             super(itemView);

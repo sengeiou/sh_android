@@ -62,6 +62,7 @@ public class GetOlderStreamTimelineInteractor implements com.shootr.mobile.domai
         return StreamTimelineParameters.builder() //
           .forStream(visibleStream) //
           .maxDate(currentOldestDate) //
+          .realTime(true) //
           .build();
     }
 

@@ -54,12 +54,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
 
-    @Bind(com.shootr.mobile.R.id.shot_detail_list) RecyclerView detailList;
-    @Bind(com.shootr.mobile.R.id.detail_new_shot_bar) View newShotBar;
+    @Bind(R.id.shot_detail_list) RecyclerView detailList;
+    @Bind(R.id.detail_new_shot_bar) View newShotBar;
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
-    @Bind(com.shootr.mobile.R.id.shot_bar_drafts) View replyDraftsButton;
-    @BindString(com.shootr.mobile.R.string.shot_shared_message) String shotShared;
-    @BindString(com.shootr.mobile.R.string.user_not_found_message) String userNotFoundMessage;
+    @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
+    @BindString(R.string.shot_shared_message) String shotShared;
+    @BindString(R.string.user_not_found_message) String userNotFoundMessage;
 
     @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
@@ -92,7 +92,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_shot_detail;
+        return R.layout.activity_shot_detail;
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -140,7 +140,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.menu_shot_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_shot_detail, menu);
         copyShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_copy_text));
         return true;
     }
@@ -149,7 +149,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
             return true;
-        } else if (item.getItemId() == com.shootr.mobile.R.id.menu_share) {
+        } else if (item.getItemId() == R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
             openContextualMenu(shotModel);
         } else if (item.getItemId() == R.id.menu_copy_text) {
@@ -159,7 +159,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this).addAction(com.shootr.mobile.R.string.menu_share_shot_via_shootr,
+        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
           new Runnable() {
               @Override public void run() {
                   detailPresenter.shareShot(shotModel);
@@ -314,11 +314,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         startActivity(intent);
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_text) public void onReplyClick() {
+    @OnClick(R.id.shot_bar_text) public void onReplyClick() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_photo) public void onStartNewShotWithPhoto() {
+    @OnClick(R.id.shot_bar_photo) public void onStartNewShotWithPhoto() {
         if (writePermissionManager.hasWritePermission()) {
             newShotBarPresenter.newShotFromImage();
         } else {
@@ -326,7 +326,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         }
     }
 
-    @OnClick(com.shootr.mobile.R.id.shot_bar_drafts) public void openDrafts() {
+    @OnClick(R.id.shot_bar_drafts) public void openDrafts() {
         startActivity(new Intent(this, DraftsActivity.class));
     }
     //endregion
@@ -352,7 +352,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void setReplyUsername(String username) {
-        replyPlaceholder.setText(getString(com.shootr.mobile.R.string.reply_placeholder_pattern, username));
+        replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
     }
 
     @Override public void scrollToBottom() {
@@ -405,7 +405,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void notifyPinnedShot(ShotModel shotModel) {
-        /* no-op */
+        detailPresenter.initialize(this, shotModel);
     }
 
     @Override public void showPinned() {

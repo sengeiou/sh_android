@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.view.View;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -20,6 +21,6 @@ public class StreamFavoritedViewHolder extends ClickableStreamActivityViewHolder
     @NonNull
     @Override
     protected String getCommentPattern() {
-        return getContext().getString(com.shootr.mobile.R.string.stream_favorited_activity_text_pattern);
+        return getContext().getString(R.string.stream_favorited_activity_text_pattern);
     }
 }

@@ -20,6 +20,9 @@ public interface ShotApiService {
     List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream, @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
+    @GET("/shot/streamTimeline/firstCall?includeLinks=false&includeAll=true")
+    List<ShotApiEntity> getStreamTimlinefirstCall(@Query("idStream") String streamId, @Query("types") List<String> comment, @Query("sinceTimestamp") Long sinceDate);
+
     @GET("/shot/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
@@ -59,8 +62,8 @@ public interface ShotApiService {
     @POST("/shot") ShotEntity postNewShot(@Body ShotEntity shotEntity) throws ApiException, IOException;
 
     @GET("/shot/user/{idUser}/?includeLinks=false")
-    List<ShotApiEntity> getAllShotsFromUserInStream(@Path("idUser") String userId,
-      @Query("idStream") String idStream, @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
+    List<ShotApiEntity> getAllShotsFromUserInStream(@Path("idUser") String userId, @Query("idStream") String idStream,
+      @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
     @PUT("/shot/{idShot}/hide")
     Response hideShot(@Path("idShot") String idShot) throws ApiException, IOException;

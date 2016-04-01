@@ -45,10 +45,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject AndroidTimeUtils timeUtils;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(com.shootr.mobile.R.id.timeline_activity_list) RecyclerView activityList;
-    @Bind(com.shootr.mobile.R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(com.shootr.mobile.R.id.timeline_empty) View emptyView;
-    @Bind(com.shootr.mobile.R.id.timeline_loading_activity) TextView loadingActivityView;
+    @Bind(R.id.timeline_activity_list) RecyclerView activityList;
+    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.timeline_loading_activity) TextView loadingActivityView;
 
     @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
 
@@ -66,7 +66,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     public View onCreateView(LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(com.shootr.mobile.R.layout.timeline_activity, container, false);
+        View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
@@ -155,8 +155,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
                 timelinePresenter.refresh();
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(com.shootr.mobile.R.color.refresh_1,
-          com.shootr.mobile.R.color.refresh_2,
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
+          R.color.refresh_2,
           R.color.refresh_3,
           R.color.refresh_4);
     }

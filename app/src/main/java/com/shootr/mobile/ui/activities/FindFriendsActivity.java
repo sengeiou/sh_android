@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -26,24 +27,30 @@ import com.shootr.mobile.ui.views.FindFriendsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class FindFriendsActivity extends BaseToolbarDecoratedActivity
+  implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback {
 
+    public static final String EXTRA_QUERY = "query";
+    public static final String EXTRA_RESULTS = "results";
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindFriendsPresenter findFriendsPresenter;
 
-    @Bind(com.shootr.mobile.R.id.find_friends_search_results_list) ListView resultsListView;
+    @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
-    @Bind(com.shootr.mobile.R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     private View progressViewContent;
     private View progressView;
     private SearchView searchView;
     private UserListAdapter adapter;
     private boolean hasMoreItemsToLoad;
+    private Bundle savedInstanceState;
+    private String currentSearchQuery;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -57,10 +64,11 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         ButterKnife.bind(this);
         setupViews();
         setupActionBar();
+        this.savedInstanceState = savedInstanceState;
     }
 
     @Override protected void initializePresenter() {
-        findFriendsPresenter.initialize(this);
+        findFriendsPresenter.initialize(this, false);
     }
 
     private void setupViews() {
@@ -106,22 +114,29 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         findFriendsPresenter.resume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         findFriendsPresenter.pause();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         createSearchView(searchItem);
+        setupQuery();
 
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(com.shootr.mobile.R.color.hint_black));
+        SearchView.SearchAutoComplete searchAutoComplete =
+          (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
 
         return true;
+    }
+
+    private void setupQuery() {
+        if (currentSearchQuery != null) {
+            searchView.setQuery(currentSearchQuery, false);
+            searchView.clearFocus();
+        }
     }
 
     private void createSearchView(MenuItem searchItem) {
@@ -134,13 +149,18 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
                 return true;
             }
 
-            @Override public boolean onQueryTextChange(String s) {
+            @Override public boolean onQueryTextChange(String query) {
+                findFriendsPresenter.queryTextChanged(query);
+                currentSearchQuery = query;
                 return false;
             }
         });
         searchView.setQueryHint(getString(R.string.activity_find_friends_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
+        if (savedInstanceState != null) {
+            searchView.setQuery(savedInstanceState.getCharSequence(EXTRA_QUERY), false);
+        }
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -194,19 +214,25 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         progressView.setVisibility(View.GONE);
     }
 
+    @Override public void restoreState() {
+        findFriendsPresenter.initialize(this, true);
+    }
+
     @Override public void follow(int position) {
         findFriendsPresenter.followUser(adapter.getItem(position));
     }
 
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
-        new AlertDialog.Builder(this).setMessage(String.format(getString(com.shootr.mobile.R.string.unfollow_dialog_message), userModel.getUsername()))
-          .setPositiveButton(getString(com.shootr.mobile.R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  findFriendsPresenter.unfollowUser(userModel);
-              }
-          })
-          .setNegativeButton(getString(com.shootr.mobile.R.string.unfollow_dialog_no), null)
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    findFriendsPresenter.unfollowUser(userModel);
+                }
+            })
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
@@ -235,9 +261,22 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         progressViewContent.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
-    @OnItemClick(R.id.find_friends_search_results_list)
-    public void openUserProfile(int position) {
+    @OnItemClick(R.id.find_friends_search_results_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+    }
+
+    @Override protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
+        savedInstanceState.putString(EXTRA_QUERY, currentSearchQuery);
+    }
+
+    @Override protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        restoreState();
+        currentSearchQuery = savedInstanceState.getString(EXTRA_QUERY);
+        List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        findFriendsPresenter.restoreFriends(restoredResults);
     }
 }

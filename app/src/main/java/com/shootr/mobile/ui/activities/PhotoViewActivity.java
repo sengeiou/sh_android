@@ -18,6 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -35,8 +36,8 @@ public class PhotoViewActivity extends BaseActivity {
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
-    @Bind(com.shootr.mobile.R.id.photo) ImageView imageView;
-    @Bind(com.shootr.mobile.R.id.toolbar_actionbar) Toolbar toolbar;
+    @Bind(R.id.photo) ImageView imageView;
+    @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
@@ -59,7 +60,7 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_photo_view;
+        return R.layout.activity_photo_view;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -132,7 +133,7 @@ public class PhotoViewActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.photo_view, menu);
+        getMenuInflater().inflate(R.menu.photo_view, menu);
         return true;
     }
 
@@ -141,7 +142,7 @@ public class PhotoViewActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
-        } else if (item.getItemId() == com.shootr.mobile.R.id.menu_download_photo) {
+        } else if (item.getItemId() == R.id.menu_download_photo) {
             saveImage();
         }
         return super.onOptionsItemSelected(item);
@@ -158,7 +159,7 @@ public class PhotoViewActivity extends BaseActivity {
     private void performImageDownload() {
         Uri imageUri = Uri.parse(imageUrl);
         String fileName = imageUri.getLastPathSegment();
-        String downloadSubpath = getString(com.shootr.mobile.R.string.downloaded_pictures_subfolder) + fileName;
+        String downloadSubpath = getString(R.string.downloaded_pictures_subfolder) + fileName;
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(imageUri);
@@ -181,7 +182,7 @@ public class PhotoViewActivity extends BaseActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 performImageDownload();
             } else {
-                feedbackMessage.showLong(getView(), com.shootr.mobile.R.string.download_photo_permission_denied);
+                feedbackMessage.showLong(getView(), R.string.download_photo_permission_denied);
             }
         }
     }

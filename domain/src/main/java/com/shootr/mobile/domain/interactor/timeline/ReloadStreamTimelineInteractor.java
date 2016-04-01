@@ -55,7 +55,7 @@ public class ReloadStreamTimelineInteractor implements Interactor {
     }
 
     private StreamTimelineParameters buildParameters() {
-        return StreamTimelineParameters.builder().forStream(idStream).build();
+        return StreamTimelineParameters.builder().forStream(idStream).realTime(false).build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {

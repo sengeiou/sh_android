@@ -72,12 +72,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private int counterToolbarPrintTimes = 0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(com.shootr.mobile.R.id.toolbar_dummy_content) View toolbarDummyContent;
-    @Bind(com.shootr.mobile.R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
+    @Bind(R.id.toolbar_dummy_content) View toolbarDummyContent;
+    @Bind(R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
-    @Bind(com.shootr.mobile.R.id.stream_title_container) View streamTitleContainer;
-    @Bind(com.shootr.mobile.R.id.cat_avatar) View streamPictureContainer;
-    @Bind(com.shootr.mobile.R.id.stream_avatar) ImageView streamPicture;
+    @Bind(R.id.stream_title_container) View streamTitleContainer;
+    @Bind(R.id.cat_avatar) View streamPictureContainer;
+    @Bind(R.id.stream_avatar) ImageView streamPicture;
     @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
@@ -85,9 +85,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.blurLayout) FrameLayout blurLayout;
 
     @Bind(R.id.list) RecyclerView recyclerView;
-    @Bind(com.shootr.mobile.R.id.loading_progress) View progressView;
+    @Bind(R.id.loading_progress) View progressView;
 
-    @BindString(com.shootr.mobile.R.string.shared_stream_notification) String streamNotification;
+    @BindString(R.string.shared_stream_notification) String streamNotification;
     @BindString(R.string.analytics_screen_stream_detail) String analyticsScreenStreamDetail;
 
     @Inject ImageLoader imageLoader;
@@ -109,7 +109,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_stream_detail;
+        return R.layout.activity_stream_detail;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -162,7 +162,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                             streamDetailPresenter.unfollow(user.getIdUser());
                         }
                     })
-                    .setNegativeButton(getString(com.shootr.mobile.R.string.unfollow_dialog_no), null)
+                    .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
                     .create()
                     .show();
               }
@@ -176,11 +176,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     private void openContextualMenuForSharing() {
-        new CustomContextMenu.Builder(this).addAction(com.shootr.mobile.R.string.share_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamViaShootr();
             }
-        }).addAction(com.shootr.mobile.R.string.share_via, new Runnable() {
+        }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamVia();
             }
@@ -193,7 +193,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.shootr.mobile.R.menu.stream, menu);
+        getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
         dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
         dataInfoMenuItem.setVisible(true);
@@ -253,7 +253,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     //region Edit photo
-    @OnClick(com.shootr.mobile.R.id.cat_avatar) public void onPhotoClick() {
+    @OnClick(R.id.cat_avatar) public void onPhotoClick() {
         streamDetailPresenter.photoClick();
     }
 
@@ -340,15 +340,15 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void showEditStreamPhotoOrInfo() {
-        new BottomSheet.Builder(this).title(getString(com.shootr.mobile.R.string.stream_detail_edit_menu_title))
-          .sheet(com.shootr.mobile.R.menu.stream_edit_photo_or_info)
+        new BottomSheet.Builder(this).title(getString(R.string.stream_detail_edit_menu_title))
+          .sheet(R.menu.stream_edit_photo_or_info)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
-                      case com.shootr.mobile.R.id.menu_stream_edit_photo:
+                      case R.id.menu_stream_edit_photo:
                           streamDetailPresenter.editStreamPhoto();
                           break;
-                      case com.shootr.mobile.R.id.menu_stream_edit_info:
+                      case R.id.menu_stream_edit_info:
                           streamDetailPresenter.editStreamInfo();
                           break;
                   }
@@ -359,14 +359,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void showPhotoPicker() {
         new BottomSheet.Builder(this).title(R.string.change_photo)
-          .sheet(com.shootr.mobile.R.menu.profile_photo_bottom_sheet)
+          .sheet(R.menu.profile_photo_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_photo_gallery:
                           handlePhotoSelectionFromGallery();
                           break;
-                      case com.shootr.mobile.R.id.menu_photo_take:
+                      case R.id.menu_photo_take:
                           takePhotoFromCamera();
                           break;
                   }

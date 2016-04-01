@@ -31,12 +31,12 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject SupportPresenter supportPresenter;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(com.shootr.mobile.R.id.support_version_number) TextView versionNumber;
-    @Bind(com.shootr.mobile.R.id.support_blog_text) TextView blog;
-    @Bind(com.shootr.mobile.R.id.support_help_text) TextView help;
+    @Bind(R.id.support_version_number) TextView versionNumber;
+    @Bind(R.id.support_blog_text) TextView blog;
+    @Bind(R.id.support_help_text) TextView help;
 
-    @BindString(com.shootr.mobile.R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(com.shootr.mobile.R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
     @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
 
     //region lifecycle methods
@@ -45,7 +45,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     }
 
     @Override protected int getLayoutResource() {
-        return com.shootr.mobile.R.layout.activity_support;
+        return R.layout.activity_support;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -70,33 +70,33 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     //endregion
 
     //region Click listeners
-    @OnClick(com.shootr.mobile.R.id.support_terms_service_text)
+    @OnClick(R.id.support_terms_service_text)
     public void onTermsAndServiceClick() {
         String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
         Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
         Intents.maybeStartActivity(this, termsIntent);
     }
 
-    @OnClick(com.shootr.mobile.R.id.privacy_policy_text)
+    @OnClick(R.id.privacy_policy_text)
     public void onPrivacyPolicyClick() {
         String termsUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
         Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
         Intents.maybeStartActivity(this, termsIntent);
     }
 
-    @OnClick(com.shootr.mobile.R.id.support_blog_text)
+    @OnClick(R.id.support_blog_text)
     public void onBlogClick() {
         supportPresenter.blogClicked();
     }
 
-    @OnClick(com.shootr.mobile.R.id.support_help_text)
+    @OnClick(R.id.support_help_text)
     public void onHelpClick() {
         supportPresenter.helpClicked();
     }
 
-    @OnLongClick(com.shootr.mobile.R.id.support_version_container)
+    @OnLongClick(R.id.support_version_container)
     public boolean onVersionLongClick() {
-        Toast.makeText(this, com.shootr.mobile.R.string.app_easter_egg, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_LONG).show();
         return true;
     }
 
@@ -104,9 +104,9 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @Override public void showError() {
         help.setEnabled(false);
-        help.setTextColor(getResources().getColor(com.shootr.mobile.R.color.gray_60));
+        help.setTextColor(getResources().getColor(R.color.gray_60));
         blog.setEnabled(false);
-        blog.setTextColor(getResources().getColor(com.shootr.mobile.R.color.gray_60));
+        blog.setTextColor(getResources().getColor(R.color.gray_60));
     }
 
     @Override public void goToStream(Stream blog) {
@@ -123,7 +123,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(com.shootr.mobile.R.string.email_confirmation_ok), null).show();
+          .setPositiveButton(getString(R.string.email_confirmation_ok), null).show();
     }
 
     @Override protected void onPause() {

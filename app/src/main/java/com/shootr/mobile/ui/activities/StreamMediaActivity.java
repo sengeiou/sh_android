@@ -30,7 +30,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     private MediaAdapter mediaAdapter;
     private GridLayoutManager layoutManager;
 
-    @Bind(com.shootr.mobile.R.id.stream_media_recycler_view) RecyclerView mediaView;
+    @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
     @Bind(R.id.media_empty) View emptyView;
     @Bind(R.id.stream_media_loading) View loadingView;
     @BindString(R.string.stream_media_no_more_media) String noMoreMedia;

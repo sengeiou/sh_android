@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.activities.DraftsActivity;
@@ -16,8 +17,8 @@ public class ShotHasParentDeletedNotification extends CommonNotification {
 
     public ShotHasParentDeletedNotification(Context context, NotificationBuilderFactory builderFactory) {
         super(context, builderFactory);
-        this.titleText = context.getResources().getString(com.shootr.mobile.R.string.notification_shot_failed);
-        this.subtitleText = context.getResources().getString(com.shootr.mobile.R.string.notification_shot_has_parent_deleted_subtitle);
+        this.titleText = context.getResources().getString(R.string.notification_shot_failed);
+        this.subtitleText = context.getResources().getString(R.string.notification_shot_has_parent_deleted_subtitle);
     }
 
     @Override
