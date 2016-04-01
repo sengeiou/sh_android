@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.8.0] - 2016-04-1
+
+### Changed
+- Palette y Crashlytics actualizados
+
+### Added
+- Number format (se muestran K en los following/followers)
+- Timeline No Live
+
+### Fixed
+- Eliminados qualified names
+- IndexOutOfBounds en getLastShot
+- En Profile Edit Presenter se usa el user de BDD
+- Ya no sale pin to profile al hacer nice de un shot propio anclado
+- Nuevos shots cuando se pagina
+
 ## [1.7.0] - 2016-03-18
 
 ### Changed
