@@ -172,7 +172,7 @@
     <style name="LoginEmailButton">
         <item name="android:background">@drawable/background_email_login_button</item>
         <item name="android:clickable">true</item>
-        <item name="android:textColor">@color/gray_40</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:alpha">0.8</item>
