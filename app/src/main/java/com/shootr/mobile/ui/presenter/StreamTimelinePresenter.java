@@ -243,14 +243,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
         if (!isFirstShotPosition && !isFirstLoad) {
             setShotsAndReposition(shotModels);
-            calculeNewShotsNumberAndShowTimeLineIndicator(shotModels);
+            showTimeLineIndicator();
         }
         oldListSize = shotModels.size();
         loadNewShots();
     }
 
-    private void calculeNewShotsNumberAndShowTimeLineIndicator(List<ShotModel> shotModels) {
-        newShotsNumber += Math.abs(oldListSize - shotModels.size());
+    private void showTimeLineIndicator() {
         if (newShotsNumber != null && newShotsNumber > 0) {
             streamTimelineView.showTimelineIndicator(newShotsNumber);
         } else {
@@ -377,6 +376,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadNewShotsInView(Timeline timeline) {
         boolean hasNewShots = !timeline.getShots().isEmpty();
         if (hasNewShots) {
+            newShotsNumber += timeline.getShots().size();
             loadTimeline();
         } else if (isEmpty) {
             streamTimelineView.showEmpty();

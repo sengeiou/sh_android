@@ -46,6 +46,7 @@ import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -265,9 +266,10 @@ public class StreamTimelinePresenterTest {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstLoadAndIsFirstPosition();
 
+        presenter.initialize(streamTimelineView, ID_STREAM);
         presenter.refresh();
 
-        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView, times(3)).setShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldSetShotsWhenRefreshTimelineRespondsShotsAndIsNotFirstPosition() throws Exception {
@@ -299,6 +301,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
 
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
         presenter.refresh();
 
         verify(streamTimelineView).hideLoading();
@@ -426,8 +429,7 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
-          anyString(),
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -437,9 +439,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-        verify(timelineInteractorWrapper).refreshTimeline(anyString(),
-          anyLong(),
-          anyBoolean(),
+        verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyLong(), anyBoolean(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -487,6 +487,7 @@ public class StreamTimelinePresenterTest {
         setupDeleteLocalShotsInteractorCallback();
         setupReloadStreamTimelineInteractorCallback();
 
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
         presenter.onAllStreamShotsClick();
 
         verify(streamTimelineView).hideAllStreamShots();
@@ -496,9 +497,10 @@ public class StreamTimelinePresenterTest {
         setupDeleteLocalShotsInteractorCallback();
         setupReloadStreamTimelineInteractorCallback();
 
+        presenter.initialize(streamTimelineView, ID_STREAM);
         presenter.onAllStreamShotsClick();
 
-        verify(streamTimelineView).showHoldingShots();
+        verify(streamTimelineView, times(2)).showHoldingShots();
     }
 
     @Test public void shouldShowLoadingWhenAllStreamShotsClicked() throws Exception {
@@ -511,6 +513,7 @@ public class StreamTimelinePresenterTest {
         setupDeleteLocalShotsInteractorCallback();
         setupReloadStreamTimelineInteractorCallback();
 
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
         presenter.onAllStreamShotsClick();
 
         verify(streamTimelineView).hideLoading();
@@ -653,7 +656,11 @@ public class StreamTimelinePresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(timelineInteractorWrapper, times(2)).refreshTimeline(anyString(), anyLong(), booleanArgumentCaptor.capture(), anyCallback(), anyErrorCallback());
+        verify(timelineInteractorWrapper, times(2)).refreshTimeline(anyString(),
+          anyLong(),
+          booleanArgumentCaptor.capture(),
+          anyCallback(),
+          anyErrorCallback());
         assertThat(booleanArgumentCaptor.getValue()).isTrue();
     }
 
