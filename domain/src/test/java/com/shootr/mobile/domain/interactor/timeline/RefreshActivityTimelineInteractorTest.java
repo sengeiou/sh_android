@@ -54,7 +54,7 @@ public class RefreshActivityTimelineInteractorTest {
     @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUser()).thenReturn(user());
-        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+        interactor.refreshActivityTimeline(isUserActivityTimeline, anyString(), spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForActivity());
     }
@@ -64,7 +64,7 @@ public class RefreshActivityTimelineInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
 
-        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+        interactor.refreshActivityTimeline(isUserActivityTimeline, anyString(), spyCallback, errorCallback);
 
         verify(shootrTimelineService).refreshTimelinesForStream(anyString(), anyBoolean());
     }
@@ -74,7 +74,7 @@ public class RefreshActivityTimelineInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(userWithoutWatchingStream());
 
-        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+        interactor.refreshActivityTimeline(isUserActivityTimeline, anyString(), spyCallback, errorCallback);
 
         verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
@@ -84,7 +84,7 @@ public class RefreshActivityTimelineInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(null);
 
-        interactor.refreshActivityTimeline(anyString(), spyCallback, errorCallback);
+        interactor.refreshActivityTimeline(isUserActivityTimeline, anyString(), spyCallback, errorCallback);
 
         verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }

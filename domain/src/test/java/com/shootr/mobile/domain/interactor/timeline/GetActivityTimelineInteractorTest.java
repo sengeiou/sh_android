@@ -64,7 +64,7 @@ public class GetActivityTimelineInteractorTest {
         when(localUserRepository.getPeople()).thenReturn(people());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetActivityTimelineInteractor(interactorHandler, postExecutionThread, localActivityRepository);
+        interactor = new GetActivityTimelineInteractor(interactorHandler, postExecutionThread, localActivityRepository, sessionRepository);
     }
 
     @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
@@ -72,7 +72,7 @@ public class GetActivityTimelineInteractorTest {
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class), anyString())).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(localeProvider.getLanguage(), spyCallback);
+        interactor.loadActivityTimeline(isUserActivityTimeline, localeProvider.getLanguage(), spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
@@ -82,7 +82,7 @@ public class GetActivityTimelineInteractorTest {
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class), anyString())).thenReturn(
           unorderedActivities());
 
-        interactor.loadActivityTimeline(localeProvider.getLanguage(), spyCallback);
+        interactor.loadActivityTimeline(isUserActivityTimeline, localeProvider.getLanguage(), spyCallback);
         List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
