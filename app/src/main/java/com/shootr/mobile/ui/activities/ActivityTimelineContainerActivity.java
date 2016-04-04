@@ -1,21 +1,43 @@
 package com.shootr.mobile.ui.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
 import android.view.MenuItem;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
+import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.util.BackStackHandler;
+
+import java.util.Locale;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActivity {
 
+    @Bind(R.id.activity_pager)
+    ViewPager viewPager;
+    @Bind(R.id.activity_tab_layout)
+    TabLayout tabLayout;
+
     @Inject BackStackHandler backStackHandler;
+
+    private ToolbarDecorator toolbarDecorator;
 
     @Override
     protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op */
+        this.toolbarDecorator = toolbarDecorator;
+        this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(true);
+        this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -25,12 +47,17 @@ public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActiv
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            ActivityTimelineFragment activityTimelineFragment = ActivityTimelineFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, activityTimelineFragment);
-            transaction.commit();
-        }
+        ButterKnife.bind(this);
+
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
+        viewPager.setPageMarginDrawable(R.drawable.page_margin);
+        viewPager.setOffscreenPageLimit(1);
+
+        tabLayout.setupWithViewPager(viewPager);
+        setupTabLayoutListener();
+        viewPager.setCurrentItem(1);
     }
 
     @Override
@@ -48,4 +75,65 @@ public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActiv
         }
     }
 
+    private void setupTabLayoutListener() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                /* no-op */
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                Fragment currentPage = getSupportFragmentManager().findFragmentByTag("android:switcher:"
+                        + R.id.pager
+                        + ":"
+                        + viewPager.getCurrentItem());
+                //TODO: scrollToTop(currentPage, viewPager.getCurrentItem());
+            }
+        });
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return ActivityTimelineFragment.newInstance();
+                case 1:
+                    return MeActivityTimelineFragment.newInstance();
+                default:
+                    throw new IllegalStateException(String.format("Item for position %d doesn't exists", position));
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.drawer_activity_title).toUpperCase(l);
+                case 1:
+                    return getString(R.string.drawer_activity_me).toUpperCase(l);
+                default:
+                    throw new IllegalStateException(String.format("Item title for position %d doesn't exists",
+                            position));
+            }
+        }
+    }
 }
