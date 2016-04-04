@@ -48,14 +48,18 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
 
     @Override public void execute() throws Exception {
         try {
-            ActivityTimelineParameters timelineParameters = buildTimelineParameters();
-            timelineParameters.excludeHiddenTypes();
-            List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters, language);
-            sortActivitiesByPublishDate(olderActivities);
-            notifyTimelineFromActivities(olderActivities);
+            loadOlderTimeline();
         } catch (ShootrException error) {
             notifyError(error);
         }
+    }
+
+    private void loadOlderTimeline() {
+        ActivityTimelineParameters timelineParameters = buildTimelineParameters();
+        timelineParameters.excludeHiddenTypes();
+        List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters, language);
+        sortActivitiesByPublishDate(olderActivities);
+        notifyTimelineFromActivities(olderActivities);
     }
 
     private ActivityTimelineParameters buildTimelineParameters() {
@@ -89,6 +93,10 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
             if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
                 userActivities.add(activity);
             }
+        }
+        if (userActivities.isEmpty()) {
+            currentOldestDate = activities.get(activities.size() -1).getPublishDate().getTime();
+            loadOlderTimeline();
         }
         return userActivities;
     }
