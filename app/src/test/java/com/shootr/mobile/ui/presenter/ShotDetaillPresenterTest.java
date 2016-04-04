@@ -295,6 +295,23 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView).disableStreamTitle();
     }
 
+    @Test public void shouldRenderMainShotInResumeWhenShotModelIsNotNull() throws Exception {
+        presenter.initialize(shotDetailView, shotModel());
+
+        presenter.resume();
+
+        verify(shotDetailView).renderShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldNotRenderMainShotInResumeWhenShotModelIsNull() throws Exception {
+        ShotModel shotModel = null;
+
+        presenter.initialize(shotDetailView, shotModel);
+        presenter.resume();
+
+        verify(shotDetailView, never()).renderShot(any(ShotModel.class));
+    }
+
     private List<Shot> shotList(int shots){
         ArrayList<Shot> shotList = new ArrayList<>();
         for(int i=0;i<shots;i++){

@@ -236,6 +236,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Override public void resume() {
         bus.register(this);
+        if(shotModel != null) {
+            shotDetailView.renderShot(shotModel);
+        }
     }
 
     @Override public void pause() {
