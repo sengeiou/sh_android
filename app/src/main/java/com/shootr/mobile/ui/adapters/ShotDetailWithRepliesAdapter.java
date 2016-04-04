@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
+    private final ParentShotClickListener parentShotClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -58,15 +60,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener,
-      OnVideoClickListener videoClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      PinToProfileClickListener onClickListenerPinToProfile,
+      ParentShotClickListener parentShotClickListener, ImageClickListener imageClickListener, OnVideoClickListener videoClickListener,
+      OnUsernameClickListener onUsernameClickListener, PinToProfileClickListener onClickListenerPinToProfile,
       OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
-      Resources resources,
-      AndroidTimeUtils timeUtils) {
+      Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
+        this.parentShotClickListener = parentShotClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -447,7 +447,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         @Bind(R.id.shot_detail_parent_progress) View progress;
         @Bind(R.id.shot_detail_parent_shot) View shot;
-
+        @Bind(R.id.shot_detail_parent) FrameLayout container;
         @Bind(R.id.shot_avatar) public ImageView avatar;
         @Bind(R.id.shot_user_name) public TextView name;
         @Bind(R.id.shot_timestamp) public TextView timestamp;
@@ -525,13 +525,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(shotModel.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
                         onNiceShotListener.markNice(shotModel.getIdShot());
                     }
+                }
+            });
+
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    parentShotClickListener.onClick(shotModel);
                 }
             });
         }
@@ -650,6 +655,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public interface PinToProfileClickListener {
 
+        void onClick(ShotModel shot);
+    }
+
+    public interface ParentShotClickListener{
         void onClick(ShotModel shot);
     }
     //endregion
