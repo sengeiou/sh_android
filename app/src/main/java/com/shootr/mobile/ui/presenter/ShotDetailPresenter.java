@@ -139,6 +139,19 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         setNiceBlocked(false);
     }
 
+    public void setupStreamTitle(){
+        getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                String streamId = shotModel.getStreamId();
+                if (streamId.equals(user.getIdWatchingStream())) {
+                    shotDetailView.disableStreamTitle();
+                }else{
+                    shotDetailView.enableStreamTitle();
+                }
+            }
+        });
+    }
+
     public void imageClick(ShotModel shot) {
         shotDetailView.openImage(shot.getImage());
     }

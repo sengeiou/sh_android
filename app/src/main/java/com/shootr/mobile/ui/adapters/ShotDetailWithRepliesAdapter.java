@@ -255,6 +255,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     }
 
+    public void disableStreamTitle(){
+        mainHolder.disableStreamTitle();
+    }
+
+    public void enableStreamTitle(){
+        mainHolder.enableStreamTitle();
+    }
+
     //region View holders
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
@@ -431,12 +439,21 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 streamTitle.setVisibility(View.GONE);
             }
-
             streamTitle.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     streamClickListener.onClick(shotModel);
                 }
             });
+        }
+
+        public void disableStreamTitle(){
+            streamTitle.setTextColor(context.getResources().getColor(R.color.gray_material));
+            streamTitle.setEnabled(false);
+        }
+
+        public void enableStreamTitle(){
+            streamTitle.setTextColor(context.getResources().getColor(R.color.links));
+            streamTitle.setEnabled(true);
         }
 
         private void setupPinToProfileContainer(final ShotModel shotModel){

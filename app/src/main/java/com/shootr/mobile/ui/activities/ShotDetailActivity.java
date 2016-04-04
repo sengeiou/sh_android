@@ -309,6 +309,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         startActivity(StreamTimelineActivity.newIntent(this, idStream));
     }
 
+    @Override public void disableStreamTitle() {
+        detailAdapter.disableStreamTitle();
+    }
+
+    @Override public void enableStreamTitle() {
+        detailAdapter.enableStreamTitle();
+    }
+
     private ShotModel extractShotFromIntent() {
         return (ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT);
     }
@@ -365,6 +373,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     //region View methods
     @Override public void renderShot(ShotModel shotModel) {
         detailAdapter.renderMainShot(shotModel);
+        detailPresenter.setupStreamTitle();
         pinShotPresenter.initialize(this, shotModel);
     }
 

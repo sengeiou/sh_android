@@ -274,6 +274,27 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView, never()).goToStreamTimeline(anyString());
     }
 
+    @Test public void shouldEnableStreamTitleWhenIsNotInShotStream() throws Exception {
+        setupCurrentUserCallback();
+        presenter.initialize(shotDetailView, shotModel());
+
+        presenter.setupStreamTitle();
+
+        verify(shotDetailView).enableStreamTitle();
+    }
+
+    @Test public void shouldDisableStreamTitleWhenIsInShotStream() throws Exception {
+        setupCurrentUserCallback();
+        ShotModel shotModel = shotModel();
+        shotModel.setStreamId(OTHER_STREAM_ID);
+
+        presenter.initialize(shotDetailView, shotModel);
+
+        presenter.setupStreamTitle();
+
+        verify(shotDetailView).disableStreamTitle();
+    }
+
     private List<Shot> shotList(int shots){
         ArrayList<Shot> shotList = new ArrayList<>();
         for(int i=0;i<shots;i++){

@@ -33,4 +33,8 @@ public interface ShotDetailView  {
     void openShot(ShotModel shotModel);
 
     void goToStreamTimeline(String idStream);
+
+    void disableStreamTitle();
+
+    void enableStreamTitle();
 }
