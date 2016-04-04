@@ -10,10 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -42,9 +39,16 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity
@@ -189,7 +193,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
               @Override public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }
-          }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+          },
+            new ShotDetailWithRepliesAdapter.StreamClickListener() {
+                @Override public void onClick(ShotModel shotModel) {
+                    onStreamTitleClick(shotModel);
+                }
+            }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotImageClick(shot);
               }
@@ -226,6 +235,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
+    }
+
+    private void onStreamTitleClick(ShotModel shotModel) {
+        detailPresenter.handleStreamTitleClick(shotModel);
     }
 
     private void setupPhotoPicker() {
@@ -290,6 +303,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     @Override public void openShot(ShotModel shotModel) {
         startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
+    }
+    
+    @Override public void goToStreamTimeline(String idStream) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream));
     }
 
     private ShotModel extractShotFromIntent() {

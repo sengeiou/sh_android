@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -10,6 +11,7 @@ import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
@@ -25,6 +27,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
+    private final GetCurrentUserInteractor getCurrentUserInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -37,12 +40,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
+      ShareShotInteractor shareShotInteractor, GetCurrentUserInteractor getCurrentUserInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
+        this.getCurrentUserInteractor = getCurrentUserInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -175,6 +179,17 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 }
             });
         }
+    }
+
+    public void handleStreamTitleClick(final ShotModel shotModel) {
+        getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
+            @Override public void onLoaded(User user) {
+                String streamId = shotModel.getStreamId();
+                if (!streamId.equals(user.getIdWatchingStream())) {
+                    shotDetailView.goToStreamTimeline(streamId);
+                }
+            }
+        });
     }
 
     private void startProfileContainerActivity(String username) {
