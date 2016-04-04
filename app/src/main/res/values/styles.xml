@@ -149,11 +149,12 @@
 
     <!-- UI widgets -->
     <style name="LoginFacebookButton">
-        <item name="android:background">@drawable/background_primary_selectable</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/background_facebook_login_button</item>
+        <item name="android:textColor">@color/primary_dark</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="WelcomePageButton">
@@ -169,16 +170,17 @@
     </style>
 
     <style name="LoginEmailButton">
-        <item name="android:background">@drawable/background_btn_login</item>
+        <item name="android:background">@drawable/background_email_login_button</item>
         <item name="android:clickable">true</item>
-        <item name="android:textColor">@color/gray_40</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:alpha">0.8</item>
     </style>
 
     <style name="LoginSessionButton">
         <item name="android:background">@color/transparent</item>x
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/white_bar</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">15sp</item>
         <item name="android:gravity">center_horizontal</item>
