@@ -213,4 +213,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     @Override public void pause() {
         bus.unregister(this);
     }
+
+    public void parentShotClick(ShotModel shotModel) {
+        shotDetailView.openShotParent(shotModel);
+    }
 }
