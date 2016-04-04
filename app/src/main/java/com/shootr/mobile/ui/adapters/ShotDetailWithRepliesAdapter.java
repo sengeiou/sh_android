@@ -434,7 +434,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             streamTitle.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
-                    streamClickListener.onClick(shotModel.getStreamId());
+                    streamClickListener.onClick(shotModel);
                 }
             });
         }
@@ -684,7 +684,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
     
     public interface StreamClickListener{
-        void onClick(String idStream);
+        void onClick(ShotModel shotModel);
     }
     //endregion
 }
