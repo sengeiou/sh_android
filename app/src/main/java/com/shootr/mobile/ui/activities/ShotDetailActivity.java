@@ -304,7 +304,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override public void openShot(ShotModel shotModel) {
         startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
     }
-    
+
     @Override public void goToStreamTimeline(String idStream) {
         startActivity(StreamTimelineActivity.newIntent(this, idStream));
     }

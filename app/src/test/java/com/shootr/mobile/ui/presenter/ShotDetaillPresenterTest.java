@@ -2,25 +2,29 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -34,11 +38,15 @@ import static org.mockito.Mockito.verify;
 public class ShotDetaillPresenterTest {
 
     private static final String ID_SHOT = "idShot";
+    private static final String ID_USER = "idUser";
+    public static final String OTHER_STREAM_ID = "otherStreamId";
+    public static final String STREAM_ID = "streamId";
     private ShotDetailPresenter presenter;
     @Mock GetShotDetailInteractor getShotDetaillInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
+    @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ShotDetailView shotDetailView;
@@ -50,8 +58,7 @@ public class ShotDetaillPresenterTest {
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
-          shareShotInteractor,
-          shotModelMapper,
+          shareShotInteractor, getCurrentUserInteractor, shotModelMapper,
           bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
@@ -160,7 +167,7 @@ public class ShotDetaillPresenterTest {
         setupGetShotDetailWithRepliesInteractorCallback();
         setupMarkNiceShotInteractorCallback();
 
-        presenter.initialize(shotDetailView,shotModel());
+        presenter.initialize(shotDetailView, shotModel());
         presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
@@ -192,8 +199,8 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, ID_SHOT);
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+                any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldSetupNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
@@ -218,8 +225,8 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView,shotModel());
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+                any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
@@ -228,8 +235,8 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView,shotModelNull());
 
         verify(getShotDetaillInteractor,never()).loadShotDetail(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+                any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
@@ -247,6 +254,24 @@ public class ShotDetaillPresenterTest {
         presenter.shotClick(shotModel());
 
         verify(shotDetailView).openShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldGoToStreamTimelineWhenNotConnectedInShotModelStream() throws Exception {
+        setupCurrentUserCallback();
+
+        presenter.handleStreamTitleClick(shotModel());
+
+        verify(shotDetailView).goToStreamTimeline(anyString());
+    }
+
+    @Test public void shouldNotGoToStreamTimelineWhenConnectedInShotModelStream() throws Exception {
+        setupCurrentUserCallback();
+        ShotModel shotModel = shotModel();
+        shotModel.setStreamId(OTHER_STREAM_ID);
+
+        presenter.handleStreamTitleClick(shotModel);
+
+        verify(shotDetailView, never()).goToStreamTimeline(anyString());
     }
 
     private List<Shot> shotList(int shots){
@@ -268,6 +293,7 @@ public class ShotDetaillPresenterTest {
     private ShotModel shotModel(){
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(ID_SHOT);
+        shotModel.setStreamId(STREAM_ID);
         return shotModel;
     }
 
@@ -297,8 +323,9 @@ public class ShotDetaillPresenterTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(unmarkNiceShotInteractor).unmarkNiceShot(anyString(), any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(unmarkNiceShotInteractor).unmarkNiceShot(anyString(),
+                any(Interactor.CompletedCallback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailInteractorCallback() {
@@ -310,8 +337,8 @@ public class ShotDetaillPresenterTest {
                 return null;
             }
         }).when(getShotDetaillInteractor).loadShotDetail(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+                any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailWithRepliesInteractorCallback() {
@@ -322,8 +349,9 @@ public class ShotDetaillPresenterTest {
                 callback.onLoaded(shotDetailWithReplies());
                 return null;
             }
-        }).when(getShotDetaillInteractor).loadShotDetail(anyString(), any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getShotDetaillInteractor).loadShotDetail(anyString(),
+                any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupMarkNiceShotInteractorCallback() {
@@ -335,7 +363,25 @@ public class ShotDetaillPresenterTest {
                 return null;
             }
         }).when(markNiceShotInteractor).markNiceShot(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+                any(Interactor.CompletedCallback.class),
+                any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupCurrentUserCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<User> callback =
+                  (Interactor.Callback<User>) invocation.getArguments()[0];
+                callback.onLoaded(user());
+                return null;
+            }
+        }).when(getCurrentUserInteractor).getCurrentUser(any(Interactor.Callback.class));
+    }
+
+    private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        user.setIdWatchingStream(OTHER_STREAM_ID);
+        return user;
     }
 }
