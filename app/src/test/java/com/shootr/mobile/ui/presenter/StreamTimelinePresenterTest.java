@@ -429,7 +429,8 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(),
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
+          anyString(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -439,7 +440,9 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-        verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyLong(), anyBoolean(),
+        verify(timelineInteractorWrapper).refreshTimeline(anyString(),
+          anyLong(),
+          anyBoolean(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -662,6 +665,16 @@ public class StreamTimelinePresenterTest {
           anyCallback(),
           anyErrorCallback());
         assertThat(booleanArgumentCaptor.getValue()).isTrue();
+    }
+
+    @Test public void shouldNotShowNotificationConfirmation() throws Exception {
+        setupCreateStreamInteractorCallbackWithTopic();
+        setupGetStreamInteractorCallback();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.editStream("");
+
+        verify(streamTimelineView, never()).showNotificationConfirmation(anyString());
     }
 
     //region Matchers
