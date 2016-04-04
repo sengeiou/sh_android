@@ -21,7 +21,7 @@ public interface ShotApiService {
       @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
     @GET("/shot/streamTimeline/firstCall?includeLinks=false&includeAll=true")
-    List<ShotApiEntity> getStreamTimlinefirstCall(@Query("idStream") String streamId, @Query("types") List<String> comment, @Query("sinceTimestamp") Long sinceDate);
+    List<ShotApiEntity> getStreamTimlinefirstCall(@Query("idStream") String streamId, @Query("types") List<String> comment, @Query("sinceTimestamp") Long sinceDate) throws ApiException, IOException;
 
     @GET("/shot/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
