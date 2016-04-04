@@ -100,7 +100,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void initializePresenter() {
-        timelinePresenter.initialize(this);
+        timelinePresenter.initialize(this, false);
     }
     //endregion
 

@@ -8,6 +8,9 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -17,21 +20,25 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ActivityRepository remoteActivityRepository;
+    private final SessionRepository sessionRepository;
 
     private Long currentOldestDate;
     private Callback<ActivityTimeline> callback;
     private ErrorCallback errorCallback;
     private String language;
+    private Boolean isUserActivityTimeline;
 
     @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ActivityRepository remoteActivityRepository) {
+                                                      PostExecutionThread postExecutionThread, @Remote ActivityRepository remoteActivityRepository, SessionRepository sessionRepository) {
         this.remoteActivityRepository = remoteActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
+        this.sessionRepository = sessionRepository;
     }
 
-    public void loadOlderActivityTimeline(Long currentOldestDate, String language, Callback<ActivityTimeline> callback,
-      ErrorCallback errorCallback) {
+    public void loadOlderActivityTimeline(Boolean isUserActivityTimeline, Long currentOldestDate, String language, Callback<ActivityTimeline> callback,
+                                          ErrorCallback errorCallback) {
+        this.isUserActivityTimeline = isUserActivityTimeline;
         this.currentOldestDate = currentOldestDate;
         this.language = language;
         this.callback = callback;
@@ -66,8 +73,24 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
 
     //region Result
     private void notifyTimelineFromActivities(List<Activity> activities) {
-        ActivityTimeline timeline = buildTimeline(activities);
-        notifyLoaded(timeline);
+        if (isUserActivityTimeline) {
+            ActivityTimeline timeline = buildTimeline(retainUsersActivity(activities));
+            notifyLoaded(timeline);
+        } else {
+            ActivityTimeline timeline = buildTimeline(activities);
+            notifyLoaded(timeline);
+        }
+    }
+
+    private List<Activity> retainUsersActivity(List<Activity> activities) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        List<Activity> userActivities = new ArrayList<>();
+        for (Activity activity : activities) {
+            if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+                userActivities.add(activity);
+            }
+        }
+        return userActivities;
     }
 
     private ActivityTimeline buildTimeline(List<Activity> activities) {

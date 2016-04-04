@@ -11,13 +11,15 @@ import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.mappers.ActivityModelMapper;
 import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteractorsWrapper;
-import com.shootr.mobile.ui.views.ActivityTimelineView;
+import com.shootr.mobile.ui.views.MeActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
-public class ActivityTimelinePresenter implements Presenter {
+public class MeActivityTimelinePresenter implements Presenter {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 5 * 1000;
 
@@ -29,15 +31,16 @@ public class ActivityTimelinePresenter implements Presenter {
     private final IntPreference badgeCount;
     private final SessionRepository sessionRepository;
 
-    private ActivityTimelineView timelineView;
+    private MeActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
     private boolean mightHaveMoreActivities = true;
     private boolean isEmpty;
     private Boolean isUserActivityTimeline;
 
-    @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
-      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
+    @Inject
+    public MeActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
+                                     ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
+                                     @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
@@ -47,11 +50,11 @@ public class ActivityTimelinePresenter implements Presenter {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setView(ActivityTimelineView timelineView) {
+    public void setView(MeActivityTimelineView timelineView) {
         this.timelineView = timelineView;
     }
 
-    public void initialize(ActivityTimelineView timelineView, Boolean isUserActivityTimeline) {
+    public void initialize(MeActivityTimelineView timelineView, Boolean isUserActivityTimeline) {
         this.setView(timelineView);
         this.isUserActivityTimeline = isUserActivityTimeline;
         this.loadTimeline();

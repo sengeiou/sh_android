@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
+import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.domain.ActivityTimeline;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -10,6 +11,10 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class RefreshActivityTimelineInteractor implements Interactor {
@@ -23,6 +28,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     private String language;
     private Callback<ActivityTimeline> callback;
     private ErrorCallback errorCallback;
+    private Boolean isUserActivityTimeline;
 
     @Inject public RefreshActivityTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService,
@@ -34,7 +40,8 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void refreshActivityTimeline(String language, Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
+    public void refreshActivityTimeline(Boolean isUserActivityTimeline, String language, Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
+        this.isUserActivityTimeline = isUserActivityTimeline;
         this.language = language;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -48,7 +55,12 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     private synchronized void executeSynchronized() {
         try {
             ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(language);
-            notifyLoaded(activityTimeline);
+            if (isUserActivityTimeline) {
+                setTimelineWithUserActivities(activityTimeline);
+                notifyLoaded(activityTimeline);
+            } else {
+                notifyLoaded(activityTimeline);
+            }
             User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             if (user != null && user.getIdWatchingStream() != null) {
                 shootrTimelineService.refreshTimelinesForStream(user.getIdWatchingStream(), false);
@@ -56,6 +68,22 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         } catch (ShootrException error) {
             notifyError(error);
         }
+    }
+
+    private void setTimelineWithUserActivities(ActivityTimeline activityTimeline) {
+        List<Activity> activities = retainUsersActivity(activityTimeline.getActivities());
+        activityTimeline.setActivities(activities);
+    }
+
+    private List<Activity> retainUsersActivity(List<Activity> activities) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        List<Activity> userActivities = new ArrayList<>();
+        for (Activity activity : activities) {
+            if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+                userActivities.add(activity);
+            }
+        }
+        return userActivities;
     }
 
     //region Result
