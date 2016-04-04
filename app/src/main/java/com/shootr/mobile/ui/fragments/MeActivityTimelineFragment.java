@@ -23,9 +23,8 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.presenter.MeActivityTimelinePresenter;
+import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
 import com.shootr.mobile.ui.views.MeActivityTimelineView;
-import com.shootr.mobile.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -42,8 +41,7 @@ import dagger.ObjectGraph;
 public class MeActivityTimelineFragment extends BaseFragment implements MeActivityTimelineView {
 
     //region Fields
-    @Inject
-    MeActivityTimelinePresenter timelinePresenter;
+    @Inject GenericActivityTimelinePresenter timelinePresenter;
 
     @Inject
     ImageLoader imageLoader;
