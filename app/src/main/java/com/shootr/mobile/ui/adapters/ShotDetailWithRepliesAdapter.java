@@ -12,8 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -26,9 +25,13 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -42,6 +45,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AvatarClickListener avatarClickListener;
     private final ShotClickListener parentShotClickListener;
     private final ShotClickListener replyShotClickListener;
+    private final StreamClickListener streamClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -62,7 +66,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener, ImageClickListener imageClickListener,
+      ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener, StreamClickListener
+                                                streamClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       PinToProfileClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
       OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
@@ -70,6 +75,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
         this.replyShotClickListener = replyShotClickListener;
+        this.streamClickListener = streamClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -417,7 +423,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             return timeFormatter.getDateAndTimeDetailed(date.getTime());
         }
 
-        private void showStreamTitle(ShotModel shotModel) {
+        private void showStreamTitle(final ShotModel shotModel) {
             String title = shotModel.getStreamTitle();
             if (title != null) {
                 streamTitle.setText(shotModel.getStreamTitle());
@@ -425,6 +431,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 streamTitle.setVisibility(View.GONE);
             }
+
+            streamTitle.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    streamClickListener.onClick(shotModel.getStreamId());
+                }
+            });
         }
 
         private void setupPinToProfileContainer(final ShotModel shotModel){
@@ -667,8 +679,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         void onClick(ShotModel shot);
     }
 
-    public interface ShotClickListener{
+    public interface ShotClickListener {
         void onClick(ShotModel shot);
+    }
+    
+    public interface StreamClickListener{
+        void onClick(String idStream);
     }
     //endregion
 }
