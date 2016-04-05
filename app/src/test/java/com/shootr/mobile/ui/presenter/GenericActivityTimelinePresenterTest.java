@@ -220,7 +220,8 @@ public class GenericActivityTimelinePresenterTest {
 
     private void setupLoadEmptyTimelineCallback() {
         doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ActivityTimeline> callback =
                         (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
                 callback.onLoaded(emptyTimeline());
