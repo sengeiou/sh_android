@@ -13,6 +13,15 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.8.1] - 2016-04-5
+
+### Changed
+- Login Selection Activity
+
+### Fixed
+- Eliminado permiso duplicado
+- Corregido Bug en ShotApiService
+
 ## [1.8.0] - 2016-04-1
 
 ### Changed
