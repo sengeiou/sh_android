@@ -172,7 +172,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           shotTextSpannableBuilder,
           avatarClickListener,
           onUsernameClickListener,
-          streamTitleClickListener);
+          streamTitleClickListener,
+          onShotClick);
     }
 
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
