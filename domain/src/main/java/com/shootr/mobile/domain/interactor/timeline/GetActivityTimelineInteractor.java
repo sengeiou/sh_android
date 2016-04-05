@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class GetActivityTimelineInteractor implements Interactor {
@@ -43,7 +44,8 @@ public class GetActivityTimelineInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Exception {
+    @Override
+    public void execute() throws Exception {
         loadLocalActivities();
     }
 
@@ -99,7 +101,8 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     private void notifyLoaded(final ActivityTimeline timeline) {
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 callback.onLoaded(timeline);
             }
         });
