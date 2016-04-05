@@ -650,15 +650,15 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showNotificationConfirmation(final String topic) {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.title_message_notification)
-          .setMessage(getString(R.string.message_notification_confirmation_text))
-          .setPositiveButton(getString(R.string.message_notification_confirmation_yes),
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
+          .setMessage(getString(R.string.pin_message_notification_confirmation_text))
+          .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     streamTimelinePresenter.notifyMessage(topic, true);
                 }
             })
-          .setNegativeButton(getString(R.string.message_notification_confirmation_no),
+          .setNegativeButton(getString(R.string.pin_message_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     streamTimelinePresenter.notifyMessage(topic, false);

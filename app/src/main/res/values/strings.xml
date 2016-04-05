@@ -383,8 +383,8 @@
     <string name="topic">Topic</string>
     <string name="watch_profile_photo">View</string>
     <string name="title_menu_photo">Photo</string>
-    <string name="title_message_notification">Notify Message?</string>
-    <string name="message_notification_confirmation_text">Message will be notified to current participants and the people with the stream in Favorites.</string>
-    <string name="message_notification_confirmation_yes">Notify</string>
-    <string name="message_notification_confirmation_no">No</string>
+    <string name="title_pin_message_notification">Notify Message?</string>
+    <string name="pin_message_notification_confirmation_text">Message will be notified to current participants and the people with the stream in Favorites.</string>
+    <string name="pin_message_notification_confirmation_yes">Notify</string>
+    <string name="pin_message_notification_confirmation_no">No</string>
 </resources>
