@@ -54,4 +54,5 @@
     <color name="intro_create_background">#4CAF50</color>
     <color name="intro_friends_background">#EF6C00</color>
     <color name="intro_streams_background">#F06292</color>
+    <color name="legal_disclaimer_text_color">#81D4FA</color>
 </resources>

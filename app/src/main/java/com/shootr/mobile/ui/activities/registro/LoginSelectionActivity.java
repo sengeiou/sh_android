@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities.registro;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
@@ -12,6 +13,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -85,6 +87,14 @@ public class LoginSelectionActivity extends BaseActivity {
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setupDisclaimerLinks();
+        setupStatusBarColor();
+    }
+
+    private void setupStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+        }
     }
 
     private void setupDisclaimerLinks() {
@@ -155,7 +165,7 @@ public class LoginSelectionActivity extends BaseActivity {
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     super.updateDrawState(ds);
-                    ds.setColor(getResources().getColor(R.color.primary));
+                    ds.setColor(getResources().getColor(R.color.white));
                     ds.setUnderlineText(false);
                 }
 
