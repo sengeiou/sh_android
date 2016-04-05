@@ -67,6 +67,7 @@ public class StreamTimelinePresenterTest {
     private static final String SHORT_TITLE = "shortTitle";
     private static final String DESCRIPTION = "description";
     private static final String EMPTY_TOPIC = "";
+    private static final boolean NOTIFY = true;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -676,6 +677,16 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).showNotificationConfirmation(anyString());
     }
 
+    @Test public void shouldShowTopicSnackBarWhenNotifyMessageAndTopicIsNotEmpty() throws Exception {
+        setupCreateStreamInteractorCallbackWithTopic();
+        setupGetStreamInteractorCallback();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.notifyMessage(TOPIC, NOTIFY);
+
+        verify(streamTimelineView, times(2)).showTopicSnackBar(TOPIC);
+    }
+    
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
