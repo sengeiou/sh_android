@@ -601,7 +601,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.editStream(TOPIC);
 
-        verify(streamTimelineView, times(2)).showTopicSnackBar(anyString());
+        verify(streamTimelineView).showTopicSnackBar(anyString());
     }
 
     @Test public void shouldNotShowSnackBarWhenEditStreamAndStreamTopicIsEmpty() throws Exception {
@@ -850,7 +850,7 @@ public class StreamTimelinePresenterTest {
     private void setupCreateStreamInteractorCallbackWithTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStream());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream());
                 return null;
             }
         }).when(createStreamInteractor).sendStream(anyString(),
@@ -858,6 +858,7 @@ public class StreamTimelinePresenterTest {
           anyString(),
           anyString(),
           anyString(),
+          anyBoolean(),
           anyBoolean(),
           any(CreateStreamInteractor.Callback.class),
           anyErrorCallback());
@@ -869,7 +870,7 @@ public class StreamTimelinePresenterTest {
                 ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStreamWithEmptyTopic());
                 return null;
             }
-        }).when(createStreamInteractor).sendStream(anyString(), anyString(), anyString(), anyString(),anyString(), anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
+        }).when(createStreamInteractor).sendStream(anyString(), anyString(), anyString(), anyString(),anyString(), anyBoolean(), anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
     }
 
     private void setupFirstShotPosition() {

@@ -185,6 +185,7 @@ public class NewStreamPresenter implements Presenter {
           description,
           currentStreamTopic,
           notifyCreation,
+          false,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   streamCreated(stream);

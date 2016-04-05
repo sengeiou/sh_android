@@ -36,7 +36,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream);
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
-            localStreamDataSource.putStream(streamEntity);
+            localStreamDataSource.putStream(streamEntity, false);
             Stream stream = streamEntityMapper.transform(streamEntity);
             streamCache.putStream(stream);
             return stream;
@@ -53,16 +53,16 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override public Stream putStream(Stream stream) {
-        return putStream(stream, false);
+        return putStream(stream, false, false);
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
         StreamEntity currentOrNewEntity = syncableStreamEntityFactory.updatedOrNewEntity(stream);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
-        StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity);
+        StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity, notifyMessage);
         markEntityAsSynchronized(remoteStreamEntity);
-        localStreamDataSource.putStream(remoteStreamEntity);
+        localStreamDataSource.putStream(remoteStreamEntity, notifyMessage);
         return streamEntityMapper.transform(remoteStreamEntity);
     }
 
@@ -82,7 +82,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
         if (blogStream != null) {
             markEntityAsSynchronized(blogStream);
-            localStreamDataSource.putStream(blogStream);
+            localStreamDataSource.putStream(blogStream, false);
             return streamEntityMapper.transform(blogStream);
         } else {
             return null;
@@ -93,7 +93,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         StreamEntity helpStream = remoteStreamDataSource.getHelpStream(country, language);
         if (helpStream != null) {
             markEntityAsSynchronized(helpStream);
-            localStreamDataSource.putStream(helpStream);
+            localStreamDataSource.putStream(helpStream, false);
             return streamEntityMapper.transform(helpStream);
         } else {
             return null;

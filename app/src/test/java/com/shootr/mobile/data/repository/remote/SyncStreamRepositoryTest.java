@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,7 +60,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getBlogStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource).putStream(any(StreamEntity.class));
+        verify(localStreamDataSource).putStream(any(StreamEntity.class), anyBoolean());
     }
 
     @Test public void shouldNotPutStreamInLocalWhenGetBlogStreamAndRemoteBlogStreamIsNull() throws Exception {
@@ -67,7 +68,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getBlogStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class));
+        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class), anyBoolean());
     }
 
     @Test public void shouldPutStreamInLocalWhenGetHelpStreamAndRemoteHelpStreamIsNotNull() throws Exception {
@@ -75,7 +76,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getHelpStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource).putStream(any(StreamEntity.class));
+        verify(localStreamDataSource).putStream(any(StreamEntity.class), anyBoolean());
     }
 
     @Test public void shouldNotPutStreamInLocalWhenGetHelpStreamAndRemoteHelpStreamIsNull() throws Exception {
@@ -83,7 +84,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getHelpStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class));
+        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class), anyBoolean());
     }
 
     private StreamEntity streamEntity(){

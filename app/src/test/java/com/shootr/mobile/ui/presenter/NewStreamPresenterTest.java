@@ -143,7 +143,7 @@ public class NewStreamPresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStreamWithNullTopic());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
         }).when(createStreamInteractor)
@@ -152,6 +152,7 @@ public class NewStreamPresenterTest {
             anyString(),
             anyString(),
             anyString(),
+            anyBoolean(),
             anyBoolean(),
             any(CreateStreamInteractor.Callback.class),
             any(Interactor.ErrorCallback.class));

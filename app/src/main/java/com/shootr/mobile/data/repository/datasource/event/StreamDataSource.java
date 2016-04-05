@@ -10,7 +10,7 @@ public interface StreamDataSource {
 
     List<StreamEntity> getStreamByIds(List<String> streamIds);
 
-    StreamEntity putStream(StreamEntity streamEntity);
+    StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
 
     List<StreamEntity> putStreams(List<StreamEntity> streams);
 

@@ -43,7 +43,7 @@ public class LocalStreamRepository implements StreamRepository {
     private StreamEntity fallbackOnSearchResults(String idEvent) {
         StreamEntity streamEntity = localStreamSearchDataSource.getStreamResult(idEvent);
         if (streamEntity != null) {
-            localStreamDataSource.putStream(streamEntity);
+            localStreamDataSource.putStream(streamEntity, false);
         }
         return streamEntity;
     }
@@ -55,11 +55,11 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public Stream putStream(Stream stream) {
         StreamEntity streamEntity = streamEntityMapper.transform(stream);
-        localStreamDataSource.putStream(streamEntity);
+        localStreamDataSource.putStream(streamEntity, false);
         return stream;
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
         throw new IllegalStateException("Notify not allowed in local repository.");
     }
 

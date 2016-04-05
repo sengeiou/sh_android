@@ -571,7 +571,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         sendStream(topic, notify);
     }
 
-    private void sendStream(String topic, Boolean notify) {
+    private void sendStream(String topic, Boolean notifyMessage) {
         String title = filterTitle(streamTitle);
         String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
@@ -583,6 +583,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           description,
           topic,
           false,
+          notifyMessage,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   streamTopic = stream.getTopic();

@@ -36,12 +36,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public StreamEntity putStream(StreamEntity streamEntity) {
+    @Override public StreamEntity putStream(StreamEntity streamEntity, Boolean notifyMessage) {
         try {
             if (streamEntity.getIdStream() == null) {
                 return streamApiService.createStream(streamEntity);
             } else {
-                return streamApiService.updateStream(streamEntity);
+                return streamApiService.updateStream(streamEntity, notifyMessage);
             }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
