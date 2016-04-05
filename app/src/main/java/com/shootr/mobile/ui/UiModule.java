@@ -2,7 +2,7 @@ package com.shootr.mobile.ui;
 
 import android.os.Handler;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
-import com.shootr.mobile.ui.activities.ActivityTimelineContainerActivity;
+import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
@@ -73,7 +73,7 @@ import javax.inject.Singleton;
     ResetPasswordActivity.class,
     ListingActivity.class,
     FavoritesFragment.class,
-    ActivityTimelineContainerActivity.class,
+    ActivityTimelinesContainerActivity.class,
     ActivityTimelineFragment.class,
     FindStreamsActivity.class,
     WhaleActivity.class,
