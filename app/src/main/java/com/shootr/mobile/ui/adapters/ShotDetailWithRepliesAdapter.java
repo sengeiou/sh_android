@@ -54,7 +54,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
-    private final PinToProfileClickListener onClickListenerPinToProfile;
+    private final ShotClickListener onClickListenerPinToProfile;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -66,11 +66,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener, StreamClickListener
+                                        ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener, StreamClickListener
                                                 streamClickListener, ImageClickListener imageClickListener,
-      OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
-      PinToProfileClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
+                                        OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
+                                        ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
+                                        OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -95,14 +95,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         notifyItemChanged(getPositionMainShot());
     }
 
-    public void hidePinToProfileButton(){
-        if(mainHolder != null) {
+    public void hidePinToProfileButton() {
+        if (mainHolder != null) {
             mainHolder.hidePintToProfileContainer();
         }
     }
 
-    public void showPinToProfileContainer(){
-        if(mainHolder != null) {
+    public void showPinToProfileContainer() {
+        if (mainHolder != null) {
             mainHolder.showPintToProfileContainer();
         }
     }
@@ -121,7 +121,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         if (position == getPositionParentShot()) {
             return TYPE_PARENT_SHOT;
         } else if (position == getPositionMainShot()) {
@@ -165,7 +166,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         notifyItemRemoved(0);
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         int itemCount = 1;
         if (hasParent()) {
             itemCount++;
@@ -177,7 +179,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return itemCount;
     }
 
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View itemView;
         switch (viewType) {
@@ -197,11 +200,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 return new ShotDetailReplyHolder(itemView);
             default:
                 throw new IllegalArgumentException(String.format("ItemViewType %d has no ViewHolder associated",
-                  viewType));
+                        viewType));
         }
     }
 
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_PARENT_SHOT:
                 bindParentShotViewHolder((ShotDetailParentViewHolder) holder);
@@ -230,7 +234,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindRepliesHeaderHolder(ShotDetailRepliesHeaderHolder holder) {
         String repliesCountText = holder.itemView.getResources()
-          .getQuantityString(R.plurals.replies_header_count_pattern, replies.size(), replies.size());
+                .getQuantityString(R.plurals.replies_header_count_pattern, replies.size(), replies.size());
         ((TextView) holder.itemView).setText(repliesCountText);
     }
 
@@ -255,11 +259,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     }
 
-    public void disableStreamTitle(){
+    public void disableStreamTitle() {
         mainHolder.disableStreamTitle();
     }
 
-    public void enableStreamTitle(){
+    public void enableStreamTitle() {
         mainHolder.enableStreamTitle();
     }
 
@@ -267,19 +271,32 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        @Bind(R.id.shot_detail_avatar) ImageView avatar;
-        @Bind(R.id.shot_detail_user_name) TextView username;
-        @Bind(R.id.shot_detail_timestamp) TextView timestamp;
-        @Bind(R.id.shot_detail_text) ClickableTextView shotText;
-        @Bind(R.id.shot_detail_image) ImageView shotImage;
-        @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
-        @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
-        @Bind(R.id.shot_video_frame) View videoFrame;
-        @Bind(R.id.shot_video_title) TextView videoTitle;
-        @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
-        @Bind(R.id.shot_nice_count) TextView niceCount;
-        @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
+        @Bind(R.id.shot_detail_avatar)
+        ImageView avatar;
+        @Bind(R.id.shot_detail_user_name)
+        TextView username;
+        @Bind(R.id.shot_detail_timestamp)
+        TextView timestamp;
+        @Bind(R.id.shot_detail_text)
+        ClickableTextView shotText;
+        @Bind(R.id.shot_detail_image)
+        ImageView shotImage;
+        @Bind(R.id.shot_detail_stream_title)
+        TextView streamTitle;
+        @Bind(R.id.shot_detail_parent_toggle)
+        ImageView parentToggleButton;
+        @Bind(R.id.shot_video_frame)
+        View videoFrame;
+        @Bind(R.id.shot_video_title)
+        TextView videoTitle;
+        @Bind(R.id.shot_video_duration)
+        TextView videoDuration;
+        @Bind(R.id.shot_nice_button)
+        NiceButtonView niceButton;
+        @Bind(R.id.shot_nice_count)
+        TextView niceCount;
+        @Bind(R.id.shot_detail_pin_to_profile_container)
+        LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -338,7 +355,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setupAvatar(final ShotModel shotModel) {
             imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     avatarClickListener.onClick(shotModel.getIdUser());
                 }
             });
@@ -357,7 +375,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setNiceButton(final ShotModel shotModel) {
             niceButton.setChecked(shotModel.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
@@ -370,12 +389,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setNiceCount(Integer niceCount) {
             this.niceCount.setVisibility(View.VISIBLE);
             this.niceCount.setText(context.getResources()
-              .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+                    .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
         }
 
         public void setComment(String comment) {
             CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-              onUsernameClickListener);
+                    onUsernameClickListener);
             shotText.setText(spannedComment);
             shotText.addLinks();
         }
@@ -384,7 +403,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             shotImage.setVisibility(View.VISIBLE);
             imageLoader.loadTimelineImage(imageUrl, shotImage);
             shotImage.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     imageClickListener.onClick(shotModel);
                 }
             });
@@ -396,7 +416,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.videoTitle.setText(shotModel.getVideoTitle());
             this.videoDuration.setText(shotModel.getVideoDuration());
             this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     videoClickListener.onVideoClick(shotModel.getVideoUrl());
                 }
             });
@@ -405,7 +426,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setReply() {
             parentToggleButton.setVisibility(View.VISIBLE);
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (isShowingParent()) {
                         hideParent();
                         parentToggleButton.setImageResource(R.drawable.ic_arrow_down_24_gray50);
@@ -420,8 +442,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         private String getUsernameTitle(ShotModel shotModel) {
             if (shotModel.isReply()) {
                 return resources.getString(R.string.reply_name_pattern,
-                  shotModel.getUsername(),
-                  shotModel.getReplyUsername());
+                        shotModel.getUsername(),
+                        shotModel.getReplyUsername());
             } else {
                 return shotModel.getUsername();
             }
@@ -440,35 +462,37 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 streamTitle.setVisibility(View.GONE);
             }
             streamTitle.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     streamClickListener.onClick(shotModel);
                 }
             });
         }
 
-        public void disableStreamTitle(){
+        public void disableStreamTitle() {
             streamTitle.setTextColor(context.getResources().getColor(R.color.gray_material));
             streamTitle.setEnabled(false);
         }
 
-        public void enableStreamTitle(){
+        public void enableStreamTitle() {
             streamTitle.setTextColor(context.getResources().getColor(R.color.links));
             streamTitle.setEnabled(true);
         }
 
-        private void setupPinToProfileContainer(final ShotModel shotModel){
+        private void setupPinToProfileContainer(final ShotModel shotModel) {
             pinToProfileContainer.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     onClickListenerPinToProfile.onClick(shotModel);
                 }
             });
         }
 
-        public void hidePintToProfileContainer(){
+        public void hidePintToProfileContainer() {
             pinToProfileContainer.setVisibility(View.GONE);
         }
 
-        public void showPintToProfileContainer(){
+        public void showPintToProfileContainer() {
             pinToProfileContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -477,18 +501,30 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private Context context;
 
-        @Bind(R.id.shot_detail_parent_progress) View progress;
-        @Bind(R.id.shot_detail_parent_shot) View shot;
-        @Bind(R.id.shot_detail_parent) FrameLayout container;
-        @Bind(R.id.shot_avatar) public ImageView avatar;
-        @Bind(R.id.shot_user_name) public TextView name;
-        @Bind(R.id.shot_timestamp) public TextView timestamp;
-        @Bind(R.id.shot_text) public ClickableTextView text;
-        @Bind(R.id.shot_image) public ImageView image;
-        @Bind(R.id.shot_video_frame) View videoFrame;
-        @Bind(R.id.shot_video_title) TextView videoTitle;
-        @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
+        @Bind(R.id.shot_detail_parent_progress)
+        View progress;
+        @Bind(R.id.shot_detail_parent_shot)
+        View shot;
+        @Bind(R.id.shot_detail_parent)
+        FrameLayout container;
+        @Bind(R.id.shot_avatar)
+        public ImageView avatar;
+        @Bind(R.id.shot_user_name)
+        public TextView name;
+        @Bind(R.id.shot_timestamp)
+        public TextView timestamp;
+        @Bind(R.id.shot_text)
+        public ClickableTextView text;
+        @Bind(R.id.shot_image)
+        public ImageView image;
+        @Bind(R.id.shot_video_frame)
+        View videoFrame;
+        @Bind(R.id.shot_video_title)
+        TextView videoTitle;
+        @Bind(R.id.shot_video_duration)
+        TextView videoDuration;
+        @Bind(R.id.shot_nice_button)
+        CheckableImageView niceButton;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -507,11 +543,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.name.setText(getUsernameTitle(shotModel));
 
             String comment = shotModel.getComment();
-           if (comment != null) {
-               CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                 onUsernameClickListener);
-               this.text.setText(spannedComment);
-               this.text.addLinks();
+            if (comment != null) {
+                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                        onUsernameClickListener);
+                this.text.setText(spannedComment);
+                this.text.addLinks();
             } else {
                 this.text.setVisibility(View.GONE);
             }
@@ -522,7 +558,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String photo = shotModel.getPhoto();
             imageLoader.loadProfilePhoto(photo, this.avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     avatarClickListener.onClick(shotModel.getIdUser());
                 }
             });
@@ -532,7 +569,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.image.setVisibility(View.VISIBLE);
                 imageLoader.loadTimelineImage(imageUrl, this.image);
                 image.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         imageClickListener.onClick(shotModel);
                     }
                 });
@@ -557,7 +595,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(shotModel.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
@@ -567,7 +606,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
 
             container.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     parentShotClickListener.onClick(shotModel);
                 }
             });
@@ -576,8 +616,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         private String getUsernameTitle(ShotModel shotModel) {
             if (shotModel.isReply()) {
                 return resources.getString(R.string.reply_name_pattern,
-                  shotModel.getUsername(),
-                  shotModel.getReplyUsername());
+                        shotModel.getUsername(),
+                        shotModel.getReplyUsername());
             } else {
                 return shotModel.getUsername();
             }
@@ -593,16 +633,26 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.shot_reply_container) RelativeLayout container;
-        @Bind(R.id.shot_avatar) public ImageView avatar;
-        @Bind(R.id.shot_user_name) public TextView name;
-        @Bind(R.id.shot_timestamp) public TextView timestamp;
-        @Bind(R.id.shot_text) public ClickableTextView text;
-        @Bind(R.id.shot_image) public ImageView image;
-        @Bind(R.id.shot_video_frame) View videoFrame;
-        @Bind(R.id.shot_video_title) TextView videoTitle;
-        @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+        @Bind(R.id.shot_reply_container)
+        RelativeLayout container;
+        @Bind(R.id.shot_avatar)
+        public ImageView avatar;
+        @Bind(R.id.shot_user_name)
+        public TextView name;
+        @Bind(R.id.shot_timestamp)
+        public TextView timestamp;
+        @Bind(R.id.shot_text)
+        public ClickableTextView text;
+        @Bind(R.id.shot_image)
+        public ImageView image;
+        @Bind(R.id.shot_video_frame)
+        View videoFrame;
+        @Bind(R.id.shot_video_title)
+        TextView videoTitle;
+        @Bind(R.id.shot_video_duration)
+        TextView videoDuration;
+        @Bind(R.id.shot_nice_button)
+        NiceButtonView niceButton;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);
@@ -616,7 +666,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
                 CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                  onUsernameClickListener);
+                        onUsernameClickListener);
                 this.text.setText(spannedComment);
                 this.text.addLinks();
             } else {
@@ -629,7 +679,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String photo = reply.getPhoto();
             imageLoader.loadProfilePhoto(photo, this.avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     avatarClickListener.onClick(reply.getIdUser());
                 }
             });
@@ -639,7 +690,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.image.setVisibility(View.VISIBLE);
                 imageLoader.loadTimelineImage(imageUrl, this.image);
                 image.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         imageClickListener.onClick(reply);
                     }
                 });
@@ -664,7 +716,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(reply.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (reply.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(reply.getIdShot());
                     } else {
@@ -674,7 +727,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
 
             container.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     replyShotClickListener.onClick(reply);
                 }
             });
@@ -691,16 +745,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         void onClick(ShotModel shot);
     }
 
-    public interface PinToProfileClickListener {
-
-        void onClick(ShotModel shot);
-    }
-
     public interface ShotClickListener {
         void onClick(ShotModel shot);
     }
-    
-    public interface StreamClickListener{
+
+    public interface StreamClickListener {
         void onClick(ShotModel shotModel);
     }
     //endregion

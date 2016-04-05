@@ -180,29 +180,35 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private void setupAdapter() {
         detailAdapter =
-          new ShotDetailWithRepliesAdapter(imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-              @Override public void onClick(String userId) {
-                  onShotAvatarClick(userId);
-              }
-          }, //
-            new ShotDetailWithRepliesAdapter.ShotClickListener() {
-                @Override public void onClick(ShotModel shot) {
-                    onShotClick(shot);
-                }
-            }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
-              @Override public void onClick(ShotModel shot) {
+          new ShotDetailWithRepliesAdapter(imageLoader,
+                  new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+                      @Override
+                      public void onClick(String userId) {
+                          onShotAvatarClick(userId);
+                      }
+                  }, //
+                  new ShotDetailWithRepliesAdapter.ShotClickListener() {
+                      @Override
+                      public void onClick(ShotModel shot) {
+                          onShotClick(shot);
+                      }
+                  }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
+              @Override
+              public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }
           },
-            new ShotDetailWithRepliesAdapter.StreamClickListener() {
-                @Override public void onClick(ShotModel shotModel) {
-                    onStreamTitleClick(shotModel);
-                }
-            }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
-              @Override public void onClick(ShotModel shot) {
+                  new ShotDetailWithRepliesAdapter.StreamClickListener() {
+                      @Override
+                      public void onClick(ShotModel shotModel) {
+                          onStreamTitleClick(shotModel);
+                      }
+                  }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+              @Override
+              public void onClick(ShotModel shot) {
                   onShotImageClick(shot);
               }
-          }, //
+          },//
             new OnVideoClickListener() {
                 @Override public void onVideoClick(String url) {
                     onShotVideoClick(url);
@@ -213,7 +219,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     onShotUsernameClick(username);
                 }
             }, //
-            new ShotDetailWithRepliesAdapter.PinToProfileClickListener() {
+            new ShotDetailWithRepliesAdapter.ShotClickListener() {
 
                 @Override public void onClick(ShotModel shot) {
                     pinShotPresenter.pinToProfile(shot);
