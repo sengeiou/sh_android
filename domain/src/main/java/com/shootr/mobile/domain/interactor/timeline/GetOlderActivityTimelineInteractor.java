@@ -95,7 +95,7 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
             }
         }
         if (userActivities.isEmpty()) {
-            currentOldestDate = activities.get(activities.size() -1).getPublishDate().getTime();
+            currentOldestDate = activities.get(0).getPublishDate().getTime();
             loadOlderTimeline();
         }
         return userActivities;
