@@ -93,9 +93,10 @@ public class RefreshActivityTimelineInteractorTest {
         verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
-    @Test public void AndIsUserTimeline() throws Exception {
+    @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivityAndIsUserTimeline() throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUser()).thenReturn(user());
+
         interactor.refreshActivityTimeline(IS_USER_ACTIVITY_TIMELINE, anyString(), spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForActivity());
