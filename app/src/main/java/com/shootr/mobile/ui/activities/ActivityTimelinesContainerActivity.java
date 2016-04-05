@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.shootr.mobile.R;
@@ -22,7 +21,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActivity {
+public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActivity {
 
     @Bind(R.id.activity_pager)
     ViewPager viewPager;
