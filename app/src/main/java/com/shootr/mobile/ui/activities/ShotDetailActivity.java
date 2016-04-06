@@ -181,11 +181,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                   onShotAvatarClick(userId);
               }
           }, //
-            new ShotDetailWithRepliesAdapter.ParentShotClickListener() {
+            new ShotDetailWithRepliesAdapter.ShotClickListener() {
                 @Override public void onClick(ShotModel shot) {
                     onShotClick(shot);
                 }
-            }, new ShotDetailWithRepliesAdapter.ReplyShotClickListener() {
+            }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }

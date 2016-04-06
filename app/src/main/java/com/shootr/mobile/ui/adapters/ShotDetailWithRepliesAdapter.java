@@ -40,8 +40,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
-    private final ParentShotClickListener parentShotClickListener;
-    private final ReplyShotClickListener replyShotClickListener;
+    private final ShotClickListener parentShotClickListener;
+    private final ShotClickListener replyShotClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -62,7 +62,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ParentShotClickListener parentShotClickListener, ReplyShotClickListener replyShotClickListener, ImageClickListener imageClickListener,
+      ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       PinToProfileClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
       OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
@@ -667,11 +667,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         void onClick(ShotModel shot);
     }
 
-    public interface ParentShotClickListener{
-        void onClick(ShotModel shot);
-    }
-
-    public interface ReplyShotClickListener{
+    public interface ShotClickListener{
         void onClick(ShotModel shot);
     }
     //endregion
