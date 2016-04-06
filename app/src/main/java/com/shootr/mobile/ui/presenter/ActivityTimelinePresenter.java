@@ -11,15 +11,13 @@ import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.mappers.ActivityModelMapper;
 import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteractorsWrapper;
-import com.shootr.mobile.ui.views.GenericActivityTimelineView;
+import com.shootr.mobile.ui.views.ActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class GenericActivityTimelinePresenter implements Presenter {
+public class ActivityTimelinePresenter implements Presenter {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 5 * 1000;
 
@@ -31,16 +29,14 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private final IntPreference badgeCount;
     private final SessionRepository sessionRepository;
 
-    private GenericActivityTimelineView timelineView;
+    private ActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
     private boolean mightHaveMoreActivities = true;
     private boolean isEmpty;
-    private Boolean isUserActivityTimeline;
 
-    @Inject
-    public GenericActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-                                     ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
-                                     @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
+    @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
+      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
+      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
@@ -50,13 +46,12 @@ public class GenericActivityTimelinePresenter implements Presenter {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setView(GenericActivityTimelineView timelineView) {
+    public void setView(ActivityTimelineView timelineView) {
         this.timelineView = timelineView;
     }
 
-    public void initialize(GenericActivityTimelineView timelineView, Boolean isUserActivityTimeline) {
+    public void initialize(ActivityTimelineView timelineView) {
         this.setView(timelineView);
-        this.isUserActivityTimeline = isUserActivityTimeline;
         this.loadTimeline();
         poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
@@ -78,9 +73,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
     }
 
     protected void loadTimeline() {
-        activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
+        activityTimelineInteractorWrapper.loadTimeline(new Interactor.Callback<ActivityTimeline>() {
+            @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
                 timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                 isEmpty = activityModels.isEmpty();
@@ -116,14 +110,13 @@ public class GenericActivityTimelinePresenter implements Presenter {
             timelineView.hideEmpty();
             timelineView.showLoadingActivity();
         }
-        activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
+        activityTimelineInteractorWrapper.refreshTimeline(new Interactor.Callback<ActivityTimeline>() {
+            @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> newActivity = activityModelMapper.transform(timeline.getActivities());
                 boolean hasNewActivity = !newActivity.isEmpty();
                 if (isEmpty && hasNewActivity) {
                     isEmpty = false;
-                } else if (isEmpty && !hasNewActivity) {
+                }else if (isEmpty && !hasNewActivity) {
                     timelineView.showEmpty();
                 }
                 if (hasNewActivity) {
@@ -135,8 +128,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
                 timelineView.hideLoadingActivity();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 timelineView.hideLoading();
                 timelineView.hideLoadingActivity();
@@ -147,9 +139,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private void loadOlderActivities(long lastActivityInScreenDate) {
         isLoadingOlderActivities = true;
         timelineView.showLoadingOldActivities();
-        activityTimelineInteractorWrapper.obtainOlderTimeline(isUserActivityTimeline, lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
+        activityTimelineInteractorWrapper.obtainOlderTimeline(lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
+            @Override public void onLoaded(ActivityTimeline timeline) {
                 isLoadingOlderActivities = false;
                 timelineView.hideLoadingOldActivities();
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
@@ -160,8 +151,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
                 }
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 timelineView.hideLoadingOldActivities();
                 timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }

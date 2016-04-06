@@ -383,6 +383,4 @@
     <string name="topic">Topic</string>
     <string name="watch_profile_photo">View</string>
     <string name="title_menu_photo">Photo</string>
-    <string name="drawer_activity_me">Me</string>
-    <string name="drawer_following_activity_title">Following</string>
 </resources>

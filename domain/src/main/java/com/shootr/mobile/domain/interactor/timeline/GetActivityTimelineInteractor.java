@@ -8,12 +8,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetActivityTimelineInteractor implements Interactor {
@@ -22,30 +18,25 @@ public class GetActivityTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ActivityRepository localActivityRepository;
-    private final SessionRepository sessionRepository;
     private Callback callback;
     private String locale;
-    private Boolean isUserActivityTimeline;
 
     @Inject
     public GetActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-                                         @Local ActivityRepository localActivityRepository, SessionRepository sessionRepository) {
+      @Local ActivityRepository localActivityRepository) {
         this.localActivityRepository = localActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.sessionRepository = sessionRepository;
     }
     //endregion
 
-    public void loadActivityTimeline(Boolean isUserActivityTimeline, String language, Callback<ActivityTimeline> callback) {
-        this.isUserActivityTimeline = isUserActivityTimeline;
+    public void loadActivityTimeline(String language, Callback<ActivityTimeline> callback) {
         this.locale = language;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
         loadLocalActivities();
     }
 
@@ -72,26 +63,8 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     //region Result
     private void notifyTimelineFromActivities(List<Activity> activities) {
-        List<Activity> userActivities = retainUsersActivity(activities);
-        if (isUserActivityTimeline) {
-            ActivityTimeline timeline = buildTimeline(userActivities);
-            notifyLoaded(timeline);
-        } else {
-            activities.removeAll(userActivities);
-            ActivityTimeline timeline = buildTimeline(activities);
-            notifyLoaded(timeline);
-        }
-    }
-
-    private List<Activity> retainUsersActivity(List<Activity> activities) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<Activity> userActivities = new ArrayList<>();
-        for (Activity activity : activities) {
-            if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-                userActivities.add(activity);
-            }
-        }
-        return userActivities;
+        ActivityTimeline timeline = buildTimeline(activities);
+        notifyLoaded(timeline);
     }
 
     private ActivityTimeline buildTimeline(List<Activity> activities) {
@@ -102,8 +75,7 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     private void notifyLoaded(final ActivityTimeline timeline) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(timeline);
             }
         });

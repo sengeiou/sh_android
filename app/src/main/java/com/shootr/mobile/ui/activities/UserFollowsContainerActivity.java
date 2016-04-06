@@ -33,7 +33,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
             return;
         }
 
-        setContainerContent(R.layout.user_follows_fragment_container);
+        setContainerContent(R.layout.activity_fragment_container);
         getIntentExtras();
         setScreenTitle();
         setupActionBar();

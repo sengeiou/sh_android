@@ -36,7 +36,7 @@ public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected int getLayoutResource() {
-        return R.layout.profile_fragment_container;
+        return R.layout.activity_fragment_container;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
