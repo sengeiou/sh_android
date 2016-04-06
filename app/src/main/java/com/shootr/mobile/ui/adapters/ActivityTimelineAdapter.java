@@ -170,7 +170,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           imageLoader,
           timeUtils,
           avatarClickListener,
-          streamTitleClickListener,
           onShotClick);
     }
 

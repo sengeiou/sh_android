@@ -14,9 +14,8 @@ import com.shootr.mobile.util.ShotTextSpannableBuilder;
 public class StartedShootingViewHolder extends StreamActivityViewHolder {
 
     public StartedShootingViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-      OnAvatarClickListener onAvatarClickListener, OnStreamTitleClickListener onStreamTitleClickListener,
-      OnShotClick onShotClick) {
-        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener, onShotClick);
+      OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClick) {
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClick);
     }
 
     @NonNull protected String getCommentPattern() {
