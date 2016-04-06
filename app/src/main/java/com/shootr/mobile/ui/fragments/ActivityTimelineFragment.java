@@ -161,9 +161,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-          R.color.refresh_2,
-          R.color.refresh_3,
-          R.color.refresh_4);
+                R.color.refresh_2,
+                R.color.refresh_3,
+                R.color.refresh_4);
     }
 
     private void setupListScrollListeners() {
@@ -274,6 +274,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override public void hideLoadingActivity() {
         loadingActivityView.setVisibility(View.GONE);
+    }
+
+    public void scrollListToTop() {
+        activityList.scrollToPosition(0);
     }
     //endregion
 }
