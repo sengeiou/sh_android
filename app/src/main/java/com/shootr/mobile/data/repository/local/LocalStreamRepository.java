@@ -43,7 +43,7 @@ public class LocalStreamRepository implements StreamRepository {
     private StreamEntity fallbackOnSearchResults(String idEvent) {
         StreamEntity streamEntity = localStreamSearchDataSource.getStreamResult(idEvent);
         if (streamEntity != null) {
-            localStreamDataSource.putStream(streamEntity, false);
+            localStreamDataSource.putStream(streamEntity);
         }
         return streamEntity;
     }
@@ -55,7 +55,7 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public Stream putStream(Stream stream) {
         StreamEntity streamEntity = streamEntityMapper.transform(stream);
-        localStreamDataSource.putStream(streamEntity, false);
+        localStreamDataSource.putStream(streamEntity);
         return stream;
     }
 

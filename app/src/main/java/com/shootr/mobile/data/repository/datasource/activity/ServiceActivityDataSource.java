@@ -69,7 +69,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
             StreamEntity stream = activity.getStream();
             boolean hasAssociatedStream = stream != null;
             if (hasAssociatedStream) {
-                localStreamDataSource.putStream(stream, false);
+                localStreamDataSource.putStream(stream);
             }
         }
     }

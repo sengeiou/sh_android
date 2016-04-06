@@ -12,6 +12,8 @@ public interface StreamDataSource {
 
     StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
 
+    StreamEntity putStream(StreamEntity streamEntity);
+
     List<StreamEntity> putStreams(List<StreamEntity> streams);
 
     List<StreamEntity> getStreamsListing(String idUser);

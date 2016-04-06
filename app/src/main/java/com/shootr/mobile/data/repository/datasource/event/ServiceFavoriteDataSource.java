@@ -91,7 +91,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     private void storeEmbedStreams(List<FavoriteApiEntity> favorites) {
         for (FavoriteApiEntity favorite : favorites) {
             StreamEntity stream = favorite.getStream();
-            localStreamDataSource.putStream(stream, false);
+            localStreamDataSource.putStream(stream);
         }
     }
 }

@@ -60,7 +60,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getBlogStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource).putStream(any(StreamEntity.class), anyBoolean());
+        verify(localStreamDataSource).putStream(any(StreamEntity.class));
     }
 
     @Test public void shouldNotPutStreamInLocalWhenGetBlogStreamAndRemoteBlogStreamIsNull() throws Exception {
@@ -68,7 +68,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getBlogStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class), anyBoolean());
+        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class));
     }
 
     @Test public void shouldPutStreamInLocalWhenGetHelpStreamAndRemoteHelpStreamIsNotNull() throws Exception {
@@ -76,7 +76,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getHelpStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource).putStream(any(StreamEntity.class), anyBoolean());
+        verify(localStreamDataSource).putStream(any(StreamEntity.class));
     }
 
     @Test public void shouldNotPutStreamInLocalWhenGetHelpStreamAndRemoteHelpStreamIsNull() throws Exception {
@@ -84,7 +84,7 @@ public class SyncStreamRepositoryTest {
 
         syncStreamRepository.getHelpStream(COUNTRY, LANGUAGE);
 
-        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class), anyBoolean());
+        verify(localStreamDataSource, never()).putStream(any(StreamEntity.class));
     }
 
     private StreamEntity streamEntity(){

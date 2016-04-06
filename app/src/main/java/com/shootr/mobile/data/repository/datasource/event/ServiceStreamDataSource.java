@@ -48,6 +48,10 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
+    @Override public StreamEntity putStream(StreamEntity streamEntity) {
+        return putStream(streamEntity, false);
+    }
+
     @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {
         throw new RuntimeException("Method not implemented yet!");
     }

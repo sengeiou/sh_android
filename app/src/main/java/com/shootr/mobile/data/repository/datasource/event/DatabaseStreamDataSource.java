@@ -27,6 +27,10 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streamEntity;
     }
 
+    @Override public StreamEntity putStream(StreamEntity streamEntity) {
+        return putStream(streamEntity, false);
+    }
+
     @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {
         streamManager.saveStreams(streams);
         return streams;
