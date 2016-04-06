@@ -667,14 +667,14 @@ public class StreamTimelinePresenterTest {
         assertThat(booleanArgumentCaptor.getValue()).isTrue();
     }
 
-    @Test public void shouldNotShowNotificationConfirmationWhenTopicIsEmpty() throws Exception {
+    @Test public void shouldNotShowPinMessageNotificationWhenTopicIsEmpty() throws Exception {
         setupCreateStreamInteractorCallbackWithTopic();
         setupGetStreamInteractorCallback();
         presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
 
         presenter.editStream(EMPTY_TOPIC);
 
-        verify(streamTimelineView, never()).showNotificationConfirmation(anyString());
+        verify(streamTimelineView, never()).showPinMessageNotification(anyString());
     }
 
     @Test public void shouldShowTopicSnackBarWhenNotifyMessageAndTopicIsNotEmpty() throws Exception {

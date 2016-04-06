@@ -649,7 +649,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override public void showNotificationConfirmation(final String topic) {
+    @Override public void showPinMessageNotification(final String topic) {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
           .setMessage(getString(R.string.pin_message_notification_confirmation_text))
           .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),

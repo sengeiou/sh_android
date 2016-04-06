@@ -563,7 +563,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         if(topic.isEmpty()){
             sendStream(topic, false);
         }else{
-            streamTimelineView.showNotificationConfirmation(topic);
+            streamTimelineView.showPinMessageNotification(topic);
         }
     }
 

@@ -98,7 +98,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showNotificationConfirmation(String topic) {
+    @Override public void showPinMessageNotification(String topic) {
         /* no-op */
     }
 

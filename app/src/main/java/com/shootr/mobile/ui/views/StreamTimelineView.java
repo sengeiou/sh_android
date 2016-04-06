@@ -52,5 +52,5 @@ public interface StreamTimelineView extends LoadDataView{
 
     void setRemainingCharactersColorInvalid();
 
-    void showNotificationConfirmation(String topic);
+    void showPinMessageNotification(String topic);
 }
