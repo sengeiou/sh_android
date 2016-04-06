@@ -90,12 +90,20 @@ public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActi
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 Fragment currentPage = getSupportFragmentManager().findFragmentByTag("android:switcher:"
-                        + R.id.pager
+                        + R.id.activity_pager
                         + ":"
                         + viewPager.getCurrentItem());
-                //TODO: scrollToTop(currentPage, viewPager.getCurrentItem());
+                scrollToTop(currentPage, viewPager.getCurrentItem());
             }
         });
+    }
+
+    private void scrollToTop(Fragment currentPage, int currentItem) {
+        if (currentPage != null && currentItem == 0) {
+            ((MeActivityTimelineFragment) currentPage).scrollListToTop();
+        } else if (currentPage != null && currentItem == 1) {
+            ((ActivityTimelineFragment) currentPage).scrollListToTop();
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

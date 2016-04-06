@@ -271,5 +271,9 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     @Override public void hideLoadingActivity() {
         loadingActivityView.setVisibility(View.GONE);
     }
+
+    public void scrollListToTop() {
+        activityList.scrollToPosition(0);
+    }
     //endregion
 }
