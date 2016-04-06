@@ -72,11 +72,12 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     //region Result
     private void notifyTimelineFromActivities(List<Activity> activities) {
+        List<Activity> userActivities = retainUsersActivity(activities);
         if (isUserActivityTimeline) {
-            List<Activity> userActivities = retainUsersActivity(activities);
             ActivityTimeline timeline = buildTimeline(userActivities);
             notifyLoaded(timeline);
         } else {
+            activities.removeAll(userActivities);
             ActivityTimeline timeline = buildTimeline(activities);
             notifyLoaded(timeline);
         }

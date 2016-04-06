@@ -55,11 +55,13 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     private synchronized void executeSynchronized() {
         try {
             ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(language);
+            List<Activity> activities = activityTimeline.getActivities();
+            List<Activity> userActivities = retainUsersActivity(activities);
             if (isUserActivityTimeline) {
-                setTimelineWithUserActivities(activityTimeline);
-                notifyLoaded(activityTimeline);
+                notifyCustomTimeline(activityTimeline, userActivities);
             } else {
-                notifyLoaded(activityTimeline);
+                activities.removeAll(userActivities);
+                notifyCustomTimeline(activityTimeline, activities);
             }
             User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             if (user != null && user.getIdWatchingStream() != null) {
@@ -70,9 +72,9 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         }
     }
 
-    private void setTimelineWithUserActivities(ActivityTimeline activityTimeline) {
-        List<Activity> activities = retainUsersActivity(activityTimeline.getActivities());
-        activityTimeline.setActivities(activities);
+    private void notifyCustomTimeline(ActivityTimeline activityTimeline, List<Activity> userActivities) {
+        activityTimeline.setActivities(userActivities);
+        notifyLoaded(activityTimeline);
     }
 
     private List<Activity> retainUsersActivity(List<Activity> activities) {
