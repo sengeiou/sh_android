@@ -74,6 +74,9 @@ public class GCMIntentService extends IntentService {
                 case PushNotification.Parameters.PUSH_TYPE_ACTIVITY:
                     receivedActivity(push);
                     break;
+                case PushNotification.Parameters.PUSH_TYPE_STREAM:
+                    receivedStream(push);
+                    break;
                 default:
                     receivedUnknown(push);
             }
@@ -100,6 +103,10 @@ public class GCMIntentService extends IntentService {
         }
 
         return new PushNotification(values, parameters, silent, badge);
+    }
+
+    private void receivedStream(PushNotification pushNotification) throws JSONException, IOException {
+        setupGoToStreamTimelineNotification(pushNotification);
     }
 
     private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {

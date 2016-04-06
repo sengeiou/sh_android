@@ -118,6 +118,7 @@ public class PushNotification {
 
         public static final int PUSH_TYPE_SHOT = 1;
         public static final int PUSH_TYPE_ACTIVITY = 2;
+        public static final int PUSH_TYPE_STREAM = 3;
 
         private int pushType;
         private String activityType;
