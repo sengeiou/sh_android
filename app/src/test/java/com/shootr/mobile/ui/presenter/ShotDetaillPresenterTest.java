@@ -38,10 +38,10 @@ public class ShotDetaillPresenterTest {
 
     private static final String ID_SHOT = "idShot";
     private static final String ID_USER = "idUser";
-    public static final String OTHER_STREAM_ID = "otherStreamId";
-    public static final String STREAM_ID = "streamId";
-    public static final boolean IS_NOT_IN_STREAM_TIMELINE = false;
-    public static final boolean IS_IN_STREAM_TIMELINE = true;
+    private static final String OTHER_STREAM_ID = "otherStreamId";
+    private static final String STREAM_ID = "streamId";
+    private static final Boolean IS_NOT_IN_STREAM_TIMELINE = false;
+    private static final Boolean IS_IN_STREAM_TIMELINE = true;
     private ShotDetailPresenter presenter;
     @Mock GetShotDetailInteractor getShotDetaillInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
