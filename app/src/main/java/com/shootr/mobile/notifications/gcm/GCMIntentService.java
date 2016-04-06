@@ -127,7 +127,6 @@ public class GCMIntentService extends IntentService {
             case ActivityType.CHECKIN:
             case ActivityType.SHARE_STREAM:
             case ActivityType.OPENED_STREAM:
-            case ActivityType.PINNED_MESSAGE:
                 setupGoToStreamTimelineNotification(push);
                 break;
             case ActivityType.NICE_SHOT:
