@@ -259,12 +259,16 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     }
 
-    public void disableStreamTitle() {
-        mainHolder.disableStreamTitle();
+    public void disableStreamTitle(){
+        if(mainHolder != null) {
+            mainHolder.disableStreamTitle();
+        }
     }
 
-    public void enableStreamTitle() {
-        mainHolder.enableStreamTitle();
+    public void enableStreamTitle(){
+        if(mainHolder != null) {
+            mainHolder.enableStreamTitle();
+        }
     }
 
     //region View holders

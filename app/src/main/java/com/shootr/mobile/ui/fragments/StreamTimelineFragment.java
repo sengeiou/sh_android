@@ -969,7 +969,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);
     }
 

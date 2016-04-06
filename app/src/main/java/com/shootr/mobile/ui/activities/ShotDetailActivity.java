@@ -56,6 +56,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
+    public static final String EXTRA_IS_IN_TIMELINE = "isIntimeline";
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
@@ -85,6 +86,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
         intent.putExtra(EXTRA_SHOT, shotModel);
+        return intent;
+    }
+
+    public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel) {
+        Intent intent = new Intent(context, ShotDetailActivity.class);
+        intent.putExtra(EXTRA_SHOT, shotModel);
+        intent.putExtra(EXTRA_IS_IN_TIMELINE, true);
         return intent;
     }
 
@@ -244,7 +252,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void onStreamTitleClick(ShotModel shotModel) {
-        detailPresenter.handleStreamTitleClick(shotModel);
+        detailPresenter.streamTitleClick(shotModel);
     }
 
     private void setupPhotoPicker() {
@@ -379,8 +387,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     //region View methods
     @Override public void renderShot(ShotModel shotModel) {
         detailAdapter.renderMainShot(shotModel);
-        detailPresenter.setupStreamTitle();
         pinShotPresenter.initialize(this, shotModel);
+        setupStreamTitle();
+    }
+
+    private void setupStreamTitle() {
+        Boolean isInStreamTimeline = getIntent().getBooleanExtra(EXTRA_IS_IN_TIMELINE, false);
+        detailPresenter.setupStreamTitle(isInStreamTimeline);
     }
 
     @Override public void renderReplies(List<ShotModel> shotModels) {

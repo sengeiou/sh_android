@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
@@ -41,12 +40,13 @@ public class ShotDetaillPresenterTest {
     private static final String ID_USER = "idUser";
     public static final String OTHER_STREAM_ID = "otherStreamId";
     public static final String STREAM_ID = "streamId";
+    public static final boolean IS_NOT_IN_STREAM_TIMELINE = false;
+    public static final boolean IS_IN_STREAM_TIMELINE = true;
     private ShotDetailPresenter presenter;
     @Mock GetShotDetailInteractor getShotDetaillInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
-    @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ShotDetailView shotDetailView;
@@ -58,7 +58,7 @@ public class ShotDetaillPresenterTest {
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
-          shareShotInteractor, getCurrentUserInteractor, shotModelMapper,
+          shareShotInteractor, shotModelMapper,
           bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
@@ -187,7 +187,7 @@ public class ShotDetaillPresenterTest {
         setupGetShotDetailWithRepliesInteractorCallback();
         setupUnmarkNiceShotInteractorCallback();
 
-        presenter.initialize(shotDetailView,shotModel());
+        presenter.initialize(shotDetailView, shotModel());
         presenter.unmarkNiceShot(ID_SHOT);
 
         verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
@@ -242,7 +242,7 @@ public class ShotDetaillPresenterTest {
     @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
         setupGetShotDetailInteractorCallback();
 
-        presenter.initialize(shotDetailView,shotModelNull());
+        presenter.initialize(shotDetailView, shotModelNull());
 
         verify(shotDetailView).showError(anyString());
 
@@ -257,40 +257,26 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldGoToStreamTimelineWhenNotConnectedInShotModelStream() throws Exception {
-        setupCurrentUserCallback();
-
-        presenter.handleStreamTitleClick(shotModel());
+        presenter.streamTitleClick(shotModel());
 
         verify(shotDetailView).goToStreamTimeline(anyString());
     }
 
-    @Test public void shouldNotGoToStreamTimelineWhenConnectedInShotModelStream() throws Exception {
-        setupCurrentUserCallback();
-        ShotModel shotModel = shotModel();
-        shotModel.setStreamId(OTHER_STREAM_ID);
-
-        presenter.handleStreamTitleClick(shotModel);
-
-        verify(shotDetailView, never()).goToStreamTimeline(anyString());
-    }
-
     @Test public void shouldEnableStreamTitleWhenIsNotInShotStream() throws Exception {
-        setupCurrentUserCallback();
         presenter.initialize(shotDetailView, shotModel());
 
-        presenter.setupStreamTitle();
+        presenter.setupStreamTitle(IS_NOT_IN_STREAM_TIMELINE);
 
         verify(shotDetailView).enableStreamTitle();
     }
 
     @Test public void shouldDisableStreamTitleWhenIsInShotStream() throws Exception {
-        setupCurrentUserCallback();
         ShotModel shotModel = shotModel();
         shotModel.setStreamId(OTHER_STREAM_ID);
 
         presenter.initialize(shotDetailView, shotModel);
 
-        presenter.setupStreamTitle();
+        presenter.setupStreamTitle(IS_IN_STREAM_TIMELINE);
 
         verify(shotDetailView).disableStreamTitle();
     }
@@ -403,17 +389,6 @@ public class ShotDetaillPresenterTest {
         }).when(markNiceShotInteractor).markNiceShot(anyString(),
                 any(Interactor.CompletedCallback.class),
                 any(Interactor.ErrorCallback.class));
-    }
-
-    private void setupCurrentUserCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<User> callback =
-                  (Interactor.Callback<User>) invocation.getArguments()[0];
-                callback.onLoaded(user());
-                return null;
-            }
-        }).when(getCurrentUserInteractor).getCurrentUser(any(Interactor.Callback.class));
     }
 
     private User user() {
