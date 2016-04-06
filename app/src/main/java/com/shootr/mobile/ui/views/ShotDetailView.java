@@ -29,5 +29,5 @@ public interface ShotDetailView  {
 
     void initializeNewShotBarPresenter(String streamId);
 
-    void openShotParent(ShotModel shotModel);
+    void openShot(ShotModel shotModel);
 }

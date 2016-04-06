@@ -158,8 +158,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
-          new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
                   detailPresenter.shareShot(shotModel);
               }
@@ -184,11 +183,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           }, //
             new ShotDetailWithRepliesAdapter.ParentShotClickListener() {
                 @Override public void onClick(ShotModel shot) {
-                    onParentShotClick(shot);
+                    onShotClick(shot);
                 }
             }, new ShotDetailWithRepliesAdapter.ReplyShotClickListener() {
               @Override public void onClick(ShotModel shot) {
-                  onReplyShotClick(shot);
+                  onShotClick(shot);
               }
           }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
               @Override public void onClick(ShotModel shot) {
@@ -289,7 +288,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarPresenter.initialize(this, streamId, false);
     }
 
-    @Override public void openShotParent(ShotModel shotModel) {
+    @Override public void openShot(ShotModel shotModel) {
         startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
     }
 
@@ -315,12 +314,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         detailPresenter.avatarClick(userId);
     }
 
-    public void onParentShotClick(ShotModel shotModel){
-        detailPresenter.parentShotClick(shotModel);
-    }
-
-    public void onReplyShotClick(ShotModel shotModel){
-        //TODO: detailPresenter.replyShotClick(shotModel);
+    public void onShotClick(ShotModel shotModel) {
+        detailPresenter.shotClick(shotModel);
     }
 
     public void onShotUsernameClick(String username) {

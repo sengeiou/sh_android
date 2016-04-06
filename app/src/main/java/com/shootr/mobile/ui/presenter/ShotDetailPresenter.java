@@ -214,7 +214,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         bus.unregister(this);
     }
 
-    public void parentShotClick(ShotModel shotModel) {
-        shotDetailView.openShotParent(shotModel);
+    public void shotClick(ShotModel shotModel) {
+        shotDetailView.openShot(shotModel);
     }
 }
