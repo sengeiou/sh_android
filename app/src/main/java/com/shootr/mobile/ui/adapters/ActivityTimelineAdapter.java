@@ -168,11 +168,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
         return new StartedShootingViewHolder(createActivityView(parent),
           imageLoader,
-          timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener,
-          onUsernameClickListener,
-          streamTitleClickListener,
+          timeUtils, avatarClickListener, streamTitleClickListener,
           onShotClick);
     }
 
