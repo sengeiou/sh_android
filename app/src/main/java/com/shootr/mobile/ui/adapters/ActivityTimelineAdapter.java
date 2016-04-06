@@ -46,12 +46,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private String currentUserId;
     private boolean showFooter = false;
 
-    public ActivityTimelineAdapter(ImageLoader imageLoader,
-      AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener streamTitleClickListener,
-      OnShotClick onShotClick) {
+    public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
+      OnStreamTitleClickListener streamTitleClickListener, OnShotClick onShotClick) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -61,8 +58,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
         if (isFooter(position)) {
             return TYPE_FOOTER;
         } else {
@@ -96,13 +92,11 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return showFooter ? activities.size() + 1 : activities.size();
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_GENERIC_ACTIVITY:
                 return onCreateActivityViewHolder(parent);
@@ -220,7 +214,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           avatarClickListener,
           onShotClick);
     }
-    
+
     private FollowActivityViewHolder onCreateFollowViewHolder(ViewGroup parent) {
         View view = createActivityView(parent);
         FollowActivityViewHolder viewHolder = new FollowActivityViewHolder(view,
@@ -240,8 +234,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         };
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!isFooter(position)) {
             ((GenericActivityViewHolder) holder).render(activities.get(position));
         }

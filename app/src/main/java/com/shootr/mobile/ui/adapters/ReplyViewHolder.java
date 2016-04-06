@@ -14,22 +14,16 @@ public class ReplyViewHolder extends ShotActivityViewHolder {
     @BindString(R.string.replied_activity_with_comment) String repliedWithCommentPrefixText;
     @BindString(R.string.replied_activity) String repliedWithoutCommentPrefixText;
 
-    public ReplyViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils,
-      OnAvatarClickListener onAvatarClickListener,
-      OnShotClick onShotClickListener) {
+    public ReplyViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClickListener);
     }
 
-    @Override
-    protected String getActivitySimpleComment(ActivityModel activity) {
+    @Override protected String getActivitySimpleComment(ActivityModel activity) {
         return repliedWithoutCommentPrefixText;
     }
 
-    @Override
-    protected String getActivityCommentPrefix(ActivityModel activity) {
+    @Override protected String getActivityCommentPrefix(ActivityModel activity) {
         return repliedWithCommentPrefixText;
     }
-
 }
