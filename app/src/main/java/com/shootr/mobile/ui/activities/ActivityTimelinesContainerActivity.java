@@ -56,7 +56,7 @@ public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActi
 
         tabLayout.setupWithViewPager(viewPager);
         setupTabLayoutListener();
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
     }
 
     @Override
@@ -108,9 +108,9 @@ public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActi
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ActivityTimelineFragment.newInstance();
-                case 1:
                     return MeActivityTimelineFragment.newInstance();
+                case 1:
+                    return ActivityTimelineFragment.newInstance();
                 default:
                     throw new IllegalStateException(String.format("Item for position %d doesn't exists", position));
             }
@@ -126,9 +126,9 @@ public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActi
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.drawer_activity_title).toUpperCase(l);
-                case 1:
                     return getString(R.string.drawer_activity_me).toUpperCase(l);
+                case 1:
+                    return getString(R.string.drawer_following_activity_title).toUpperCase(l);
                 default:
                     throw new IllegalStateException(String.format("Item title for position %d doesn't exists",
                             position));
