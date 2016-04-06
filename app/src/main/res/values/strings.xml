@@ -385,4 +385,6 @@
     <string name="title_menu_photo">Photo</string>
     <string name="drawer_activity_me">Me</string>
     <string name="drawer_following_activity_title">Following</string>
+    <string name="replied_activity_with_comment">"Replied: "</string>
+    <string name="replied_activity">Replied</string>
 </resources>
