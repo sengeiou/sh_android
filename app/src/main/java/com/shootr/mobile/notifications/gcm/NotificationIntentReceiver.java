@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
-import com.shootr.mobile.ui.activities.ActivityTimelineContainerActivity;
+import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -42,7 +42,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 break;
             case ACTION_OPEN_ACTIVITY_NOTIFICATION:
                 startActivityFromIntent(context,
-                  new Intent(context, ActivityTimelineContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                  new Intent(context, ActivityTimelinesContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
                 activityNotificationManager.clearActivityNotifications();
