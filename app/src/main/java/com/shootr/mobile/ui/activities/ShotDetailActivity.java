@@ -186,7 +186,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 @Override public void onClick(ShotModel shot) {
                     onParentShotClick(shot);
                 }
-            }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+            }, new ShotDetailWithRepliesAdapter.ReplyShotClickListener() {
+              @Override public void onClick(ShotModel shot) {
+                  onReplyShotClick(shot);
+              }
+          }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotImageClick(shot);
               }
@@ -286,7 +290,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void openShotParent(ShotModel shotModel) {
-        startActivity(ShotDetailActivity.getIntentForActivity(this,shotModel));
+        startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
     }
 
     private ShotModel extractShotFromIntent() {
@@ -313,6 +317,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     public void onParentShotClick(ShotModel shotModel){
         detailPresenter.parentShotClick(shotModel);
+    }
+
+    public void onReplyShotClick(ShotModel shotModel){
+        //TODO: detailPresenter.replyShotClick(shotModel);
     }
 
     public void onShotUsernameClick(String username) {

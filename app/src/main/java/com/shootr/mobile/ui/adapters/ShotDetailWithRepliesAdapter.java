@@ -41,6 +41,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
     private final ParentShotClickListener parentShotClickListener;
+    private final ReplyShotClickListener replyShotClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -61,13 +62,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ParentShotClickListener parentShotClickListener, ImageClickListener imageClickListener, OnVideoClickListener videoClickListener,
-      OnUsernameClickListener onUsernameClickListener, PinToProfileClickListener onClickListenerPinToProfile,
-      OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
-      Resources resources, AndroidTimeUtils timeUtils) {
+      ParentShotClickListener parentShotClickListener, ReplyShotClickListener replyShotClickListener, ImageClickListener imageClickListener,
+      OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
+      PinToProfileClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
+      OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
+        this.replyShotClickListener = replyShotClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -633,13 +635,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(reply.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (reply.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(reply.getIdShot());
                     } else {
                         onNiceShotListener.markNice(reply.getIdShot());
                     }
+                }
+            });
+
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    replyShotClickListener.onClick(reply);
                 }
             });
         }
