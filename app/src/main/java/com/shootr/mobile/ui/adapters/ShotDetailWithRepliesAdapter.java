@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -561,6 +562,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.shot_reply_container) RelativeLayout container;
         @Bind(R.id.shot_avatar) public ImageView avatar;
         @Bind(R.id.shot_user_name) public TextView name;
         @Bind(R.id.shot_timestamp) public TextView timestamp;
@@ -659,6 +661,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface ParentShotClickListener{
+        void onClick(ShotModel shot);
+    }
+
+    public interface ReplyShotClickListener{
         void onClick(ShotModel shot);
     }
     //endregion
