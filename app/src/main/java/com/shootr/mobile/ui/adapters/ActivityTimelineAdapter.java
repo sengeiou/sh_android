@@ -32,6 +32,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_MENTION = 8;
     public static final int TYPE_FOLLOW = 9;
     public static final int TYPE_PINNED_SHOT = 10;
+    public static final int TYPE_REPLY_SHOT = 11;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -87,6 +88,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_FOLLOW;
                 case ActivityType.PINNED_SHOT:
                     return TYPE_PINNED_SHOT;
+                case ActivityType.REPLY_SHOT:
+                    return TYPE_REPLY_SHOT;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -125,6 +128,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateFollowViewHolder(parent);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent);
+            case TYPE_REPLY_SHOT:
+                return onCreateReplyViewHolder(parent);
         }
         throw new IllegalStateException("View type %d not handled");
     }
@@ -208,6 +213,14 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           onShotClick);
     }
 
+    private ReplyViewHolder onCreateReplyViewHolder(ViewGroup parent) {
+        return new ReplyViewHolder(createActivityView(parent),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          onShotClick);
+    }
+    
     private FollowActivityViewHolder onCreateFollowViewHolder(ViewGroup parent) {
         View view = createActivityView(parent);
         FollowActivityViewHolder viewHolder = new FollowActivityViewHolder(view,
