@@ -210,7 +210,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void navigateToActivity() {
-        startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
+        startActivity(new Intent(this, ActivityTimelineContainerActivity.class));
     }
 
     @Override

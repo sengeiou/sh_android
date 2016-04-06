@@ -34,7 +34,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected int getLayoutResource() {
-        return R.layout.stream_timeline_fragment_container;
+        return R.layout.activity_fragment_container;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {

@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -23,28 +25,21 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
+import com.shootr.mobile.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.mobile.ui.views.ActivityTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 import dagger.ObjectGraph;
+import java.util.List;
+import javax.inject.Inject;
 
 public class ActivityTimelineFragment extends BaseFragment implements ActivityTimelineView {
 
     //region Fields
-    @Inject
-    GenericActivityTimelinePresenter timelinePresenter;
+    @Inject ActivityTimelinePresenter timelinePresenter;
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
@@ -105,7 +100,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void initializePresenter() {
-        timelinePresenter.initialize(this, false);
+        timelinePresenter.initialize(this);
     }
     //endregion
 
@@ -161,9 +156,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-                R.color.refresh_2,
-                R.color.refresh_3,
-                R.color.refresh_4);
+          R.color.refresh_2,
+          R.color.refresh_3,
+          R.color.refresh_4);
     }
 
     private void setupListScrollListeners() {
@@ -274,10 +269,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override public void hideLoadingActivity() {
         loadingActivityView.setVisibility(View.GONE);
-    }
-
-    public void scrollListToTop() {
-        activityList.scrollToPosition(0);
     }
     //endregion
 }

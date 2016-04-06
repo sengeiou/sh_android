@@ -25,16 +25,16 @@ public class ActivityTimelineInteractorsWrapper {
         this.localeProvider = localeProvider;
     }
 
-    public void loadTimeline(Boolean isUserActivityTimeline, Interactor.Callback<ActivityTimeline> callback) {
-        getActivityTimelineInteractor.loadActivityTimeline(isUserActivityTimeline, localeProvider.getLocale(), callback);
+    public void loadTimeline(Interactor.Callback<ActivityTimeline> callback) {
+        getActivityTimelineInteractor.loadActivityTimeline(localeProvider.getLocale(), callback);
     }
 
-    public void refreshTimeline(Boolean isUserActivityTimeline, Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshActivityTimelineInteractor.refreshActivityTimeline(isUserActivityTimeline, localeProvider.getLocale(), callback, errorCallback);
+    public void refreshTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
+        refreshActivityTimelineInteractor.refreshActivityTimeline(localeProvider.getLocale(), callback, errorCallback);
     }
 
-    public void obtainOlderTimeline(Boolean isUserActivityTimeline, long currentOldestDate, Interactor.Callback<ActivityTimeline> callback,
-                                    Interactor.ErrorCallback errorCallback) {
-        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(isUserActivityTimeline, currentOldestDate, localeProvider.getLocale(), callback, errorCallback);
+    public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<ActivityTimeline> callback,
+      Interactor.ErrorCallback errorCallback) {
+        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(currentOldestDate, localeProvider.getLocale(), callback, errorCallback);
     }
 }

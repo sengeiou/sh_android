@@ -2,7 +2,7 @@ package com.shootr.mobile.ui;
 
 import android.os.Handler;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
-import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
+import com.shootr.mobile.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
@@ -36,7 +36,6 @@ import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
-import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.widgets.WatchersView;
@@ -73,7 +72,7 @@ import javax.inject.Singleton;
     ResetPasswordActivity.class,
     ListingActivity.class,
     FavoritesFragment.class,
-    ActivityTimelinesContainerActivity.class,
+    ActivityTimelineContainerActivity.class,
     ActivityTimelineFragment.class,
     FindStreamsActivity.class,
     WhaleActivity.class,
@@ -86,7 +85,6 @@ import javax.inject.Singleton;
     WelcomePageActivity.class,
     ErrorActivity.class,
     StreamDataInfoActivity.class,
-    MeActivityTimelineFragment.class
   },
   complete = false) public class UiModule {
 
