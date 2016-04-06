@@ -58,7 +58,8 @@ public class ShotDetaillPresenterTest {
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
-          shareShotInteractor, shotModelMapper,
+          shareShotInteractor,
+          shotModelMapper,
           bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
@@ -139,7 +140,6 @@ public class ShotDetaillPresenterTest {
         presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView).renderReplies(anyList());
-
     }
 
     @Test public void shouldRenderRepliesWhenNiceIsUnmarked() throws Exception {
@@ -152,7 +152,7 @@ public class ShotDetaillPresenterTest {
 
         verify(shotDetailView).renderReplies(anyList());
     }
-    
+
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsMarked() throws Exception {
         setupGetShotDetailInteractorCallback();
         setupMarkNiceShotInteractorCallback();
@@ -170,7 +170,7 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, shotModel());
         presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
+        verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsUnmarked() throws Exception {
@@ -190,7 +190,7 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, shotModel());
         presenter.unmarkNiceShot(ID_SHOT);
 
-        verify(shotDetailView,times(2)).renderReplies(anyListOf(ShotModel.class));
+        verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldLoadShotDetailFromShotIdWhenInitializedFromDeepLinking() throws Exception {
@@ -222,7 +222,7 @@ public class ShotDetaillPresenterTest {
     @Test public void shouldLoadShotDetailFromShotModelWhenShotModelIsNotNull() throws Exception {
         setupGetShotDetailInteractorCallback();
 
-        presenter.initialize(shotDetailView,shotModel());
+        presenter.initialize(shotDetailView, shotModel());
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
                 any(Interactor.Callback.class),
@@ -232,11 +232,11 @@ public class ShotDetaillPresenterTest {
     @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
         setupGetShotDetailInteractorCallback();
 
-        presenter.initialize(shotDetailView,shotModelNull());
+        presenter.initialize(shotDetailView, shotModelNull());
 
-        verify(getShotDetaillInteractor,never()).loadShotDetail(anyString(),
-                any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
+        verify(getShotDetaillInteractor, never()).loadShotDetail(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldShowErrorWhenLoadShotDetailANdShotModelIsNull() throws Exception {
@@ -245,7 +245,6 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, shotModelNull());
 
         verify(shotDetailView).showError(anyString());
-
     }
 
     @Test public void shouldOpenShotWhenParentOrReplyShotClick() throws Exception {
@@ -298,15 +297,15 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView, never()).renderShot(any(ShotModel.class));
     }
 
-    private List<Shot> shotList(int shots){
+    private List<Shot> shotList(int shots) {
         ArrayList<Shot> shotList = new ArrayList<>();
-        for(int i=0;i<shots;i++){
+        for (int i = 0; i < shots; i++) {
             shotList.add(shot());
         }
         return shotList;
     }
 
-    private Shot shot(){
+    private Shot shot() {
         Shot shot = new Shot();
         shot.setIdShot(ID_SHOT);
         shot.setStreamInfo(new Shot.ShotStreamInfo());
@@ -314,26 +313,26 @@ public class ShotDetaillPresenterTest {
         return shot;
     }
 
-    private ShotModel shotModel(){
+    private ShotModel shotModel() {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(ID_SHOT);
         shotModel.setStreamId(STREAM_ID);
         return shotModel;
     }
 
-    private ShotModel shotModelNull(){
+    private ShotModel shotModelNull() {
         return null;
     }
 
     private ShotDetail shotDetail() {
-        ShotDetail shotDetail= new ShotDetail();
+        ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(Collections.<Shot>emptyList());
         return shotDetail;
     }
 
     private ShotDetail shotDetailWithReplies() {
-        ShotDetail shotDetail= new ShotDetail();
+        ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(shotList(2));
         return shotDetail;
@@ -342,14 +341,12 @@ public class ShotDetaillPresenterTest {
     private void setupUnmarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(unmarkNiceShotInteractor).unmarkNiceShot(anyString(),
-                any(Interactor.CompletedCallback.class),
-                any(Interactor.ErrorCallback.class));
+        }).when(unmarkNiceShotInteractor)
+          .unmarkNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailInteractorCallback() {
@@ -360,9 +357,8 @@ public class ShotDetaillPresenterTest {
                 callback.onLoaded(shotDetail());
                 return null;
             }
-        }).when(getShotDetaillInteractor).loadShotDetail(anyString(),
-                any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
+        }).when(getShotDetaillInteractor)
+          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailWithRepliesInteractorCallback() {
@@ -373,28 +369,19 @@ public class ShotDetaillPresenterTest {
                 callback.onLoaded(shotDetailWithReplies());
                 return null;
             }
-        }).when(getShotDetaillInteractor).loadShotDetail(anyString(),
-                any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
+        }).when(getShotDetaillInteractor)
+          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupMarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(markNiceShotInteractor).markNiceShot(anyString(),
-                any(Interactor.CompletedCallback.class),
-                any(Interactor.ErrorCallback.class));
+        }).when(markNiceShotInteractor)
+          .markNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private User user() {
-        User user = new User();
-        user.setIdUser(ID_USER);
-        user.setIdWatchingStream(OTHER_STREAM_ID);
-        return user;
-    }
 }

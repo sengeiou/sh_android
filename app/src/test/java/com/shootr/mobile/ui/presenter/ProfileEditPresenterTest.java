@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UpdateUserProfileInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -10,8 +9,6 @@ import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import dagger.ObjectGraph;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

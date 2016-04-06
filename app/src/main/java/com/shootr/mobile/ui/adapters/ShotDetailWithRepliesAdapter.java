@@ -256,17 +256,16 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public interface OnParentShownListener {
 
         void onShown();
-
     }
 
-    public void disableStreamTitle(){
-        if(mainHolder != null) {
+    public void disableStreamTitle() {
+        if (mainHolder != null) {
             mainHolder.disableStreamTitle();
         }
     }
 
-    public void enableStreamTitle(){
-        if(mainHolder != null) {
+    public void enableStreamTitle() {
+        if (mainHolder != null) {
             mainHolder.enableStreamTitle();
         }
     }
@@ -397,8 +396,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         public void setComment(String comment) {
-            CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                    onUsernameClickListener);
+            CharSequence spannedComment =
+              shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
             shotText.setText(spannedComment);
             shotText.addLinks();
         }
@@ -548,8 +547,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             String comment = shotModel.getComment();
             if (comment != null) {
-                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                        onUsernameClickListener);
+                CharSequence spannedComment =
+                  shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
                 this.text.setText(spannedComment);
                 this.text.addLinks();
             } else {
@@ -587,8 +586,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoTitle.setText(shotModel.getVideoTitle());
                 this.videoDuration.setText(shotModel.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    @Override public void onClick(View v) {
                         videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
@@ -599,8 +597,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(shotModel.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
@@ -669,8 +666,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = reply.getComment();
             if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
-                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                        onUsernameClickListener);
+                CharSequence spannedComment =
+                  shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
                 this.text.setText(spannedComment);
                 this.text.addLinks();
             } else {
@@ -708,8 +705,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoTitle.setText(reply.getVideoTitle());
                 this.videoDuration.setText(reply.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    @Override public void onClick(View v) {
                         videoClickListener.onVideoClick(reply.getVideoUrl());
                     }
                 });
@@ -720,8 +716,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             niceButton.setChecked(reply.isMarkedAsNice());
             niceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (reply.isMarkedAsNice()) {
                         onNiceShotListener.unmarkNice(reply.getIdShot());
                     } else {
