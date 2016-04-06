@@ -80,13 +80,18 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
 
     //region Result
     private void notifyTimelineFromActivities(List<Activity> activities) {
+        List<Activity> userActivities = retainUsersActivity(activities);
         if (isUserActivityTimeline) {
-            ActivityTimeline timeline = buildTimeline(retainUsersActivity(activities));
-            notifyLoaded(timeline);
+            notifyCustomTimeline(retainUsersActivity(userActivities));
         } else {
-            ActivityTimeline timeline = buildTimeline(activities);
-            notifyLoaded(timeline);
+            activities.removeAll(userActivities);
+            notifyCustomTimeline(activities);
         }
+    }
+
+    private void notifyCustomTimeline(List<Activity> activities) {
+        ActivityTimeline timeline = buildTimeline(activities);
+        notifyLoaded(timeline);
     }
 
     private List<Activity> retainUsersActivity(List<Activity> activities) {
