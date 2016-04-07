@@ -649,6 +649,25 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
+    @Override public void showPinMessageNotification(final String topic) {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
+          .setMessage(getString(R.string.pin_message_notification_confirmation_text))
+          .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    streamTimelinePresenter.notifyMessage(topic, true);
+                }
+            })
+          .setNegativeButton(getString(R.string.pin_message_notification_confirmation_no),
+            new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    streamTimelinePresenter.notifyMessage(topic, false);
+                }
+            })
+          .create()
+          .show();
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

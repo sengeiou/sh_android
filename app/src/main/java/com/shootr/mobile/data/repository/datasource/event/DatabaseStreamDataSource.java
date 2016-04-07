@@ -22,9 +22,13 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streamManager.getStreamsByIds(streamIds);
     }
 
-    @Override public StreamEntity putStream(StreamEntity streamEntity) {
+    @Override public StreamEntity putStream(StreamEntity streamEntity, Boolean notifyMessage) {
         streamManager.saveStream(streamEntity);
         return streamEntity;
+    }
+
+    @Override public StreamEntity putStream(StreamEntity streamEntity) {
+        return putStream(streamEntity, false);
     }
 
     @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {

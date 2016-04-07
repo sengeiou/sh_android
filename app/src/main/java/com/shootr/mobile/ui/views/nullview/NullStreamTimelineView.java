@@ -98,6 +98,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void showPinMessageNotification(String topic) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

@@ -46,7 +46,6 @@ import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -67,7 +66,8 @@ public class StreamTimelinePresenterTest {
     private static final String TITLE = "title";
     private static final String SHORT_TITLE = "shortTitle";
     private static final String DESCRIPTION = "description";
-    private static final String EMPTY_TOPIC = "emptyTopic";
+    private static final String EMPTY_TOPIC = "";
+    private static final boolean NOTIFY = true;
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -429,7 +429,8 @@ public class StreamTimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyString(),
+        verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
+          anyString(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -439,7 +440,9 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-        verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyLong(), anyBoolean(),
+        verify(timelineInteractorWrapper).refreshTimeline(anyString(),
+          anyLong(),
+          anyBoolean(),
           anyCallback(),
           anyErrorCallback());
     }
@@ -598,7 +601,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.editStream(TOPIC);
 
-        verify(streamTimelineView, times(2)).showTopicSnackBar(anyString());
+        verify(streamTimelineView).showTopicSnackBar(anyString());
     }
 
     @Test public void shouldNotShowSnackBarWhenEditStreamAndStreamTopicIsEmpty() throws Exception {
@@ -664,6 +667,26 @@ public class StreamTimelinePresenterTest {
         assertThat(booleanArgumentCaptor.getValue()).isTrue();
     }
 
+    @Test public void shouldNotShowPinMessageNotificationWhenTopicIsEmpty() throws Exception {
+        setupCreateStreamInteractorCallbackWithTopic();
+        setupGetStreamInteractorCallback();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.editStream(EMPTY_TOPIC);
+
+        verify(streamTimelineView, never()).showPinMessageNotification(anyString());
+    }
+
+    @Test public void shouldShowTopicSnackBarWhenNotifyMessageAndTopicIsNotEmpty() throws Exception {
+        setupCreateStreamInteractorCallbackWithTopic();
+        setupGetStreamInteractorCallback();
+        presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
+
+        presenter.notifyMessage(TOPIC, NOTIFY);
+
+        verify(streamTimelineView, times(2)).showTopicSnackBar(TOPIC);
+    }
+    
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
@@ -772,8 +795,8 @@ public class StreamTimelinePresenterTest {
                 ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
                 return null;
             }
-        }).when(timelineInteractorWrapper).refreshTimeline(anyString(),
-          anyLong(), anyBoolean(), anyCallback(), anyErrorCallback());
+        }).when(timelineInteractorWrapper)
+          .refreshTimeline(anyString(), anyLong(), anyBoolean(), anyCallback(), anyErrorCallback());
     }
 
     private void setupSelectStreamInteractorCallbacksStream() {
@@ -837,26 +860,37 @@ public class StreamTimelinePresenterTest {
     private void setupCreateStreamInteractorCallbackWithTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStream());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream());
                 return null;
             }
-        }).when(createStreamInteractor).sendStream(anyString(),
-          anyString(),
-          anyString(),
-          anyString(),
-          anyString(),
-          anyBoolean(),
-          any(CreateStreamInteractor.Callback.class),
-          anyErrorCallback());
+        }).when(createStreamInteractor)
+          .sendStream(anyString(),
+            anyString(),
+            anyString(),
+            anyString(),
+            anyString(),
+            anyBoolean(),
+            anyBoolean(),
+            any(CreateStreamInteractor.Callback.class),
+            anyErrorCallback());
     }
 
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStreamWithEmptyTopic());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStreamWithEmptyTopic());
                 return null;
             }
-        }).when(createStreamInteractor).sendStream(anyString(), anyString(), anyString(), anyString(),anyString(), anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
+        }).when(createStreamInteractor)
+          .sendStream(anyString(),
+            anyString(),
+            anyString(),
+            anyString(),
+            anyString(),
+            anyBoolean(),
+            anyBoolean(),
+            any(CreateStreamInteractor.Callback.class),
+            anyErrorCallback());
     }
 
     private void setupFirstShotPosition() {

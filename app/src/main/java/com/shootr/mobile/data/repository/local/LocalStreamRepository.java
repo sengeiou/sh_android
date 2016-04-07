@@ -59,7 +59,7 @@ public class LocalStreamRepository implements StreamRepository {
         return stream;
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
         throw new IllegalStateException("Notify not allowed in local repository.");
     }
 

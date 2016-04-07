@@ -11,7 +11,7 @@ public interface StreamRepository {
 
     Stream putStream(Stream stream);
 
-    Stream putStream(Stream stream, boolean notify);
+    Stream putStream(Stream stream, boolean notify, boolean notifyStreamMessage);
 
     void shareStream(String idStream);
 
