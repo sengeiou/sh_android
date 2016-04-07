@@ -121,7 +121,7 @@
         <activity android:name=".ui.activities.UpdateWarningActivity" />
         <activity android:name=".ui.activities.WhaleActivity" />
         <activity
-            android:name=".ui.activities.ActivityTimelineContainerActivity"
+            android:name=".ui.activities.ActivityTimelinesContainerActivity"
             android:label="@string/drawer_activity_title" />
 
         <service android:name=".data.background.ShotDispatcherBackgroundService" />

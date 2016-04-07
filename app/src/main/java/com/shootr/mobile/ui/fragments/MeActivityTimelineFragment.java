@@ -24,9 +24,8 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
-import com.shootr.mobile.ui.views.ActivityTimelineView;
-import com.shootr.mobile.ui.views.nullview.NullActivityTimelineView;
-import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.ui.views.MeActivityTimelineView;
+import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -36,42 +35,43 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import dagger.ObjectGraph;
 
-public class ActivityTimelineFragment extends BaseFragment implements ActivityTimelineView {
+public class MeActivityTimelineFragment extends BaseFragment implements MeActivityTimelineView {
 
     //region Fields
+    @Inject GenericActivityTimelinePresenter timelinePresenter;
+
     @Inject
-    GenericActivityTimelinePresenter timelinePresenter;
+    ImageLoader imageLoader;
+    @Inject
+    AndroidTimeUtils timeUtils;
 
-    @Inject ImageLoader imageLoader;
-    @Inject AndroidTimeUtils timeUtils;
-    @Inject AnalyticsTool analyticsTool;
-
-    @Bind(R.id.timeline_activity_list) RecyclerView activityList;
-    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.timeline_empty) View emptyView;
-    @Bind(R.id.timeline_loading_activity) TextView loadingActivityView;
-
-    @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
+    @Bind(R.id.timeline_me_activity_list)
+    RecyclerView activityList;
+    @Bind(R.id.timeline_me_activity_swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.me_activity_timeline_empty) View emptyView;
+    @Bind(R.id.me_activity_timeline_loading_activity)
+    TextView loadingActivityView;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
-    @Inject FeedbackMessage feedbackMessage;
+    @Inject
+    FeedbackMessage feedbackMessage;
     //endregion
 
-    public static ActivityTimelineFragment newInstance() {
-        return new ActivityTimelineFragment();
+    public static MeActivityTimelineFragment newInstance() {
+        return new MeActivityTimelineFragment();
     }
 
     //region Lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater,
-      @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View fragmentView = inflater.inflate(R.layout.fragment_me_activity_timeline, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
@@ -79,15 +79,13 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
-        timelinePresenter.setView(new NullActivityTimelineView());
+        timelinePresenter.setView(new NullMeActivityTimelineView());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), analyticsScreenActivity);
         initializeViews();
         initializePresenter();
     }
@@ -104,53 +102,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         timelinePresenter.pause();
     }
 
-    private void initializePresenter() {
-        timelinePresenter.initialize(this, false);
-    }
-    //endregion
-
-    @Override
-    protected ObjectGraph getObjectGraph() {
-        return super.getObjectGraph();
-    }
-
-    //region Views manipulation
     private void initializeViews() {
         setupListAdapter();
         setupSwipeRefreshLayout();
         setupListScrollListeners();
-    }
-
-    private void setupListAdapter() {
-        layoutManager = new LinearLayoutManager(getActivity());
-        activityList.setLayoutManager(layoutManager);
-
-        adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
-          new OnAvatarClickListener() {
-              @Override
-              public void onAvatarClick(String userId, View avatarView) {
-                  openProfile(userId);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override
-              public void onUsernameClick(String username) {
-                  openProfileFromUsername(username);
-              }
-          }, //
-          new OnStreamTitleClickListener() {
-              @Override
-              public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
-                  openStream(streamId, streamShortTitle, authorId);
-              }
-          }, //
-          new OnShotClick() {
-              @Override
-              public void onShotClick(ShotModel shot) {
-                  openShotDetail(shot);
-              }
-          });
-        activityList.setAdapter(adapter);
     }
 
     private void setupSwipeRefreshLayout() {
@@ -185,7 +140,38 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             timelinePresenter.showingLastActivity(adapter.getLastActivity());
         }
     }
-    //endregion
+
+    private void setupListAdapter() {
+        layoutManager = new LinearLayoutManager(getActivity());
+        activityList.setLayoutManager(layoutManager);
+
+        adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
+                new OnAvatarClickListener() {
+                    @Override
+                    public void onAvatarClick(String userId, View avatarView) {
+                        openProfile(userId);
+                    }
+                }, //
+                new OnUsernameClickListener() {
+                    @Override
+                    public void onUsernameClick(String username) {
+                        openProfileFromUsername(username);
+                    }
+                }, //
+                new OnStreamTitleClickListener() {
+                    @Override
+                    public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
+                        openStream(streamId, streamShortTitle, authorId);
+                    }
+                }, //
+                new OnShotClick() {
+                    @Override
+                    public void onShotClick(ShotModel shot) {
+                        openShotDetail(shot);
+                    }
+                });
+        activityList.setAdapter(adapter);
+    }
 
     protected void openProfile(String idUser) {
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
@@ -205,6 +191,16 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void openShotDetail(ShotModel shot) {
         Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(shotIntent);
+    }
+
+    private void initializePresenter() {
+        timelinePresenter.initialize(this, true);
+    }
+    //endregion
+
+    @Override
+    protected ObjectGraph getObjectGraph() {
+        return super.getObjectGraph();
     }
 
     //region View methods
