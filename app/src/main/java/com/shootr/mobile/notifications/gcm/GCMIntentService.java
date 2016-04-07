@@ -132,6 +132,7 @@ public class GCMIntentService extends IntentService {
             case ActivityType.NICE_SHOT:
             case ActivityType.SHARE_SHOT:
             case ActivityType.MENTION:
+            case ActivityType.REPLY_SHOT:
                 setupGoToShotDetailNotification(push);
                 break;
             default:
