@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.shootr.mobile.ShootrApplication;
+import com.shootr.mobile.data.prefs.ActivityBadgeCount;
+import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
@@ -27,6 +29,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject ActivityNotificationManager activityNotificationManager;
+    @Inject @ActivityBadgeCount
+    IntPreference badgeCount;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -64,17 +68,19 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
     public void openShot(Context context) {
         context.startActivity(new Intent(context,
-          MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         shotNotificationManager.clearShotNotifications();
     }
 
     public void openProfile(Context context, Intent intent) {
+        decrementBadgeCount();
         String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
         startActivityFromIntent(context,
-          ProfileContainerActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                ProfileContainerActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public void openStream(Context context, Intent intent) {
+        decrementBadgeCount();
         String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
         String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
         String shortTitle = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE);
@@ -84,6 +90,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     }
 
     public void openShotDetail(Context context, Intent intent) {
+        decrementBadgeCount();
         ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
         startActivityFromIntent(context,
           ShotDetailActivity.getIntentForActivity(context, shotModel).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -92,5 +99,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     public void startActivityFromIntent(Context context, Intent intent) {
         context.startActivity(intent);
         activityNotificationManager.clearActivityNotifications();
+    }
+
+    private void decrementBadgeCount() {
+        int numberOfActivities = badgeCount.get();
+        badgeCount.set(numberOfActivities - 1);
     }
 }
