@@ -402,8 +402,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-        View footerView =
-          LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+        View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
         footerProgress.setVisibility(View.GONE);
@@ -626,7 +625,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void hideTopicSnackBar() {
-        if(topicSnackbar != null && topicSnackbar.isShown()){
+        if (topicSnackbar != null && topicSnackbar.isShown()) {
             topicSnackbar.dismiss();
         }
     }
@@ -705,8 +704,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock,
-          new Runnable() {
+        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
               @Override public void run() {
                   reportShotPresenter.unblockUser(shotModel);
               }
@@ -727,8 +725,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
-          .setPositiveButton(getString(R.string.block_user_dialog_block),
-            new DialogInterface.OnClickListener() {
+          .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     reportShotPresenter.confirmBlock();
                 }
@@ -849,8 +846,7 @@ public class StreamTimelineFragment extends BaseFragment
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
+          .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);
                 }
@@ -969,7 +965,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);
     }
 

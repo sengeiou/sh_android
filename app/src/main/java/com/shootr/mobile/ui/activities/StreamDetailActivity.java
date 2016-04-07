@@ -35,7 +35,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;

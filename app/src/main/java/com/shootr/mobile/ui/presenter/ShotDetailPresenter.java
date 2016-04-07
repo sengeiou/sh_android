@@ -135,6 +135,14 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         setNiceBlocked(false);
     }
 
+    public void setupStreamTitle(Boolean isInStreamTimeline) {
+        if (isInStreamTimeline) {
+            shotDetailView.disableStreamTitle();
+        } else {
+            shotDetailView.enableStreamTitle();
+        }
+    }
+
     public void imageClick(ShotModel shot) {
         shotDetailView.openImage(shot.getImage());
     }
@@ -175,6 +183,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 }
             });
         }
+    }
+
+    public void streamTitleClick(final ShotModel shotModel) {
+        shotDetailView.goToStreamTimeline(shotModel.getStreamId());
     }
 
     private void startProfileContainerActivity(String username) {

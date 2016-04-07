@@ -2,8 +2,6 @@ package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
-import com.shootr.mobile.data.entity.StreamEntity;
-import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
@@ -19,7 +17,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
