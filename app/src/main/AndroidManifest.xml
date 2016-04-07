@@ -37,6 +37,8 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:host="web.shootr.com" android:scheme="http" />
                 <data android:host="web.shootr.com" android:scheme="https" />
+                <data android:host="s" android:scheme="shootr" />
+                <data android:host="st" android:scheme="shootr" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.StreamTimelineActivity" >
