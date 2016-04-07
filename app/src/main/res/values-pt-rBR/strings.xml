@@ -43,6 +43,15 @@
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Um email confirmado é requerido</string>
   <string name="all_participants_button">Todos os participantes</string>
+  <string name="analytics_screen_activity">atividade</string>
+  <string name="analytics_screen_favorites">favoritos</string>
+  <string name="analytics_screen_friends">amigos</string>
+  <string name="analytics_screen_me">me</string>
+  <string name="analytics_screen_stream_detail">streamDetail</string>
+  <string name="analytics_screen_stream_list">popularStreams</string>
+  <string name="analytics_screen_stream_timeline">streamTimeline</string>
+  <string name="analytics_screen_userProfile">userProfile</string>
+  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">Os shots que publique nos seus streams só serão exibidos aos seus seguidores.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
   <string name="block_ignore_user">Ignorar usuário</string>
@@ -72,6 +81,7 @@
   <string name="discard_profile_confirmation">Descartar modificações?</string>
   <string name="done">Feito</string>
   <string name="done_label">Feito</string>
+  <string name="done_pin_topic" formatted="false">Linkar</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Acesso negado. É necessário dar permissão para salvar imagens.</string>
   <string name="download_photo_permission_explaination">Você deve dar permissão para Shootr salvar imagens.</string>
@@ -213,9 +223,10 @@
   <string name="new_stream_description_label">Descrição</string>
   <string name="new_stream_short_title_label">Título curto</string>
   <string name="new_stream_title_label">Título</string>
+  <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
   <string name="niced_shot_activity">Te deu um nice</string>
-  <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
+  <string name="niced_shot_activity_with_comment">Te deu um nice: </string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -239,10 +250,12 @@
   <string name="opened_activity_text_pattern">Criou (stream)</string>
   <string name="participants_list_empty">Nenhum participante</string>
   <string name="photo_edit_gallery">Galeria</string>
+  <string name="photo_edit_remove">Apagar</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
   <string name="pinned_shot_activity">Linkado ao perfil</string>
   <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
+  <string name="pin_topic" formatted="false">Linkar mensagem</string>
   <string name="profile_all_shots">Todos os shots</string>
   <string name="profile_edit_done_button">Feito</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -278,13 +291,13 @@
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="seconds">s</string>
   <string name="shared_shot_activity">Compartilhou um shot de %s</string>
-  <string name="shared_shot_activity_with_comment">"Compartilhado de %s: "</string>
+  <string name="shared_shot_activity_with_comment">Compartilhado de %s: </string>
   <string name="shared_stream_notification">Stream compartilhado</string>
   <string name="share_shot_chooser_title">Compartilhar</string>
   <string name="share_shot_message">Shot de %1$s em %2$s: %3$s</string>
   <string name="share_shot_subject">Shot de %1$s em %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Não compartilhado (stream)</string>
-  <string name="share_stream_message">Confira %1$s em Shootr: https://web.shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">Confira %1$s em Shootr: https://shootr.com/#/st/%2$s</string>
   <string name="share_stream_subject">Confira a %s em Shootr</string>
   <string name="share_via">Compartilhar via…</string>
   <string name="share_via_shootr">Compartilhar via Shootr</string>
@@ -335,6 +348,8 @@
   <string name="title_activity_stream_data_info">Estatísticas</string>
   <string name="title_activity_stream_media">Arquivos</string>
   <string name="title_activity_support">Suporte</string>
+  <string name="title_menu_photo" formatted="false">foto</string>
+  <string name="topic" formatted="false">mensagem</string>
   <plurals name="total_watchers_pattern">
     <item quantity="one">%d participante</item>
     <item quantity="other">%d participantes</item>
@@ -354,6 +369,7 @@
   <string name="user_unblocked">Ignorar desfeito.</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
+  <string name="watch_profile_photo" formatted="false">ver</string>
   <string name="welcome_friends_text">Sair para desconectar</string>
   <string name="welcome_get_started_button">Começar</string>
   <string name="welcome_shootr_title">Entre em um stream para conectar-se</string>
@@ -361,11 +377,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="photo_edit_remove">Apagar</string>
-  <string name="pin_topic">Linkar mensagem</string>
-  <string name="done_pin_topic">Linkar</string>
-  <string name="new_topic">Nova mensagem…</string>
-  <string name="topic">Mensagem</string>
-  <string name="watch_profile_photo">Ver</string>
-  <string name="title_menu_photo">Foto</string>
 </resources>
