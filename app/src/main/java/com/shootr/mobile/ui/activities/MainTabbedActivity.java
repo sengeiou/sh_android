@@ -44,6 +44,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/#/st/";
     public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/#/s/";
     public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/#/s/";
+    public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
+    public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
@@ -97,17 +99,29 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         Pattern shareShotPatternWithHttps = Pattern.compile(SHARE_SHOT_PATTERN_HTTPS);
         Matcher matcherShareShotHttps = shareShotPatternWithHttps.matcher(address);
 
+        Pattern shareShotPatternWithShootr = Pattern.compile(SHARE_SHOT_PATTERN_SHOOTR);
+        Matcher matcherShareShotShootr = shareShotPatternWithShootr.matcher(address);
+
+        Pattern shareStreamPatternWithShootr = Pattern.compile(SHARE_STREAM_PATTERN_SHOOTR);
+        Matcher matcherShateStreamShootr = shareStreamPatternWithShootr.matcher(address);
+
         if (matcherShareStreamHttps.find()) {
             String idStream = address.substring(matcherShareStreamHttps.end());
             startActivity(StreamTimelineActivity.newIntent(this, idStream));
         } else if (matcherShateStreamHttp.find()) {
             String idStream = address.substring(matcherShateStreamHttp.end());
             startActivity(StreamTimelineActivity.newIntent(this, idStream));
+        } else if (matcherShateStreamShootr.find()) {
+            String idStream = address.substring(matcherShateStreamShootr.end());
+            startActivity(StreamTimelineActivity.newIntent(this, idStream));
         } else if (matcherShareShotHttp.find()) {
             String idShot = address.substring(matcherShareShotHttp.end());
             startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
         } else if (matcherShareShotHttps.find()) {
             String idShot = address.substring(matcherShareShotHttps.end());
+            startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
+        } else if (matcherShareShotShootr.find()) {
+            String idShot = address.substring(matcherShareShotShootr.end());
             startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
         }
     }
