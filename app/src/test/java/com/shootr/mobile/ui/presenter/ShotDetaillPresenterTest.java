@@ -241,6 +241,14 @@ public class ShotDetaillPresenterTest {
 
     }
 
+    @Test public void shouldOpenShotWhenParentOrReplyShotClick() throws Exception {
+        presenter.initialize(shotDetailView, shotModelNull());
+
+        presenter.shotClick(shotModel());
+
+        verify(shotDetailView).openShot(any(ShotModel.class));
+    }
+
     private List<Shot> shotList(int shots){
         ArrayList<Shot> shotList = new ArrayList<>();
         for(int i=0;i<shots;i++){

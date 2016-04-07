@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -159,8 +158,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
-          new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
                   detailPresenter.shareShot(shotModel);
               }
@@ -183,11 +181,19 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                   onShotAvatarClick(userId);
               }
           }, //
-            new ShotDetailWithRepliesAdapter.ImageClickListener() {
+            new ShotDetailWithRepliesAdapter.ShotClickListener() {
                 @Override public void onClick(ShotModel shot) {
-                    onShotImageClick(shot);
+                    onShotClick(shot);
                 }
-            }, //
+            }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
+              @Override public void onClick(ShotModel shot) {
+                  onShotClick(shot);
+              }
+          }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+              @Override public void onClick(ShotModel shot) {
+                  onShotImageClick(shot);
+              }
+          }, //
             new OnVideoClickListener() {
                 @Override public void onVideoClick(String url) {
                     onShotVideoClick(url);
@@ -282,6 +288,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarPresenter.initialize(this, streamId, false);
     }
 
+    @Override public void openShot(ShotModel shotModel) {
+        startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
+    }
+
     private ShotModel extractShotFromIntent() {
         return (ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT);
     }
@@ -302,6 +312,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     public void onShotAvatarClick(String userId) {
         detailPresenter.avatarClick(userId);
+    }
+
+    public void onShotClick(ShotModel shotModel) {
+        detailPresenter.shotClick(shotModel);
     }
 
     public void onShotUsernameClick(String username) {

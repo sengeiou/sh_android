@@ -28,4 +28,6 @@ public interface ShotDetailView  {
     void setupNewShotBarDelegate(ShotModel shotModel);
 
     void initializeNewShotBarPresenter(String streamId);
+
+    void openShot(ShotModel shotModel);
 }
