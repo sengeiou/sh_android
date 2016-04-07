@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.service.NetworkNotAvailableException;
+
 import javax.inject.Inject;
 
 public class GetStreamIsReadOnlyInteractor implements Interactor {

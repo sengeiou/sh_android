@@ -15,14 +15,16 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;

@@ -4,9 +4,11 @@ import com.shootr.mobile.domain.dagger.ServiceModule;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Fast;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   includes = { ServiceModule.class },

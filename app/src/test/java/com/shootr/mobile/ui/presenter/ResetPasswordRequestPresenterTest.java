@@ -9,6 +9,7 @@ import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.model.mappers.ForgotPasswordUserModelMapper;
 import com.shootr.mobile.ui.views.ResetPasswordRequestView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
+
 import timber.log.Timber;
 
 public class UserModel implements Serializable, Cloneable {

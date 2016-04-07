@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteQuery;
+
 import java.util.LinkedList;
 import java.util.List;
 

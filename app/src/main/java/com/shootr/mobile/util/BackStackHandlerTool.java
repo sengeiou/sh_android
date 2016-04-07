@@ -3,8 +3,11 @@ package com.shootr.mobile.util;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class BackStackHandlerTool implements BackStackHandler {

@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.task.validation.FieldValidationError;
 import com.shootr.mobile.task.validation.FieldValidator;
 import com.shootr.mobile.ui.model.UserModel;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

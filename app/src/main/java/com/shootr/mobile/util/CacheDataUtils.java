@@ -1,7 +1,9 @@
 package com.shootr.mobile.util;
 
 import android.content.Context;
+
 import java.io.File;
+
 import javax.inject.Inject;
 
 public class CacheDataUtils implements CacheUtils {

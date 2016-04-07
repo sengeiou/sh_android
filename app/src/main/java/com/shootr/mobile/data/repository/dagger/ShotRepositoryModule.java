@@ -12,9 +12,11 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

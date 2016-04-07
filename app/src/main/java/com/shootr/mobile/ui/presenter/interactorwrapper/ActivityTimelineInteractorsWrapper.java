@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.timeline.GetActivityTimelineInteracto
 import com.shootr.mobile.domain.interactor.timeline.GetOlderActivityTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshActivityTimelineInteractor;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+
 import javax.inject.Inject;
 
 public class ActivityTimelineInteractorsWrapper {

@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
+
 import javax.inject.Inject;
 
 public class DeleteDraftInteractor implements Interactor {

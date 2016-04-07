@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.mobile.ui.views.EmailLoginView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import javax.inject.Inject;
 
 public class EmailLoginPresenter implements Presenter {

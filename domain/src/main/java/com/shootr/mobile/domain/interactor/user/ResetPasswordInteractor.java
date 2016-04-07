@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.ResetPasswordException;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+
 import javax.inject.Inject;
 
 public class ResetPasswordInteractor implements Interactor {

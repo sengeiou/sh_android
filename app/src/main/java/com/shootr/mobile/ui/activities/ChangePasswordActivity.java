@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.EditText;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
@@ -17,7 +14,13 @@ import com.shootr.mobile.ui.presenter.ChangePasswordPresenter;
 import com.shootr.mobile.ui.views.ChangePasswordView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChangePasswordActivity extends BaseToolbarDecoratedActivity implements ChangePasswordView {
 

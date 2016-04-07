@@ -1,12 +1,15 @@
 package com.shootr.mobile.stetho;
 
 import android.content.Context;
+
 import com.facebook.stetho.DumperPluginsProvider;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 import com.shootr.mobile.data.dagger.ApplicationContext;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ShootrDumperPluginsProvider implements DumperPluginsProvider {

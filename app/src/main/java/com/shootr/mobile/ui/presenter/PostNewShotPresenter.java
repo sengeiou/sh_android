@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -16,9 +17,12 @@ import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class PostNewShotPresenter implements Presenter {

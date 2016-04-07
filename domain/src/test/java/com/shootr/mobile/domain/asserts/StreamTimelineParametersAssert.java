@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.asserts;
 
 import com.shootr.mobile.domain.StreamTimelineParameters;
+
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 

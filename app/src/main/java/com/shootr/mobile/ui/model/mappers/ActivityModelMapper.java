@@ -2,8 +2,10 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.ui.model.ActivityModel;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ActivityModelMapper {

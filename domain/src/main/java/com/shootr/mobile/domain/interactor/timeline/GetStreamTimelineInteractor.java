@@ -8,8 +8,10 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class GetStreamTimelineInteractor implements Interactor {

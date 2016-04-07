@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.Preconditions;
+
 import javax.inject.Inject;
 
 public class RemoveStreamInteractor implements com.shootr.mobile.domain.interactor.Interactor {

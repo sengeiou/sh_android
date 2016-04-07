@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.UserFollowsView;
+
 import java.util.List;
 
 public class NullUserFollowsView implements UserFollowsView {

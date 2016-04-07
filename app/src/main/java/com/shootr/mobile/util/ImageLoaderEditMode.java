@@ -2,9 +2,11 @@ package com.shootr.mobile.util;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.shootr.mobile.R;
+
 import java.io.File;
 import java.io.IOException;
 

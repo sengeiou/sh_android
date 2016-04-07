@@ -6,7 +6,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import java.util.Date;
+
 import javax.inject.Inject;
 
 public class HideShotInteractor implements Interactor {

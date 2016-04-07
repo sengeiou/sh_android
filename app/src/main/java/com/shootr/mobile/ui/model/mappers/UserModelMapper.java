@@ -4,8 +4,10 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class UserModelMapper {

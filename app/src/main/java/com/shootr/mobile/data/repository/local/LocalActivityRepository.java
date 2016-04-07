@@ -8,8 +8,10 @@ import com.shootr.mobile.domain.ActivityTimelineParameters;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

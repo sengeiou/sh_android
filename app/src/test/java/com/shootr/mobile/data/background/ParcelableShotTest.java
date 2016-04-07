@@ -1,9 +1,12 @@
 package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
+
 import com.shootr.mobile.domain.Shot;
-import java.util.Date;
+
 import org.junit.Test;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

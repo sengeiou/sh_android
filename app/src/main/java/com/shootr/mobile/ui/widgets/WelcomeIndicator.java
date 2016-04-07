@@ -6,6 +6,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.shootr.mobile.R;
 
 

@@ -2,6 +2,7 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.DeviceEntity;
 import com.shootr.mobile.domain.Device;
+
 import javax.inject.Inject;
 
 public class DeviceEntityMapper {

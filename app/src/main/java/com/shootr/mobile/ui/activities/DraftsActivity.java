@@ -8,8 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.DraftAdapter;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
@@ -17,8 +16,13 @@ import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.DraftsView;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class DraftsActivity extends BaseSignedInActivity implements DraftsView, DraftAdapter.DraftActionListener {
 

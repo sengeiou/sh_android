@@ -1,6 +1,7 @@
 package com.shootr.mobile.util;
 
 import com.crashlytics.android.Crashlytics;
+
 import timber.log.Timber;
 
 public class CrashReportingTree extends Timber.HollowTree {

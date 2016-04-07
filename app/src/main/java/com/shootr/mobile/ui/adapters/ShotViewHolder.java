@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindColor;
-import butterknife.BindDimen;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
@@ -25,6 +22,11 @@ import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
+
+import butterknife.Bind;
+import butterknife.BindColor;
+import butterknife.BindDimen;
+import butterknife.ButterKnife;
 
 public class ShotViewHolder {
 

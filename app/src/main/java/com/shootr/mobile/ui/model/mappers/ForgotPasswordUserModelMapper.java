@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.ForgotPasswordResult;
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
+
 import javax.inject.Inject;
 
 public class ForgotPasswordUserModelMapper {

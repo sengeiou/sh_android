@@ -5,8 +5,10 @@ import com.shootr.mobile.data.repository.remote.SyncFollowRepository;
 import com.shootr.mobile.data.repository.remote.SyncMuteRepository;
 import com.shootr.mobile.data.repository.remote.SyncShotRepository;
 import com.shootr.mobile.data.repository.remote.SyncUserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

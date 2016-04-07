@@ -1,6 +1,7 @@
 package com.shootr.mobile.stetho;
 
 import com.shootr.mobile.ShootrDebugApplication;
+
 import dagger.Module;
 
 @Module(

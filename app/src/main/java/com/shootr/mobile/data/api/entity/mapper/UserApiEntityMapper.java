@@ -2,6 +2,7 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.entity.UserEntity;
+
 import javax.inject.Inject;
 
 public class UserApiEntityMapper {

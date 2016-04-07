@@ -3,7 +3,9 @@ package com.shootr.mobile.data.repository.datasource.user;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.repository.datasource.CachedDataSource;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

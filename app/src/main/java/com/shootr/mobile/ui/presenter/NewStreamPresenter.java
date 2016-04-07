@@ -17,8 +17,11 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class NewStreamPresenter implements Presenter {

@@ -7,9 +7,11 @@ import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.squareup.otto.Bus;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
         injects = {

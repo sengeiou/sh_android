@@ -2,10 +2,12 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.FacebookController;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

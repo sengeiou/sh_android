@@ -11,9 +11,11 @@ import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 public class LocalStreamSearchRepository implements StreamSearchRepository {

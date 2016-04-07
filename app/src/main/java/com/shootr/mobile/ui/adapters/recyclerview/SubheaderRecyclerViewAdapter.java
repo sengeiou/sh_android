@@ -18,6 +18,7 @@ package com.shootr.mobile.ui.adapters.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
 import java.util.Collections;
 import java.util.List;
 

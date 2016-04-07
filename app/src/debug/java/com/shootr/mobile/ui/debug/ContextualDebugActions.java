@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import com.shootr.mobile.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import timber.log.Timber;
 
 public class ContextualDebugActions {

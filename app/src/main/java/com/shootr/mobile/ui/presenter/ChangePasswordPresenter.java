@@ -9,7 +9,9 @@ import com.shootr.mobile.domain.validation.ChangePasswordValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.ui.views.ChangePasswordView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ChangePasswordPresenter implements Presenter {

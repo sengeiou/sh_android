@@ -8,9 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -19,8 +17,14 @@ import com.shootr.mobile.ui.views.StreamMediaView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements StreamMediaView {
 

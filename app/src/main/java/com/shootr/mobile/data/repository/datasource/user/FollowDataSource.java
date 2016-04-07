@@ -5,6 +5,7 @@ import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
+
 import java.util.List;
 
 public interface FollowDataSource extends SyncableDataSource<FollowEntity> {

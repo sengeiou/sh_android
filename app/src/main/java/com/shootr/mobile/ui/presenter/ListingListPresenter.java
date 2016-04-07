@@ -14,7 +14,9 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.ListingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ListingListPresenter implements Presenter{

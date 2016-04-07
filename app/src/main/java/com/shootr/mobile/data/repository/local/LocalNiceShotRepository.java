@@ -4,8 +4,10 @@ import com.shootr.mobile.db.manager.NiceManager;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
+
 import java.lang.ref.WeakReference;
 import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

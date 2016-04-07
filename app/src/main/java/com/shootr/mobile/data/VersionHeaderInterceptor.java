@@ -1,12 +1,15 @@
 package com.shootr.mobile.data;
 
 import android.app.Application;
+
 import com.shootr.mobile.constant.Constants;
 import com.shootr.mobile.util.VersionUtils;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class VersionHeaderInterceptor implements Interceptor {

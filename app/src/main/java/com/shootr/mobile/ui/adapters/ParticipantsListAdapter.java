@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters;
 
 import android.content.Context;
+
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 

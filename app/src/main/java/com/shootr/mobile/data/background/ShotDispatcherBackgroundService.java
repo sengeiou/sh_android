@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
@@ -11,9 +12,11 @@ import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.ShotDispatcher;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ShotDispatcherBackgroundService extends Service {

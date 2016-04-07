@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -29,8 +26,15 @@ import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment

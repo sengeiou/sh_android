@@ -15,7 +15,9 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class CreateStreamInteractor implements Interactor {

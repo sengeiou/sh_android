@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.PeopleView;
+
 import java.util.List;
 
 public class NullPeopleView implements PeopleView {

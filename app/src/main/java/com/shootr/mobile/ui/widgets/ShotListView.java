@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;

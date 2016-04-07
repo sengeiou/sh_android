@@ -2,7 +2,9 @@ package com.shootr.mobile.interactor;
 
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class MainThreadInteractorExecutor implements InteractorHandler {

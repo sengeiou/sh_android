@@ -9,8 +9,10 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkArgument;

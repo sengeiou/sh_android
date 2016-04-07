@@ -8,16 +8,19 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.EmailConfirmationPresenter;
 import com.shootr.mobile.ui.views.EmailConfirmationView;
 import com.shootr.mobile.util.FeedbackMessage;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
 

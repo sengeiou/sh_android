@@ -11,16 +11,18 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static com.shootr.mobile.domain.asserts.StreamTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;

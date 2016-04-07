@@ -4,8 +4,10 @@ import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.domain.Shot;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

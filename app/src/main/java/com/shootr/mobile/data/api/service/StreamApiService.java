@@ -4,8 +4,10 @@ import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
+
 import java.io.IOException;
 import java.util.List;
+
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;

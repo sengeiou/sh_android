@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;

@@ -4,7 +4,9 @@ import com.shootr.mobile.data.bus.ServerDown;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ServerDownErrorInterceptor implements Interceptor {

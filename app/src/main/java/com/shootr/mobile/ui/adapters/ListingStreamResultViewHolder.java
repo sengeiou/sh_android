@@ -2,13 +2,16 @@ package com.shootr.mobile.ui.adapters;
 
 import android.view.View;
 import android.widget.ImageView;
-import butterknife.Bind;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
+
+import butterknife.Bind;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 

@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.interactor.InteractorExecutor;
 import com.shootr.mobile.util.DatabaseVersionUtils;
+
 import javax.inject.Inject;
 
 public class SafeDataClearRunnable implements Runnable {

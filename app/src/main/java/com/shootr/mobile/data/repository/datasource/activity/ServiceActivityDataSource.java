@@ -11,10 +11,12 @@ import com.shootr.mobile.domain.ActivityTimelineParameters;
 import com.shootr.mobile.domain.ActivityType;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ServiceActivityDataSource implements ActivityDataSource{

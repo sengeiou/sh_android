@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
+
+import com.shootr.mobile.R;
+import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.shootr.mobile.R;
-import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
 
 public class UpdateWarningActivity extends BaseNoToolbarActivity {
 

@@ -2,8 +2,10 @@ package stream;
 
 import android.support.test.espresso.action.TypeTextAction;
 import android.support.test.rule.ActivityTestRule;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
+
 import org.junit.Rule;
 import org.junit.Test;
 

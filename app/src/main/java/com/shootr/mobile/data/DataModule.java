@@ -3,6 +3,7 @@ package com.shootr.mobile.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
@@ -65,12 +66,15 @@ import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import dagger.Module;
-import dagger.Provides;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;

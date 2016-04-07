@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.util.BackStackHandler;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {

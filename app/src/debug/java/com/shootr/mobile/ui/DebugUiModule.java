@@ -1,15 +1,18 @@
 package com.shootr.mobile.ui;
 
 import android.os.Handler;
+
 import com.shootr.mobile.data.PollerEnabled;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.ui.debug.CaptureIntents;
 import com.shootr.mobile.ui.debug.DebugAppContainer;
 import com.shootr.mobile.util.DebugIntentFactory;
 import com.shootr.mobile.util.IntentFactory;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
     injects = DebugAppContainer.class,

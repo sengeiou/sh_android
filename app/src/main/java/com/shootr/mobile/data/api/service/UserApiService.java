@@ -6,8 +6,10 @@ import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
+
 import java.io.IOException;
 import java.util.List;
+
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;

@@ -6,8 +6,10 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
+
 import java.util.Arrays;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SendDraftInteractor implements Interactor {

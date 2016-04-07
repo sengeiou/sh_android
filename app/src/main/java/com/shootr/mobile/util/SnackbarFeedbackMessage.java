@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+
 import javax.inject.Inject;
 
 public class SnackbarFeedbackMessage implements FeedbackMessage {

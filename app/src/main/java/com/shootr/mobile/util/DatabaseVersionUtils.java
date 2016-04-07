@@ -2,6 +2,7 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -9,6 +10,7 @@ import com.shootr.mobile.data.prefs.LastDatabaseVersion;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
+
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils implements DatabaseUtils {

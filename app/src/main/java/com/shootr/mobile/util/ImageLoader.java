@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.widget.ImageView;
+
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+
 import java.io.File;
 import java.io.IOException;
 

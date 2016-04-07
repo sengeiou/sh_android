@@ -2,10 +2,12 @@ package com.shootr.mobile.data.bus;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.DeadEvent;
 import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
+
 import timber.log.Timber;
 
 public class AndroidBus extends Bus {

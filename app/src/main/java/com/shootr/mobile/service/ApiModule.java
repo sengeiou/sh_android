@@ -24,11 +24,14 @@ import com.shootr.mobile.domain.repository.PhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
-import dagger.Module;
-import dagger.Provides;
+
 import java.lang.reflect.Type;
 import java.util.Date;
+
 import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;

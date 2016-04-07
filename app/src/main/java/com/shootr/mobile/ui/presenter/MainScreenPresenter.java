@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import javax.inject.Inject;
 
 public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {

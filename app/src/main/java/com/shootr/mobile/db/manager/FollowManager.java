@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -11,8 +12,10 @@ import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class FollowManager extends AbstractManager{

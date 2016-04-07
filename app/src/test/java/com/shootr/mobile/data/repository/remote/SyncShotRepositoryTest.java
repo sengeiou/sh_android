@@ -7,12 +7,14 @@ import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;

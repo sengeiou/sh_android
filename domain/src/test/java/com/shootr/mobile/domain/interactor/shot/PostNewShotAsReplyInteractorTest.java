@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
