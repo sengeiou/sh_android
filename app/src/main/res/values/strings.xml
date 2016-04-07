@@ -43,15 +43,6 @@
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
   <string name="all_participants_button">All participants</string>
-  <string name="analytics_screen_activity">activity</string>
-  <string name="analytics_screen_favorites">favorites</string>
-  <string name="analytics_screen_friends">friends</string>
-  <string name="analytics_screen_me">me</string>
-  <string name="analytics_screen_stream_detail">streamDetail</string>
-  <string name="analytics_screen_stream_list">popularStreams</string>
-  <string name="analytics_screen_stream_timeline">streamTimeline</string>
-  <string name="analytics_screen_userProfile">userProfile</string>
-  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">Their shots on your streams will only be visible to their followers.</string>
   <string name="block_cannot_shoot_streams">Ban user</string>
   <string name="block_ignore_user">Ignore user</string>

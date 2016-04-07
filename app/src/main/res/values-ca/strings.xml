@@ -43,15 +43,6 @@
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Cal un email confirmat</string>
   <string name="all_participants_button">Tots els participants</string>
-  <string name="analytics_screen_activity">activitat</string>
-  <string name="analytics_screen_favorites">favorits</string>
-  <string name="analytics_screen_friends">amics</string>
-  <string name="analytics_screen_me">me</string>
-  <string name="analytics_screen_stream_detail">streamDetail</string>
-  <string name="analytics_screen_stream_list">popularStreams</string>
-  <string name="analytics_screen_stream_timeline">streamTimeline</string>
-  <string name="analytics_screen_userProfile">userProfile</string>
-  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">Els shots que publiqui als teus streams només es mostraràn als seus seguidors.</string>
   <string name="block_cannot_shoot_streams">Vetar usuari</string>
   <string name="block_ignore_user">Ignorar usuari</string>
