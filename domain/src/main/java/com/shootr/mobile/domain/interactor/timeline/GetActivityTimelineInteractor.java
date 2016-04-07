@@ -87,11 +87,25 @@ public class GetActivityTimelineInteractor implements Interactor {
         String currentUserId = sessionRepository.getCurrentUserId();
         List<Activity> userActivities = new ArrayList<>();
         for (Activity activity : activities) {
-            if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+            if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
                 userActivities.add(activity);
             }
         }
         return userActivities;
+    }
+
+    private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
+        return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId, activity);
+    }
+
+    private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
+        return activity
+                .getIdUser() != null && activity
+                .getIdUser().equals(currentUserId);
+    }
+
+    private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
+        return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
     }
 
     private ActivityTimeline buildTimeline(List<Activity> activities) {

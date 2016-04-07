@@ -94,15 +94,29 @@ public class GetOlderActivityTimelineInteractor implements com.shootr.mobile.dom
         notifyLoaded(timeline);
     }
 
+    private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
+        return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId, activity);
+    }
+
+    private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
+        return activity
+                .getIdUser() != null && activity
+                .getIdUser().equals(currentUserId);
+    }
+
+    private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
+        return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
+    }
+
     private List<Activity> retainUsersActivity(List<Activity> activities) {
         String currentUserId = sessionRepository.getCurrentUserId();
         List<Activity> userActivities = new ArrayList<>();
         for (Activity activity : activities) {
-            if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+            if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
                 userActivities.add(activity);
             }
         }
-        if (userActivities.isEmpty()) {
+        if (userActivities.isEmpty() && !activities.isEmpty()) {
             currentOldestDate = activities.get(0).getPublishDate().getTime();
             loadOlderTimeline();
         }
