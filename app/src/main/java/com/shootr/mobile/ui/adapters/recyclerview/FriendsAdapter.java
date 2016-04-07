@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;

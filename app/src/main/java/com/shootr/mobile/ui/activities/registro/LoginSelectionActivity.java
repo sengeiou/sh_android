@@ -15,10 +15,7 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -47,10 +44,17 @@ import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class LoginSelectionActivity extends BaseActivity {

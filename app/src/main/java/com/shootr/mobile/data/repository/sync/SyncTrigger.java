@@ -1,8 +1,9 @@
 package com.shootr.mobile.data.repository.sync;
 
-import dagger.Lazy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import dagger.Lazy;
 
 @Singleton
 public class SyncTrigger {

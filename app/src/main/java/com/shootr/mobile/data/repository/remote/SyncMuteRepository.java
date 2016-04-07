@@ -10,10 +10,13 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class SyncMuteRepository implements MuteRepository, SyncableRepository {

@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.ViewGroup;
+
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.AppContainer;
-import dagger.ObjectGraph;
+
 import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 
 public class BaseNoToolbarActivity extends ActionBarActivity {
 

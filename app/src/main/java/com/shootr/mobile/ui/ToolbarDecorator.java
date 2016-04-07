@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.ImageLoader;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {

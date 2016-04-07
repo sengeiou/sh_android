@@ -9,7 +9,9 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.PinShotView;
+
 import java.util.Date;
+
 import javax.inject.Inject;
 
 public class PinShotPresenter implements Presenter {

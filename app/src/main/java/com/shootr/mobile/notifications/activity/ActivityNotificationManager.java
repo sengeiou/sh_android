@@ -2,6 +2,7 @@ package com.shootr.mobile.notifications.activity;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
@@ -10,8 +11,10 @@ import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.PushNotification;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

@@ -11,17 +11,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ImageLoaderEditMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class WatchersView extends LinearLayout{
 

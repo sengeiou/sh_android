@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.bus.WatchUpdateRequest;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+
 import javax.inject.Inject;
 
 public class UpdateWatchNumberInteractor implements Interactor {

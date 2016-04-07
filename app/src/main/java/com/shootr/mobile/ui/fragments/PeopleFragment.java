@@ -14,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -35,8 +32,15 @@ import com.shootr.mobile.ui.views.nullview.NullSuggestedPeopleView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 
 public class PeopleFragment extends BaseFragment implements PeopleView, SuggestedPeopleView,
   UserListAdapter.FollowUnfollowAdapterCallback {

@@ -6,13 +6,15 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
-import java.util.Arrays;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;

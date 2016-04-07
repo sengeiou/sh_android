@@ -6,8 +6,10 @@ import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
+
 import java.io.File;
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ShootrShotService {

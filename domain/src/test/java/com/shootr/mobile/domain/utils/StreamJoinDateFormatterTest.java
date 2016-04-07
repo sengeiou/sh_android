@@ -1,12 +1,13 @@
 package com.shootr.mobile.domain.utils;
 
-import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneOffset;
+
+import java.util.Date;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

@@ -1,7 +1,9 @@
 package com.shootr.mobile.data.repository.datasource.event;
 
 import com.shootr.mobile.data.entity.StreamSearchEntity;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ServiceStreamSearchDataSource implements StreamSearchDataSource {

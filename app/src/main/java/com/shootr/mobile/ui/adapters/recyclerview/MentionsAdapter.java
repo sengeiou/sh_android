@@ -6,15 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.BindableAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MentionsAdapter extends BindableAdapter<UserModel> {
 

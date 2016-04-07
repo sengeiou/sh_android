@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.notifications.CommonNotification;

@@ -12,6 +12,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

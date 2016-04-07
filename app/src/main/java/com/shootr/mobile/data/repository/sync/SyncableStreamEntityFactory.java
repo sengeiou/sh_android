@@ -6,7 +6,9 @@ import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

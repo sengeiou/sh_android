@@ -9,13 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.Truss;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public final class ExternalIntentActivity extends Activity implements Toolbar.OnMenuItemClickListener {

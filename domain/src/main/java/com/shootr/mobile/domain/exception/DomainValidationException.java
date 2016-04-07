@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.exception;
 
 import com.shootr.mobile.domain.validation.FieldValidationError;
+
 import java.util.Arrays;
 import java.util.List;
 

@@ -13,9 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
@@ -27,10 +25,16 @@ import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 

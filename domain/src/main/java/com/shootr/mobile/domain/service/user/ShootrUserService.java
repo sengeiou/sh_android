@@ -17,7 +17,9 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ShootrUserService {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.repository;
 
 import com.shootr.mobile.domain.Stream;
+
 import java.util.List;
 
 public interface StreamRepository {

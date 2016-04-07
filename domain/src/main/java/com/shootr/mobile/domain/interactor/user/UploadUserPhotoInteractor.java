@@ -12,8 +12,10 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
+
 import java.io.File;
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.interactor.Interactor {

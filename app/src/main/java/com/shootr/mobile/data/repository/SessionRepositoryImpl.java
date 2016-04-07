@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
+
 import javax.inject.Inject;
 
 public class SessionRepositoryImpl implements SessionRepository {

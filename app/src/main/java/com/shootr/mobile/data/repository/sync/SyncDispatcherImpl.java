@@ -1,7 +1,9 @@
 package com.shootr.mobile.data.repository.sync;
 
 import java.util.Collection;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class SyncDispatcherImpl implements SyncDispatcher {

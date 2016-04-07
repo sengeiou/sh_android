@@ -3,9 +3,11 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.ActivityApiEntity;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.entity.ActivityEntity;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ActivityApiEntityMapper {

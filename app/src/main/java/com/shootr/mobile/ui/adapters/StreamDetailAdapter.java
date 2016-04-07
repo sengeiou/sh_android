@@ -11,8 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -20,10 +19,14 @@ import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 import static com.shootr.mobile.domain.utils.Preconditions.checkPositionIndex;

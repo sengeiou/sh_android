@@ -13,7 +13,9 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SyncShotRepository implements ShotRepository, SyncableRepository {

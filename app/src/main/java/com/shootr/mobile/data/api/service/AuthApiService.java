@@ -9,7 +9,9 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.FacebookUserEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.squareup.okhttp.Response;
+
 import java.io.IOException;
+
 import retrofit.http.Body;
 import retrofit.http.POST;
 

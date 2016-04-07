@@ -5,6 +5,7 @@ import com.shootr.mobile.data.mapper.DeviceEntityMapper;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.domain.Device;
 import com.shootr.mobile.domain.repository.DeviceRepository;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

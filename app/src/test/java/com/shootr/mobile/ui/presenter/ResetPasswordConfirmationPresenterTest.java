@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.user.SendPasswordResetEmailInteractor
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.views.ResetPasswordConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

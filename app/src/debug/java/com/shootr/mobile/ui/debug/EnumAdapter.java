@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.ui.adapters.BindableAdapter;
+
+import butterknife.ButterKnife;
 
 class EnumAdapter<T extends Enum<T>> extends BindableAdapter<T> {
   private final T[] enumConstants;

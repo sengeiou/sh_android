@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class SuggestedPeopleListView extends FrameLayout {
 

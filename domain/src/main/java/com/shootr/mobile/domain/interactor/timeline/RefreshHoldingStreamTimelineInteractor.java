@@ -7,7 +7,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+
 import java.util.Date;
+
 import javax.inject.Inject;
 
 public class RefreshHoldingStreamTimelineInteractor implements Interactor {

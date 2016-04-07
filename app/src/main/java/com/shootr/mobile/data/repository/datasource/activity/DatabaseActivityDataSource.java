@@ -3,7 +3,9 @@ package com.shootr.mobile.data.repository.datasource.activity;
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.db.manager.ActivityManager;
 import com.shootr.mobile.domain.ActivityTimelineParameters;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DatabaseActivityDataSource implements ActivityDataSource {

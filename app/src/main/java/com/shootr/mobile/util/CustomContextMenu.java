@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
+
 import com.shootr.mobile.domain.utils.Preconditions;
+
 import java.util.ArrayList;
 import java.util.List;
 

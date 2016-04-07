@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.squareup.otto.Bus;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -12,7 +13,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class InteractorExecutor implements InteractorHandler {

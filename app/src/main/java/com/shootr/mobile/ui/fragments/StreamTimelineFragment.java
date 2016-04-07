@@ -21,12 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -72,10 +67,19 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
+
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment

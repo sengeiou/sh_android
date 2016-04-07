@@ -15,7 +15,9 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.LoginGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ServiceLoginGateway implements LoginGateway {

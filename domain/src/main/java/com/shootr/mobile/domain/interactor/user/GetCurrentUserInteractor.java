@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+
 import javax.inject.Inject;
 
 public class GetCurrentUserInteractor implements Interactor {

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.view.MenuItem;
+
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;

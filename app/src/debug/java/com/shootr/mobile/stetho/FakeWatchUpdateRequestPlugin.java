@@ -5,7 +5,9 @@ import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 import com.shootr.mobile.data.repository.remote.SyncUserRepository;
 import com.shootr.mobile.domain.bus.WatchUpdateRequest;
+
 import java.io.PrintStream;
+
 import javax.inject.Inject;
 
 public class FakeWatchUpdateRequestPlugin implements DumperPlugin {

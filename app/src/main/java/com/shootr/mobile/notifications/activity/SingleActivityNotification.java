@@ -3,9 +3,11 @@ package com.shootr.mobile.notifications.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.PushNotification;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.io.IOException;
 
 public class SingleActivityNotification extends AbstractActivityNotification {

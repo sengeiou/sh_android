@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -13,14 +14,16 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;

@@ -4,7 +4,9 @@ import com.shootr.mobile.data.api.service.VideoApiService;
 import com.shootr.mobile.data.entity.VideoEmbedEntity;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.service.shot.ShotGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class SpecialserviceShotGateway implements ShotGateway {

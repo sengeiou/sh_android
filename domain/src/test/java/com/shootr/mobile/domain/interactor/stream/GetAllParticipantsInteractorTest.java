@@ -8,12 +8,14 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.interactor.user.GetAllParticipantsInteractor;
 import com.shootr.mobile.domain.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

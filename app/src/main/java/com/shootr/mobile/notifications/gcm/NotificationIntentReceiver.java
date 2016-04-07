@@ -3,6 +3,7 @@ package com.shootr.mobile.notifications.gcm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -15,6 +16,7 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.model.ShotModel;
+
 import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {

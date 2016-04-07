@@ -5,10 +5,12 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 public class ServiceStreamDataSource implements StreamDataSource {

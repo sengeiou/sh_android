@@ -14,10 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.UserModel;
@@ -26,7 +23,13 @@ import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.ui.widgets.MaxLinesInputFilter;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements ProfileEditView {
 

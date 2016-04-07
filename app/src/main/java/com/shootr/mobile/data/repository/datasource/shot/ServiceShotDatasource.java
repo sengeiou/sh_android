@@ -12,9 +12,11 @@ import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {

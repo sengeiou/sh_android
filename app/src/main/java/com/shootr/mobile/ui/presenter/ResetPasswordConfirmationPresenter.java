@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.user.SendPasswordResetEmailInteractor
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.views.ResetPasswordConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import javax.inject.Inject;
 
 public class ResetPasswordConfirmationPresenter implements Presenter {

@@ -2,8 +2,10 @@ package com.shootr.mobile.util;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.widgets.UsernameSpan;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -18,7 +18,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
 import com.shootr.mobile.domain.utils.Patterns;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

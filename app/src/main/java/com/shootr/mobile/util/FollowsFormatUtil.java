@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+
 import javax.inject.Inject;
 
 public class FollowsFormatUtil implements FormatNumberUtils {

@@ -13,8 +13,10 @@ import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {

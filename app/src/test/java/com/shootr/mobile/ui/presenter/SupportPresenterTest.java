@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.mobile.ui.views.SupportView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -2,8 +2,10 @@ package shot;
 
 import android.support.test.espresso.action.TypeTextAction;
 import android.support.test.rule.ActivityTestRule;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
+
 import org.junit.Rule;
 import org.junit.Test;
 

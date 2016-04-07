@@ -2,14 +2,12 @@ package com.shootr.mobile.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.view.View;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
-import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
-import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class StartedShootingViewHolder extends StreamActivityViewHolder {
 

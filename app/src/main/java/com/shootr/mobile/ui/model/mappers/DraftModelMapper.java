@@ -5,8 +5,10 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.DraftModel;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DraftModelMapper {

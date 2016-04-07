@@ -2,9 +2,11 @@ package com.shootr.mobile.data.repository.dagger;
 
 import com.shootr.mobile.data.repository.sync.SyncDispatcher;
 import com.shootr.mobile.data.repository.sync.SyncDispatcherImpl;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   includes = {

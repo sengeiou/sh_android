@@ -9,7 +9,9 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class FindFriendsServerInteractor implements Interactor {

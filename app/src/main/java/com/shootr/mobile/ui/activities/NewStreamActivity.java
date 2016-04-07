@@ -16,9 +16,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.NewStreamPresenter;
@@ -26,7 +24,12 @@ import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.ui.widgets.FloatLabelLayout;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 public class NewStreamActivity extends BaseToolbarDecoratedActivity implements NewStreamView {
 

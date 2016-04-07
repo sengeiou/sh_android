@@ -3,6 +3,7 @@ package com.shootr.mobile.db.manager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import javax.inject.Inject;
 
 public abstract class AbstractManager {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -27,9 +28,12 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.shootr.mobile.util.UIObserver;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscriber;
 

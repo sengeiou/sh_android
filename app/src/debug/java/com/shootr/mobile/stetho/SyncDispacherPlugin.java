@@ -4,7 +4,9 @@ import com.facebook.stetho.dumpapp.DumpException;
 import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 import com.shootr.mobile.data.repository.sync.SyncDispatcher;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class SyncDispacherPlugin implements DumperPlugin {

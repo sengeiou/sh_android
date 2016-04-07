@@ -1,8 +1,10 @@
 package shot;
 
 import android.support.test.rule.ActivityTestRule;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
+
 import org.junit.Rule;
 import org.junit.Test;
 

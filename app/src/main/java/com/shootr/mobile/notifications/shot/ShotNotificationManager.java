@@ -2,13 +2,16 @@ package com.shootr.mobile.notifications.shot;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

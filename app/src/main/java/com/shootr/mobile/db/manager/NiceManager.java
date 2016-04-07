@@ -3,12 +3,15 @@ package com.shootr.mobile.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.db.DatabaseContract.NiceShotTable;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.inject.Inject;
 
 public class NiceManager extends AbstractManager {

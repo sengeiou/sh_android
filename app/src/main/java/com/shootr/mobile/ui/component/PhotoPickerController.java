@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.FileChooserUtils;
+
 import java.io.File;
 import java.io.IOException;
+
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui;
 
 import android.os.Handler;
+
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
@@ -42,9 +43,11 @@ import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

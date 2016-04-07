@@ -9,6 +9,7 @@ import com.shootr.mobile.db.mappers.SuggestedPeopleDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserEntityModelMapper;
+
 import dagger.Module;
 import dagger.Provides;
 

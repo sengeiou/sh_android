@@ -15,6 +15,7 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
+
 import javax.inject.Inject;
 
 public class SelectStreamInteractor implements Interactor {

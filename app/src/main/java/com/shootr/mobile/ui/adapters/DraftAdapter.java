@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -17,8 +15,13 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.DraftItemView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHolder> {
 

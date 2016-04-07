@@ -1,10 +1,12 @@
 package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;

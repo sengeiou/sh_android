@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.ui.views.WelcomePageView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import javax.inject.Inject;
 
 public class WelcomePagePresenter implements Presenter {

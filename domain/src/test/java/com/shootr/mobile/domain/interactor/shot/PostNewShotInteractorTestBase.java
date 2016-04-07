@@ -7,10 +7,12 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.ShotSender;
-import java.io.File;
+
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+
+import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;

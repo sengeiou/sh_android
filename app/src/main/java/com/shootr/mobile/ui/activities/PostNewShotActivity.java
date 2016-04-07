@@ -15,10 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
+
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
@@ -36,12 +33,19 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
+
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

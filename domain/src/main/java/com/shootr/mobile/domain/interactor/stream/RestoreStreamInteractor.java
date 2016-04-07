@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.Preconditions;
+
 import javax.inject.Inject;
 
 public class RestoreStreamInteractor implements com.shootr.mobile.domain.interactor.Interactor {

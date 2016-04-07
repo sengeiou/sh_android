@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnFocusChange;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
@@ -18,7 +15,13 @@ import com.shootr.mobile.ui.activities.WelcomePageActivity;
 import com.shootr.mobile.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.FeedbackMessage;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnFocusChange;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 

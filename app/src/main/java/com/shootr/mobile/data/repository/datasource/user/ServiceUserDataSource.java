@@ -10,8 +10,10 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserNotFoundException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ServiceUserDataSource implements UserDataSource {

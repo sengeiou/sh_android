@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
@@ -14,9 +15,12 @@ import com.shootr.mobile.domain.service.EmailInUseException;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.mobile.domain.service.user.LoginException;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class ErrorMessageFactory {

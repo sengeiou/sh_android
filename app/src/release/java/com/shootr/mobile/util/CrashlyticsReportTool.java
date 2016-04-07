@@ -1,7 +1,9 @@
 package com.shootr.mobile.util;
 
 import android.content.Context;
+
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
 
 public class CrashlyticsReportTool implements CrashReportTool {

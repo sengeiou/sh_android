@@ -13,11 +13,15 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-import java.io.File;
-import java.io.IOException;
-import javax.inject.Inject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class ShootrPhotoService implements PhotoService {

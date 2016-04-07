@@ -9,14 +9,16 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

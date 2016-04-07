@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.datasource.event;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+
 import java.util.List;
 
 public interface FavoriteDataSource extends SyncableDataSource<FavoriteEntity> {

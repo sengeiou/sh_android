@@ -2,10 +2,12 @@ package com.shootr.mobile.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ErrorActivity extends BaseActivity {
 

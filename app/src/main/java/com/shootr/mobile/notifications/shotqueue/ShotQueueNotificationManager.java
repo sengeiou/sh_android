@@ -2,9 +2,11 @@ package com.shootr.mobile.notifications.shotqueue;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

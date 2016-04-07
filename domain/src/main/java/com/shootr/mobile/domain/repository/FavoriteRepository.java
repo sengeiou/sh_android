@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.repository;
 
 import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+
 import java.util.List;
 
 public interface FavoriteRepository {

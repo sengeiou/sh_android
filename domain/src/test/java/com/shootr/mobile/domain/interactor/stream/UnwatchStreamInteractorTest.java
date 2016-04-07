@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

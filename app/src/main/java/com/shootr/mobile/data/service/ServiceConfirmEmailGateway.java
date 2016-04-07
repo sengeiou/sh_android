@@ -10,7 +10,9 @@ import com.shootr.mobile.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.service.user.ConfirmEmailGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {

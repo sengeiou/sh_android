@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.adapters;
 
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import butterknife.BindColor;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -10,6 +10,8 @@ import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
+
+import butterknife.BindColor;
 
 public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 

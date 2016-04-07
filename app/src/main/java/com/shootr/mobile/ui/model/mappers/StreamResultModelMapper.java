@@ -3,8 +3,10 @@ package com.shootr.mobile.ui.model.mappers;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

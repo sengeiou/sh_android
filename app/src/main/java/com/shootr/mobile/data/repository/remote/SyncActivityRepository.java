@@ -10,8 +10,10 @@ import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.user.CreateAccountInteractor;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

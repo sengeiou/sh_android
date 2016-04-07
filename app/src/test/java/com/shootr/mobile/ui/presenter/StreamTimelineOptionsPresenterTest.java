@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

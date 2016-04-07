@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
+
 import javax.inject.Inject;
 
 public class GetStreamInteractor implements Interactor {

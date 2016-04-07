@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.ActivityEntityDBMapper;
 import com.shootr.mobile.domain.ActivityTimelineParameters;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ActivityManager extends AbstractManager {

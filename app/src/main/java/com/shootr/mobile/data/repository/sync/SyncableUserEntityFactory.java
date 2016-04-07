@@ -6,7 +6,9 @@ import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.util.Date;
+
 import javax.inject.Inject;
 
 public class SyncableUserEntityFactory extends SyncableEntityFactory<User, UserEntity> {

@@ -8,7 +8,9 @@ import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class LocalFavoriteRepository implements FavoriteRepository {

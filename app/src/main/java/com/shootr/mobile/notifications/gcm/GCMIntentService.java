@@ -3,6 +3,7 @@ package com.shootr.mobile.notifications.gcm;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -17,9 +18,13 @@ import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.sloydev.jsonadapters.JsonAdapter;
-import java.io.IOException;
-import javax.inject.Inject;
+
 import org.json.JSONException;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.repository;
 
 import com.shootr.mobile.domain.StreamSearchResult;
+
 import java.util.List;
 import java.util.Map;
 

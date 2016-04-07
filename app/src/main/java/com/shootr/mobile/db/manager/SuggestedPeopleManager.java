@@ -4,11 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.SuggestedPeopleDBMapper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SuggestedPeopleManager extends AbstractManager {

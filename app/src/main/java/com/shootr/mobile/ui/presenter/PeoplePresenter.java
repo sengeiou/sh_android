@@ -11,7 +11,9 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PeopleView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class PeoplePresenter implements Presenter {

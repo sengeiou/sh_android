@@ -6,13 +6,13 @@ import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.Stream;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.repository;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.StreamTimelineParameters;
+
 import java.util.List;
 
 public interface ShotRepository {

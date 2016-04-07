@@ -7,7 +7,9 @@ import com.shootr.mobile.data.mapper.DeviceEntityMapper;
 import com.shootr.mobile.domain.Device;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.DeviceRepository;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class RemoteDeviceRepository implements DeviceRepository {

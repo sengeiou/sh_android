@@ -1,9 +1,11 @@
 package com.shootr.mobile.data.prefs;
 
 import android.content.SharedPreferences;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
         library = true,

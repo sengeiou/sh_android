@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.service;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.data.api.entity.CreateAccountApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
@@ -13,7 +14,9 @@ import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.service.user.CreateAccountGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

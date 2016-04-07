@@ -1,8 +1,10 @@
 package com.shootr.mobile.util;
 
 import android.content.res.Resources;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
+
 import javax.inject.Inject;
 
 public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {

@@ -2,10 +2,13 @@ package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.mobile.domain.User;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import timber.log.Timber;
 
 @Singleton

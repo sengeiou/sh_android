@@ -6,11 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnLongClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
@@ -21,8 +17,16 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
+
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
 

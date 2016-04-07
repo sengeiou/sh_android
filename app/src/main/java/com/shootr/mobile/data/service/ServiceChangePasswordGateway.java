@@ -6,7 +6,9 @@ import com.shootr.mobile.data.entity.ChangePasswordEntity;
 import com.shootr.mobile.domain.exception.InvalidPasswordException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.ChangePasswordGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ServiceChangePasswordGateway implements ChangePasswordGateway {

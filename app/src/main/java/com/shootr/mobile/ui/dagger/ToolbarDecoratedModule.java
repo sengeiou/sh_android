@@ -6,6 +6,7 @@ import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
+
 import dagger.Module;
 import dagger.Provides;
 

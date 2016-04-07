@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -15,9 +16,11 @@ import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SyncFollowRepository implements FollowRepository, SyncableRepository {

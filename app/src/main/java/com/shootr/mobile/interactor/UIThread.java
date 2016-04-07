@@ -6,7 +6,9 @@ package com.shootr.mobile.interactor;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import com.shootr.mobile.domain.executor.PostExecutionThread;
+
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 

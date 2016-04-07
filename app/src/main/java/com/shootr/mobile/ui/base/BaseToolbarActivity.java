@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.ViewGroup;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.bus.Main;
@@ -14,8 +15,10 @@ import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import dagger.ObjectGraph;
+
 import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 
 import static butterknife.ButterKnife.findById;
 

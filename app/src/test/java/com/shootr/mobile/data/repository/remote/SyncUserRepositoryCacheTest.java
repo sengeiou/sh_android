@@ -12,12 +12,14 @@ import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;

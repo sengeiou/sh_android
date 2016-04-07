@@ -12,8 +12,10 @@ import com.shootr.mobile.ui.model.mappers.DraftModelMapper;
 import com.shootr.mobile.ui.views.DraftsView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFailed.Receiver {
