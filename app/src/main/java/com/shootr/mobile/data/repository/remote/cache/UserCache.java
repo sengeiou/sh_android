@@ -16,7 +16,7 @@ public class UserCache {
 
     public static final String GET_PEOPLE = "getPeople";
     public static final int GET_PEOPLE_KEEP_ALIVE_SECONDS = 20 * 1000;
-    private final QNCache userCache;
+    private final QNCache<List<User>> userCache;
 
     @Inject
     public UserCache(QNCache userCache) {
