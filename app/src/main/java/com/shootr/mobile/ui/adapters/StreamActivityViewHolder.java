@@ -28,6 +28,8 @@ public abstract class StreamActivityViewHolder extends GenericActivityViewHolder
         text.setText(formatActivityComment(activity));
         if(activity.getShot() != null){
             enableShotClick(activity);
+        }else{
+            itemView.setOnClickListener(null);
         }
     }
 
