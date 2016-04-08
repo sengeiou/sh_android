@@ -101,6 +101,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @OnLongClick(R.id.support_version_container)
     public boolean onVersionLongClick() {
         Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_LONG).show();
+        startActivity(new Intent(this, EasterEggActivity.class));
         return true;
     }
 

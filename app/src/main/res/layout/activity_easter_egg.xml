@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      tools:context="com.shootr.mobile.ui.activities.EasterEggActivity">
+
+        <FrameLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="50dp">
+
+            <ImageView android:id="@+id/imv_rafa"
+              android:layout_width="match_parent"
+              android:layout_height="400dp"
+              android:scaleType="centerCrop"
+              android:src="@drawable/sample_avatar" />
+
+            <LinearLayout android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_date_rafa"
+                  android:textColor="@color/white"
+                  android:textSize="24sp"
+                  android:textStyle="bold" />
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_end_rafa"
+                  android:textColor="@color/white"
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="900dp"
+              android:layout_height="200dp"
+              android:layout_gravity="bottom"
+              android:background="@drawable/diagonal_view"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="20dp"
+                  android:text="@string/easter_egg_rafa"
+                  android:textColor="@color/primary"
+                  android:textSize="20sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="50dp">
+
+            <ImageView android:id="@+id/imv_arturo"
+              android:layout_width="match_parent"
+              android:layout_height="400dp"
+              android:scaleType="centerCrop"
+              android:src="@drawable/sample_avatar_arturo" />
+
+            <LinearLayout android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_date_arturo"
+                  android:textColor="@color/white"
+                  android:textSize="24sp"
+                  android:textStyle="bold" />
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_end_arturo"
+                  android:textColor="@color/white"
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/diagonal_view"
+              android:layout_width="900dp"
+              android:layout_height="200dp"
+              android:layout_gravity="bottom"
+              android:background="@drawable/diagonal_view"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="20dp"
+                  android:text="@string/easter_egg_arturo"
+                  android:textColor="@color/primary"
+                  android:textSize="20sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="50dp">
+
+            <ImageView android:id="@+id/imv_jorge"
+              android:layout_width="match_parent"
+              android:layout_height="400dp"
+              android:scaleType="centerCrop"
+              android:src="@drawable/sample_avatar_jorge" />
+
+            <LinearLayout android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_date_jorge"
+                  android:textColor="@color/white"
+                  android:textSize="24sp"
+                  android:textStyle="bold" />
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/easter_egg_end_jorge"
+                  android:textColor="@color/white"
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="900dp"
+              android:layout_height="200dp"
+              android:layout_gravity="bottom"
+              android:background="@drawable/diagonal_view"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="20dp"
+                  android:text="@string/easter_egg_jorge"
+                  android:textColor="@color/primary"
+                  android:textSize="20sp"
+                  android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+</ScrollView>
