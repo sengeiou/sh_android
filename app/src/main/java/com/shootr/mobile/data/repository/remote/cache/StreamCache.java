@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 public class StreamCache {
 
     public static final int GET_STREAM_KEEP_ALIVE_SECONDS =  60 * 60 * 1000;
-    private final QNCache streamCache;
+    private final QNCache<Stream> streamCache;
 
     @Inject
     public StreamCache(QNCache streamCache) {

@@ -202,7 +202,7 @@ dependencies {
         transitive = true;
     }
 
-    compile 'com.sloydev.quitnowcache:quitnow-cache:1.2' //TODO use original when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
+    compile 'com.fewlaps.quitnowcache:quitnow-cache:1.5.0'
 
     compile 'io.reactivex:rxjava:1.0.10'
 
