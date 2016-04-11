@@ -13,6 +13,21 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.9.0] - 2016-04-11
+
+### Changed
+- QNCache v1.5
+
+### Added
+- Activity Filter
+- Pin Alert
+- Reply Activity
+- Father Shot detail
+- Shot Detail to stream
+- Started shooting to shot
+- Badge decrementado cuando se accede a las activities
+- Scheme añadido para el deeplinking
+
 ## [1.8.1] - 2016-04-5
 
 ### Changed
