@@ -123,7 +123,8 @@ public class NicersActivity extends BaseToolbarDecoratedActivity implements Nice
 
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
-        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          userModel.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.unfollowUser(userModel);

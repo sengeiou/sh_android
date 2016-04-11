@@ -48,9 +48,13 @@ public class NicersPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        UserModelMapper userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+        UserModelMapper userModelMapper =
+          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         presenter = new NicersPresenter(getNicersInteractor,
-          followInteractor, unfollowInteractor, errorMessageFactory, userModelMapper);
+          followInteractor,
+          unfollowInteractor,
+          errorMessageFactory,
+          userModelMapper);
         presenter.setView(nicersView);
     }
 
