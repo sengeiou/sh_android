@@ -361,12 +361,15 @@ public class ShotDetaillPresenterTest {
     private void setupUnmarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
         }).when(unmarkNiceShotInteractor)
-          .unmarkNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+          .unmarkNiceShot(anyString(),
+            any(Interactor.CompletedCallback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailInteractorCallback() {
@@ -396,7 +399,8 @@ public class ShotDetaillPresenterTest {
     private void setupMarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
@@ -404,13 +408,15 @@ public class ShotDetaillPresenterTest {
           .markNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupShareShotInteractor(){
+    private void setupShareShotInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(shareShotInteractor).shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(shareShotInteractor)
+          .shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 }
