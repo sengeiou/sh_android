@@ -172,7 +172,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
-                  detailPresenter.shareShot(shotModel);
+                  detailPresenter.shareShot();
               }
           }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {

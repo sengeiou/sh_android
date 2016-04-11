@@ -204,7 +204,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail(shotModel);
     }
 
-    public void shareShot(ShotModel shotModel) {
+    public void shareShot() {
         shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 shotDetailView.showShotShared();
