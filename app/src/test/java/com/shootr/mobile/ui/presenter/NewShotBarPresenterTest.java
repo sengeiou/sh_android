@@ -33,7 +33,7 @@ public class NewShotBarPresenterTest {
     private static final String STREAM_ID = "stream";
     private static final Boolean IS_IN_STREAMTIMELINE = true;
     public static final String AUTHOR_ID = "authorId";
-    private static final Boolean IS__NOT_IN_STREAMTIMELINE = false;
+    private static final Boolean IS_NOT_IN_STREAMTIMELINE = false;
     private static final String ANOTHER_ID = "anotherId";
 
     @Mock GetStreamIsReadOnlyInteractor getStreamIsRemovedInteractor;
@@ -124,7 +124,7 @@ public class NewShotBarPresenterTest {
     }
 
     @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS__NOT_IN_STREAMTIMELINE);
+        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS_NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
@@ -142,7 +142,7 @@ public class NewShotBarPresenterTest {
     }
 
     @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsNotStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS__NOT_IN_STREAMTIMELINE);
+        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS_NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();

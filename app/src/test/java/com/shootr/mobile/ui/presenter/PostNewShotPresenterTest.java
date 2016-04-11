@@ -34,8 +34,8 @@ public class PostNewShotPresenterTest {
     public static final String USERNAME = "username";
     public static final String PART_OF_A_USERNAME = "@use";
     public static final String COMMENT_WITH_USERNAME = "comment @username ";
-    public static final String[] words = { "comment", "@username" };
-    public static final Integer wordPosition = 1;
+    public static final String[] WORDS = { "comment", "@username" };
+    public static final Integer WORD_POSITION = 1;
     private PostNewShotPresenter presenter;
 
     @Mock Bus bus;
@@ -61,7 +61,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldShowMentionSuggestionsIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).showMentionSuggestions();
     }
@@ -69,7 +69,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldHideImageContainerIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).hideImageContainer();
     }
@@ -77,7 +77,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldRenderMentionSuggestionsIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).renderMentionSuggestions(anyList());
     }
@@ -85,7 +85,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldhideMentionSuggestionsIfNoPeopleObtainedWhenMentioning() throws Exception {
         setupNoMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).hideMentionSuggestions();
     }
@@ -93,7 +93,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldMentionUserWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).mentionUser(COMMENT_WITH_USERNAME);
@@ -102,7 +102,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldHideMentionSuggestionsWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).hideMentionSuggestions();
@@ -111,7 +111,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldShowImageContainerWhenMentionClickedIfThereWasNoPictureSelected() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView, never()).showImageContainer();
@@ -120,7 +120,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldSetCursonrToEndOfTextWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).setCursorToEndOfText();

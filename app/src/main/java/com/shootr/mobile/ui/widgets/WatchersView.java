@@ -64,9 +64,7 @@ public class WatchersView extends LinearLayout {
         layoutInflater = LayoutInflater.from(context);
         watchersHoldersMap = new ArrayMap<>();
 
-        if (true || isInEditMode()) {
-            addMockData();
-        }
+        addMockData();
     }
     //endregion
 
@@ -166,7 +164,7 @@ public class WatchersView extends LinearLayout {
         }
     }
 
-    public static interface OnProfileClickListener {
+    public interface OnProfileClickListener {
 
         void onProfile(String idUser);
     }

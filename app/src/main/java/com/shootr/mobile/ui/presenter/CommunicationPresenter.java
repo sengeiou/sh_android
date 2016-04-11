@@ -6,7 +6,7 @@ import com.squareup.otto.Subscribe;
 
 public interface CommunicationPresenter {
 
-    @Subscribe public void onCommunicationError(CommunicationErrorEvent event);
+    @Subscribe void onCommunicationError(CommunicationErrorEvent event);
 
-    @Subscribe public void onConnectionNotAvailable(ConnectionNotAvailableEvent event);
+    @Subscribe void onConnectionNotAvailable(ConnectionNotAvailableEvent event);
 }

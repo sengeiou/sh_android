@@ -85,7 +85,7 @@ public class ScrollListView extends ListView {
         this.onDetectScrollListener = onDetectScrollListener;
     }
 
-    public static interface OnDetectScrollListener {
+    public interface OnDetectScrollListener {
 
         void onUpScrolling();
 

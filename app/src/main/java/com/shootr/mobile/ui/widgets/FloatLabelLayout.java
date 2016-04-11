@@ -73,7 +73,7 @@ public final class FloatLabelLayout extends FrameLayout {
         a.recycle();
     }
 
-    @Override public final void addView(View child, int index, ViewGroup.LayoutParams params) {
+    @Override public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (child instanceof TextView && child != mLabel) {
             // If we already have an EditText, throw an exception
             if (mEditText != null) {

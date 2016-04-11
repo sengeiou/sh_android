@@ -24,9 +24,9 @@ public class ToggleSwitch extends SwitchCompat {
 
     private OnBeforeCheckedChangeListener mOnBeforeListener;
 
-    public static interface OnBeforeCheckedChangeListener {
+    public interface OnBeforeCheckedChangeListener {
 
-        public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
+        boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
     }
 
     public ToggleSwitch(Context context) {
