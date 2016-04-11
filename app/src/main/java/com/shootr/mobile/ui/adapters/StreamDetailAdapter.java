@@ -190,6 +190,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             case TYPE_ALL_PARTICIPANTS:
                 allParticipantsViewHolder.setVisible(isAllParticipantsVisible);
+                break;
+            default:
         }
     }
 

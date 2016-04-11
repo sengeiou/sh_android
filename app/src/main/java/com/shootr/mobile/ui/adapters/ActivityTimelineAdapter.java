@@ -124,6 +124,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateFooterViewHolder(parent);
             case TYPE_REPLY_SHOT:
                 return onCreateReplyViewHolder(parent);
+            default:
         }
         throw new IllegalStateException("View type %d not handled");
     }

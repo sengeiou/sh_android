@@ -355,6 +355,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                       case R.id.menu_stream_edit_info:
                           streamDetailPresenter.editStreamInfo();
                           break;
+                      default:
+                          break;
                   }
               }
           })
@@ -372,6 +374,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                           break;
                       case R.id.menu_photo_take:
                           takePhotoFromCamera();
+                          break;
+                      default:
                           break;
                   }
               }

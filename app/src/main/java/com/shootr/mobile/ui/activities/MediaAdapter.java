@@ -39,6 +39,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 return onCreateFooterViewHolder(viewGroup);
             case TYPE_GENERIC_MEDIA:
                 return onCreateMediaViewHolder(viewGroup);
+            default:
         }
         throw new IllegalStateException("View type %d not handled");
     }
