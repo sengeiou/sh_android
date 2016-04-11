@@ -279,24 +279,44 @@ public class ShotDetaillPresenterTest {
         verify(shotDetailView).disableStreamTitle();
     }
 
-    @Test public void shouldShowShotSharedWhenInitializeWithIdShotAndShareShot() throws Exception {
+    @Test public void shouldShowShotSharedWhenInitializeWithIdShotAndShareShotViaShootr() throws Exception {
         setupShareSHotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, ID_SHOT);
 
-        presenter.shareShot();
+        presenter.shareShotViaShootr();
 
         verify(shotDetailView).showShotShared();
     }
 
-    @Test public void shouldShowShotSharedWhenInitializeWithShotModelAndShareShot() throws Exception {
+    @Test public void shouldShowShotSharedWhenInitializeWithShotModelAndShareShotViaShootr() throws Exception {
+        setupShareSHotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, shotModel());
+
+        presenter.shareShotViaShootr();
+
+        verify(shotDetailView).showShotShared();
+    }
+
+    @Test public void shouldShareShotWhenInitializeWithShotModel() throws Exception {
         setupShareSHotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, shotModel());
 
         presenter.shareShot();
 
-        verify(shotDetailView).showShotShared();
+        verify(shotDetailView).shareShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldShareShotWhenInitializeWithIdShot() throws Exception {
+        setupShareSHotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        presenter.shareShot();
+
+        verify(shotDetailView).shareShot(any(ShotModel.class));
     }
 
     private List<Shot> shotList(int shots) {

@@ -37,4 +37,6 @@ public interface ShotDetailView  {
     void disableStreamTitle();
 
     void enableStreamTitle();
+
+    void shareShot(ShotModel shotModel);
 }
