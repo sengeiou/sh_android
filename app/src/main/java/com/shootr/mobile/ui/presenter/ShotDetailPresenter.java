@@ -204,7 +204,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail(shotModel);
     }
 
-    public void shareShot(ShotModel shotModel) {
+    public void shareShotViaShootr() {
         shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 shotDetailView.showShotShared();
@@ -214,6 +214,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void shareShot(){
+        shotDetailView.shareShot(shotModel);
     }
 
     protected void setNiceBlocked(Boolean blocked) {

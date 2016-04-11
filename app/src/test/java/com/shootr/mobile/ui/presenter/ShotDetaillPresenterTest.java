@@ -198,8 +198,8 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, ID_SHOT);
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
-                any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldSetupNewShotBarDelegateWhenInitializedFromDeepLinking() throws Exception {
@@ -224,8 +224,8 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, shotModel());
 
         verify(getShotDetaillInteractor).loadShotDetail(anyString(),
-                any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldNotLoadShotDetailFromShotModelWhenShotModelIsNull() throws Exception {
@@ -277,6 +277,46 @@ public class ShotDetaillPresenterTest {
         presenter.setupStreamTitle(IS_IN_STREAM_TIMELINE);
 
         verify(shotDetailView).disableStreamTitle();
+    }
+
+    @Test public void shouldShowShotSharedWhenInitializeWithIdShotAndShareShotViaShootr() throws Exception {
+        setupShareShotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        presenter.shareShotViaShootr();
+
+        verify(shotDetailView).showShotShared();
+    }
+
+    @Test public void shouldShowShotSharedWhenInitializeWithShotModelAndShareShotViaShootr() throws Exception {
+        setupShareShotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, shotModel());
+
+        presenter.shareShotViaShootr();
+
+        verify(shotDetailView).showShotShared();
+    }
+
+    @Test public void shouldShareShotWhenInitializeWithShotModel() throws Exception {
+        setupShareShotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, shotModel());
+
+        presenter.shareShot();
+
+        verify(shotDetailView).shareShot(any(ShotModel.class));
+    }
+
+    @Test public void shouldShareShotWhenInitializeWithIdShot() throws Exception {
+        setupShareShotInteractor();
+        setupGetShotDetailInteractorCallback();
+        presenter.initialize(shotDetailView, ID_SHOT);
+
+        presenter.shareShot();
+
+        verify(shotDetailView).shareShot(any(ShotModel.class));
     }
 
     private List<Shot> shotList(int shots) {
@@ -364,6 +404,16 @@ public class ShotDetaillPresenterTest {
             }
         }).when(markNiceShotInteractor)
           .markNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupShareShotInteractor(){
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(shareShotInteractor).shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
 }

@@ -10,7 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -39,16 +42,9 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity
@@ -161,27 +157,26 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             backStackHandler.handleBackStack(this);
             return true;
         } else if (item.getItemId() == R.id.menu_share) {
-            ShotModel shotModel = extractShotFromIntent();
-            openContextualMenu(shotModel);
+            openContextualMenu();
         } else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void openContextualMenu(final ShotModel shotModel) {
+    private void openContextualMenu() {
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
-                  detailPresenter.shareShot(shotModel);
+                  detailPresenter.shareShotViaShootr();
               }
           }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
-                shareShot(shotModel);
+                detailPresenter.shareShot();
             }
         }).show();
     }
 
-    private void shareShot(ShotModel shotModel) {
+    @Override public void shareShot(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
         Intents.maybeStartActivity(this, shareIntent);
     }
