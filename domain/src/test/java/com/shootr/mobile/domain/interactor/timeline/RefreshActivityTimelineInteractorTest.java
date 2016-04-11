@@ -104,7 +104,8 @@ public class RefreshActivityTimelineInteractorTest {
         verify(spyCallback).onLoaded(timelineForActivity());
     }
 
-    @Test public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStreamAndIsUserTimeline()
+    @Test
+    public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStreamAndIsUserTimeline()
       throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);

@@ -15,9 +15,9 @@ public class SendDeviceInfoInteractor implements Interactor {
     private final DeviceRepository remoteDeviceRepository;
     private final DeviceFactory deviceFactory;
 
-    @Inject
-    public SendDeviceInfoInteractor(InteractorHandler interactorHandler, @Local DeviceRepository localDeviceRepository,
-      @Remote DeviceRepository remoteDeviceRepository, DeviceFactory deviceFactory) {
+    @Inject public SendDeviceInfoInteractor(InteractorHandler interactorHandler,
+      @Local DeviceRepository localDeviceRepository, @Remote DeviceRepository remoteDeviceRepository,
+      DeviceFactory deviceFactory) {
         this.interactorHandler = interactorHandler;
         this.localDeviceRepository = localDeviceRepository;
         this.remoteDeviceRepository = remoteDeviceRepository;

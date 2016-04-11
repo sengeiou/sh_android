@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -37,8 +36,10 @@ public class GetUserByIdInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor =
-          new GetUserByIdInteractor(interactorHandler, postExecutionThread, localUserRepository, remoteUserRepository);
+        interactor = new GetUserByIdInteractor(interactorHandler,
+          postExecutionThread,
+          localUserRepository,
+          remoteUserRepository);
     }
 
     @Test public void shouldLoadUserFromLocalRepository() throws Exception {

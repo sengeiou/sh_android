@@ -149,6 +149,7 @@ public class CreateStreamInteractor implements Interactor {
             case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT:
             case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG:
                 return StreamValidator.FIELD_TITLE;
+            default:
         }
         return 0;
     }

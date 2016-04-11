@@ -1,10 +1,8 @@
 package com.shootr.mobile.domain.validation;
 
 import com.shootr.mobile.domain.exception.ShootrError;
-
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +44,8 @@ public class CreateUserValidatorTest {
 
     @Test public void shouldReturnusernameTooLongErrorIfMoreThanTwentyCharacters() {
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_LONGER_THAN_MAXIMUM, PASSWORD_STUB);
+        List<FieldValidationError> errors =
+          validator.validate(EMAIL_STUB, USERNAME_LONGER_THAN_MAXIMUM, PASSWORD_STUB);
 
         assertThat(errors).contains(usernameTooLongError());
     }
@@ -81,7 +80,8 @@ public class CreateUserValidatorTest {
         List<FieldValidationError> errors =
           new CreateUserValidator().validate(EMAIL_WITH_PLUS_SIGN, USERNAME_STUB, PASSWORD_STUB);
 
-        assertThat(errors).doesNotContain(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
+        assertThat(errors).doesNotContain(
+          new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
           CreateUserValidator.FIELD_EMAIL));
     }
 
@@ -116,7 +116,8 @@ public class CreateUserValidatorTest {
         assertThat(errors).contains(passwordIsEqualToUsernameError());
     }
 
-    @Test public void shouldReturnPasswordHasNotValidCharactersErrorIfContainsInvalidCharacters() throws Exception {
+    @Test public void shouldReturnPasswordHasNotValidCharactersErrorIfContainsInvalidCharacters()
+      throws Exception {
         CreateUserValidator validator = new CreateUserValidator();
         List<FieldValidationError> errors =
           validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_WITH_INVALID_CHARACTERS);

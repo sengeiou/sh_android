@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.validation;
 
+import com.shootr.mobile.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class CreateUserValidator {
 
     private void validateEmailIsNotNull(String email) {
         if (email == null) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL,
               CreateUserValidator.FIELD_EMAIL);
         }
     }
@@ -53,7 +54,7 @@ public class CreateUserValidator {
             Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
             boolean hasEmailFormat = emailPattern.matcher(email).matches();
             if (!hasEmailFormat) {
-                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
+                addError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
                   CreateUserValidator.FIELD_EMAIL);
             }
         }
@@ -73,7 +74,7 @@ public class CreateUserValidator {
             Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN);
             boolean hasUsernameFormat = usernamePattern.matcher(username).matches();
             if (!hasUsernameFormat) {
-                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_USERNAME_INVALID_CHARACTERS,
+                addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_INVALID_CHARACTERS,
                   FIELD_USERNAME);
             }
         }
@@ -81,21 +82,21 @@ public class CreateUserValidator {
 
     private void validateUsernameIsNotNull(String username) {
         if (username == null) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL,
               FIELD_USERNAME);
         }
     }
 
     private void validateUsernameHasMoreThanThreeCharacters(String username) {
         if (username != null && username.length() < USERNAME_MINIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT,
               FIELD_USERNAME);
         }
     }
 
     private void validateUsernameHasLessThan25Characters(String username) {
         if (username != null && username.length() > USERNAME_MAXIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG,
               FIELD_USERNAME);
         }
     }
@@ -115,7 +116,7 @@ public class CreateUserValidator {
             Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
             boolean hasPasswordPattern = passwordPattern.matcher(password).matches();
             if (!hasPasswordPattern) {
-                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS,
+                addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS,
                   CreateUserValidator.FIELD_PASSWORD);
             }
         }
@@ -123,28 +124,28 @@ public class CreateUserValidator {
 
     private void validatePasswordIsDifferentFromUsername(String username, String password) {
         if (username != null && username.equals(password)) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME,
               FIELD_PASSWORD);
         }
     }
 
     private void validatePasswordHasLesThanTwentyCharacters(String password) {
         if (password != null && password.length() > PASSWORD_MAXIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG,
               FIELD_PASSWORD);
         }
     }
 
     private void validatePasswordHasMoreThanSixCharacters(String password) {
         if (password != null && password.length() < PASSWORD_MINIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT,
               FIELD_PASSWORD);
         }
     }
 
     private void validatePasswordNotNull(String password) {
         if (password == null) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL,
+            addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL,
               FIELD_PASSWORD);
         }
     }

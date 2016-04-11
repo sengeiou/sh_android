@@ -2,7 +2,6 @@ package com.shootr.mobile.domain.asserts;
 
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.Shot;
-
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 
@@ -22,7 +21,8 @@ public class QueuedShotAssert extends AbstractAssert<QueuedShotAssert, QueuedSho
 
     /**
      * An entry point for QueuedShotAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
-     * With a static import, one can write directly: <code>assertThat(myQueuedShot)</code> and get specific assertion
+     * With a static import, one can write directly: <code>assertThat(myQueuedShot)</code> and get specific
+     * assertion
      * with code completion.
      *
      * @param actual the QueuedShot we want to make assertions on.

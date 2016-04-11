@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -56,7 +55,9 @@ public class SelectStreamInteractorTest {
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectStreamInteractor(interactorHandler,
           postExecutionThread,
-          localStreamRepository, remoteStreamRepository, localUserRepository,
+          localStreamRepository,
+          remoteStreamRepository,
+          localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
           sessionRepository,
@@ -128,7 +129,7 @@ public class SelectStreamInteractorTest {
         assertThat(updatedUser).hasWatchingStreamId(NEW_STREAM_ID);
     }
 
-    @Test public void should_setStreamTitle_when_updateWatchWithStreamInfo() throws Exception {
+    @Test public void shouldSetStreamTitleWhenUpdateWatchWithStreamInfo() throws Exception {
         User userWithOldStream = currentUserWatchingOldStream();
         Stream selectedStream = newStream();
 

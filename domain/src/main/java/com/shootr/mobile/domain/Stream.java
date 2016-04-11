@@ -121,13 +121,16 @@ public class Stream {
 
         if (id != null ? !id.equals(stream.id) : stream.id != null) return false;
         if (authorId != null ? !authorId.equals(stream.authorId) : stream.authorId != null) return false;
-        if (authorUsername != null ? !authorUsername.equals(stream.authorUsername) : stream.authorUsername != null) {
+        if (authorUsername != null ? !authorUsername.equals(stream.authorUsername)
+          : stream.authorUsername != null) {
             return false;
         }
         if (title != null ? !title.equals(stream.title) : stream.title != null) return false;
         if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
         if (shortTitle != null ? !shortTitle.equals(stream.shortTitle) : stream.shortTitle != null) return false;
-        if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
+        if (description != null ? !description.equals(stream.description) : stream.description != null) {
+            return false;
+        }
         return !(country != null ? !country.equals(stream.country) : stream.country != null);
     }
 

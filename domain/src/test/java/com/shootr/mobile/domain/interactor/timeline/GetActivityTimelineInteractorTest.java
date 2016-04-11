@@ -123,7 +123,9 @@ public class GetActivityTimelineInteractorTest {
     }
 
     private List<Activity> unorderedActivities() {
-        return Arrays.asList(activityWithDate(DATE_MIDDLE), activityWithDate(DATE_OLDER), activityWithDate(DATE_NEWER));
+        return Arrays.asList(activityWithDate(DATE_MIDDLE),
+          activityWithDate(DATE_OLDER),
+          activityWithDate(DATE_NEWER));
     }
 
     private Activity activityWithDate(Long date) {

@@ -124,7 +124,8 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
-        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters()))
+          .thenReturn(Collections.<Shot>emptyList());
 
         shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 

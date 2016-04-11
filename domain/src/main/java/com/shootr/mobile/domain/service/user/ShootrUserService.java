@@ -17,9 +17,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ShootrUserService {
@@ -36,7 +34,8 @@ public class ShootrUserService {
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
 
-    @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
+    @Inject
+    public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
       ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway,
       ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
@@ -125,7 +124,8 @@ public class ShootrUserService {
         confirmEmailGateway.changeEmail(email);
     }
 
-    public void changePassword(String currentPassword, String newPassword, String locale) throws InvalidPasswordException {
+    public void changePassword(String currentPassword, String newPassword, String locale)
+      throws InvalidPasswordException {
         changePasswordGateway.changePassword(currentPassword, newPassword, locale);
     }
 

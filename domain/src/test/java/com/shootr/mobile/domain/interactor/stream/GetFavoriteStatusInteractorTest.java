@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;

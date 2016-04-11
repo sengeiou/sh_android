@@ -140,7 +140,9 @@ public class Activity {
 
         Activity activity = (Activity) o;
 
-        if (idActivity != null ? !idActivity.equals(activity.idActivity) : activity.idActivity != null) return false;
+        if (idActivity != null ? !idActivity.equals(activity.idActivity) : activity.idActivity != null) {
+            return false;
+        }
         if (idUser != null ? !idUser.equals(activity.idUser) : activity.idUser != null) return false;
         if (username != null ? !username.equals(activity.username) : activity.username != null) return false;
         if (idStream != null ? !idStream.equals(activity.idStream) : activity.idStream != null) return false;

@@ -77,7 +77,8 @@ public class GetStreamIsReadOnlyInteractorTest {
 
     @Test public void shouldNotifyErrorIfRemoteRepositoryThrowsServerCommunicationException() throws Exception {
         when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenThrow(new ServerCommunicationException(new Throwable()));
+        when(remoteStreamRepository.getStreamById(ID_STREAM))
+          .thenThrow(new ServerCommunicationException(new Throwable()));
 
         interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
