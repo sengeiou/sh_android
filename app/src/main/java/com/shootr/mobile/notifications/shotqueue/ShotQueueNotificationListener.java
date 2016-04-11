@@ -2,10 +2,13 @@ package com.shootr.mobile.notifications.shotqueue;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.service.ShotQueueListener;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class ShotQueueNotificationListener implements ShotQueueListener {

@@ -8,7 +8,9 @@ import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class LocalShotRepository implements ShotRepository {

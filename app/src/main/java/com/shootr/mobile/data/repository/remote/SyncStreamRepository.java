@@ -11,7 +11,9 @@ import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SyncStreamRepository implements StreamRepository, SyncableRepository {
@@ -53,16 +55,16 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override public Stream putStream(Stream stream) {
-        return putStream(stream, false);
+        return putStream(stream, false, false);
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
         StreamEntity currentOrNewEntity = syncableStreamEntityFactory.updatedOrNewEntity(stream);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
-        StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity);
+        StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity, notifyMessage);
         markEntityAsSynchronized(remoteStreamEntity);
-        localStreamDataSource.putStream(remoteStreamEntity);
+        localStreamDataSource.putStream(remoteStreamEntity, notifyMessage);
         return streamEntityMapper.transform(remoteStreamEntity);
     }
 

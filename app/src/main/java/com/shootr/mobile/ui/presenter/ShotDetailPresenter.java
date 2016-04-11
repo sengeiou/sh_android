@@ -16,7 +16,9 @@ import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
@@ -135,6 +137,14 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         setNiceBlocked(false);
     }
 
+    public void setupStreamTitle(Boolean isInStreamTimeline) {
+        if (isInStreamTimeline) {
+            shotDetailView.disableStreamTitle();
+        } else {
+            shotDetailView.enableStreamTitle();
+        }
+    }
+
     public void imageClick(ShotModel shot) {
         shotDetailView.openImage(shot.getImage());
     }
@@ -177,6 +187,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
+    public void streamTitleClick(final ShotModel shotModel) {
+        shotDetailView.goToStreamTimeline(shotModel.getStreamId());
+    }
+
     private void startProfileContainerActivity(String username) {
         shotDetailView.startProfileContainerActivity(username);
     }
@@ -190,7 +204,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail(shotModel);
     }
 
-    public void shareShot(ShotModel shotModel) {
+    public void shareShotViaShootr() {
         shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 shotDetailView.showShotShared();
@@ -200,6 +214,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    public void shareShot(){
+        shotDetailView.shareShot(shotModel);
     }
 
     protected void setNiceBlocked(Boolean blocked) {
@@ -212,5 +230,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Override public void pause() {
         bus.unregister(this);
+    }
+
+    public void shotClick(ShotModel shotModel) {
+        shotDetailView.openShot(shotModel);
     }
 }

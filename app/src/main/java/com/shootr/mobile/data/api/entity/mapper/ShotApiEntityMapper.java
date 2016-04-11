@@ -3,9 +3,11 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

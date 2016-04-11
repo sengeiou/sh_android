@@ -3,6 +3,7 @@ package com.shootr.mobile;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+
 import com.shootr.mobile.data.DataModule;
 import com.shootr.mobile.data.background.dagger.BackgroundModule;
 import com.shootr.mobile.data.bus.BusModule;
@@ -10,10 +11,13 @@ import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.notifications.dagger.NotificationModule;
 import com.shootr.mobile.ui.UiModule;
+
+import java.io.File;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import java.io.File;
-import javax.inject.Singleton;
 
 @Module(
         includes = {

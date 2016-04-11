@@ -13,7 +13,9 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.AllParticipantsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class AllParticipantsPresenter implements Presenter {

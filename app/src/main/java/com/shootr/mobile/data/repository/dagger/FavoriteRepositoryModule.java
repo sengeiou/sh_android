@@ -8,9 +8,11 @@ import com.shootr.mobile.data.repository.remote.SyncFavoriteRepository;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

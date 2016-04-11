@@ -18,9 +18,11 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

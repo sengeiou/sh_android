@@ -3,6 +3,7 @@ package com.shootr.mobile.notifications.gcm;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -17,9 +18,13 @@ import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.sloydev.jsonadapters.JsonAdapter;
-import java.io.IOException;
-import javax.inject.Inject;
+
 import org.json.JSONException;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -74,6 +79,9 @@ public class GCMIntentService extends IntentService {
                 case PushNotification.Parameters.PUSH_TYPE_ACTIVITY:
                     receivedActivity(push);
                     break;
+                case PushNotification.Parameters.PUSH_TYPE_STREAM:
+                    receivedStream(push);
+                    break;
                 default:
                     receivedUnknown(push);
             }
@@ -102,6 +110,10 @@ public class GCMIntentService extends IntentService {
         return new PushNotification(values, parameters, silent, badge);
     }
 
+    private void receivedStream(PushNotification pushNotification) throws JSONException, IOException {
+        setupGoToStreamTimelineNotification(pushNotification);
+    }
+
     private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {
         String idShot = pushNotification.getParameters().getIdShot();
         Shot shot = remoteShotRepository.getShot(idShot);
@@ -125,6 +137,7 @@ public class GCMIntentService extends IntentService {
             case ActivityType.NICE_SHOT:
             case ActivityType.SHARE_SHOT:
             case ActivityType.MENTION:
+            case ActivityType.REPLY_SHOT:
                 setupGoToShotDetailNotification(push);
                 break;
             default:

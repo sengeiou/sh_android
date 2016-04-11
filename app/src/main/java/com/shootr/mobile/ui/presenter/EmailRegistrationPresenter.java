@@ -9,9 +9,12 @@ import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class EmailRegistrationPresenter implements Presenter {

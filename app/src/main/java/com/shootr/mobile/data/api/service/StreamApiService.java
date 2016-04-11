@@ -4,8 +4,10 @@ import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
+
 import java.io.IOException;
 import java.util.List;
+
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
@@ -20,8 +22,8 @@ public interface StreamApiService {
     @POST("/stream")
     StreamEntity createStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
 
-    @PUT("/stream")
-    StreamEntity updateStream(@Body StreamEntity streamEntity) throws IOException, ApiException;
+    @PUT("/stream/")
+    StreamEntity updateStream(@Body StreamEntity streamEntity, @Query("notifyPinMessage") Boolean notify) throws IOException, ApiException;
 
     @GET("/stream/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;

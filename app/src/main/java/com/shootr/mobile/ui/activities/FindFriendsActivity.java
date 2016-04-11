@@ -15,9 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -27,9 +25,15 @@ import com.shootr.mobile.ui.views.FindFriendsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.io.Serializable;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 
 public class FindFriendsActivity extends BaseToolbarDecoratedActivity
   implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback {

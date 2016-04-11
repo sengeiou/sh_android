@@ -13,9 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
@@ -27,10 +25,16 @@ import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -40,6 +44,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/#/st/";
     public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/#/s/";
     public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/#/s/";
+    public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
+    public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
@@ -93,17 +99,29 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         Pattern shareShotPatternWithHttps = Pattern.compile(SHARE_SHOT_PATTERN_HTTPS);
         Matcher matcherShareShotHttps = shareShotPatternWithHttps.matcher(address);
 
+        Pattern shareShotPatternWithShootr = Pattern.compile(SHARE_SHOT_PATTERN_SHOOTR);
+        Matcher matcherShareShotShootr = shareShotPatternWithShootr.matcher(address);
+
+        Pattern shareStreamPatternWithShootr = Pattern.compile(SHARE_STREAM_PATTERN_SHOOTR);
+        Matcher matcherShateStreamShootr = shareStreamPatternWithShootr.matcher(address);
+
         if (matcherShareStreamHttps.find()) {
             String idStream = address.substring(matcherShareStreamHttps.end());
             startActivity(StreamTimelineActivity.newIntent(this, idStream));
         } else if (matcherShateStreamHttp.find()) {
             String idStream = address.substring(matcherShateStreamHttp.end());
             startActivity(StreamTimelineActivity.newIntent(this, idStream));
+        } else if (matcherShateStreamShootr.find()) {
+            String idStream = address.substring(matcherShateStreamShootr.end());
+            startActivity(StreamTimelineActivity.newIntent(this, idStream));
         } else if (matcherShareShotHttp.find()) {
             String idShot = address.substring(matcherShareShotHttp.end());
             startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
         } else if (matcherShareShotHttps.find()) {
             String idShot = address.substring(matcherShareShotHttps.end());
+            startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
+        } else if (matcherShareShotShootr.find()) {
+            String idShot = address.substring(matcherShareShotShootr.end());
             startActivity(ShotDetailActivity.getIntentForActivity(this, idShot));
         }
     }
@@ -210,7 +228,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void navigateToActivity() {
-        startActivity(new Intent(this, ActivityTimelineContainerActivity.class));
+        startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
     }
 
     @Override

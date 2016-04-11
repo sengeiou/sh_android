@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
+
 import javax.inject.Inject;
 
 public class GetFavoriteStatusInteractor implements Interactor {

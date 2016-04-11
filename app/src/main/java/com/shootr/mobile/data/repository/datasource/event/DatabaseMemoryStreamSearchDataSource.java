@@ -1,15 +1,18 @@
 package com.shootr.mobile.data.repository.datasource.event;
 
 import android.support.v4.util.ArrayMap;
+
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

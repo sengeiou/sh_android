@@ -25,9 +25,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
@@ -58,6 +56,7 @@ import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.okresponsefaker.EmptyBodyFakeResponse;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -71,8 +70,13 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit.MockRestAdapter;
 import timber.log.Timber;
 

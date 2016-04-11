@@ -27,6 +27,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+
 import com.shootr.mobile.R;
 
 public class ForegroundRelativeLayout extends RelativeLayout {

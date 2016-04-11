@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.views.StreamTimelineView;
+
 import java.util.List;
 
 public class NullStreamTimelineView implements StreamTimelineView {
@@ -95,6 +96,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void setRemainingCharactersColorInvalid() {
+        /* no-op */
+    }
+
+    @Override public void showPinMessageNotification(String topic) {
         /* no-op */
     }
 

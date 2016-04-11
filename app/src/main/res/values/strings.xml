@@ -1,386 +1,394 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="account_confirmation_title">Is this correct?</string>
-    <string name="activity_drafts_title">Drafts</string>
-    <string name="activity_edit_profile_bio_hint">Bio</string>
-    <string name="activity_edit_profile_email_hint">Email</string>
-    <string name="activity_edit_profile_name_hint">Name</string>
-    <string name="activity_edit_profile_username_hint">Username</string>
-    <string name="activity_edit_profile_website_hint">Website</string>
-    <string name="activity_edit_stream_title">Edit stream</string>
-    <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
-    <string name="activity_find_friends_empty_message">No Results</string>
-    <string name="activity_find_friends_hint">Find friends</string>
-    <!-- Find Friends -->
-    <string name="activity_find_friends_title">Find friends</string>
-    <string name="activity_find_participants_empty_message">No results</string>
-    <string name="activity_find_participants_hint">Find participants</string>
-    <string name="activity_find_streams_hint">Find streams</string>
-    <string name="activity_find_streams_title">Find streams</string>
-    <string name="activity_followers_title">Followers</string>
-    <string name="activity_following_title">Following</string>
-    <string name="activity_login_email_button">Enter</string>
-    <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
-    <string name="activity_login_email_forgot">Forgot Password?</string>
-    <string name="activity_login_email_id_hint">Username or Email</string>
-    <string name="activity_login_email_password_hint">Password</string>
-    <string name="activity_login_register_email">Register with Email</string>
-    <string name="activity_login_register_facebook">Sign In with Facebook</string>
-    <!-- Activity literals -->
-    <string name="activity_login_signin">Sign In</string>
-    <string name="activity_new_stream_title">New stream</string>
-    <string name="activity_registration_email_hint">Email</string>
-    <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the (privacy-policy) and agree to the (terms-of-service).</string>
-    <string name="activity_registration_legal_disclaimer_privacy_policy">Privacy Policy</string>
-    <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
-    <string name="activity_registration_password_hint">Password</string>
-    <string name="activity_registration_username_hint">Username</string>
-    <string name="activity_started_following_you">Started following you</string>
-    <string name="activity_timeline_empty_title">No Activity</string>
-    <string name="added_to_favorites">Added to Favorites</string>
-    <string name="add_to_favorites_menu_title">Add to Favorites</string>
-    <string name="alert_report_confirmed_email_message">Go to Account &gt; Edit Profile and confirm your email.</string>
-    <string name="alert_report_confirmed_email_ok">OK</string>
-    <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
-    <string name="all_participants_button">All participants</string>
-    <string name="ban_user_dialog_message">Their shots on your streams will only be visible to their followers.</string>
-    <string name="block_cannot_shoot_streams">Ban user</string>
-    <string name="block_ignore_user">Ignore user</string>
-    <string name="block_unblock_user">Remove ignore</string>
-    <string name="block_user_dialog_ban">Ban</string>
-    <string name="block_user_dialog_block">Ignore</string>
-    <string name="block_user_dialog_cancel">Cancel</string>
-    <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
-    <string name="block_user_error">To ignore this user you need to unfollow first.</string>
-    <string name="cancel">Cancel</string>
-    <string name="cancel_hide_shot" formatted="false">Cancel</string>
-    <string name="can_shoot_streams">Remove ban</string>
-    <string name="change_password_button_text">DONE</string>
-    <string name="change_password_logout_message">Password changed. Must sign in again…</string>
-    <string name="change_photo">Change photo</string>
-    <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
-    <!-- Errors -->
-    <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-    <string name="confirmation_hide_shot_message" formatted="false">Unpin shot</string>
-    <string name="confirm_hide_shot" formatted="false">Unpin</string>
-    <string name="connection_lost">The network connection was lost</string>
-    <string name="copied_to_clipboard">Text copied to clipboard.</string>
-    <string name="current_password_hint">Current password</string>
-    <string name="days">d</string>
-    <string name="delete_shot_confirmation_message">Delete shot?</string>
-    <string name="discard">Discard</string>
-    <string name="discard_profile_confirmation">Discard changes?</string>
-    <string name="done">Done</string>
-    <string name="done_label">Done</string>
-    <string name="downloaded_pictures_subfolder">Shootr/</string>
-    <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
-    <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
-    <string name="drafts_action_discard">Discard</string>
-    <string name="drafts_action_shoot">Shoot</string>
-    <string name="drafts_empty">No Drafts</string>
-    <string name="drawer_activity_title">Activity</string>
-    <string name="drawer_favorites_title">Favorites</string>
-    <string name="drawer_friends_title">Friends</string>
-    <string name="drawer_streams_title">Streams</string>
-    <string name="edit_stream">Edit</string>
-    <string name="edit_stream_listing_context_menu">Edit</string>
-    <string name="email_already_registered">Email already registered</string>
-    <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
-    <string name="email_confirmation_message_content">Click the link in the email we\'ve just sent to %s</string>
-    <string name="email_confirmation_ok">OK</string>
-    <string name="email_confirmation_title">Confirm Your Email</string>
-    <string name="empty_followings">-</string>
-    <string name="entered_an_hour_ago">Entered 1 hour ago</string>
-    <string name="entered_a_day_ago">Entered 1 day ago</string>
-    <string name="entered_a_minute_ago">Entered 1 minute ago</string>
-    <string name="entered_days_ago">Entered %d days ago</string>
-    <string name="entered_hours_ago">Entered %d hours ago</string>
-    <string name="entered_just_now">Entered just now</string>
-    <string name="entered_long_time_ago">Entered many days ago</string>
-    <string name="entered_minutes_ago">Entered %d minutes ago</string>
-    <string name="error_deleted_shot">This shot was deleted</string>
-    <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
-    <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
-    <string name="error_image_upload">Error trying to upload image</string>
-    <string name="error_login_credentials_invalid">Id or password are not valid</string>
-    <string name="error_message">Shootr encountered a problem and needs to close.</string>
-    <!-- Profile: Bio -->
-    <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
-    <string name="error_message_change_password_new_password_and_again_must_match">Passwords don\'t match</string>
-    <string name="error_message_change_password_new_password_same_current_password">Your new password must be different</string>
-    <string name="error_message_invalid_change_password">Invalid password</string>
-    <!-- Image upload -->
-    <string name="error_message_invalid_image">Invalid image</string>
-    <!-- Profile: Name -->
-    <string name="error_message_name_invalid">Invalid characters</string>
-    <string name="error_message_name_long">Maximum length is 25 characters</string>
-    <string name="error_message_registration_email_empty">Enter your email</string>
-    <string name="error_message_registration_email_existing">Email already in use</string>
-    <string name="error_message_registration_email_invalid">Invalid Email</string>
-    <string name="error_message_registration_password_equals_username">Password and username must not match</string>
-    <string name="error_message_registration_password_invalid">Invalid characters</string>
-    <string name="error_message_registration_password_null">6 to 20 characters</string>
-    <string name="error_message_registration_password_too_long">6 to 20 characters</string>
-    <string name="error_message_registration_password_too_short">6 to 20 characters</string>
-    <!-- Create account -->
-    <string name="error_message_registration_username_duplicated">Username already in use</string>
-    <string name="error_message_registration_username_empty">3 to 20 characters</string>
-    <string name="error_message_registration_username_invalid">Invalid characters</string>
-    <string name="error_message_registration_username_too_long">3 to 20 characters</string>
-    <string name="error_message_registration_username_too_short">3 to 20 characters</string>
-    <string name="error_message_search_too_short">3 or more characters required</string>
-    <string name="error_message_stream_title_too_long">Must not have more than 50 characters</string>
-    <!-- Stream -->
-    <string name="error_message_stream_title_too_short">3 or more characters required</string>
-    <string name="error_message_unknown">Unknown error</string>
-    <!-- Profile: Username -->
-    <string name="error_message_username_duplicate">Username already taken</string>
-    <string name="error_message_username_empty">3 or more characters required</string>
-    <string name="error_message_username_invalid">Use only a–z, 0–9 and underscores</string>
-    <string name="error_message_username_long">3 to 25 characters required</string>
-    <string name="error_message_username_short">3 or more characters required</string>
-    <!-- Profile: Website -->
-    <string name="error_message_website_invalid">Invalid website</string>
-    <string name="error_message_website_too_long">Website must not have more than 100 characters</string>
-    <!-- Forgot password -->
-    <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
-    <string name="error_restart_button">Restart</string>
-    <string name="error_stream_already_favorites">Already in Favorites</string>
-    <string name="error_stream_read_only">This stream was removed and is read-only</string>
-    <string name="error_title">Ooops!</string>
-    <string name="facebookID">389647124570169</string>
-    <string name="favorites_emtpy">No Favorites</string>
-    <string name="feedback_email_address">feedback@shootr.com</string>
-    <string name="follower_list_empty">No followers</string>
-    <string name="following_followers_separator">|</string>
-    <string name="following_list_empty">Not following anyone</string>
-    <string name="hours">h</string>
-    <string name="include_listing_empty">No streams</string>
-    <string name="intro_create_text">Running a community? Make it a stream and… Shoot!</string>
-    <string name="intro_create_title">Create</string>
-    <string name="intro_favorites_text">Dozens of streams are added every day. Build your Favorites.</string>
-    <string name="intro_free_title">Free</string>
-    <string name="intro_friends_text">Register your @name before someone else does.</string>
-    <string name="intro_shootr">Shootr</string>
-    <string name="intro_start_shooting_button">Start shooting</string>
-    <string name="intro_streams">Streams</string>
-    <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
-    <string name="invite_friends_button">Invite friends</string>
-    <string name="invite_friends_message">Hey, let\'s use Shootr: https://shootr.com/</string>
-    <string name="invite_friends_title">Invite friends</string>
-    <string name="language_support_alert" formatted="false">We currently support English only.</string>
-    <plurals name="listing_favorites">
+  <string name="account_confirmation_title">Is this correct?</string>
+  <string name="activity_drafts_title">Drafts</string>
+  <string name="activity_edit_profile_bio_hint">Bio</string>
+  <string name="activity_edit_profile_email_hint">Email</string>
+  <string name="activity_edit_profile_name_hint">Name</string>
+  <string name="activity_edit_profile_username_hint">Username</string>
+  <string name="activity_edit_profile_website_hint">Website</string>
+  <string name="activity_edit_stream_title">Edit stream</string>
+  <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
+  <string name="activity_find_friends_empty_message">No Results</string>
+  <string name="activity_find_friends_hint">Find friends</string>
+  <!-- Find Friends -->
+  <string name="activity_find_friends_title">Find friends</string>
+  <string name="activity_find_participants_empty_message">No results</string>
+  <string name="activity_find_participants_hint">Find participants</string>
+  <string name="activity_find_streams_hint">Find streams</string>
+  <string name="activity_find_streams_title">Find streams</string>
+  <string name="activity_followers_title">Followers</string>
+  <string name="activity_following_title">Following</string>
+  <string name="activity_login_email_button">Enter</string>
+  <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
+  <string name="activity_login_email_forgot">Forgot Password?</string>
+  <string name="activity_login_email_id_hint">Username or Email</string>
+  <string name="activity_login_email_password_hint">Password</string>
+  <string name="activity_login_register_email">Register with Email</string>
+  <string name="activity_login_register_facebook">Sign In with Facebook</string>
+  <!-- Activity literals -->
+  <string name="activity_login_signin">Sign In</string>
+  <string name="activity_new_stream_title">New stream</string>
+  <string name="activity_registration_email_hint">Email</string>
+  <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the (privacy-policy) and agree to the (terms-of-service).</string>
+  <string name="activity_registration_legal_disclaimer_privacy_policy">Privacy Policy</string>
+  <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
+  <string name="activity_registration_password_hint">Password</string>
+  <string name="activity_registration_username_hint">Username</string>
+  <string name="activity_started_following_you">Started following you</string>
+  <string name="activity_timeline_empty_title">No Activity</string>
+  <string name="added_to_favorites">Added to Favorites</string>
+  <string name="add_to_favorites_menu_title">Add to Favorites</string>
+  <string name="alert_report_confirmed_email_message">Go to Account &gt; Edit Profile and confirm your email.</string>
+  <string name="alert_report_confirmed_email_ok">OK</string>
+  <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
+  <string name="all_participants_button">All participants</string>
+  <string name="ban_user_dialog_message">Their shots on your streams will only be visible to their followers.</string>
+  <string name="block_cannot_shoot_streams">Ban user</string>
+  <string name="block_ignore_user">Ignore user</string>
+  <string name="block_unblock_user">Remove ignore</string>
+  <string name="block_user_dialog_ban">Ban</string>
+  <string name="block_user_dialog_block">Ignore</string>
+  <string name="block_user_dialog_cancel">Cancel</string>
+  <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
+  <string name="block_user_error">To ignore this user you need to unfollow first.</string>
+  <string name="cancel">Cancel</string>
+  <string name="cancel_hide_shot" formatted="false">Cancel</string>
+  <string name="can_shoot_streams">Remove ban</string>
+  <string name="change_password_button_text">DONE</string>
+  <string name="change_password_logout_message">Password changed. Must sign in again…</string>
+  <string name="change_photo">Change photo</string>
+  <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- Errors -->
+  <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
+  <string name="confirmation_hide_shot_message" formatted="false">Unpin shot</string>
+  <string name="confirm_hide_shot" formatted="false">Unpin</string>
+  <string name="connection_lost">The network connection was lost</string>
+  <string name="copied_to_clipboard">Text copied to clipboard.</string>
+  <string name="current_password_hint">Current password</string>
+  <string name="days">d</string>
+  <string name="delete_shot_confirmation_message">Delete shot?</string>
+  <string name="discard">Discard</string>
+  <string name="discard_profile_confirmation">Discard changes?</string>
+  <string name="done">Done</string>
+  <string name="done_label">Done</string>
+  <string name="done_pin_topic" formatted="false">Pin</string>
+  <string name="downloaded_pictures_subfolder">Shootr/</string>
+  <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
+  <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
+  <string name="drafts_action_discard">Discard</string>
+  <string name="drafts_action_shoot">Shoot</string>
+  <string name="drafts_empty">No Drafts</string>
+  <string name="drawer_activity_me" formatted="false">Me</string>
+  <string name="drawer_activity_title">Activity</string>
+  <string name="drawer_favorites_title">Favorites</string>
+  <string name="drawer_friends_activity_title" formatted="false">Friends</string>
+  <string name="drawer_friends_title">Friends</string>
+  <string name="drawer_streams_title">Streams</string>
+  <string name="edit_stream">Edit</string>
+  <string name="edit_stream_listing_context_menu">Edit</string>
+  <string name="email_already_registered">Email already registered</string>
+  <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
+  <string name="email_confirmation_message_content">Click the link in the email we\'ve just sent to %s</string>
+  <string name="email_confirmation_ok">OK</string>
+  <string name="email_confirmation_title">Confirm Your Email</string>
+  <string name="empty_followings">-</string>
+  <string name="entered_an_hour_ago">Entered 1 hour ago</string>
+  <string name="entered_a_day_ago">Entered 1 day ago</string>
+  <string name="entered_a_minute_ago">Entered 1 minute ago</string>
+  <string name="entered_days_ago">Entered %d days ago</string>
+  <string name="entered_hours_ago">Entered %d hours ago</string>
+  <string name="entered_just_now">Entered just now</string>
+  <string name="entered_long_time_ago">Entered many days ago</string>
+  <string name="entered_minutes_ago">Entered %d minutes ago</string>
+  <string name="error_deleted_shot">This shot was deleted</string>
+  <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
+  <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
+  <string name="error_image_upload">Error trying to upload image</string>
+  <string name="error_login_credentials_invalid">Id or password are not valid</string>
+  <string name="error_message">Shootr encountered a problem and needs to close.</string>
+  <!-- Profile: Bio -->
+  <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
+  <string name="error_message_change_password_new_password_and_again_must_match">Passwords don\'t match</string>
+  <string name="error_message_change_password_new_password_same_current_password">Your new password must be different</string>
+  <string name="error_message_invalid_change_password">Invalid password</string>
+  <!-- Image upload -->
+  <string name="error_message_invalid_image">Invalid image</string>
+  <!-- Profile: Name -->
+  <string name="error_message_name_invalid">Invalid characters</string>
+  <string name="error_message_name_long">Maximum length is 25 characters</string>
+  <string name="error_message_registration_email_empty">Enter your email</string>
+  <string name="error_message_registration_email_existing">Email already in use</string>
+  <string name="error_message_registration_email_invalid">Invalid Email</string>
+  <string name="error_message_registration_password_equals_username">Password and username must not match</string>
+  <string name="error_message_registration_password_invalid">Invalid characters</string>
+  <string name="error_message_registration_password_null">6 to 20 characters</string>
+  <string name="error_message_registration_password_too_long">6 to 20 characters</string>
+  <string name="error_message_registration_password_too_short">6 to 20 characters</string>
+  <!-- Create account -->
+  <string name="error_message_registration_username_duplicated">Username already in use</string>
+  <string name="error_message_registration_username_empty">3 to 20 characters</string>
+  <string name="error_message_registration_username_invalid">Invalid characters</string>
+  <string name="error_message_registration_username_too_long">3 to 20 characters</string>
+  <string name="error_message_registration_username_too_short">3 to 20 characters</string>
+  <string name="error_message_search_too_short">3 or more characters required</string>
+  <string name="error_message_stream_title_too_long">Must not have more than 50 characters</string>
+  <!-- Stream -->
+  <string name="error_message_stream_title_too_short">3 or more characters required</string>
+  <string name="error_message_unknown">Unknown error</string>
+  <!-- Profile: Username -->
+  <string name="error_message_username_duplicate">Username already taken</string>
+  <string name="error_message_username_empty">3 or more characters required</string>
+  <string name="error_message_username_invalid">Use only a–z, 0–9 and underscores</string>
+  <string name="error_message_username_long">3 to 25 characters required</string>
+  <string name="error_message_username_short">3 or more characters required</string>
+  <!-- Profile: Website -->
+  <string name="error_message_website_invalid">Invalid website</string>
+  <string name="error_message_website_too_long">Website must not have more than 100 characters</string>
+  <!-- Forgot password -->
+  <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
+  <string name="error_restart_button">Restart</string>
+  <string name="error_stream_already_favorites">Already in Favorites</string>
+  <string name="error_stream_read_only">This stream was removed and is read-only</string>
+  <string name="error_title">Ooops!</string>
+  <string name="facebookID">389647124570169</string>
+  <string name="favorites_emtpy">No Favorites</string>
+  <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="follower_list_empty">No followers</string>
+  <string name="following_followers_separator">|</string>
+  <string name="following_list_empty">Not following anyone</string>
+  <string name="hours">h</string>
+  <string name="include_listing_empty">No streams</string>
+  <string name="intro_create_text">Running a community? Make it a stream and… Shoot!</string>
+  <string name="intro_create_title">Create</string>
+  <string name="intro_favorites_text">Dozens of streams are added every day. Build your Favorites.</string>
+  <string name="intro_free_title">Free</string>
+  <string name="intro_friends_text">Register your @name before someone else does.</string>
+  <string name="intro_shootr">Shootr</string>
+  <string name="intro_start_shooting_button">Start shooting</string>
+  <string name="intro_streams">Streams</string>
+  <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
+  <string name="invite_friends_button">Invite friends</string>
+  <string name="invite_friends_message">Hey, let\'s use Shootr: https://shootr.com/</string>
+  <string name="invite_friends_title">Invite friends</string>
+  <string name="language_support_alert" formatted="false">We currently support English only.</string>
+  <plurals name="listing_favorites">
     <item quantity="one">
             %d favorite
         </item>
     <item quantity="other">
             %d favorites
         </item>
-    </plurals>
-    <string name="listing_title_favorites">Favorites</string>
-    <string name="listing_title_holding">Holding</string>
-    <string name="loading_activity_message">Loading…</string>
-    <string name="main_activity_title">Activity</string>
-    <string name="mentioned_shot_activity_with_comment">"Mentioned you: "</string>
-    <string name="menu_all_shots">Show all shots</string>
-    <string name="menu_copy_text">Copy text</string>
-    <string name="menu_holding_shots">Show holder\'s shots</string>
-    <!-- Menu names -->
-    <string name="menu_info">Friends</string>
-    <string name="menu_pin_shot">Pin to profile</string>
-    <string name="menu_profile_chage_password">Change password</string>
-    <string name="menu_remove_favorite">Remove from Favorites</string>
-    <string name="menu_save_photo">Save image</string>
-    <string name="menu_search_friends">Find friends</string>
-    <string name="menu_search_participants">Find participants</string>
-    <string name="menu_search_streams">Search</string>
-    <string name="menu_search_timeline">Search timeline</string>
-    <string name="menu_share_shot_via">Share via…</string>
-    <string name="menu_share_shot_via_shootr">Share via Shootr</string>
-    <string name="menu_stream_edit_info">Info</string>
-    <string name="menu_stream_edit_photo">Photo</string>
-    <!-- TimeUtils -->
-    <string name="minutes">m</string>
-    <string name="multiple_activities_action">GO</string>
-    <string name="multiple_activity_notification">%d new Activity notifications</string>
-    <string name="mute">Mute</string>
-    <string name="new_activity_notification">New activity</string>
-    <string name="new_password_again_hint">New password again</string>
-    <string name="new_password_hint">New password</string>
-    <plurals name="new_shots_indicator">
-        <item quantity="one">%d new shot</item>
-        <item quantity="other">%d new shots</item>
-    </plurals>
-    <string name="new_shot_discard_message">Discard shot?</string>
-    <string name="new_shot_placeholder">Shoot something…</string>
-    <string name="new_shot_repeated">Whoops! You already shot that</string>
-    <string name="new_stream_description_label">Description</string>
-    <string name="new_stream_short_title_label">Short title</string>
-    <string name="new_stream_title_label">Title</string>
-    <string name="next">Next</string>
-    <string name="niced_shot_activity">Niced your shot</string>
-    <string name="niced_shot_activity_with_comment">"Niced your shot: "</string>
-    <plurals name="nice_count_pattern">
+  </plurals>
+  <string name="listing_title_favorites">Favorites</string>
+  <string name="listing_title_holding">Holding</string>
+  <string name="loading_activity_message">Loading…</string>
+  <string name="main_activity_title">Activity</string>
+  <string name="mentioned_shot_activity_with_comment">Mentioned you: </string>
+  <string name="menu_all_shots">Show all shots</string>
+  <string name="menu_copy_text">Copy text</string>
+  <string name="menu_holding_shots">Show holder\'s shots</string>
+  <!-- Menu names -->
+  <string name="menu_info">Friends</string>
+  <string name="menu_pin_shot">Pin to profile</string>
+  <string name="menu_profile_chage_password">Change password</string>
+  <string name="menu_remove_favorite">Remove from Favorites</string>
+  <string name="menu_save_photo">Save image</string>
+  <string name="menu_search_friends">Find friends</string>
+  <string name="menu_search_participants">Find participants</string>
+  <string name="menu_search_streams">Search</string>
+  <string name="menu_search_timeline">Search timeline</string>
+  <string name="menu_share_shot_via">Share via…</string>
+  <string name="menu_share_shot_via_shootr">Share via Shootr</string>
+  <string name="menu_stream_edit_info">Info</string>
+  <string name="menu_stream_edit_photo">Photo</string>
+  <!-- TimeUtils -->
+  <string name="minutes">m</string>
+  <string name="multiple_activities_action">GO</string>
+  <string name="multiple_activity_notification">%d new Activity notifications</string>
+  <string name="mute">Mute</string>
+  <string name="new_activity_notification">New activity</string>
+  <string name="new_password_again_hint">New password again</string>
+  <string name="new_password_hint">New password</string>
+  <plurals name="new_shots_indicator">
+    <item quantity="one">%d new shot</item>
+    <item quantity="other">%d new shots</item>
+  </plurals>
+  <string name="new_shot_discard_message">Discard shot?</string>
+  <string name="new_shot_placeholder">Shoot something…</string>
+  <string name="new_shot_repeated">Whoops! You already shot that</string>
+  <string name="new_stream_description_label">Description</string>
+  <string name="new_stream_short_title_label">Short title</string>
+  <string name="new_stream_title_label">Title</string>
+  <string name="new_topic" formatted="false">New message…</string>
+  <string name="next">Next</string>
+  <string name="niced_shot_activity">Niced your shot</string>
+  <string name="niced_shot_activity_with_comment">Niced: </string>
+  <plurals name="nice_count_pattern">
     <item quantity="one">
             %d nice
         </item>
     <item quantity="other">
             %d nices
         </item>
-    </plurals>
-    <string name="no">No</string>
-    <string name="notification_image">Image</string>
-    <string name="notification_image_and_text">Image: %s</string>
-    <string name="notification_shot_failed">Shot failed</string>
-    <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
-    <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
-    <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to reply has been deleted</string>
-    <string name="notification_shot_has_stream_removed_subtitle">This stream has been removed</string>
-    <!-- Notifications -->
-    <string name="notification_shot_multiple_title">%d new shots</string>
-    <string name="notification_shot_sending">Shooting…</string>
-    <string name="notification_shot_sent">Shot sent</string>
-    <string name="now">now</string>
-    <string name="no_intent_handler">There are no applications available to handle this action.</string>
-    <string name="ok">OK</string>
-    <string name="opened_activity_text_pattern">Opened (stream)</string>
-    <string name="participants_list_empty">No participants</string>
-    <string name="photo_edit_gallery">Gallery</string>
-    <string name="photo_edit_remove">Remove</string>
-    <string name="photo_edit_remove_confirmation">Remove photo?</string>
-    <string name="photo_edit_take">Camera</string>
-    <string name="pinned_shot_activity">Pinned a shot to profile</string>
-    <string name="pinned_shot_activity_with_comment">"Pinned to profile: "</string>
-    <string name="profile_all_shots">All shots</string>
-    <string name="profile_edit_done_button">Done</string>
-    <string name="profile_edit_profile">Edit Profile</string>
-    <string name="profile_follow">Follow</string>
-    <string name="profile_following">Following</string>
-    <string name="profile_listing">Streams</string>
-    <string name="profile_listing_number">0</string>
-    <string name="profile_logout">Sign out</string>
-    <string name="profile_marks_followers">followers</string>
-    <string name="profile_marks_following">following</string>
-    <string name="profile_support">Support</string>
-    <string name="profile_updated">Profile updated</string>
-    <string name="registration_create_button_text">Create account</string>
-    <string name="remove">Remove</string>
-    <string name="remove_stream_confirmation">Remove stream?</string>
-    <string name="remove_stream_label">Remove stream</string>
-    <string name="remove_stream_listing_context_menu">Remove</string>
-    <plurals name="replies_header_count_pattern">
+  </plurals>
+  <string name="no">No</string>
+  <string name="notification_image">Image</string>
+  <string name="notification_image_and_text">Image: %s</string>
+  <string name="notification_shot_failed">Shot failed</string>
+  <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
+  <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
+  <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to reply has been deleted</string>
+  <string name="notification_shot_has_stream_removed_subtitle">This stream has been removed</string>
+  <!-- Notifications -->
+  <string name="notification_shot_multiple_title">%d new shots</string>
+  <string name="notification_shot_sending">Shooting…</string>
+  <string name="notification_shot_sent">Shot sent</string>
+  <string name="now">now</string>
+  <string name="no_intent_handler">There are no applications available to handle this action.</string>
+  <string name="ok">OK</string>
+  <string name="opened_activity_text_pattern">Opened (stream)</string>
+  <string name="participants_list_empty">No participants</string>
+  <string name="photo_edit_gallery">Gallery</string>
+  <string name="photo_edit_remove">Remove</string>
+  <string name="photo_edit_remove_confirmation">Remove photo?</string>
+  <string name="photo_edit_take">Camera</string>
+  <string name="pinned_shot_activity">Pinned to profile</string>
+  <string name="pinned_shot_activity_with_comment">Pinned to profile: </string>
+  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to current participants and users who have the stream as a favorite.</string>
+  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
+  <string name="pin_topic" formatted="false">Pin message</string>
+  <string name="profile_all_shots">All shots</string>
+  <string name="profile_edit_done_button">Done</string>
+  <string name="profile_edit_profile">Edit Profile</string>
+  <string name="profile_follow">Follow</string>
+  <string name="profile_following">Following</string>
+  <string name="profile_listing">Streams</string>
+  <string name="profile_listing_number">0</string>
+  <string name="profile_logout">Sign out</string>
+  <string name="profile_marks_followers">followers</string>
+  <string name="profile_marks_following">following</string>
+  <string name="profile_support">Support</string>
+  <string name="profile_updated">Profile updated</string>
+  <string name="registration_create_button_text">Create account</string>
+  <string name="remove">Remove</string>
+  <string name="remove_stream_confirmation">Remove stream?</string>
+  <string name="remove_stream_label">Remove stream</string>
+  <string name="remove_stream_listing_context_menu">Remove</string>
+  <string name="replied_activity" formatted="false">Replied</string>
+  <string name="replied_activity_with_comment" formatted="false">Replied: </string>
+  <plurals name="replies_header_count_pattern">
     <item quantity="one">
             %d reply
         </item>
     <item quantity="other">
             %d replies
         </item>
-    </plurals>
-    <string name="reply_name_pattern">%1$s to %2$s</string>
-    <string name="reply_placeholder_pattern">Reply to %s…</string>
-    <string name="report_context_menu_block">Block…</string>
-    <string name="report_context_menu_delete">Delete</string>
-    <string name="report_context_menu_report">Report</string>
-    <string name="report_context_menu_unblock">Remove ignore</string>
-    <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
-    <string name="report_user_subject">Report This Account - Issue %1$s - %2$s</string>
-    <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
-    <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
-    <string name="reset_password_send_email">Send a Password Reset Email</string>
-    <string name="restore_stream_label">Restore stream</string>
-    <string name="seconds">s</string>
-    <string name="shared_shot_activity">Shared %s\'s shot</string>
-    <string name="shared_shot_activity_with_comment">"Shared %s\'s shot: "</string>
-    <string name="shared_stream_notification">Stream shared</string>
-    <string name="share_shot_chooser_title">Share</string>
-    <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
-    <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
-    <string name="share_stream_activity_text_pattern">Shared (stream)</string>
-    <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/#/st/%2$s</string>
-    <string name="share_stream_subject">Check out %s on Shootr</string>
-    <string name="share_via">Share via…</string>
-    <string name="share_via_shootr">Share via Shootr</string>
-    <string name="shoot_all_button">Shoot all</string>
-    <string name="shot_pinned">Pinned</string>
-    <string name="shot_shared_message">Shot shared</string>
-    <string name="shot_timeline_empty_title">No Shots</string>
-    <string name="showing_shots_by_holder">Showing shots by holder.</string>
-    <string name="sign_out_message">Signing out…</string>
-    <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
-    <string name="stream_data_info_favorites">Favorites</string>
-    <string name="stream_data_info_participants">Participants</string>
-    <string name="stream_data_info_participants_with_shots">Sent a shot</string>
-    <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
-    <string name="stream_data_info_shots">Shots</string>
-    <string name="stream_detail_edit_menu_title">Edit stream</string>
-    <string name="stream_detail_media">Media</string>
-    <string name="stream_detail_menu_data_info">Stats</string>
-    <string name="stream_detail_mute">Mute</string>
-    <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-    <string name="stream_favorited_activity_text_pattern">Favorited (stream)</string>
-    <string name="stream_list_empty">No results</string>
-    <string name="stream_media_empty_title">No photos or videos</string>
-    <string name="stream_media_no_more_media">No more media</string>
-    <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
-    <string name="stream_notification_confirmation_no">Nope</string>
-    <string name="stream_notification_confirmation_yes">Notify</string>
-    <string name="stream_participants_following_number">following %d</string>
-    <string name="stream_subtitle">following %d</string>
-    <string name="stream_subtitle_pattern_multiple_participants">following %1$s of %2$s participants</string>
-    <string name="stream_timeline_add_favorite">Add to Favorites</string>
-    <string name="stream_timeline_empty_message">Checking for shots…</string>
-    <string name="stream_timeline_remove_favorite">Remove from Favorites</string>
-    <string name="suggested_people_section_title">Who to follow</string>
-    <string name="support_blog">Blog</string>
-    <string name="support_help">Help</string>
-    <string name="support_privacy_policy">Privacy Policy</string>
-    <string name="support_terms_service">Terms of Service</string>
-    <string name="support_version">Version</string>
-    <string name="title_activity_all_participants">All Participants</string>
-    <string name="title_activity_all_shots">All shots</string>
-    <string name="title_activity_change_password">Change Password</string>
-    <string name="title_activity_email_confirmation">Email</string>
-    <string name="title_activity_listing">Streams</string>
-    <string name="title_activity_login_email">Sign In</string>
-    <string name="title_activity_registration_email">Register with Email</string>
-    <string name="title_activity_reset_password">Reset Password</string>
-    <string name="title_activity_stream_data_info">Stats</string>
-    <string name="title_activity_stream_media">Media</string>
-    <string name="title_activity_support">Support</string>
-    <plurals name="total_watchers_pattern">
+  </plurals>
+  <string name="reply_name_pattern">%1$s to %2$s</string>
+  <string name="reply_placeholder_pattern">Reply to %s…</string>
+  <string name="report_context_menu_block">Block…</string>
+  <string name="report_context_menu_delete">Delete</string>
+  <string name="report_context_menu_report">Report</string>
+  <string name="report_context_menu_unblock">Remove ignore</string>
+  <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
+  <string name="report_user_subject">Report This Account - Issue %1$s - %2$s</string>
+  <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
+  <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
+  <string name="reset_password_send_email">Send a Password Reset Email</string>
+  <string name="restore_stream_label">Restore stream</string>
+  <string name="seconds">s</string>
+  <string name="shared_shot_activity">Shared %s\'s shot</string>
+  <string name="shared_shot_activity_with_comment">Shared: </string>
+  <string name="shared_stream_notification">Stream shared</string>
+  <string name="share_shot_chooser_title">Share</string>
+  <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
+  <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
+  <string name="share_stream_activity_text_pattern">Shared (stream)</string>
+  <string name="share_stream_message">Check out %1$s on Shootr: https://shootr.com/#/st/%2$s</string>
+  <string name="share_stream_subject">Check out %s on Shootr</string>
+  <string name="share_via">Share via…</string>
+  <string name="share_via_shootr">Share via Shootr</string>
+  <string name="shoot_all_button">Shoot all</string>
+  <string name="shot_pinned">Pinned</string>
+  <string name="shot_shared_message">Shot shared</string>
+  <string name="shot_timeline_empty_title">No Shots</string>
+  <string name="showing_shots_by_holder">Showing shots by holder.</string>
+  <string name="sign_out_message">Signing out…</string>
+  <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
+  <string name="stream_data_info_favorites">Favorites</string>
+  <string name="stream_data_info_participants">Participants</string>
+  <string name="stream_data_info_participants_with_shots">Sent a shot</string>
+  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+  <string name="stream_data_info_shots">Shots</string>
+  <string name="stream_detail_edit_menu_title">Edit stream</string>
+  <string name="stream_detail_media">Media</string>
+  <string name="stream_detail_menu_data_info">Stats</string>
+  <string name="stream_detail_mute">Mute</string>
+  <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
+  <string name="stream_favorited_activity_text_pattern">Favorited (stream)</string>
+  <string name="stream_list_empty">No results</string>
+  <string name="stream_media_empty_title">No photos or videos</string>
+  <string name="stream_media_no_more_media">No more media</string>
+  <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
+  <string name="stream_notification_confirmation_no">Nope</string>
+  <string name="stream_notification_confirmation_yes">Notify</string>
+  <string name="stream_participants_following_number">following %d</string>
+  <string name="stream_subtitle">following %d</string>
+  <string name="stream_subtitle_pattern_multiple_participants">following %1$s of %2$s participants</string>
+  <string name="stream_timeline_add_favorite">Add to Favorites</string>
+  <string name="stream_timeline_empty_message">Checking for shots…</string>
+  <string name="stream_timeline_remove_favorite">Remove from Favorites</string>
+  <string name="suggested_people_section_title">Who to follow</string>
+  <string name="support_blog">Blog</string>
+  <string name="support_help">Help</string>
+  <string name="support_privacy_policy">Privacy Policy</string>
+  <string name="support_terms_service">Terms of Service</string>
+  <string name="support_version">Version</string>
+  <string name="title_activity_all_participants">All Participants</string>
+  <string name="title_activity_all_shots">All shots</string>
+  <string name="title_activity_change_password">Change Password</string>
+  <string name="title_activity_email_confirmation">Email</string>
+  <string name="title_activity_listing">Streams</string>
+  <string name="title_activity_login_email">Sign In</string>
+  <string name="title_activity_registration_email">Register with Email</string>
+  <string name="title_activity_reset_password">Reset Password</string>
+  <string name="title_activity_stream_data_info">Stats</string>
+  <string name="title_activity_stream_media">Media</string>
+  <string name="title_activity_support">Support</string>
+  <string name="title_menu_photo" formatted="false">Photo</string>
+  <string name="title_pin_message_notification" formatted="false">Notify message?</string>
+  <string name="topic" formatted="false">Message</string>
+  <plurals name="total_watchers_pattern">
     <item quantity="one">
             %d participant
         </item>
     <item quantity="other">
             %d participants
         </item>
-    </plurals>
-    <string name="unfollow_dialog_message">Unfollow %s?</string>
-    <string name="unfollow_dialog_no">No</string>
-    <string name="unfollow_dialog_yes">Yes</string>
-    <string name="unmute">Unmute</string>
-    <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
-    <string name="update_warning_button">Update now</string>
-    <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
-    <string name="user_banned">User banned.</string>
-    <string name="user_blocked">User ignored.</string>
-    <string name="user_not_found">User not found.</string>
-    <string name="user_not_found_message">User not found.</string>
-    <string name="user_unbanned">Ban removed.</string>
-    <string name="user_unblocked">Ignore removed.</string>
-    <string name="watching_stream_connected">connected</string>
-    <string name="watching_stream_connected_muted">connected (muted)</string>
-    <string name="welcome_friends_text">Leave to disconnect</string>
-    <string name="welcome_get_started_button">Got it</string>
-    <string name="welcome_shootr_title">Enter a stream to connect</string>
-    <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
-    <string name="whale_retry_button_text">OK</string>
-    <string name="whale_title_default">We\'ll be back</string>
-    <string name="yes">Yes</string>
-    <string name="pin_topic">Pin message</string>
-    <string name="done_pin_topic">Pin</string>
-    <string name="new_topic">New topic…</string>
-    <string name="topic">Topic</string>
-    <string name="watch_profile_photo">View</string>
-    <string name="title_menu_photo">Photo</string>
+  </plurals>
+  <string name="unfollow_dialog_message">Unfollow %s?</string>
+  <string name="unfollow_dialog_no">No</string>
+  <string name="unfollow_dialog_yes">Yes</string>
+  <string name="unmute">Unmute</string>
+  <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
+  <string name="update_warning_button">Update now</string>
+  <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
+  <string name="user_banned">User banned.</string>
+  <string name="user_blocked">User ignored.</string>
+  <string name="user_not_found">User not found.</string>
+  <string name="user_not_found_message">User not found.</string>
+  <string name="user_unbanned">Ban removed.</string>
+  <string name="user_unblocked">Ignore removed.</string>
+  <string name="watching_stream_connected">connected</string>
+  <string name="watching_stream_connected_muted">connected (muted)</string>
+  <string name="watch_profile_photo" formatted="false">View</string>
+  <string name="welcome_friends_text">Leave to disconnect</string>
+  <string name="welcome_get_started_button">Got it</string>
+  <string name="welcome_shootr_title">Enter a stream to connect</string>
+  <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
+  <string name="whale_retry_button_text">OK</string>
+  <string name="whale_title_default">We\'ll be back</string>
+  <string name="yes">Yes</string>
 </resources>

@@ -16,15 +16,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
+
 import java.io.File;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

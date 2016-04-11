@@ -5,7 +5,9 @@ import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DatabaseFollowDataSource implements FollowDataSource {

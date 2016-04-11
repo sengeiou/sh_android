@@ -1,6 +1,7 @@
 package com.shootr.mobile.util;
 
 import com.shootr.mobile.BuildConfig;
+
 import javax.inject.Inject;
 
 public class Version {

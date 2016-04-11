@@ -13,10 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -37,8 +34,15 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 

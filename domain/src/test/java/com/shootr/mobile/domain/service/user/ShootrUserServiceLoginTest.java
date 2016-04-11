@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

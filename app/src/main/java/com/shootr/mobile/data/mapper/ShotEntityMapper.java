@@ -7,8 +7,10 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

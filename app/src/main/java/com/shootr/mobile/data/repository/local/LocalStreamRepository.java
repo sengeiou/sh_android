@@ -8,7 +8,9 @@ import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.StreamRepository;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class LocalStreamRepository implements StreamRepository {
@@ -59,7 +61,7 @@ public class LocalStreamRepository implements StreamRepository {
         return stream;
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
         throw new IllegalStateException("Notify not allowed in local repository.");
     }
 

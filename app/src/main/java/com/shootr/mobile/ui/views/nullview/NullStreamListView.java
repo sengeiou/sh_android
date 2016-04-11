@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.StreamsListView;
+
 import java.util.List;
 
 public class NullStreamListView implements StreamsListView {

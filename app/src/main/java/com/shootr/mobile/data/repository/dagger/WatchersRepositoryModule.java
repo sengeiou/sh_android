@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.dagger;
 import com.shootr.mobile.data.repository.local.LocalWatchersRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+
 import dagger.Module;
 import dagger.Provides;
 

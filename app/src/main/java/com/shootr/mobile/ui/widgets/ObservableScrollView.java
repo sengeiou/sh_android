@@ -19,6 +19,7 @@ package com.shootr.mobile.ui.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
+
 import java.util.ArrayList;
 
 /**

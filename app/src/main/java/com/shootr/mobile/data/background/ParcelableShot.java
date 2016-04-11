@@ -2,7 +2,9 @@ package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.shootr.mobile.domain.Shot;
+
 import java.util.Date;
 
 public class ParcelableShot implements Parcelable {

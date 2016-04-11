@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.entity;
 
 import java.io.Serializable;
+
 import timber.log.Timber;
 
 public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{

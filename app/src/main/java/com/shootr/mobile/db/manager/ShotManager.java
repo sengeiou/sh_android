@@ -6,13 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.DatabaseContract.ShotTable;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
 import com.shootr.mobile.domain.StreamTimelineParameters;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ShotManager extends AbstractManager {

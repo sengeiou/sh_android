@@ -11,8 +11,10 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class GetSuggestedPeopleInteractor implements Interactor {

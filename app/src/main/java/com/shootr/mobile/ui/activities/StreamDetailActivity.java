@@ -26,16 +26,12 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -55,10 +51,17 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {

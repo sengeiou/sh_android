@@ -15,7 +15,9 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class CreateStreamInteractor implements Interactor {
@@ -36,6 +38,8 @@ public class CreateStreamInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
+    private boolean notifyTopicMessage;
+
     @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository, LocaleProvider localeProvider) {
@@ -48,13 +52,14 @@ public class CreateStreamInteractor implements Interactor {
     }
 
     public void sendStream(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
-      Callback callback, ErrorCallback errorCallback) {
+      Boolean notifyTopicMessage ,Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
         this.shortTitle = shortTitle;
         this.description = description;
         this.topic = topic;
         this.notifyCreation = notifyCreation;
+        this.notifyTopicMessage = notifyTopicMessage;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -64,7 +69,7 @@ public class CreateStreamInteractor implements Interactor {
         Stream stream = streamFromParameters();
         if (validateStream(stream)) {
             try {
-                Stream savedStream = sendStreamToServer(stream, notifyCreation);
+                Stream savedStream = sendStreamToServer(stream, notifyCreation, notifyTopicMessage);
                 notifyLoaded(savedStream);
             } catch (ShootrException e) {
                 handleServerError(e);
@@ -96,8 +101,8 @@ public class CreateStreamInteractor implements Interactor {
         return idStream == null;
     }
 
-    private Stream sendStreamToServer(Stream stream, boolean notify) {
-        return remoteStreamRepository.putStream(stream, notify);
+    private Stream sendStreamToServer(Stream stream, boolean notify, Boolean notifyTopicMessage) {
+        return remoteStreamRepository.putStream(stream, notify, notifyTopicMessage);
     }
 
     //region Validation

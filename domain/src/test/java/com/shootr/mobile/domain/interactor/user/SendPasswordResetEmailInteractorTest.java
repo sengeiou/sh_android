@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

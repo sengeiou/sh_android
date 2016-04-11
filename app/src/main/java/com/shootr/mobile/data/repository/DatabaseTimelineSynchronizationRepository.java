@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository;
 import com.shootr.mobile.db.manager.ActivityManager;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+
 import javax.inject.Inject;
 
 public class DatabaseTimelineSynchronizationRepository implements TimelineSynchronizationRepository {

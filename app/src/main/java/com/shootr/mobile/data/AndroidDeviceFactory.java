@@ -5,6 +5,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.mobile.constant.Constants;
 import com.shootr.mobile.data.dagger.ApplicationContext;
@@ -14,10 +15,13 @@ import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.notifications.gcm.GCMConstants;
 import com.shootr.mobile.util.Version;
+
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class AndroidDeviceFactory implements DeviceFactory {

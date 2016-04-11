@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import com.github.paolorotolo.appintro.AppIntro;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.fragments.IntroSlideFragment;

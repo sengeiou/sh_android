@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshStreamTimelineInteractor;
+
 import javax.inject.Inject;
 
 public class StreamTimelineInteractorsWrapper {

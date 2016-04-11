@@ -9,7 +9,9 @@ import com.shootr.mobile.domain.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.ResetPasswordGateway;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class ServiceResetPasswordGateway implements ResetPasswordGateway {

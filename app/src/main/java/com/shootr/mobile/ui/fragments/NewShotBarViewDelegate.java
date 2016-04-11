@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.FeedbackMessage;

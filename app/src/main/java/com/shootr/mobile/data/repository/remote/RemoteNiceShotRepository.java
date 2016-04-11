@@ -4,7 +4,9 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 public class RemoteNiceShotRepository implements NiceShotRepository {

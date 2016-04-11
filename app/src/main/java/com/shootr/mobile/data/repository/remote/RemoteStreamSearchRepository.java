@@ -12,9 +12,11 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 public class RemoteStreamSearchRepository implements StreamSearchRepository {

@@ -2,11 +2,13 @@ package com.shootr.mobile.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
+
 import javax.inject.Inject;
 
 public class BaseSignedInActivity extends BaseToolbarActivity {

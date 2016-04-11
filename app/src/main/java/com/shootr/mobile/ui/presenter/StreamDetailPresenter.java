@@ -22,10 +22,13 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

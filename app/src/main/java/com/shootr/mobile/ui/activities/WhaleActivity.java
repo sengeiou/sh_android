@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WhaleActivity extends BaseActivity {
 

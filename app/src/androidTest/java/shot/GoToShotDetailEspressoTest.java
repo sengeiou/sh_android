@@ -3,9 +3,11 @@ package shot;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.model.ShotModel;
+
 import org.junit.Rule;
 import org.junit.Test;
 

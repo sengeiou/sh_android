@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.mobile.ui.views.SupportView;
+
 import javax.inject.Inject;
 
 public class SupportPresenter implements Presenter {

@@ -14,10 +14,12 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 public class GetFavoriteStreamsInteractor implements Interactor {

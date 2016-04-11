@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.ShotModel;
+
 import java.util.List;
 
 public interface ShotDetailView  {
@@ -28,4 +29,14 @@ public interface ShotDetailView  {
     void setupNewShotBarDelegate(ShotModel shotModel);
 
     void initializeNewShotBarPresenter(String streamId);
+
+    void openShot(ShotModel shotModel);
+
+    void goToStreamTimeline(String idStream);
+
+    void disableStreamTitle();
+
+    void enableStreamTitle();
+
+    void shareShot(ShotModel shotModel);
 }

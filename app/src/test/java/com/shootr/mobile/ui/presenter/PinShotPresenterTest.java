@@ -9,13 +9,15 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.PinShotView;
-import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;

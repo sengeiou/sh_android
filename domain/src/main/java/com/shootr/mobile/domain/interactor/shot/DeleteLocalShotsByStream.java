@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.ShotRepository;
+
 import javax.inject.Inject;
 
 public class DeleteLocalShotsByStream implements Interactor {

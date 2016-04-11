@@ -13,7 +13,9 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class AllShotsPresenter implements Presenter {

@@ -2,7 +2,9 @@ package com.shootr.mobile.data.repository.datasource.event;
 
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.db.manager.FavoriteManager;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DatabaseFavoriteDataSource implements FavoriteDataSource {

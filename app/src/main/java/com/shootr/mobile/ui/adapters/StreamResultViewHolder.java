@@ -6,9 +6,7 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
@@ -16,8 +14,13 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
+
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 

@@ -2,8 +2,10 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.DatabaseContract.UserTable;
+
 import java.text.Normalizer;
 
 public class UserEntityDBMapper extends GenericDBMapper {

@@ -2,8 +2,10 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.db.DatabaseContract;
+
 import java.util.Date;
 
 public abstract class GenericDBMapper {

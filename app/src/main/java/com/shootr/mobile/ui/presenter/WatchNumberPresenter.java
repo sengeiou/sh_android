@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import javax.inject.Inject;
 
 public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, StreamChanged.Receiver {

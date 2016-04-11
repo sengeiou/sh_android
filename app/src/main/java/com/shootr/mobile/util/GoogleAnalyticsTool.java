@@ -2,10 +2,12 @@ package com.shootr.mobile.util;
 
 import android.app.Activity;
 import android.content.Context;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.shootr.mobile.R;
+
 import java.util.HashMap;
 
 public class GoogleAnalyticsTool implements AnalyticsTool {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.service;
 
 import android.content.SharedPreferences;
+
 import com.shootr.mobile.data.ApiEndpoint;
 import com.shootr.mobile.data.DebugMode;
 import com.shootr.mobile.data.api.service.ActivityApiService;
@@ -15,9 +16,11 @@ import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.api.service.VideoApiService;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.StringPreference;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidMockValuePersistence;

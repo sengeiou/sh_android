@@ -2,6 +2,7 @@ package com.shootr.mobile.util;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.ui.ExternalIntentActivity;
 import com.shootr.mobile.ui.model.ShotModel;

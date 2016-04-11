@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

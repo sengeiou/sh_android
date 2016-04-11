@@ -3,7 +3,9 @@ package com.shootr.mobile.ui.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
 import com.shootr.mobile.ShootrApplication;
+
 import dagger.ObjectGraph;
 
 public class BaseFragment extends Fragment {

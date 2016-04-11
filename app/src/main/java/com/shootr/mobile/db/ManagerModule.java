@@ -1,6 +1,7 @@
 package com.shootr.mobile.db;
 
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShotManager;
@@ -12,9 +13,11 @@ import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   complete = false,

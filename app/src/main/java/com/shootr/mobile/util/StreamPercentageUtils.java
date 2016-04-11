@@ -1,6 +1,7 @@
 package com.shootr.mobile.util;
 
 import java.text.DecimalFormat;
+
 import javax.inject.Inject;
 
 public class StreamPercentageUtils implements PercentageUtils {

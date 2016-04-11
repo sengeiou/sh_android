@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -53,6 +52,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
+    public static final String EXTRA_IS_IN_TIMELINE = "isIntimeline";
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
@@ -82,6 +82,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
         intent.putExtra(EXTRA_SHOT, shotModel);
+        return intent;
+    }
+
+    public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel) {
+        Intent intent = new Intent(context, ShotDetailActivity.class);
+        intent.putExtra(EXTRA_SHOT, shotModel);
+        intent.putExtra(EXTRA_IS_IN_TIMELINE, true);
         return intent;
     }
 
@@ -150,44 +157,61 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             backStackHandler.handleBackStack(this);
             return true;
         } else if (item.getItemId() == R.id.menu_share) {
-            ShotModel shotModel = extractShotFromIntent();
-            openContextualMenu(shotModel);
+            openContextualMenu();
         } else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
-          new Runnable() {
+    private void openContextualMenu() {
+        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
               @Override public void run() {
-                  detailPresenter.shareShot(shotModel);
+                  detailPresenter.shareShotViaShootr();
               }
           }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
-                shareShot(shotModel);
+                detailPresenter.shareShot();
             }
         }).show();
     }
 
-    private void shareShot(ShotModel shotModel) {
+    @Override public void shareShot(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
         Intents.maybeStartActivity(this, shareIntent);
     }
 
     private void setupAdapter() {
         detailAdapter =
-          new ShotDetailWithRepliesAdapter(imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-              @Override public void onClick(String userId) {
-                  onShotAvatarClick(userId);
+          new ShotDetailWithRepliesAdapter(imageLoader,
+                  new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+                      @Override
+                      public void onClick(String userId) {
+                          onShotAvatarClick(userId);
+                      }
+                  }, //
+                  new ShotDetailWithRepliesAdapter.ShotClickListener() {
+                      @Override
+                      public void onClick(ShotModel shot) {
+                          onShotClick(shot);
+                      }
+                  }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
+              @Override
+              public void onClick(ShotModel shot) {
+                  onShotClick(shot);
               }
-          }, //
-            new ShotDetailWithRepliesAdapter.ImageClickListener() {
-                @Override public void onClick(ShotModel shot) {
-                    onShotImageClick(shot);
-                }
-            }, //
+          },
+                  new ShotDetailWithRepliesAdapter.StreamClickListener() {
+                      @Override
+                      public void onClick(ShotModel shotModel) {
+                          onStreamTitleClick(shotModel);
+                      }
+                  }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+              @Override
+              public void onClick(ShotModel shot) {
+                  onShotImageClick(shot);
+              }
+          },//
             new OnVideoClickListener() {
                 @Override public void onVideoClick(String url) {
                     onShotVideoClick(url);
@@ -198,7 +222,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     onShotUsernameClick(username);
                 }
             }, //
-            new ShotDetailWithRepliesAdapter.PinToProfileClickListener() {
+            new ShotDetailWithRepliesAdapter.ShotClickListener() {
 
                 @Override public void onClick(ShotModel shot) {
                     pinShotPresenter.pinToProfile(shot);
@@ -220,6 +244,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
+    }
+
+    private void onStreamTitleClick(ShotModel shotModel) {
+        detailPresenter.streamTitleClick(shotModel);
     }
 
     private void setupPhotoPicker() {
@@ -282,6 +310,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         newShotBarPresenter.initialize(this, streamId, false);
     }
 
+    @Override public void openShot(ShotModel shotModel) {
+        startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
+    }
+
+    @Override public void goToStreamTimeline(String idStream) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream));
+    }
+
+    @Override public void disableStreamTitle() {
+        detailAdapter.disableStreamTitle();
+    }
+
+    @Override public void enableStreamTitle() {
+        detailAdapter.enableStreamTitle();
+    }
+
     private ShotModel extractShotFromIntent() {
         return (ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT);
     }
@@ -302,6 +346,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     public void onShotAvatarClick(String userId) {
         detailPresenter.avatarClick(userId);
+    }
+
+    public void onShotClick(ShotModel shotModel) {
+        detailPresenter.shotClick(shotModel);
     }
 
     public void onShotUsernameClick(String username) {
@@ -335,6 +383,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override public void renderShot(ShotModel shotModel) {
         detailAdapter.renderMainShot(shotModel);
         pinShotPresenter.initialize(this, shotModel);
+        setupStreamTitle();
+    }
+
+    private void setupStreamTitle() {
+        Boolean isInStreamTimeline = getIntent().getBooleanExtra(EXTRA_IS_IN_TIMELINE, false);
+        detailPresenter.setupStreamTitle(isInStreamTimeline);
     }
 
     @Override public void renderReplies(List<ShotModel> shotModels) {

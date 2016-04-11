@@ -2,7 +2,9 @@ package com.shootr.mobile.data.repository.datasource.user;
 
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.db.manager.SuggestedPeopleManager;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DatabaseSuggestedPeopleDataSource implements SuggestedPeopleDataSource {

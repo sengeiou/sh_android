@@ -25,8 +25,10 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
@@ -479,28 +481,32 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void onHoldingShotsClick() {
         showingHolderShots(true);
         streamTimelineView.showLoading();
-        streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, hasBeenPaused, new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                streamTimelineView.setShots(shotModels);
-                isEmpty = shotModels.isEmpty();
-                streamTimelineView.hideCheckingForShots();
-                if (isEmpty) {
-                    streamTimelineView.showEmpty();
-                    streamTimelineView.hideShots();
-                } else {
-                    streamTimelineView.hideEmpty();
-                    streamTimelineView.showShots();
-                }
-                streamTimelineView.hideHoldingShots();
-                streamTimelineView.showAllStreamShots();
-                streamTimelineView.hideLoading();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorLoadingNewShots();
-            }
-        });
+        streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId,
+          idAuthor,
+          hasBeenPaused,
+          new Interactor.Callback<Timeline>() {
+              @Override public void onLoaded(Timeline timeline) {
+                  List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+                  streamTimelineView.setShots(shotModels);
+                  isEmpty = shotModels.isEmpty();
+                  streamTimelineView.hideCheckingForShots();
+                  if (isEmpty) {
+                      streamTimelineView.showEmpty();
+                      streamTimelineView.hideShots();
+                  } else {
+                      streamTimelineView.hideEmpty();
+                      streamTimelineView.showShots();
+                  }
+                  streamTimelineView.hideHoldingShots();
+                  streamTimelineView.showAllStreamShots();
+                  streamTimelineView.hideLoading();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showErrorLoadingNewShots();
+              }
+          });
     }
 
     public void onAllStreamShotsClick() {
@@ -556,10 +562,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void editStream(String topic) {
-        sendStream(topic);
+        if(topic.isEmpty()){
+            sendStream(topic, false);
+        }else{
+            streamTimelineView.showPinMessageNotification(topic);
+        }
     }
 
-    private void sendStream(String topic) {
+    public void notifyMessage(String topic, Boolean notify) {
+        sendStream(topic, notify);
+    }
+
+    private void sendStream(String topic, Boolean notifyMessage) {
         String title = filterTitle(streamTitle);
         String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
@@ -571,6 +585,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           description,
           topic,
           false,
+          notifyMessage,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   streamTopic = stream.getTopic();

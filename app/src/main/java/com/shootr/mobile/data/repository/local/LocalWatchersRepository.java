@@ -4,9 +4,11 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 public class LocalWatchersRepository implements WatchersRepository {

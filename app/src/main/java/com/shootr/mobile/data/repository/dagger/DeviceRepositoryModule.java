@@ -5,6 +5,7 @@ import com.shootr.mobile.data.repository.remote.RemoteDeviceRepository;
 import com.shootr.mobile.domain.repository.DeviceRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+
 import dagger.Module;
 import dagger.Provides;
 

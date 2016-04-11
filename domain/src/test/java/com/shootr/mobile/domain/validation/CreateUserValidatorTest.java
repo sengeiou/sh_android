@@ -1,8 +1,10 @@
 package com.shootr.mobile.domain.validation;
 
 import com.shootr.mobile.domain.exception.ShootrError;
-import java.util.List;
+
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

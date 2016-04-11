@@ -9,9 +9,11 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.repository.Local;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class ServiceFavoriteDataSource implements FavoriteDataSource {

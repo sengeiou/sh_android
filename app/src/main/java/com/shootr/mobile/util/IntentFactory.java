@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;

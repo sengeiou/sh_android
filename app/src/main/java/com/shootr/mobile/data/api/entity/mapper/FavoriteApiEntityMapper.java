@@ -3,8 +3,10 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.FavoriteApiEntity;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class FavoriteApiEntityMapper {

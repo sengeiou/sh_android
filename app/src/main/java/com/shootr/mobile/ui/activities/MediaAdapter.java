@@ -10,14 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

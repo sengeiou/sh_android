@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.mobile.domain.service.user.LoginException;
 import com.shootr.mobile.ui.views.EmailLoginView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

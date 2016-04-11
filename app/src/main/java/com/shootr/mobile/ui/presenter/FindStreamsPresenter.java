@@ -12,7 +12,9 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class FindStreamsPresenter implements Presenter {

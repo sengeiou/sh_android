@@ -6,13 +6,15 @@ import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.lang.reflect.Method;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;

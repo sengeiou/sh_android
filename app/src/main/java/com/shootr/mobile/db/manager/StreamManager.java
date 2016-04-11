@@ -4,13 +4,16 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class StreamManager extends AbstractManager{

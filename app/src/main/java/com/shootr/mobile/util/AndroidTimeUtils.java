@@ -3,13 +3,16 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.TimeUtils;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 public class AndroidTimeUtils implements TimeUtils {

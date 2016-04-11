@@ -1,12 +1,13 @@
 package com.shootr.mobile.domain.utils;
 
-import javax.inject.Inject;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;
 import org.threeten.bp.temporal.Temporal;
+
+import javax.inject.Inject;
 
 public class StreamJoinDateFormatter {
 

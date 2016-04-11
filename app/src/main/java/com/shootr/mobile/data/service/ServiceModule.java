@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.service.user.CreateAccountGateway;
 import com.shootr.mobile.domain.service.user.LoginGateway;
 import com.shootr.mobile.domain.service.user.ResetPasswordEmailGateway;
 import com.shootr.mobile.domain.service.user.ResetPasswordGateway;
+
 import dagger.Module;
 import dagger.Provides;
 

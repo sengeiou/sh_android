@@ -4,7 +4,9 @@ import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.domain.StreamTimelineParameters;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class DatabaseShotDataSource implements ShotDataSource {

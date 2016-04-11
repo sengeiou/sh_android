@@ -6,11 +6,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+
 import com.shootr.mobile.domain.utils.ImageResizer;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class BitmapImageResizer implements ImageResizer {

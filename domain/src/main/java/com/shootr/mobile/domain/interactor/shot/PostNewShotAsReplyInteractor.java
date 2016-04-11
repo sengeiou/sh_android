@@ -9,7 +9,9 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
+
 import java.io.File;
+
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

@@ -10,7 +10,9 @@ import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class StreamTimelineOptionsPresenter implements Presenter {

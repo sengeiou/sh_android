@@ -1,11 +1,14 @@
 package com.shootr.mobile.service;
 
 import android.support.annotation.NonNull;
+
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.exception.ErrorResource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+
 import javax.inject.Inject;
+
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 import timber.log.Timber;

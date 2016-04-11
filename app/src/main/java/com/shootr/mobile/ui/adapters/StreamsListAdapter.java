@@ -4,12 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
+
 import java.util.List;
 
 public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {

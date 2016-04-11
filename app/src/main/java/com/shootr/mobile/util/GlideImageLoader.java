@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -17,10 +18,13 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.dagger.ApplicationContext;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
 import javax.inject.Inject;
+
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 

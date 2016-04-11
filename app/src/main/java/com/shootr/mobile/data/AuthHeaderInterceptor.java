@@ -4,7 +4,9 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 class AuthHeaderInterceptor implements Interceptor {

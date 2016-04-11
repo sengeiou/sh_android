@@ -3,6 +3,7 @@ package com.shootr.mobile.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.StringPreference;
@@ -13,9 +14,11 @@ import com.shootr.mobile.service.DebugApiModule;
 import com.shootr.mobile.ui.debug.CaptureIntents;
 import com.shootr.mobile.ui.debug.NetworkProxy;
 import com.shootr.mobile.util.Version;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

@@ -53,6 +53,7 @@
   <string name="block_user_dialog_message">如忽略此用戶，您將看不到他的shots。</string>
   <string name="block_user_error">要忽略該用戶前，您必須先取消關注。</string>
   <string name="cancel">取消</string>
+  <string name="cancel_hide_shot" formatted="false">取消</string>
   <string name="can_shoot_streams">清除禁止</string>
   <string name="change_password_button_text">完成</string>
   <string name="change_password_logout_message">密碼已更改。必須重新登錄…</string>
@@ -60,6 +61,7 @@
   <string name="checkin_activity_text_pattern">在(stream)簽到</string>
   <!-- Errors -->
   <string name="communication_error">網絡連接發生問題。請查檢查您的連接，然後重試。</string>
+  <string name="confirmation_hide_shot_message" formatted="false">解除釘選</string>
   <string name="confirm_hide_shot" formatted="false">解除釘選</string>
   <string name="connection_lost">網絡連接中斷</string>
   <string name="copied_to_clipboard">文字已複製到剪貼板。</string>
@@ -70,14 +72,17 @@
   <string name="discard_profile_confirmation">取消變更？</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
+  <string name="done_pin_topic" formatted="false">釘選</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">沒有權限。您需要授權以儲存相片。</string>
   <string name="download_photo_permission_explaination">您必須授權給 Shootr 以儲存相片。</string>
   <string name="drafts_action_discard">捨棄</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">沒有草稿</string>
+  <string name="drawer_activity_me" formatted="false">私</string>
   <string name="drawer_activity_title">動態消息</string>
   <string name="drawer_favorites_title">最愛</string>
+  <string name="drawer_friends_activity_title" formatted="false">朋友</string>
   <string name="drawer_friends_title">朋友</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="edit_stream">編輯Stream</string>
@@ -209,9 +214,10 @@
   <string name="new_stream_description_label">說明</string>
   <string name="new_stream_short_title_label">簡稱</string>
   <string name="new_stream_title_label">主題</string>
+  <string name="new_topic" formatted="false">新的消息…</string>
   <string name="next">下一步</string>
   <string name="niced_shot_activity">Nice了您的shot</string>
-  <string name="niced_shot_activity_with_comment">Nice了您的shot:</string>
+  <string name="niced_shot_activity_with_comment">"Nice了: "</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d 個nice</item>
   </plurals>
@@ -234,10 +240,15 @@
   <string name="opened_activity_text_pattern">建立了(stream)</string>
   <string name="participants_list_empty">沒有參與者</string>
   <string name="photo_edit_gallery">相簿</string>
+  <string name="photo_edit_remove">清除</string>
   <string name="photo_edit_remove_confirmation">清除相片?</string>
   <string name="photo_edit_take">相機</string>
-  <string name="pinned_shot_activity">釘選shot到個人主頁</string>
-  <string name="pinned_shot_activity_with_comment">已釘選到個人主頁:</string>
+  <string name="pinned_shot_activity">已釘選到個人主頁</string>
+  <string name="pinned_shot_activity_with_comment">"已釘選到個人主頁: "</string>
+  <string name="pin_message_notification_confirmation_no" formatted="false">否</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">通知將傳送給喜愛Stream的參與者與使用者。</string>
+  <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
+  <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="profile_all_shots">所有shots</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">編輯個人檔案</string>
@@ -255,6 +266,8 @@
   <string name="remove_stream_confirmation">清除stream?</string>
   <string name="remove_stream_label">清除stream</string>
   <string name="remove_stream_listing_context_menu">清除</string>
+  <string name="replied_activity" formatted="false">已回覆</string>
+  <string name="replied_activity_with_comment" formatted="false">"已回覆: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="other">%d回覆</item>
   </plurals>
@@ -272,13 +285,13 @@
   <string name="restore_stream_label">還原stream</string>
   <string name="seconds">秒</string>
   <string name="shared_shot_activity">分享了%s的 Shot</string>
-  <string name="shared_shot_activity_with_comment">分享了%s的 Shot:</string>
+  <string name="shared_shot_activity_with_comment">"分享了: "</string>
   <string name="shared_stream_notification">分享了 Stream</string>
   <string name="share_shot_chooser_title">分享</string>
   <string name="share_shot_message">%1$s在%2$s發怖了 :%3$s</string>
   <string name="share_shot_subject">%1$s在%2$s發怖了訊息</string>
   <string name="share_stream_activity_text_pattern">分享了(stream)</string>
-  <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
+  <string name="share_stream_message">在Shootr看看%1$s: https://shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
   <string name="share_via">透過以下方式分享：</string>
   <string name="share_via_shootr">通過Shootr分享</string>
@@ -329,6 +342,9 @@
   <string name="title_activity_stream_data_info">数据</string>
   <string name="title_activity_stream_media">媒體</string>
   <string name="title_activity_support">支援</string>
+  <string name="title_menu_photo" formatted="false">照片</string>
+  <string name="title_pin_message_notification" formatted="false">通知訊息？</string>
+  <string name="topic" formatted="false">訊息</string>
   <plurals name="total_watchers_pattern">
     <item quantity="other">%d個參與者</item>
     <item quantity="zero"/>
@@ -348,6 +364,7 @@
   <string name="user_unblocked">忽略已清除</string>
   <string name="watching_stream_connected">已連接</string>
   <string name="watching_stream_connected_muted">已連接(靜音)</string>
+  <string name="watch_profile_photo" formatted="false">點開</string>
   <string name="welcome_friends_text">離開以取消連結</string>
   <string name="welcome_get_started_button">明白了</string>
   <string name="welcome_shootr_title">進入一個stream以進行聯繫</string>
@@ -355,13 +372,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
-  <string name="cancel_hide_shot">取消</string>
-  <string name="confirmation_hide_shot_message">解除釘選</string>
-  <string name="photo_edit_remove">清除</string>
-  <string name="pin_topic">釘選訊息</string>
-  <string name="done_pin_topic">釘選</string>
-  <string name="new_topic">新的消息…</string>
-  <string name="topic">訊息</string>
-  <string name="watch_profile_photo">點開</string>
-  <string name="title_menu_photo">照片</string>
 </resources>

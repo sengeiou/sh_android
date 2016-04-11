@@ -11,8 +11,10 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.SuggestedPeopleView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class SuggestedPeoplePresenter implements Presenter {

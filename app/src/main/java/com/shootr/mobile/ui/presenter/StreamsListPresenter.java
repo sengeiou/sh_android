@@ -21,7 +21,9 @@ import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
