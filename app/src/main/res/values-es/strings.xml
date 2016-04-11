@@ -269,7 +269,7 @@
   <string name="remove_stream_label">Borrar stream</string>
   <string name="remove_stream_listing_context_menu">Borrar</string>
   <string name="replied_activity" formatted="false">Ha respondido</string>
-  <string name="replied_activity_with_comment" formatted="false">Ha respondido:</string>
+  <string name="replied_activity_with_comment" formatted="false">"Ha respondido: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d respuesta</item>
     <item quantity="other">%d respuestas</item>

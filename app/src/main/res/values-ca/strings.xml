@@ -220,7 +220,7 @@
   <string name="new_topic" formatted="false">Nou missatge…</string>
   <string name="next">Següent</string>
   <string name="niced_shot_activity">T\'ha fet un nice</string>
-  <string name="niced_shot_activity_with_comment">Ha fet nice a: </string>
+  <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
