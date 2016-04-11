@@ -304,7 +304,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadHolderNewShots() {
-        if (handleShotsRefresh()) return;
+        if (handleShotsRefresh()) {
+            return;
+        }
         streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId,
           idAuthor,
           lastRefreshDate,
@@ -322,7 +324,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadNewShots() {
-        if (handleShotsRefresh()) return;
+        if (handleShotsRefresh()) {
+            return;
+        }
         if (!showingHoldingShots) {
             timelineInteractorWrapper.refreshTimeline(streamId,
               lastRefreshDate,
