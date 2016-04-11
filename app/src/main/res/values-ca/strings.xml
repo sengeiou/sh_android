@@ -220,7 +220,7 @@
   <string name="new_topic" formatted="false">Nou missatge…</string>
   <string name="next">Següent</string>
   <string name="niced_shot_activity">T\'ha fet un nice</string>
-  <string name="niced_shot_activity_with_comment">"T\'ha fet un nice: "</string>
+  <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -289,7 +289,7 @@
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="seconds">s</string>
   <string name="shared_shot_activity">Ha compartit un shot de %s</string>
-  <string name="shared_shot_activity_with_comment">"Ha compartit de %s: "</string>
+  <string name="shared_shot_activity_with_comment">"Ha compartit: "</string>
   <string name="shared_stream_notification">Stream compartit</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%1$s ha fet un shot a %2$s: %3$s</string>

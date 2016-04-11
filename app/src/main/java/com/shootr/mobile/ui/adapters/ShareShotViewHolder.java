@@ -31,6 +31,6 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
 
     @Override
     protected String getActivityCommentPrefix(ActivityModel activity) {
-        return String.format(sharedShotPrefixPattern, activity.getShot().getUsername());
+        return sharedShotPrefixPattern;
     }
 }
