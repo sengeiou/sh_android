@@ -11,7 +11,9 @@ features:
         - /^feature\/.*$/
 
 integration:
-    script: gradle build -PdisablePreDex
+    script:
+        - ./gradlew checkstyle build
+        - gradle build -PdisablePreDex
     stage: test
     only:
         - master
