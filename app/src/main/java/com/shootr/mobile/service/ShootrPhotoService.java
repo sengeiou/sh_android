@@ -13,15 +13,11 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 public class ShootrPhotoService implements PhotoService {
@@ -34,7 +30,8 @@ public class ShootrPhotoService implements PhotoService {
     private SessionRepository sessionRepository;
     private JsonAdapter jsonAdapter;
 
-    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, JsonAdapter jsonAdapter, Endpoint endpoint) {
+    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, JsonAdapter jsonAdapter,
+      Endpoint endpoint) {
         this.client = client;
         this.sessionRepository = sessionRepository;
         this.jsonAdapter = jsonAdapter;
@@ -102,17 +99,12 @@ public class ShootrPhotoService implements PhotoService {
         return executeRequest(body, uploadShotPhotoEndpoint);
     }
 
-
-
     private Response executeStreamImageRequest(RequestBody body) throws IOException {
         return executeRequest(body, uploadStreamPhotoEndpoint);
     }
 
     private Response executeRequest(RequestBody body, String endpoint) throws IOException {
-        Request request = new Request.Builder()
-          .url(endpoint)
-          .post(body)
-          .build();
+        Request request = new Request.Builder().url(endpoint).post(body).build();
 
         return client.newCall(request).execute();
     }
@@ -122,8 +114,9 @@ public class ShootrPhotoService implements PhotoService {
             JSONObject responseJson = getJsonFromResponse(response);
             return readJsonFromShotImage(responseJson);
         } catch (JSONException e) {
-            ShootrError
-              jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
+            ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
+              "JSONException",
+              "Error while parsing response JSON. Response received:" + response.body().string());
             throw new ShootrServerException(jsonError);
         }
     }
@@ -133,8 +126,9 @@ public class ShootrPhotoService implements PhotoService {
             JSONObject responseJson = getJsonFromResponse(response);
             return readJsonFromProfilePhoto(responseJson);
         } catch (JSONException e) {
-            ShootrError
-              jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
+            ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
+              "JSONException",
+              "Error while parsing response JSON. Response received:" + response.body().string());
             throw new ShootrServerException(jsonError);
         }
     }
@@ -144,8 +138,9 @@ public class ShootrPhotoService implements PhotoService {
             JSONObject responseJson = getJsonFromResponse(response);
             return readJsonFromStreamImage(responseJson);
         } catch (JSONException e) {
-            ShootrError
-              jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
+            ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
+              "JSONException",
+              "Error while parsing response JSON. Response received:" + response.body().string());
             throw new ShootrServerException(jsonError);
         }
     }
@@ -174,7 +169,6 @@ public class ShootrPhotoService implements PhotoService {
         }
     }
 
-
     private String readJsonFromStreamImage(JSONObject jsonObject) throws IOException, JSONException {
         String imageUrl = getStreamImageUrlFromJson(jsonObject);
 
@@ -188,10 +182,12 @@ public class ShootrPhotoService implements PhotoService {
     }
 
     private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
-        ShootrPhotoUploadError
-        shootrError = jsonAdapter.fromJson(jsonObject.getString("status"), ShootrPhotoUploadError.class);
+        ShootrPhotoUploadError shootrError =
+          jsonAdapter.fromJson(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
-        Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.getErrorCode(),
+        Timber.e(shootrServerException,
+          "Photo not received, ShootrError: %s - %s",
+          shootrError.getErrorCode(),
           shootrError.getMessage());
         throw shootrServerException;
     }

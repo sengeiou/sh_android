@@ -12,10 +12,8 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
-
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetOlderHoldingStreamTimelineInteractor implements com.shootr.mobile.domain.interactor.Interactor {

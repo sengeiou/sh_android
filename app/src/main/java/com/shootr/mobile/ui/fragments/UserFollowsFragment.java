@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -26,15 +29,8 @@ import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment
@@ -113,7 +109,8 @@ public class UserFollowsFragment extends BaseFragment
 
     public void setupUserListAdapter() {
         userList.setAdapter(getAdapter());
-        new ListViewScrollObserver(userList).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+        new ListViewScrollObserver(userList)
+          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 /* no-op */
             }
@@ -178,7 +175,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(),getActivity());
+        analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         userFollowsPresenter.setView(new NullUserFollowsView());
     }
@@ -198,7 +195,8 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void unFollow(int position) {
         final UserModel userModel = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          userModel.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   unfollowUser(userModel);
@@ -240,9 +238,9 @@ public class UserFollowsFragment extends BaseFragment
         setupUserListAfterAddFooter();
     }
 
-    public void setupUserListAfterAddFooter(){
+    public void setupUserListAfterAddFooter() {
         userList.setAdapter(getAdapter());
-        userList.setSelection(getAdapter().getCount()-1);
+        userList.setSelection(getAdapter().getCount() - 1);
     }
 
     @Override public void hideProgressView() {
@@ -256,9 +254,9 @@ public class UserFollowsFragment extends BaseFragment
     }
 
     @Override public void registerAnalytics(boolean followers) {
-        if(followers){
+        if (followers) {
             analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollower);
-        }else{
+        } else {
             analyticsTool.analyticsStart(getContext(), analyticsScreenUserFollowing);
         }
     }

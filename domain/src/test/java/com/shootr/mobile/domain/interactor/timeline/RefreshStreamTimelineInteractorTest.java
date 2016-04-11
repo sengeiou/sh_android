@@ -9,16 +9,14 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,9 +42,10 @@ public class RefreshStreamTimelineInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.interactor =
-          new RefreshStreamTimelineInteractor(interactorHandler, postExecutionThread, shootrTimelineService,
-            localeProvider);
+        this.interactor = new RefreshStreamTimelineInteractor(interactorHandler,
+          postExecutionThread,
+          shootrTimelineService,
+          localeProvider);
     }
 
     @Test public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream() throws Exception {

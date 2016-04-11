@@ -11,10 +11,8 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.SuggestedPeopleView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SuggestedPeoplePresenter implements Presenter {
@@ -30,9 +28,7 @@ public class SuggestedPeoplePresenter implements Presenter {
     private Boolean hasBeenPaused = false;
 
     @Inject public SuggestedPeoplePresenter(GetSuggestedPeopleInteractor getSuggestedPeopleInteractor,
-      FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor,
-      UserModelMapper userModelMapper,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.getSuggestedPeopleInteractor = getSuggestedPeopleInteractor;
         this.followInteractor = followInteractor;
@@ -53,8 +49,7 @@ public class SuggestedPeoplePresenter implements Presenter {
 
     private void obtainSuggestedPeople() {
         getSuggestedPeopleInteractor.loadSuggestedPeople(new Interactor.Callback<List<SuggestedPeople>>() {
-            @Override
-            public void onLoaded(List<SuggestedPeople> suggestedPeoples) {
+            @Override public void onLoaded(List<SuggestedPeople> suggestedPeoples) {
                 List<UserModel> users = new ArrayList<>();
                 for (SuggestedPeople suggested : suggestedPeoples) {
                     users.add(userModelMapper.transform(suggested.getUser()));
@@ -63,14 +58,13 @@ public class SuggestedPeoplePresenter implements Presenter {
                 suggestedPeople = users;
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 suggestedPeopleView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
 
-    public void followUser(final UserModel user){
+    public void followUser(final UserModel user) {
         followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 onFollowUpdated(user.getIdUser(), true);
@@ -82,7 +76,7 @@ public class SuggestedPeoplePresenter implements Presenter {
         });
     }
 
-    public void unfollowUser(final UserModel user){
+    public void unfollowUser(final UserModel user) {
         unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 onFollowUpdated(user.getIdUser(), false);
@@ -94,7 +88,8 @@ public class SuggestedPeoplePresenter implements Presenter {
         for (int i = 0; i < suggestedPeople.size(); i++) {
             UserModel userModel = suggestedPeople.get(i);
             if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                userModel.setRelationship(
+                  following ? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
                 suggestedPeopleView.refreshSuggestedPeople(suggestedPeople);
                 break;
             }

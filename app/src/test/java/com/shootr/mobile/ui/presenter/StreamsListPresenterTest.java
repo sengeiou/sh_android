@@ -20,18 +20,16 @@ import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
@@ -65,13 +63,17 @@ public class StreamsListPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        StreamResultModelMapper streamResultModelMapper =
-          new StreamResultModelMapper(streamModelMapper);
+        StreamResultModelMapper streamResultModelMapper = new StreamResultModelMapper(streamModelMapper);
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
           unwatchStreamInteractor,
-          shareStreamInteractor, getMutedStreamsInteractor, muteInteractor, unmuteInterator, streamResultModelMapper,
-          errorMessageFactory, bus);
+          shareStreamInteractor,
+          getMutedStreamsInteractor,
+          muteInteractor,
+          unmuteInterator,
+          streamResultModelMapper,
+          errorMessageFactory,
+          bus);
         presenter.setView(streamsListView);
     }
 
@@ -93,7 +95,8 @@ public class StreamsListPresenterTest {
         verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
-    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId()
+      throws Exception {
         presenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
@@ -220,12 +223,12 @@ public class StreamsListPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
-                errorCallback.onError(new ShootrException() {});
+                errorCallback.onError(new ShootrException() {
+                });
                 return null;
             }
-        }).when(shareStreamInteractor).shareStream(anyString(),
-          any(Interactor.CompletedCallback.class),
-          anyErrorCallback());
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
     private void setupShareStreamCompletedCallback() {
@@ -236,9 +239,8 @@ public class StreamsListPresenterTest {
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(shareStreamInteractor).shareStream(anyString(),
-          any(Interactor.CompletedCallback.class),
-          anyErrorCallback());
+        }).when(shareStreamInteractor)
+          .shareStream(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
     }
 
     private StreamResultModel streamModel() {

@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.adapters;
 
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-
+import butterknife.BindColor;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -11,8 +11,6 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
 
-import butterknife.BindColor;
-
 public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
     private final ImageLoader imageLoader;
@@ -20,31 +18,27 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
     @BindColor(R.color.gray_60) int shotCommentColor;
 
-    public ShotActivityViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {
+    public ShotActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
         this.imageLoader = imageLoader;
         this.onShotClickListener = onShotClickListener;
     }
 
-    @Override
-    public void render(ActivityModel activity) {
+    @Override public void render(ActivityModel activity) {
         super.render(activity);
         enableShotClick(activity);
     }
 
     private void enableShotClick(final ActivityModel activity) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 onShotClickListener.onShotClick(activity.getShot());
             }
         });
     }
 
-    @Override
-    protected void renderText(ActivityModel activity) {
+    @Override protected void renderText(ActivityModel activity) {
         CharSequence activityText = getActivityText(activity);
         text.setText(activityText);
     }
@@ -58,8 +52,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
         }
     }
 
-    @Override
-    protected void renderImage(ActivityModel activity) {
+    @Override protected void renderImage(ActivityModel activity) {
         String shotImage = activity.getShot().getImage();
         if (shotImage != null) {
             image.setVisibility(View.VISIBLE);

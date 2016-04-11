@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.model;
 import java.io.File;
 import java.io.Serializable;
 
-public class DraftModel implements Serializable{
+public class DraftModel implements Serializable {
 
     private Long idQueue;
     private ShotModel shotModel;

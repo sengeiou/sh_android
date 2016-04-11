@@ -17,12 +17,9 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class ProfileEditPresenter implements Presenter {
@@ -43,8 +40,8 @@ public class ProfileEditPresenter implements Presenter {
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory,
-      GetUserByIdInteractor getUserByIdInteractor, UpdateUserProfileInteractor updateUserProfileInteractor) {
+      ErrorMessageFactory errorMessageFactory, GetUserByIdInteractor getUserByIdInteractor,
+      UpdateUserProfileInteractor updateUserProfileInteractor) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;

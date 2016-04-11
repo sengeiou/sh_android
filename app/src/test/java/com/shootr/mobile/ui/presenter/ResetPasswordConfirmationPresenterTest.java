@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.user.SendPasswordResetEmailInteractor
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.views.ResetPasswordConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,30 +31,26 @@ public class ResetPasswordConfirmationPresenterTest {
 
     private ResetPasswordConfirmationPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new ResetPasswordConfirmationPresenter(sendPasswordResetEmailInteractor, errorMessageFactory);
         presenter.setView(resetPasswordConfirmationView);
         presenter.setUserModel(stubForgotPasswordUserModel());
     }
 
-    @Test
-    public void shouldShowAvatarWhenInitialized() throws Exception {
+    @Test public void shouldShowAvatarWhenInitialized() throws Exception {
         presenter.initialize(resetPasswordConfirmationView, stubForgotPasswordUserModel());
 
         verify(resetPasswordConfirmationView).showAvatar(STUB_AVATAR);
     }
 
-    @Test
-    public void shouldShowUsernameWhenInitialized() throws Exception {
+    @Test public void shouldShowUsernameWhenInitialized() throws Exception {
         presenter.initialize(resetPasswordConfirmationView, stubForgotPasswordUserModel());
 
         verify(resetPasswordConfirmationView).showUsername(STUB_USERNAME);
     }
 
-    @Test
-    public void shouldShowDoneButtonWhenConfirmIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldShowDoneButtonWhenConfirmIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacksCompleted();
 
         presenter.confirm();
@@ -63,15 +58,13 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showDoneButton();
     }
 
-    @Test
-    public void shouldHideConfirmButtonWhenConfirm() throws Exception {
+    @Test public void shouldHideConfirmButtonWhenConfirm() throws Exception {
         presenter.confirm();
 
         verify(resetPasswordConfirmationView).hideConfirmationButton();
     }
 
-    @Test
-    public void shouldShowConfirmButtonWhenConfirmIfInteractorCallbacksError() throws Exception {
+    @Test public void shouldShowConfirmButtonWhenConfirmIfInteractorCallbacksError() throws Exception {
         setupInteractorCallbacksError();
 
         presenter.confirm();
@@ -79,8 +72,8 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showConfirmationButton();
     }
 
-    @Test
-    public void shouldShowPostConfirmationMessageWithEmailWhenConfirmIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldShowPostConfirmationMessageWithEmailWhenConfirmIfInteractorCallbacksResult()
+      throws Exception {
         setupInteractorCallbacksCompleted();
 
         presenter.confirm();
@@ -88,15 +81,13 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showPostConfirmationMessage(STUB_EMAIL);
     }
 
-    @Test
-    public void shouldShowLoadingWhenConfirm() throws Exception {
+    @Test public void shouldShowLoadingWhenConfirm() throws Exception {
         presenter.confirm();
 
         verify(resetPasswordConfirmationView).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenConfirmIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldHideLoadingWhenConfirmIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacksCompleted();
 
         presenter.confirm();
@@ -104,8 +95,7 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).hideConfirmationButton();
     }
 
-    @Test
-    public void shouldShowErrorWhenConfirmIfInteractorCallbacksError() throws Exception {
+    @Test public void shouldShowErrorWhenConfirmIfInteractorCallbacksError() throws Exception {
         setupInteractorCallbacksError();
 
         presenter.confirm();
@@ -113,8 +103,7 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showError(anyString());
     }
 
-    @Test
-    public void shouldHideLoadingWhenConfirmIfInteractorCallbacksError() throws Exception {
+    @Test public void shouldHideLoadingWhenConfirmIfInteractorCallbacksError() throws Exception {
         setupInteractorCallbacksError();
 
         presenter.confirm();
@@ -122,32 +111,31 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).hideLoading();
     }
 
-    @Test
-    public void shouldNavigateToLoginWhenDone() throws Exception {
+    @Test public void shouldNavigateToLoginWhenDone() throws Exception {
         presenter.done();
 
         verify(resetPasswordConfirmationView).navigateToLogin();
-
     }
 
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
                 return null;
             }
-        }).when(sendPasswordResetEmailInteractor).sendPasswordResetEmail(anyString(), anyCallback(), anyErrorCallback());
+        }).when(sendPasswordResetEmailInteractor)
+          .sendPasswordResetEmail(anyString(), anyCallback(), anyErrorCallback());
     }
 
     protected void setupInteractorCallbacksError() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException() {});
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException() {
+                });
                 return null;
             }
-        }).when(sendPasswordResetEmailInteractor).sendPasswordResetEmail(anyString(), anyCallback(), anyErrorCallback());
+        }).when(sendPasswordResetEmailInteractor)
+          .sendPasswordResetEmail(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private Interactor.CompletedCallback anyCallback() {

@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteQuery;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,11 +14,10 @@ public class TrackingCursor extends SQLiteCursor {
 
     public TrackingCursor(SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
         super(driver, editTable, query);
-        synchronized (openCursors){
+        synchronized (openCursors) {
             openCursors.add(this);
             stackTrace = Thread.currentThread().getStackTrace();
         }
-
     }
 
     public void close() {

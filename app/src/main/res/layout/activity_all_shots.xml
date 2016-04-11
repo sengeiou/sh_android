@@ -6,21 +6,20 @@
   android:layout_height="match_parent"
   android:layout_above="@+id/timeline_new_shot_bar">
 
-  <ProgressBar android:id="@+id/all_shots_loading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center|center_horizontal"
-    android:indeterminate="true"
-    android:visibility="gone"
-    tools:visibility="visible" />
+    <ProgressBar android:id="@+id/all_shots_loading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center|center_horizontal"
+      android:indeterminate="true"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
-  <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/all_shots_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:listitem="@layout/item_list_shot" />
+    <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/all_shots_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:listitem="@layout/item_list_shot" />
 
-    <TextView
-      android:id="@+id/timeline_empty"
+    <TextView android:id="@+id/timeline_empty"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/shot_timeline_empty_title"

@@ -11,17 +11,15 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -36,7 +34,7 @@ public class PostNewShotPresenterTest {
     public static final String USERNAME = "username";
     public static final String PART_OF_A_USERNAME = "@use";
     public static final String COMMENT_WITH_USERNAME = "comment @username ";
-    public static final String[] words = {"comment","@username"};
+    public static final String[] words = { "comment", "@username" };
     public static final Integer wordPosition = 1;
     private PostNewShotPresenter presenter;
 
@@ -51,7 +49,12 @@ public class PostNewShotPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new PostNewShotPresenter(bus, errorMessageFactory, postNewShotInStreamInteractor, postNewShotAsReplyInteractor, getMentionedPeopleInteractor, userModelMapper);
+        presenter = new PostNewShotPresenter(bus,
+          errorMessageFactory,
+          postNewShotInStreamInteractor,
+          postNewShotAsReplyInteractor,
+          getMentionedPeopleInteractor,
+          userModelMapper);
         presenter.setView(postNewShotView);
     }
 
@@ -69,7 +72,6 @@ public class PostNewShotPresenterTest {
         presenter.autocompleteMention(USERNAME, words, wordPosition);
 
         verify(postNewShotView).hideImageContainer();
-
     }
 
     @Test public void shouldRenderMentionSuggestionsIfPeopleObtainedWhenMentioning() throws Exception {
@@ -78,7 +80,6 @@ public class PostNewShotPresenterTest {
         presenter.autocompleteMention(USERNAME, words, wordPosition);
 
         verify(postNewShotView).renderMentionSuggestions(anyList());
-
     }
 
     @Test public void shouldhideMentionSuggestionsIfNoPeopleObtainedWhenMentioning() throws Exception {

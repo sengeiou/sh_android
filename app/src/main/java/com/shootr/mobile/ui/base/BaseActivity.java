@@ -6,7 +6,6 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.bus.Main;
@@ -21,10 +20,8 @@ import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.util.VersionUpdater;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 public abstract class BaseActivity extends ActionBarActivity {
 
@@ -132,9 +129,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     private void setupUnauthorizedRedirection() {
         unauthorizedReceiver = new Unauthorized.Receiver() {
-            @Subscribe
-            @Override
-            public void onUnauthorized(Unauthorized.Event event) {
+            @Subscribe @Override public void onUnauthorized(Unauthorized.Event event) {
                 if (requiresUserLogin()) {
                     redirectToLogin();
                 }

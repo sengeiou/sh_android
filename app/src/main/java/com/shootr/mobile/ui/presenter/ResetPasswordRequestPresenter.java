@@ -9,7 +9,6 @@ import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.model.mappers.ForgotPasswordUserModelMapper;
 import com.shootr.mobile.ui.views.ResetPasswordRequestView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import javax.inject.Inject;
 
 public class ResetPasswordRequestPresenter implements Presenter {
@@ -20,8 +19,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
 
     private ResetPasswordRequestView resetPasswordRequestView;
 
-    @Inject
-    public ResetPasswordRequestPresenter(ResetPasswordInteractor resetPasswordInteractor,
+    @Inject public ResetPasswordRequestPresenter(ResetPasswordInteractor resetPasswordInteractor,
       ForgotPasswordUserModelMapper forgotPasswordUserModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.resetPasswordInteractor = resetPasswordInteractor;
         this.forgotPasswordUserModelMapper = forgotPasswordUserModelMapper;
@@ -43,15 +41,13 @@ public class ResetPasswordRequestPresenter implements Presenter {
         resetPasswordRequestView.hideKeyboard();
         resetPasswordInteractor.attempResetPassword(resetPasswordRequestView.getUsernameOrEmail(), //
           new Interactor.Callback<ForgotPasswordResult>() {
-              @Override
-              public void onLoaded(ForgotPasswordResult forgotPasswordResult) {
+              @Override public void onLoaded(ForgotPasswordResult forgotPasswordResult) {
                   ForgotPasswordUserModel model = forgotPasswordUserModelMapper.transform(forgotPasswordResult);
                   resetPasswordRequestView.navigateToResetPasswordConfirmation(model);
               }
           }, //
           new Interactor.ErrorCallback() {
-              @Override
-              public void onError(ShootrException error) {
+              @Override public void onError(ShootrException error) {
                   resetPasswordRequestView.enableNextButton();
                   resetPasswordRequestView.hideLoading();
                   showErrorInView(error);
@@ -79,13 +75,11 @@ public class ResetPasswordRequestPresenter implements Presenter {
         return inputText.trim();
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
         /* no-op */
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
         /* no-op */
     }
 }

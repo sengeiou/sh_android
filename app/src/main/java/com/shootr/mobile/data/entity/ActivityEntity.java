@@ -104,7 +104,8 @@ public class ActivityEntity extends Synchronized {
     }
 
     public void setShotForMapping(Shot shotForMapping) {
-        Preconditions.checkState(idShot != null, "Can't set ShotForMapping to an activity without idShot. Activity id: "+idActivity);
+        Preconditions.checkState(idShot != null,
+          "Can't set ShotForMapping to an activity without idShot. Activity id: " + idActivity);
         this.shotForMapping = shotForMapping;
     }
 

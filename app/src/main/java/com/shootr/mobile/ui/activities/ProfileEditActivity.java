@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.UserModel;
@@ -23,13 +26,7 @@ import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.ui.widgets.MaxLinesInputFilter;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements ProfileEditView {
 
@@ -95,8 +92,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
         });
     }
 
-    @Override
-    public void initializePresenter() {
+    @Override public void initializePresenter() {
         presenter.initialize(this);
     }
 
@@ -107,7 +103,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void onPause() {
         super.onPause();
-        analyticsTool.analyticsStop(getBaseContext(),this);
+        analyticsTool.analyticsStop(getBaseContext(), this);
         presenter.pause();
     }
 
@@ -182,7 +178,6 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void hideLoadingIndicator() {
         menuItemDone.setActionView(null);
-
     }
 
     @Override public void alertComunicationError() {
@@ -197,8 +192,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
         email.setError(" ");
     }
 
-    @Override
-    public void hideEmailNotConfirmedError() {
+    @Override public void hideEmailNotConfirmedError() {
         email.setError(null);
     }
 
@@ -206,8 +200,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
         feedbackMessage.show(getView(), errorMessage);
     }
 
-    @Override
-    public void navigateToEditEmail() {
+    @Override public void navigateToEditEmail() {
         startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
     }
 
@@ -228,8 +221,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.profile_edit_email_layout)
-    public void onEmailClick() {
+    @OnClick(R.id.profile_edit_email_layout) public void onEmailClick() {
         presenter.editEmail();
     }
 }

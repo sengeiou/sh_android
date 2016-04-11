@@ -24,28 +24,22 @@ import com.shootr.mobile.domain.repository.PhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
-
-import java.lang.reflect.Type;
-import java.util.Date;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import java.lang.reflect.Type;
+import java.util.Date;
+import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 @Module(
-        injects = {
-                ShootrPhotoService.class,
-                PhotoService.class,
-        },
-        complete = false,
-  library = true
-)
-public final class ApiModule {
+  injects = {
+    ShootrPhotoService.class, PhotoService.class,
+  },
+  complete = false,
+  library = true) public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
     public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api.shootr.com/v1";
@@ -63,17 +57,13 @@ public final class ApiModule {
         return new RestAdapter.Builder() //
           .setEndpoint(endpoint.getUrl()) //
           .setClient(new OkClient(okHttpClient)) //
-          .setConverter(new GsonConverter(gson))
-          .setErrorHandler(errorHandler) //
-          .setLogLevel(logLevel)
-          .setLog(new RestAdapter.Log() {
-              @Override
-              public void log(String message) {
+          .setConverter(new GsonConverter(gson)).setErrorHandler(errorHandler) //
+          .setLogLevel(logLevel).setLog(new RestAdapter.Log() {
+              @Override public void log(String message) {
                   Timber.tag("Retrofit");
                   Timber.d(message);
               }
-          })
-          .build();
+          }).build();
     }
 
     @Provides AuthApiService provideAuthApiService(RestAdapter restAdapter) {
@@ -119,19 +109,15 @@ public final class ApiModule {
     @Provides @Singleton Gson provideGson() {
         return new GsonBuilder() //
           .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-              @Override
-              public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+              @Override public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
                   return new Date(json.getAsJsonPrimitive().getAsLong());
               }
-          })
-          .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
-              @Override
-              public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+          }).registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+              @Override public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
                   return new JsonPrimitive(src.getTime());
               }
-          })
-          .create();
+          }).create();
     }
 
     @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {
@@ -140,13 +126,11 @@ public final class ApiModule {
 
     @Provides @Singleton Endpoint provideEndpoint() {
         return new Endpoint() {
-            @Override
-            public String getUrl() {
+            @Override public String getUrl() {
                 return BuildConfig.USE_PRE_PRODUCTION ? PRE_PRODUCTION_ENDPOINT_URL : PRODUCTION_ENDPOINT_URL;
             }
 
-            @Override
-            public String getName() {
+            @Override public String getName() {
                 return "Production";
             }
         };

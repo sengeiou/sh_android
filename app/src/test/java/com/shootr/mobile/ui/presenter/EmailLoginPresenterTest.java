@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.mobile.domain.service.user.LoginException;
 import com.shootr.mobile.ui.views.EmailLoginView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -100,23 +99,25 @@ public class EmailLoginPresenterTest {
         verify(emailLoginView).showError(anyString());
     }
 
-    @Test public void shouldCallShowErrorOnViewButNoEmailButtonPrintsCredentialsErrorOrEmailButtonPrintsCommunicationErrorWhenInteractorCallbacksShootrException()
+    @Test
+    public void shouldShowErrorButNoEmailButtonPrintsCredentialsErrorOrCommunicationErrorWhenCallbacksShootrException()
       throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[3];
-                errorCallback.onError(new ShootrException() {});
+                errorCallback.onError(new ShootrException() {
+                });
 
                 return null;
             }
-        }).when(emailLoginInteractor).attempLogin(anyString(),
-          anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(emailLoginInteractor)
+          .attempLogin(anyString(),
+            anyString(),
+            any(Interactor.CompletedCallback.class),
+            any(Interactor.ErrorCallback.class));
 
         presenter.attempLogin();
 
         verify(emailLoginView).showError(anyString());
     }
-
 }

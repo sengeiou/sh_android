@@ -9,9 +9,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.StreamMediaView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamMediaPresenter implements Presenter {
@@ -27,7 +25,8 @@ public class StreamMediaPresenter implements Presenter {
     private boolean mightHaveMoreMedia = true;
 
     @Inject public StreamMediaPresenter(GetStreamMediaInteractor getStreamMediaInteractor,
-      GetOlderStreamMediaInteractor getOlderStreamMediaInteractor, ShotModelMapper shotModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetOlderStreamMediaInteractor getOlderStreamMediaInteractor, ShotModelMapper shotModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getStreamMediaInteractor = getStreamMediaInteractor;
         this.getOlderStreamMediaInteractor = getOlderStreamMediaInteractor;
         this.shotModelMapper = shotModelMapper;
@@ -46,8 +45,8 @@ public class StreamMediaPresenter implements Presenter {
         retrieveMedia();
     }
 
-    public void retrieveMedia(){
-        if(streamMediaCount > 0){
+    public void retrieveMedia() {
+        if (streamMediaCount > 0) {
             streamMediaView.showLoading();
             streamMediaView.hideEmpty();
         }
@@ -101,8 +100,8 @@ public class StreamMediaPresenter implements Presenter {
                   streamMediaView.hideLoadingOldMedia();
                   String errorMessage = errorMessageFactory.getMessageForError(error);
                   streamMediaView.showError(errorMessage);
-            }
-        });
+              }
+          });
     }
 
     @Override public void resume() {

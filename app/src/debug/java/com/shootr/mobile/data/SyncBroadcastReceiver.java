@@ -3,12 +3,9 @@ package com.shootr.mobile.data;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 /**

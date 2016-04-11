@@ -9,11 +9,9 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.repository.Local;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ServiceFavoriteDataSource implements FavoriteDataSource {
@@ -22,17 +20,15 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     private final FavoriteApiEntityMapper favoriteApiEntityMapper;
     private final StreamDataSource localStreamDataSource;
 
-    @Inject
-    public ServiceFavoriteDataSource(FavoriteApiService favoriteApiService,
-      FavoriteApiEntityMapper favoriteApiEntityMapper,
-      @Local StreamDataSource localStreamDataSource) {
+    @Inject public ServiceFavoriteDataSource(FavoriteApiService favoriteApiService,
+      FavoriteApiEntityMapper favoriteApiEntityMapper, @Local StreamDataSource localStreamDataSource) {
         this.favoriteApiService = favoriteApiService;
         this.favoriteApiEntityMapper = favoriteApiEntityMapper;
         this.localStreamDataSource = localStreamDataSource;
     }
 
-    @Override
-    public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity) throws StreamAlreadyInFavoritesException {
+    @Override public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity)
+      throws StreamAlreadyInFavoritesException {
         try {
             FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(favoriteEntity);
             return favoriteApiEntityMapper.transform(favoriteFromApi);
@@ -43,13 +39,11 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         }
     }
 
-    @Override
-    public FavoriteEntity getFavoriteByIdStream(String idStream) {
+    @Override public FavoriteEntity getFavoriteByIdStream(String idStream) {
         throw new IllegalStateException("Method not implemented in service datasource");
     }
 
-    @Override
-    public List<FavoriteEntity> getFavorites(String userId) {
+    @Override public List<FavoriteEntity> getFavorites(String userId) {
         try {
             List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(userId);
             favorites = filterFavoritesWithoutStreams(favorites);
@@ -58,7 +52,6 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
-
     }
 
     private List<FavoriteApiEntity> filterFavoritesWithoutStreams(List<FavoriteApiEntity> favorites) {
@@ -71,8 +64,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         return filtered;
     }
 
-    @Override
-    public void removeFavoriteByIdStream(String streamId) {
+    @Override public void removeFavoriteByIdStream(String streamId) {
         try {
             favoriteApiService.deleteFavorite(streamId);
         } catch (ApiException | IOException error) {
@@ -80,13 +72,11 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         }
     }
 
-    @Override
-    public void clear() {
+    @Override public void clear() {
         throw new IllegalStateException("Method not available in Service");
     }
 
-    @Override
-    public List<FavoriteEntity> getEntitiesNotSynchronized() {
+    @Override public List<FavoriteEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not available in Service");
     }
 

@@ -12,9 +12,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.EmailConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class EmailConfirmationPresenter implements Presenter {
@@ -62,13 +60,11 @@ public class EmailConfirmationPresenter implements Presenter {
 
     private void requestEmailConfirmation(final String email) {
         confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 emailConfirmationView.showConfirmationEmailSentAlert(email, null);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
         });
@@ -146,18 +142,15 @@ public class EmailConfirmationPresenter implements Presenter {
 
     private void requestEmailConfirmationAndCloseScreen(final String emailEdited) {
         confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 emailConfirmationView.showConfirmationEmailSentAlert(emailEdited, new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         emailConfirmationView.closeScreen();
                     }
                 });
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
         });

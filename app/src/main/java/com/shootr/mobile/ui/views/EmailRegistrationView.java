@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.views.base.DataTransferView;
 
-public interface EmailRegistrationView extends DataTransferView{
+public interface EmailRegistrationView extends DataTransferView {
 
     void showCreateButton();
 

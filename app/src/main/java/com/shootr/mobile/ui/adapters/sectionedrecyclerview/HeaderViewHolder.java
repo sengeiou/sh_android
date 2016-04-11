@@ -30,8 +30,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         titleText = (TextView) itemView.findViewById(titleID);
     }
 
-    public void render(@StringRes int title){
+    public void render(@StringRes int title) {
         titleText.setText(title);
     }
-
 }

@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.ChangePasswordInvalidException;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import javax.inject.Inject;
 
 public class ChangePasswordInteractor implements Interactor {
@@ -24,7 +23,8 @@ public class ChangePasswordInteractor implements Interactor {
     private String newPassword;
     private LocaleProvider localeProvider;
 
-    @Inject public ChangePasswordInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject
+    public ChangePasswordInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       ShootrUserService shootrUserService, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -67,5 +67,4 @@ public class ChangePasswordInteractor implements Interactor {
             }
         });
     }
-
 }

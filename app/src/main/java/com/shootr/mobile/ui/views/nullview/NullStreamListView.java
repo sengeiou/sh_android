@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.StreamsListView;
-
 import java.util.List;
 
 public class NullStreamListView implements StreamsListView {
@@ -27,8 +26,7 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
-    @Override
-    public void showAddedToFavorites() {
+    @Override public void showAddedToFavorites() {
         /* no-op */
     }
 

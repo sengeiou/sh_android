@@ -4,10 +4,8 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ServiceStreamListDataSource implements StreamListDataSource {
@@ -18,8 +16,7 @@ public class ServiceStreamListDataSource implements StreamListDataSource {
         this.streamApiService = streamApiService;
     }
 
-    @Override
-    public List<StreamEntity> getStreamList(String locale) {
+    @Override public List<StreamEntity> getStreamList(String locale) {
         try {
             return streamApiService.getStreamList(locale);
         } catch (ApiException | IOException e) {

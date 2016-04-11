@@ -4,9 +4,7 @@ import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.domain.StreamTimelineParameters;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class DatabaseShotDataSource implements ShotDataSource {
@@ -26,8 +24,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
         shotManager.saveShots(shotEntities);
     }
 
-    @Override
-    public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         return shotManager.getShotsByStreamParameters(parameters);
     }
 
@@ -43,13 +40,11 @@ public class DatabaseShotDataSource implements ShotDataSource {
         return shotManager.getStreamMediaShots(idStream, userIds);
     }
 
-    @Override
-    public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
+    @Override public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
         return shotManager.getShotsFromUser(idUser, limit);
     }
 
-    @Override
-    public ShotDetailEntity getShotDetail(String idShot) {
+    @Override public ShotDetailEntity getShotDetail(String idShot) {
         ShotEntity shot = getShot(idShot);
         if (shot != null) {
             ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
@@ -93,7 +88,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
     }
 
     @Override public void hideShot(String idShot, Long timeStamp) {
-        shotManager.hideShot(idShot,timeStamp);
+        shotManager.hideShot(idShot, timeStamp);
     }
 
     @Override public void unhideShot(String idShot) {

@@ -3,11 +3,9 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamSearchEntityMapper {
@@ -57,5 +55,4 @@ public class StreamSearchEntityMapper {
         }
         return entities;
     }
-
 }

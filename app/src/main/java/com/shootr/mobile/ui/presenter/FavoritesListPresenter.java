@@ -21,12 +21,11 @@ import com.shootr.mobile.ui.views.FavoritesListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver, UnwatchDone.Receiver, StreamMuted.Receiver{
+public class FavoritesListPresenter
+  implements Presenter, FavoriteAdded.Receiver, UnwatchDone.Receiver, StreamMuted.Receiver {
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
@@ -138,8 +137,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         });
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
         bus.register(this);
         if (hasBeenPaused) {
             this.loadMutedStreamIds();
@@ -147,18 +145,14 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         }
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
         bus.unregister(this);
         hasBeenPaused = true;
     }
 
-    @Subscribe
-    @Override
-    public void onFavoriteAdded(FavoriteAdded.Event event) {
+    @Subscribe @Override public void onFavoriteAdded(FavoriteAdded.Event event) {
         loadFavorites();
     }
-
 
     public void shareStream(StreamResultModel stream) {
         shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
@@ -185,8 +179,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     public void removeFromFavorites(StreamResultModel stream) {
         removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+              @Override public void onCompleted() {
                   loadFavorites();
               }
           });
@@ -200,15 +193,11 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         });
     }
 
-    @Subscribe
-    @Override
-    public void onUnwatchDone(UnwatchDone.Event event) {
+    @Subscribe @Override public void onUnwatchDone(UnwatchDone.Event event) {
         loadFavorites();
     }
 
-    @Subscribe
-    @Override
-    public void onStreamMuted(StreamMuted.Event event) {
+    @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {
         this.loadMutedStreamIds();
         this.loadFavorites();
     }

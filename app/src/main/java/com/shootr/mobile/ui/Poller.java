@@ -18,8 +18,7 @@ public class Poller {
         this.intervalMilliseconds = intervalMilliseconds;
         this.polledRunnable = polledRunnable;
         recursiveRunnable = new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (isPolling) {
                     pollNow();
                     scheduleNextPoll();

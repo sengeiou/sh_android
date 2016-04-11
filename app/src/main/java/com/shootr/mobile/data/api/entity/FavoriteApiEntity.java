@@ -41,5 +41,4 @@ public class FavoriteApiEntity {
     public void setStream(StreamEntity stream) {
         this.stream = stream;
     }
-
 }

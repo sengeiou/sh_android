@@ -10,10 +10,8 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
-
 import java.io.File;
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ChangeStreamPhotoInteractor implements Interactor {
@@ -63,7 +61,8 @@ public class ChangeStreamPhotoInteractor implements Interactor {
         } catch (ServerCommunicationException e) {
             notifyError(e);
         } catch (OutOfMemoryError error) {
-            notifyError(new ShootrException() {});
+            notifyError(new ShootrException() {
+            });
         }
     }
 

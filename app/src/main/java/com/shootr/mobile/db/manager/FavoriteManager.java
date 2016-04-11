@@ -3,23 +3,19 @@ package com.shootr.mobile.db.manager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.FavoriteEntityDBMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class FavoriteManager extends AbstractManager {
 
     private final FavoriteEntityDBMapper favoriteEntityCursorMapper;
 
-    @Inject
-    public FavoriteManager(SQLiteOpenHelper dbHelper, FavoriteEntityDBMapper favoriteEntityCursorMapper) {
+    @Inject public FavoriteManager(SQLiteOpenHelper dbHelper, FavoriteEntityDBMapper favoriteEntityCursorMapper) {
         super(dbHelper);
         this.favoriteEntityCursorMapper = favoriteEntityCursorMapper;
     }

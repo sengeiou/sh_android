@@ -5,16 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
@@ -28,9 +26,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.activity_text) ClickableTextView text;
     @Bind(R.id.shot_image) ImageView image;
 
-    public GenericActivityViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils,
+    public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener) {
         super(view);
         this.imageLoader = imageLoader;
@@ -63,8 +59,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
 
         avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
             }
         });

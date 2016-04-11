@@ -3,7 +3,6 @@ package com.shootr.mobile.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
@@ -66,15 +65,12 @@ import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-
+import dagger.Module;
+import dagger.Provides;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -115,15 +111,14 @@ import static android.content.Context.MODE_PRIVATE;
     BitmapImageResizer.class,
 
     WritePermissionManager.class,
-
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
     RepositoryModule.class, ServiceModule.class,
   },
   complete = false,
-  library = true)
-public class DataModule {
+  library = true) public class DataModule {
+
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT_SECONDS = 30;
     private static final long TIMEOUT_CONNECT_SECONDS = 15;
@@ -152,17 +147,12 @@ public class DataModule {
         return imageLoader;
     }
 
-    @Provides
-    FeedbackMessage provideFeedbackLoader(SnackbarFeedbackMessage snackbarFeedbackLoader) {
+    @Provides FeedbackMessage provideFeedbackLoader(SnackbarFeedbackMessage snackbarFeedbackLoader) {
         return snackbarFeedbackLoader;
     }
 
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient(Application app,
-      AuthHeaderInterceptor authHeaderInterceptor,
-      VersionHeaderInterceptor versionHeaderInterceptor,
-      ServerDownErrorInterceptor serverDownErrorInterceptor,
+    @Provides @Singleton OkHttpClient provideOkHttpClient(Application app, AuthHeaderInterceptor authHeaderInterceptor,
+      VersionHeaderInterceptor versionHeaderInterceptor, ServerDownErrorInterceptor serverDownErrorInterceptor,
       UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
       VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
 
@@ -207,8 +197,7 @@ public class DataModule {
         return new GoogleAnalyticsTool();
     }
 
-    @Provides @Singleton
-    CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
+    @Provides @Singleton CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
         return new CacheDataUtils(crashReportTool);
     }
 
@@ -232,8 +221,7 @@ public class DataModule {
         return imageResizer;
     }
 
-    @Provides @Singleton
-    QNCache provideQNCache() {
+    @Provides @Singleton QNCache provideQNCache() {
         return new QNCacheBuilder().createQNCache();
     }
 

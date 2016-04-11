@@ -8,19 +8,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.EmailConfirmationPresenter;
 import com.shootr.mobile.ui.views.EmailConfirmationView;
 import com.shootr.mobile.util.FeedbackMessage;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
 
@@ -65,25 +62,22 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         }
     }
 
-    @OnTextChanged(R.id.email_confirmation_email)
-    public void onEmailChanged(CharSequence email) {
+    @OnTextChanged(R.id.email_confirmation_email) public void onEmailChanged(CharSequence email) {
         presenter.onEmailEdited(email.toString());
     }
 
-    @OnClick(R.id.email_confirmation_confirm_button)
-    public void onDoneButtonClick() {
+    @OnClick(R.id.email_confirmation_confirm_button) public void onDoneButtonClick() {
         presenter.done(email.getText().toString());
     }
 
     //region View methods
     @Override public void showConfirmationEmailSentAlert(String email, final Runnable alertCallback) {
-        if(!isFinishing()) {
+        if (!isFinishing()) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
               .setMessage(getString(R.string.email_confirmation_message_content, email)) //
               .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
+                  @Override public void onClick(DialogInterface dialog, int which) {
                       if (alertCallback != null) {
                           alertCallback.run();
                       }
@@ -116,5 +110,4 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         this.finish();
     }
     //endregion
-
 }

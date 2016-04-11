@@ -4,10 +4,9 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.ui.model.UserModel;
 
-@Deprecated
-public class UserEntityModelMapper {
+@Deprecated public class UserEntityModelMapper {
 
-    public UserModel toUserModel(UserEntity user, FollowEntity follow, boolean isMe){
+    public UserModel toUserModel(UserEntity user, FollowEntity follow, boolean isMe) {
         UserModel userModel = new UserModel();
         userModel.setIdUser(user.getIdUser());
         userModel.setBio(user.getBio());
@@ -23,14 +22,14 @@ public class UserEntityModelMapper {
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
-        userModel.setVerifiedUser(user.getVerifiedUser()==1);
+        userModel.setVerifiedUser(user.getVerifiedUser() == 1);
         return userModel;
     }
 
-    private int getRelationShip(FollowEntity f){
-        if(f!=null && f.getBirth()!=null && f.getDeleted() == null){
+    private int getRelationShip(FollowEntity f) {
+        if (f != null && f.getBirth() != null && f.getDeleted() == null) {
             return FollowEntity.RELATIONSHIP_FOLLOWING;
-        }else{
+        } else {
             return FollowEntity.RELATIONSHIP_NONE;
         }
     }

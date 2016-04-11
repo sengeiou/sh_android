@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -101,8 +100,7 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
         set.start();
     }
 
-    @Override
-    public void showError(String errorMessage) {
+    @Override public void showError(String errorMessage) {
         feedbackMessage.show(draftsButton, errorMessage);
     }
 }

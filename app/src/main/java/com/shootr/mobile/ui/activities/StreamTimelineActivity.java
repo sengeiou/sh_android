@@ -5,16 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.util.BackStackHandler;
-
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 

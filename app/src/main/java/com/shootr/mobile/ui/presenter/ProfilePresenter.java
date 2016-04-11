@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
-
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -28,12 +27,9 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.shootr.mobile.util.UIObserver;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
@@ -72,11 +68,13 @@ public class ProfilePresenter implements Presenter {
     private int hadleBlockMenuCalls;
 
     @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
-      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      HideShotInteractor hideShotInteractor,ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      GetLastShotsInteractor getLastShotsInteractor, UploadUserPhotoInteractor uploadUserPhotoInteractor,
-      RemoveUserPhotoInteractor removeUserPhotoInteractor, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
-      GetBannedUsersInteractor getBannedUsersInteractor, SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
+      GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      HideShotInteractor hideShotInteractor, ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, GetLastShotsInteractor getLastShotsInteractor,
+      UploadUserPhotoInteractor uploadUserPhotoInteractor, RemoveUserPhotoInteractor removeUserPhotoInteractor,
+      GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, GetBannedUsersInteractor getBannedUsersInteractor,
+      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
       ShotModelMapper shotModelMapper) {
         this.getUserByIdInteractor = getUserByIdInteractor;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
@@ -95,7 +93,7 @@ public class ProfilePresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.shotModelMapper = shotModelMapper;
-        this.hideShotInteractor=hideShotInteractor;
+        this.hideShotInteractor = hideShotInteractor;
     }
 
     protected void setView(ProfileView profileView) {
@@ -141,7 +139,8 @@ public class ProfilePresenter implements Presenter {
     }
 
     private void renderStreamsNumber() {
-        Integer streamsCount = userModel.getFavoritedStreamsCount().intValue() + userModel.getCreatedStreamsCount().intValue();
+        Integer streamsCount =
+          userModel.getFavoritedStreamsCount().intValue() + userModel.getCreatedStreamsCount().intValue();
         if (streamsCount > 0) {
             profileView.showStreamsCount();
             profileView.setStreamsCount(streamsCount);
@@ -284,7 +283,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void avatarClicked() {
-        if (userModel != null && !isCurrentUser && userModel.getPhoto()  != null) {
+        if (userModel != null && !isCurrentUser && userModel.getPhoto() != null) {
             profileView.openPhoto(userModel.getPhoto());
         } else if (userModel != null && isCurrentUser) {
             boolean shouldShowRemovePhoto = userModel.getPhoto() != null;
@@ -368,8 +367,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getLoadProfileObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 if (profileIdUser != null) {
                     getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
                         @Override public void onLoaded(User user) {
@@ -410,8 +408,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getRelationshipButtonObservable(final User user) {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 if (isCurrentUser) {
                     profileView.showEditProfileButton();
                 } else {
@@ -428,8 +425,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getLatestShotsObservable(final String idUser) {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 getLastShotsInteractor.loadLastShots(idUser, new Interactor.Callback<List<Shot>>() {
                     @Override public void onLoaded(List<Shot> shotList) {
                         if (!shotList.isEmpty()) {
@@ -457,8 +453,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getMenuItemsVisibilityObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 if (isCurrentUser) {
                     profileView.showLogoutButton();
                     profileView.showSupportButton();
@@ -474,8 +469,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getBlockedIdsObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 getBlockedIdUsersInteractor.loadBlockedIdUsers(new Interactor.Callback<List<String>>() {
                     @Override public void onLoaded(final List<String> blockedIds) {
                         hadleBlockMenuCalls++;
@@ -493,8 +487,7 @@ public class ProfilePresenter implements Presenter {
 
     @NonNull private Observable<Void> getBannedIdsObservable() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
+            @Override public void call(Subscriber<? super Void> subscriber) {
                 getBannedUsersInteractor.loadBannedIdUsers(new Interactor.Callback<List<String>>() {
                     @Override public void onLoaded(List<String> bannedIds) {
                         hadleBlockMenuCalls++;
@@ -541,6 +534,7 @@ public class ProfilePresenter implements Presenter {
     public void reportUserClicked() {
         profileView.goToReportEmail(sessionRepository.getCurrentUserId(), userModel.getIdUser());
     }
+
     public void banUserClicked() {
         profileView.showBanUserConfirmation(userModel);
     }
@@ -563,7 +557,7 @@ public class ProfilePresenter implements Presenter {
         profileView.showHideShotConfirmation(idShot);
     }
 
-    public void hideShot(String idShot){
+    public void hideShot(String idShot) {
         hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadLatestShots(userModel.getIdUser());

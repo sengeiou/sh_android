@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.repository.DeviceRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.utils.DeviceFactory;
-
 import javax.inject.Inject;
 
 public class SendDeviceInfoInteractor implements Interactor {

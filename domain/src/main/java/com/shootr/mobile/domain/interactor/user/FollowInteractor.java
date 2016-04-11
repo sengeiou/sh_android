@@ -13,9 +13,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 

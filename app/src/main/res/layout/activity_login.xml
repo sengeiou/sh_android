@@ -23,7 +23,6 @@
               android:layout_marginBottom="22dp"
               android:src="@drawable/logo_white_104" />
 
-
             <FrameLayout android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="56dp"
@@ -73,18 +72,18 @@
                 </LinearLayout>
             </FrameLayout>
 
-          <TextView android:id="@+id/login_selection_legal_disclaimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="32dp"
-            android:gravity="center_horizontal"
-            android:lineSpacingMultiplier="1.4"
-            android:text="@string/activity_registration_legal_disclaimer"
-            android:textColor="@color/legal_disclaimer_text_color"
-            android:textSize="14sp" />
+            <TextView android:id="@+id/login_selection_legal_disclaimer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="bottom"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="32dp"
+              android:gravity="center_horizontal"
+              android:lineSpacingMultiplier="1.4"
+              android:text="@string/activity_registration_legal_disclaimer"
+              android:textColor="@color/legal_disclaimer_text_color"
+              android:textSize="14sp" />
 
         </LinearLayout>
     </ScrollView>

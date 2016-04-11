@@ -6,7 +6,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
@@ -14,13 +17,7 @@ import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.presenter.EmailLoginPresenter;
 import com.shootr.mobile.ui.views.EmailLoginView;
 import com.shootr.mobile.util.FeedbackMessage;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
 
@@ -38,7 +35,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         /* no-op */
     }
 
-    @Override protected  void initializeViews(Bundle savedInstanceState){
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         loginButton.setEnabled(false);
     }
@@ -59,26 +56,22 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-    @OnTextChanged({ R.id.email_login_username_email, R.id.email_login_password})
-    public void inputTextChanged() {
+    @OnTextChanged({ R.id.email_login_username_email, R.id.email_login_password }) public void inputTextChanged() {
         if (presenter.isInitialized()) {
             presenter.inputTextChanged();
         }
     }
 
-    @OnClick(R.id.email_login_button)
-    public void onLoginWithEmailButtonClick(){
+    @OnClick(R.id.email_login_button) public void onLoginWithEmailButtonClick() {
         presenter.attempLogin();
     }
 
-    @OnClick(R.id.email_login_forgot)
-    public void onLoginForgotButtonClick(){
+    @OnClick(R.id.email_login_forgot) public void onLoginForgotButtonClick() {
         Intent resetPasswordIntent = new Intent(this, ResetPasswordActivity.class);
         startActivity(resetPasswordIntent);
     }
 
-
-    public void goToTimeline(){
+    public void goToTimeline() {
         finish();
         Intent i = new Intent(this, MainTabbedActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

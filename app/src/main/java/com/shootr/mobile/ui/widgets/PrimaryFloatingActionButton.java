@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
-
 import com.shootr.mobile.R;
 
 public class PrimaryFloatingActionButton extends FloatingActionButton {
@@ -24,8 +23,7 @@ public class PrimaryFloatingActionButton extends FloatingActionButton {
         init();
     }
 
-    @SuppressLint("NewApi")
-    private void init() {
+    @SuppressLint("NewApi") private void init() {
         setBackgroundTintList(getResources().getColorStateList(R.color.primary));
     }
 }

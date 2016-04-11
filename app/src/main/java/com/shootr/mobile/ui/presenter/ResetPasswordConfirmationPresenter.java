@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.user.SendPasswordResetEmailInteractor
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.views.ResetPasswordConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import javax.inject.Inject;
 
 public class ResetPasswordConfirmationPresenter implements Presenter {
@@ -17,8 +16,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
     private ForgotPasswordUserModel forgotPasswordUserModel;
 
-    @Inject
-    public ResetPasswordConfirmationPresenter(SendPasswordResetEmailInteractor sendPasswordResetEmailInteractor,
+    @Inject public ResetPasswordConfirmationPresenter(SendPasswordResetEmailInteractor sendPasswordResetEmailInteractor,
       ErrorMessageFactory errorMessageFactory) {
         this.sendPasswordResetEmailInteractor = sendPasswordResetEmailInteractor;
         this.errorMessageFactory = errorMessageFactory;
@@ -44,16 +42,15 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
         resetPasswordConfirmationView.hideConfirmationButton();
         sendPasswordResetEmailInteractor.sendPasswordResetEmail(forgotPasswordUserModel.getIdUser(), //
           new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+              @Override public void onCompleted() {
                   resetPasswordConfirmationView.showDoneButton();
-                  resetPasswordConfirmationView.showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
+                  resetPasswordConfirmationView.
+                    showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
                   resetPasswordConfirmationView.hideLoading();
               }
           }, //
           new Interactor.ErrorCallback() {
-              @Override
-              public void onError(ShootrException error) {
+              @Override public void onError(ShootrException error) {
                   resetPasswordConfirmationView.hideLoading();
                   resetPasswordConfirmationView.showConfirmationButton();
                   showErrorInView(error);
@@ -75,13 +72,11 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
         resetPasswordConfirmationView.showError(errorMessage);
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
         /* no-op */
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
         /* no-op */
     }
 }

@@ -13,10 +13,8 @@ import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
@@ -35,7 +33,8 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     private Boolean isInStreamTimeline;
 
     @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
-      GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus, SessionRepository sessionRepository) {
+      GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus,
+      SessionRepository sessionRepository) {
         this.getStreamIsReadOnlyInteractor = getStreamIsReadOnlyInteractor;
         this.getDraftsInteractor = getDraftsInteractor;
         this.errorMessageFactory = errorMessageFactory;
@@ -55,7 +54,8 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.isInStreamTimeline = isInStreamTimeline;
     }
 
-    public void initializeWithIdStreamAuthor(NewShotBarView newShotBarView, String idStreamForShot, String idStreamAuthor, Boolean isInStreamTimeline) {
+    public void initializeWithIdStreamAuthor(NewShotBarView newShotBarView, String idStreamForShot,
+      String idStreamAuthor, Boolean isInStreamTimeline) {
         this.idStreamForShot = idStreamForShot;
         this.idStreamAuthor = idStreamAuthor;
         this.setView(newShotBarView);
@@ -74,7 +74,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                if(error instanceof NetworkNotAvailableException) {
+                if (error instanceof NetworkNotAvailableException) {
                     /* no-op */
                 } else {
                     showReadOnlyError();
@@ -99,10 +99,10 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         }
     }
 
-    private void handleMenuPicker(){
-        if(isInStreamTimeline && currentUserIsStreamHolder(idStreamAuthor)) {
+    private void handleMenuPicker() {
+        if (isInStreamTimeline && currentUserIsStreamHolder(idStreamAuthor)) {
             newShotBarView.showHolderOptions();
-        }else{
+        } else {
             newShotBarView.pickImage();
         }
     }
@@ -111,7 +111,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         newShotBarView.openNewShotViewWithImage(image);
     }
 
-    public void openEditTopicCustomDialog(){
+    public void openEditTopicCustomDialog() {
         newShotBarView.openEditTopicDialog();
     }
 
@@ -133,7 +133,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     @Override public void resume() {
         bus.register(this);
-        if(hasBeenPaused) {
+        if (hasBeenPaused) {
             updateDraftsButtonVisibility();
         }
     }
@@ -143,8 +143,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         hasBeenPaused = true;
     }
 
-    @Subscribe
-    @Override public void onShotFailed(ShotFailed.Event event) {
+    @Subscribe @Override public void onShotFailed(ShotFailed.Event event) {
         updateDraftsButtonVisibility();
     }
 

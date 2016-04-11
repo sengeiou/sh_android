@@ -2,10 +2,8 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.db.DatabaseContract;
-
 import javax.inject.Inject;
 
 public class MuteStreamEntityDBMapper extends GenericDBMapper {
@@ -28,5 +26,4 @@ public class MuteStreamEntityDBMapper extends GenericDBMapper {
         setSynchronizedtoContentValues(muteStreamEntity, cv);
         return cv;
     }
-
 }

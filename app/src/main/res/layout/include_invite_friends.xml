@@ -10,8 +10,7 @@
       android:layout_marginLeft="16dp"
       android:src="@drawable/ic_invite_friends_24_gray50" />
 
-    <TextView
-      android:layout_width="match_parent"
+    <TextView android:layout_width="match_parent"
       android:layout_height="56dp"
       android:gravity="center_vertical"
       android:layout_marginLeft="80dp"

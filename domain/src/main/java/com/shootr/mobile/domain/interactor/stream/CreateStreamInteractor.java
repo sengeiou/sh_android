@@ -15,9 +15,7 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class CreateStreamInteractor implements Interactor {
@@ -51,8 +49,8 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
-      Boolean notifyTopicMessage ,Callback callback, ErrorCallback errorCallback) {
+    public void sendStream(String idStream, String title, String shortTitle, String description, String topic,
+      boolean notifyCreation, Boolean notifyTopicMessage, Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
         this.shortTitle = shortTitle;

@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import javax.inject.Inject;
 
 public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, StreamChanged.Receiver {
@@ -66,13 +65,11 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         hasBeenPaused = true;
     }
 
-    @Subscribe
-    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+    @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         retrieveData();
     }
 
-    @Subscribe
-    @Override public void onStreamChanged(StreamChanged.Event event) {
+    @Subscribe @Override public void onStreamChanged(StreamChanged.Event event) {
         if (event.getNewStreamId() != null) {
             retrieveData();
         } else {

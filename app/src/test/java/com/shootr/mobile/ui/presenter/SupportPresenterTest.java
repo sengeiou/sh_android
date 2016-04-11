@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.mobile.ui.views.SupportView;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -53,12 +52,12 @@ public class SupportPresenterTest {
     @Test public void shouldGoToBlogStreamIfBlogClickedAndBlogHasBeenLoaded() throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Stream> callback =
-                  (Interactor.Callback<Stream>) invocation.getArguments()[0];
+                Interactor.Callback<Stream> callback = (Interactor.Callback<Stream>) invocation.getArguments()[0];
                 callback.onLoaded(stream());
                 return null;
             }
-        }).when(getBlogInteractor).obtainBlogStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getBlogInteractor)
+          .obtainBlogStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
 
         presenter.initialize(supportView);
         presenter.blogClicked();
@@ -69,12 +68,12 @@ public class SupportPresenterTest {
     @Test public void shouldGoToHelpStreamIfHelpClickedAndHelpHasBeenLoaded() throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Stream> callback =
-                  (Interactor.Callback<Stream>) invocation.getArguments()[0];
+                Interactor.Callback<Stream> callback = (Interactor.Callback<Stream>) invocation.getArguments()[0];
                 callback.onLoaded(stream());
                 return null;
             }
-        }).when(getHelpInteractor).obtainHelpStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getHelpInteractor)
+          .obtainHelpStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
 
         presenter.initialize(supportView);
         presenter.helpClicked();
@@ -85,13 +84,13 @@ public class SupportPresenterTest {
     @Test public void shouldNotGoToBlogStreamIfBlogClickedAndBlogHasBeenLoaded() throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback callback =
-                  (Interactor.ErrorCallback) invocation.getArguments()[1];
+                Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[1];
                 callback.onError(new ShootrException() {
                 });
                 return null;
             }
-        }).when(getBlogInteractor).obtainBlogStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getBlogInteractor)
+          .obtainBlogStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
 
         presenter.initialize(supportView);
         presenter.blogClicked();
@@ -102,12 +101,13 @@ public class SupportPresenterTest {
     @Test public void shouldNotGoToHelpStreamIfHelpClickedAndHelpHasBeenLoaded() throws Exception {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback callback =
-                  (Interactor.ErrorCallback) invocation.getArguments()[1];
-                callback.onError(new ShootrException() {});
+                Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[1];
+                callback.onError(new ShootrException() {
+                });
                 return null;
             }
-        }).when(getHelpInteractor).obtainHelpStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getHelpInteractor)
+          .obtainHelpStream(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
 
         presenter.initialize(supportView);
         presenter.helpClicked();
@@ -124,7 +124,7 @@ public class SupportPresenterTest {
     @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnglish() throws Exception {
         presenter.setUpAlertDialog(EN_LOCALE);
 
-        verify(supportView,never()).showAlertDialog();
+        verify(supportView, never()).showAlertDialog();
     }
 
     private Stream stream() {

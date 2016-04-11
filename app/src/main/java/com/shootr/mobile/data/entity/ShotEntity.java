@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class ShotEntity extends Synchronized{
+public class ShotEntity extends Synchronized {
 
     private String idShot;
     private String idUser;

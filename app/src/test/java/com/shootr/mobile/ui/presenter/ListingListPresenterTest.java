@@ -18,17 +18,15 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.ListingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -66,7 +64,10 @@ public class ListingListPresenterTest {
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
           getFavoriteStreamInteractor,
-          shareStreamInteractor, removeStreamInteractor, streamResultModelMapper, errorMessageFactory);
+          shareStreamInteractor,
+          removeStreamInteractor,
+          streamResultModelMapper,
+          errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
     }
@@ -112,8 +113,7 @@ public class ListingListPresenterTest {
         verify(listingView).showEmpty();
     }
 
-    @Test
-    public void shouldShowSectionTitlesIfListingIncludesBothSections() throws Exception {
+    @Test public void shouldShowSectionTitlesIfListingIncludesBothSections() throws Exception {
         Listing listingBothSections = Listing.builder() //
           .favoritedStreams(Collections.singletonList(getStreamSearchResult())) //
           .holdingStreams(Collections.singletonList(getStreamSearchResult())) //
@@ -125,8 +125,7 @@ public class ListingListPresenterTest {
         verify(listingView).showSectionTitles();
     }
 
-    @Test
-    public void shouldShowSectionTitlesIfListingIncludesHoldingOnly() throws Exception {
+    @Test public void shouldShowSectionTitlesIfListingIncludesHoldingOnly() throws Exception {
         Listing listingHolding = Listing.builder() //
           .holdingStreams(Collections.singletonList(getStreamSearchResult())) //
           .build();
@@ -173,7 +172,8 @@ public class ListingListPresenterTest {
           anyString());
     }
 
-    @Test public void shouldShowCurrentUserContextMenuWithAddFavoriteIfIsCurrentUserAndItsMyStreamAndIsFavorite() throws Exception {
+    @Test public void shouldShowCurrentUserContextMenuWithAddFavoriteIfIsCurrentUserAndItsMyStreamAndIsFavorite()
+      throws Exception {
         setupGetUserWithFavoritesListingCallback();
         setupFavoritesInteractorCallback();
 
@@ -183,7 +183,8 @@ public class ListingListPresenterTest {
         verify(listingView).showCurrentUserContextMenuWithoutAddFavorite(any(StreamResultModel.class));
     }
 
-    @Test public void shouldShowCurrentUserContextMenuWithouAddFavoriteIfIsCurrentUserAndItsNotMyStreamAndIsFavorite() throws Exception {
+    @Test public void shouldShowCurrentUserContextMenuWithouAddFavoriteIfIsCurrentUserAndItsNotMyStreamAndIsFavorite()
+      throws Exception {
         setupGetUserWithFavoritesListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
@@ -331,15 +332,11 @@ public class ListingListPresenterTest {
     }
 
     private Listing listingWithUserStreams() {
-        return Listing.builder()
-          .holdingStreams(Arrays.asList(getStreamSearchResult()))
-          .build();
+        return Listing.builder().holdingStreams(Arrays.asList(getStreamSearchResult())).build();
     }
 
     private Listing listingWithFavoriteStreams() {
-        return Listing.builder()
-          .favoritedStreams(Arrays.asList(getStreamSearchResult()))
-          .build();
+        return Listing.builder().favoritedStreams(Arrays.asList(getStreamSearchResult())).build();
     }
 
     private StreamSearchResult getStreamSearchResult() {
@@ -378,7 +375,8 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithUserStreams());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
+        }).when(getUserListingStreamsInteractor)
+          .loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupUserWithoutListingCallback() {
@@ -389,7 +387,8 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithEmptyHoldingList());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
+        }).when(getUserListingStreamsInteractor)
+          .loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupGetUserWithFavoritesListingCallback() {
@@ -400,7 +399,8 @@ public class ListingListPresenterTest {
                 callback.onLoaded(listingWithFavoriteStreams());
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
+        }).when(getUserListingStreamsInteractor)
+          .loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private void setupGetUserListingCallbacks(final Listing resultListing) {
@@ -411,7 +411,8 @@ public class ListingListPresenterTest {
                 callback.onLoaded(resultListing);
                 return null;
             }
-        }).when(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
+        }).when(getUserListingStreamsInteractor)
+          .loadUserListingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyString());
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {

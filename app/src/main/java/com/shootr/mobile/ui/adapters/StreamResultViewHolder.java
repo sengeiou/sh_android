@@ -6,7 +6,9 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
@@ -14,13 +16,8 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
-
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -96,7 +93,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
-    public void render(StreamResultModel streamResultModel, boolean showSeparator, List<StreamResultModel> favoritedStreams) {
+    public void render(StreamResultModel streamResultModel, boolean showSeparator,
+      List<StreamResultModel> favoritedStreams) {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
         setMutedVisibility(streamResultModel);
@@ -104,7 +102,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
             renderHolderSubttile(streamResultModel);
-            if(watchersCount > 0) {
+            if (watchersCount > 0) {
                 watchers.setVisibility(View.VISIBLE);
                 watchers.setText(String.valueOf(watchersCount));
             } else {
@@ -121,7 +119,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     public void setMutedVisibility(StreamResultModel streamResultModel) {
         if (!isWatchingStateEnabled) {
-            if(streamIsMuted(streamResultModel.getStreamModel().getIdStream())) {
+            if (streamIsMuted(streamResultModel.getStreamModel().getIdStream())) {
                 mute.setVisibility(View.VISIBLE);
             } else {
                 mute.setVisibility(View.GONE);
@@ -186,7 +184,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             } else {
                 String favorites = subtitle.getContext()
                   .getResources()
-                  .getQuantityString(R.plurals.listing_favorites, stream.getStreamModel().getTotalFavorites(), stream.getStreamModel().getTotalFavorites());
+                  .getQuantityString(R.plurals.listing_favorites,
+                    stream.getStreamModel().getTotalFavorites(),
+                    stream.getStreamModel().getTotalFavorites());
                 subtitle.setText(favorites);
             }
         }
@@ -195,17 +195,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private CharSequence getConnectedSubtitle(StreamModel stream) {
         //TODO can be null
         if (streamIsMuted(stream.getIdStream())) {
-            return new Truss()
-              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
-              .append(connectedAndMuted)
-              .popSpan()
-              .build();
+            return new Truss().pushSpan(new TextAppearanceSpan(itemView.getContext(),
+              R.style.InlineConnectedAppearance)).append(connectedAndMuted).popSpan().build();
         } else {
-            return new Truss()
-              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
-              .append(connected)
-              .popSpan()
-              .build();
+            return new Truss().pushSpan(new TextAppearanceSpan(itemView.getContext(),
+              R.style.InlineConnectedAppearance)).append(connected).popSpan().build();
         }
     }
 

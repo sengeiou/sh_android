@@ -13,5 +13,4 @@ public interface EmailLoginView extends DataTransferView {
     void disableLoginButton();
 
     void enableLoginButton();
-
 }

@@ -3,7 +3,6 @@ package com.shootr.mobile.util;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-
 import javax.inject.Inject;
 
 public class FollowsFormatUtil implements FormatNumberUtils {
@@ -23,7 +22,7 @@ public class FollowsFormatUtil implements FormatNumberUtils {
     }
 
     @Override public String formatNumbers(Long number) {
-        if (number >= 100000 || number<0){
+        if (number >= 100000 || number < 0) {
             return formatNumbersBiggerThanHundredThousand(number);
         }
 
@@ -33,8 +32,8 @@ public class FollowsFormatUtil implements FormatNumberUtils {
         String result = formatString(number, exp);
         String comma = COMMA;
         String dot = DOT;
-        if(result.contains(comma)){
-            result = result.replaceAll(comma,dot);
+        if (result.contains(comma)) {
+            result = result.replaceAll(comma, dot);
         }
         return result;
     }

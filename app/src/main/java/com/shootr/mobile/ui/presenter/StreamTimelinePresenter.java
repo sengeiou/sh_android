@@ -25,10 +25,8 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
@@ -216,14 +214,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void loadTimeline() {
         if (!showingHoldingShots) {
-            timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused,new Interactor.Callback<Timeline>() {
+            timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, new Interactor.Callback<Timeline>() {
                 @Override public void onLoaded(Timeline timeline) {
                     showShotsInView(timeline);
                 }
             });
         } else {
             streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId,
-              idAuthor, hasBeenPaused,
+              idAuthor,
+              hasBeenPaused,
               new Interactor.Callback<Timeline>() {
                   @Override public void onLoaded(Timeline timeline) {
                       showShotsInView(timeline);
@@ -307,7 +306,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadHolderNewShots() {
         if (handleShotsRefresh()) return;
         streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId,
-          idAuthor, lastRefreshDate, hasBeenPaused, new Interactor.Callback<Timeline>() {
+          idAuthor,
+          lastRefreshDate,
+          hasBeenPaused,
+          new Interactor.Callback<Timeline>() {
               @Override public void onLoaded(Timeline timeline) {
                   loadNewShotsInView(timeline);
               }
@@ -322,20 +324,26 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadNewShots() {
         if (handleShotsRefresh()) return;
         if (!showingHoldingShots) {
-            timelineInteractorWrapper.refreshTimeline(streamId, lastRefreshDate, hasBeenPaused, new Interactor.Callback<Timeline>() {
-                @Override public void onLoaded(Timeline timeline) {
-                    updateTimelineLiveSettings();
-                    loadNewShotsInView(timeline);
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    hasBeenPaused = false;
-                    showErrorLoadingNewShots();
-                }
-            });
+            timelineInteractorWrapper.refreshTimeline(streamId,
+              lastRefreshDate,
+              hasBeenPaused,
+              new Interactor.Callback<Timeline>() {
+                  @Override public void onLoaded(Timeline timeline) {
+                      updateTimelineLiveSettings();
+                      loadNewShotsInView(timeline);
+                  }
+              },
+              new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      hasBeenPaused = false;
+                      showErrorLoadingNewShots();
+                  }
+              });
         } else {
             streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId,
-              idAuthor, lastRefreshDate, hasBeenPaused,
+              idAuthor,
+              lastRefreshDate,
+              hasBeenPaused,
               new Interactor.Callback<Timeline>() {
                   @Override public void onLoaded(Timeline timeline) {
                       updateTimelineLiveSettings();
@@ -562,9 +570,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void editStream(String topic) {
-        if(topic.isEmpty()){
+        if (topic.isEmpty()) {
             sendStream(topic, false);
-        }else{
+        } else {
             streamTimelineView.showPinMessageNotification(topic);
         }
     }

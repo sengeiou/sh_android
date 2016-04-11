@@ -9,7 +9,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-
 import com.shootr.mobile.R;
 
 public class BadgeDrawable extends Drawable {
@@ -22,7 +21,7 @@ public class BadgeDrawable extends Drawable {
     private String mCount = "";
     private boolean mWillDraw = false;
 
-    public BadgeDrawable(Context context){
+    public BadgeDrawable(Context context) {
         final Resources res = context.getResources();
 
         mBadgePaint = new Paint();
@@ -46,12 +45,12 @@ public class BadgeDrawable extends Drawable {
     }
 
     @Override public void draw(Canvas canvas) {
-        if(!mWillDraw){
+        if (!mWillDraw) {
             return;
         }
         Rect bounds = getBounds();
-        float width = bounds.right-bounds.left;
-        float height = bounds.bottom-bounds.top;
+        float width = bounds.right - bounds.left;
+        float height = bounds.bottom - bounds.top;
         // Position the badge in the top-right quadrant of the icon.
         float radius = ((Math.min(width, height) / 2) - 1) / 2;
         float centerX = width - radius - 1;

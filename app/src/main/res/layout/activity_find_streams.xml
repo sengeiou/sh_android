@@ -6,38 +6,36 @@
   android:background="@color/white"
   android:animateLayoutChanges="true">
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#d9d9d9" />
+    <View android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#d9d9d9" />
 
-  <com.shootr.mobile.ui.adapters.recyclerview.StreamSearchRecyclerView
-    android:id="@+id/find_streams_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:scrollbars="vertical" />
+    <com.shootr.mobile.ui.adapters.recyclerview.StreamSearchRecyclerView android:id="@+id/find_streams_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:paddingBottom="8dp"
+      android:paddingTop="8dp"
+      android:scrollbars="vertical" />
 
-  <ProgressBar android:id="@+id/find_streams_loading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:indeterminate="true"
-    android:visibility="gone"
-    tools:visibility="visible" />
+    <ProgressBar android:id="@+id/find_streams_loading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
-  <!-- emtpy -->
-  <TextView android:id="@+id/find_streams_empty"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:padding="16dp"
-    android:text="@string/stream_list_empty"
-    android:textColor="@color/gray_50"
-    android:textSize="20sp"
-    android:visibility="gone"
-    tools:visibility="visible" />
+    <!-- emtpy -->
+    <TextView android:id="@+id/find_streams_empty"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:padding="16dp"
+      android:text="@string/stream_list_empty"
+      android:textColor="@color/gray_50"
+      android:textSize="20sp"
+      android:visibility="gone"
+      tools:visibility="visible" />
 </FrameLayout>

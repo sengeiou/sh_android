@@ -2,12 +2,10 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.FacebookController;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,15 +32,17 @@ public class DatabaseVersionUtilsTest {
 
     private DatabaseVersionUtils databaseVersionUtils;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        databaseVersionUtils = new DatabaseVersionUtils(context, preferencesDatabaseVersion, version,
-          dbOpenHelper, shouldShowIntro, cacheUtils);
+        databaseVersionUtils = new DatabaseVersionUtils(context,
+          preferencesDatabaseVersion,
+          version,
+          dbOpenHelper,
+          shouldShowIntro,
+          cacheUtils);
     }
 
-    @Test
-    public void shouldUpdateDatabaseVersionIfTheresNoVersion(){
+    @Test public void shouldUpdateDatabaseVersionIfTheresNoVersion() {
         when(preferencesDatabaseVersion.get()).thenReturn(NO_VERSION);
         when(version.getDatabaseVersion()).thenReturn(VERSION_1);
 
@@ -51,8 +51,7 @@ public class DatabaseVersionUtilsTest {
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
-    @Test
-    public void shouldUpdateDatabaseVersionIfVersionIsInferior(){
+    @Test public void shouldUpdateDatabaseVersionIfVersionIsInferior() {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_2);
 
@@ -61,8 +60,7 @@ public class DatabaseVersionUtilsTest {
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
-    @Test
-    public void shouldNotUpdateDatabaseVersionIfVersionIsTheSame(){
+    @Test public void shouldNotUpdateDatabaseVersionIfVersionIsTheSame() {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_1);
 
@@ -79,6 +77,4 @@ public class DatabaseVersionUtilsTest {
 
         verify(context).deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
     }
-
-
 }

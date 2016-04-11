@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -15,13 +17,8 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.DraftItemView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHolder> {
 
@@ -78,11 +75,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     private CharSequence getShotCommentWithStream(ShotModel shot, DraftViewHolder holder) {
         if (shot.getComment() == null) {
-            return new Truss()
-              .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(), R.style.InlineDescriptionAppearance))
-              .append(shot.getStreamShortTitle())
-              .popSpan()
-              .build();
+            return new Truss().pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
+              R.style.InlineDescriptionAppearance)).append(shot.getStreamShortTitle()).popSpan().build();
         } else {
             return new Truss().append(shot.getComment())
               .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(), R.style.InlineDescriptionAppearance))
@@ -103,7 +97,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             imageLoader.loadTimelineImage(shotModel.getImage(), holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else if (draftModel.getImageFile() != null) {
-            imageLoader.load(draftModel.getImageFile(),holder.image);
+            imageLoader.load(draftModel.getImageFile(), holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);
@@ -170,13 +164,11 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             });
         }
 
-        @OnClick(R.id.shot_draft_shoot)
-        public void shoot() {
+        @OnClick(R.id.shot_draft_shoot) public void shoot() {
             draftActionListener.onShootDraft(getDraftForThisPosition());
         }
 
-        @OnClick(R.id.shot_draft_delete)
-        public void delete() {
+        @OnClick(R.id.shot_draft_delete) public void delete() {
             draftActionListener.onDeleteDraft(getDraftForThisPosition());
         }
 

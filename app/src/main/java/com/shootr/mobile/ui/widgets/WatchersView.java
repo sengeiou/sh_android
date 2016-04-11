@@ -11,23 +11,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ImageLoaderEditMode;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class WatchersView extends LinearLayout{
+public class WatchersView extends LinearLayout {
 
     @Inject ImageLoader imageLoader;
 
@@ -52,7 +48,8 @@ public class WatchersView extends LinearLayout{
         init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP) public WatchersView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public WatchersView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
@@ -134,7 +131,7 @@ public class WatchersView extends LinearLayout{
         List<UserModel> userWatchingMocks = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             UserModel watch1 = new UserModel();
-            watch1.setIdUser("id"+i);
+            watch1.setIdUser("id" + i);
             watch1.setUsername("Username " + i);
             watch1.setJoinStreamDate("Entered a long time ago");
             userWatchingMocks.add(watch1);
@@ -172,6 +169,5 @@ public class WatchersView extends LinearLayout{
     public static interface OnProfileClickListener {
 
         void onProfile(String idUser);
-
     }
 }

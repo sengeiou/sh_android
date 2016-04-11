@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,13 +17,10 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.dagger.ApplicationContext;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-
 import javax.inject.Inject;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
@@ -36,25 +32,26 @@ public class GlideImageLoader implements ImageLoader {
     private final Resources resources;
     private final RequestManager glide;
 
-    @Inject
-    public GlideImageLoader(@ApplicationContext Context context, Resources resources) {
+    @Inject public GlideImageLoader(@ApplicationContext Context context, Resources resources) {
         this.resources = resources;
         glide = Glide.with(context);
     }
 
-    @Override
-    public void loadProfilePhoto(String url, ImageView view) {
+    @Override public void loadProfilePhoto(String url, ImageView view) {
         boolean isValidPhoto = url != null && !url.isEmpty();
         if (isValidPhoto) {
             /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
-            glide.load(url).dontAnimate().placeholder(DEFAULT_PROFILE_PHOTO_RES).diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
+            glide.load(url)
+              .dontAnimate()
+              .placeholder(DEFAULT_PROFILE_PHOTO_RES)
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
+              .into(view);
         } else {
             view.setImageResource(DEFAULT_PROFILE_PHOTO_RES);
         }
     }
 
-    @Override
-    public void loadStreamPicture(String url, ImageView view) {
+    @Override public void loadStreamPicture(String url, ImageView view) {
         boolean isValidPicture = url != null && !url.isEmpty();
         if (isValidPicture) {
             /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
@@ -64,59 +61,56 @@ public class GlideImageLoader implements ImageLoader {
         }
     }
 
-    @Override public void loadBlurStreamPicture(String url, ImageView blurView, RequestListener <String,GlideDrawable> listener) {
+    @Override
+    public void loadBlurStreamPicture(String url, ImageView blurView, RequestListener<String, GlideDrawable> listener) {
         boolean isValidPicture = url != null && !url.isEmpty();
         if (isValidPicture) {
             /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
-            glide.load(url).listener(listener).dontAnimate().bitmapTransform(new BlurTransformation(blurView.getContext())).diskCacheStrategy(
-              DiskCacheStrategy.ALL).into(blurView);
+            glide.load(url)
+              .listener(listener)
+              .dontAnimate()
+              .bitmapTransform(new BlurTransformation(blurView.getContext()))
+              .diskCacheStrategy(DiskCacheStrategy.ALL)
+              .into(blurView);
         } else {
             /* no - op */
         }
     }
 
-    @Override
-    public void loadTimelineImage(String url, ImageView view) {
+    @Override public void loadTimelineImage(String url, ImageView view) {
         boolean isValidPicture = url != null && !url.isEmpty();
         if (isValidPicture) {
             glide.load(url).placeholder(R.color.transparent).into(view);
         }
     }
 
-    @Override
-    public void load(String url, ImageView image, final Callback callback) {
+    @Override public void load(String url, ImageView image, final Callback callback) {
         glide.load(url).into(new ImageViewTarget<GlideDrawable>(image) {
-            @Override
-            protected void setResource(GlideDrawable resource) {
+            @Override protected void setResource(GlideDrawable resource) {
                 view.setImageDrawable(resource);
                 callback.onLoaded();
             }
         });
     }
 
-    @Override
-    public void load(String url, ImageView view) {
+    @Override public void load(String url, ImageView view) {
         glide.load(url).into(view);
     }
 
-    @Override
-    public void load(File file, ImageView view) {
+    @Override public void load(File file, ImageView view) {
         glide.load(file).signature(getSignature(file)).into(view);
     }
 
-    @Override
-    public void load(File file, ImageView view, int maxSize) {
+    @Override public void load(File file, ImageView view, int maxSize) {
         glide.load(file).signature(getSignature(file)).fitCenter().override(maxSize, maxSize).into(view);
     }
 
-    @Override
-    public void loadWithPreview(String url, String previewUrl, ImageView view, Callback callback) {
+    @Override public void loadWithPreview(String url, String previewUrl, ImageView view, Callback callback) {
         //TODO no preview?
         load(url, view, callback);
     }
 
-    @Override
-    public Bitmap loadProfilePhoto(String url) throws IOException {
+    @Override public Bitmap loadProfilePhoto(String url) throws IOException {
         try {
             boolean isValidPhoto = url != null && !url.isEmpty();
             if (isValidPhoto) {
@@ -132,8 +126,7 @@ public class GlideImageLoader implements ImageLoader {
         }
     }
 
-    @Override
-    public Bitmap load(String url) throws IOException {
+    @Override public Bitmap load(String url) throws IOException {
         try {
             boolean isValidPhoto = url != null && !url.isEmpty();
             if (isValidPhoto) {
@@ -147,12 +140,11 @@ public class GlideImageLoader implements ImageLoader {
         }
     }
 
-    @NonNull
-    protected StringSignature getSignature(File file) {
+    @NonNull protected StringSignature getSignature(File file) {
         return new StringSignature(String.valueOf(file.lastModified()));
     }
 
-    private static Bitmap drawableToBitmap (Drawable drawable) {
+    private static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
@@ -163,9 +155,11 @@ public class GlideImageLoader implements ImageLoader {
         }
 
         if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+            bitmap =
+              Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            bitmap =
+              Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         }
 
         Canvas canvas = new Canvas(bitmap);

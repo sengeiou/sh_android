@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.shootr.mobile"
+<manifest
+  package="com.shootr.mobile"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,7 +13,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="${packageName}.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <!-- optional -->
+    <!-- optional -->
 
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
@@ -34,13 +35,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="web.shootr.com" android:scheme="http" />
-                <data android:host="web.shootr.com" android:scheme="https" />
-                <data android:host="s" android:scheme="shootr" />
-                <data android:host="st" android:scheme="shootr" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                  android:host="web.shootr.com"
+                  android:scheme="http" />
+                <data
+                  android:host="web.shootr.com"
+                  android:scheme="https" />
+                <data
+                  android:host="s"
+                  android:scheme="shootr" />
+                <data
+                  android:host="st"
+                  android:scheme="shootr" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.StreamTimelineActivity"></activity>

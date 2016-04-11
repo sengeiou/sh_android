@@ -13,7 +13,6 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import javax.inject.Inject;
 
 public class MarkNiceShotInteractor implements Interactor {
@@ -57,7 +56,8 @@ public class MarkNiceShotInteractor implements Interactor {
             remoteNiceShotRepository.mark(idShot);
             markNiceInLocal();
         } catch (ServerCommunicationException | NiceAlreadyMarkedException error) {
-            notifyError(new ShootrException() {});
+            notifyError(new ShootrException() {
+            });
         }
     }
 
@@ -69,7 +69,7 @@ public class MarkNiceShotInteractor implements Interactor {
             localShotRepository.putShot(shot);
         } catch (ShotNotFoundException error) {
             /* swallow */
-        }catch (ServerCommunicationException error) {
+        } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }

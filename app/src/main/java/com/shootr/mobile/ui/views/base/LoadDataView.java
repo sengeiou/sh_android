@@ -5,5 +5,4 @@ public interface LoadDataView extends DataTransferView {
     void showEmpty();
 
     void hideEmpty();
-
 }

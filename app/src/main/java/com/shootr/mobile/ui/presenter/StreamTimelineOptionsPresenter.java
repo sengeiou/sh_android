@@ -10,9 +10,7 @@ import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamTimelineOptionsPresenter implements Presenter {
@@ -30,8 +28,7 @@ public class StreamTimelineOptionsPresenter implements Presenter {
     private String idStream;
     private boolean hasBeenPaused;
 
-    @Inject
-    public StreamTimelineOptionsPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
+    @Inject public StreamTimelineOptionsPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
       UnmuteInteractor unmuteInteractor, ErrorMessageFactory errorMessageFactory) {
@@ -126,15 +123,13 @@ public class StreamTimelineOptionsPresenter implements Presenter {
         });
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
         if (hasBeenPaused) {
             loadMuteStatus();
         }
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
         hasBeenPaused = true;
     }
 }

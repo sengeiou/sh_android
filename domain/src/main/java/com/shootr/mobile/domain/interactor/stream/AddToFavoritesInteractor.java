@@ -14,12 +14,9 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
-
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 

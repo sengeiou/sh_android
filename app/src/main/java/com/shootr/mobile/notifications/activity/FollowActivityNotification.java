@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
@@ -17,16 +16,13 @@ public class FollowActivityNotification extends SingleActivityNotification {
 
     private final String idUser;
 
-    public FollowActivityNotification(Context context,
-      NotificationBuilderFactory builderFactory,
-      ImageLoader imageLoader,
-      PushNotification.NotificationValues values, String idUser) {
+    public FollowActivityNotification(Context context, NotificationBuilderFactory builderFactory,
+      ImageLoader imageLoader, PushNotification.NotificationValues values, String idUser) {
         super(context, builderFactory, imageLoader, values);
         this.idUser = idUser;
     }
 
-    @Override
-    public void setNotificationValues(NotificationCompat.Builder builder) {
+    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
         super.setNotificationValues(builder);
         builder.setContentIntent(getOpenProfileNotificationPendingIntent());
     }
@@ -34,6 +30,6 @@ public class FollowActivityNotification extends SingleActivityNotification {
     protected PendingIntent getOpenProfileNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PROFILE);
         intent.putExtra(ProfileContainerActivity.EXTRA_USER, idUser);
-        return PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

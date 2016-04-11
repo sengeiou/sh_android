@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     /**
      * Esta variable es la que nos sirve para almacenar el estado de este widget
      */
-    private boolean mChecked=false;
+    private boolean mChecked = false;
 
     private List<Checkable> checkableViews = new ArrayList<>();
 
@@ -30,7 +29,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
      * que es el que utilizamos en nuestro selector
      */
     private static final int[] CHECKED_STATE_SET = {
-        android.R.attr.state_checked
+      android.R.attr.state_checked
     };
 
     public CheckedLinearLayout(Context context) {
@@ -41,8 +40,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
         super(context, attrs);
     }
 
-    @Override
-    protected void onFinishInflate() {
+    @Override protected void onFinishInflate() {
         super.onFinishInflate();
         final int childCount = this.getChildCount();
         for (int i = 0; i < childCount; ++i) {
@@ -69,10 +67,10 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
 
     /**
      * Este method es el que cambia el estado de nuestro widget
+     *
      * @param checked true para activarlo y false para desactivarlo
      */
-    @Override
-    public void setChecked(boolean checked) {
+    @Override public void setChecked(boolean checked) {
         mChecked = checked;
         //Cuando cambiamos el estado, debemos informar a los drawables
         //que este widget tenga vinculados
@@ -85,11 +83,13 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     }
 
     /**
-     * Este method devuelve el estado de nuestro widget <img src="http://androcode.es/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley">
+     * Este method devuelve el estado de nuestro widget
+     * <img src="http://androcode.es/wp-includes/images/smilies/icon_smile.gif"
+     * alt=":)" class="wp-smiley">
+     *
      * @return true o false, no?
      */
-    @Override
-    public boolean isChecked() {
+    @Override public boolean isChecked() {
         return mChecked;
     }
 
@@ -97,8 +97,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
      * Este method cambia el estado de nuestro widget
      * Si estaba activo se desactiva y viceversa
      */
-    @Override
-    public void toggle() {
+    @Override public void toggle() {
         setChecked(!mChecked);
     }
 
@@ -112,8 +111,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
      *
      * @return el array de estados de nuestro widget
      */
-    @Override
-    public int[] onCreateDrawableState(int extraSpace) {
+    @Override public int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
         if (isChecked()) {
             mergeDrawableStates(drawableState, CHECKED_STATE_SET);

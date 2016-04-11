@@ -4,15 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.ActivityEntityDBMapper;
 import com.shootr.mobile.domain.ActivityTimelineParameters;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ActivityManager extends AbstractManager {
@@ -28,7 +25,8 @@ public class ActivityManager extends AbstractManager {
     public List<ActivityEntity> getActivityTimelineFromParameters(ActivityTimelineParameters parameters) {
         List<String> includedTypes = parameters.getIncludedTypes();
 
-        String typeSelection = DatabaseContract.ActivityTable.TYPE + " IN ("+ createListPlaceholders(includedTypes.size()) +")";
+        String typeSelection =
+          DatabaseContract.ActivityTable.TYPE + " IN (" + createListPlaceholders(includedTypes.size()) + ")";
 
         int whereArgumentsSize = includedTypes.size();
         String[] whereArguments = new String[whereArgumentsSize];
@@ -39,9 +37,13 @@ public class ActivityManager extends AbstractManager {
 
         String whereClause = typeSelection;
 
-        Cursor queryResult =
-          getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.ActivityTable.PROJECTION, whereClause, whereArguments, null, null,
-            DatabaseContract.ActivityTable.BIRTH +" DESC");
+        Cursor queryResult = getReadableDatabase().query(ACTIVITY_TABLE,
+          DatabaseContract.ActivityTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          DatabaseContract.ActivityTable.BIRTH + " DESC");
 
         List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());
         ActivityEntity activityEntity;
@@ -56,19 +58,21 @@ public class ActivityManager extends AbstractManager {
         return resultActivities;
     }
 
-    public void saveActivities(List<ActivityEntity> activityEntities){
+    public void saveActivities(List<ActivityEntity> activityEntities) {
         SQLiteDatabase database = getWritableDatabase();
-        try{
+        try {
             database.beginTransaction();
             for (ActivityEntity activityEntity : activityEntities) {
                 ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
-                database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE,
+                  null,
+                  contentValues,
+                  SQLiteDatabase.CONFLICT_REPLACE);
             }
             database.setTransactionSuccessful();
-        }finally {
+        } finally {
             database.endTransaction();
         }
-
     }
 
     public ActivityEntity getActivity(String activityId) {
@@ -96,8 +100,14 @@ public class ActivityManager extends AbstractManager {
     public Long getLastModifiedDateForActivity() {
         String order = DatabaseContract.ActivityTable.MODIFIED + " desc";
 
-        Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE, DatabaseContract.ActivityTable.PROJECTION, null, null, null, null, order, "1");
+        Cursor queryResult = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
+          DatabaseContract.ActivityTable.PROJECTION,
+          null,
+          null,
+          null,
+          null,
+          order,
+          "1");
 
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
@@ -110,8 +120,14 @@ public class ActivityManager extends AbstractManager {
 
     public void deleteActivitiesWithShot(String idShot) {
         String args = DatabaseContract.ActivityTable.ID_SHOT + "=?";
-        String[] stringArgs = new String[]{idShot};
-        Cursor c = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE, DatabaseContract.ActivityTable.PROJECTION, args, stringArgs, null, null, null);
+        String[] stringArgs = new String[] { idShot };
+        Cursor c = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
+          DatabaseContract.ActivityTable.PROJECTION,
+          args,
+          stringArgs,
+          null,
+          null,
+          null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             do {

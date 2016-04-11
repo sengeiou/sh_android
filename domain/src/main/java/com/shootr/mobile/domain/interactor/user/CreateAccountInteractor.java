@@ -13,9 +13,7 @@ import com.shootr.mobile.domain.service.user.ShootrUserService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class CreateAccountInteractor implements Interactor {

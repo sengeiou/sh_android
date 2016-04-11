@@ -2,16 +2,13 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
-
 import javax.inject.Inject;
 
 public class ShotEntityDBMapper extends GenericDBMapper {
 
-    @Inject
-    public ShotEntityDBMapper() {
+    @Inject public ShotEntityDBMapper() {
     }
 
     public ShotEntity fromCursor(Cursor c) {
@@ -58,7 +55,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.VIDEO_TITLE, shot.getVideoTitle());
         cv.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot.getVideoDuration());
         cv.put(DatabaseContract.ShotTable.PROFILE_HIDDEN, shot.getProfileHidden());
-        setSynchronizedtoContentValues(shot,cv);
+        setSynchronizedtoContentValues(shot, cv);
         return cv;
     }
 }

@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class FollowEntity extends Synchronized{
+public class FollowEntity extends Synchronized {
 
     public static final int RELATIONSHIP_NONE = 0;
     public static final int RELATIONSHIP_OWN = 1;

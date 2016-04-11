@@ -4,10 +4,8 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class UserModelMapper {
@@ -61,9 +59,9 @@ public class UserModelMapper {
         boolean follower = user.isFollower();
         if (following && follower) {
             return FollowEntity.RELATIONSHIP_BOTH;
-        } else if(following) {
+        } else if (following) {
             return FollowEntity.RELATIONSHIP_FOLLOWING;
-        }else if (follower) {
+        } else if (follower) {
             return FollowEntity.RELATIONSHIP_FOLLOWER;
         } else {
             return FollowEntity.RELATIONSHIP_NONE;

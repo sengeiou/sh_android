@@ -18,19 +18,16 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
     LocalStreamRepository.class, SyncStreamRepository.class
   },
   complete = false,
-  library = true)
-public class StreamRepositoryModule {
+  library = true) public class StreamRepositoryModule {
 
     @Provides @Singleton @Local StreamRepository provideLocalStreamRepository(LocalStreamRepository streamRepository) {
         return streamRepository;
@@ -40,25 +37,28 @@ public class StreamRepositoryModule {
         return streamRepository;
     }
 
-    @Provides @Singleton @Local StreamDataSource provideLocalStreamDataSource(DatabaseStreamDataSource streamDataSource) {
+    @Provides @Singleton @Local StreamDataSource provideLocalStreamDataSource(
+      DatabaseStreamDataSource streamDataSource) {
         return streamDataSource;
     }
 
-    @Provides @Singleton @Remote StreamDataSource provideRemoteStreamDataSource(ServiceStreamDataSource streamDataSource) {
+    @Provides @Singleton @Remote StreamDataSource provideRemoteStreamDataSource(
+      ServiceStreamDataSource streamDataSource) {
         return streamDataSource;
     }
 
-    @Provides @Local
-    StreamSearchRepository provideLocalStreamSearchRepository(LocalStreamSearchRepository streamSearchRepository) {
+    @Provides @Local StreamSearchRepository provideLocalStreamSearchRepository(
+      LocalStreamSearchRepository streamSearchRepository) {
         return streamSearchRepository;
     }
 
-    @Provides @Remote
-    StreamSearchRepository provideLocalStreamSearchRepository(RemoteStreamSearchRepository streamSearchRepository) {
+    @Provides @Remote StreamSearchRepository provideLocalStreamSearchRepository(
+      RemoteStreamSearchRepository streamSearchRepository) {
         return streamSearchRepository;
     }
 
-    @Provides @Remote StreamListDataSource provideRemoteStreamListDataSource(ServiceStreamListDataSource serviceStreamListDataSource) {
+    @Provides @Remote StreamListDataSource provideRemoteStreamListDataSource(
+      ServiceStreamListDataSource serviceStreamListDataSource) {
         return serviceStreamListDataSource;
     }
 

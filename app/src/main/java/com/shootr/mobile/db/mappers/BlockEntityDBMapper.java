@@ -2,7 +2,6 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.db.DatabaseContract;
 
@@ -24,5 +23,4 @@ public class BlockEntityDBMapper extends GenericDBMapper {
         cv.put(ID_BLOCKED_USER, f.getIdBlockedUser());
         return cv;
     }
-
 }

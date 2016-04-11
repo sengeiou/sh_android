@@ -11,7 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -19,14 +20,10 @@ import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 import static com.shootr.mobile.domain.utils.Preconditions.checkPositionIndex;
@@ -65,8 +62,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean isAllParticipantsVisible = false;
 
     public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
-      View.OnClickListener onMediaClickListener, CompoundButton.OnCheckedChangeListener onCheckedChangeListener, View.OnClickListener onAllParticipantsClickListener,
-      OnUserClickListener onUserClickListener, OnFollowUnfollowListener onFollowUnfollowListener) {
+      View.OnClickListener onMediaClickListener, CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
+      View.OnClickListener onAllParticipantsClickListener, OnUserClickListener onUserClickListener,
+      OnFollowUnfollowListener onFollowUnfollowListener) {
         this.onAuthorClickListener = onAuthorClickListener;
         this.onMediaClickListener = onMediaClickListener;
         this.onCheckedChangeListener = onCheckedChangeListener;
@@ -97,9 +95,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(position == getItemCount() -1) {
+    @Override public int getItemViewType(int position) {
+        if (position == getItemCount() - 1) {
             return TYPE_ALL_PARTICIPANTS;
         }
         switch (position) {
@@ -118,8 +115,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
@@ -154,7 +150,11 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new SeparatorViewHolder(v);
             case TYPE_PARTICIPANT:
                 v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
-                return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener, keepFollowButtonIds);
+                return new WatcherViewHolder(v,
+                  onUserClickListener,
+                  imageLoader,
+                  onFollowUnfollowListener,
+                  keepFollowButtonIds);
             case TYPE_ALL_PARTICIPANTS:
                 if (allParticipantsViewHolder == null) {
                     v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
@@ -167,8 +167,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_DESCRIPTION:
                 descriptionViewHolder.setText(description);
@@ -194,8 +193,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return EXTRA_ITEMS_ABOVE_PARTICIPANTS + participants.size() + 1;
     }
 
@@ -275,7 +273,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             setupMuteContainer();
         }
 
-        private void setupMuteContainer(){
+        private void setupMuteContainer() {
             muteContainer.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     muteSwitch.setChecked(!muteSwitch.isChecked());
@@ -321,9 +319,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         private String userId;
 
-        public WatcherViewHolder(View itemView,
-          OnUserClickListener onUserClickListener,
-          ImageLoader imageLoader,
+        public WatcherViewHolder(View itemView, OnUserClickListener onUserClickListener, ImageLoader imageLoader,
           OnFollowUnfollowListener onFollowUnfollowListener, Set<String> keepFollowButtonIds) {
             super(itemView);
             this.onUserClickListener = onUserClickListener;
@@ -340,8 +336,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (verifiedUser(userModel)) {
                 name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
                 name.setCompoundDrawablePadding(6);
-            }else{
-                name.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            } else {
+                name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 
             watchingText.setText(userModel.getJoinStreamDate());
@@ -361,8 +357,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     followButton.setFollowing(false);
             }
             followButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (followButton.isFollowing()) {
                         onFollowUnfollowListener.onUnfollow(userModel);
                         followButton.setFollowing(false);
@@ -375,8 +370,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
 
-        @Override
-        public void onClick(View v) {
+        @Override public void onClick(View v) {
             checkNotNull(userId);
             if (onUserClickListener != null) {
                 onUserClickListener.onUserClick(userId);
@@ -384,7 +378,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         private boolean verifiedUser(UserModel userModel) {
-            if(userModel.isVerifiedUser()!=null) {
+            if (userModel.isVerifiedUser() != null) {
                 return userModel.isVerifiedUser();
             }
             return false;
@@ -401,8 +395,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void setVisible(boolean visible) {
-            button.setVisibility(visible? View.VISIBLE : View.GONE);
+            button.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
-
     }
 }

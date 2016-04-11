@@ -12,8 +12,7 @@ public class ApiException extends Exception {
         return errorInfo;
     }
 
-    @Override
-    public String getMessage() {
+    @Override public String getMessage() {
         return errorInfo.toString();
     }
 }

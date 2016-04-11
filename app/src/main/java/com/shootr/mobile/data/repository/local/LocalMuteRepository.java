@@ -6,10 +6,8 @@ import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalMuteRepository implements MuteRepository {
@@ -17,7 +15,8 @@ public class LocalMuteRepository implements MuteRepository {
     private final MuteDataSource muteDataSource;
     private final MuteRepository remoteMuteRepository;
 
-    @Inject public LocalMuteRepository(@Local MuteDataSource muteDataSource, @Remote MuteRepository remoteMuteRepository) {
+    @Inject
+    public LocalMuteRepository(@Local MuteDataSource muteDataSource, @Remote MuteRepository remoteMuteRepository) {
         this.muteDataSource = muteDataSource;
         this.remoteMuteRepository = remoteMuteRepository;
     }

@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
-
 import javax.inject.Inject;
 
 public class GetStreamInteractor implements Interactor {
@@ -38,21 +37,21 @@ public class GetStreamInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             loadRemoteStream();
-        }catch (ServerCommunicationException error){
+        } catch (ServerCommunicationException error) {
             loadLocalStream();
         }
     }
 
-    private void loadRemoteStream(){
+    private void loadRemoteStream() {
         Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
         if (remoteStream != null) {
             notifyLoaded(remoteStream);
-        }else{
+        } else {
             // TODO: Notify error
         }
     }
 
-    private void loadLocalStream(){
+    private void loadLocalStream() {
         Stream localStream = localStreamRepository.getStreamById(idStream);
         notifyLoaded(localStream);
     }

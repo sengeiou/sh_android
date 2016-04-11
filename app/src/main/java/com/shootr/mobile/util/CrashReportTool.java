@@ -19,6 +19,5 @@ public interface CrashReportTool {
     interface Factory {
 
         CrashReportTool create();
-
     }
 }

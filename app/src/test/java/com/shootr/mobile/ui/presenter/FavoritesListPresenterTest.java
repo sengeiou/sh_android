@@ -15,17 +15,15 @@ import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FavoritesListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -48,42 +46,41 @@ public class FavoritesListPresenterTest {
 
     private FavoritesListPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, shareStreamInteractor,
-          removeFromFavoritesInteractor, unwatchStreamInteractor,
+        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor,
+          shareStreamInteractor,
+          removeFromFavoritesInteractor,
+          unwatchStreamInteractor,
           getMutedStreamsInteractor,
           muteInteractor,
           unmuteInterator,
-          streamResultModelMapper, errorMessageFactory, bus);
+          streamResultModelMapper,
+          errorMessageFactory,
+          bus);
         presenter.setView(favoritesListView);
     }
 
-    @Test
-    public void shouldLoadFavoritesWhenInitialized() throws Exception {
+    @Test public void shouldLoadFavoritesWhenInitialized() throws Exception {
         presenter.initialize(favoritesListView);
 
         verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
-    @Test
-    public void shouldLoadFavoritesWhenPausedAndResumed() throws Exception {
+    @Test public void shouldLoadFavoritesWhenPausedAndResumed() throws Exception {
         presenter.pause();
         presenter.resume();
 
         verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
-    @Test
-    public void shouldShowLoadingWhenInitialized() throws Exception {
+    @Test public void shouldShowLoadingWhenInitialized() throws Exception {
         presenter.initialize(favoritesListView);
 
         verify(favoritesListView).showLoading();
     }
 
-    @Test
-    public void shouldShowContentWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldShowContentWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacks(stubResult());
 
         presenter.loadFavorites();
@@ -91,8 +88,7 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).showContent();
     }
 
-    @Test
-    public void shouldHideContentWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
+    @Test public void shouldHideContentWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
         setupInteractorCallbacks(empty());
 
         presenter.loadFavorites();
@@ -100,8 +96,7 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).hideContent();
     }
 
-    @Test
-    public void shouldHideLoadingWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldHideLoadingWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacks(stubResult());
 
         presenter.loadFavorites();
@@ -109,8 +104,7 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).hideLoading();
     }
 
-    @Test
-    public void shouldShowEmptyWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
+    @Test public void shouldShowEmptyWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
         setupInteractorCallbacks(empty());
 
         presenter.loadFavorites();
@@ -118,8 +112,7 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).showEmpty();
     }
 
-    @Test
-    public void shouldHideEmptyWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
+    @Test public void shouldHideEmptyWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
         setupInteractorCallbacks(stubResult());
 
         presenter.loadFavorites();
@@ -127,8 +120,7 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).hideEmpty();
     }
 
-    @Test
-    public void shouldShowFavoritesWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
+    @Test public void shouldShowFavoritesWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
         setupInteractorCallbacks(stubResult());
 
         presenter.loadFavorites();
@@ -158,9 +150,9 @@ public class FavoritesListPresenterTest {
 
     private void setupInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<StreamSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<StreamSearchResult>> callback =
+                  (Interactor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(result);
                 return null;
             }

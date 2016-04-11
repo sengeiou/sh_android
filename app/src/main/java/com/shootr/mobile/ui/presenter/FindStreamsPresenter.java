@@ -12,9 +12,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class FindStreamsPresenter implements Presenter {
@@ -65,7 +63,9 @@ public class FindStreamsPresenter implements Presenter {
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getShortTitle(), stream.getStreamModel().getAuthorId());
+        selectStream(stream.getStreamModel().getIdStream(),
+          stream.getStreamModel().getShortTitle(),
+          stream.getStreamModel().getAuthorId());
     }
 
     private void selectStream(final String idStream, String streamShortTitle, String authorId) {
@@ -122,17 +122,17 @@ public class FindStreamsPresenter implements Presenter {
     }
 
     public void addToFavorites(StreamResultModel stream) {
-        addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+        addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
                   findStreamsView.showAddedToFavorites();
               }
-          }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                showViewError(error);
-            }
-        });
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showViewError(error);
+              }
+          });
     }
 
     public void shareStream(StreamResultModel stream) {

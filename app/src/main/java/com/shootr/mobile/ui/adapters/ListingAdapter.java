@@ -4,7 +4,6 @@ import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
@@ -12,7 +11,6 @@ import com.shootr.mobile.ui.adapters.sectionedrecyclerview.HeaderViewHolder;
 import com.shootr.mobile.ui.adapters.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -31,9 +29,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
     private Set<String> favoriteStreamsIds = Collections.emptySet();
     private boolean showTitles = true;
 
-    public ListingAdapter(ImageLoader imageLoader,
-      boolean isCurrentUser,
-      OnStreamClickListener onStreamClickListener,
+    public ListingAdapter(ImageLoader imageLoader, boolean isCurrentUser, OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener) {
         this.imageLoader = imageLoader;
         this.isCurrentUser = isCurrentUser;
@@ -41,13 +37,11 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
-    @Override
-    protected int getSectionCount() {
+    @Override protected int getSectionCount() {
         return 2;
     }
 
-    @Override
-    protected int getItemCountForSection(int section) {
+    @Override protected int getItemCountForSection(int section) {
         if (section == 0) {
             return createdStreams.size();
         } else if (section == 1) {
@@ -57,14 +51,12 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         }
     }
 
-    @Override
-    protected HeaderViewHolder onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType) {
+    @Override protected HeaderViewHolder onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType) {
         View text = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_title_separator, parent, false);
         return new HeaderViewHolder(text, android.R.id.text1);
     }
 
-    @Override
-    protected StreamResultViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    @Override protected StreamResultViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
 
         ListingStreamResultViewHolder listingStreamResultViewHolder =
@@ -76,8 +68,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         return listingStreamResultViewHolder;
     }
 
-    @Override
-    protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
+    @Override protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
         if (showTitles && getItemCountForSection(section) > 0) {
             holder.itemView.findViewById(R.id.separator).setVisibility(View.VISIBLE);
             holder.itemView.findViewById(android.R.id.text1).setVisibility(View.VISIBLE);
@@ -87,8 +78,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         }
     }
 
-    @StringRes
-    private int getTitleForSection(int section) {
+    @StringRes private int getTitleForSection(int section) {
         if (section == 0) {
             return R.string.listing_title_holding;
         } else {
@@ -96,8 +86,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         }
     }
 
-    @Override
-    protected void onBindItemViewHolder(StreamResultViewHolder holder, int section, int position) {
+    @Override protected void onBindItemViewHolder(StreamResultViewHolder holder, int section, int position) {
         ((ListingStreamResultViewHolder) holder).setFavorite(isFavorite(section, position));
         StreamResultModel stream = getItem(section, position);
         boolean showSeparator = position != 0;

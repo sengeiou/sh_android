@@ -8,9 +8,7 @@ import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalFavoriteRepository implements FavoriteRepository {
@@ -26,26 +24,22 @@ public class LocalFavoriteRepository implements FavoriteRepository {
         this.syncableFavoriteEntityFactory = syncableFavoriteEntityFactory;
     }
 
-    @Override
-    public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
+    @Override public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
         FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         localFavoriteDataSource.putFavorite(currentOrNewEntity);
     }
 
-    @Override
-    public List<Favorite> getFavorites(String userId) {
+    @Override public List<Favorite> getFavorites(String userId) {
         List<FavoriteEntity> favoriteEntities = localFavoriteDataSource.getFavorites(userId);
         return favoriteEntityMapper.transformEntities(favoriteEntities);
     }
 
-    @Override
-    public Favorite getFavoriteByStream(String eventId) {
+    @Override public Favorite getFavoriteByStream(String eventId) {
         FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdStream(eventId);
         return favoriteEntityMapper.transform(favoriteByIdEvent);
     }
 
-    @Override
-    public void removeFavoriteByStream(String eventId) {
+    @Override public void removeFavoriteByStream(String eventId) {
         localFavoriteDataSource.removeFavoriteByIdStream(eventId);
     }
 }

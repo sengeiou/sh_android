@@ -3,10 +3,8 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.domain.SuggestedPeople;
 import com.shootr.mobile.domain.User;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SuggestedPeopleEntityMapper {
@@ -56,7 +54,7 @@ public class SuggestedPeopleEntityMapper {
         suggestedPeopleEntity.setEmail(suggestedPeople.getUser().getEmail());
         suggestedPeopleEntity.setPhoto(suggestedPeople.getUser().getPhoto());
         suggestedPeopleEntity.setPoints(suggestedPeople.getUser().getPoints());
-        suggestedPeopleEntity.setVerifiedUser(suggestedPeople.getUser().isVerifiedUser() ? 1:0);
+        suggestedPeopleEntity.setVerifiedUser(suggestedPeople.getUser().isVerifiedUser() ? 1 : 0);
         suggestedPeopleEntity.setNumFollowings(suggestedPeople.getUser().getNumFollowings());
         suggestedPeopleEntity.setNumFollowers(suggestedPeople.getUser().getNumFollowers());
         suggestedPeopleEntity.setWebsite(suggestedPeople.getUser().getWebsite());

@@ -21,9 +21,7 @@ import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
@@ -45,8 +43,9 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
-      ShareStreamInteractor shareStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
-      UnmuteInteractor unmuteInterator, StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+      ShareStreamInteractor shareStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
+      MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator, StreamResultModelMapper streamResultModelMapper,
+      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
@@ -127,7 +126,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
             this.renderViewStreamsList(streamResultModels);
             StreamSearchResult currentWatchingStream = resultList.getCurrentWatchingStream();
             this.setViewCurrentVisibleWatchingStream(streamResultModelMapper.transform(currentWatchingStream));
-        }else{
+        } else {
             streamsListView.showLoading();
         }
     }
@@ -183,9 +182,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
     }
 
-    @Subscribe
-    @Override
-    public void onUnwatchDone(UnwatchDone.Event event) {
+    @Subscribe @Override public void onUnwatchDone(UnwatchDone.Event event) {
         this.loadDefaultStreamList();
     }
 
@@ -219,9 +216,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
     }
 
-    @Subscribe
-    @Override
-    public void onStreamMuted(StreamMuted.Event event) {
+    @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {
         loadMutedStreamIds();
         loadDefaultStreamList();
     }

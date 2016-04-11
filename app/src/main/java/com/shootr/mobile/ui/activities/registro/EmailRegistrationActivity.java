@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
@@ -15,13 +18,7 @@ import com.shootr.mobile.ui.activities.WelcomePageActivity;
 import com.shootr.mobile.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.FeedbackMessage;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnFocusChange;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
@@ -69,27 +66,23 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         presenter.createAccount();
     }
 
-    @OnFocusChange(R.id.registration_email)
-    public void onEmailFieldFocusChanged(boolean hasFocus) {
+    @OnFocusChange(R.id.registration_email) public void onEmailFieldFocusChanged(boolean hasFocus) {
         if (!hasFocus) {
             presenter.emailFocusRemoved();
         }
     }
 
-    @OnFocusChange(R.id.registration_username)
-    public void onUsernameFieldFocusChanged(boolean hasFocus) {
+    @OnFocusChange(R.id.registration_username) public void onUsernameFieldFocusChanged(boolean hasFocus) {
         if (!hasFocus) {
             presenter.usernameFocusRemoved();
         }
     }
 
-    @OnFocusChange(R.id.registration_password)
-    public void onPasswordFieldFocusChanged(boolean hasFocus) {
+    @OnFocusChange(R.id.registration_password) public void onPasswordFieldFocusChanged(boolean hasFocus) {
         if (!hasFocus) {
             presenter.passwordFocusRemoved();
         }
     }
-
 
     //region View methods
     @Override public void showLoading() {

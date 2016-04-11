@@ -8,9 +8,7 @@ import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.StreamRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalStreamRepository implements StreamRepository {

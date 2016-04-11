@@ -1,12 +1,9 @@
 package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
-
 import com.shootr.mobile.domain.Shot;
-
-import org.junit.Test;
-
 import java.util.Date;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +25,7 @@ public class ParcelableShotTest {
     private static final String PARENT_USERNAME = "username";
     //endregion
 
-    @Test
-    public void testShotFromParcelableHasIdCommentImageAndDate() throws Exception {
+    @Test public void testShotFromParcelableHasIdCommentImageAndDate() throws Exception {
         Shot shotStub = shotStub();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
 
@@ -46,8 +42,7 @@ public class ParcelableShotTest {
         assertThat(shotFromParcel.getPublishDate()).isEqualTo(shotStub.getPublishDate());
     }
 
-    @Test
-    public void testShotWithoutIdIsObtainedFromParcel() throws Exception {
+    @Test public void testShotWithoutIdIsObtainedFromParcel() throws Exception {
         Shot shotStub = shotStub();
         shotStub.setIdShot(null);
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -61,8 +56,7 @@ public class ParcelableShotTest {
         assertThat(shotFromParcel.getIdShot()).isNull();
     }
 
-    @Test
-    public void testShotFromParcelableHasUserInfo() throws Exception {
+    @Test public void testShotFromParcelableHasUserInfo() throws Exception {
         Shot shotStub = shotStub();
         Shot.ShotUserInfo userInfoStub = shotStub.getUserInfo();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -80,8 +74,7 @@ public class ParcelableShotTest {
         assertThat(userInfoFromParcel.getAvatar()).isEqualTo(userInfoStub.getAvatar());
     }
 
-    @Test
-    public void testShotFromParcelableHasStreamInfo() throws Exception {
+    @Test public void testShotFromParcelableHasStreamInfo() throws Exception {
         Shot shotStub = shotStub();
         Shot.ShotStreamInfo streamInfoStub = shotStub.getStreamInfo();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -99,8 +92,7 @@ public class ParcelableShotTest {
         assertThat(streamInfoFromParcel.getStreamShortTitle()).isEqualTo(streamInfoStub.getStreamShortTitle());
     }
 
-    @Test
-    public void testStreamInfoFromParcelableIsNullIfOriginalWasNull() throws Exception {
+    @Test public void testStreamInfoFromParcelableIsNullIfOriginalWasNull() throws Exception {
         Shot shotStub = shotStub();
         shotStub.setStreamInfo(null);
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -114,8 +106,7 @@ public class ParcelableShotTest {
         assertThat(streamInfoFromParcel).isNull();
     }
 
-    @Test
-    public void testShotFromparcelableHasIdQueueIfOriginalDoes() throws Exception {
+    @Test public void testShotFromparcelableHasIdQueueIfOriginalDoes() throws Exception {
         Shot shotStub = shotStub();
         shotStub.setIdQueue(QUEUE_ID);
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);

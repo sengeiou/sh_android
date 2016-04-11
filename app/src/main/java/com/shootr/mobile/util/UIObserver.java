@@ -4,8 +4,7 @@ import rx.Observer;
 
 public abstract class UIObserver<T> implements Observer<T> {
 
-    @Override
-    public void onNext(T o) {
+    @Override public void onNext(T o) {
         /* no-op */
     }
 

@@ -8,7 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -17,14 +19,8 @@ import com.shootr.mobile.ui.views.StreamMediaView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements StreamMediaView {
 
@@ -46,8 +42,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject AnalyticsTool analyticsTool;
 
-    @NonNull
-    protected static Intent newIntent(Context context, String idStream, int predictedMediaCount) {
+    @NonNull protected static Intent newIntent(Context context, String idStream, int predictedMediaCount) {
         Intent intent = new Intent(context, StreamMediaActivity.class);
         intent.putExtra(EXTRA_STREAM_ID, idStream);
         intent.putExtra(EXTRA_STREAM_MEDIA_COUNT, predictedMediaCount);
@@ -61,7 +56,8 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamMedia);
-        layoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns));
+        layoutManager =
+          new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns));
         mediaView.setLayoutManager(layoutManager);
         mediaAdapter = new MediaAdapter(this, imageLoader);
         mediaView.setAdapter(mediaAdapter);
@@ -140,12 +136,11 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
         feedbackMessage.show(getView(), noMoreMedia);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

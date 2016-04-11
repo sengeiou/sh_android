@@ -2,32 +2,31 @@ package com.shootr.mobile.util;
 
 import android.app.Activity;
 import android.content.Context;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.shootr.mobile.R;
-
 import java.util.HashMap;
 
 public class GoogleAnalyticsTool implements AnalyticsTool {
 
     private Tracker tracker;
     private HashMap<TrackerName, Tracker> mTrackers = new HashMap();
+
     private enum TrackerName {
-        APP_TRACKER, GLOBAL_TRACKER, NAVIGATION_TRACKER,
+        APP_TRACKER,
+        GLOBAL_TRACKER,
+        NAVIGATION_TRACKER,
     }
 
-    @Override
-    public void init(Context context) {
+    @Override public void init(Context context) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
         tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
         tracker.enableAutoActivityTracking(true);
         tracker.enableExceptionReporting(true);
     }
 
-    @Override
-    public void setUserId(String userId) {
+    @Override public void setUserId(String userId) {
         tracker.set("&uid", userId);
     }
 

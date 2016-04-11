@@ -4,7 +4,6 @@ import com.shootr.mobile.domain.SuggestedPeople;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
-
 import java.io.IOException;
 import java.util.List;
 

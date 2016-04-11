@@ -11,24 +11,20 @@ import com.shootr.mobile.domain.ActivityTimelineParameters;
 import com.shootr.mobile.domain.ActivityType;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class ServiceActivityDataSource implements ActivityDataSource{
+public class ServiceActivityDataSource implements ActivityDataSource {
 
     private final ActivityApiService activityApiService;
     private final ActivityApiEntityMapper activityApiEntityMapper;
     private final StreamDataSource localStreamDataSource;
 
-    @Inject
-    public ServiceActivityDataSource(ActivityApiService activityApiService,
-      ActivityApiEntityMapper activityApiEntityMapper,
-      @Local StreamDataSource localStreamDataSource) {
+    @Inject public ServiceActivityDataSource(ActivityApiService activityApiService,
+      ActivityApiEntityMapper activityApiEntityMapper, @Local StreamDataSource localStreamDataSource) {
         this.activityApiService = activityApiService;
         this.activityApiEntityMapper = activityApiEntityMapper;
         this.localStreamDataSource = localStreamDataSource;
@@ -48,8 +44,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         }
     }
 
-    @Override
-    public ActivityEntity getActivity(String activityId) {
+    @Override public ActivityEntity getActivity(String activityId) {
         try {
             ActivityApiEntity activityApiEntity = activityApiService.getActivity(activityId);
             return activityApiEntityMapper.transform(activityApiEntity);
@@ -90,5 +85,4 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         String type = activityEntity.getType();
         return !Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN).contains(type);
     }
-
 }

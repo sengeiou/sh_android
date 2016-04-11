@@ -26,7 +26,10 @@ import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,11 +38,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -62,7 +60,7 @@ public class ProfilePresenterTest {
     private static final String WEBSITE_HTTP_PREFIX = "http://website";
     private static final String WEBSITE_HTTPS_PREFIX = "https://website";
     public static final String PHOTO_PATH = "photoPath";
-    private static final String ID_SHOT ="id_shot" ;
+    private static final String ID_SHOT = "id_shot";
 
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
@@ -103,9 +101,11 @@ public class ProfilePresenterTest {
           unfollowInteractor,
           getLastShotsInteractor,
           uploadUserPhotoInteractor,
-          removeUserPhotoInteractor, getBlockedIdUsersInteractor,
+          removeUserPhotoInteractor,
+          getBlockedIdUsersInteractor,
           getBannedUsersInteractor,
-          sessionRepository, errorMessageFactory,
+          sessionRepository,
+          errorMessageFactory,
           userModelMapper,
           shotModelMapper);
         profilePresenter.setView(profileView);
@@ -268,7 +268,7 @@ public class ProfilePresenterTest {
 
         verify(profileView).openEditPhotoMenu(false, null);
     }
-    
+
     @Test public void shouldShowLogoutInProgressWhenLogoutSelected() {
         profilePresenter.logoutSelected();
 
@@ -872,7 +872,6 @@ public class ProfilePresenterTest {
                 return null;
             }
         }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
-
     }
 
     public void setupUserNotInBlockedIdsCallback() {
@@ -1114,19 +1113,19 @@ public class ProfilePresenterTest {
         return user;
     }
 
-    private UserModel userModel(){
+    private UserModel userModel() {
         return new UserModel();
     }
 
     private void setupHideShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(hideShotInteractor)
-          .hideShot(anyString(), any(Interactor.CompletedCallback.class));
+        }).when(hideShotInteractor).hideShot(anyString(), any(Interactor.CompletedCallback.class));
     }
 
     private void setupLatestShotCallbacks(final List<Shot> result) {

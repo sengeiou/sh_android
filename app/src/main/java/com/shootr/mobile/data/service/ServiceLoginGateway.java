@@ -15,9 +15,7 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.LoginGateway;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ServiceLoginGateway implements LoginGateway {
@@ -26,8 +24,7 @@ public class ServiceLoginGateway implements LoginGateway {
     private final UserEntityMapper userEntityMapper;
     private final DeviceManager deviceManager;
 
-    @Inject public ServiceLoginGateway(AuthApiService authApiService,
-      UserEntityMapper userEntityMapper,
+    @Inject public ServiceLoginGateway(AuthApiService authApiService, UserEntityMapper userEntityMapper,
       DeviceManager deviceManager) {
         this.authApiService = authApiService;
         this.userEntityMapper = userEntityMapper;
@@ -47,8 +44,8 @@ public class ServiceLoginGateway implements LoginGateway {
         }
     }
 
-    @Override
-    public LoginResult performFacebookLogin(String facebookToken, String locale) throws InvalidLoginException {
+    @Override public LoginResult performFacebookLogin(String facebookToken, String locale)
+      throws InvalidLoginException {
         try {
             FacebookUserEntity loggedInUserEntity =
               authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken, locale));

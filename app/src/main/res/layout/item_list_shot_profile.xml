@@ -8,6 +8,6 @@
   android:paddingTop="16dp"
   android:paddingBottom="8dp">
 
-  <include layout="@layout/item_list_shot_inner_profile" />
+    <include layout="@layout/item_list_shot_inner_profile" />
 
 </FrameLayout>

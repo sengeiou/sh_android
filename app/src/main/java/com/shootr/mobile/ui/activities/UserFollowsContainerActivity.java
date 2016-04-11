@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
-
 import timber.log.Timber;
 
 public class UserFollowsContainerActivity extends BaseSignedInActivity {
@@ -28,10 +26,9 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         return i;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()){
+        if (!restoreSessionOrLogin()) {
             return;
         }
 
@@ -61,12 +58,11 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
@@ -80,9 +76,9 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setScreenTitle() {
-        String title = followType.equals(UserFollowingRelationship.FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(
-          R.string.activity_following_title);
+        String title =
+          followType.equals(UserFollowingRelationship.FOLLOWERS) ? getString(R.string.activity_followers_title)
+            : getString(R.string.activity_following_title);
         getSupportActionBar().setTitle(title);
     }
-
 }

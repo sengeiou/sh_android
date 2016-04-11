@@ -8,15 +8,13 @@ import com.shootr.mobile.domain.ActivityTimelineParameters;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-public class LocalActivityRepository implements ActivityRepository{
+public class LocalActivityRepository implements ActivityRepository {
 
     private final ActivityDataSource localActivityDataSource;
     private final ActivityEntityMapper activityEntityMapper;
@@ -30,14 +28,12 @@ public class LocalActivityRepository implements ActivityRepository{
     }
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
-        List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters, locale);
+        List<ActivityEntity> activityTimeline = localActivityDataSource.getActivityTimeline(parameters, locale);
         List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
         return activityEntityMapper.transform(activityEntities);
     }
 
-    @Override
-    public Activity getActivity(String activityId) {
+    @Override public Activity getActivity(String activityId) {
         ActivityEntity activity = localActivityDataSource.getActivity(activityId);
         bindActivityShot(activity);
         return activityEntityMapper.transform(activity);
@@ -51,7 +47,7 @@ public class LocalActivityRepository implements ActivityRepository{
         List<ActivityEntity> activityEntities = new ArrayList<>();
         for (ActivityEntity activity : activities) {
             bindActivityShot(activity);
-            if(activity.getIdShot()!=null && activity.getShotForMapping() != null) {
+            if (activity.getIdShot() != null && activity.getShotForMapping() != null) {
                 activityEntities.add(activity);
             } else if (activity.getIdShot() == null) {
                 activityEntities.add(activity);

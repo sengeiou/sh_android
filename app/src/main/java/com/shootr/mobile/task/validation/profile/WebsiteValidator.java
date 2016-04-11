@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 public class WebsiteValidator extends FieldValidator {
 
     public static final int MAX_LENGTH = 100;
-    private static final String WEBSITE_FORMAT_REGEX = "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.\\-\\?\\=_]*)*";
+    private static final String WEBSITE_FORMAT_REGEX =
+      "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.\\-\\?\\=_]*)*";
 
     private String website;
 

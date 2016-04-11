@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import javax.inject.Inject;
 
 public class GetHelpInteractor implements Interactor {

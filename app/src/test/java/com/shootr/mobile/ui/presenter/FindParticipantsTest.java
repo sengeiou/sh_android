@@ -13,17 +13,15 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.FindParticipantsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -48,11 +46,10 @@ public class FindParticipantsTest {
 
     private FindParticipantsPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        UserModelMapper
-          userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+        UserModelMapper userModelMapper =
+          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         presenter = new FindParticipantsPresenter(findParticipantsInteractor,
           followInteractor,
           unfollowInteractor,
@@ -61,29 +58,25 @@ public class FindParticipantsTest {
         presenter.setView(findParticipantsView);
     }
 
-    @Test
-    public void shouldHideEmptyWhenSearchParticipants() throws Exception {
+    @Test public void shouldHideEmptyWhenSearchParticipants() throws Exception {
         presenter.searchParticipants(QUERY);
 
         verify(findParticipantsView).hideEmpty();
     }
 
-    @Test
-    public void shouldHideKeyboardWhenSearchParticipants() throws Exception {
+    @Test public void shouldHideKeyboardWhenSearchParticipants() throws Exception {
         presenter.searchParticipants(QUERY);
 
         verify(findParticipantsView).hideKeyboard();
     }
 
-    @Test
-    public void shouldSetCurrentQueryWhenSearchParticipants() throws Exception {
+    @Test public void shouldSetCurrentQueryWhenSearchParticipants() throws Exception {
         presenter.searchParticipants(QUERY);
 
         verify(findParticipantsView).setCurrentQuery(QUERY);
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenSearchParticipants() throws Exception {
+    @Test public void shouldRenderParticipantsWhenSearchParticipants() throws Exception {
         setupFindParticipantsCallback();
 
         presenter.searchParticipants(QUERY);
@@ -91,8 +84,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView).renderParticipants(anyList());
     }
 
-    @Test
-    public void shouldShowEmptyWhenSearchParticipantsReturnsEmpty() throws Exception {
+    @Test public void shouldShowEmptyWhenSearchParticipantsReturnsEmpty() throws Exception {
         setupFindParticipantsEmptyCallback();
 
         presenter.searchParticipants(QUERY);
@@ -100,8 +92,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView).showEmpty();
     }
 
-    @Test
-    public void shouldShowErrorWhenSearchParticipantsThrowsError() throws Exception {
+    @Test public void shouldShowErrorWhenSearchParticipantsThrowsError() throws Exception {
         setupFindParticipantsErrorCallback();
 
         presenter.searchParticipants(QUERY);
@@ -109,8 +100,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView).showError(anyString());
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenRefreshParticipants() throws Exception {
+    @Test public void shouldRenderParticipantsWhenRefreshParticipants() throws Exception {
         setupFindParticipantsCallback();
 
         presenter.refreshParticipants();
@@ -118,8 +108,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView).renderParticipants(anyList());
     }
 
-    @Test
-    public void shouldShowErrorWhenRefreshParticipantsThrowsError() throws Exception {
+    @Test public void shouldShowErrorWhenRefreshParticipantsThrowsError() throws Exception {
         setupFindParticipantsErrorCallback();
 
         presenter.refreshParticipants();
@@ -127,8 +116,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView).showError(anyString());
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenFollowAParticipant() throws Exception {
+    @Test public void shouldRenderParticipantsWhenFollowAParticipant() throws Exception {
         setupFindParticipantsCallback();
         setupFollowUserCallback();
 
@@ -138,8 +126,7 @@ public class FindParticipantsTest {
         verify(findParticipantsView, atLeastOnce()).renderParticipants(anyList());
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenUnfollowAParticipant() throws Exception {
+    @Test public void shouldRenderParticipantsWhenUnfollowAParticipant() throws Exception {
         setupFindParticipantsCallback();
         setupFollowUserCallback();
 
@@ -163,10 +150,11 @@ public class FindParticipantsTest {
                 callback.onLoaded(participants());
                 return null;
             }
-        }).when(findParticipantsInteractor).obtainAllParticipants(anyString(),
-          anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(findParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyString(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupFindParticipantsEmptyCallback() {
@@ -177,9 +165,11 @@ public class FindParticipantsTest {
                 callback.onLoaded(Collections.EMPTY_LIST);
                 return null;
             }
-        }).when(findParticipantsInteractor).obtainAllParticipants(anyString(), anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(findParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyString(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupFindParticipantsErrorCallback() {
@@ -190,20 +180,22 @@ public class FindParticipantsTest {
                 });
                 return null;
             }
-        }).when(findParticipantsInteractor).obtainAllParticipants(anyString(), anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(findParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyString(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupFollowUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(followInteractor).follow(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(followInteractor)
+          .follow(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private List<User> participants() {

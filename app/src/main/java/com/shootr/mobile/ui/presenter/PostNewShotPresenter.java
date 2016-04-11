@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
-
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -17,12 +16,9 @@ import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class PostNewShotPresenter implements Presenter {
@@ -46,8 +42,7 @@ public class PostNewShotPresenter implements Presenter {
     private Integer wordPosition;
     private String[] words;
 
-    @Inject
-    public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
+    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
       PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
       GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
@@ -215,14 +210,12 @@ public class PostNewShotPresenter implements Presenter {
         return trimmed;
     }
 
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    @Subscribe public void onCommunicationError(CommunicationErrorEvent event) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    @Subscribe public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
@@ -242,7 +235,6 @@ public class PostNewShotPresenter implements Presenter {
     private boolean hasEnteredData() {
         return ((currentTextWritten != null) && !currentTextWritten.isEmpty()) || (selectedImageFile != null);
     }
-
 
     private void showLoading() {
         postNewShotView.showLoading();
@@ -268,7 +260,7 @@ public class PostNewShotPresenter implements Presenter {
         this.words = words;
         this.wordPosition = wordPosition;
         String extractedUsername = username.substring(1);
-        if (extractedUsername.length()>=1) {
+        if (extractedUsername.length() >= 1) {
             loadMentions(extractedUsername);
         }
     }
@@ -302,7 +294,7 @@ public class PostNewShotPresenter implements Presenter {
         Integer position = 0;
         for (String word : words) {
             if (equals(position, wordPosition)) {
-                shotComment += "@" +user.getUsername() + " ";
+                shotComment += "@" + user.getUsername() + " ";
             } else {
                 shotComment += word + " ";
             }

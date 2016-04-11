@@ -13,14 +13,12 @@ public class NiceButtonView extends CheckableImageView {
         super(context);
     }
 
-    @Override
-    public void setChecked(boolean b) {
+    @Override public void setChecked(boolean b) {
         super.setChecked(b);
         setEnabled(true);
     }
 
-    @Override
-    public boolean performClick() {
+    @Override public boolean performClick() {
         toggle();
         setEnabled(false);
         return super.performClick();

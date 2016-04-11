@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.service.user.LoginException;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

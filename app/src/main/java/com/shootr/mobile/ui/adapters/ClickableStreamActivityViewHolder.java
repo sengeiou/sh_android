@@ -5,14 +5,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.StreamTitleSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,15 +18,13 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
 
     private final OnStreamTitleClickListener onStreamTitleClickListener;
 
-    public ClickableStreamActivityViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
+    public ClickableStreamActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
         this.onStreamTitleClickListener = onStreamTitleClickListener;
     }
 
-    @Override
-    protected void renderText(ActivityModel activity) {
+    @Override protected void renderText(ActivityModel activity) {
         text.setText(formatActivityComment(activity));
         text.setMovementMethod(new LinkMovementMethod());
         text.addLinks();
@@ -44,8 +40,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
           streamPlaceholder,
           streamTitle,
           new StreamTitleSpan(activity.getIdStream(), activity.getStreamShortTitle(), activity.getIdStreamAuthor()) {
-              @Override
-              public void onStreamClick(String streamId, String streamShortTitle, String idAuthor) {
+              @Override public void onStreamClick(String streamId, String streamShortTitle, String idAuthor) {
                   onStreamTitleClickListener.onStreamTitleClick(streamId, streamShortTitle, idAuthor);
               }
           });
@@ -53,13 +48,10 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         return spannableCheckinPattern;
     }
 
-    @NonNull
-    protected abstract String getCommentPattern();
+    @NonNull protected abstract String getCommentPattern();
 
-    private void replacePlaceholderWithStreamTitleSpan(SpannableStringBuilder spannableBuilder,
-      String placeholder,
-      String replaceText,
-      StreamTitleSpan streamTitleSpan) {
+    private void replacePlaceholderWithStreamTitleSpan(SpannableStringBuilder spannableBuilder, String placeholder,
+      String replaceText, StreamTitleSpan streamTitleSpan) {
         Pattern termsPattern = Pattern.compile(placeholder);
         Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
         if (termsMatcher.find()) {

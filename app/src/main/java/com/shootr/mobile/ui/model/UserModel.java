@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
-
 import timber.log.Timber;
 
 public class UserModel implements Serializable, Cloneable {
@@ -98,7 +97,6 @@ public class UserModel implements Serializable, Cloneable {
         this.photo = photo;
     }
 
-
     public Long getNumFollowings() {
         return numFollowings;
     }
@@ -151,7 +149,8 @@ public class UserModel implements Serializable, Cloneable {
         try {
             return (UserModel) super.clone();
         } catch (CloneNotSupportedException e) {
-            Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+            Timber.w(e,
+              "UserModel has thrown CloneNotSupportedException. This should never happen.");
             return this;
         }
     }
