@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -30,21 +32,14 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 import dagger.ObjectGraph;
+import java.util.List;
+import javax.inject.Inject;
 
 public class ActivityTimelineFragment extends BaseFragment implements ActivityTimelineView {
 
     //region Fields
-    @Inject
-    GenericActivityTimelinePresenter timelinePresenter;
+    @Inject GenericActivityTimelinePresenter timelinePresenter;
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
@@ -67,39 +62,33 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     //region Lifecycle methods
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-      @Nullable ViewGroup container,
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         timelinePresenter.setView(new NullActivityTimelineView());
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         analyticsTool.analyticsStart(getContext(), analyticsScreenActivity);
         initializeViews();
         initializePresenter();
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         timelinePresenter.resume();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         timelinePresenter.pause();
     }
@@ -109,8 +98,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
     //endregion
 
-    @Override
-    protected ObjectGraph getObjectGraph() {
+    @Override protected ObjectGraph getObjectGraph() {
         return super.getObjectGraph();
     }
 
@@ -127,26 +115,22 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
         adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
           new OnAvatarClickListener() {
-              @Override
-              public void onAvatarClick(String userId, View avatarView) {
+              @Override public void onAvatarClick(String userId, View avatarView) {
                   openProfile(userId);
               }
           }, //
           new OnUsernameClickListener() {
-              @Override
-              public void onUsernameClick(String username) {
+              @Override public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
           }, //
           new OnStreamTitleClickListener() {
-              @Override
-              public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
+              @Override public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
                   openStream(streamId, streamShortTitle, authorId);
               }
           }, //
           new OnShotClick() {
-              @Override
-              public void onShotClick(ShotModel shot) {
+              @Override public void onShotClick(ShotModel shot) {
                   openShotDetail(shot);
               }
           });
@@ -155,21 +139,19 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            @Override public void onRefresh() {
                 timelinePresenter.refresh();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-                R.color.refresh_2,
-                R.color.refresh_3,
-                R.color.refresh_4);
+          R.color.refresh_2,
+          R.color.refresh_3,
+          R.color.refresh_4);
     }
 
     private void setupListScrollListeners() {
         activityList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 //TODO: fix that ñapa. It can't be good enough to check this shit
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && activityList != null) {
                     checkIfEndOfListVisible();
@@ -208,63 +190,51 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     //region View methods
-    @Override
-    public void showEmpty() {
+    @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideEmpty() {
+    @Override public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showLoading() {
+    @Override public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    @Override
-    public void hideLoading() {
+    @Override public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void showError(String message) {
+    @Override public void showError(String message) {
         feedbackMessage.show(getView(), message);
     }
 
-    @Override
-    public void setActivities(List<ActivityModel> activities, String currentUserId) {
+    @Override public void setActivities(List<ActivityModel> activities, String currentUserId) {
         adapter.setActivities(activities, currentUserId);
     }
 
-    @Override
-    public void hideActivities() {
+    @Override public void hideActivities() {
         activityList.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showActivities() {
+    @Override public void showActivities() {
         activityList.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void addNewActivities(List<ActivityModel> newActivities) {
+    @Override public void addNewActivities(List<ActivityModel> newActivities) {
         adapter.addActivitiesAbove(newActivities);
     }
 
-    @Override
-    public void addOldActivities(List<ActivityModel> oldActivities) {
+    @Override public void addOldActivities(List<ActivityModel> oldActivities) {
         adapter.addActivitiesBelow(oldActivities);
     }
 
-    @Override
-    public void showLoadingOldActivities() {
+    @Override public void showLoadingOldActivities() {
         adapter.setFooterVisible(true);
     }
 
-    @Override
-    public void hideLoadingOldActivities() {
+    @Override public void hideLoadingOldActivities() {
         adapter.setFooterVisible(false);
     }
 

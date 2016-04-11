@@ -15,7 +15,6 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
-
 import javax.inject.Inject;
 
 public class SelectStreamInteractor implements Interactor {
@@ -37,8 +36,9 @@ public class SelectStreamInteractor implements Interactor {
 
     @Inject
     public SelectStreamInteractor(final InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository,
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;

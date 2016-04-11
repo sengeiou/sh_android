@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ShotModel implements Serializable{
+public class ShotModel implements Serializable {
 
     //Shot attributes
     private String idShot;

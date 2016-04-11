@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.StreamPercentageUtils;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
@@ -54,13 +51,15 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
     private void setupStatics() {
         Intent intent = getIntent();
-        String streamName = (String)intent.getExtras().get(ARGUMENT_STREAM_NAME);
+        String streamName = (String) intent.getExtras().get(ARGUMENT_STREAM_NAME);
         Long participantsNumber = (Long) intent.getExtras().get(ARGUMENT_PARTICIPANTS_NUMBER);
         Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
         Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
         Long participantsWithShotsNumber = (Long) intent.getExtras().get(ARGUMENT_UNIQUE_SHOTS);
-        Double pctParticipantsWithShots = streamPercentageUtils.getPercentage(participantsWithShotsNumber,participantsNumber);
-        Double pctFavoritesNumber = streamPercentageUtils.getPercentage(favoritesNumber.longValue(),participantsNumber);
+        Double pctParticipantsWithShots =
+          streamPercentageUtils.getPercentage(participantsWithShotsNumber, participantsNumber);
+        Double pctFavoritesNumber =
+          streamPercentageUtils.getPercentage(favoritesNumber.longValue(), participantsNumber);
 
         streamNameTextView.setText(streamName);
         participantsNumberTextView.setText(String.valueOf(participantsNumber));
@@ -77,12 +76,11 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
         /* no-op */
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

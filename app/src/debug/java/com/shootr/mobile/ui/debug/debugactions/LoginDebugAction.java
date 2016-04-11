@@ -14,13 +14,11 @@ public class LoginDebugAction extends ContextualDebugActions.DebugAction<EmailLo
         this.password = password;
     }
 
-    @Override
-    public String name() {
-        return "Login with "+username;
+    @Override public String name() {
+        return "Login with " + username;
     }
 
-    @Override
-    public void run(EmailLoginActivity activity) {
+    @Override public void run(EmailLoginActivity activity) {
         activity.emailUsername.setText(username);
         activity.password.setText(password);
         activity.password.requestFocus();

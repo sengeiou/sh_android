@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import com.shootr.mobile.R;
 
 /**
@@ -74,8 +73,7 @@ public final class FloatLabelLayout extends FrameLayout {
         a.recycle();
     }
 
-    @Override
-    public final void addView(View child, int index, ViewGroup.LayoutParams params) {
+    @Override public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (child instanceof TextView && child != mLabel) {
             // If we already have an EditText, throw an exception
             if (mEditText != null) {
@@ -102,8 +100,7 @@ public final class FloatLabelLayout extends FrameLayout {
         // Add a TextWatcher so that we know when the text input has changed
         mEditText.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            @Override public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
                     // The text is empty, so hide the label if it is visible
                     if (mLabel.getVisibility() == View.VISIBLE) {
@@ -117,13 +114,11 @@ public final class FloatLabelLayout extends FrameLayout {
                 }
             }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 /* no-op */
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 /* no-op */
             }
         });
@@ -131,8 +126,7 @@ public final class FloatLabelLayout extends FrameLayout {
         // Add focus listener to the EditText so that we can notify the label that it is activated.
         // Allows the use of a ColorStateList for the text color on the label
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean focused) {
+            @Override public void onFocusChange(View view, boolean focused) {
                 mLabel.setActivated(focused);
             }
         });
@@ -181,8 +175,7 @@ public final class FloatLabelLayout extends FrameLayout {
           .translationY(mLabel.getHeight())
           .setDuration(ANIMATION_DURATION)
           .setListener(new AnimatorListenerAdapter() {
-              @Override
-              public void onAnimationEnd(Animator animation) {
+              @Override public void onAnimationEnd(Animator animation) {
                   mLabel.setVisibility(View.GONE);
               }
           })

@@ -3,7 +3,6 @@ package com.shootr.mobile.ui.views;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.base.DataTransferView;
-
 import java.util.List;
 
 public interface StreamDetailView extends DataTransferView {

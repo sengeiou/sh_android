@@ -27,13 +27,10 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
@@ -198,7 +195,6 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public void updateWatch(User user) {
-        //HEY: Esta entity no tiene por que estar bien actualizada ni nada. No se usa syncableEntityFactory porque modifica el synchronized normal, y no queremos eso. De todos modos solo se usaran los 3 campos del watch. Si se guarda el user entero puede dejar de funcionar bien.
         UserEntity entityWithWatchValues = userEntityMapper.transform(user);
         try {
             remoteUserDataSource.updateWatch(entityWithWatchValues);

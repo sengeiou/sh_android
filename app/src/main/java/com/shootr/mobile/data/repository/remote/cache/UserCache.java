@@ -2,24 +2,19 @@ package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.mobile.domain.User;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import timber.log.Timber;
 
-@Singleton
-public class UserCache {
+@Singleton public class UserCache {
 
     public static final String GET_PEOPLE = "getPeople";
     public static final int GET_PEOPLE_KEEP_ALIVE_SECONDS = 20 * 1000;
     private final QNCache<List<User>> userCache;
 
-    @Inject
-    public UserCache(QNCache userCache) {
+    @Inject public UserCache(QNCache userCache) {
         this.userCache = userCache;
     }
 

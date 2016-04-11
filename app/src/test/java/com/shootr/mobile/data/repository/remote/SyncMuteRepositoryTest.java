@@ -6,14 +6,12 @@ import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -72,24 +70,24 @@ public class SyncMuteRepositoryTest {
         verify(remoteMuteDataSource).mute(any(MuteStreamEntity.class));
     }
 
-    private MuteStreamEntity muteStreamEntity(){
+    private MuteStreamEntity muteStreamEntity() {
         MuteStreamEntity muteStreamEntity = new MuteStreamEntity();
         muteStreamEntity.setIdStream(ID_STREAM);
         muteStreamEntity.setSynchronizedStatus(LocalSynchronized.SYNC_DELETED);
         return muteStreamEntity;
     }
 
-    private MuteStreamEntity muteStreamEntitySyncNew(){
+    private MuteStreamEntity muteStreamEntitySyncNew() {
         MuteStreamEntity muteStreamEntity = new MuteStreamEntity();
         muteStreamEntity.setIdStream(ID_STREAM);
         muteStreamEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         return muteStreamEntity;
     }
 
-    private List<MuteStreamEntity> muteStreamEntities(){
+    private List<MuteStreamEntity> muteStreamEntities() {
         ArrayList<MuteStreamEntity> muteStreamEntities = new ArrayList<>();
         muteStreamEntities.add(muteStreamEntity());
         muteStreamEntities.add(muteStreamEntitySyncNew());
-        return  muteStreamEntities;
+        return muteStreamEntities;
     }
 }

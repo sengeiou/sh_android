@@ -2,10 +2,8 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.db.DatabaseContract;
-
 import javax.inject.Inject;
 
 public class FavoriteEntityDBMapper {

@@ -14,17 +14,15 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.AllParticipantsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
@@ -49,30 +47,32 @@ public class AllParticipantsPresenterTest {
 
     private AllParticipantsPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        UserModelMapper userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        presenter = new AllParticipantsPresenter(getAllParticipantsInteractor, selectStreamInteractor, followInteractor, unfollowInteractor, errorMessageFactory, userModelMapper);
+        UserModelMapper userModelMapper =
+          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+        presenter = new AllParticipantsPresenter(getAllParticipantsInteractor,
+          selectStreamInteractor,
+          followInteractor,
+          unfollowInteractor,
+          errorMessageFactory,
+          userModelMapper);
         presenter.setView(allParticipantsView);
     }
 
-    @Test
-    public void shouldHideEmptyWhenLoadAllParticipants() throws Exception {
+    @Test public void shouldHideEmptyWhenLoadAllParticipants() throws Exception {
         presenter.initialize(allParticipantsView, STRING_ID);
 
         verify(allParticipantsView).hideEmpty();
     }
 
-    @Test
-    public void shouldShowLoadingWhenLoadAllParticipants() throws Exception {
+    @Test public void shouldShowLoadingWhenLoadAllParticipants() throws Exception {
         presenter.initialize(allParticipantsView, STRING_ID);
 
         verify(allParticipantsView).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenAllParticipantsLoaded() throws Exception {
+    @Test public void shouldHideLoadingWhenAllParticipantsLoaded() throws Exception {
         setupAllParticipantsEmptyCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -80,8 +80,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).hideLoading();
     }
 
-    @Test
-    public void shouldShowEmptyWhenAllParticipantsReceivesEmptyList() throws Exception {
+    @Test public void shouldShowEmptyWhenAllParticipantsReceivesEmptyList() throws Exception {
         setupAllParticipantsEmptyCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -89,8 +88,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).showEmpty();
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenAllParticipantsLoaded() throws Exception {
+    @Test public void shouldRenderParticipantsWhenAllParticipantsLoaded() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -98,8 +96,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).renderAllParticipants(anyList());
     }
 
-    @Test
-    public void shouldShowErrorWhenAllParticipantsLoadedAndServerCommunicationException() throws Exception {
+    @Test public void shouldShowErrorWhenAllParticipantsLoadedAndServerCommunicationException() throws Exception {
         setupAllParticipantsErrorCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -107,8 +104,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).showError(anyString());
     }
 
-    @Test
-    public void shouldHideEmptyWhenRefreshAllParticipants() throws Exception {
+    @Test public void shouldHideEmptyWhenRefreshAllParticipants() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.refreshAllParticipants();
@@ -116,8 +112,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).hideEmpty();
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenRefreshAllParticipants() throws Exception {
+    @Test public void shouldRenderParticipantsWhenRefreshAllParticipants() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.refreshAllParticipants();
@@ -125,18 +120,18 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).renderAllParticipants(anyList());
     }
 
-    @Test
-    public void shouldSelectStreamWhenResume() throws Exception {
+    @Test public void shouldSelectStreamWhenResume() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.pause();
         presenter.resume();
 
-        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        verify(selectStreamInteractor).selectStream(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenFollowAParticipant() throws Exception {
+    @Test public void shouldRenderParticipantsWhenFollowAParticipant() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -145,8 +140,7 @@ public class AllParticipantsPresenterTest {
         verify(allParticipantsView).renderAllParticipants(anyList());
     }
 
-    @Test
-    public void shouldRenderParticipantsWhenUnfollowAParticipant() throws Exception {
+    @Test public void shouldRenderParticipantsWhenUnfollowAParticipant() throws Exception {
         setupAllParticipantsCallback();
 
         presenter.initialize(allParticipantsView, STRING_ID);
@@ -163,11 +157,12 @@ public class AllParticipantsPresenterTest {
                 callback.onLoaded(noParticipants());
                 return null;
             }
-        }).when(getAllParticipantsInteractor).obtainAllParticipants(anyString(),
-          anyLong(),
-          anyBoolean(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getAllParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyLong(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupAllParticipantsCallback() {
@@ -178,11 +173,12 @@ public class AllParticipantsPresenterTest {
                 callback.onLoaded(participants());
                 return null;
             }
-        }).when(getAllParticipantsInteractor).obtainAllParticipants(anyString(),
-          anyLong(),
-          anyBoolean(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getAllParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyLong(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupAllParticipantsErrorCallback() {
@@ -193,11 +189,12 @@ public class AllParticipantsPresenterTest {
                 });
                 return null;
             }
-        }).when(getAllParticipantsInteractor).obtainAllParticipants(anyString(),
-          anyLong(),
-          anyBoolean(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getAllParticipantsInteractor)
+          .obtainAllParticipants(anyString(),
+            anyLong(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private List<User> participants() {
@@ -222,6 +219,4 @@ public class AllParticipantsPresenterTest {
         userModel.setIdUser(ID_USER);
         return userModel;
     }
-
-
 }

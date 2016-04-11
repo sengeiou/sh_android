@@ -3,16 +3,13 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.TimeUtils;
-
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 public class AndroidTimeUtils implements TimeUtils {
@@ -23,7 +20,7 @@ public class AndroidTimeUtils implements TimeUtils {
     private long currentOffset = 0L;
 
     @Override public long getCurrentTime() {
-        return getSystemCurrentTime()+ currentOffset;
+        return getSystemCurrentTime() + currentOffset;
     }
 
     @Override public void setCurrentTime(long timeMilliseconds) {
@@ -34,47 +31,51 @@ public class AndroidTimeUtils implements TimeUtils {
         return System.currentTimeMillis();
     }
 
-
     public static TimeZone getDisplayTimeZone() {
         return TimeZone.getDefault();
     }
 
-
     public String getElapsedTime(Context context, long publishTime) {
-        long difference =getCurrentTime() - publishTime;
+        long difference = getCurrentTime() - publishTime;
 
-        long days =  TimeUnit.MILLISECONDS.toDays(difference);
+        long days = TimeUnit.MILLISECONDS.toDays(difference);
         Resources res = context.getResources();
-        if(days>0){
+        if (days > 0) {
             String time = res.getString(R.string.days);
-            return String.valueOf(days+time);
+            return String.valueOf(days + time);
         }
 
-       long hours = TimeUnit.MILLISECONDS.toHours(difference);
-       if (hours > 0) {
+        long hours = TimeUnit.MILLISECONDS.toHours(difference);
+        if (hours > 0) {
             String time = res.getString(R.string.hours);
-            return String.valueOf(hours+time);
-       }
-       long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
-        if(minutes>0){
+            return String.valueOf(hours + time);
+        }
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
+        if (minutes > 0) {
             String time = res.getString(R.string.minutes);
-            return String.valueOf(minutes+time);
+            return String.valueOf(minutes + time);
         }
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
-        if(seconds>0){
+        if (seconds > 0) {
             String time = res.getString(R.string.seconds);
-            return String.valueOf(seconds+time);
+            return String.valueOf(seconds + time);
         }
         return res.getString(R.string.now);
     }
+
     /**
      * @return String short format for a date
      */
     public static String formatShortDate(Context context, Date date) {
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
-        return DateUtils.formatDateRange(context, formatter, date.getTime(), date.getTime(), DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR, getDisplayTimeZone().getID()).toString();
+        return DateUtils.formatDateRange(context,
+          formatter,
+          date.getTime(),
+          date.getTime(),
+          DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR,
+          getDisplayTimeZone().getID()).toString();
     }
 
     /**
@@ -89,12 +90,11 @@ public class AndroidTimeUtils implements TimeUtils {
         return mFormat.format(date);
     }
 
-
-    public static long getMilisecondsByDaysNumber(Integer daysNumber){
+    public static long getMilisecondsByDaysNumber(Integer daysNumber) {
         return TimeUnit.MILLISECONDS.convert(daysNumber, TimeUnit.DAYS);
     }
 
-    public static Long getNDaysAgo(Integer daysNumber){
+    public static Long getNDaysAgo(Integer daysNumber) {
         long daysInMillis = getMilisecondsByDaysNumber(daysNumber);
         return System.currentTimeMillis() - daysInMillis;
     }

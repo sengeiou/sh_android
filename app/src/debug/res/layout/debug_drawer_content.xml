@@ -244,16 +244,13 @@
       style="@style/Widget.U2020.DebugDrawer.RowWidget"
       android:layout_gravity="start|center_vertical" />
 
-    <TextView
-      android:layout_gravity="start|center_vertical"
+    <TextView android:layout_gravity="start|center_vertical"
       android:text="Capture intents"
-      style="@style/Widget.U2020.DebugDrawer.RowTitle"
-      />
-    <Switch
-      android:id="@+id/debug_capture_intents"
+      style="@style/Widget.U2020.DebugDrawer.RowTitle" />
+
+    <Switch android:id="@+id/debug_capture_intents"
       android:layout_gravity="start|center_vertical"
-      style="@style/Widget.U2020.DebugDrawer.RowWidget"
-      />
+      style="@style/Widget.U2020.DebugDrawer.RowWidget" />
 
     <!-- LOGGING SECTION -->
 
@@ -318,7 +315,7 @@
       android:layout_width="0dp"
       android:layout_gravity="start|center_vertical|fill_horizontal" />
 
-  <TextView style="@style/Widget.U2020.DebugDrawer.RowTitle"
+    <TextView style="@style/Widget.U2020.DebugDrawer.RowTitle"
       android:layout_gravity="start|center_vertical"
       android:text="Branch" />
 

@@ -6,18 +6,16 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.shootr.mobile.domain.asserts.QueuedShotAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;

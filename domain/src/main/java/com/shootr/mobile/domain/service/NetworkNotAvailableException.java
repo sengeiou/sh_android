@@ -11,5 +11,4 @@ public class NetworkNotAvailableException extends ShootrException {
     public NetworkNotAvailableException(Throwable cause) {
         super(cause);
     }
-
 }

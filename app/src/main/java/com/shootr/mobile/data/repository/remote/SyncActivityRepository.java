@@ -10,10 +10,8 @@ import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -27,10 +25,8 @@ public class SyncActivityRepository implements ActivityRepository {
     private final ShotRepository localShotRepository;
 
     @Inject public SyncActivityRepository(@Local ActivityDataSource localActivityDataSource,
-      @Remote ActivityDataSource remoteActivityDataSource,
-      ActivityEntityMapper activityEntityMapper,
-      @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository) {
+      @Remote ActivityDataSource remoteActivityDataSource, ActivityEntityMapper activityEntityMapper,
+      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository) {
         this.localActivityDataSource = localActivityDataSource;
         this.remoteActivityDataSource = remoteActivityDataSource;
         this.activityEntityMapper = activityEntityMapper;
@@ -45,8 +41,7 @@ public class SyncActivityRepository implements ActivityRepository {
         return activityEntityMapper.transform(activities);
     }
 
-    @Override
-    public Activity getActivity(String activityId) {
+    @Override public Activity getActivity(String activityId) {
         ActivityEntity activity = remoteActivityDataSource.getActivity(activityId);
         bindActivityShot(activity);
         return activityEntityMapper.transform(activity);

@@ -10,10 +10,8 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetUserFollowersInteractor implements Interactor {
@@ -33,9 +31,10 @@ public class GetUserFollowersInteractor implements Interactor {
     private ErrorCallback errorCallback;
     private Integer page;
 
-    @Inject public GetUserFollowersInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+    @Inject
+    public GetUserFollowersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
@@ -43,7 +42,8 @@ public class GetUserFollowersInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void obtainFollowers(String idUser, Integer page, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainFollowers(String idUser, Integer page, Callback<List<User>> callback,
+      ErrorCallback errorCallback) {
         this.idUser = idUser;
         this.page = page;
         this.callback = callback;
@@ -70,7 +70,7 @@ public class GetUserFollowersInteractor implements Interactor {
     private List<User> setRelationshipInUsers(List<User> usersFollowers, String currentUserId,
       List<User> currentUserFollowing) {
         List<User> users = new ArrayList<>();
-        for(User user: usersFollowers){
+        for (User user : usersFollowers) {
             String idUser = user.getIdUser();
             boolean isMe = idUser.equals(currentUserId);
             if (isMe) {

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.model;
 
-
 public class WatchingRequestModel {
 
     private String streamId;
@@ -40,21 +39,19 @@ public class WatchingRequestModel {
         this.subtitle = subtitle;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o){
+    @Override public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         WatchingRequestModel that = (WatchingRequestModel) o;
         return streamId.equals(that.streamId);
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return streamId.hashCode();
     }
 }

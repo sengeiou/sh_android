@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
-
 import java.util.List;
 
 public interface ProfileView {

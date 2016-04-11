@@ -9,12 +9,10 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetMentionedPeopleInteractor implements Interactor {
@@ -27,9 +25,10 @@ public class GetMentionedPeopleInteractor implements Interactor {
     private String mention;
     private Callback<List<User>> callback;
 
-    @Inject public GetMentionedPeopleInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+    @Inject
+    public GetMentionedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
@@ -68,7 +67,9 @@ public class GetMentionedPeopleInteractor implements Interactor {
     private List<User> getUsersPossiblyMentioned(List<User> userList) {
         List<User> users = new ArrayList<>();
         for (User user : userList) {
-            if (user.getUsername().toLowerCase().contains(mention.toLowerCase()) || user.getName().toLowerCase().contains(mention.toLowerCase())) {
+            if (user.getUsername().toLowerCase().contains(mention.toLowerCase()) || user.getName()
+              .toLowerCase()
+              .contains(mention.toLowerCase())) {
                 users.add(user);
             }
         }
@@ -98,5 +99,4 @@ public class GetMentionedPeopleInteractor implements Interactor {
             return user1.getUsername().compareToIgnoreCase(user2.getUsername());
         }
     }
-
 }

@@ -2,10 +2,9 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.views.MeActivityTimelineView;
-
 import java.util.List;
 
-public class NullMeActivityTimelineView implements MeActivityTimelineView{
+public class NullMeActivityTimelineView implements MeActivityTimelineView {
 
     @Override public void setActivities(List<ActivityModel> activities, String currentUserId) {
         /* no-op */
@@ -62,5 +61,4 @@ public class NullMeActivityTimelineView implements MeActivityTimelineView{
     @Override public void showError(String message) {
         /* no-op */
     }
-
 }

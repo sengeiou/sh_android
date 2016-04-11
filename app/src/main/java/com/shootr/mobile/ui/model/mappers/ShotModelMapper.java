@@ -2,10 +2,8 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.ui.model.ShotModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShotModelMapper {

@@ -16,7 +16,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
-
 import javax.inject.Inject;
 
 public class UpdateUserProfileInteractor implements Interactor {
@@ -31,9 +30,10 @@ public class UpdateUserProfileInteractor implements Interactor {
     private Interactor.ErrorCallback errorCallback;
     private User user;
 
-    @Inject public UpdateUserProfileInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository) {
+    @Inject
+    public UpdateUserProfileInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;

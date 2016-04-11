@@ -3,7 +3,6 @@ package com.shootr.mobile.db.manager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import javax.inject.Inject;
 
 public abstract class AbstractManager {
@@ -22,10 +21,10 @@ public abstract class AbstractManager {
         return dbHelper.getReadableDatabase();
     }
 
-    public  boolean isTableEmpty( String entity) {
+    public boolean isTableEmpty(String entity) {
         boolean res = true;
-        String raw_query = "SELECT * FROM "+ entity;
-        Cursor c = getReadableDatabase().rawQuery(raw_query, new String[] { });
+        String raw_query = "SELECT * FROM " + entity;
+        Cursor c = getReadableDatabase().rawQuery(raw_query, new String[] {});
         if (c.getCount() > 0) {
             res = false;
         }
@@ -37,7 +36,8 @@ public abstract class AbstractManager {
     public String createListPlaceholders(int length) {
         if (length < 1) {
             // It will lead to an invalid query anyway ..
-            throw new IllegalArgumentException("At least one placeholder must be created, otherwise this method is useless.");
+            throw new IllegalArgumentException(
+              "At least one placeholder must be created, otherwise this method is useless.");
         } else {
             StringBuilder sb = new StringBuilder(length * 2 - 1);
             sb.append("?");
@@ -47,6 +47,4 @@ public abstract class AbstractManager {
             return sb.toString();
         }
     }
-
-
 }

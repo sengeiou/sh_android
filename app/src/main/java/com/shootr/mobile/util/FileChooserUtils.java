@@ -24,8 +24,7 @@ public class FileChooserUtils {
      * @param uri The Uri to query.
      * @author paulburke
      */
-    @SuppressLint("NewApi")
-    public static String getPath(final Context context, final Uri uri) {
+    @SuppressLint("NewApi") public static String getPath(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -48,9 +47,7 @@ public class FileChooserUtils {
                   ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];

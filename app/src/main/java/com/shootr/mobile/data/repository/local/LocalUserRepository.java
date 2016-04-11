@@ -12,11 +12,9 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalUserRepository implements UserRepository {
@@ -30,12 +28,9 @@ public class LocalUserRepository implements UserRepository {
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
 
-    @Inject public LocalUserRepository(SessionRepository sessionRepository,
-      @Local UserDataSource userDataSource,
-      @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource,
-      UserEntityMapper userEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
+    @Inject public LocalUserRepository(SessionRepository sessionRepository, @Local UserDataSource userDataSource,
+      @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource, UserEntityMapper userEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
         this.sessionRepository = sessionRepository;
         this.localUserDataSource = userDataSource;
         this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
@@ -45,8 +40,8 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getPeople() {
-        List<UserEntity> userEntities = localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE,
-          PAGE_SIZE);
+        List<UserEntity> userEntities =
+          localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE, PAGE_SIZE);
         return transformUserEntitiesForPeople(userEntities);
     }
 
@@ -57,8 +52,7 @@ public class LocalUserRepository implements UserRepository {
           isFollowing(id));
     }
 
-    @Override
-    public User getUserByUsername(String username){
+    @Override public User getUserByUsername(String username) {
         return userEntityMapper.transform(localUserDataSource.getUserByUsername(username));
     }
 
@@ -77,8 +71,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<SuggestedPeople> getSuggestedPeople(String locale) {
-        List<SuggestedPeopleEntity> suggestedPeople =
-          localSuggestedPeopleDataSource.getSuggestedPeople(locale);
+        List<SuggestedPeopleEntity> suggestedPeople = localSuggestedPeopleDataSource.getSuggestedPeople(locale);
         return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 
@@ -90,8 +83,7 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("Find Participants has no local implementation");
     }
 
-    @Override
-    public void updateWatch(User user) {
+    @Override public void updateWatch(User user) {
         UserEntity entity = userEntityMapper.transform(user);
         localUserDataSource.updateWatch(entity);
     }
@@ -112,8 +104,7 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
-    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
-      throws IOException {
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException {
         return transformUserEntitiesForPeople(localUserDataSource.findFriends(searchString, pageOffset, locale));
     }
 
@@ -122,7 +113,8 @@ public class LocalUserRepository implements UserRepository {
         String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
             String idUser = localUserEntity.getIdUser();
-            User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(idUser), isFollowing(idUser));
+            User user =
+              userEntityMapper.transform(localUserEntity, currentUserId, isFollower(idUser), isFollowing(idUser));
             userList.add(user);
         }
         return userList;

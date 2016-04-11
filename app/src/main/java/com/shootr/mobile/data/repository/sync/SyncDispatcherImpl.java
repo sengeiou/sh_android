@@ -1,9 +1,7 @@
 package com.shootr.mobile.data.repository.sync;
 
 import java.util.Collection;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class SyncDispatcherImpl implements SyncDispatcher {
@@ -36,7 +34,8 @@ public class SyncDispatcherImpl implements SyncDispatcher {
                 Timber.d("Dispatching sync in %s", syncableRepository.getClass().getSimpleName());
                 syncableRepository.dispatchSync();
             } catch (Exception e) {
-                Timber.e(e, "Synchronization failed for repository %s. Will retry with in nex trigger.",
+                Timber.e(e,
+                  "Synchronization failed for repository %s. Will retry with in nex trigger.",
                   syncableRepository.toString());
                 anySyncFailed = true;
             }

@@ -13,17 +13,15 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
@@ -46,16 +44,21 @@ public class GenericActivityTimelinePresenterTest {
     @Mock SessionRepository sessionRepository;
     @Mock GenericActivityTimelineView view;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ActivityModelMapper activityModelMapper = new ActivityModelMapper(shotModelMapper);
-        genericActivityTimelinePresenter = new GenericActivityTimelinePresenter(activityTimelineInteractorWrapper, activityModelMapper, bus, errorMessageFactory, poller, badgeCount, sessionRepository);
+        genericActivityTimelinePresenter = new GenericActivityTimelinePresenter(activityTimelineInteractorWrapper,
+          activityModelMapper,
+          bus,
+          errorMessageFactory,
+          poller,
+          badgeCount,
+          sessionRepository);
         genericActivityTimelinePresenter.setView(view);
     }
 
-    @Test
-    public void shouldSetActivitiesInViewWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
+    @Test public void shouldSetActivitiesInViewWhenInitializeAllActivitiesAndTimelineNotEmptyCallback()
+      throws Exception {
         setupLoadTimelineCallback();
 
         genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
@@ -63,8 +66,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).setActivities(anyList(), anyString());
     }
 
-    @Test
-    public void shouldHideEmptyWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
+    @Test public void shouldHideEmptyWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
         setupLoadTimelineCallback();
 
         genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
@@ -72,8 +74,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideEmpty();
     }
 
-    @Test
-    public void shouldShowActivitiesWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
+    @Test public void shouldShowActivitiesWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
         setupLoadTimelineCallback();
 
         genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
@@ -81,8 +82,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).showActivities();
     }
 
-    @Test
-    public void shouldShowEmptyWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
+    @Test public void shouldShowEmptyWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
         setupLoadEmptyTimelineCallback();
 
         genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
@@ -90,8 +90,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).showEmpty();
     }
 
-    @Test
-    public void shouldHideActivitiesWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
+    @Test public void shouldHideActivitiesWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
         setupLoadEmptyTimelineCallback();
 
         genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
@@ -99,15 +98,13 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideActivities();
     }
 
-    @Test
-    public void shouldShowLoadingWhenRefresh() throws Exception {
+    @Test public void shouldShowLoadingWhenRefresh() throws Exception {
         genericActivityTimelinePresenter.refresh();
 
         verify(view).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenRefresh() throws Exception {
+    @Test public void shouldHideLoadingWhenRefresh() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -115,8 +112,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideEmpty();
     }
 
-    @Test
-    public void shouldAddNewActivitiesWhenRefresh() throws Exception {
+    @Test public void shouldAddNewActivitiesWhenRefresh() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -124,8 +120,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).addNewActivities(anyList());
     }
 
-    @Test
-    public void shouldShowActivitiesNewActivitiesWhenRefresh() throws Exception {
+    @Test public void shouldShowActivitiesNewActivitiesWhenRefresh() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -133,8 +128,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).showActivities();
     }
 
-    @Test
-    public void shouldHideLoadingWhenRefreshAndRefreshTimelineCallback() throws Exception {
+    @Test public void shouldHideLoadingWhenRefreshAndRefreshTimelineCallback() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -142,8 +136,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideLoading();
     }
 
-    @Test
-    public void shouldHideLoadingActivitiyWhenRefreshAndRefreshTimelineCallback() throws Exception {
+    @Test public void shouldHideLoadingActivitiyWhenRefreshAndRefreshTimelineCallback() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -151,8 +144,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideLoadingActivity();
     }
 
-    @Test
-    public void shouldAddNewActivitiesWhenRefreshTimelineCallback() throws Exception {
+    @Test public void shouldAddNewActivitiesWhenRefreshTimelineCallback() throws Exception {
         setupRefreshTimelineCallback();
 
         genericActivityTimelinePresenter.refresh();
@@ -160,8 +152,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideLoadingActivity();
     }
 
-    @Test
-    public void shouldHideLoadingOldActivitiesWhenObtainOlderActivitiesTimelineCallback() throws Exception {
+    @Test public void shouldHideLoadingOldActivitiesWhenObtainOlderActivitiesTimelineCallback() throws Exception {
         setupOlderTimelineCallback();
 
         genericActivityTimelinePresenter.showingLastActivity(activityModel());
@@ -169,8 +160,7 @@ public class GenericActivityTimelinePresenterTest {
         verify(view).hideLoadingOldActivities();
     }
 
-    @Test
-    public void shouldAddOldActivitiesWhenObtainOlderActivitiesTimelineCallback() throws Exception {
+    @Test public void shouldAddOldActivitiesWhenObtainOlderActivitiesTimelineCallback() throws Exception {
         setupOlderTimelineCallback();
 
         genericActivityTimelinePresenter.showingLastActivity(activityModel());
@@ -182,11 +172,15 @@ public class GenericActivityTimelinePresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ActivityTimeline> callback =
-                        (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[2];
+                  (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[2];
                 callback.onLoaded(activityTimeline());
                 return null;
             }
-        }).when(activityTimelineInteractorWrapper).obtainOlderTimeline(anyBoolean(), anyLong(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(activityTimelineInteractorWrapper)
+          .obtainOlderTimeline(anyBoolean(),
+            anyLong(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private ActivityModel activityModel() {
@@ -199,19 +193,19 @@ public class GenericActivityTimelinePresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ActivityTimeline> callback =
-                        (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
+                  (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
                 callback.onLoaded(activityTimeline());
                 return null;
             }
-        }).when(activityTimelineInteractorWrapper).refreshTimeline(anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(activityTimelineInteractorWrapper)
+          .refreshTimeline(anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
-
 
     private void setupLoadTimelineCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ActivityTimeline> callback =
-                        (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
+                  (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
                 callback.onLoaded(activityTimeline());
                 return null;
             }
@@ -220,10 +214,9 @@ public class GenericActivityTimelinePresenterTest {
 
     private void setupLoadEmptyTimelineCallback() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ActivityTimeline> callback =
-                        (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
+                  (Interactor.Callback<ActivityTimeline>) invocation.getArguments()[1];
                 callback.onLoaded(emptyTimeline());
                 return null;
             }

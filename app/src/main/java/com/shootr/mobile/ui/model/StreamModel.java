@@ -61,8 +61,7 @@ public class StreamModel implements Serializable {
         this.topic = topic;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return idStream.hashCode();
     }
 
@@ -154,8 +153,7 @@ public class StreamModel implements Serializable {
         this.uniqueShots = uniqueShots;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) {
             return true;
         }

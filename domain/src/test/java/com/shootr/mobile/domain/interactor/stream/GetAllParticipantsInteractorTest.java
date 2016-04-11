@@ -8,14 +8,12 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.interactor.user.GetAllParticipantsInteractor;
 import com.shootr.mobile.domain.repository.UserRepository;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,12 +39,14 @@ public class GetAllParticipantsInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetAllParticipantsInteractor(interactorHandler, remoteUserRepository, postExecutionThread);
+        interactor =
+          new GetAllParticipantsInteractor(interactorHandler, remoteUserRepository, postExecutionThread);
     }
 
     @Test public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenNotPaginating() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
-        when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
+        when(remoteUserRepository.getAllParticipants(ID_STREAM,
+          MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 
         interactor.obtainAllParticipants(ID_STREAM, MAX_JOIN_DATE, NOT_PAGINATING, callback, errorCallback);
 
@@ -55,7 +55,8 @@ public class GetAllParticipantsInteractorTest {
 
     @Test public void shouldCallbackUserFollowedAndNotFollowedInStreamWhenPaginating() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
-        when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
+        when(remoteUserRepository.getAllParticipants(ID_STREAM,
+          MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 
         interactor.obtainAllParticipants(ID_STREAM, MAX_JOIN_DATE, IS_PAGINATING, callback, errorCallback);
 
@@ -64,7 +65,8 @@ public class GetAllParticipantsInteractorTest {
 
     @Test public void shouldHaveUsersOrderedByJoinStreamDateWhenAllParticipantsLoaded() {
         when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
-        when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
+        when(remoteUserRepository.getAllParticipants(ID_STREAM,
+          MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
 
         interactor.obtainAllParticipants(ID_STREAM, MAX_JOIN_DATE, NOT_PAGINATING, callback, errorCallback);
 

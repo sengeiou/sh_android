@@ -8,27 +8,25 @@ import com.shootr.mobile.data.repository.remote.SyncActivityRepository;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
-    SyncActivityRepository.class,
-    LocalActivityRepository.class,
-    ServiceActivityDataSource.class,
+    SyncActivityRepository.class, LocalActivityRepository.class, ServiceActivityDataSource.class,
     DatabaseActivityDataSource.class,
   },
   complete = false,
-  library = true)
-public class ActivityRepositoryModule {
-    @Provides @Singleton @Remote ActivityRepository provideRemoteActivityRepository(SyncActivityRepository syncActivityRepository) {
+  library = true) public class ActivityRepositoryModule {
+
+    @Provides @Singleton @Remote ActivityRepository provideRemoteActivityRepository(
+      SyncActivityRepository syncActivityRepository) {
         return syncActivityRepository;
     }
 
-    @Provides @Singleton @Local ActivityRepository provideLocalActivityRepository(LocalActivityRepository localActivityRepository) {
+    @Provides @Singleton @Local ActivityRepository provideLocalActivityRepository(
+      LocalActivityRepository localActivityRepository) {
         return localActivityRepository;
     }
 
@@ -37,7 +35,8 @@ public class ActivityRepositoryModule {
         return serviceActivityDataSource;
     }
 
-    @Provides @Singleton @Local ActivityDataSource provideLocalActivityDataSource(DatabaseActivityDataSource databaseActivityDataSource) {
+    @Provides @Singleton @Local ActivityDataSource provideLocalActivityDataSource(
+      DatabaseActivityDataSource databaseActivityDataSource) {
         return databaseActivityDataSource;
     }
 }

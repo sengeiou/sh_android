@@ -4,9 +4,7 @@ import com.facebook.stetho.dumpapp.DumpException;
 import com.facebook.stetho.dumpapp.DumperContext;
 import com.facebook.stetho.dumpapp.DumperPlugin;
 import com.shootr.mobile.data.repository.sync.SyncDispatcher;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class SyncDispacherPlugin implements DumperPlugin {
@@ -17,13 +15,11 @@ public class SyncDispacherPlugin implements DumperPlugin {
         this.syncDispatcher = syncDispatcher;
     }
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return "dispatchSync";
     }
 
-    @Override
-    public void dump(DumperContext dumpContext) throws DumpException {
+    @Override public void dump(DumperContext dumpContext) throws DumpException {
         StethoTree stethoTree = new StethoTree(dumpContext.getStdout());
         Timber.plant(stethoTree);
         syncDispatcher.triggerSync();

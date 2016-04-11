@@ -4,9 +4,7 @@ import com.shootr.mobile.data.bus.ServerDown;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ServerDownErrorInterceptor implements Interceptor {
@@ -15,13 +13,11 @@ public class ServerDownErrorInterceptor implements Interceptor {
 
     private final BusPublisher busPublisher;
 
-    @Inject
-    ServerDownErrorInterceptor(BusPublisher busPublisher) {
+    @Inject ServerDownErrorInterceptor(BusPublisher busPublisher) {
         this.busPublisher = busPublisher;
     }
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
         if (response.code() == CODE_SERVER_DOWN) {
             busPublisher.post(new ServerDown.Event());

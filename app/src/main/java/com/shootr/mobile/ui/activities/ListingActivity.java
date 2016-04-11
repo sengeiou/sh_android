@@ -11,7 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ListingAdapter;
@@ -25,15 +28,8 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
@@ -68,14 +64,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        analyticsTool.analyticsStart(getBaseContext(),analyticsScreenuserStreams);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenuserStreams);
         Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
         adapter = new ListingAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
-            @Override
-            public boolean onStreamLongClick(StreamResultModel stream) {
+
+            @Override public boolean onStreamLongClick(StreamResultModel stream) {
                 openContextualMenu(stream);
                 return true;
             }
@@ -113,8 +109,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         /* no-op */
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
             String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
@@ -122,14 +117,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         }
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         presenter.resume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         analyticsTool.analyticsStop(getBaseContext(), this);
         presenter.pause();
@@ -184,17 +177,15 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         feedbackMessage.show(getView(), sharedStream);
     }
 
-    @Override
-    public void showSectionTitles() {
+    @Override public void showSectionTitles() {
         adapter.setShowTitles(true);
     }
 
-    @Override
-    public void askRemoveStreamConfirmation() {
+    @Override public void askRemoveStreamConfirmation() {
         new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                 presenter.removeStream();
+                  presenter.removeStream();
               }
           })
           .setNegativeButton(R.string.cancel, null)
@@ -230,7 +221,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
         builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
-                Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                Intent intent =
+                  NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
             }
         });
@@ -246,7 +238,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
         builder.addAction(R.string.edit_stream_listing_context_menu, new Runnable() {
             @Override public void run() {
-                Intent intent = NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
+                Intent intent =
+                  NewStreamActivity.newIntent(ListingActivity.this, stream.getStreamModel().getIdStream());
                 startActivity(intent);
             }
         });
@@ -273,12 +266,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     private void addBaseContextMenuOptions(CustomContextMenu.Builder builder, final StreamResultModel stream) {
-        builder.addAction(R.string.add_to_favorites_menu_title,
-          new Runnable() {
-              @Override public void run() {
-                  presenter.addToFavorite(stream);
-              }
-          }).addAction(R.string.share_via_shootr, new Runnable() {
+        builder.addAction(R.string.add_to_favorites_menu_title, new Runnable() {
+            @Override public void run() {
+                presenter.addToFavorite(stream);
+            }
+        }).addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }

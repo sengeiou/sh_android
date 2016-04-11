@@ -1,10 +1,8 @@
 package com.shootr.mobile.util;
 
 import android.content.res.Resources;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
-
 import javax.inject.Inject;
 
 public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {
@@ -15,13 +13,11 @@ public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {
         this.resources = resources;
     }
 
-    @Override
-    public String formatJustNow() {
+    @Override public String formatJustNow() {
         return resources.getString(R.string.entered_just_now);
     }
 
-    @Override
-    public String formatMinutesAgo(int minutes) {
+    @Override public String formatMinutesAgo(int minutes) {
         if (minutes > 1) {
             return resources.getString(R.string.entered_minutes_ago, minutes);
         } else {
@@ -29,8 +25,7 @@ public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {
         }
     }
 
-    @Override
-    public String formatHoursAgo(int hours) {
+    @Override public String formatHoursAgo(int hours) {
         if (hours > 1) {
             return resources.getString(R.string.entered_hours_ago, hours);
         } else {
@@ -38,8 +33,7 @@ public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {
         }
     }
 
-    @Override
-    public String formatDaysAgo(int days) {
+    @Override public String formatDaysAgo(int days) {
         if (days > 1) {
             return resources.getString(R.string.entered_days_ago, days);
         } else {
@@ -47,8 +41,7 @@ public class ResourcesDateRangeTextProvider implements DateRangeTextProvider {
         }
     }
 
-    @Override
-    public String formatLongTime() {
+    @Override public String formatLongTime() {
         return resources.getString(R.string.entered_long_time_ago);
     }
 }

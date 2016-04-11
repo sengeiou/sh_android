@@ -2,7 +2,6 @@ package com.shootr.mobile.data.entity;
 
 public class ShotQueueEntity extends ShotEntity {
 
-
     private Long idQueue;
     private Integer failed;
     private String imageFile;

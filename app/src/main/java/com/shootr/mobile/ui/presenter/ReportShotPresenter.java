@@ -16,9 +16,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
@@ -38,8 +36,9 @@ public class ReportShotPresenter implements Presenter {
     private ReportShotView reportShotView;
     private String idUserToBlock;
 
-    @Inject public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor,
-      ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository, UserModelMapper userModelMapper,
+    @Inject
+    public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor, ErrorMessageFactory errorMessageFactory,
+      SessionRepository sessionRepository, UserModelMapper userModelMapper,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
       UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
       BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
@@ -76,7 +75,7 @@ public class ReportShotPresenter implements Presenter {
         }
     }
 
-    public boolean isEnglishLocale(String locale){
+    public boolean isEnglishLocale(String locale) {
         return locale.equals(EN_LOCALE);
     }
 
@@ -104,7 +103,7 @@ public class ReportShotPresenter implements Presenter {
         }
     }
 
-    public void showAuthorContextMenu(ShotModel shot){
+    public void showAuthorContextMenu(ShotModel shot) {
         if (isShotVisible(shot)) {
             reportShotView.showAuthorContextMenuWithPin(shot);
         } else {
@@ -259,9 +258,9 @@ public class ReportShotPresenter implements Presenter {
     }
 
     public void reportClicked(String language, String sessionToken, ShotModel shotModel) {
-        if(isEnglishLocale(language)){
+        if (isEnglishLocale(language)) {
             reportShotView.goToReport(sessionToken, shotModel);
-        }else{
+        } else {
             reportShotView.showAlertLanguageSupportDialog(sessionToken, shotModel);
         }
     }

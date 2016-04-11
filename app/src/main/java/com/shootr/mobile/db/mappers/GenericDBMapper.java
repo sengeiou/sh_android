@@ -2,10 +2,8 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.db.DatabaseContract;
-
 import java.util.Date;
 
 public abstract class GenericDBMapper {
@@ -26,12 +24,12 @@ public abstract class GenericDBMapper {
 
     protected void setSynchronizedtoContentValues(Synchronized s, ContentValues cv) {
         Date birth = s.getBirth();
-        cv.put(DatabaseContract.SyncColumns.BIRTH, birth!=null ? birth.getTime() : null);
+        cv.put(DatabaseContract.SyncColumns.BIRTH, birth != null ? birth.getTime() : null);
         Date deleted = s.getDeleted();
-        cv.put(DatabaseContract.SyncColumns.DELETED, deleted!=null ? deleted.getTime() : null);
+        cv.put(DatabaseContract.SyncColumns.DELETED, deleted != null ? deleted.getTime() : null);
         Date modified = s.getModified();
         if (modified != null || birth != null) {
-            cv.put(DatabaseContract.SyncColumns.MODIFIED, modified!=null ? modified.getTime() : birth.getTime());
+            cv.put(DatabaseContract.SyncColumns.MODIFIED, modified != null ? modified.getTime() : birth.getTime());
         }
 
         cv.put(DatabaseContract.SyncColumns.REVISION, s.getRevision());

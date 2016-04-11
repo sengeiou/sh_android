@@ -9,14 +9,12 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -43,7 +41,10 @@ public class FindFriendsServerInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new FindFriendsServerInteractor(interactorHandler, remoteUserRepository, postExecutionThread, localeProvider);
+        interactor = new FindFriendsServerInteractor(interactorHandler,
+          remoteUserRepository,
+          postExecutionThread,
+          localeProvider);
     }
 
     @Test public void shouldOnLoadUsersWhenFindFriends() throws Exception {
@@ -62,7 +63,7 @@ public class FindFriendsServerInteractorTest {
         verify(callback).onLoaded(anyList());
     }
 
-    private List<User> userList(){
+    private List<User> userList() {
         ArrayList<User> users = new ArrayList<>();
 
         users.add(user());
@@ -70,7 +71,7 @@ public class FindFriendsServerInteractorTest {
         return users;
     }
 
-    private User user(){
+    private User user() {
         User user = new User();
 
         user.setIdUser(USER_ID);
@@ -79,5 +80,4 @@ public class FindFriendsServerInteractorTest {
 
         return user;
     }
-
 }

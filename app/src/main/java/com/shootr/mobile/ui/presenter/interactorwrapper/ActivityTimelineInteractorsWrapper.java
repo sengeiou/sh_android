@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.timeline.GetActivityTimelineInteracto
 import com.shootr.mobile.domain.interactor.timeline.GetOlderActivityTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshActivityTimelineInteractor;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import javax.inject.Inject;
 
 public class ActivityTimelineInteractorsWrapper {
@@ -27,15 +26,25 @@ public class ActivityTimelineInteractorsWrapper {
     }
 
     public void loadTimeline(Boolean isUserActivityTimeline, Interactor.Callback<ActivityTimeline> callback) {
-        getActivityTimelineInteractor.loadActivityTimeline(isUserActivityTimeline, localeProvider.getLocale(), callback);
+        getActivityTimelineInteractor.loadActivityTimeline(isUserActivityTimeline,
+          localeProvider.getLocale(),
+          callback);
     }
 
-    public void refreshTimeline(Boolean isUserActivityTimeline, Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshActivityTimelineInteractor.refreshActivityTimeline(isUserActivityTimeline, localeProvider.getLocale(), callback, errorCallback);
+    public void refreshTimeline(Boolean isUserActivityTimeline, Interactor.Callback<ActivityTimeline> callback,
+      Interactor.ErrorCallback errorCallback) {
+        refreshActivityTimelineInteractor.refreshActivityTimeline(isUserActivityTimeline,
+          localeProvider.getLocale(),
+          callback,
+          errorCallback);
     }
 
-    public void obtainOlderTimeline(Boolean isUserActivityTimeline, long currentOldestDate, Interactor.Callback<ActivityTimeline> callback,
-                                    Interactor.ErrorCallback errorCallback) {
-        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(isUserActivityTimeline, currentOldestDate, localeProvider.getLocale(), callback, errorCallback);
+    public void obtainOlderTimeline(Boolean isUserActivityTimeline, long currentOldestDate,
+      Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
+        getOlderActivityTimelineInteractor.loadOlderActivityTimeline(isUserActivityTimeline,
+          currentOldestDate,
+          localeProvider.getLocale(),
+          callback,
+          errorCallback);
     }
 }

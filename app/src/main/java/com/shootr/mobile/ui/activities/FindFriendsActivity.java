@@ -15,7 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -25,15 +27,9 @@ import com.shootr.mobile.ui.views.FindFriendsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.io.Serializable;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 
 public class FindFriendsActivity extends BaseToolbarDecoratedActivity
   implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback {
@@ -86,7 +82,8 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);
-        new ListViewScrollObserver(resultsListView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+        new ListViewScrollObserver(resultsListView)
+          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 /* no - op */
             }
@@ -230,8 +227,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
         final UserModel userModel = adapter.getItem(position);
         new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
           userModel.getUsername()))
-          .setPositiveButton(getString(R.string.unfollow_dialog_yes),
-            new DialogInterface.OnClickListener() {
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     findFriendsPresenter.unfollowUser(userModel);
                 }

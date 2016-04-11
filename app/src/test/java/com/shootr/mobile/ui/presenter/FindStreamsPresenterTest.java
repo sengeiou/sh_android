@@ -15,16 +15,14 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -51,29 +49,28 @@ public class FindStreamsPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        StreamResultModelMapper streamResultModelMapper =
-          new StreamResultModelMapper(streamModelMapper);
+        StreamResultModelMapper streamResultModelMapper = new StreamResultModelMapper(streamModelMapper);
         findStreamsPresenter = new FindStreamsPresenter(streamSearchInteractor,
-          addToFavoritesInteractor, shareStreamInteractor, streamResultModelMapper, errorMessageFactory);
+          addToFavoritesInteractor,
+          shareStreamInteractor,
+          streamResultModelMapper,
+          errorMessageFactory);
         findStreamsPresenter.setView(findStreamsView);
     }
 
-    @Test
-    public void shouldHideStreamListWhileSearching() throws Exception {
+    @Test public void shouldHideStreamListWhileSearching() throws Exception {
         findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).hideContent();
     }
 
-    @Test
-    public void shouldShowLoadingWhileSearching() throws Exception {
+    @Test public void shouldShowLoadingWhileSearching() throws Exception {
         findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenFinishSearching() throws Exception {
+    @Test public void shouldHideLoadingWhenFinishSearching() throws Exception {
         setupSearchStreamInteractorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
@@ -81,8 +78,7 @@ public class FindStreamsPresenterTest {
         verify(findStreamsView, times(1)).hideLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
+    @Test public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
         setupSearchStreamInteractorErrorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
@@ -90,8 +86,7 @@ public class FindStreamsPresenterTest {
         verify(findStreamsView, times(1)).hideLoading();
     }
 
-    @Test
-    public void shouldShowStreamListWhenFinishSearching() throws Exception {
+    @Test public void shouldShowStreamListWhenFinishSearching() throws Exception {
         setupSearchStreamInteractorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
@@ -102,7 +97,9 @@ public class FindStreamsPresenterTest {
     @Test public void shouldNavigateToStreamTimeLineWhenStreamSelected() throws Exception {
         findStreamsPresenter.selectStream(streamResultModel());
 
-        verify(findStreamsView).navigateToStreamTimeline(SELECTED_STREAM_ID,SELECTED_STREAM_SHORT_TITLE,STREAM_AUTHOR_ID);
+        verify(findStreamsView).navigateToStreamTimeline(SELECTED_STREAM_ID,
+          SELECTED_STREAM_SHORT_TITLE,
+          STREAM_AUTHOR_ID);
     }
 
     private void setupSearchStreamInteractorCallbacks(final List<StreamSearchResult> result) {
@@ -145,13 +142,13 @@ public class FindStreamsPresenterTest {
         return streamSearchResult;
     }
 
-    private StreamResultModel streamResultModel(){
+    private StreamResultModel streamResultModel() {
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel());
         return streamResultModel;
     }
 
-    private StreamModel streamModel(){
+    private StreamModel streamModel() {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setShortTitle(SELECTED_STREAM_SHORT_TITLE);
@@ -166,5 +163,4 @@ public class FindStreamsPresenterTest {
         stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
-
 }

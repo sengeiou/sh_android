@@ -17,11 +17,8 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class NewStreamPresenter implements Presenter {
@@ -51,7 +48,8 @@ public class NewStreamPresenter implements Presenter {
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
       GetStreamInteractor getStreamInteractor, RemoveStreamInteractor removeStreamInteractor,
-      RestoreStreamInteractor restoreStreamInteractor, SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
+      RestoreStreamInteractor restoreStreamInteractor, SelectStreamInteractor selectStreamInteractor,
+      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
         this.removeStreamInteractor = removeStreamInteractor;
@@ -106,7 +104,7 @@ public class NewStreamPresenter implements Presenter {
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
-        if(!shortTitleEditedManually){
+        if (!shortTitleEditedManually) {
             currentShortTitle = filterShortTitle(title);
             newStreamView.showShortTitle(currentShortTitle);
         }
@@ -232,6 +230,7 @@ public class NewStreamPresenter implements Presenter {
             showViewError(errorMessageFactory.getUnknownErrorMessage());
         }
     }
+
     private void onCommunicationError() {
         showViewError(errorMessageFactory.getCommunicationErrorMessage());
     }
@@ -255,6 +254,7 @@ public class NewStreamPresenter implements Presenter {
     private void showViewTitleError(String errorMessage) {
         newStreamView.showTitleError(errorMessage);
     }
+
     private void showViewError(String errorMessage) {
         newStreamView.showError(errorMessage);
     }
@@ -267,10 +267,10 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private String filterShortTitle(String shortTitle) {
-        if(shortTitle.length() <= 20){
+        if (shortTitle.length() <= 20) {
             return shortTitle.trim();
-        }else {
-            return shortTitle.substring(0,20).trim();
+        } else {
+            return shortTitle.substring(0, 20).trim();
         }
     }
 
@@ -291,9 +291,11 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private boolean isValidShortTitle() {
-        return currentShortTitle != null && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
+        return currentShortTitle != null
+          && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
           && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
     }
+
     private void bindShortTitleToTitleIfMatches() {
         if (currentTitle != null && currentShortTitle != null) {
             shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);

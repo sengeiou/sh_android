@@ -8,9 +8,7 @@ import com.shootr.mobile.domain.interactor.OnCompletedObserver;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 

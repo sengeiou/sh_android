@@ -11,10 +11,8 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class RefreshActivityTimelineInteractor implements Interactor {
@@ -40,7 +38,8 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void refreshActivityTimeline(Boolean isUserActivityTimeline, String language, Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
+    public void refreshActivityTimeline(Boolean isUserActivityTimeline, String language,
+      Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
         this.isUserActivityTimeline = isUserActivityTimeline;
         this.language = language;
         this.callback = callback;
@@ -93,9 +92,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     }
 
     private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
-        return activity
-                .getIdUser() != null && activity
-                .getIdUser().equals(currentUserId);
+        return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
     }
 
     private boolean isCurrentUserTarget(String currentUserId, Activity activity) {

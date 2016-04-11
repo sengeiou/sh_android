@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -39,7 +38,11 @@ public class UpdateUserProfileInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new UpdateUserProfileInteractor(interactorHandler, postExecutionThread, localUserRepository, remoteUserRepository, sessionRepository);
+        interactor = new UpdateUserProfileInteractor(interactorHandler,
+          postExecutionThread,
+          localUserRepository,
+          remoteUserRepository,
+          sessionRepository);
     }
 
     @Test public void shouldUpdateUserProfileInRemoteUserRepository() throws Exception {
@@ -70,7 +73,8 @@ public class UpdateUserProfileInteractorTest {
         verify(errorCallback).onError(any(ServerCommunicationException.class));
     }
 
-    @Test public void shouldNotifyDomainValidationExceptionIfRemoteThrowsEmailAlreadyExistsException() throws Exception {
+    @Test public void shouldNotifyDomainValidationExceptionIfRemoteThrowsEmailAlreadyExistsException()
+      throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
         doThrow(EmailAlreadyExistsException.class).when(remoteUserRepository).updateUserProfile(any(User.class));
@@ -80,10 +84,12 @@ public class UpdateUserProfileInteractorTest {
         verify(errorCallback).onError(any(DomainValidationException.class));
     }
 
-    @Test public void shouldNotifyDomainValidationExceptionIfRemoteThrowsUsernameAlreadyExistsException() throws Exception {
+    @Test public void shouldNotifyDomainValidationExceptionIfRemoteThrowsUsernameAlreadyExistsException()
+      throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
-        doThrow(UsernameAlreadyExistsException.class).when(remoteUserRepository).updateUserProfile(any(User.class));
+        doThrow(UsernameAlreadyExistsException.class).when(remoteUserRepository)
+          .updateUserProfile(any(User.class));
 
         interactor.updateProfile(user(), completedCallback, errorCallback);
 

@@ -2,10 +2,8 @@ package com.shootr.mobile.data.repository.datasource.event;
 
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
-
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 
 public class DatabaseStreamDataSource implements StreamDataSource {

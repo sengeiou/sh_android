@@ -3,13 +3,17 @@ image: sloydev/android-env:23.2
 before_script:
 
 features:
-    script: gradle test
+    script:
+        - ./gradlew checkstyle build
+        - gradle test
     stage: test
     only:
         - /^feature\/.*$/
 
 integration:
-    script: gradle build -PdisablePreDex
+    script:
+        - ./gradlew checkstyle build
+        - gradle build -PdisablePreDex
     stage: test
     only:
         - master

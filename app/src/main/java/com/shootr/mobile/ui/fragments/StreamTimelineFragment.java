@@ -21,7 +21,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -67,19 +72,10 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
@@ -457,7 +453,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListScrollListeners() {
-        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+        new ListViewScrollObserver(listView)
+          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta > 10) {
                     hideTimelineIndicator();
@@ -709,10 +706,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showBlockFollowingUserAlert() {
@@ -730,10 +727,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
           .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    reportShotPresenter.confirmBlock();
-                }
-            })
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBlock();
+              }
+          })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
           .create()
           .show();
@@ -851,10 +848,10 @@ public class StreamTimelineFragment extends BaseFragment
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
           .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    goToReport(sessionToken, shotModel);
-                }
-            }).show();
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  goToReport(sessionToken, shotModel);
+              }
+          }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shot) {

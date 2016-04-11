@@ -3,13 +3,11 @@ package com.shootr.mobile.ui.adapters;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.view.View;
-
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,9 +24,9 @@ public abstract class StreamActivityViewHolder extends GenericActivityViewHolder
     @Override public void render(ActivityModel activity) {
         super.render(activity);
         text.setText(formatActivityComment(activity));
-        if(activity.getShot() != null){
+        if (activity.getShot() != null) {
             enableShotClick(activity);
-        }else{
+        } else {
             itemView.setOnClickListener(null);
         }
     }
@@ -52,8 +50,7 @@ public abstract class StreamActivityViewHolder extends GenericActivityViewHolder
         return spannableCheckinPattern;
     }
 
-    @NonNull
-    protected abstract String getCommentPattern();
+    @NonNull protected abstract String getCommentPattern();
 
     private void replacePlaceholderWithStreamTitle(SpannableStringBuilder spannableBuilder, String placeholder,
       String replaceText) {
@@ -65,5 +62,4 @@ public abstract class StreamActivityViewHolder extends GenericActivityViewHolder
             spannableBuilder.replace(termsStart, termsEnd, replaceText);
         }
     }
-
 }

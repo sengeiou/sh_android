@@ -1,10 +1,9 @@
 package com.shootr.mobile.data.entity;
 
 import java.io.Serializable;
-
 import timber.log.Timber;
 
-public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
+public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable {
 
     private String idUser;
     private String sessionToken;
@@ -27,7 +26,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private Long createdStreamsCount;
     private Long favoritedStreamsCount;
 
-    public UserEntity(){
+    public UserEntity() {
     }
 
     public Long getCreatedStreamsCount() {
@@ -164,19 +163,17 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         }
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return idUser.hashCode();
     }
 
-    @Override
-    public UserEntity clone(){
+    @Override public UserEntity clone() {
         try {
             return (UserEntity) super.clone();
         } catch (CloneNotSupportedException e) {
             //TODO custom logger
             Timber.w(e,
-              "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+              "UserModel has thrown CloneNotSupportedException. This should never happen.");
             return this;
         }
     }
@@ -194,7 +191,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     }
 
     public void setIdWatchingStream(String idWatchingStream) {
-        if (idWatchingStream !=null) {
+        if (idWatchingStream != null) {
             this.idWatchingStream = idWatchingStream;
         } else {
             this.idWatchingStream = null;

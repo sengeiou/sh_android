@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import com.shootr.mobile.domain.utils.Patterns;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +20,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.regex.Matcher;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

@@ -11,18 +11,16 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static com.shootr.mobile.domain.asserts.StreamTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,7 +124,8 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
-        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters()))
+          .thenReturn(Collections.<Shot>emptyList());
 
         shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED);
 
@@ -142,7 +141,8 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test public void shouldReturnVisibleActivityTypesIfIsThereWasLocalActivity() {
-        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activitiesList());
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(
+          activitiesList());
 
         shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 
@@ -153,7 +153,8 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity() {
-        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(emptyActivityList());
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(
+          emptyActivityList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
 

@@ -1,23 +1,19 @@
 package com.shootr.mobile.data.repository.datasource.event;
 
 import android.support.v4.util.ArrayMap;
-
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSource {
+@Singleton public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSource {
 
     private final StreamManager streamManager;
     private final Map<String, StreamSearchEntity> lastStreamSearchResults;
@@ -25,8 +21,9 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
     private final FollowManager followManager;
     private final UserManager userManager;
 
-    @Inject public DatabaseMemoryStreamSearchDataSource(StreamManager streamManager,
-      SessionRepository sessionRepository, FollowManager followManager, UserManager userManager) {
+    @Inject
+    public DatabaseMemoryStreamSearchDataSource(StreamManager streamManager, SessionRepository sessionRepository,
+      FollowManager followManager, UserManager userManager) {
         this.streamManager = streamManager;
         this.sessionRepository = sessionRepository;
         this.followManager = followManager;
@@ -75,7 +72,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
         }
     }
 
-    private Map<String, Integer> getWatchersCountByStreams()  {
+    private Map<String, Integer> getWatchersCountByStreams() {
         String currentUserId = sessionRepository.getCurrentUserId();
 
         List<String> followingUserIds = followManager.getUserFollowingIds(currentUserId);

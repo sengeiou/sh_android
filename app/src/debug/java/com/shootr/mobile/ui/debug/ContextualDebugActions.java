@@ -6,15 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import com.shootr.mobile.R;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import timber.log.Timber;
 
 public class ContextualDebugActions {
@@ -96,8 +93,7 @@ public class ContextualDebugActions {
           .inflate(R.layout.debug_drawer_contextual_action, contextualListView, false);
         button.setText(action.name());
         button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (clickListener != null) {
                     clickListener.onClick(view);
                 }

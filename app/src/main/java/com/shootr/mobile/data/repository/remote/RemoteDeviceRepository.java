@@ -7,9 +7,7 @@ import com.shootr.mobile.data.mapper.DeviceEntityMapper;
 import com.shootr.mobile.domain.Device;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.DeviceRepository;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class RemoteDeviceRepository implements DeviceRepository {
@@ -24,13 +22,11 @@ public class RemoteDeviceRepository implements DeviceRepository {
         this.deviceApiService = deviceApiService;
     }
 
-    @Override
-    public Device getCurrentDevice() {
+    @Override public Device getCurrentDevice() {
         throw new IllegalStateException("Retrieving device from remote is not implemented");
     }
 
-    @Override
-    public Device putDevice(Device device) {
+    @Override public Device putDevice(Device device) {
         try {
             DeviceEntity createdDevice = deviceApiService.createUpdateDevice(mapper.transform(device));
             return mapper.transform(createdDevice);

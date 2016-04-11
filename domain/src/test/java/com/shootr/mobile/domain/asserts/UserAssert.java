@@ -1,7 +1,6 @@
 package com.shootr.mobile.domain.asserts;
 
 import com.shootr.mobile.domain.User;
-
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 
@@ -21,7 +20,8 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
 
     /**
      * An entry point for UserAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
-     * With a static import, one can write directly: <code>assertThat(myUser)</code> and get specific assertion with
+     * With a static import, one can write directly: <code>assertThat(myUser)</code> and get specific assertion
+     * with
      * code completion.
      *
      * @param actual the User we want to make assertions on.

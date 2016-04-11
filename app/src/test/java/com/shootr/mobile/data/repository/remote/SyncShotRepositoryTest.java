@@ -7,14 +7,12 @@ import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -75,7 +73,6 @@ public class SyncShotRepositoryTest {
         syncShotRepository.dispatchSync();
 
         verify(remoteShotDataSource, atLeastOnce()).hideShot(anyString(), anyLong());
-
     }
 
     @Test public void shouldNotHideShotWhenDispatchSyncAndZeroPendingEntities() throws Exception {
@@ -84,17 +81,16 @@ public class SyncShotRepositoryTest {
         syncShotRepository.dispatchSync();
 
         verify(remoteShotDataSource, never()).hideShot(anyString(), anyLong());
-
     }
 
-    private ShotEntity shotEntity(){
+    private ShotEntity shotEntity() {
         ShotEntity shotEntity = new ShotEntity();
         shotEntity.setIdShot(ID_USER);
         shotEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
         return shotEntity;
     }
 
-    private List<ShotEntity> shotEntities(){
+    private List<ShotEntity> shotEntities() {
         ArrayList<ShotEntity> shotEntities = new ArrayList<>();
         shotEntities.add(shotEntity());
         return shotEntities;

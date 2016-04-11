@@ -3,9 +3,7 @@ package com.shootr.mobile.data;
 import com.shootr.mobile.util.VersionUpdater;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class VersionOutdatedErrorInterceptor implements Interceptor {

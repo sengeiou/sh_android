@@ -26,8 +26,7 @@ public class ScrollListView extends ListView {
         onCreate(context, attrs, defStyle);
     }
 
-    @SuppressWarnings("UnusedParameters")
-    private void onCreate(Context context, AttributeSet attrs, Integer defStyle) {
+    @SuppressWarnings("UnusedParameters") private void onCreate(Context context, AttributeSet attrs, Integer defStyle) {
         setListeners();
     }
 
@@ -37,8 +36,7 @@ public class ScrollListView extends ListView {
             private int oldTop;
             private int oldFirstVisibleItem;
 
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (onScrollListener != null) {
                     onScrollListener.onScrollStateChanged(view, scrollState);
                 }
@@ -79,8 +77,7 @@ public class ScrollListView extends ListView {
         });
     }
 
-    @Override
-    public void setOnScrollListener(OnScrollListener onScrollListener) {
+    @Override public void setOnScrollListener(OnScrollListener onScrollListener) {
         this.onScrollListener = onScrollListener;
     }
 
@@ -88,7 +85,7 @@ public class ScrollListView extends ListView {
         this.onDetectScrollListener = onDetectScrollListener;
     }
 
-    public static interface OnDetectScrollListener {
+    public interface OnDetectScrollListener {
 
         void onUpScrolling();
 

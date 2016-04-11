@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
 import android.view.View;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -19,11 +18,8 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
     private String currentUserId;
 
-    public FollowActivityViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener,
+    public FollowActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
@@ -34,8 +30,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         this.currentUserId = currentUserId;
     }
 
-    @Override
-    protected void renderText(ActivityModel activity) {
+    @Override protected void renderText(ActivityModel activity) {
         checkNotNull(currentUserId,
           "Follow ViewHolder must know the current user's id. Use setCurrentUser(String) before rendering");
         text.setText(formatActivityComment(activity, currentUserId));

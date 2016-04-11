@@ -2,7 +2,6 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.ForgotPasswordResultEntity;
 import com.shootr.mobile.domain.ForgotPasswordResult;
-
 import javax.inject.Inject;
 
 public class ForgotPasswordResultEntityMapper {

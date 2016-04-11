@@ -20,7 +20,8 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
     protected String imageOnlyText;
     protected String imageAndTextPattern;
 
-    protected AbstractSingleShotNotification(Context context, NotificationBuilderFactory builderFactory, ShotModel shotModel) {
+    protected AbstractSingleShotNotification(Context context, NotificationBuilderFactory builderFactory,
+      ShotModel shotModel) {
         super(context, builderFactory);
         imageOnlyText = context.getResources().getString(R.string.notification_image);
         imageAndTextPattern = context.getResources().getString(R.string.notification_image_and_text);

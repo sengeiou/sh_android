@@ -12,19 +12,16 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
     SyncShotRepository.class, LocalShotRepository.class, ServiceShotDatasource.class, DatabaseShotDataSource.class,
   },
   complete = false,
-  library = true)
-public class ShotRepositoryModule {
+  library = true) public class ShotRepositoryModule {
 
     @Provides @Singleton @Remote ShotRepository provideRemoteShotRepository(SyncShotRepository syncShotRepository) {
         return syncShotRepository;
@@ -39,7 +36,8 @@ public class ShotRepositoryModule {
         return serviceShotDatasource;
     }
 
-    @Provides @Singleton @Local ShotDataSource provideLocalShotDataSource(DatabaseShotDataSource databaseShotDataSource) {
+    @Provides @Singleton @Local ShotDataSource provideLocalShotDataSource(
+      DatabaseShotDataSource databaseShotDataSource) {
         return databaseShotDataSource;
     }
 

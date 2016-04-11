@@ -2,16 +2,13 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.db.DatabaseContract;
-
 import javax.inject.Inject;
 
 public class ActivityEntityDBMapper extends GenericDBMapper {
 
-    @Inject
-    public ActivityEntityDBMapper() {
+    @Inject public ActivityEntityDBMapper() {
     }
 
     public ActivityEntity fromCursor(Cursor c) {
@@ -46,7 +43,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ActivityTable.TYPE, activity.getType());
         cv.put(DatabaseContract.ActivityTable.ID_SHOT, activity.getIdShot());
         cv.put(DatabaseContract.ActivityTable.ID_STREAM_AUTHOR, activity.getIdStreamAuthor());
-        setSynchronizedtoContentValues(activity,cv);
+        setSynchronizedtoContentValues(activity, cv);
         return cv;
     }
 }

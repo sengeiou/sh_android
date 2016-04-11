@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileEditView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -29,7 +28,6 @@ public class ProfileEditPresenterTest {
     private static final String ID_USER = "idUser";
     private static final String USERNAME = "userName";
     private static final String BIO = "BIO";
-    private static final String LONG_BIO = "BIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
     private static final java.lang.String NAME = "name";
     public static final String WRONG_WEBSITE = "www";
     @Mock SessionRepository sessionRepository;
@@ -40,7 +38,6 @@ public class ProfileEditPresenterTest {
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
 
     private ProfileEditPresenter presenter;
-
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -154,7 +151,7 @@ public class ProfileEditPresenterTest {
         setUpGetUserByIdInteractor();
         when(sessionRepository.getCurrentUser()).thenReturn(user());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        when(profileEditView.getBio()).thenReturn(LONG_BIO);
+        when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
         when(profileEditView.getUsername()).thenReturn("USERNAME");
         when(profileEditView.getName()).thenReturn("");
@@ -165,12 +162,20 @@ public class ProfileEditPresenterTest {
         verify(profileEditView, never()).showUpdatedSuccessfulAlert();
     }
 
+    private String longBio(int characters) {
+        String bio = "";
+        for (int character = 0; character < characters; character++) {
+            bio += "a";
+        }
+        return bio;
+    }
+
     @Test public void shouldShowUserNameValidationErrorWhenUserNameIsNotValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
         when(sessionRepository.getCurrentUser()).thenReturn(user());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        when(profileEditView.getBio()).thenReturn(LONG_BIO);
+        when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
         when(profileEditView.getUsername()).thenReturn("");
         when(profileEditView.getName()).thenReturn(NAME);
@@ -186,7 +191,7 @@ public class ProfileEditPresenterTest {
         setUpGetUserByIdInteractor();
         when(sessionRepository.getCurrentUser()).thenReturn(user());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        when(profileEditView.getBio()).thenReturn(LONG_BIO);
+        when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn(WRONG_WEBSITE);
         when(profileEditView.getUsername()).thenReturn("");
         when(profileEditView.getName()).thenReturn(NAME);
@@ -197,27 +202,27 @@ public class ProfileEditPresenterTest {
         verify(profileEditView).showWebsiteValidationError(anyString());
     }
 
-    private void setupUpdateUserProfileInteractor(){
+    private void setupUpdateUserProfileInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
                 return null;
             }
-        }).when(updateUserProfileInteractor).updateProfile(any(User.class),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(updateUserProfileInteractor)
+          .updateProfile(any(User.class), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setUpGetUserByIdInteractor(){
+    private void setUpGetUserByIdInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((GetUserByIdInteractor.Callback) invocation.getArguments()[1]).onLoaded(user());
                 return null;
             }
-        }).when(getUserByIdInteractor).loadUserById(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getUserByIdInteractor)
+          .loadUserById(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private User user(){
+    private User user() {
         User user = new User();
         user.setIdUser(ID_USER);
         user.setUsername(USERNAME);

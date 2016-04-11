@@ -22,13 +22,10 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -60,8 +57,7 @@ public class StreamDetailPresenter implements Presenter {
     private boolean hasBeenPaused = false;
     private Integer totalWatchers;
 
-    @Inject
-    public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
+    @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
@@ -318,12 +314,14 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void selectStream() {
-        if(streamModel!=null) {
-            selectStreamInteractor.selectStream(streamModel.getIdStream(), new Interactor.Callback<StreamSearchResult>() {
+        if (streamModel != null) {
+            selectStreamInteractor.selectStream(streamModel.getIdStream(),
+              new Interactor.Callback<StreamSearchResult>() {
                   @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
                   }
-              }, new Interactor.ErrorCallback() {
+              },
+              new Interactor.ErrorCallback() {
                   @Override public void onError(ShootrException error) {
                       showErrorInView(error);
                   }
@@ -351,16 +349,14 @@ public class StreamDetailPresenter implements Presenter {
         streamDetailView.goToStreamDataInfo(streamModel);
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
         if (hasBeenPaused) {
             selectStream();
             getStreamInfo();
         }
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
         hasBeenPaused = true;
     }
 }

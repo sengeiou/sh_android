@@ -7,21 +7,20 @@ import com.shootr.mobile.domain.service.user.CreateAccountGateway;
 import com.shootr.mobile.domain.service.user.LoginGateway;
 import com.shootr.mobile.domain.service.user.ResetPasswordEmailGateway;
 import com.shootr.mobile.domain.service.user.ResetPasswordGateway;
-
 import dagger.Module;
 import dagger.Provides;
 
 @Module(
   complete = false,
-  library = true
-)
-public class ServiceModule {
+  library = true) public class ServiceModule {
 
-    @Provides ChangePasswordGateway provideChangePasswordGateway(ServiceChangePasswordGateway serviceChangePasswordGateway) {
+    @Provides ChangePasswordGateway provideChangePasswordGateway(
+      ServiceChangePasswordGateway serviceChangePasswordGateway) {
         return serviceChangePasswordGateway;
     }
 
-    @Provides CreateAccountGateway provideCreateAccountGateway(ServiceCreateAccountGateway serviceCreateAccountGateway) {
+    @Provides CreateAccountGateway provideCreateAccountGateway(
+      ServiceCreateAccountGateway serviceCreateAccountGateway) {
         return serviceCreateAccountGateway;
     }
 
@@ -37,12 +36,13 @@ public class ServiceModule {
         return serviceConfirmEmailGateway;
     }
 
-    @Provides
-    ResetPasswordGateway provideForgotPasswordGateway(ServiceResetPasswordGateway serviceForgotPasswordGateway){
+    @Provides ResetPasswordGateway provideForgotPasswordGateway(
+      ServiceResetPasswordGateway serviceForgotPasswordGateway) {
         return serviceForgotPasswordGateway;
     }
 
-    @Provides ResetPasswordEmailGateway provideResetPasswordEmailGateway(ServiceResetPasswordEmailGateway serviceForgotPasswordEmailGateway){
+    @Provides ResetPasswordEmailGateway provideResetPasswordEmailGateway(
+      ServiceResetPasswordEmailGateway serviceForgotPasswordEmailGateway) {
         return serviceForgotPasswordEmailGateway;
     }
 }

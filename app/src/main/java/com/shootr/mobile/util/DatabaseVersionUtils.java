@@ -2,7 +2,6 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -10,7 +9,6 @@ import com.shootr.mobile.data.prefs.LastDatabaseVersion;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
-
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils implements DatabaseUtils {
@@ -23,8 +21,8 @@ public class DatabaseVersionUtils implements DatabaseUtils {
     private final CacheUtils cacheUtils;
 
     @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
-                                        @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
-                                        @ShouldShowIntro BooleanPreference shouldShowIntro, CacheUtils cacheUtils) {
+      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
+      @ShouldShowIntro BooleanPreference shouldShowIntro, CacheUtils cacheUtils) {
         this.lastDatabaseVersion = lastDatabaseVersion;
         this.currentVersion = currentVersion;
         this.context = context;
@@ -39,8 +37,7 @@ public class DatabaseVersionUtils implements DatabaseUtils {
         }
     }
 
-    @Override
-    public void clearDataOnLogout() {
+    @Override public void clearDataOnLogout() {
         resetAppData();
         deleteCache();
     }

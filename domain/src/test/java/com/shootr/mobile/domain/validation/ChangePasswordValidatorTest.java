@@ -1,12 +1,10 @@
 package com.shootr.mobile.domain.validation;
 
 import com.shootr.mobile.domain.exception.ShootrError;
-
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +14,8 @@ public class ChangePasswordValidatorTest {
     public static final String USERNAME = "username";
     public static final String PASSWORD_AGAIN = "password_again";
     public static final String NEW_PASSWORD = "new_password";
-    public static final String NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS = "new_password_with_more_than_20_characters";
+    public static final String NEW_PASSWORD_WITH_MORE_THAN_20_CHARACTERS =
+      "new_password_with_more_than_20_characters";
     public static final String NEW_PASSWORD_WITH_LESS_5_CHARACTERS = "12345";
     private ChangePasswordValidator validator;
     private List<FieldValidationError> errors;

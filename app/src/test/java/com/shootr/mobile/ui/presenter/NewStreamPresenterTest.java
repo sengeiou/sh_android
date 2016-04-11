@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -144,7 +143,8 @@ public class NewStreamPresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStreamWithNullTopic());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7])
+                  .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
         }).when(createStreamInteractor)

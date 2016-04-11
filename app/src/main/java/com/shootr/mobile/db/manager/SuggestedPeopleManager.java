@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.SuggestedPeopleDBMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SuggestedPeopleManager extends AbstractManager {
@@ -43,7 +40,10 @@ public class SuggestedPeopleManager extends AbstractManager {
         if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
             deleteSuggestedPeople(suggestedPeople);
         } else {
-            getWritableDatabase().insertWithOnConflict(DatabaseContract.SuggestedPeopleTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(DatabaseContract.SuggestedPeopleTable.TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 
@@ -51,9 +51,17 @@ public class SuggestedPeopleManager extends AbstractManager {
         long res = 0;
         String args = DatabaseContract.SuggestedPeopleTable.ID + "=?";
         String[] stringArgs = new String[] { String.valueOf(suggestedPeople.getIdUser()) };
-        Cursor c = getReadableDatabase().query(SUGGESTED_PEOPLE_TABLE, DatabaseContract.SuggestedPeopleTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(SUGGESTED_PEOPLE_TABLE,
+          DatabaseContract.SuggestedPeopleTable.PROJECTION,
+          args,
+          stringArgs,
+          null,
+          null,
+          null);
         if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(SUGGESTED_PEOPLE_TABLE, DatabaseContract.SuggestedPeopleTable.ID+"=?", new String[] { String.valueOf(suggestedPeople.getIdUser()) });
+            res = getWritableDatabase().delete(SUGGESTED_PEOPLE_TABLE,
+              DatabaseContract.SuggestedPeopleTable.ID + "=?",
+              new String[] { String.valueOf(suggestedPeople.getIdUser()) });
         }
         c.close();
         return res;
@@ -62,7 +70,14 @@ public class SuggestedPeopleManager extends AbstractManager {
     public List<SuggestedPeopleEntity> getSuggestedPeople() {
         List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
 
-        Cursor c = getReadableDatabase().query(DatabaseContract.SuggestedPeopleTable.TABLE, DatabaseContract.SuggestedPeopleTable.PROJECTION, null, null, null, null, null, null);
+        Cursor c = getReadableDatabase().query(DatabaseContract.SuggestedPeopleTable.TABLE,
+          DatabaseContract.SuggestedPeopleTable.PROJECTION,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             do {

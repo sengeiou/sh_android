@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -12,13 +11,11 @@ public class FavoriteStreamsAdapter extends StreamsListAdapter {
         super(imageLoader, onStreamClickListener);
     }
 
-    @Override
-    protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         return super.onCreateItemViewHolder(parent, viewType);
     }
 
-    @Override
-    protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultViewHolder streamViewHolder = (StreamResultViewHolder) viewHolder;
         streamViewHolder.setMutedStreamIds(getMutedStreamIds());
         if (isWatchingStream(position)) {

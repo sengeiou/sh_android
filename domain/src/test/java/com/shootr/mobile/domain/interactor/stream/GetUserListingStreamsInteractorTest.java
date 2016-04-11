@@ -13,18 +13,16 @@ import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyList;
@@ -105,14 +103,16 @@ public class GetUserListingStreamsInteractorTest {
         assertEquals(listing.includesFavorited(), true);
     }
 
-    @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHoldingStreamsAreEmptyList() throws Exception {
+    @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHoldingStreamsAreEmptyList()
+      throws Exception {
         interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
         Listing listing = spyCallback.lastResult();
 
         assertEquals(listing.includesHolding(), true);
     }
 
-    @Test public void shouldReturnListingWithIncludeFavoritesTrueIfUserFavoriteStreamsAreEmptyList() throws Exception {
+    @Test public void shouldReturnListingWithIncludeFavoritesTrueIfUserFavoriteStreamsAreEmptyList()
+      throws Exception {
         when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
         when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
 

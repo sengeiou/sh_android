@@ -6,16 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.DatabaseContract.ShotTable;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
 import com.shootr.mobile.domain.StreamTimelineParameters;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShotManager extends AbstractManager {
@@ -24,8 +21,7 @@ public class ShotManager extends AbstractManager {
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
 
-    @Inject
-    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityDBMapper shotEntityMapper) {
+    @Inject public ShotManager(SQLiteOpenHelper openHelper, ShotEntityDBMapper shotEntityMapper) {
         super(openHelper);
         this.shotEntityMapper = shotEntityMapper;
     }
@@ -111,13 +107,11 @@ public class ShotManager extends AbstractManager {
         return (long) getWritableDatabase().delete(SHOT_TABLE, where, whereArgs);
     }
 
-    @NonNull
-    private List<ShotEntity> readShots(String whereClause, String[] whereArguments) {
+    @NonNull private List<ShotEntity> readShots(String whereClause, String[] whereArguments) {
         return readShots(whereClause, whereArguments, null);
     }
 
-    @NonNull
-    private List<ShotEntity> readShots(String whereClause, String[] whereArguments, String limit) {
+    @NonNull private List<ShotEntity> readShots(String whereClause, String[] whereArguments, String limit) {
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
           ShotTable.PROJECTION,
           whereClause,
@@ -140,8 +134,7 @@ public class ShotManager extends AbstractManager {
         return resultShots;
     }
 
-    @Nullable
-    private ShotEntity readShot(String whereClause, String[] whereArguments) {
+    @Nullable private ShotEntity readShot(String whereClause, String[] whereArguments) {
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
           ShotTable.PROJECTION,
           whereClause,
@@ -197,29 +190,34 @@ public class ShotManager extends AbstractManager {
         }
     }
 
-    public void hideShot(String idShot, Long timestamp){
+    public void hideShot(String idShot, Long timestamp) {
         SQLiteDatabase database = getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues(1);
             contentValues.put(ShotTable.PROFILE_HIDDEN, timestamp);
             String where = ShotTable.ID_SHOT + "=?";
-            String[] whereArgs = new String[] {idShot};
+            String[] whereArgs = new String[] { idShot };
             database.update(SHOT_TABLE, contentValues, where, whereArgs);
-
         } finally {
-           database.close();
+            database.close();
         }
     }
 
     public List<ShotEntity> getHiddenShotNotSynchronized() {
         List<ShotEntity> shotsToUpdate = new ArrayList<>();
-        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
-        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION,args,null,null,null,null);
-        if(c.getCount()>0){
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='N' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "= 'D' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='U'";
+        Cursor c =
+          getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, null, null, null, null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 shotsToUpdate.add(shotEntityMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return shotsToUpdate;
@@ -231,9 +229,8 @@ public class ShotManager extends AbstractManager {
             ContentValues contentValues = new ContentValues(1);
             contentValues.put(ShotTable.PROFILE_HIDDEN, "NULL");
             String where = ShotTable.ID_SHOT + "=?";
-            String[] whereArgs = new String[] {idShot};
+            String[] whereArgs = new String[] { idShot };
             database.update(SHOT_TABLE, contentValues, where, whereArgs);
-
         } finally {
             database.close();
         }

@@ -13,9 +13,7 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SyncShotRepository implements ShotRepository, SyncableRepository {
@@ -25,12 +23,13 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     private final ShotEntityMapper shotEntityMapper;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource, @Local ShotDataSource localShotDataSource,
+    @Inject
+    public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource, @Local ShotDataSource localShotDataSource,
       ShotEntityMapper shotEntityMapper, SyncTrigger syncTrigger) {
         this.remoteShotDataSource = remoteShotDataSource;
         this.localShotDataSource = localShotDataSource;
         this.shotEntityMapper = shotEntityMapper;
-        this.syncTrigger=syncTrigger;
+        this.syncTrigger = syncTrigger;
     }
 
     @Override public Shot putShot(Shot shot) {
@@ -58,18 +57,17 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     }
 
     @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userId, Long maxTimestamp) {
-        List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getStreamMediaShots(idEvent, userId, maxTimestamp);
+        List<ShotEntity> shotEntitiesWithMedia =
+          remoteShotDataSource.getStreamMediaShots(idEvent, userId, maxTimestamp);
         return shotEntityMapper.transform(shotEntitiesWithMedia);
     }
 
-    @Override
-    public List<Shot> getShotsFromUser(String idUser, Integer limit) {
+    @Override public List<Shot> getShotsFromUser(String idUser, Integer limit) {
         syncTrigger.triggerSync();
         return shotEntityMapper.transform(remoteShotDataSource.getShotsFromUser(idUser, limit));
     }
 
-    @Override
-    public ShotDetail getShotDetail(String idShot) {
+    @Override public ShotDetail getShotDetail(String idShot) {
         return shotEntityMapper.transform(remoteShotDataSource.getShotDetail(idShot));
     }
 
@@ -94,7 +92,8 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     }
 
     @Override public List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
-        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getUserShotsForStreamTimeline(timelineParameters);
+        List<ShotEntity> shotEntitiesFromTimeline =
+          remoteShotDataSource.getUserShotsForStreamTimeline(timelineParameters);
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }
@@ -106,17 +105,16 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     @Override public void hideShot(String idShot, Long timestamp) {
         ShotEntity shotEntity = getShotEntity(idShot);
         try {
-            remoteShotDataSource.hideShot(idShot,timestamp);
+            remoteShotDataSource.hideShot(idShot, timestamp);
             shotEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             shotEntity.setProfileHidden(timestamp);
             localShotDataSource.putShot(shotEntity);
         } catch (ServerCommunicationException e) {
             shotEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
-            localShotDataSource.hideShot(idShot,timestamp);
+            localShotDataSource.hideShot(idShot, timestamp);
             localShotDataSource.putShot(shotEntity);
             syncTrigger.notifyNeedsSync(this);
         }
-
     }
 
     private ShotEntity getShotEntity(String idShot) {
@@ -140,9 +138,9 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
 
     private void syncHiddenEntities(ShotEntity entity) {
         try {
-            remoteShotDataSource.hideShot(entity.getIdShot(),entity.getProfileHidden());
+            remoteShotDataSource.hideShot(entity.getIdShot(), entity.getProfileHidden());
             entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
-            localShotDataSource.hideShot(entity.getIdShot(),entity.getProfileHidden());
+            localShotDataSource.hideShot(entity.getIdShot(), entity.getProfileHidden());
         } catch (Exception error) {
             error.printStackTrace();
         }

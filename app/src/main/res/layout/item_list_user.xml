@@ -36,7 +36,7 @@
           android:textColor="@color/gray_10"
           android:textSize="17sp"
           tools:text="Rafa"
-          android:paddingRight="8dp"/>
+          android:paddingRight="8dp" />
 
         <TextView android:id="@+id/user_username"
           android:layout_width="wrap_content"

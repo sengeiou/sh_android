@@ -3,7 +3,6 @@ package com.shootr.mobile.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.StringPreference;
@@ -14,11 +13,9 @@ import com.shootr.mobile.service.DebugApiModule;
 import com.shootr.mobile.ui.debug.CaptureIntents;
 import com.shootr.mobile.ui.debug.NetworkProxy;
 import com.shootr.mobile.util.Version;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
@@ -27,9 +24,7 @@ import dagger.Provides;
   includes = DebugApiModule.class,
   complete = false,
   library = true,
-  overrides = true
-)
-public class DebugDataModule {
+  overrides = true) public class DebugDataModule {
 
     private static final int DEFAULT_ANIMATION_SPEED = 1; // 1x (normal) speed.
     private static final boolean DEFAULT_PICASSO_DEBUGGING = false; // Debug indicators displayed
@@ -77,13 +72,12 @@ public class DebugDataModule {
         return new StringPreference(preferences, "debug_custom_endpoint", ApiModule.PRODUCTION_ENDPOINT_URL);
     }
 
-    @Provides @Singleton @PollerEnabled
-    BooleanPreference providePollerActive(SharedPreferences preferences) {
+    @Provides @Singleton @PollerEnabled BooleanPreference providePollerActive(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_poller_active", DEFAULT_POLLER_ACTIVE);
     }
 
-    @Provides @Singleton @CaptureIntents
-    BooleanPreference provideCaptureIntentsPreference(SharedPreferences preferences) {
+    @Provides @Singleton @CaptureIntents BooleanPreference provideCaptureIntentsPreference(
+      SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_capture_intents", DEFAULT_CAPTURE_INTENTS);
     }
 

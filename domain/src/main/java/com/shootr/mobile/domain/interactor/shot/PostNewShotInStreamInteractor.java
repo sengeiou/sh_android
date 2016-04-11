@@ -9,9 +9,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
-
 import java.io.File;
-
 import javax.inject.Inject;
 
 public class PostNewShotInStreamInteractor extends PostNewShotInteractor {

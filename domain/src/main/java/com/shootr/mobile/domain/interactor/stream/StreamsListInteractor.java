@@ -17,9 +17,7 @@ import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamsListInteractor implements Interactor {

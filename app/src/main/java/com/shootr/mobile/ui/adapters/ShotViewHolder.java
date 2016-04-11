@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindColor;
+import butterknife.BindDimen;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
@@ -22,11 +25,6 @@ import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
-
-import butterknife.Bind;
-import butterknife.BindColor;
-import butterknife.BindDimen;
-import butterknife.ButterKnife;
 
 public class ShotViewHolder {
 
@@ -45,11 +43,11 @@ public class ShotViewHolder {
     @Bind(R.id.shot_user_name) TextView name;
     @Bind(R.id.shot_timestamp) TextView timestamp;
     @Bind(R.id.shot_text) ClickableTextView text;
-    @Bind(R.id.shot_image)  ImageView image;
+    @Bind(R.id.shot_image) ImageView image;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind (R.id.shot_nice_button) NiceButtonView niceButton;
+    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.nices_container) View niceContainer;
     @Bind(R.id.shot_hide_button_container) View hideContainer;
@@ -62,13 +60,9 @@ public class ShotViewHolder {
     private View view;
     private Boolean isCurrentUser;
 
-    public ShotViewHolder(View view,
-      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener,
-      OnHideClickListener onHideClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      AndroidTimeUtils timeUtils,
-      ImageLoader imageLoader,
+    public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
+      OnNiceShotListener onNiceShotListener, OnHideClickListener onHideClickListener,
+      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
       ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
@@ -80,7 +74,7 @@ public class ShotViewHolder {
         ButterKnife.bind(this, view);
         this.view = view;
         this.onHideClickListener = onHideClickListener;
-        this.isCurrentUser= isCurrentUser;
+        this.isCurrentUser = isCurrentUser;
     }
 
     protected void render(ShotModel shot, boolean shouldShowShortTitle) {
@@ -90,15 +84,14 @@ public class ShotViewHolder {
         bindUserPhoto(shot);
         bindImageInfo(shot);
         bindVideoInfo(shot);
-        if(isCurrentUser){
+        if (isCurrentUser) {
             bindHideButton(shot);
-        }else {
+        } else {
             bindNiceInfo(shot);
         }
-
     }
 
-    private void bindHideButton(final ShotModel shot){
+    private void bindHideButton(final ShotModel shot) {
         hideContainer.setVisibility(View.VISIBLE);
         niceButton.setVisibility(View.GONE);
         hideContainer.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +117,8 @@ public class ShotViewHolder {
         }
     }
 
-    private @Nullable
-    SpannableStringBuilder buildCommentTextWithShortTitle(@Nullable String comment, @Nullable String shortTitle) {
+    private @Nullable SpannableStringBuilder buildCommentTextWithShortTitle(@Nullable String comment,
+      @Nullable String shortTitle) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         if (comment == null && shortTitle == null) {
             return null;
@@ -151,7 +144,8 @@ public class ShotViewHolder {
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment) {
-        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+        CharSequence spannedComment =
+          shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         vh.text.setText(spannedComment);
         vh.text.addLinks();
     }
@@ -218,8 +212,12 @@ public class ShotViewHolder {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
         lp.setMargins(0, marginTop, 0, 0);
 
-        ViewGroup.MarginLayoutParams lpNiceCountContainer = (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
-        lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin, marginTop, lpNiceCountContainer.rightMargin, lpNiceCountContainer.bottomMargin);
+        ViewGroup.MarginLayoutParams lpNiceCountContainer =
+          (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
+        lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin,
+          marginTop,
+          lpNiceCountContainer.rightMargin,
+          lpNiceCountContainer.bottomMargin);
 
         Integer nicesCount = shot.getNiceCount();
         if (nicesCount > 0) {
@@ -230,8 +228,7 @@ public class ShotViewHolder {
 
         niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 if (shot.isMarkedAsNice()) {
                     onNiceShotListener.unmarkNice(shot.getIdShot());
                 } else {

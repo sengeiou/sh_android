@@ -26,8 +26,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     public static final String ACTION_OPEN_SHOT_DETAIL = "com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL";
     public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION";
     public static final String ACTION_OPEN_SHOT_NOTIFICATION = "com.shootr.mobile.ACTION_OPEN_SHOT_NOTIFICATION";
-    public static final String ACTION_OPEN_ACTIVITY_NOTIFICATION = "com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION";
-    public static final String ACTION_DISCARD_ACTIVITY_NOTIFICATION = "com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION";
+    public static final String ACTION_OPEN_ACTIVITY_NOTIFICATION =
+      "com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION";
+    public static final String ACTION_DISCARD_ACTIVITY_NOTIFICATION =
+      "com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION";
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject ActivityNotificationManager activityNotificationManager;
@@ -48,7 +50,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 break;
             case ACTION_OPEN_ACTIVITY_NOTIFICATION:
                 startActivityFromIntent(context,
-                  new Intent(context, ActivityTimelinesContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                  new Intent(context, ActivityTimelinesContainerActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
                 activityNotificationManager.clearActivityNotifications();

@@ -9,18 +9,16 @@ import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -35,7 +33,7 @@ public class NewShotBarPresenterTest {
     private static final String STREAM_ID = "stream";
     private static final Boolean IS_IN_STREAMTIMELINE = true;
     public static final String AUTHOR_ID = "authorId";
-    private static final Boolean IS__NOT_IN_STREAMTIMELINE = false;
+    private static final Boolean IS_NOT_IN_STREAMTIMELINE = false;
     private static final String ANOTHER_ID = "anotherId";
 
     @Mock GetStreamIsReadOnlyInteractor getStreamIsRemovedInteractor;
@@ -126,7 +124,7 @@ public class NewShotBarPresenterTest {
     }
 
     @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS__NOT_IN_STREAMTIMELINE);
+        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS_NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();
@@ -144,7 +142,7 @@ public class NewShotBarPresenterTest {
     }
 
     @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsNotStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS__NOT_IN_STREAMTIMELINE);
+        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS_NOT_IN_STREAMTIMELINE);
         when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
 
         presenter.newShotFromImage();

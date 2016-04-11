@@ -15,7 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
@@ -33,19 +36,12 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -178,7 +174,6 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
           .build();
     }
 
-
     private void initializeSubscription() {
         commentSubscription = RxTextView.textChangeEvents(editTextView)//
           .debounce(100, TimeUnit.MILLISECONDS)//
@@ -188,18 +183,15 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     private Observer<TextViewTextChangeEvent> getShotCommentObserver() {
         return new Observer<TextViewTextChangeEvent>() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 Timber.d("autocomplete mention onComplete");
             }
 
-            @Override
-            public void onError(Throwable e) {
+            @Override public void onError(Throwable e) {
                 crashReportTool.logException(e);
             }
 
-            @Override
-            public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
+            @Override public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
                 checkIfWritingMention(onTextChangeEvent);
             }
         };
@@ -213,7 +205,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         Integer wordPosition = 0;
         Integer characterPosition = 0;
 
-        if(input.length() > 0 && !input.endsWith(SPACE)) {
+        if (input.length() > 0 && !input.endsWith(SPACE)) {
             autocompleteWhenInputEndsWithoutSpace(pattern, input, words, wordPosition, characterPosition);
         } else if (input.length() <= 0) {
             presenter.onStopMentioning();
@@ -273,25 +265,21 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         }
     }
 
-    @OnTextChanged(R.id.new_shot_text)
-    public void onTextChanged() {
+    @OnTextChanged(R.id.new_shot_text) public void onTextChanged() {
         if (presenter.isInitialized()) {
             presenter.textChanged(editTextView.getText().toString());
         }
     }
 
-    @OnClick(R.id.new_shot_send_button)
-    public void onSendShot() {
+    @OnClick(R.id.new_shot_send_button) public void onSendShot() {
         presenter.sendShot(editTextView.getText().toString());
     }
 
-    @OnClick(R.id.new_shot_photo_button)
-    public void onAddImageFromCamera() {
+    @OnClick(R.id.new_shot_photo_button) public void onAddImageFromCamera() {
         presenter.takePhotoFromCamera();
     }
 
-    @OnClick(R.id.new_shot_gallery_button)
-    public void onAddImageFromGallery() {
+    @OnClick(R.id.new_shot_gallery_button) public void onAddImageFromGallery() {
         if (writePermissionManager.hasWritePermission()) {
             presenter.choosePhotoFromGallery();
         } else {
@@ -299,13 +287,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         }
     }
 
-    @OnClick(R.id.new_shot_image_remove)
-    public void onRemoveImage() {
+    @OnClick(R.id.new_shot_image_remove) public void onRemoveImage() {
         presenter.removeImage();
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         presenter.navigateBack();
     }
 
@@ -324,15 +310,13 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         super.onBackPressed();
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         presenter.resume();
         initializeSubscription();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         presenter.pause();
         if (commentSubscription != null) {

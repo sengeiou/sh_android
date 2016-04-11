@@ -8,9 +8,7 @@ import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalShotRepository implements ShotRepository {
@@ -43,18 +41,17 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds, Long maxTimestamp) {
-        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getStreamMediaShots(idEvent, userIds, maxTimestamp);
+        List<ShotEntity> shotEntitiesWithMedia =
+          localShotDataSource.getStreamMediaShots(idEvent, userIds, maxTimestamp);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }
 
-    @Override
-    public List<Shot> getShotsFromUser(String idUser, Integer limit) {
+    @Override public List<Shot> getShotsFromUser(String idUser, Integer limit) {
         return shotEntityMapper.transform(localShotDataSource.getShotsFromUser(idUser, limit));
     }
 
-    @Override
-    public ShotDetail getShotDetail(String idShot) {
+    @Override public ShotDetail getShotDetail(String idShot) {
         return shotEntityMapper.transform(localShotDataSource.getShotDetail(idShot));
     }
 

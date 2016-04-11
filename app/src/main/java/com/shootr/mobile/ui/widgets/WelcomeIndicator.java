@@ -6,9 +6,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.shootr.mobile.R;
-
 
 /**
  * TODO: document your custom view class.
@@ -37,8 +35,8 @@ public class WelcomeIndicator extends LinearLayout {
     }
 
     private void init() {
-        mColorActive=getResources().getColor(R.color.accent);
-        mColorInactive=getResources().getColor(R.color.gray_70);
+        mColorActive = getResources().getColor(R.color.accent);
+        mColorInactive = getResources().getColor(R.color.gray_70);
         if (isInEditMode()) {
             setItemCount(4);
             setActiveItem(0);
@@ -63,6 +61,4 @@ public class WelcomeIndicator extends LinearLayout {
         mIndicators.get(position).setBackgroundColor(mColorActive);
         mCurrentActivePosition = position;
     }
-
-
 }

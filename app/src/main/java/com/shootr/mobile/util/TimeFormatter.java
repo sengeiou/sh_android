@@ -1,11 +1,10 @@
 package com.shootr.mobile.util;
 
+import javax.inject.Inject;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import javax.inject.Inject;
 
 public class TimeFormatter {
 
@@ -23,5 +22,4 @@ public class TimeFormatter {
     private String getDetailedFormat(ZonedDateTime targetDate) {
         return detailedFormater.format(targetDate);
     }
-
 }

@@ -22,18 +22,16 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -74,12 +72,20 @@ public class StreamDetailPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        UserModelMapper userModelMapper = new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor, shareStreamInteractor, followInteractor, unfollowInteractor, selectStreamInteractor,
+        UserModelMapper userModelMapper =
+          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+        presenter = new StreamDetailPresenter(streamInfoInteractor,
+          changeStreamPhotoInteractor,
+          shareStreamInteractor,
+          followInteractor,
+          unfollowInteractor,
+          selectStreamInteractor,
           getMutedStreamsInteractor,
           muteInteractor,
           unmuteInteractor,
-          streamModelMapper, userModelMapper, errorMessageFactory);
+          streamModelMapper,
+          userModelMapper,
+          errorMessageFactory);
         presenter.setView(streamDetailView);
     }
 
@@ -165,7 +171,6 @@ public class StreamDetailPresenterTest {
         presenter.photoClick();
 
         verify(streamDetailView).zoomPhoto(PICTURE_URL);
-
     }
 
     @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
@@ -207,7 +212,9 @@ public class StreamDetailPresenterTest {
     @Test public void shouldNeverSelectStreamIfNoStreamInOnResume() throws Exception {
         presenter.resume();
 
-        verify(selectStreamInteractor, never()).selectStream(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        verify(selectStreamInteractor, never()).selectStream(anyString(),
+          any(Interactor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
@@ -246,9 +253,10 @@ public class StreamDetailPresenterTest {
                 callback.onLoaded(streamInfoWith3Participants());
                 return null;
             }
-        }).when(streamInfoInteractor).obtainStreamInfo(anyString(),
-          (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(streamInfoInteractor)
+          .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     public void setupStreamInfoCallbackWithPhoto() {
@@ -259,9 +267,10 @@ public class StreamDetailPresenterTest {
                 callback.onLoaded(streamInfoWithPhoto());
                 return null;
             }
-        }).when(streamInfoInteractor).obtainStreamInfo(anyString(),
-          (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(streamInfoInteractor)
+          .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     public void setupStreamInfoWith50PlusParticipantsCallback() {
@@ -272,9 +281,10 @@ public class StreamDetailPresenterTest {
                 callback.onLoaded(streamInfoWith50plusParticipants());
                 return null;
             }
-        }).when(streamInfoInteractor).obtainStreamInfo(anyString(),
-          (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(streamInfoInteractor)
+          .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private StreamInfo streamInfoWith50plusParticipants() {
@@ -320,7 +330,7 @@ public class StreamDetailPresenterTest {
     private List<User> moreThan50watchers() {
         List<User> participants = new ArrayList<>();
         participants.add(user());
-        for (int i = 0; i< 50; i++) {
+        for (int i = 0; i < 50; i++) {
             participants.add(new User());
         }
         return participants;
@@ -359,5 +369,4 @@ public class StreamDetailPresenterTest {
         stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
         return stream;
     }
-
 }

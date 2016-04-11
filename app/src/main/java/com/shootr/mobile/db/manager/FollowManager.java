@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -12,14 +11,11 @@ import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class FollowManager extends AbstractManager{
-
+public class FollowManager extends AbstractManager {
 
     FollowEntityDBMapper followMapper;
     BlockEntityDBMapper blockMapper;
@@ -32,9 +28,8 @@ public class FollowManager extends AbstractManager{
     private static final String ID_BANNED_USER = DatabaseContract.BanTable.ID_BANNED_USER;
     private static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
 
-
-    @Inject
-    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper, BlockEntityDBMapper blockMapper, BanEntityDBMapper banEntityDBMapper){
+    @Inject public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper,
+      BlockEntityDBMapper blockMapper, BanEntityDBMapper banEntityDBMapper) {
         super(openHelper);
         this.followMapper = followMapper;
         this.blockMapper = blockMapper;
@@ -43,13 +38,13 @@ public class FollowManager extends AbstractManager{
 
     /** Insert a Follow **/
     public void saveFollow(FollowEntity follow) {
-        if(follow!=null){
+        if (follow != null) {
             ContentValues contentValues = followMapper.toContentValues(follow);
             getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE,
               null,
               contentValues,
               SQLiteDatabase.CONFLICT_REPLACE);
-         }
+        }
     }
 
     /**
@@ -65,7 +60,7 @@ public class FollowManager extends AbstractManager{
                 if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
                     deleteFollow(follow.getFollowedUser(), follow.getIdUser(), database);
                 } else {
-                    contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
+                    contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
                     database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 }
             }
@@ -75,12 +70,26 @@ public class FollowManager extends AbstractManager{
         }
     }
 
-    public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
-        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND ("+ DatabaseContract.SyncColumns.DELETED+" IS NULL OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+" = 'D')";
-        String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
+    public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed) {
+        String args = ID_USER
+          + "=? AND "
+          + ID_FOLLOWED_USER
+          + " =? AND ("
+          + DatabaseContract.SyncColumns.DELETED
+          + " IS NULL OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + " = 'D')";
+        String[] argsString = new String[] { String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed) };
         FollowEntity follow = null;
-        Cursor  c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, DatabaseContract.FollowTable.PROJECTION,args,argsString,null,null,null,null);
-        if(c.getCount()>0){
+        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
+          DatabaseContract.FollowTable.PROJECTION,
+          args,
+          argsString,
+          null,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
             follow = followMapper.fromCursor(c);
         }
@@ -94,9 +103,16 @@ public class FollowManager extends AbstractManager{
     public List<String> getUserFollowingIds(String idUser) {
         List<String> userIds = new ArrayList<>();
 
-        String args = ID_USER+"=? AND "+DatabaseContract.SyncColumns.DELETED +" IS NULL";
-        String[] argsString = new String[]{String.valueOf(idUser)};
-        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, DatabaseContract.FollowTable.PROJECTION,args,argsString,null,null,null,null);
+        String args = ID_USER + "=? AND " + DatabaseContract.SyncColumns.DELETED + " IS NULL";
+        String[] argsString = new String[] { String.valueOf(idUser) };
+        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
+          DatabaseContract.FollowTable.PROJECTION,
+          args,
+          argsString,
+          null,
+          null,
+          null,
+          null);
 
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -115,32 +131,43 @@ public class FollowManager extends AbstractManager{
 
     public long deleteFollow(String followedUser, String idUser) {
         String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[]{followedUser, idUser};
+        String[] whereArgs = new String[] { followedUser, idUser };
         return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
     private long deleteFollow(String followedUser, String idUser, SQLiteDatabase database) {
         String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[]{followedUser, idUser};
+        String[] whereArgs = new String[] { followedUser, idUser };
         return database.delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
-    public List<FollowEntity> getFollowsNotSynchronized(){
+    public List<FollowEntity> getFollowsNotSynchronized() {
         List<FollowEntity> followsToUpdate = new ArrayList<>();
-        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
-        Cursor c = getReadableDatabase().query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION,args,null,null,null,null);
-        if(c.getCount()>0){
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='N' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "= 'D' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='U'";
+        Cursor c = getReadableDatabase().query(FOLLOW_TABLE,
+          DatabaseContract.FollowTable.PROJECTION,
+          args,
+          null,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 followsToUpdate.add(followMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return followsToUpdate;
     }
 
     public void saveBlock(BlockEntity block) {
-        if(block != null){
+        if (block != null) {
             ContentValues contentValues = blockMapper.toContentValues(block);
             getWritableDatabase().insertWithOnConflict(BLOCK_TABLE,
               null,
@@ -151,7 +178,7 @@ public class FollowManager extends AbstractManager{
 
     public long deleteBlock(String currentUserId, String idBlockedUser) {
         String whereClause = ID_BLOCKED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[]{idBlockedUser, currentUserId};
+        String[] whereArgs = new String[] { idBlockedUser, currentUserId };
         return getWritableDatabase().delete(BLOCK_TABLE, whereClause, whereArgs);
     }
 
@@ -171,24 +198,27 @@ public class FollowManager extends AbstractManager{
 
     public List<BlockEntity> getBlockeds() {
         List<BlockEntity> blockeds = new ArrayList<>();
-        Cursor c = getReadableDatabase().query(BLOCK_TABLE, DatabaseContract.BlockTable.PROJECTION,null,null,null,null,null);
-        if(c.getCount()>0){
+        Cursor c = getReadableDatabase().query(BLOCK_TABLE,
+          DatabaseContract.BlockTable.PROJECTION,
+          null,
+          null,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 blockeds.add(blockMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return blockeds;
     }
 
     public void saveBan(BanEntity banEntity) {
-        if(banEntity != null){
+        if (banEntity != null) {
             ContentValues contentValues = banMapper.toContentValues(banEntity);
-            getWritableDatabase().insertWithOnConflict(BAN_TABLE,
-              null,
-              contentValues,
-              SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(BAN_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 
@@ -208,12 +238,13 @@ public class FollowManager extends AbstractManager{
 
     public List<BanEntity> getBans() {
         List<BanEntity> bans = new ArrayList<>();
-        Cursor c = getReadableDatabase().query(BAN_TABLE, DatabaseContract.BanTable.PROJECTION,null,null,null,null,null);
-        if(c.getCount()>0){
+        Cursor c =
+          getReadableDatabase().query(BAN_TABLE, DatabaseContract.BanTable.PROJECTION, null, null, null, null, null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 bans.add(banMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return bans;
@@ -221,7 +252,7 @@ public class FollowManager extends AbstractManager{
 
     public long deleteBan(String currentUserId, String idUser) {
         String whereClause = ID_BANNED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[]{idUser, currentUserId};
+        String[] whereArgs = new String[] { idUser, currentUserId };
         return getWritableDatabase().delete(BAN_TABLE, whereClause, whereArgs);
     }
 }

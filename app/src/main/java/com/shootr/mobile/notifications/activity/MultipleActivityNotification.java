@@ -9,11 +9,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +24,8 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
     private final List<SingleActivityNotification> individualNotifications;
     private final ImageLoader imageLoader;
 
-    public MultipleActivityNotification(Context context, ImageLoader imageLoader, NotificationBuilderFactory builderFactory,
-      List<SingleActivityNotification> individualNotifications) {
+    public MultipleActivityNotification(Context context, ImageLoader imageLoader,
+      NotificationBuilderFactory builderFactory, List<SingleActivityNotification> individualNotifications) {
         super(context, builderFactory);
         this.imageLoader = imageLoader;
         this.individualNotifications = individualNotifications;
@@ -42,9 +40,9 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
 
     private NotificationCompat.Style getInboxStyleFromActivities() {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
-        for (SingleActivityNotification notification: individualNotifications) {
-            Spannable styledLine = getSpannableLineFromTitleAndText(notification.getTitle(),
-              notification.getContentText());
+        for (SingleActivityNotification notification : individualNotifications) {
+            Spannable styledLine =
+              getSpannableLineFromTitleAndText(notification.getTitle(), notification.getContentText());
             inbox.addLine(styledLine);
         }
         return inbox;
@@ -75,13 +73,11 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         return getResources().getString(R.string.new_activity_notification);
     }
 
-    @Override
-    protected CharSequence getTickerText() {
+    @Override protected CharSequence getTickerText() {
         return getTitle();
     }
 
-    @Override @Nullable
-    public Bitmap getLargeIcon() {
+    @Override @Nullable public Bitmap getLargeIcon() {
         if (hasMoreThanOneIcon()) {
             return MULTIPLE_ICONS_BITMAP;
         } else {

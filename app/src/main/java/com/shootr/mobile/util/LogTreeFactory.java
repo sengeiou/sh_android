@@ -4,6 +4,5 @@ import timber.log.Timber;
 
 public interface LogTreeFactory {
 
-    public Timber.Tree[] getTrees();
-
+    Timber.Tree[] getTrees();
 }

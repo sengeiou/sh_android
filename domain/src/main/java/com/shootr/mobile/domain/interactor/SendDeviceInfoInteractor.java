@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.repository.DeviceRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.utils.DeviceFactory;
-
 import javax.inject.Inject;
 
 public class SendDeviceInfoInteractor implements Interactor {
@@ -16,9 +15,9 @@ public class SendDeviceInfoInteractor implements Interactor {
     private final DeviceRepository remoteDeviceRepository;
     private final DeviceFactory deviceFactory;
 
-    @Inject
-    public SendDeviceInfoInteractor(InteractorHandler interactorHandler, @Local DeviceRepository localDeviceRepository,
-      @Remote DeviceRepository remoteDeviceRepository, DeviceFactory deviceFactory) {
+    @Inject public SendDeviceInfoInteractor(InteractorHandler interactorHandler,
+      @Local DeviceRepository localDeviceRepository, @Remote DeviceRepository remoteDeviceRepository,
+      DeviceFactory deviceFactory) {
         this.interactorHandler = interactorHandler;
         this.localDeviceRepository = localDeviceRepository;
         this.remoteDeviceRepository = remoteDeviceRepository;

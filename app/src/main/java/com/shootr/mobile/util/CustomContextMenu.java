@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
-
 import com.shootr.mobile.domain.utils.Preconditions;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +31,7 @@ public class CustomContextMenu {
 
     public void show() {
         new AlertDialog.Builder(context).setItems(titles, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 callbacks[which].run();
             }
         }).show();
@@ -71,7 +68,6 @@ public class CustomContextMenu {
         public void show() {
             build().show();
         }
-
     }
 
     public static class MenuAction {

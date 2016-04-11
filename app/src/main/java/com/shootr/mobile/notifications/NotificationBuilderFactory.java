@@ -8,5 +8,4 @@ public class NotificationBuilderFactory {
     public NotificationCompat.Builder getNotificationBuilder(Context context) {
         return new NotificationCompat.Builder(context);
     }
-
 }

@@ -8,11 +8,9 @@ import com.shootr.mobile.data.repository.remote.SyncFollowRepository;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
@@ -21,30 +19,23 @@ import dagger.Provides;
   complete = false,
   library = true) public class FollowRepositoryModule {
 
-    @Provides
-    @Singleton
-    @Local
-    FollowRepository provideLocalFollowRepository(LocalFollowRepository localFollowRepository) {
+    @Provides @Singleton @Local FollowRepository provideLocalFollowRepository(
+      LocalFollowRepository localFollowRepository) {
         return localFollowRepository;
     }
 
-    @Provides
-    @Singleton
-    @Remote
-    FollowRepository provideRemoteFollowRepository(SyncFollowRepository remoteFollowRepository) {
+    @Provides @Singleton @Remote FollowRepository provideRemoteFollowRepository(
+      SyncFollowRepository remoteFollowRepository) {
         return remoteFollowRepository;
     }
 
-    @Provides
-    @Singleton
-    @Local FollowDataSource provideLocalFollowDataSource(DatabaseFollowDataSource databaseFollowDataSource) {
+    @Provides @Singleton @Local FollowDataSource provideLocalFollowDataSource(
+      DatabaseFollowDataSource databaseFollowDataSource) {
         return databaseFollowDataSource;
     }
 
-    @Provides
-    @Singleton
-    @Remote
-    FollowDataSource provideRemoteFollowDataSource(ServiceFollowDataSource serviceFollowDataSource) {
+    @Provides @Singleton @Remote FollowDataSource provideRemoteFollowDataSource(
+      ServiceFollowDataSource serviceFollowDataSource) {
         return serviceFollowDataSource;
     }
 }

@@ -5,5 +5,4 @@ import android.app.Activity;
 public interface BackStackHandler {
 
     void handleBackStack(Activity activity);
-
 }

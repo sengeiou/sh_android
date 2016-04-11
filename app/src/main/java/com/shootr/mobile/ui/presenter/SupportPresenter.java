@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
 import com.shootr.mobile.ui.views.SupportView;
-
 import javax.inject.Inject;
 
 public class SupportPresenter implements Presenter {
@@ -39,12 +38,12 @@ public class SupportPresenter implements Presenter {
         supportView.handleReport();
     }
 
-    public boolean isEnglishLocale(String locale){
+    public boolean isEnglishLocale(String locale) {
         return locale.equals(EN_LOCALE);
     }
 
     public void setUpAlertDialog(String language) {
-        if(!isEnglishLocale(language)) {
+        if (!isEnglishLocale(language)) {
             supportView.showAlertDialog();
         }
     }

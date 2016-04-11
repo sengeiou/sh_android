@@ -34,6 +34,5 @@ public class SecurityUtils {
             Timber.e(e.getMessage());
             return null;
         }
-
     }
 }

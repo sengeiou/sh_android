@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.FavoriteStreamsAdapter;
@@ -26,14 +28,8 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesListView {
 
@@ -55,38 +51,33 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         return new FavoritesFragment();
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_favorites, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
         favoritesListPresenter.setView(new NullFavoritesListView());
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         analyticsTool.analyticsStart(getContext(), analyticsScreenFavorites);
         initializePresenter();
         initializeViews();
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         favoritesListPresenter.resume();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         favoritesListPresenter.pause();
     }
@@ -94,13 +85,11 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new FavoriteStreamsAdapter(imageLoader, new OnStreamClickListener() {
-            @Override
-            public void onStreamClick(StreamResultModel stream) {
+            @Override public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
             }
 
-            @Override
-            public boolean onStreamLongClick(StreamResultModel stream) {
+            @Override public boolean onStreamLongClick(StreamResultModel stream) {
                 favoritesListPresenter.onFavoriteLongClicked(stream);
                 return true;
             }
@@ -124,14 +113,14 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
                   favoritesListPresenter.removeFromFavorites(stream);
               }
           }).addAction(R.string.share_via_shootr, new Runnable() {
-            @Override public void run() {
-                favoritesListPresenter.shareStream(stream);
-            }
-        }).addAction(R.string.share_via, new Runnable() {
-            @Override public void run() {
-                shareStream(stream);
-            }
-        });
+              @Override public void run() {
+                  favoritesListPresenter.shareStream(stream);
+              }
+          }).addAction(R.string.share_via, new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          });
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -139,24 +128,20 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
-    @Override
-    public void renderFavorites(List<StreamResultModel> streamModels) {
+    @Override public void renderFavorites(List<StreamResultModel> streamModels) {
         adapter.setStreams(streamModels);
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void showContent() {
+    @Override public void showContent() {
         favoritesList.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideContent() {
+    @Override public void hideContent() {
         favoritesList.setVisibility(View.GONE);
     }
 
-    @Override
-    public void navigateToStreamTimeline(String idStream, String title, String authorId) {
+    @Override public void navigateToStreamTimeline(String idStream, String title, String authorId) {
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title, authorId));
     }
 
@@ -188,29 +173,23 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         favoritesList.scrollToPosition(0);
     }
 
-    @Override
-    public void showEmpty() {
+    @Override public void showEmpty() {
         empty.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideEmpty() {
+    @Override public void hideEmpty() {
         empty.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showLoading() {
+    @Override public void showLoading() {
         loading.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideLoading() {
+    @Override public void hideLoading() {
         loading.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showError(String message) {
+    @Override public void showError(String message) {
         feedbackMessage.show(getView(), message);
     }
-
 }

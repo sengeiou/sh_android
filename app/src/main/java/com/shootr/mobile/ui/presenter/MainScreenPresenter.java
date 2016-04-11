@@ -13,7 +13,6 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import javax.inject.Inject;
 
 public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
@@ -28,10 +27,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     private boolean hasBeenPaused = false;
 
     @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
-      SendDeviceInfoInteractor sendDeviceInfoInteractor,
-      UserModelMapper userModelMapper,
-      @ActivityBadgeCount IntPreference badgeCount,
-      @Main Bus bus) {
+      SendDeviceInfoInteractor sendDeviceInfoInteractor, UserModelMapper userModelMapper,
+      @ActivityBadgeCount IntPreference badgeCount, @Main Bus bus) {
         this.getCurrentUserInteractor = getCurrentUserInteractor;
         this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
         this.userModelMapper = userModelMapper;
@@ -52,13 +49,13 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     }
 
     private void setupMultipleActivitiesNotification() {
-        if(hasMultipleActivities()){
+        if (hasMultipleActivities()) {
             mainScreenView.showHasMultipleActivities(badgeCount.get());
         }
     }
 
     private boolean hasMultipleActivities() {
-        return badgeCount.get()>1;
+        return badgeCount.get() > 1;
     }
 
     private void sendDeviceInfo() {
@@ -67,8 +64,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
     private void loadCurrentUser() {
         getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
-            @Override
-            public void onLoaded(User user) {
+            @Override public void onLoaded(User user) {
                 UserModel userModel = userModelMapper.transform(user);
                 mainScreenView.setUserData(userModel);
             }
@@ -93,9 +89,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         hasBeenPaused = true;
     }
 
-    @Override
-    @Subscribe
-    public void onBadgeChanged(BadgeChanged.Event event) {
+    @Override @Subscribe public void onBadgeChanged(BadgeChanged.Event event) {
         updateActivityBadge();
     }
 }

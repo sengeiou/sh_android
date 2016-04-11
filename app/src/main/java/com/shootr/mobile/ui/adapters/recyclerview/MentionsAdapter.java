@@ -6,18 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.BindableAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class MentionsAdapter extends BindableAdapter<UserModel> {
 
@@ -64,7 +61,7 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
         if (verifiedUser(item)) {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
             viewHolder.title.setCompoundDrawablePadding(6);
-        }else{
+        } else {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
 
@@ -76,7 +73,7 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
     }
 
     private boolean verifiedUser(UserModel userModel) {
-        if(userModel.isVerifiedUser()!=null) {
+        if (userModel.isVerifiedUser() != null) {
             return userModel.isVerifiedUser();
         }
         return false;
@@ -106,6 +103,4 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
             this.user = user;
         }
     }
-
-
 }

@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.views.base.DataTransferView;
 
-public interface NewStreamView extends DataTransferView{
+public interface NewStreamView extends DataTransferView {
 
     void setStreamTitle(String title);
 

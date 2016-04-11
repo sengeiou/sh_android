@@ -9,9 +9,7 @@ import com.shootr.mobile.domain.interactor.OnCompletedObserver;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
@@ -29,7 +27,8 @@ public class UnmuteInteractor implements Interactor {
     private CompletedCallback callback;
 
     @Inject public UnmuteInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository, BusPublisher busPublisher) {
+      @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository,
+      BusPublisher busPublisher) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localMuteRepository = localMuteRepository;
@@ -87,5 +86,4 @@ public class UnmuteInteractor implements Interactor {
     protected void notifyAdditionToBus() {
         busPublisher.post(new StreamMuted.Event());
     }
-
 }

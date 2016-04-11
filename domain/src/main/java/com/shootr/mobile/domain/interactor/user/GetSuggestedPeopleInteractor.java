@@ -11,10 +11,8 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetSuggestedPeopleInteractor implements Interactor {
@@ -56,7 +54,8 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private void loadSuggestedPeople() {
         List<SuggestedPeople> localSuggestions = localUserRepository.getSuggestedPeople(localeProvider.getLocale());
         if (localSuggestions.isEmpty()) {
-            List<SuggestedPeople> remoteSuggestions = remoteUserRepository.getSuggestedPeople(localeProvider.getLocale());
+            List<SuggestedPeople> remoteSuggestions =
+              remoteUserRepository.getSuggestedPeople(localeProvider.getLocale());
             filterAndCallback(remoteSuggestions);
         } else {
             filterAndCallback(localSuggestions);

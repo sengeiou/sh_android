@@ -2,7 +2,6 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.domain.EntityMetadata;
-
 import javax.inject.Inject;
 
 public class MetadataMapper {

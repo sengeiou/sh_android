@@ -7,6 +7,4 @@ public interface DataTransferView {
     void hideLoading();
 
     void showError(String message);
-
-
 }

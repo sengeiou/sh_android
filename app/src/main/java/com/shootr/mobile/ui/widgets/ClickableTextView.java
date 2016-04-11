@@ -18,15 +18,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-
 import com.shootr.mobile.domain.utils.Patterns;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClickableTextView extends TextView {
 
-    private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://"};
+    private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
     private static final String DEFAULT_SCHEMA = ALLOWED_SCHEMAS[0];
 
     private Pattern urlPattern;
@@ -100,7 +98,6 @@ public class ClickableTextView extends TextView {
         return newUrl;
     }
 
-
     public void setUrlPattern(Pattern pattern) {
         this.urlPattern = pattern;
     }
@@ -125,10 +122,14 @@ public class ClickableTextView extends TextView {
                 Selection.removeSelection(buffer);
             }
 
-            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+            if (action == MotionEvent.ACTION_UP
+              || action == MotionEvent.ACTION_DOWN
+              || action == MotionEvent.ACTION_MOVE) {
                 PressableSpan touchedUrlSpan = getTouchedSpan(event, widget, buffer);
 
-                if (action == MotionEvent.ACTION_MOVE && alreadyPressedSpan != null && touchedUrlSpan != alreadyPressedSpan) {
+                if (action == MotionEvent.ACTION_MOVE
+                  && alreadyPressedSpan != null
+                  && touchedUrlSpan != alreadyPressedSpan) {
                     alreadyPressedSpan.setPressed(false);
                     alreadyPressedSpan = null;
                     Selection.removeSelection(buffer);
@@ -137,7 +138,9 @@ public class ClickableTextView extends TextView {
 
                 if (touchedUrlSpan != null) {
                     if (action == MotionEvent.ACTION_DOWN) {
-                        Selection.setSelection(buffer, buffer.getSpanStart(touchedUrlSpan), buffer.getSpanEnd(touchedUrlSpan));
+                        Selection.setSelection(buffer,
+                          buffer.getSpanStart(touchedUrlSpan),
+                          buffer.getSpanEnd(touchedUrlSpan));
                         alreadyPressedSpan = touchedUrlSpan;
                         alreadyPressedSpan.setPressed(true);
                     } else if (action == MotionEvent.ACTION_UP) {
@@ -149,12 +152,10 @@ public class ClickableTextView extends TextView {
                         Selection.removeSelection(buffer);
                     }
                     return true;
-
                 } else {
                     Selection.removeSelection(buffer);
                 }
             }
-
         }
         return false;
     }
@@ -212,6 +213,4 @@ public class ClickableTextView extends TextView {
             ds.setUnderlineText(isPressed);
         }
     }
-
-
 }

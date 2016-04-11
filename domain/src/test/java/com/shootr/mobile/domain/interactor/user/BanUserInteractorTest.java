@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,7 +32,10 @@ public class BanUserInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new BanUserInteractor(interactorHandler, postExecutionThread, localFollowRepository, remoteFollowRepository);
+        interactor = new BanUserInteractor(interactorHandler,
+          postExecutionThread,
+          localFollowRepository,
+          remoteFollowRepository);
     }
 
     @Test public void shouldBanUserInLocalWhenBanUser() throws Exception {

@@ -1,7 +1,6 @@
 package com.shootr.mobile.stetho;
 
 import com.shootr.mobile.ShootrDebugApplication;
-
 import dagger.Module;
 
 @Module(
@@ -9,8 +8,6 @@ import dagger.Module;
     ShootrDebugApplication.class,
   },
   complete = false,
-  library = true
-)
-public class StethoModule {
+  library = true) public class StethoModule {
 
 }

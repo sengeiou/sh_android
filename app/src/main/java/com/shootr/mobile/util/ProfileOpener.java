@@ -3,13 +3,11 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
-
 import timber.log.Timber;
 
 public class ProfileOpener {
@@ -26,8 +24,7 @@ public class ProfileOpener {
 
     public void openUserProfileFromUsername(String username) {
         getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-            @Override
-            public void onLoaded(User user) {
+            @Override public void onLoaded(User user) {
                 if (user != null) {
                     startProfileContainerActivity(user.getIdUser());
                 } else {
@@ -35,10 +32,8 @@ public class ProfileOpener {
                 }
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 Timber.e(error, "Error while searching user by username");
-
             }
         });
     }
@@ -51,7 +46,7 @@ public class ProfileOpener {
         intent = ProfileContainerActivity.getIntent(context, idUser);
     }
 
-    public Intent getIntent(){
+    public Intent getIntent() {
         return intent;
     }
 }

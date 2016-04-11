@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.validation;
 
+import com.shootr.mobile.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ChangePasswordValidator {
             Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
             boolean hasPasswordPattern = passwordPattern.matcher(password).matches();
             if (!hasPasswordPattern) {
-                addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS,
+                addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS,
                   field);
             }
         }
@@ -63,27 +64,29 @@ public class ChangePasswordValidator {
 
     private void validateNewPasswordIsDifferentFromCurrentPassword(String username, String password) {
         if (username != null && username.equals(password)) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD,
+            addError(ShootrError.ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD,
               FIELD_NEW_PASSWORD_AGAIN);
         }
     }
 
     private void validateNewPasswordEqualsNewPasswordAgain(String newPassword, String newPasswordAgain) {
         if (newPassword != null && newPasswordAgain != null && !newPassword.equals(newPasswordAgain)) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN,
+            addError(ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN,
               FIELD_NEW_PASSWORD_AGAIN);
         }
     }
 
     private void validatePasswordHasLessThanTwentyCharacters(String password, int field) {
         if (password != null && password.length() > PASSWORD_MAXIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG, field);
+            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG,
+              field);
         }
     }
 
     private void validatePasswordHasMoreThanSixCharacters(String password, int field) {
         if (password != null && password.length() < PASSWORD_MINIMUM_LENGTH) {
-            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT, field);
+            addError(com.shootr.mobile.domain.exception.ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT,
+              field);
         }
     }
 

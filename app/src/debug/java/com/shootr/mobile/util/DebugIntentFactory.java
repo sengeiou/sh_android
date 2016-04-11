@@ -2,7 +2,6 @@ package com.shootr.mobile.util;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.ui.ExternalIntentActivity;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -22,26 +21,22 @@ public final class DebugIntentFactory implements IntentFactory {
         this.captureIntents = captureIntents;
     }
 
-    @Override
-    public Intent openUrlIntent(String url) {
+    @Override public Intent openUrlIntent(String url) {
         Intent baseIntent = realIntentFactory.openUrlIntent(url);
         return createCaptureIntent(baseIntent);
     }
 
-    @Override
-    public Intent openEmbededUrlIntent(Activity launchActivity, String url) {
+    @Override public Intent openEmbededUrlIntent(Activity launchActivity, String url) {
         Intent baseIntent = realIntentFactory.openEmbededUrlIntent(launchActivity, url);
         return createCaptureIntent(baseIntent);
     }
 
-    @Override
-    public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
+    @Override public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
         Intent baseIntent = realIntentFactory.shareShotIntent(launchActivity, shotModel);
         return createCaptureIntent(baseIntent);
     }
 
-    @Override
-    public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
+    @Override public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
         Intent baseIntent = realIntentFactory.shareStreamIntent(launchActivity, streamModel);
         return createCaptureIntent(baseIntent);
     }

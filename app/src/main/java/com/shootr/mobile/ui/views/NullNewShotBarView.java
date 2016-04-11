@@ -32,8 +32,7 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
-    @Override
-    public void showError(String errorMessage) {
+    @Override public void showError(String errorMessage) {
         /* no-op */
     }
 }

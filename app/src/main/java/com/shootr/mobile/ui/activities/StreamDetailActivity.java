@@ -26,7 +26,10 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -51,17 +54,10 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
@@ -158,7 +154,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                  new AlertDialog.Builder(StreamDetailActivity.this)
+                    .setMessage(String.format(getString(R.string.unfollow_dialog_message),
                     user.getUsername()))
                     .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
@@ -326,19 +323,23 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             streamPicture.buildDrawingCache();
             Bitmap bitmap = streamPicture.getDrawingCache();
             Palette palette = Palette.from(bitmap).generate();
-            collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
-            collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            collapsingToolbar.setContentScrimColor(getDarkVibrantColor(palette));
+            collapsingToolbar.setStatusBarScrimColor(getDarkVibrantColor(palette));
             changeStatusBarColor(palette);
-        }catch (IllegalArgumentException exception){
+        } catch (IllegalArgumentException exception) {
             crashReportTool.logException("IllegalArgumentException. Bitmap is not valid");
         }
+    }
+
+    private int getDarkVibrantColor(Palette palette) {
+        return palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material));
     }
 
     private void changeStatusBarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            window.setStatusBarColor(getDarkVibrantColor(palette));
         }
     }
 
@@ -353,6 +354,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                           break;
                       case R.id.menu_stream_edit_info:
                           streamDetailPresenter.editStreamInfo();
+                          break;
+                      default:
                           break;
                   }
               }
@@ -371,6 +374,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                           break;
                       case R.id.menu_photo_take:
                           takePhotoFromCamera();
+                          break;
+                      default:
                           break;
                   }
               }

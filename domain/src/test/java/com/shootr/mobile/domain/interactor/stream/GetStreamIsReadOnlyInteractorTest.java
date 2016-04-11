@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.StreamRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,7 +32,10 @@ public class GetStreamIsReadOnlyInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetStreamIsReadOnlyInteractor(interactorHandler, postExecutionThread, localStreamRepository, remoteStreamRepository);
+        interactor = new GetStreamIsReadOnlyInteractor(interactorHandler,
+          postExecutionThread,
+          localStreamRepository,
+          remoteStreamRepository);
     }
 
     @Test public void shouldLoadStreamFromLocalRepository() throws Exception {
@@ -75,7 +77,8 @@ public class GetStreamIsReadOnlyInteractorTest {
 
     @Test public void shouldNotifyErrorIfRemoteRepositoryThrowsServerCommunicationException() throws Exception {
         when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenThrow(new ServerCommunicationException(new Throwable()));
+        when(remoteStreamRepository.getStreamById(ID_STREAM))
+          .thenThrow(new ServerCommunicationException(new Throwable()));
 
         interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 

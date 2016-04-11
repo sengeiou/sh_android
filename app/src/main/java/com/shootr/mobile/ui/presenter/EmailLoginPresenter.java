@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.mobile.ui.views.EmailLoginView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import javax.inject.Inject;
 
 public class EmailLoginPresenter implements Presenter {
@@ -22,11 +21,11 @@ public class EmailLoginPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    protected void setView(EmailLoginView emailLoginView){
+    protected void setView(EmailLoginView emailLoginView) {
         this.emailLoginView = emailLoginView;
     }
 
-    public void initialize(EmailLoginView emailLoginView){
+    public void initialize(EmailLoginView emailLoginView) {
         this.setView(emailLoginView);
         this.isInitialized = true;
     }
@@ -54,7 +53,7 @@ public class EmailLoginPresenter implements Presenter {
     }
 
     public void inputTextChanged() {
-        String usernameOrEmail= emailLoginView.getUsernameOrEmail();
+        String usernameOrEmail = emailLoginView.getUsernameOrEmail();
         String password = emailLoginView.getPassword();
         boolean hasAnEmptyInputField = usernameOrEmail.isEmpty() || password.isEmpty();
 
@@ -77,5 +76,4 @@ public class EmailLoginPresenter implements Presenter {
     @Override public void pause() {
         /* no-op */
     }
-
 }

@@ -1,14 +1,13 @@
 /**
  * Copyright (C) 2014 android10.org. All rights reserved.
+ *
  * @author Fernando Cejas (the android10 coder)
  */
 package com.shootr.mobile.interactor;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.shootr.mobile.domain.executor.PostExecutionThread;
-
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -21,8 +20,7 @@ public class UIThread implements PostExecutionThread {
     private final Handler handler;
     private final Collection<CancellableRunnable> pendingRunnables;
     private final RunnableFinishedListener runnableFinishedListener = new RunnableFinishedListener() {
-        @Override
-        public void onFinished(CancellableRunnable cancellableRunnable) {
+        @Override public void onFinished(CancellableRunnable cancellableRunnable) {
             pendingRunnables.remove(cancellableRunnable);
         }
     };
@@ -44,14 +42,13 @@ public class UIThread implements PostExecutionThread {
         handler.post(cancellableRunnable);
     }
 
-    @Override
-    public void cancelPendingExecutions() {
+    @Override public void cancelPendingExecutions() {
         for (CancellableRunnable pendingRunnable : pendingRunnables) {
             pendingRunnable.cancel();
         }
     }
 
-    private static class CancellableRunnable implements Runnable{
+    private static class CancellableRunnable implements Runnable {
 
         private final Runnable wrappedRunnable;
         private final RunnableFinishedListener runnableFinishedListener;
@@ -67,8 +64,7 @@ public class UIThread implements PostExecutionThread {
             isCancelled = true;
         }
 
-        @Override
-        public void run() {
+        @Override public void run() {
             if (!isCancelled) {
                 wrappedRunnable.run();
                 runnableFinishedListener.onFinished(this);
@@ -79,6 +75,5 @@ public class UIThread implements PostExecutionThread {
     private interface RunnableFinishedListener {
 
         void onFinished(CancellableRunnable cancellableRunnable);
-
     }
 }

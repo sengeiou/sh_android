@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui;
 
 import android.os.Handler;
-
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
@@ -43,75 +42,40 @@ import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
     // Every single activity extending BaseActivity, sadly
-    BaseToolbarActivity.class,
-    LoginSelectionActivity.class,
-    EmailLoginActivity.class,
-    EmailRegistrationActivity.class,
-    PostNewShotActivity.class,
-    ProfileContainerActivity.class,
-    UserFollowsContainerActivity.class,
-    FindFriendsActivity.class,
-    StreamDetailActivity.class,
-    ProfileEditActivity.class,
-    ShotDetailActivity.class,
-    PhotoViewActivity.class,
-    StreamTimelineActivity.class,
-    PeopleFragment.class,
-    WatchersView.class,
-    NewStreamActivity.class,
-    StreamMediaActivity.class,
-    UpdateWarningActivity.class,
-    DraftsActivity.class,
-    DraftsPresenter.class,
-    MainTabbedActivity.class,
-    ResetPasswordActivity.class,
-    ListingActivity.class,
-    FavoritesFragment.class,
-    ActivityTimelinesContainerActivity.class,
-    ActivityTimelineFragment.class,
-    FindStreamsActivity.class,
-    WhaleActivity.class,
-    EmailConfirmationActivity.class,
-    AllShotsActivity.class,
-    SupportActivity.class,
-    ChangePasswordActivity.class,
-    AllParticipantsActivity.class,
-    FindParticipantsActivity.class,
-    WelcomePageActivity.class,
-    ErrorActivity.class,
-    StreamDataInfoActivity.class,
-    MeActivityTimelineFragment.class
+    BaseToolbarActivity.class, LoginSelectionActivity.class, EmailLoginActivity.class, EmailRegistrationActivity.class,
+    PostNewShotActivity.class, ProfileContainerActivity.class, UserFollowsContainerActivity.class,
+    FindFriendsActivity.class, StreamDetailActivity.class, ProfileEditActivity.class, ShotDetailActivity.class,
+    PhotoViewActivity.class, StreamTimelineActivity.class, PeopleFragment.class, WatchersView.class,
+    NewStreamActivity.class, StreamMediaActivity.class, UpdateWarningActivity.class, DraftsActivity.class,
+    DraftsPresenter.class, MainTabbedActivity.class, ResetPasswordActivity.class, ListingActivity.class,
+    FavoritesFragment.class, ActivityTimelinesContainerActivity.class, ActivityTimelineFragment.class,
+    FindStreamsActivity.class, WhaleActivity.class, EmailConfirmationActivity.class, AllShotsActivity.class,
+    SupportActivity.class, ChangePasswordActivity.class, AllParticipantsActivity.class, FindParticipantsActivity.class,
+    WelcomePageActivity.class, ErrorActivity.class, StreamDataInfoActivity.class, MeActivityTimelineFragment.class
   },
   complete = false) public class UiModule {
 
-  @Provides
-  @Singleton
-  AppContainer provideAppContainer() {
-    return AppContainer.DEFAULT;
-  }
+    @Provides @Singleton AppContainer provideAppContainer() {
+        return AppContainer.DEFAULT;
+    }
 
-  @Provides
-  Poller providePoller() {
-    return new Poller(new Handler());
-  }
+    @Provides Poller providePoller() {
+        return new Poller(new Handler());
+    }
 
-  @Provides
-  DateRangeTextProvider provideDateRangeTextProvider(ResourcesDateRangeTextProvider resourcesDateRangeTextProvider) {
-    return resourcesDateRangeTextProvider;
-  }
+    @Provides DateRangeTextProvider provideDateRangeTextProvider(
+      ResourcesDateRangeTextProvider resourcesDateRangeTextProvider) {
+        return resourcesDateRangeTextProvider;
+    }
 
-  @Provides
-  @Singleton
-  IntentFactory provideIntentFactory() {
-    return IntentFactory.REAL;
-  }
+    @Provides @Singleton IntentFactory provideIntentFactory() {
+        return IntentFactory.REAL;
+    }
 }

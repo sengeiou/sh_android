@@ -20,6 +20,17 @@ allprojects {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
+
+    apply plugin: 'checkstyle'
+
+    task checkstyle(type: Checkstyle) {
+        configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+
+        classpath = files()
+    }
 }
 
 project.ext.preDexLibs = !project.hasProperty('disablePreDex')

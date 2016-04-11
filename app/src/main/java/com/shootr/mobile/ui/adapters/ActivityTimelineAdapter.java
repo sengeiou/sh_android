@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -15,7 +14,6 @@ import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -126,6 +124,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateFooterViewHolder(parent);
             case TYPE_REPLY_SHOT:
                 return onCreateReplyViewHolder(parent);
+            default:
         }
         throw new IllegalStateException("View type %d not handled");
     }

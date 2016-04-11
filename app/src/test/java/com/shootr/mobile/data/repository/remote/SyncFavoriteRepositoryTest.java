@@ -11,14 +11,12 @@ import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -76,7 +74,7 @@ public class SyncFavoriteRepositoryTest {
 
         syncFavoriteRepository.getFavorites(ID_CURRENT_USER);
 
-        verify(localFavoriteDataSource,atLeastOnce()).putFavorite(any(FavoriteEntity.class));
+        verify(localFavoriteDataSource, atLeastOnce()).putFavorite(any(FavoriteEntity.class));
     }
 
     @Test public void shouldNotPutFavoritesInLocalWhenGetFavoritesFromRemoteAndIsNotCurrentUser() throws Exception {
@@ -85,7 +83,7 @@ public class SyncFavoriteRepositoryTest {
 
         syncFavoriteRepository.getFavorites(ID_CURRENT_USER);
 
-        verify(localFavoriteDataSource,never()).putFavorite(any(FavoriteEntity.class));
+        verify(localFavoriteDataSource, never()).putFavorite(any(FavoriteEntity.class));
     }
 
     @Test public void shouldNotifyNeedSyncWhenRemoveFavoritesByStreamAndThrowServerComunicatoinException()
@@ -114,8 +112,11 @@ public class SyncFavoriteRepositoryTest {
         verify(remoteFavoriteDataSource).putFavorite(any(FavoriteEntity.class));
     }
 
-    @Test public void shouldNotPutFavoriteWhenDispatchSyncAndFavoriteEntityIsNotSyncDeletedAndThrowsStreamAlreadyInFavoritesException() throws Exception {
-        when(remoteFavoriteDataSource.putFavorite(any(FavoriteEntity.class))).thenThrow(StreamAlreadyInFavoritesException.class);
+    @Test
+    public void shouldNotPutFavoriteWhenDispatchSyncAndFavoriteEntityIsNotSyncDeletedAndThrowsStreamAlreadyInFavorites()
+      throws Exception {
+        when(remoteFavoriteDataSource.putFavorite(any(FavoriteEntity.class))).thenThrow(
+          StreamAlreadyInFavoritesException.class);
         when(localFavoriteDataSource.getEntitiesNotSynchronized()).thenReturn(favoriteEntities());
 
         syncFavoriteRepository.dispatchSync();
@@ -123,32 +124,32 @@ public class SyncFavoriteRepositoryTest {
         verify(localFavoriteDataSource, never()).putFavorite(any(FavoriteEntity.class));
     }
 
-    private FavoriteEntity favoriteEntity(){
-        FavoriteEntity favoriteEntity= new FavoriteEntity();
+    private FavoriteEntity favoriteEntity() {
+        FavoriteEntity favoriteEntity = new FavoriteEntity();
         favoriteEntity.setIdStream(ID_STREAM);
         return favoriteEntity;
     }
 
-    private FavoriteEntity favoriteEntitySyncDeleted(){
-        FavoriteEntity favoriteEntity= new FavoriteEntity();
+    private FavoriteEntity favoriteEntitySyncDeleted() {
+        FavoriteEntity favoriteEntity = new FavoriteEntity();
         favoriteEntity.setIdStream(ID_STREAM);
         favoriteEntity.setSynchronizedStatus(Synchronized.SYNC_DELETED);
         return favoriteEntity;
     }
 
-    private Favorite favorite(){
+    private Favorite favorite() {
         Favorite favorite = new Favorite();
         favorite.setIdStream(ID_STREAM);
         return favorite;
     }
 
-    private List<FavoriteEntity> favoriteEntities(){
+    private List<FavoriteEntity> favoriteEntities() {
         ArrayList<FavoriteEntity> favoritesEntities = new ArrayList<>();
         favoritesEntities.add(favoriteEntity());
         return favoritesEntities;
     }
 
-    private List<FavoriteEntity> favoriteEntitiesSyncDeleted(){
+    private List<FavoriteEntity> favoriteEntitiesSyncDeleted() {
         ArrayList<FavoriteEntity> favoritesEntities = new ArrayList<>();
         favoritesEntities.add(favoriteEntitySyncDeleted());
         return favoritesEntities;

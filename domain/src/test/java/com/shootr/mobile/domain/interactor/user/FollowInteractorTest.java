@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,7 +37,12 @@ public class FollowInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new FollowInteractor(interactorHandler, postExecutionThread, localFollowRepository, remoteFollowRepository, remoteUserRepository, localUserRepository);
+        interactor = new FollowInteractor(interactorHandler,
+          postExecutionThread,
+          localFollowRepository,
+          remoteFollowRepository,
+          remoteUserRepository,
+          localUserRepository);
     }
 
     @Test public void shouldFollowUserInLocalWhenFollow() throws Exception {

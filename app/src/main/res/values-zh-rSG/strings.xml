@@ -220,7 +220,7 @@
     <string name="niced_shot_activity_with_comment">"赞了: "</string>
     <plurals name="nice_count_pattern">
         <item quantity="other">%d赞</item>
-        <item quantity="zero"/>
+        <item quantity="zero" />
     </plurals>
     <string name="no">不</string>
     <string name="notification_image">图片</string>
@@ -271,7 +271,7 @@
     <string name="replied_activity_with_comment" formatted="false">"已回覆: "</string>
     <plurals name="replies_header_count_pattern">
         <item quantity="other">%d回复</item>
-        <item quantity="zero"/>
+        <item quantity="zero" />
     </plurals>
     <string name="reply_name_pattern">%1$s回复%2$s</string>
     <string name="reply_placeholder_pattern">回复%s…</string>
