@@ -3,7 +3,9 @@ image: sloydev/android-env:23.2
 before_script:
 
 features:
-    script: gradle test
+    script:
+        - ./gradlew checkstyle build
+        - gradle test
     stage: test
     only:
         - /^feature\/.*$/
