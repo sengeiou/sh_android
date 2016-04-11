@@ -280,7 +280,7 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldShowShotSharedWhenInitializeWithIdShotAndShareShotViaShootr() throws Exception {
-        setupShareSHotInteractor();
+        setupShareShotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, ID_SHOT);
 
@@ -290,7 +290,7 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldShowShotSharedWhenInitializeWithShotModelAndShareShotViaShootr() throws Exception {
-        setupShareSHotInteractor();
+        setupShareShotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, shotModel());
 
@@ -300,7 +300,7 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldShareShotWhenInitializeWithShotModel() throws Exception {
-        setupShareSHotInteractor();
+        setupShareShotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, shotModel());
 
@@ -310,7 +310,7 @@ public class ShotDetaillPresenterTest {
     }
 
     @Test public void shouldShareShotWhenInitializeWithIdShot() throws Exception {
-        setupShareSHotInteractor();
+        setupShareShotInteractor();
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, ID_SHOT);
 
@@ -406,7 +406,7 @@ public class ShotDetaillPresenterTest {
           .markNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupShareSHotInteractor(){
+    private void setupShareShotInteractor(){
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
