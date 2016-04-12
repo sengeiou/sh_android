@@ -181,6 +181,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         Intents.maybeStartActivity(this, shareIntent);
     }
 
+    @Override public void goToNicers(String idShot) {
+        startActivity(NicersActivity.newIntent(this, idShot));
+    }
+
     private void setupAdapter() {
         detailAdapter =
           new ShotDetailWithRepliesAdapter(imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
@@ -234,7 +238,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     detailPresenter.unmarkNiceShot(idShot);
                 }
             }, //
-            timeFormatter, getResources(), timeUtils);
+            new ShotDetailWithRepliesAdapter.onNicesClickListener() {
+                @Override public void onClick(ShotModel shotModel) {
+                    detailPresenter.openShotNicers(shotModel);
+                }
+            }, timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
     }

@@ -30,13 +30,13 @@ public class NicersActivity extends BaseToolbarDecoratedActivity implements Nice
     @Bind(R.id.nicerslist_progress) ProgressBar progressBar;
 
     @Inject FeedbackMessage feedbackMessage;
+    @Inject NicersPresenter presenter;
 
-    private NicersPresenter presenter;
     private UserListAdapter adapter;
 
-    public static Intent newIntent(Context context, String idStream) {
+    public static Intent newIntent(Context context, String idShot) {
         Intent intent = new Intent(context, NicersActivity.class);
-        intent.putExtra(EXTRA_ID_SHOT, idStream);
+        intent.putExtra(EXTRA_ID_SHOT, idShot);
         return intent;
     }
 

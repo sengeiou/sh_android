@@ -38,4 +38,6 @@ public interface ShotDetailView {
     void enableStreamTitle();
 
     void shareShot(ShotModel shotModel);
+
+    void goToNicers(String idShot);
 }

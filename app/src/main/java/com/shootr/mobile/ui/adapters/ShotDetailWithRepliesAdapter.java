@@ -18,7 +18,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.mobile.ui.model.NicerModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
@@ -54,6 +53,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
+    private final onNicesClickListener onNicesClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -70,8 +70,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       StreamClickListener streamClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources,
-      AndroidTimeUtils timeUtils) {
+      OnNiceShotListener onNiceShotListener, ShotDetailWithRepliesAdapter.onNicesClickListener onNicesClickListener,
+      TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -82,6 +82,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.onUsernameClickListener = onUsernameClickListener;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
+        this.onNicesClickListener = onNicesClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -374,12 +375,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
         }
 
-        public void setNiceCount(ShotModel shotModel ,Integer niceCount) {
+        public void setNiceCount(final ShotModel shotModel ,Integer niceCount) {
             if(niceCount>2) {
                 this.nicers.setVisibility(View.GONE);
                 this.niceCount.setVisibility(View.VISIBLE);
                 this.niceCount.setText(context.getResources()
                   .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+                this.niceCount.setTextColor(context.getResources().getColor(R.color.links));
+                this.niceCount.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        onNicesClickListener.onClick(shotModel);
+                    }
+                });
             }else{
                 this.nicers.setVisibility(View.VISIBLE);
                 this.niceCount.setVisibility(View.GONE);
@@ -719,6 +726,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface StreamClickListener {
+
+        void onClick(ShotModel shotModel);
+    }
+
+    public interface onNicesClickListener {
 
         void onClick(ShotModel shotModel);
     }

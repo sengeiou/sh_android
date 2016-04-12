@@ -251,4 +251,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void shotClick(ShotModel shotModel) {
         shotDetailView.openShot(shotModel);
     }
+
+    public void openShotNicers(ShotModel shotModel) {
+        shotDetailView.goToNicers(shotModel.getIdShot());
+    }
 }
