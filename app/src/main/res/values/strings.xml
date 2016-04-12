@@ -392,5 +392,6 @@
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
     <string name="nicers">Nicers</string>
+    <string name="niced_by">"Niced by "</string>
 
 </resources>

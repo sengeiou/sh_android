@@ -25,6 +25,7 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NicerTextSpannableBuilder;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotModel parentShot;
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private NicerTextSpannableBuilder nicerTextSpannableBuilder;
 
     private ShotDetailMainViewHolder mainHolder;
 
@@ -87,6 +89,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
+        this.nicerTextSpannableBuilder = new NicerTextSpannableBuilder();
     }
 
     public void renderMainShot(ShotModel mainShot) {
@@ -281,7 +284,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
-        @Bind(R.id.shot_nicers) TextView nicers;
+        @Bind(R.id.shot_nicers) ClickableTextView nicers;
         @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -386,11 +389,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private void setNicers(ShotModel shotModel){
             if(shotModel.getNicers() != null) {
-                String nicersText = "Niced by " ;
+                String nicersText = context.getString(R.string.niced_by) ;
                 for (String nicer : shotModel.getNicers()) {
                     nicersText += nicer + ", ";
                 }
-                this.nicers.setText(nicersText);
+                this.nicers.setText(nicerTextSpannableBuilder.formatWithUsernameSpans(nicersText, onUsernameClickListener));
             }
         }
 

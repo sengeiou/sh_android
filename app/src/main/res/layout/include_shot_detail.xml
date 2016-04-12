@@ -148,7 +148,7 @@
           android:visibility="gone"
           tools:text="8 nices" />
 
-      <TextView android:id="@+id/shot_nicers"
+      <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/shot_nicers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
