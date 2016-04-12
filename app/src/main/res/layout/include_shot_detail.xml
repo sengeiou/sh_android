@@ -145,7 +145,19 @@
           android:layout_marginLeft="8dp"
           android:textColor="@color/gray_60"
           android:textSize="14sp"
+          android:visibility="gone"
           tools:text="8 nices" />
+
+      <TextView android:id="@+id/shot_nicers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/gray_60"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:visibility= "visible"
+        tools:text="Niced by user1, user2" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/shot_detail_pin_to_profile_container"

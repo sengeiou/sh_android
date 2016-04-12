@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Collections;
@@ -19,17 +20,20 @@ public class GetShotDetailInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
+    private final NicerRepository nicerRepository;
 
     private String idShot;
     private Callback<ShotDetail> callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
+      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
+      NicerRepository nicerRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.nicerRepository = nicerRepository;
     }
 
     public void loadShotDetail(String idShot, Callback<ShotDetail> callback, ErrorCallback errorCallback) {
@@ -46,6 +50,7 @@ public class GetShotDetailInteractor implements Interactor {
                 notifyLoaded(reorderReplies(localShotDetail));
             }
             ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
+            remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
             notifyLoaded(reorderReplies(remoteShotDetail));
             if (localShotDetail != null) {
                 localShotRepository.putShot(remoteShotDetail.getShot());

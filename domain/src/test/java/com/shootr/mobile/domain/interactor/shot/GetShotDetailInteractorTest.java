@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 
 import org.junit.Before;
@@ -31,6 +32,7 @@ public class GetShotDetailInteractorTest {
 
     @Mock ShotRepository localShotRepository;
     @Mock ShotRepository remoteShotRepository;
+    @Mock NicerRepository nicerRepository;
     @Spy SpyCallback<ShotDetail> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback errorCallback;
 
@@ -41,7 +43,7 @@ public class GetShotDetailInteractorTest {
         interactor = new GetShotDetailInteractor(new TestInteractorHandler(),
           new TestPostExecutionThread(),
           localShotRepository,
-          remoteShotRepository);
+          remoteShotRepository, nicerRepository);
         setupDefaultEmptyShotDetail();
     }
 

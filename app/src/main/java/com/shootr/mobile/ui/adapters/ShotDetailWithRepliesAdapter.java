@@ -18,6 +18,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.model.NicerModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
@@ -280,6 +281,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
+        @Bind(R.id.shot_nicers) TextView nicers;
         @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -348,9 +350,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setupNiceButton(final ShotModel shotModel) {
             Integer nicesCount = shotModel.getNiceCount();
             if (nicesCount > 0) {
-                setNiceCount(nicesCount);
+                setNiceCount(shotModel, nicesCount);
             } else {
                 this.niceCount.setVisibility(View.GONE);
+                this.nicers.setVisibility(View.GONE);
             }
             setNiceButton(shotModel);
         }
@@ -368,10 +371,27 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
         }
 
-        public void setNiceCount(Integer niceCount) {
-            this.niceCount.setVisibility(View.VISIBLE);
-            this.niceCount.setText(context.getResources()
-              .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+        public void setNiceCount(ShotModel shotModel ,Integer niceCount) {
+            if(niceCount>2) {
+                this.nicers.setVisibility(View.GONE);
+                this.niceCount.setVisibility(View.VISIBLE);
+                this.niceCount.setText(context.getResources()
+                  .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+            }else{
+                this.nicers.setVisibility(View.VISIBLE);
+                this.niceCount.setVisibility(View.GONE);
+                setNicers(shotModel);
+            }
+        }
+
+        private void setNicers(ShotModel shotModel){
+            if(shotModel.getNicers() != null) {
+                String nicersText = "Niced by " ;
+                for (String nicer : shotModel.getNicers()) {
+                    nicersText += nicer + ", ";
+                }
+                this.nicers.setText(nicersText);
+            }
         }
 
         public void setComment(String comment) {

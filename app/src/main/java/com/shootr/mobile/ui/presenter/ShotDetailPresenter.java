@@ -10,12 +10,15 @@ import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.ui.model.NicerModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -26,6 +29,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
     private final ShotModelMapper shotModelMapper;
+    private final NicerModelMapper nicerModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
 
@@ -37,13 +41,14 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
       MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory) {
+      ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, NicerModelMapper nicerModelMapper,
+      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.shotModelMapper = shotModelMapper;
+        this.nicerModelMapper = nicerModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -80,6 +85,16 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    private void setShotNicers(List<NicerModel> nicers) {
+        List<String> usernames = new ArrayList<>();
+        if(nicers != null){
+            for (NicerModel nicer : nicers) {
+                usernames.add(nicer.getUserName());
+            }
+        }
+        this.shotModel.setNicers(usernames);
     }
 
     public void initializeNewShotBarDelegate(ShotModel shotModel, ShotDetailView shotDetailView) {
@@ -128,6 +143,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void onShotDetailLoaded(ShotDetail shotDetail) {
         setShotModel(shotModelMapper.transform(shotDetail.getShot()));
+        if(shotDetail.getNicers() != null) {
+            setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
+        }
         shotDetailView.renderShot(shotModel);
         shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
         onRepliesLoaded(shotDetail.getReplies());
