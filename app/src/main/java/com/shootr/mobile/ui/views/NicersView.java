@@ -10,7 +10,4 @@ public interface NicersView extends LoadDataView {
 
     void showNicersList();
 
-    void hideProgressView();
-
-    void showProgressView();
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -22,8 +22,8 @@ import com.shootr.mobile.util.FeedbackMessage;
 import java.util.List;
 import javax.inject.Inject;
 
-public class NicersActivity extends BaseToolbarDecoratedActivity implements NicersView,
-  UserListAdapter.FollowUnfollowAdapterCallback {
+public class NicersActivity extends BaseToolbarDecoratedActivity
+  implements NicersView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_ID_SHOT = "idShot";
     @Bind(R.id.nicerslist_list) ListView nicerslistListView;
@@ -59,16 +59,21 @@ public class NicersActivity extends BaseToolbarDecoratedActivity implements Nice
         presenter.pause();
     }
 
-    private UserListAdapter getNicersAdapter(){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private UserListAdapter getNicersAdapter() {
         if (adapter == null) {
             adapter = new UserListAdapter(this, imageLoader);
             adapter.setCallback(this);
         }
         return adapter;
-    }
-
-    private View getLoadingView() {
-        return LayoutInflater.from(this).inflate(R.layout.item_list_loading, nicerslistListView, false);
     }
 
     @Override protected void initializePresenter() {
@@ -89,20 +94,12 @@ public class NicersActivity extends BaseToolbarDecoratedActivity implements Nice
         nicerslistListView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideProgressView() {
-        /* no-op */
-    }
-
-    @Override public void showProgressView() {
-        /* no-op */
-    }
-
     @Override public void showEmpty() {
-        //TODO
+        /* no-op */
     }
 
     @Override public void hideEmpty() {
-        //TODO
+        /* no-op */
     }
 
     @Override public void showLoading() {
@@ -135,8 +132,7 @@ public class NicersActivity extends BaseToolbarDecoratedActivity implements Nice
           .show();
     }
 
-    @OnItemClick(R.id.nicerslist_list)
-    public void openUserProfile(int position) {
+    @OnItemClick(R.id.nicerslist_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
     }
