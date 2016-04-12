@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetShotDetailInteractor implements com.shootr.mobile.domain.interactor.Interactor {
+public class GetShotDetailInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -42,10 +43,10 @@ public class GetShotDetailInteractor implements com.shootr.mobile.domain.interac
         try {
             ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
             if (localShotDetail != null) {
-                notifyLoaded(reoderReplies(localShotDetail));
+                notifyLoaded(reorderReplies(localShotDetail));
             }
             ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
-            notifyLoaded(reoderReplies(remoteShotDetail));
+            notifyLoaded(reorderReplies(remoteShotDetail));
             if (localShotDetail != null) {
                 localShotRepository.putShot(remoteShotDetail.getShot());
             }
@@ -54,7 +55,7 @@ public class GetShotDetailInteractor implements com.shootr.mobile.domain.interac
         }
     }
 
-    private ShotDetail reoderReplies(ShotDetail shotDetail) {
+    private ShotDetail reorderReplies(ShotDetail shotDetail) {
         List<Shot> unorderedReplies = shotDetail.getReplies();
         List<Shot> reorderedReplies = orderShots(unorderedReplies);
         shotDetail.setReplies(reorderedReplies);

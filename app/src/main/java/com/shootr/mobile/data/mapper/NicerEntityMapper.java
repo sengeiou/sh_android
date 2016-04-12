@@ -1,0 +1,34 @@
+package com.shootr.mobile.data.mapper;
+
+import com.shootr.mobile.data.entity.NicerEntity;
+import com.shootr.mobile.domain.Nicer;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+
+public class NicerEntityMapper {
+
+    @Inject public NicerEntityMapper() {
+    }
+
+    public Nicer transform(NicerEntity nicerEntity) {
+        Nicer nicer = new Nicer();
+
+        nicer.setIdUser(nicerEntity.getIdUser());
+        nicer.setIdNice(nicerEntity.getIdNice());
+        nicer.setIdShot(nicerEntity.getIdShot());
+        nicer.setUserName(nicerEntity.getUserName());
+
+        return nicer;
+    }
+
+    public List<Nicer> transform(List<NicerEntity> nicerEntityList) {
+        List<Nicer> nicers = new ArrayList<>(nicerEntityList.size());
+
+        for (NicerEntity nicerEntity : nicerEntityList) {
+            nicers.add(transform(nicerEntity));
+        }
+
+        return nicers;
+    }
+}
