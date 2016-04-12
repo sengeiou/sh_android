@@ -238,7 +238,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     detailPresenter.unmarkNiceShot(idShot);
                 }
             }, //
-            new ShotDetailWithRepliesAdapter.onNicesClickListener() {
+            new ShotDetailWithRepliesAdapter.NicesClickListener() {
                 @Override public void onClick(ShotModel shotModel) {
                     detailPresenter.openShotNicers(shotModel);
                 }

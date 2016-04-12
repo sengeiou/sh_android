@@ -53,7 +53,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
-    private final onNicesClickListener onNicesClickListener;
+    private final NicesClickListener NicesClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -70,7 +70,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       StreamClickListener streamClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, ShotDetailWithRepliesAdapter.onNicesClickListener onNicesClickListener,
+      OnNiceShotListener onNiceShotListener, NicesClickListener nicesClickListener,
       TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -82,7 +82,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.onUsernameClickListener = onUsernameClickListener;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
-        this.onNicesClickListener = onNicesClickListener;
+        this.NicesClickListener = nicesClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -375,8 +375,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
         }
 
-        public void setNiceCount(final ShotModel shotModel ,Integer niceCount) {
-            if(niceCount>2) {
+        public void setNiceCount(final ShotModel shotModel, Integer niceCount) {
+            if (niceCount > 2) {
                 this.nicers.setVisibility(View.GONE);
                 this.niceCount.setVisibility(View.VISIBLE);
                 this.niceCount.setText(context.getResources()
@@ -384,23 +384,24 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.niceCount.setTextColor(context.getResources().getColor(R.color.links));
                 this.niceCount.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-                        onNicesClickListener.onClick(shotModel);
+                        NicesClickListener.onClick(shotModel);
                     }
                 });
-            }else{
+            } else {
                 this.nicers.setVisibility(View.VISIBLE);
                 this.niceCount.setVisibility(View.GONE);
                 setNicers(shotModel);
             }
         }
 
-        private void setNicers(ShotModel shotModel){
-            if(shotModel.getNicers() != null) {
-                String nicersText = context.getString(R.string.niced_by) ;
+        private void setNicers(ShotModel shotModel) {
+            if (shotModel.getNicers() != null) {
+                String nicersText = context.getString(R.string.niced_by);
                 for (String nicer : shotModel.getNicers()) {
                     nicersText += nicer + ", ";
                 }
-                this.nicers.setText(nicerTextSpannableBuilder.formatWithUsernameSpans(nicersText, onUsernameClickListener));
+                this.nicers.setText(nicerTextSpannableBuilder.formatWithUsernameSpans(nicersText,
+                  onUsernameClickListener));
             }
         }
 
@@ -730,7 +731,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         void onClick(ShotModel shotModel);
     }
 
-    public interface onNicesClickListener {
+    public interface NicesClickListener {
 
         void onClick(ShotModel shotModel);
     }
