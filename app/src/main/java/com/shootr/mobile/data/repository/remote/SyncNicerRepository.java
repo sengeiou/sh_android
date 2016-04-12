@@ -20,4 +20,8 @@ public class SyncNicerRepository implements NicerRepository {
     @Override public List<Nicer> getNicers(String idShot) {
         return nicerEntityMapper.transform(nicerDataSource.getNicers(idShot));
     }
+
+    @Override public List<Nicer> getNicersWithUser(String idShot) {
+        return nicerEntityMapper.transform(nicerDataSource.getNicersWithUser(idShot));
+    }
 }

@@ -8,7 +8,10 @@ import javax.inject.Inject;
 
 public class NicerEntityMapper {
 
-    @Inject public NicerEntityMapper() {
+    private final UserEntityMapper userEntityMapper;
+
+    @Inject public NicerEntityMapper(UserEntityMapper userEntityMapper) {
+        this.userEntityMapper = userEntityMapper;
     }
 
     public Nicer transform(NicerEntity nicerEntity) {
@@ -18,7 +21,9 @@ public class NicerEntityMapper {
         nicer.setIdNice(nicerEntity.getIdNice());
         nicer.setIdShot(nicerEntity.getIdShot());
         nicer.setUserName(nicerEntity.getUserName());
-
+        if(nicerEntity.getUser() != null) {
+            nicer.setUser(userEntityMapper.transform(nicerEntity.getUser()));
+        }
         return nicer;
     }
 

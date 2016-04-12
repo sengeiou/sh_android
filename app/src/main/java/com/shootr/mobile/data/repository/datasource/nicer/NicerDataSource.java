@@ -6,4 +6,6 @@ import java.util.List;
 public interface NicerDataSource {
 
     List<NicerEntity> getNicers(String idShot);
+
+    List<NicerEntity> getNicersWithUser(String idShot);
 }

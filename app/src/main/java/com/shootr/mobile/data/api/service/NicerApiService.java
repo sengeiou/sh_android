@@ -10,4 +10,6 @@ import retrofit.http.Query;
 public interface NicerApiService {
 
     @GET("/nice?includeEmbed=false") List<NicerEntity> getNicers(@Query("idShot") String idShot) throws ApiException, IOException;
+
+    @GET("/nice?includeEmbed=true") List<NicerEntity> getNicersWithUser(@Query("idShot") String idShot) throws ApiException, IOException;
 }

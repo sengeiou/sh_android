@@ -6,6 +6,15 @@ public class NicerEntity {
     private String idShot;
     private String userName;
     private String idNice;
+    private UserEntity user;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 
     public String getIdUser() {
         return idUser;
