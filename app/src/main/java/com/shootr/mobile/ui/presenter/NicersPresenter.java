@@ -49,17 +49,17 @@ public class NicersPresenter implements Presenter {
     private void loadNicers() {
         nicersView.hideEmpty();
         nicersView.showLoading();
-        getNicersInteractor.obtainNicers(idShot, new Interactor.Callback<List<User>>() {
-              @Override public void onLoaded(List<User> users) {
-                  nicersView.hideLoading();
-                  nicersView.showNicersList();
-                  renderNicers(users);
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  nicersView.showError(errorMessageFactory.getMessageForError(error));
-              }
-          });
+        getNicersInteractor.obtainNicersWithUser(idShot, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                nicersView.hideLoading();
+                nicersView.showNicersList();
+                renderNicers(users);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                nicersView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
     private void renderNicers(List<User> users) {

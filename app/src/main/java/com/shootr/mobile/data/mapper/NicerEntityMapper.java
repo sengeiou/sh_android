@@ -36,4 +36,10 @@ public class NicerEntityMapper {
 
         return nicers;
     }
+
+    public Nicer transform(NicerEntity nicerEntity, String currentUserId, Boolean follower, Boolean following) {
+        Nicer nicer = transform(nicerEntity);
+        nicer.setUser(userEntityMapper.transform(nicerEntity.getUser(),currentUserId, follower, following));
+        return nicer;
+    }
 }

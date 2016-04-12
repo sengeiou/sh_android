@@ -169,7 +169,7 @@ public class NicersPresenterTest {
                 callback.onLoaded(noNicers());
                 return null;
             }
-        }).when(getNicersInteractor).obtainNicers(anyString(),
+        }).when(getNicersInteractor).obtainNicersWithUser(anyString(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -182,7 +182,7 @@ public class NicersPresenterTest {
                 callback.onLoaded(nicers());
                 return null;
             }
-        }).when(getNicersInteractor).obtainNicers(anyString(),
+        }).when(getNicersInteractor).obtainNicersWithUser(anyString(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -195,7 +195,7 @@ public class NicersPresenterTest {
                 });
                 return null;
             }
-        }).when(getNicersInteractor).obtainNicers(anyString(),
+        }).when(getNicersInteractor).obtainNicersWithUser(anyString(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }

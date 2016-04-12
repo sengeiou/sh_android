@@ -1,13 +1,13 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.Nicer;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.NicerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 public class GetNicersInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository remoteUserRepository;
+    private final NicerRepository nicerRepository;
     private final PostExecutionThread postExecutionThread;
 
     private Callback<List<User>> callback;
@@ -23,13 +23,13 @@ public class GetNicersInteractor implements Interactor {
     private String idShot;
 
     @Inject public GetNicersInteractor(InteractorHandler interactorHandler,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+      NicerRepository nicerRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
-        this.remoteUserRepository = remoteUserRepository;
+        this.nicerRepository = nicerRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainNicers(String idShot, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainNicersWithUser(String idShot, Callback<List<User>> callback, ErrorCallback errorCallback) {
         this.idShot = idShot;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -46,8 +46,16 @@ public class GetNicersInteractor implements Interactor {
     }
 
     private List<User> obtainNicersList() {
-        //TODO: obtain nicers
-        return new ArrayList<>();
+        List<User> users = new ArrayList<>();
+        List<Nicer> nicers = nicerRepository.getNicersWithUser(idShot);
+
+        if(nicers != null && !nicers.isEmpty()) {
+            for (Nicer nicer : nicers) {
+                users.add(nicer.getUser());
+            }
+        }
+
+        return users;
     }
 
     private void notifyLoaded(final List<User> results) {
