@@ -612,10 +612,10 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
 
     private static class VpaListenerAdapter implements ViewPropertyAnimatorListener {
 
-        @Override public void onAnimationStart(View view) {/* no-op */}
+        @Override public void onAnimationStart(View view) { /* no-op */ }
 
-        @Override public void onAnimationEnd(View view) {/* no-op */}
+        @Override public void onAnimationEnd(View view) { /* no-op */ }
 
-        @Override public void onAnimationCancel(View view) {/* no-op */}
+        @Override public void onAnimationCancel(View view) { /* no-op */ }
     }
 }

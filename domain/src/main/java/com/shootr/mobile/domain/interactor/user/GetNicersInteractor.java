@@ -22,8 +22,8 @@ public class GetNicersInteractor implements Interactor {
     private ErrorCallback errorCallback;
     private String idShot;
 
-    @Inject public GetNicersInteractor(InteractorHandler interactorHandler,
-      NicerRepository nicerRepository, PostExecutionThread postExecutionThread) {
+    @Inject public GetNicersInteractor(InteractorHandler interactorHandler, NicerRepository nicerRepository,
+      PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.nicerRepository = nicerRepository;
         this.postExecutionThread = postExecutionThread;
@@ -49,7 +49,7 @@ public class GetNicersInteractor implements Interactor {
         List<User> users = new ArrayList<>();
         List<Nicer> nicers = nicerRepository.getNicersWithUser(idShot);
 
-        if(nicers != null && !nicers.isEmpty()) {
+        if (nicers != null && !nicers.isEmpty()) {
             for (Nicer nicer : nicers) {
                 users.add(nicer.getUser());
             }

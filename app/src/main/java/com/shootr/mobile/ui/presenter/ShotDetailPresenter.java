@@ -89,7 +89,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void setShotNicers(List<NicerModel> nicers) {
         List<String> usernames = new ArrayList<>();
-        if(nicers != null){
+        if (nicers != null) {
             for (NicerModel nicer : nicers) {
                 usernames.add(nicer.getUserName());
             }
@@ -143,7 +143,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void onShotDetailLoaded(ShotDetail shotDetail) {
         setShotModel(shotModelMapper.transform(shotDetail.getShot()));
-        if(shotDetail.getNicers() != null) {
+        if (shotDetail.getNicers() != null) {
             setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
         }
         shotDetailView.renderShot(shotModel);
@@ -232,7 +232,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    public void shareShot(){
+    public void shareShot() {
         shotDetailView.shareShot(shotModel);
     }
 

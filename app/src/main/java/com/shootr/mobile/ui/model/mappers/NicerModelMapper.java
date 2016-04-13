@@ -11,7 +11,7 @@ public class NicerModelMapper {
     @Inject public NicerModelMapper() {
     }
 
-    public NicerModel transform(Nicer nicer){
+    public NicerModel transform(Nicer nicer) {
         if (nicer == null) {
             return null;
         }
@@ -24,7 +24,7 @@ public class NicerModelMapper {
         return nicerModel;
     }
 
-    public List<NicerModel> transform(List<Nicer> nicers){
+    public List<NicerModel> transform(List<Nicer> nicers) {
         List<NicerModel> nicerModels = new ArrayList<>(nicers.size());
         for (Nicer nicer : nicers) {
             nicerModels.add(transform(nicer));
