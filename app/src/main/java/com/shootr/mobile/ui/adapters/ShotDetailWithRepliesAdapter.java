@@ -53,7 +53,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
-    private final NicesClickListener NicesClickListener;
+    private final NicesClickListener nicesClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -82,7 +82,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.onUsernameClickListener = onUsernameClickListener;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
-        this.NicesClickListener = nicesClickListener;
+        this.nicesClickListener = nicesClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -384,7 +384,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.niceCount.setTextColor(context.getResources().getColor(R.color.links));
                 this.niceCount.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-                        NicesClickListener.onClick(shotModel);
+                        nicesClickListener.onClick(shotModel);
                     }
                 });
             } else {
