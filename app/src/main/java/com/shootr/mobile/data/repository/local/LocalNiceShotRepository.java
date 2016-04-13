@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,6 +41,14 @@ import javax.inject.Singleton;
         initMarkedShots();
         getMarkedShots().remove(idShot);
         niceManager.unmark(idShot);
+    }
+
+    @Override public void markAll(List<String> nicedIdShots) {
+        try {
+            niceManager.mark(nicedIdShots);
+        } catch (NiceAlreadyMarkedException e) {
+            /* no - op */
+        }
     }
 
     public Set<String> getMarkedShots() {

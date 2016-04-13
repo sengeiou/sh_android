@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.NiceShotRepository;
 import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -38,6 +39,7 @@ public class ShootrUserService {
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
     private final NicerRepository nicerRepository;
+    private final NiceShotRepository localNiceShotRepository;
 
     @Inject
     public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
@@ -45,7 +47,7 @@ public class ShootrUserService {
       ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway,
       ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
       @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
-      DatabaseUtils databaseUtils, NicerRepository nicerRepository) {
+      DatabaseUtils databaseUtils, NicerRepository nicerRepository, @Local NiceShotRepository localNiceShotRepository) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.createAccountGateway = createAccountGateway;
@@ -58,6 +60,7 @@ public class ShootrUserService {
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
         this.databaseUtils = databaseUtils;
         this.nicerRepository = nicerRepository;
+        this.localNiceShotRepository = localNiceShotRepository;
     }
 
     public void createAccount(String username, String email, String password, String locale)
@@ -88,7 +91,7 @@ public class ShootrUserService {
         for (Nicer nice : nices) {
             nicedIdShots.add(nice.getIdShot());
         }
-        //TODO save all nices
+        localNiceShotRepository.markAll(nicedIdShots);
         remoteUserRepository.getPeople();
     }
 
