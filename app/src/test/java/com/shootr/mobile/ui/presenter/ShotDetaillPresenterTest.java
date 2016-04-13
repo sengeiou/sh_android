@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -52,12 +53,12 @@ public class ShotDetaillPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
+        NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
           shareShotInteractor,
-          shotModelMapper,
-          bus,
+          shotModelMapper, nicerModelMapper, bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
     }

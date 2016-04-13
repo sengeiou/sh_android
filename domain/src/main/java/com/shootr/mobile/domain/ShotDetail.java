@@ -7,6 +7,15 @@ public class ShotDetail {
     private Shot shot;
     private Shot parentShot;
     private List<Shot> replies;
+    private List<Nicer> nicers;
+
+    public List<Nicer> getNicers() {
+        return nicers;
+    }
+
+    public void setNicers(List<Nicer> nicers) {
+        this.nicers = nicers;
+    }
 
     public Shot getShot() {
         return shot;

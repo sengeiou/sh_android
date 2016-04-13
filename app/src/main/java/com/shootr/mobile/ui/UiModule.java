@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
+import com.shootr.mobile.ui.activities.NicersActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -49,16 +50,45 @@ import javax.inject.Singleton;
 @Module(
   injects = {
     // Every single activity extending BaseActivity, sadly
-    BaseToolbarActivity.class, LoginSelectionActivity.class, EmailLoginActivity.class, EmailRegistrationActivity.class,
-    PostNewShotActivity.class, ProfileContainerActivity.class, UserFollowsContainerActivity.class,
-    FindFriendsActivity.class, StreamDetailActivity.class, ProfileEditActivity.class, ShotDetailActivity.class,
-    PhotoViewActivity.class, StreamTimelineActivity.class, PeopleFragment.class, WatchersView.class,
-    NewStreamActivity.class, StreamMediaActivity.class, UpdateWarningActivity.class, DraftsActivity.class,
-    DraftsPresenter.class, MainTabbedActivity.class, ResetPasswordActivity.class, ListingActivity.class,
-    FavoritesFragment.class, ActivityTimelinesContainerActivity.class, ActivityTimelineFragment.class,
-    FindStreamsActivity.class, WhaleActivity.class, EmailConfirmationActivity.class, AllShotsActivity.class,
-    SupportActivity.class, ChangePasswordActivity.class, AllParticipantsActivity.class, FindParticipantsActivity.class,
-    WelcomePageActivity.class, ErrorActivity.class, StreamDataInfoActivity.class, MeActivityTimelineFragment.class
+    BaseToolbarActivity.class,
+    LoginSelectionActivity.class,
+    EmailLoginActivity.class,
+    EmailRegistrationActivity.class,
+    PostNewShotActivity.class,
+    ProfileContainerActivity.class,
+    UserFollowsContainerActivity.class,
+    FindFriendsActivity.class,
+    StreamDetailActivity.class,
+    ProfileEditActivity.class,
+    ShotDetailActivity.class,
+    PhotoViewActivity.class,
+    StreamTimelineActivity.class,
+    PeopleFragment.class,
+    WatchersView.class,
+    NewStreamActivity.class,
+    StreamMediaActivity.class,
+    UpdateWarningActivity.class,
+    DraftsActivity.class,
+    DraftsPresenter.class,
+    MainTabbedActivity.class,
+    ResetPasswordActivity.class,
+    ListingActivity.class,
+    FavoritesFragment.class,
+    ActivityTimelinesContainerActivity.class,
+    ActivityTimelineFragment.class,
+    FindStreamsActivity.class,
+    WhaleActivity.class,
+    EmailConfirmationActivity.class,
+    AllShotsActivity.class,
+    SupportActivity.class,
+    ChangePasswordActivity.class,
+    AllParticipantsActivity.class,
+    FindParticipantsActivity.class,
+    WelcomePageActivity.class,
+    ErrorActivity.class,
+    StreamDataInfoActivity.class,
+    MeActivityTimelineFragment.class,
+    NicersActivity.class
   },
   complete = false) public class UiModule {
 

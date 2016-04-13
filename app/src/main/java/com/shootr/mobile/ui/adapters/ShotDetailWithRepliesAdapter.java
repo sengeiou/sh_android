@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NicerTextSpannableBuilder;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
+    private final NicesClickListener nicesClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -59,6 +61,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotModel parentShot;
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private NicerTextSpannableBuilder nicerTextSpannableBuilder;
 
     private ShotDetailMainViewHolder mainHolder;
 
@@ -67,8 +70,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       StreamClickListener streamClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter, Resources resources,
-      AndroidTimeUtils timeUtils) {
+      OnNiceShotListener onNiceShotListener, NicesClickListener nicesClickListener,
+      TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -79,6 +82,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.onUsernameClickListener = onUsernameClickListener;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
+        this.nicesClickListener = nicesClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -86,6 +90,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
+        this.nicerTextSpannableBuilder = new NicerTextSpannableBuilder();
     }
 
     public void renderMainShot(ShotModel mainShot) {
@@ -280,6 +285,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
+        @Bind(R.id.shot_nicers) ClickableTextView nicers;
         @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -348,9 +354,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public void setupNiceButton(final ShotModel shotModel) {
             Integer nicesCount = shotModel.getNiceCount();
             if (nicesCount > 0) {
-                setNiceCount(nicesCount);
+                setNiceCount(shotModel, nicesCount);
             } else {
                 this.niceCount.setVisibility(View.GONE);
+                this.nicers.setVisibility(View.GONE);
             }
             setNiceButton(shotModel);
         }
@@ -368,10 +375,34 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             });
         }
 
-        public void setNiceCount(Integer niceCount) {
-            this.niceCount.setVisibility(View.VISIBLE);
-            this.niceCount.setText(context.getResources()
-              .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+        public void setNiceCount(final ShotModel shotModel, Integer niceCount) {
+            if (niceCount > 2) {
+                this.nicers.setVisibility(View.GONE);
+                this.niceCount.setVisibility(View.VISIBLE);
+                this.niceCount.setText(context.getResources()
+                  .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+                this.niceCount.setTextColor(context.getResources().getColor(R.color.links));
+                this.niceCount.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        nicesClickListener.onClick(shotModel);
+                    }
+                });
+            } else {
+                this.nicers.setVisibility(View.VISIBLE);
+                this.niceCount.setVisibility(View.GONE);
+                setNicers(shotModel);
+            }
+        }
+
+        private void setNicers(ShotModel shotModel) {
+            if (shotModel.getNicers() != null) {
+                String nicersText = context.getString(R.string.niced_by);
+                for (String nicer : shotModel.getNicers()) {
+                    nicersText += nicer + ", ";
+                }
+                this.nicers.setText(nicerTextSpannableBuilder.formatWithUsernameSpans(nicersText,
+                  onUsernameClickListener));
+            }
         }
 
         public void setComment(String comment) {
@@ -696,6 +727,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface StreamClickListener {
+
+        void onClick(ShotModel shotModel);
+    }
+
+    public interface NicesClickListener {
 
         void onClick(ShotModel shotModel);
     }

@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ShotModel implements Serializable {
 
@@ -10,6 +11,7 @@ public class ShotModel implements Serializable {
     private String comment;
     private String image;
     private Date birth;
+    private List<String> nicers;
     //User attributes
     private String idUser;
     private String userName;
@@ -180,5 +182,13 @@ public class ShotModel implements Serializable {
 
     public void setHide(Long hide) {
         this.hide = hide;
+    }
+
+    public List<String> getNicers() {
+        return nicers;
+    }
+
+    public void setNicers(List<String> nicers) {
+        this.nicers = nicers;
     }
 }
