@@ -1,4 +1,5 @@
-package com.shootr.mobile.ui.widgets;/*
+package com.shootr.mobile.ui.widgets;
+/*
  * Copyright (C) 2014 Chris Banes
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

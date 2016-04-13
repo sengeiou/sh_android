@@ -28,8 +28,7 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
         this.shotModel = shotModel;
     }
 
-    @Override
-    public void setNotificationValues(NotificationCompat.Builder builder) {
+    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
         builder.setContentIntent(getOpenShotNotificationPendingIntent());
         builder.setDeleteIntent(getDiscardShotNotificationPendingIntent());
     }
@@ -37,12 +36,14 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
         intent.putExtra(ShotDetailActivity.EXTRA_SHOT, shotModel);
-        return PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected PendingIntent getDiscardShotNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION), 0);
+        return PendingIntent.getBroadcast(getContext(),
+          REQUEST_DELETE,
+          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION),
+          0);
     }
 
     protected String getShotText(ShotModel shot) {

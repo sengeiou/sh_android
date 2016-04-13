@@ -21,7 +21,7 @@ public class NicerEntityMapper {
         nicer.setIdNice(nicerEntity.getIdNice());
         nicer.setIdShot(nicerEntity.getIdShot());
         nicer.setUserName(nicerEntity.getUserName());
-        if(nicerEntity.getUser() != null) {
+        if (nicerEntity.getUser() != null) {
             nicer.setUser(userEntityMapper.transform(nicerEntity.getUser()));
         }
         return nicer;
@@ -39,7 +39,7 @@ public class NicerEntityMapper {
 
     public Nicer transform(NicerEntity nicerEntity, String currentUserId, Boolean follower, Boolean following) {
         Nicer nicer = transform(nicerEntity);
-        nicer.setUser(userEntityMapper.transform(nicerEntity.getUser(),currentUserId, follower, following));
+        nicer.setUser(userEntityMapper.transform(nicerEntity.getUser(), currentUserId, follower, following));
         return nicer;
     }
 }
