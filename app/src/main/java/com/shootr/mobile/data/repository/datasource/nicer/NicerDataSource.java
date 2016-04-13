@@ -8,4 +8,6 @@ public interface NicerDataSource {
     List<NicerEntity> getNicers(String idShot);
 
     List<NicerEntity> getNicersWithUser(String idShot);
+
+    List<NicerEntity> getNices(String idUser);
 }

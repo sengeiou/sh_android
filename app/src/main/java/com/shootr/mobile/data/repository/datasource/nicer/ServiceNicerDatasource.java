@@ -31,4 +31,12 @@ public class ServiceNicerDatasource implements NicerDataSource {
             throw new ServerCommunicationException(cause);
         }
     }
+
+    @Override public List<NicerEntity> getNices(String idUser) {
+        try {
+            return nicerApiService.getNices(idUser);
+        } catch (ApiException | IOException cause) {
+            throw new ServerCommunicationException(cause);
+        }
+    }
 }

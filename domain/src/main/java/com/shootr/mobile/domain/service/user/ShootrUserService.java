@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.service.user;
 
 import com.shootr.mobile.domain.ForgotPasswordResult;
 import com.shootr.mobile.domain.LoginResult;
+import com.shootr.mobile.domain.Nicer;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
@@ -13,11 +14,15 @@ import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class ShootrUserService {
@@ -33,6 +38,8 @@ public class ShootrUserService {
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
+    private final NicerRepository nicerRepository;
+    private final NiceShotRepository localNiceShotRepository;
 
     @Inject
     public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
@@ -40,7 +47,7 @@ public class ShootrUserService {
       ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway,
       ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
       @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
-      DatabaseUtils databaseUtils) {
+      DatabaseUtils databaseUtils, NicerRepository nicerRepository, @Local NiceShotRepository localNiceShotRepository) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.createAccountGateway = createAccountGateway;
@@ -52,6 +59,8 @@ public class ShootrUserService {
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
         this.databaseUtils = databaseUtils;
+        this.nicerRepository = nicerRepository;
+        this.localNiceShotRepository = localNiceShotRepository;
     }
 
     public void createAccount(String username, String email, String password, String locale)
@@ -77,7 +86,17 @@ public class ShootrUserService {
         if (visibleEventId != null) {
             remoteStreamRepository.getStreamById(visibleEventId);
         }
+        storeNicedShots(loginResult);
         remoteUserRepository.getPeople();
+    }
+
+    private void storeNicedShots(LoginResult loginResult) {
+        List<Nicer> nices = nicerRepository.getNices(loginResult.getUser().getIdUser());
+        List<String> nicedIdShots = new ArrayList<>(nices.size());
+        for (Nicer nice : nices) {
+            nicedIdShots.add(nice.getIdShot());
+        }
+        localNiceShotRepository.markAll(nicedIdShots);
     }
 
     private void storeSession(LoginResult loginResult) {
