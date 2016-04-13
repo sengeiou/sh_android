@@ -14,4 +14,7 @@ public interface NicerApiService {
 
     @GET("/nice?includeEmbed=true") List<NicerEntity> getNicersWithUser(@Query("idShot") String idShot)
       throws ApiException, IOException;
+
+    @GET("/nice?includeEmbed=false") List<NicerEntity> getNices(@Query("idUser") String idUser)
+      throws ApiException, IOException;
 }

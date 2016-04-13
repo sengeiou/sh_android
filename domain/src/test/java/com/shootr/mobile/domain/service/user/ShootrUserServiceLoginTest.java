@@ -51,7 +51,7 @@ public class ShootrUserServiceLoginTest {
           remoteStreamRepository,
           remoteUserRepository,
           resetPasswordEmailGateway,
-          databaseUtils);
+          databaseUtils, nicerRepository);
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws Exception {
