@@ -618,6 +618,4 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
 
         @Override public void onAnimationCancel(View view) {/* no-op */}
     }
-
-    ;
 }
