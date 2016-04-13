@@ -86,13 +86,17 @@ public class ShootrUserService {
         if (visibleEventId != null) {
             remoteStreamRepository.getStreamById(visibleEventId);
         }
+        storeNicedShots(loginResult);
+        remoteUserRepository.getPeople();
+    }
+
+    private void storeNicedShots(LoginResult loginResult) {
         List<Nicer> nices = nicerRepository.getNices(loginResult.getUser().getIdUser());
         List<String> nicedIdShots = new ArrayList<>(nices.size());
         for (Nicer nice : nices) {
             nicedIdShots.add(nice.getIdShot());
         }
         localNiceShotRepository.markAll(nicedIdShots);
-        remoteUserRepository.getPeople();
     }
 
     private void storeSession(LoginResult loginResult) {
