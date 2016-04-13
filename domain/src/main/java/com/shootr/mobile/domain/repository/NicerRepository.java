@@ -8,8 +8,4 @@ public interface NicerRepository {
     List<Nicer> getNicers(String idShot);
 
     List<Nicer> getNicersWithUser(String idShot);
-
-    Boolean isFollower(String userId);
-
-    Boolean isFollowing(String userId);
 }

@@ -47,11 +47,11 @@ public class SyncNicerRepository implements NicerRepository {
         return nicers;
     }
 
-    @Override public Boolean isFollower(String userId) {
+    private boolean isFollower(String userId) {
         return remoteUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
     }
 
-    @Override public Boolean isFollowing(String userId) {
+    private boolean isFollowing(String userId) {
         return remoteUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
     }
 }
