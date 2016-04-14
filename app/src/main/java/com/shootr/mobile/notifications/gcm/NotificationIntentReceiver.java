@@ -10,7 +10,6 @@ import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
-import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -46,7 +45,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 shotNotificationManager.clearShotNotifications();
                 break;
             case ACTION_OPEN_SHOT_NOTIFICATION:
-                openShot(context);
+                openActivities(context);
                 break;
             case ACTION_OPEN_ACTIVITY_NOTIFICATION:
                 startActivityFromIntent(context,
@@ -71,9 +70,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         }
     }
 
-    public void openShot(Context context) {
+    public void openActivities(Context context) {
         context.startActivity(new Intent(context,
-                MainTabbedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+          ActivityTimelinesContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         shotNotificationManager.clearShotNotifications();
     }
 
