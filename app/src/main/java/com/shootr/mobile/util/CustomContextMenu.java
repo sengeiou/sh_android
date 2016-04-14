@@ -52,10 +52,6 @@ public class CustomContextMenu {
             return this;
         }
 
-        public Builder addAction(String title, Runnable callback) {
-            return addAction(new MenuAction(title, callback));
-        }
-
         public Builder addAction(@StringRes int titleRes, Runnable callback) {
             return addAction(new MenuAction(context.getString(titleRes), callback));
         }
