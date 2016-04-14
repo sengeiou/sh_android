@@ -26,6 +26,10 @@ public class FileChooserUtils {
      */
     @SuppressLint("NewApi") public static String getPath(final Context context, final Uri uri) {
 
+        if(uri == null){
+            return null;
+        }
+
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
