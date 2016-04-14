@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import com.crashlytics.android.Crashlytics;
 import com.shootr.mobile.R;
 
 public class WritePermissionManager {
@@ -45,8 +46,8 @@ public class WritePermissionManager {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     WRITE_PERMISSION_REQUEST);
-        } catch (Exception ignored) {
-            /* ignore */
+        } catch (Exception error) {
+            Crashlytics.logException(error);
         }
     }
 
