@@ -6,7 +6,5 @@ public interface TimeUtils {
 
     long getCurrentTime();
 
-    void setCurrentTime(long timeMilliseconds);
-
     Date getCurrentDate();
 }
