@@ -39,9 +39,13 @@ public class WritePermissionManager {
     }
 
     protected void requestWritePermission() {
-        ActivityCompat.requestPermissions(activity,
-          new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-          WRITE_PERMISSION_REQUEST);
+        try {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    WRITE_PERMISSION_REQUEST);
+        }catch(Exception ignored){
+            /* ignore */
+        }
     }
 
     public int getWritePermissionRequest() {
