@@ -100,7 +100,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder contributorsMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -127,10 +126,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
           }, // author
           new View.OnClickListener() {
-              @Override public void onClick(View v) {
-                  streamDetailPresenter.clickMedia();
+              @Override public void onClick(View view) {
+                  streamDetailPresenter.contributorsClicked();
               }
-          }, // media
+          }, new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                streamDetailPresenter.clickMedia();
+            }
+        }, // media
           new CompoundButton.OnCheckedChangeListener() {
               @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                   if (isChecked) {
@@ -155,8 +158,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this)
-                    .setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
                     user.getUsername()))
                     .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
@@ -196,7 +198,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
-        contributorsMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_contributors));
         dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
         dataInfoMenuItem.setVisible(true);
         return true;
@@ -212,9 +213,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return true;
             case R.id.stream_detail_menu_data_info:
                 streamDetailPresenter.dataInfoClicked();
-                return true;
-            case R.id.stream_detail_contributors:
-                streamDetailPresenter.contributorsClicked();
                 return true;
             default:
                 return false;
