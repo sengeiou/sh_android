@@ -376,7 +376,4 @@
     <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
         <item name="android:textColor">@color/primary</item>
     </style>
-
-    <string name="add_contributor">Add</string>
-    <string name="added_contributor">Added</string>
 </resources>
