@@ -62,4 +62,8 @@ public interface StreamDetailView extends DataTransferView {
     void goToContributorsActivityAsHolder(String idStream);
 
     void goToContributorsActivity(String idStream);
+
+    void hideContributorsNumber();
+
+    void showContributorsNumber(Integer contributorsNumber);
 }

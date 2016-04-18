@@ -238,6 +238,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public void setContributorsNumber(Integer contributorsNumber){
+        if(contributorViewHolder != null){
+            contributorViewHolder.setNumber(contributorsNumber);
+        }
+    }
+
     public static class TextViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.text) TextView text;

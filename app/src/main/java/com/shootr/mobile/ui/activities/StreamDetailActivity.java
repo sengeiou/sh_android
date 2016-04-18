@@ -68,6 +68,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
+    private static final int NO_CONTRIBUTORS = 0;
     private int counterToolbarPrintTimes = 0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -551,6 +552,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void goToContributorsActivity(String idStream) {
         startActivity(ContributorsActivity.newIntent(this, idStream, false));
+    }
+
+    @Override public void hideContributorsNumber() {
+        adapter.setContributorsNumber(NO_CONTRIBUTORS);
+    }
+
+    @Override public void showContributorsNumber(Integer contributorsNumber) {
+        adapter.setContributorsNumber(contributorsNumber);
     }
 
     @Override public void showLoading() {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamInfo;
 import com.shootr.mobile.domain.StreamSearchResult;
@@ -15,6 +16,7 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -42,6 +44,7 @@ public class StreamDetailPresenter implements Presenter {
     private final GetMutedStreamsInteractor getMutedStreamsInteractor;
     private final MuteInteractor muteInteractor;
     private final UnmuteInteractor unmuteInteractor;
+    private final GetContributorsInteractor getContributorsInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -61,7 +64,8 @@ public class StreamDetailPresenter implements Presenter {
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
-      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor, StreamModelMapper streamModelMapper,
+      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
+      GetContributorsInteractor getContributorsInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
@@ -72,6 +76,7 @@ public class StreamDetailPresenter implements Presenter {
         this.getMutedStreamsInteractor = getMutedStreamsInteractor;
         this.muteInteractor = muteInteractor;
         this.unmuteInteractor = unmuteInteractor;
+        this.getContributorsInteractor = getContributorsInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -146,6 +151,24 @@ public class StreamDetailPresenter implements Presenter {
     public void loadStreamInfo() {
         this.showViewLoading();
         this.getStreamInfo();
+        this.getContributorsNumber();
+    }
+
+    public void getContributorsNumber() {
+        getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
+            @Override public void onLoaded(List<Contributor> contributors) {
+                if(contributors.size()>0){
+                    streamDetailView.showContributorsNumber(contributors.size());
+                }else{
+                    streamDetailView.hideContributorsNumber();
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
     }
 
     public void getStreamInfo() {
