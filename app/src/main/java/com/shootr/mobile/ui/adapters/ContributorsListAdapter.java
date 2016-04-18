@@ -11,7 +11,6 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.widgets.ContributorButton;
-import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +23,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private Boolean isHolder;
     private AddRemoveContributorAdapterCallback callback;
 
-    public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder){
+    public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder) {
         super(context);
         this.imageLoader = imageLoader;
         this.isHolder = isHolder;
@@ -72,7 +71,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         if (verifiedUser(item)) {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
             viewHolder.title.setCompoundDrawablePadding(6);
-        }else{
+        } else {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
 
@@ -86,22 +85,20 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
-
-        if(isHolder) {
+        if (isHolder) {
             //TODO logic visibility
             viewHolder.contributorButton.setVisibility(View.VISIBLE);
             viewHolder.contributorButton.setAddContributor(true);
 
             //TODO button click listener to add/remove contributor
 
-        }else{
+        } else {
             viewHolder.contributorButton.setVisibility(View.GONE);
         }
-
     }
 
     private boolean verifiedUser(UserModel userModel) {
-        if(userModel.isVerifiedUser()!=null) {
+        if (userModel.isVerifiedUser() != null) {
             return userModel.isVerifiedUser();
         }
         return false;
@@ -118,7 +115,6 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private String getUsernameForSubtitle(UserModel item) {
         return String.format("@%s", item.getUsername());
     }
-
 
     public List<UserModel> getItems() {
         return users;

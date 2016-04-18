@@ -18,7 +18,6 @@ import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
-import com.shootr.mobile.ui.adapters.recyclerview.ContributorsAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
 import com.shootr.mobile.ui.views.ContributorsView;
@@ -26,8 +25,8 @@ import com.shootr.mobile.util.FeedbackMessage;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ContributorsActivity extends BaseToolbarDecoratedActivity implements ContributorsView,
-  ContributorsListAdapter.AddRemoveContributorAdapterCallback {
+public class ContributorsActivity extends BaseToolbarDecoratedActivity
+  implements ContributorsView, ContributorsListAdapter.AddRemoveContributorAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
@@ -77,7 +76,6 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity implement
         Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
         presenter.initialize(this, idStream, isHolder);
-
     }
     //endregion
 

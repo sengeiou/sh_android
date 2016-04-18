@@ -350,9 +350,9 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void contributorsClicked() {
-        if(streamModel.amIAuthor()) {
+        if (streamModel.amIAuthor()) {
             streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
-        }else {
+        } else {
             streamDetailView.goToContributorsActivity(streamModel.getIdStream());
         }
     }

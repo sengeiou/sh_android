@@ -56,8 +56,8 @@ public class ContributorsPresenter implements Presenter {
         loadContributors();
     }
 
-    public void handleAddContributorsVisibility(){
-        if(!isHolder) {
+    public void handleAddContributorsVisibility() {
+        if (!isHolder) {
             view.hideAddContributorsButton();
             view.hideAddContributorsText();
         }
@@ -89,14 +89,14 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void onAddContributorClick(Integer countContributors) {
-        if(countContributors > CONTRIBUTORS_LIMIT){
+        if (countContributors > CONTRIBUTORS_LIMIT) {
             view.showContributorsLimitSnackbar();
-        }else{
+        } else {
             view.goToSearchContributors();
         }
     }
 
-    public void addContributor(UserModel userModel){
+    public void addContributor(UserModel userModel) {
         addContributorInteractor.addContributor(idStream, userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 //TODO: refresh list
@@ -108,7 +108,7 @@ public class ContributorsPresenter implements Presenter {
         });
     }
 
-    public void removeContributor(UserModel userModel){
+    public void removeContributor(UserModel userModel) {
         removeContributorInteractor.removeContributor(idStream,
           userModel.getIdUser(),
           new Interactor.CompletedCallback() {

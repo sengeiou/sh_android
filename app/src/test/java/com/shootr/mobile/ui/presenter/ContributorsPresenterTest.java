@@ -45,7 +45,10 @@ public class ContributorsPresenterTest {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new ContributorsPresenter(getContributorsInteractor,
-          addContributorInteractor, removeContributorInteractor, errorMessageFactory, userModelMapper);
+          addContributorInteractor,
+          removeContributorInteractor,
+          errorMessageFactory,
+          userModelMapper);
     }
 
     @Test public void shouldHideAddContributorButtonWhenIsNotHolder() throws Exception {
@@ -114,7 +117,7 @@ public class ContributorsPresenterTest {
         verify(contributorsView, never()).showContributorsLimitSnackbar();
     }
 
-    private void setupGetContributorsInteractor(){
+    private void setupGetContributorsInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
@@ -122,12 +125,11 @@ public class ContributorsPresenterTest {
                 callback.onLoaded(contributors());
                 return null;
             }
-        }).when(getContributorsInteractor).obtainContributors(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getContributorsInteractor)
+          .obtainContributors(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupGetContributorsInteractorWithEmptyList(){
+    private void setupGetContributorsInteractorWithEmptyList() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<User>> callback =
@@ -135,8 +137,8 @@ public class ContributorsPresenterTest {
                 callback.onLoaded(Collections.<User>emptyList());
                 return null;
             }
-        }).when(getContributorsInteractor).obtainContributors(anyString(), any(Interactor.Callback.class), any(
-          Interactor.ErrorCallback.class));
+        }).when(getContributorsInteractor)
+          .obtainContributors(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private List<User> contributors() {

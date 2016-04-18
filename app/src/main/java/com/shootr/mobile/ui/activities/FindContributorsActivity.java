@@ -26,8 +26,8 @@ import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindContributorsActivity extends BaseToolbarDecoratedActivity implements FindContributorsView,
-  ContributorsListAdapter.AddRemoveContributorAdapterCallback{
+public class FindContributorsActivity extends BaseToolbarDecoratedActivity
+  implements FindContributorsView, ContributorsListAdapter.AddRemoveContributorAdapterCallback {
 
     public static final String ID_STREAM = "idStream";
     private SearchView searchView;
@@ -84,7 +84,8 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
         getMenuInflater().inflate(R.menu.search, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         createSearchView(searchItem);
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        SearchView.SearchAutoComplete searchAutoComplete =
+          (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
         return true;
     }
@@ -158,8 +159,7 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity imple
         feedbackMessage.show(getView(), message);
     }
 
-    @OnItemClick(R.id.find_contributors_search_results_list)
-    public void openUserProfile(int position) {
+    @OnItemClick(R.id.find_contributors_search_results_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
     }

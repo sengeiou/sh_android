@@ -27,7 +27,7 @@ public class ContributorsAdapter extends ContributorsListAdapter {
     }
 
     private String usernameInSubtitleFormat(UserModel item) {
-        return "@"+item.getUsername();
+        return "@" + item.getUsername();
     }
 
     @Override public int getItemViewType(int position) {
@@ -43,7 +43,7 @@ public class ContributorsAdapter extends ContributorsListAdapter {
     }
 
     @Override public int getCount() {
-        return super.getCount()+1;
+        return super.getCount() + 1;
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
@@ -71,8 +71,7 @@ public class ContributorsAdapter extends ContributorsListAdapter {
         return layoutPosition == 0 ? null : super.getItem(userPosition);
     }
 
-    @Override
-    public boolean isEnabled(int position) {
+    @Override public boolean isEnabled(int position) {
         return true;
     }
 }

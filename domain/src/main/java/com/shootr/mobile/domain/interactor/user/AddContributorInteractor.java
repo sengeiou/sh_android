@@ -21,7 +21,8 @@ public class AddContributorInteractor implements Interactor {
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public AddContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
+    @Inject
+    public AddContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.localUserRepository = localUserRepository;
@@ -29,7 +30,8 @@ public class AddContributorInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void addContributor(String idStream, String idUser, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void addContributor(String idStream, String idUser, CompletedCallback callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.idUser = idUser;
         this.callback = callback;

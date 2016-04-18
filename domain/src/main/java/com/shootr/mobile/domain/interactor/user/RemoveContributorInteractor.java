@@ -21,7 +21,8 @@ public class RemoveContributorInteractor implements Interactor {
     private Interactor.CompletedCallback callback;
     private Interactor.ErrorCallback errorCallback;
 
-    @Inject public RemoveContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
+    @Inject
+    public RemoveContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.localUserRepository = localUserRepository;
@@ -29,7 +30,8 @@ public class RemoveContributorInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void removeContributor(String idStream, String idUser, Interactor.CompletedCallback callback, Interactor.ErrorCallback errorCallback) {
+    public void removeContributor(String idStream, String idUser, Interactor.CompletedCallback callback,
+      Interactor.ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.idUser = idUser;
         this.callback = callback;

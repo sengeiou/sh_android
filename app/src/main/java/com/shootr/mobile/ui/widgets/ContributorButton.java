@@ -5,13 +5,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.shootr.mobile.R;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 
-public class ContributorButton extends FrameLayout{
+public class ContributorButton extends FrameLayout {
 
     @Bind(R.id.add_contributor) View addContributor;
     @Bind(R.id.added_contributor) View addedContributor;

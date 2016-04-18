@@ -24,7 +24,8 @@ public class GetContributorsInteractor implements Interactor {
     private ErrorCallback errorCallback;
     private String idStream;
 
-    @Inject public GetContributorsInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
+    @Inject
+    public GetContributorsInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.localUserRepository = localUserRepository;

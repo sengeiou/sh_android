@@ -73,7 +73,7 @@ public class FindContributorsPresenter implements Presenter {
         });
     }
 
-    public void addContributor(UserModel userModel){
+    public void addContributor(UserModel userModel) {
         addContributorInteractor.addContributor(idStream, userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 //TODO: refresh list
@@ -85,7 +85,7 @@ public class FindContributorsPresenter implements Presenter {
         });
     }
 
-    public void removeContributor(UserModel userModel){
+    public void removeContributor(UserModel userModel) {
         removeContributorInteractor.removeContributor(idStream,
           userModel.getIdUser(),
           new Interactor.CompletedCallback() {

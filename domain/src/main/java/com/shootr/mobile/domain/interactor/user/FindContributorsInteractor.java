@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -22,8 +21,9 @@ public class FindContributorsInteractor implements Interactor {
     private ErrorCallback errorCallback;
     private String query;
 
-    @Inject public FindContributorsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository) {
+    @Inject
+    public FindContributorsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
         this.postExecutionThread = postExecutionThread;
