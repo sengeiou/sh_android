@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -10,6 +11,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ContributorsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -66,11 +68,14 @@ public class ContributorsPresenter implements Presenter {
     private void loadContributors() {
         view.hideEmpty();
         view.showLoading();
-        getContributorsInteractor.obtainContributors(idStream, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> contributors) {
+        getContributorsInteractor.obtainContributors(idStream, true, new Interactor.Callback<List<Contributor>>() {
+            @Override public void onLoaded(List<Contributor> contributors) {
                 view.hideLoading();
                 view.showAllContributors();
-                List<UserModel> contributorModels = userModelMapper.transform(contributors);
+                List<UserModel> contributorModels = new ArrayList<>(contributors.size());
+                for (Contributor contributor : contributors) {
+                    contributorModels.add(userModelMapper.transform(contributor.getUser()));
+                }
                 renderContributors(contributorModels);
             }
         }, new Interactor.ErrorCallback() {

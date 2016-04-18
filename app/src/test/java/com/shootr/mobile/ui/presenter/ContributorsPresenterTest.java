@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.AddContributorInteractor;
@@ -20,6 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -120,32 +122,38 @@ public class ContributorsPresenterTest {
     private void setupGetContributorsInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+                Interactor.Callback<List<Contributor>> callback =
+                  (Interactor.Callback<List<Contributor>>) invocation.getArguments()[2];
                 callback.onLoaded(contributors());
                 return null;
             }
         }).when(getContributorsInteractor)
-          .obtainContributors(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetContributorsInteractorWithEmptyList() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[1];
-                callback.onLoaded(Collections.<User>emptyList());
+                Interactor.Callback<List<Contributor>> callback =
+                  (Interactor.Callback<List<Contributor>>) invocation.getArguments()[2];
+                callback.onLoaded(Collections.<Contributor>emptyList());
                 return null;
             }
         }).when(getContributorsInteractor)
-          .obtainContributors(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private List<User> contributors() {
-        List<User> contributors = new ArrayList<>();
-        contributors.add(user());
-        contributors.add(new User());
+    private List<Contributor> contributors() {
+        List<Contributor> contributors = new ArrayList<>();
+        contributors.add(contributor());
         return contributors;
+    }
+
+    private Contributor contributor() {
+        Contributor contributor = new Contributor();
+        contributor.setUser(user());
+        contributor.setIdUser(ID_USER);
+        return contributor;
     }
 
     private User user() {

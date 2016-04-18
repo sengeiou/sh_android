@@ -1,67 +1,55 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.UserRepository;
-import java.util.Arrays;
-import java.util.Collections;
+import com.shootr.mobile.domain.repository.ContributorRepository;
 import java.util.List;
 import javax.inject.Inject;
 
 public class GetContributorsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
+    private final ContributorRepository contributorRepository;
     private final PostExecutionThread postExecutionThread;
 
-    private Callback<List<User>> callback;
+    private Callback<List<Contributor>> callback;
     private ErrorCallback errorCallback;
     private String idStream;
+    private Boolean withUsersEmbed;
 
     @Inject
-    public GetContributorsInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+    public GetContributorsInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
+      PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
+        this.contributorRepository = contributorRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainContributors(String idStream, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainContributors(String idStream, Boolean withUsersEmbed, Callback<List<Contributor>> callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
+        this.withUsersEmbed = withUsersEmbed;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        List<User> contributors = obtainLocalContributors();
-        if (contributors.isEmpty()) {
-            contributors = obtainRemoteContributors();
+        notifyLoaded(obtainRemoteContributors());
+    }
+
+    private List<Contributor> obtainRemoteContributors() {
+        if(withUsersEmbed){
+            return contributorRepository.getContributorsWithUsers(idStream);
+        }else{
+            return contributorRepository.getContributors(idStream);
         }
-        notifyLoaded(contributors);
     }
 
-    private List<User> obtainRemoteContributors() {
-        User user = new User();
-        user.setIdUser("idUser");
-        user.setName("culirrotos de backend");
-        user.setUsername("mamahuevos");
-        user.setEmail("unamierda");
-        return Arrays.asList(user);
-    }
-
-    private List<User> obtainLocalContributors() {
-        return Collections.emptyList();
-    }
-
-    private void notifyLoaded(final List<User> results) {
+    private void notifyLoaded(final List<Contributor> results) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(results);

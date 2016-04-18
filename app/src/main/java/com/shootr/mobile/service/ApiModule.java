@@ -13,6 +13,7 @@ import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.api.service.ActivityApiService;
 import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.ChangePasswordApiService;
+import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
@@ -139,5 +140,9 @@ import timber.log.Timber;
 
     @Provides NicerApiService provideNicerApiService(RestAdapter restAdapter) {
         return restAdapter.create(NicerApiService.class);
+    }
+
+    @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter) {
+        return restAdapter.create(ContributorApiService.class);
     }
 }
