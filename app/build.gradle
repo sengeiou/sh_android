@@ -3,10 +3,11 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://jitpack.io' } // sdk manager
     }
 
     dependencies {
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
         classpath 'io.fabric.tools:gradle:1.19.2'
@@ -65,9 +66,6 @@ android {
         buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        renderscriptTargetApi 20
-        renderscriptSupportModeEnabled true
     }
 
     splits {
