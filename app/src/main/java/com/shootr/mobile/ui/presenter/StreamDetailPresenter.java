@@ -110,7 +110,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void editStreamPhoto() {
-        streamDetailView.showPhotoPicker();
+        streamDetailView.showPhotoOptions();
     }
 
     public void photoSelected(File photoFile) {
@@ -181,7 +181,9 @@ public class StreamDetailPresenter implements Presenter {
     //endregion
 
     public void photoClick() {
-        if (streamModel.amIAuthor()) {
+        if (streamModel.amIAuthor() && streamModel.getPicture() != null) {
+            streamDetailView.showPhotoOptions();
+        } else if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
             streamDetailView.showPhotoPicker();
         } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
             zoomPhoto();

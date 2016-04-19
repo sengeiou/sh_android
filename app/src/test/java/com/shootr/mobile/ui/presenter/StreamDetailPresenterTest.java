@@ -120,17 +120,17 @@ public class StreamDetailPresenterTest {
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
 
-        verify(streamDetailView).showPhotoPicker();
+        verify(streamDetailView).showPhotoOptions();
     }
 
-    @Test public void shouldNotOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
+    @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
         setupStreamInfoCallbackWithPhoto();
 
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
 
-        verify(streamDetailView, never()).showPhotoPicker();
+        verify(streamDetailView).showPhotoOptions();
     }
 
     @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
@@ -140,7 +140,7 @@ public class StreamDetailPresenterTest {
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
 
-        verify(streamDetailView, never()).showPhotoPicker();
+        verify(streamDetailView, never()).showPhotoOptions();
     }
 
     @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
@@ -150,7 +150,7 @@ public class StreamDetailPresenterTest {
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
 
-        verify(streamDetailView, never()).showPhotoPicker();
+        verify(streamDetailView, never()).showPhotoOptions();
     }
 
     @Test public void shouldZoomPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
@@ -170,12 +170,12 @@ public class StreamDetailPresenterTest {
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
 
-        verify(streamDetailView).zoomPhoto(PICTURE_URL);
+        verify(streamDetailView).showPhotoOptions();
     }
 
     @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
+        setupStreamWithoutPictureInfoCallback();
 
         presenter.initialize(streamDetailView, ID_STREAM);
         presenter.photoClick();
@@ -245,7 +245,21 @@ public class StreamDetailPresenterTest {
         }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
     }
 
-    public void setupStreamInfoCallback() {
+    private void setupStreamWithoutPictureInfoCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetStreamInfoInteractor.Callback callback =
+                    (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(streamInfoWithoutPhoto());
+                return null;
+            }
+        }).when(streamInfoInteractor)
+            .obtainStreamInfo(anyString(),
+                (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupStreamInfoCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 GetStreamInfoInteractor.Callback callback =
@@ -320,6 +334,17 @@ public class StreamDetailPresenterTest {
           .build();
     }
 
+    private StreamInfo streamInfoWithoutPhoto() {
+        return StreamInfo.builder()
+            .stream(streamWithoutPhoto())
+            .watchers(watchers())
+            .currentUserWatching(new User())
+            .numberOfFollowing(NO_WATCHERS)
+            .hasMoreParticipants(false)
+            .isDataComplete(true)
+            .build();
+    }
+
     private List<User> watchers() {
         List<User> participants = new ArrayList<>();
         participants.add(user());
@@ -348,6 +373,7 @@ public class StreamDetailPresenterTest {
         stream.setTitle(SELECTED_STREAM_TITLE);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         stream.setTotalWatchers(NO_WATCHERS);
+        stream.setPicture(PICTURE_URL);
         return stream;
     }
 
@@ -358,6 +384,15 @@ public class StreamDetailPresenterTest {
         stream.setAuthorId(STREAM_AUTHOR_ID);
         stream.setTotalWatchers(NO_WATCHERS);
         stream.setPicture(PICTURE_URL);
+        return stream;
+    }
+
+    private Stream streamWithoutPhoto() {
+        Stream stream = new Stream();
+        stream.setId(SELECTED_STREAM_ID);
+        stream.setTitle(SELECTED_STREAM_TITLE);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
+        stream.setTotalWatchers(NO_WATCHERS);
         return stream;
     }
 

@@ -15,7 +15,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void showEditStreamPhotoOrInfo();
 
-    void showPhotoPicker();
+    void showPhotoOptions();
 
     void showEditPicturePlaceholder();
 
@@ -56,4 +56,6 @@ public interface StreamDetailView extends DataTransferView {
     void setMuteStatus(Boolean isChecked);
 
     void goToStreamDataInfo(StreamModel streamModel);
+
+    void showPhotoPicker();
 }

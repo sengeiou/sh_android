@@ -360,9 +360,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           .show();
     }
 
-    @Override public void showPhotoPicker() {
+    @Override public void showPhotoOptions() {
         new BottomSheet.Builder(this).title(R.string.change_photo)
-          .sheet(R.menu.profile_photo_bottom_sheet)
+          .sheet(R.menu.photo_options_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
@@ -540,6 +540,26 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
+    }
+
+    @Override public void showPhotoPicker() {
+        new BottomSheet.Builder(this).title(R.string.change_photo)
+            .sheet(R.menu.photo_picker_bottom_sheet)
+            .listener(new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case R.id.menu_photo_gallery:
+                            handlePhotoSelectionFromGallery();
+                            break;
+                        case R.id.menu_photo_take:
+                            takePhotoFromCamera();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            })
+            .show();
     }
 
     @Override public void showLoading() {
