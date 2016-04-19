@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -58,11 +59,14 @@ public class StreamDetailPresenter implements Presenter {
     private Integer totalWatchers;
 
     @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
-      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor, StreamModelMapper streamModelMapper,
-      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+        ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
+        ShareStreamInteractor shareStreamInteractor,
+        FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
+        SelectStreamInteractor selectStreamInteractor,
+        GetMutedStreamsInteractor getMutedStreamsInteractor,
+        MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
+        StreamModelMapper streamModelMapper,
+        UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
@@ -178,11 +182,15 @@ public class StreamDetailPresenter implements Presenter {
     //endregion
 
     public void photoClick() {
-        if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
-            editStreamPhoto();
-        } else if (streamModel.getPicture() != null) {
+        if (streamModel.amIAuthor()) {
+            streamDetailView.showPhotoPicker();
+        } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
             zoomPhoto();
         }
+    }
+
+    public void viewPhotoClicked(){
+        zoomPhoto();
     }
 
     public void zoomPhoto() {

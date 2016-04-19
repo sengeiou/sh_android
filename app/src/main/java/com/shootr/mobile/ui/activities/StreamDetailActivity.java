@@ -366,6 +366,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
+                      case R.id.menu_photo_view:
+                          streamDetailPresenter.viewPhotoClicked();
+                          break;
                       case R.id.menu_photo_gallery:
                           handlePhotoSelectionFromGallery();
                           break;
