@@ -4,16 +4,13 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.ContributorRepository;
 import javax.inject.Inject;
 
 public class AddContributorInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
+    private final ContributorRepository contributorRepository;
     private final PostExecutionThread postExecutionThread;
 
     private String idStream;
@@ -22,11 +19,10 @@ public class AddContributorInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public AddContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+    public AddContributorInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
+      PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
+        this.contributorRepository = contributorRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -40,17 +36,16 @@ public class AddContributorInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        addLocalContributor(idStream, idUser);
         addRemoteContributor(idStream, idUser);
     }
 
     private void addRemoteContributor(String idStream, String idUser) {
-        //TODO: call remoteRepository
-        notifyCompleted();
-    }
-
-    private void addLocalContributor(String idStream, String idUser) {
-        //TODO: call localRepository
+        try {
+            contributorRepository.addContributor(idStream, idUser);
+            notifyCompleted();
+        }catch (Exception error){
+            //TODO: notify error
+        }
     }
 
     private void notifyCompleted() {

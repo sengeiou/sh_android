@@ -24,4 +24,8 @@ public class SyncContributorRepository implements ContributorRepository {
     @Override public List<Contributor> getContributorsWithUsers(String idStream) {
         return mapper.transform(contributorDataSource.getContributorsWithUser(idStream));
     }
+
+    @Override public void addContributor(String idStream, String idUser) {
+        contributorDataSource.addContributor(idStream, idUser);
+    }
 }

@@ -31,4 +31,12 @@ public class ServiceContributorDataSource implements ContributorDataSource {
             throw new ServerCommunicationException(cause);
         }
     }
+
+    @Override public void addContributor(String idStream, String idUser) {
+        try {
+            contributorApiService.addContributor(idStream, idUser);
+        } catch (ApiException | IOException cause) {
+            throw new ServerCommunicationException(cause);
+        }
+    }
 }
