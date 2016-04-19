@@ -29,4 +29,8 @@ public class SyncContributorRepository implements ContributorRepository {
     @Override public void addContributor(String idStream, String idUser) {
         contributorDataSource.addContributor(idStream, idUser);
     }
+
+    @Override public void removeContributor(String idStream, String idUser) {
+        contributorDataSource.removeContributor(idStream, idUser);
+    }
 }

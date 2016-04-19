@@ -39,4 +39,12 @@ public class ServiceContributorDataSource implements ContributorDataSource {
             throw new ServerCommunicationException(cause);
         }
     }
+
+    @Override public void removeContributor(String idStream, String idUser) {
+        try {
+            contributorApiService.removeContributor(idStream, idUser);
+        } catch (ApiException | IOException cause) {
+            throw new ServerCommunicationException(cause);
+        }
+    }
 }

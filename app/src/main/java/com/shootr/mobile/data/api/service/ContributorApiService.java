@@ -16,4 +16,6 @@ public interface ContributorApiService {
       @Query("idStream") String idShot) throws ApiException, IOException;
 
     void addContributor(String idStream, String idUser) throws ApiException, IOException;
+
+    void removeContributor(String idStream, String idUser) throws ApiException, IOException;
 }

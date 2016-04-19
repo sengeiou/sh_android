@@ -10,4 +10,6 @@ public interface ContributorDataSource {
     List<ContributorEntity> getContributorsWithUser(String idStream);
 
     void addContributor(String idStream, String idUser);
+
+    void removeContributor(String idStream, String idUser);
 }

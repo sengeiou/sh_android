@@ -4,16 +4,13 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.ContributorRepository;
 import javax.inject.Inject;
 
 public class RemoveContributorInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
+    private final ContributorRepository contributorRepository;
     private final PostExecutionThread postExecutionThread;
 
     private String idStream;
@@ -22,11 +19,10 @@ public class RemoveContributorInteractor implements Interactor {
     private Interactor.ErrorCallback errorCallback;
 
     @Inject
-    public RemoveContributorInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+    public RemoveContributorInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
+      PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
+        this.contributorRepository = contributorRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -45,8 +41,12 @@ public class RemoveContributorInteractor implements Interactor {
     }
 
     private void removeRemoteContributor(String idStream, String idUser) {
-        //TODO: call remoteRepository
-        notifyCompleted();
+        try {
+            contributorRepository.addContributor(idStream, idUser);
+            notifyCompleted();
+        } catch (Exception error) {
+            //TODO: notify error
+        }
     }
 
     private void removeLocalContributor(String idStream, String idUser) {

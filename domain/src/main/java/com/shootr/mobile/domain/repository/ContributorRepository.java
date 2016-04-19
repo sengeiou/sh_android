@@ -10,4 +10,6 @@ public interface ContributorRepository {
     List<Contributor> getContributorsWithUsers(String idStream);
 
     void addContributor(String idStream, String idUser);
+
+    void removeContributor(String idStream, String idUser);
 }
