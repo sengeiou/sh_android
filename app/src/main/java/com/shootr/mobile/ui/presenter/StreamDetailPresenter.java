@@ -16,7 +16,6 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -189,7 +188,7 @@ public class StreamDetailPresenter implements Presenter {
         }
     }
 
-    public void viewPhotoClicked(){
+    public void viewPhotoClicked() {
         zoomPhoto();
     }
 
