@@ -31,6 +31,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     private static final String EXTRA_STREAM = "stream";
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     public static final String IS_HOLDER = "isHolder";
+    public static final boolean IS_NOT_ADDING = false;
 
     private ContributorsListAdapter adapter;
     private Snackbar limitContributorsSnackbar;
@@ -82,7 +83,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     private ListAdapter getContributorsAdapter() {
         if (adapter == null) {
             Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
-            adapter = new ContributorsListAdapter(this, imageLoader, isHolder);
+            adapter = new ContributorsListAdapter(this, imageLoader, isHolder, IS_NOT_ADDING);
             adapter.setCallback(this);
         }
         return adapter;

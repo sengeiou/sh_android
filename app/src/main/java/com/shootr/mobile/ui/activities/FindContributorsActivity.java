@@ -30,6 +30,7 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
   implements FindContributorsView, ContributorsListAdapter.AddRemoveContributorAdapterCallback {
 
     public static final String ID_STREAM = "idStream";
+    public static final boolean IS_ADDING = true;
     private SearchView searchView;
     private ContributorsListAdapter adapter;
 
@@ -63,7 +64,7 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
 
     private void setupViews() {
         if (adapter == null) {
-            adapter = new ContributorsListAdapter(this, imageLoader, true);
+            adapter = new ContributorsListAdapter(this, imageLoader, true, IS_ADDING);
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);

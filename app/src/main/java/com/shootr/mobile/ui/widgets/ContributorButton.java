@@ -13,6 +13,7 @@ public class ContributorButton extends FrameLayout {
 
     @Bind(R.id.add_contributor) View addContributor;
     @Bind(R.id.added_contributor) View addedContributor;
+    private boolean isAdded;
 
     public ContributorButton(Context context) {
         super(context);
@@ -39,6 +40,7 @@ public class ContributorButton extends FrameLayout {
     }
 
     public void setAddContributor(boolean isAdded) {
+
         if (isAdded) {
             addContributor.setVisibility(GONE);
             addedContributor.setVisibility(VISIBLE);
@@ -46,5 +48,9 @@ public class ContributorButton extends FrameLayout {
             addContributor.setVisibility(VISIBLE);
             addedContributor.setVisibility(GONE);
         }
+    }
+
+    public boolean isAdded() {
+        return isAdded;
     }
 }

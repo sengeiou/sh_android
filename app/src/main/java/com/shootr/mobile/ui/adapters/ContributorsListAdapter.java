@@ -22,11 +22,13 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private ImageLoader imageLoader;
     private Boolean isHolder;
     private AddRemoveContributorAdapterCallback callback;
+    private Boolean isAdding;
 
-    public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder) {
+    public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolder, Boolean isAdding) {
         super(context);
         this.imageLoader = imageLoader;
         this.isHolder = isHolder;
+        this.isAdding = isAdding;
         this.users = new ArrayList<>(0);
     }
 
@@ -36,10 +38,6 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     public void setItems(List<UserModel> users) {
         this.users = users;
-    }
-
-    public void addItems(List<UserModel> users) {
-        this.users.addAll(users);
     }
 
     public void removeItems() {
@@ -86,15 +84,33 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
         if (isHolder) {
-            //TODO logic visibility
-            viewHolder.contributorButton.setVisibility(View.VISIBLE);
-            viewHolder.contributorButton.setAddContributor(true);
-
-            //TODO button click listener to add/remove contributor
-
+            if(isAdding){
+                viewHolder.contributorButton.setVisibility(View.VISIBLE);
+                viewHolder.contributorButton.setAddContributor(false);
+            } else{
+                viewHolder.contributorButton.setVisibility(View.VISIBLE);
+                viewHolder.contributorButton.setAddContributor(true);
+            }
+            setupContributorButtonListener(position, viewHolder);
         } else {
             viewHolder.contributorButton.setVisibility(View.GONE);
         }
+    }
+
+    private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
+        viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if(viewHolder.contributorButton.isAdded()){
+                    if (callback != null) {
+                        callback.remove(position);
+                    }
+                }else{
+                    if (callback != null) {
+                        callback.add(position);
+                    }
+                }
+            }
+        });
     }
 
     private boolean verifiedUser(UserModel userModel) {
