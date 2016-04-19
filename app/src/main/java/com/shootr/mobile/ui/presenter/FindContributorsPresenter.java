@@ -26,6 +26,7 @@ public class FindContributorsPresenter implements Presenter {
     private List<UserModel> contributors;
     private String query;
     private String idStream;
+    private Integer currentPage;
 
     @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor,
       AddContributorInteractor addContributorInteractor, RemoveContributorInteractor removeContributorInteractor,
@@ -54,7 +55,8 @@ public class FindContributorsPresenter implements Presenter {
         findContributorsView.hideKeyboard();
         findContributorsView.showLoading();
         findContributorsView.setCurrentQuery(query);
-        findContributorsInteractor.findContributors(query, new Interactor.Callback<List<User>>() {
+        currentPage = 0;
+        findContributorsInteractor.findContributors(idStream, this.query, currentPage, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 findContributorsView.hideLoading();
                 contributors = userModelMapper.transform(users);

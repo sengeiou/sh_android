@@ -1,36 +1,49 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
-import java.util.Arrays;
+import com.shootr.mobile.domain.utils.LocaleProvider;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FindContributorsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
+    private final ContributorRepository contributorRepository;
     private final UserRepository remoteUserRepository;
     private final PostExecutionThread postExecutionThread;
+    private final LocaleProvider localeProvider;
 
     private Callback<List<User>> callback;
     private ErrorCallback errorCallback;
     private String query;
+    private Integer currentPage;
+    private String idStream;
 
     @Inject
-    public FindContributorsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository) {
+    public FindContributorsInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
+      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
+        this.contributorRepository = contributorRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.postExecutionThread = postExecutionThread;
+        this.localeProvider = localeProvider;
     }
 
-    public void findContributors(String query, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void findContributors(String idStream, String query, Integer currentPage, Callback<List<User>> callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.query = query;
+        this.currentPage = currentPage;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -40,13 +53,34 @@ public class FindContributorsInteractor implements Interactor {
         notifyLoaded(findRemoteContributors());
     }
 
-    private List<User> findRemoteContributors() {
-        User user = new User();
-        user.setIdUser("idUser");
-        user.setName("culirrotos de backend");
-        user.setUsername("mamahuevos");
-        user.setEmail("unamierda");
-        return Arrays.asList(user);
+    private List<User> findRemoteContributors() throws IOException {
+        return findNotAddedContributors();
+    }
+
+    private List<User> findNotAddedContributors() throws IOException {
+        List<User> resultUsers = new ArrayList<>();
+        try {
+            List<User> users = remoteUserRepository.findFriends(query, currentPage, localeProvider.getLocale());
+            List<Contributor> currentContributors = contributorRepository.getContributorsWithUsers(idStream);
+            filterContributors(resultUsers, users, currentContributors);
+        } catch (ServerCommunicationException error) {
+           notifyError(error);
+        }
+        return resultUsers;
+    }
+
+    private void filterContributors(List<User> resultUsers, List<User> users, List<Contributor> currentContributors) {
+        List<User> contributorUsers = new ArrayList<>(currentContributors.size());
+
+        for (Contributor currentContributor : currentContributors) {
+            contributorUsers.add(currentContributor.getUser());
+        }
+
+        for (User user : users) {
+            if(!contributorUsers.contains(user)){
+                resultUsers.add(user);
+            }
+        }
     }
 
     private void notifyLoaded(final List<User> results) {
