@@ -105,7 +105,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     }
 
     @Override public void goToStream(Stream blog) {
-        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle(), blog.getAuthorId());
+        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getTitle(), blog.getAuthorId());
         startActivity(intent);
     }
 

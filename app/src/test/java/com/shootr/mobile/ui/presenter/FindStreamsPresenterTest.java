@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verify;
 public class FindStreamsPresenterTest {
 
     private static final String SELECTED_STREAM_ID = "selected_stream";
-    private static final String SELECTED_STREAM_SHORT_TITLE = "short_title";
+    private static final String SELECTED_STREAM_TITLE = "title";
     private static final String STREAM_AUTHOR_ID = "author";
     public static final String QUERY = "query";
 
@@ -97,8 +97,7 @@ public class FindStreamsPresenterTest {
     @Test public void shouldNavigateToStreamTimeLineWhenStreamSelected() throws Exception {
         findStreamsPresenter.selectStream(streamResultModel());
 
-        verify(findStreamsView).navigateToStreamTimeline(SELECTED_STREAM_ID,
-          SELECTED_STREAM_SHORT_TITLE,
+        verify(findStreamsView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE,
           STREAM_AUTHOR_ID);
     }
 
@@ -151,7 +150,7 @@ public class FindStreamsPresenterTest {
     private StreamModel streamModel() {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(SELECTED_STREAM_ID);
-        streamModel.setShortTitle(SELECTED_STREAM_SHORT_TITLE);
+        streamModel.setTitle(SELECTED_STREAM_TITLE);
         streamModel.setAuthorId(STREAM_AUTHOR_ID);
         return streamModel;
     }
@@ -159,7 +158,7 @@ public class FindStreamsPresenterTest {
     private Stream selectedStream() {
         Stream stream = new Stream();
         stream.setId(SELECTED_STREAM_ID);
-        stream.setShortTitle(SELECTED_STREAM_SHORT_TITLE);
+        stream.setTitle(SELECTED_STREAM_TITLE);
         stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }

@@ -8,11 +8,11 @@ public abstract class StreamTitleSpan extends ClickableSpan implements Clickable
 
     private String idAuthor;
     private String streamId;
-    private String streamShortTitle;
+    private String streamTitle;
 
-    public StreamTitleSpan(String streamId, String streamShortTitle, String idAuthor) {
+    public StreamTitleSpan(String streamId, String streamTitle, String idAuthor) {
         this.streamId = streamId;
-        this.streamShortTitle = streamShortTitle;
+        this.streamTitle = streamTitle;
         this.idAuthor = idAuthor;
     }
 
@@ -23,10 +23,10 @@ public abstract class StreamTitleSpan extends ClickableSpan implements Clickable
     }
 
     @Override public void onClick(View widget) {
-        onStreamClick(streamId, streamShortTitle, idAuthor);
+        onStreamClick(streamId, streamTitle, idAuthor);
     }
 
-    public abstract void onStreamClick(String streamId, String streamShortTitle, String idAuthor);
+    public abstract void onStreamClick(String streamId, String streamTitle, String idAuthor);
 
     @Override public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);

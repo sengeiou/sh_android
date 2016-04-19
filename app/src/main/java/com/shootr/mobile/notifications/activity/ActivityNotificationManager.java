@@ -65,14 +65,14 @@ import javax.inject.Singleton;
     }
 
     public void sendOpenStreamNotification(PushNotification.NotificationValues notificationValues, String idStream,
-      String idStreamHolder, String shortTitle) {
+      String idStreamHolder, String title) {
         StreamActivityNotification notification = new StreamActivityNotification(context,
           notificationBuilderFactory,
           imageLoader,
           notificationValues,
           idStream,
           idStreamHolder,
-          shortTitle);
+          title);
         showNotification(notification);
     }
 

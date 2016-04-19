@@ -280,7 +280,6 @@ public class StreamsListPresenterTest {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setTitle(SELECTED_STREAM_TITLE);
-        streamModel.setShortTitle(SELECTED_STREAM_TITLE);
         streamModel.setAuthorId(STREAM_AUTHOR_ID);
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel);

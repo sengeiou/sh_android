@@ -31,7 +31,6 @@ public class ActivityApiEntityMapper {
         }
 
         activityEntity.setIdStream(activityApiEntity.getIdStream());
-        activityEntity.setStreamShortTitle(activityApiEntity.getStreamShortTitle());
         activityEntity.setStreamTitle(activityApiEntity.getStreamTitle());
 
         activityEntity.setIdShot(activityApiEntity.getIdShot());

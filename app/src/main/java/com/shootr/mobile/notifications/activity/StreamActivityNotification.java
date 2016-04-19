@@ -15,15 +15,15 @@ public class StreamActivityNotification extends SingleActivityNotification {
     private static final int REQUEST_OPEN = 2;
     private final String idStream;
     private final String idStreamHolder;
-    private final String shortTitle;
+    private final String title;
 
     public StreamActivityNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
       ImageLoader imageLoader, PushNotification.NotificationValues notificationValues, String idStream,
-      String idStreamHolder, String shortTitle) {
+      String idStreamHolder, String title) {
         super(context, notificationBuilderFactory, imageLoader, notificationValues);
         this.idStream = idStream;
         this.idStreamHolder = idStreamHolder;
-        this.shortTitle = shortTitle;
+        this.title = title;
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
@@ -35,7 +35,7 @@ public class StreamActivityNotification extends SingleActivityNotification {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STREAM);
         intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, idStreamHolder);
         intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, idStream);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE, shortTitle);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, title);
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

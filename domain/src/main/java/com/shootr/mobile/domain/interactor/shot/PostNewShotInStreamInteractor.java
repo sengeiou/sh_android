@@ -37,7 +37,6 @@ public class PostNewShotInStreamInteractor extends PostNewShotInteractor {
             Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
             eventInfo.setIdStream(stream.getId());
             eventInfo.setStreamTitle(stream.getTitle());
-            eventInfo.setStreamShortTitle(stream.getShortTitle());
             shot.setStreamInfo(eventInfo);
         }
     }

@@ -62,7 +62,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setTitle(String shortTitle) {
+    @Override public void setTitle(String title) {
         /* no-op */
     }
 

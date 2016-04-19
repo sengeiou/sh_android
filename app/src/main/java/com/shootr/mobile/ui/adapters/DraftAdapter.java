@@ -76,12 +76,12 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     private CharSequence getShotCommentWithStream(ShotModel shot, DraftViewHolder holder) {
         if (shot.getComment() == null) {
             return new Truss().pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
-              R.style.InlineDescriptionAppearance)).append(shot.getStreamShortTitle()).popSpan().build();
+              R.style.InlineDescriptionAppearance)).append(shot.getStreamTitle()).popSpan().build();
         } else {
             return new Truss().append(shot.getComment())
               .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(), R.style.InlineDescriptionAppearance))
               .append(" ")
-              .append(shot.getStreamShortTitle())
+              .append(shot.getStreamTitle())
               .popSpan()
               .build();
         }

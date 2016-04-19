@@ -24,10 +24,6 @@ public interface NewStreamView extends DataTransferView {
 
     void askRemoveStreamConfirmation();
 
-    void showShortTitle(String currentShortTitle);
-
-    String getStreamShortTitle();
-
     String getStreamDescription();
 
     void showDescription(String description);

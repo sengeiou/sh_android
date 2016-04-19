@@ -29,7 +29,6 @@ public class MarkNiceShotInteractorTest {
     private static final String SHOT_ID = "shot_id";
     private static final Long STREAM_ID = 2L;
     private static final String STREAM_TITLE = "title";
-    private static final String STREAM_SHORT_TITLE = "shortTitle";
     private static final Long SHOT_USER_ID = 3L;
     private static final String SHOT_USERNAME = "username";
 
@@ -117,7 +116,6 @@ public class MarkNiceShotInteractorTest {
         Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
         shotStreamInfo.setIdStream(String.valueOf(STREAM_ID));
         shotStreamInfo.setStreamTitle(STREAM_TITLE);
-        shotStreamInfo.setStreamShortTitle(STREAM_SHORT_TITLE);
         return shotStreamInfo;
     }
 

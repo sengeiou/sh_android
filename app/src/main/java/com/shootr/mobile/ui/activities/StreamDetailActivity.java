@@ -67,7 +67,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private static final int REQUEST_TAKE_PHOTO = 5;
 
     private static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
+    public static final String EXTRA_STREAM_TITLE = "title";
     private int counterToolbarPrintTimes = 0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -248,8 +248,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         analyticsTool.analyticsStop(getBaseContext(), this);
     }
 
-    private void setShortTitleResultForPreviousActivity(String shortTitle) {
-        setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_SHORT_TITLE, shortTitle));
+    private void setTitleResultForPreviousActivity(String title) {
+        setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_TITLE, title));
     }
 
     //region Edit photo
@@ -286,10 +286,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     //region View methods
     @Override public void setStreamTitle(String title) {
         streamTitle.setText(title);
-    }
-
-    @Override public void setStreamShortTitle(String shortTitle) {
-        setShortTitleResultForPreviousActivity(shortTitle);
+        setTitleResultForPreviousActivity(title);
     }
 
     @Override public void setStreamAuthor(String author) {

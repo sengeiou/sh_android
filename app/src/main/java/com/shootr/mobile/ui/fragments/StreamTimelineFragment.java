@@ -83,7 +83,7 @@ public class StreamTimelineFragment extends BaseFragment
   PinShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
+    public static final String EXTRA_STREAM_TITLE = "streamTitle";
     public static final String EXTRA_ID_USER = "userId";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
@@ -172,7 +172,7 @@ public class StreamTimelineFragment extends BaseFragment
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
         setStreamTitleClickListener(idStream);
         if (streamAuthorIdUser != null) {
             initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser);
@@ -192,8 +192,8 @@ public class StreamTimelineFragment extends BaseFragment
                 getActivity().finish();
             }
         } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
-            String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
-            setStreamTitle(updatedShortTitle);
+            String updatedTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_TITLE);
+            setStreamTitle(updatedTitle);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
         }
@@ -279,8 +279,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     //endregion
 
-    private void setStreamTitle(String streamShortTitle) {
-        toolbarDecorator.setTitle(streamShortTitle);
+    private void setStreamTitle(String streamTitle) {
+        toolbarDecorator.setTitle(streamTitle);
     }
 
     private void setStreamTitleClickListener(final String idStream) {
@@ -588,8 +588,8 @@ public class StreamTimelineFragment extends BaseFragment
         showAllShotsMenuItem.setVisible(false);
     }
 
-    @Override public void setTitle(String shortTitle) {
-        setStreamTitle(shortTitle);
+    @Override public void setTitle(String title) {
+        setStreamTitle(title);
     }
 
     @Override public void setPosition(Integer oldListSize, Integer shots) {

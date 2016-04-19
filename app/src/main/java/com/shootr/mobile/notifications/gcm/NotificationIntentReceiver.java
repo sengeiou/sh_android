@@ -87,9 +87,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         decrementBadgeCount();
         String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
         String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
-        String shortTitle = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE);
+        String title = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_TITLE);
         startActivityFromIntent(context,
-          StreamTimelineActivity.newIntent(context, idStream, shortTitle, idStreamHolder)
+          StreamTimelineActivity.newIntent(context, idStream, title, idStreamHolder)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 

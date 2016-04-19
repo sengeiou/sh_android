@@ -72,7 +72,6 @@ public class DatabaseContract {
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_STREAM = "idStream";
-        public static final String STREAM_SHORT_TITLE = "streamShortTitle";
         public static final String STREAM_TITLE = "streamTitle";
         public static final String NICE_COUNT = "niceCount";
         public static final String TYPE = "type";
@@ -87,7 +86,7 @@ public class DatabaseContract {
         public static final String PROFILE_HIDDEN = "profileHidden";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_SHORT_TITLE, STREAM_TITLE,
+          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TITLE,
           NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
           PROFILE_HIDDEN, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
@@ -184,7 +183,6 @@ public class DatabaseContract {
         public static final String USERNAME = "userName";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
-        public static final String SHORT_TITLE = "shortTitle";
         public static final String DESCRIPTION = "description";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
         public static final String COUNTRY = "country";
@@ -198,7 +196,7 @@ public class DatabaseContract {
         public static final String TOPIC = "topic";
 
         public static final String[] PROJECTION = {
-          ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, SHORT_TITLE, DESCRIPTION, TOPIC,
+          ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, DESCRIPTION, TOPIC,
           BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS,
           UNIQUE_SHOTS, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
@@ -211,7 +209,7 @@ public class DatabaseContract {
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, SHORT_TITLE, DESCRIPTION, TOPIC, REMOVED,
+          WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, DESCRIPTION, TOPIC, REMOVED,
           MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, BIRTH, MODIFIED,
           DELETED, REVISION, SYNCHRONIZED
         };
@@ -229,7 +227,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM,
-          STREAM_SHORT_TITLE, STREAM_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL,
+          STREAM_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL,
           VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
@@ -263,7 +261,6 @@ public class DatabaseContract {
         public static final String USERNAME = "userName";
         public static final String ID_STREAM = "idStream";
         public static final String USER_PHOTO = "userPhoto";
-        public static final String STREAM_SHORT_TITLE = "streamShortTitle";
         public static final String STREAM_TITLE = "streamTitle";
         public static final String COMMENT = "comment";
         public static final String TYPE = "type";
@@ -271,7 +268,7 @@ public class DatabaseContract {
         public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
 
         public static final String[] PROJECTION = {
-          ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_SHORT_TITLE, STREAM_TITLE,
+          ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
           ID_SHOT, ID_STREAM_AUTHOR, COMMENT, TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }

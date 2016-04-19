@@ -25,7 +25,7 @@ public class GoToShotDetailEspressoTest {
               Intent result = new Intent(targetContext, StreamTimelineActivity.class);
               result.putExtra("streamId", "563a3239e4b0149d10d68d2b");
               result.putExtra("userId", "563a114fe4b076203c9738a3");
-              result.putExtra("streamShortTitle", "Sálvame Diario");
+              result.putExtra("streamTitle", "Sálvame Diario");
               return result;
           }
       };

@@ -40,9 +40,7 @@ public class NewStreamPresenter implements Presenter {
     private boolean isNewStream;
     private String preloadedStreamId;
     private String currentTitle;
-    private String currentShortTitle;
     private boolean notifyCreation;
-    private boolean shortTitleEditedManually;
     private String currentStreamTopic;
 
     //region Initialization
@@ -62,7 +60,6 @@ public class NewStreamPresenter implements Presenter {
     public void initialize(NewStreamView newStreamView, String optionalIdStreamToEdit) {
         this.newStreamView = newStreamView;
         this.isNewStream = optionalIdStreamToEdit == null;
-        this.shortTitleEditedManually = false;
         if (!isNewStream) {
             this.preloadStreamToEdit(optionalIdStreamToEdit);
         }
@@ -81,7 +78,6 @@ public class NewStreamPresenter implements Presenter {
         preloadedStreamId = streamModel.getIdStream();
         String preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
-        newStreamView.showShortTitle(streamModel.getShortTitle());
         newStreamView.showDescription(streamModel.getDescription());
 
         if (streamModel.isRemoved()) {
@@ -89,13 +85,10 @@ public class NewStreamPresenter implements Presenter {
         } else {
             newStreamView.showRemoveStreamButton();
         }
-        if (currentTitle == null && currentShortTitle == null) {
+        if (currentTitle == null) {
             preloadedTitle = streamModel.getTitle();
-            String preloadedShortTitle = streamModel.getShortTitle();
             currentTitle = preloadedTitle;
-            currentShortTitle = preloadedShortTitle;
             newStreamView.setStreamTitle(preloadedTitle);
-            bindShortTitleToTitleIfMatches();
         }
         this.currentStreamTopic = streamModel.getTopic();
     }
@@ -104,16 +97,6 @@ public class NewStreamPresenter implements Presenter {
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
-        if (!shortTitleEditedManually) {
-            currentShortTitle = filterShortTitle(title);
-            newStreamView.showShortTitle(currentShortTitle);
-        }
-        this.updateDoneButtonStatus();
-    }
-
-    public void shortTitleTextChanged(String shortTitle) {
-        currentShortTitle = filterShortTitle(shortTitle);
-        this.bindShortTitleToTitleIfMatches();
         this.updateDoneButtonStatus();
     }
 
@@ -177,12 +160,10 @@ public class NewStreamPresenter implements Presenter {
 
     private void sendStream(String preloadedStreamId) {
         String title = filterTitle(newStreamView.getStreamTitle());
-        String shortTitle = filterShortTitle(newStreamView.getStreamShortTitle());
         String description = filterDescription(newStreamView.getStreamDescription());
 
         createStreamInteractor.sendStream(preloadedStreamId,
           title,
-          shortTitle,
           description,
           currentStreamTopic,
           notifyCreation,
@@ -266,14 +247,6 @@ public class NewStreamPresenter implements Presenter {
         return title.trim();
     }
 
-    private String filterShortTitle(String shortTitle) {
-        if (shortTitle.length() <= 20) {
-            return shortTitle.trim();
-        } else {
-            return shortTitle.substring(0, 20).trim();
-        }
-    }
-
     private String filterDescription(String streamDescription) {
         return streamDescription.trim();
     }
@@ -283,23 +256,11 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private boolean canSendStream() {
-        return isValidTitle() && isValidShortTitle();
+        return isValidTitle();
     }
 
     private boolean isValidTitle() {
         return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
-    }
-
-    private boolean isValidShortTitle() {
-        return currentShortTitle != null
-          && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
-          && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
-    }
-
-    private void bindShortTitleToTitleIfMatches() {
-        if (currentTitle != null && currentShortTitle != null) {
-            shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
-        }
     }
 
     //endregion

@@ -34,7 +34,7 @@ public interface StreamTimelineView extends LoadDataView {
 
     void hideAllStreamShots();
 
-    void setTitle(String shortTitle);
+    void setTitle(String title);
 
     void setPosition(Integer oldListSize, Integer shots);
 

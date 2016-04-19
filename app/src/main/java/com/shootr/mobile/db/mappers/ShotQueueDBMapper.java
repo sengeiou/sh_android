@@ -31,8 +31,6 @@ public class ShotQueueDBMapper extends GenericDBMapper {
         shotQueueEntity.setUsername(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME)));
         shotQueueEntity.setComment(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.COMMENT)));
         shotQueueEntity.setImage(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE)));
-        shotQueueEntity.setStreamShortTitle(cursor.getString(cursor.getColumnIndex(
-          DatabaseContract.ShotQueueTable.STREAM_SHORT_TITLE)));
         shotQueueEntity.setStreamTitle(cursor.getString(cursor.getColumnIndex(
           DatabaseContract.ShotQueueTable.STREAM_TITLE)));
         shotQueueEntity.setIdStream(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_STREAM)));
@@ -67,7 +65,6 @@ public class ShotQueueDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.ShotQueueTable.USERNAME, entity.getUsername());
         contentValues.put(DatabaseContract.ShotQueueTable.COMMENT, entity.getComment());
         contentValues.put(DatabaseContract.ShotQueueTable.IMAGE, entity.getImage());
-        contentValues.put(DatabaseContract.ShotQueueTable.STREAM_SHORT_TITLE, entity.getStreamShortTitle());
         contentValues.put(DatabaseContract.ShotQueueTable.STREAM_TITLE, entity.getStreamTitle());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_STREAM, entity.getIdStream());
         contentValues.put(DatabaseContract.ShotQueueTable.TYPE, entity.getType());

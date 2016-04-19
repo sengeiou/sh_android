@@ -9,7 +9,6 @@ public class ShotEntity extends Synchronized {
     private String comment;
     private String image;
     private String idStream;
-    private String streamShortTitle;
     private String streamTitle;
 
     private Integer niceCount;
@@ -71,14 +70,6 @@ public class ShotEntity extends Synchronized {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {

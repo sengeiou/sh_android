@@ -35,7 +35,6 @@ import javax.inject.Singleton;
             Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
             eventInfo.setIdStream(shotEntity.getIdStream());
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
-            eventInfo.setStreamShortTitle(shotEntity.getStreamShortTitle());
             shot.setStreamInfo(eventInfo);
         }
 
@@ -96,7 +95,6 @@ import javax.inject.Singleton;
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
             shotEntity.setStreamTitle(eventInfo.getStreamTitle());
-            shotEntity.setStreamShortTitle(eventInfo.getStreamShortTitle());
         }
 
         shotEntity.setIdShotParent(shot.getParentShotId());

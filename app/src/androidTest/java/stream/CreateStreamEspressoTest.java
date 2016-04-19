@@ -20,7 +20,6 @@ public class CreateStreamEspressoTest {
 
     @Test public void shouldFillStreamData() throws Exception {
         onView(withId(R.id.new_stream_title)).perform(new TypeTextAction("Test"));
-        onView(withId(R.id.new_stream_short_title)).check(matches(withText(containsString("Test"))));
         onView(withId(R.id.new_stream_description)).perform(new TypeTextAction("Test Description"));
         onView(withId(R.id.menu_done)).perform(click());
     }

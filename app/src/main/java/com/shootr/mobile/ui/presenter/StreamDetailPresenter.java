@@ -219,7 +219,6 @@ public class StreamDetailPresenter implements Presenter {
     private void renderStreamInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
         streamDetailView.setStreamTitle(streamModel.getTitle());
-        streamDetailView.setStreamShortTitle(streamModel.getShortTitle());
         streamDetailView.setStreamPicture(streamModel.getPicture());
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
         if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {

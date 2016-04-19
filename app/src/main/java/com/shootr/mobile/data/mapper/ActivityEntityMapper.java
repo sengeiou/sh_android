@@ -30,7 +30,6 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
             Activity.ActivityStreamInfo eventInfo = new Activity.ActivityStreamInfo();
             eventInfo.setIdStream(activityEntity.getIdStream());
             eventInfo.setStreamTitle(activityEntity.getStreamTitle());
-            eventInfo.setStreamShortTitle(activityEntity.getStreamShortTitle());
             activity.setStreamInfo(eventInfo);
         }
 
@@ -79,7 +78,6 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
         if (eventInfo != null) {
             activityEntity.setIdStream(eventInfo.getIdStream());
             activityEntity.setStreamTitle(eventInfo.getStreamTitle());
-            activityEntity.setStreamShortTitle(eventInfo.getStreamShortTitle());
         }
         Activity.ActivityUserInfo userInfo = activity.getUserInfo();
         if (userInfo != null) {
