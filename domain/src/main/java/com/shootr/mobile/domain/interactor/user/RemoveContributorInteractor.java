@@ -36,21 +36,16 @@ public class RemoveContributorInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        removeLocalContributor(idStream, idUser);
         removeRemoteContributor(idStream, idUser);
     }
 
     private void removeRemoteContributor(String idStream, String idUser) {
         try {
-            contributorRepository.addContributor(idStream, idUser);
+            contributorRepository.removeContributor(idStream, idUser);
             notifyCompleted();
         } catch (Exception error) {
             //TODO: notify error
         }
-    }
-
-    private void removeLocalContributor(String idStream, String idUser) {
-        //TODO: call localRepository
     }
 
     private void notifyCompleted() {
