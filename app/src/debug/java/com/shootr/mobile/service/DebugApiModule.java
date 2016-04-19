@@ -112,8 +112,8 @@ import retrofit.android.AndroidMockValuePersistence;
         return mockOrRealService(NicerApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
-    @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter,
-      @DebugMode BooleanPreference debugMode) {
+    @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter,
+      MockRestAdapter mockRestAdapter, @DebugMode BooleanPreference debugMode) {
         return mockOrRealService(ContributorApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 }

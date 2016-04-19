@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.AddContributorInteractor;

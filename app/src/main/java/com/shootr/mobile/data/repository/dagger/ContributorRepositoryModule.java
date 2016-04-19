@@ -15,11 +15,13 @@ import javax.inject.Singleton;
   complete = false,
   library = true) public class ContributorRepositoryModule {
 
-    @Provides @Singleton ContributorRepository provideContributorRepository(SyncContributorRepository contributorRepository) {
+    @Provides @Singleton ContributorRepository provideContributorRepository(
+      SyncContributorRepository contributorRepository) {
         return contributorRepository;
     }
 
-    @Provides @Singleton ContributorDataSource provideContributorDataSource(ServiceContributorDataSource serviceContributorDataSource) {
+    @Provides @Singleton ContributorDataSource provideContributorDataSource(
+      ServiceContributorDataSource serviceContributorDataSource) {
         return serviceContributorDataSource;
     }
 }

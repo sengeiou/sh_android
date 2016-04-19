@@ -12,7 +12,8 @@ public class SyncContributorRepository implements ContributorRepository {
     private final ContributorDataSource contributorDataSource;
     private final ContributorEntityMapper mapper;
 
-    @Inject public SyncContributorRepository(ContributorDataSource contributorDataSource, ContributorEntityMapper mapper) {
+    @Inject
+    public SyncContributorRepository(ContributorDataSource contributorDataSource, ContributorEntityMapper mapper) {
         this.contributorDataSource = contributorDataSource;
         this.mapper = mapper;
     }

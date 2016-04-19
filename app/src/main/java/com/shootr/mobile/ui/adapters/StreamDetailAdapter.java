@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
 import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -66,7 +65,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean isAllParticipantsVisible = false;
 
     public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
-      View.OnClickListener onContributorsClickListener, View.OnClickListener onMediaClickListener, CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
+      View.OnClickListener onContributorsClickListener, View.OnClickListener onMediaClickListener,
+      CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
       View.OnClickListener onAllParticipantsClickListener, OnUserClickListener onUserClickListener,
       OnFollowUnfollowListener onFollowUnfollowListener) {
         this.onAuthorClickListener = onAuthorClickListener;
@@ -238,8 +238,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public void setContributorsNumber(Integer contributorsNumber){
-        if(contributorViewHolder != null){
+    public void setContributorsNumber(Integer contributorsNumber) {
+        if (contributorViewHolder != null) {
             contributorViewHolder.setNumber(contributorsNumber);
         }
     }

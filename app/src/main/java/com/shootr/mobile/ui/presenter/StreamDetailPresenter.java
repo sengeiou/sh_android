@@ -157,9 +157,9 @@ public class StreamDetailPresenter implements Presenter {
     public void getContributorsNumber() {
         getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
             @Override public void onLoaded(List<Contributor> contributors) {
-                if(contributors.size()>0){
+                if (contributors.size() > 0) {
                     streamDetailView.showContributorsNumber(contributors.size());
-                }else{
+                } else {
                     streamDetailView.hideContributorsNumber();
                 }
             }

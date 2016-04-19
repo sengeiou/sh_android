@@ -1,7 +1,6 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -29,7 +28,8 @@ public class GetContributorsInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainContributors(String idStream, Boolean withUsersEmbed, Callback<List<Contributor>> callback, ErrorCallback errorCallback) {
+    public void obtainContributors(String idStream, Boolean withUsersEmbed, Callback<List<Contributor>> callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.withUsersEmbed = withUsersEmbed;
         this.callback = callback;
@@ -42,9 +42,9 @@ public class GetContributorsInteractor implements Interactor {
     }
 
     private List<Contributor> obtainRemoteContributors() {
-        if(withUsersEmbed){
+        if (withUsersEmbed) {
             return contributorRepository.getContributorsWithUsers(idStream);
-        }else{
+        } else {
             return contributorRepository.getContributors(idStream);
         }
     }

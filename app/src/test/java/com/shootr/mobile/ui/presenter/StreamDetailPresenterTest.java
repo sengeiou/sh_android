@@ -86,7 +86,9 @@ public class StreamDetailPresenterTest {
           selectStreamInteractor,
           getMutedStreamsInteractor,
           muteInteractor,
-          unmuteInteractor, getContributorsInteractor, streamModelMapper,
+          unmuteInteractor,
+          getContributorsInteractor,
+          streamModelMapper,
           userModelMapper,
           errorMessageFactory);
         presenter.setView(streamDetailView);
@@ -338,10 +340,11 @@ public class StreamDetailPresenterTest {
                 callback.onLoaded(contributorList());
                 return null;
             }
-        }).when(getContributorsInteractor).obtainContributors(anyString(),
-          anyBoolean(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getContributorsInteractor)
+          .obtainContributors(anyString(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupContributorsCallBackWithoutContributors() {
@@ -352,10 +355,11 @@ public class StreamDetailPresenterTest {
                 callback.onLoaded(Collections.emptyList());
                 return null;
             }
-        }).when(getContributorsInteractor).obtainContributors(anyString(),
-          anyBoolean(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getContributorsInteractor)
+          .obtainContributors(anyString(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private StreamInfo streamInfoWith50plusParticipants() {
@@ -448,6 +452,6 @@ public class StreamDetailPresenterTest {
         contributor.setUser(user());
         contributor.setIdUser(ID_USER);
         contributors.add(contributor);
-        return  contributors;
+        return contributors;
     }
 }

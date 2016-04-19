@@ -128,7 +128,10 @@ public class ContributorsPresenterTest {
                 return null;
             }
         }).when(getContributorsInteractor)
-          .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainContributors(anyString(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetContributorsInteractorWithEmptyList() {
@@ -140,7 +143,10 @@ public class ContributorsPresenterTest {
                 return null;
             }
         }).when(getContributorsInteractor)
-          .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainContributors(anyString(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private List<Contributor> contributors() {

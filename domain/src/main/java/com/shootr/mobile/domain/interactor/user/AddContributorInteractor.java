@@ -43,7 +43,7 @@ public class AddContributorInteractor implements Interactor {
         try {
             contributorRepository.addContributor(idStream, idUser);
             notifyCompleted();
-        }catch (Exception error){
+        } catch (Exception error) {
             //TODO: notify error
         }
     }

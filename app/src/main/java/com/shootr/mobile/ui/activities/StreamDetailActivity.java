@@ -159,7 +159,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                  new AlertDialog.Builder(StreamDetailActivity.this)
+                    .setMessage(String.format(getString(R.string.unfollow_dialog_message),
                     user.getUsername()))
                     .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {

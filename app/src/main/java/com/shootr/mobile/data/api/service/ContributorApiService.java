@@ -12,8 +12,8 @@ public interface ContributorApiService {
     @GET("/contributor?includeEmbed=false") List<ContributorEntity> getContributors(@Query("idStream") String idShot)
       throws ApiException, IOException;
 
-    @GET("/contributor?includeEmbed=true") List<ContributorEntity> getContributorsWithUser(@Query("idStream") String idShot)
-      throws ApiException, IOException;
+    @GET("/contributor?includeEmbed=true") List<ContributorEntity> getContributorsWithUser(
+      @Query("idStream") String idShot) throws ApiException, IOException;
 
     void addContributor(String idStream, String idUser) throws ApiException, IOException;
 }
