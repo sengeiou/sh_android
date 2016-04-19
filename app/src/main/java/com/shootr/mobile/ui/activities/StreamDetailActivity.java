@@ -206,7 +206,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 finish();
                 return true;
             case R.id.stream_detail_menu_edit:
-                streamDetailPresenter.editStreamClick();
+                streamDetailPresenter.editStreamInfo();
                 return true;
             case R.id.stream_detail_menu_data_info:
                 streamDetailPresenter.dataInfoClicked();

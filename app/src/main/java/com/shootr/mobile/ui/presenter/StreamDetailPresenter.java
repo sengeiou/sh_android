@@ -98,11 +98,6 @@ public class StreamDetailPresenter implements Presenter {
     }
     //endregion
 
-    //region Edit stream
-    public void editStreamClick() {
-        streamDetailView.showEditStreamPhotoOrInfo();
-    }
-
     public void editStreamInfo() {
         streamDetailView.navigateToEditStream(idStream);
     }
