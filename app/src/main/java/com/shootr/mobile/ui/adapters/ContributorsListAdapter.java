@@ -40,6 +40,11 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         this.users = users;
     }
 
+    public void removeUserFromList(UserModel user){
+        users.remove(user);
+        notifyDataSetChanged();
+    }
+
     public void removeItems() {
         this.users = Collections.emptyList();
     }
@@ -100,7 +105,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
         viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if(viewHolder.contributorButton.isAdded()){
+                if(!viewHolder.contributorButton.isAdded()){
                     if (callback != null) {
                         callback.remove(position);
                     }

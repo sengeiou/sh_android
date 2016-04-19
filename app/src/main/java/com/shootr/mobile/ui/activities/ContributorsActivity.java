@@ -158,6 +158,10 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
         addContributorText.setVisibility(View.GONE);
     }
 
+    @Override public void removeContributorFromList(UserModel userModel) {
+        adapter.removeUserFromList(userModel);
+    }
+
     @Override public void add(int position) {
         presenter.addContributor(adapter.getItem(position));
     }

@@ -100,10 +100,10 @@ public class ContributorsPresenter implements Presenter {
         }
     }
 
-    public void addContributor(UserModel userModel) {
+    public void addContributor(final UserModel userModel) {
         addContributorInteractor.addContributor(idStream, userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                //TODO: refresh list
+                view.removeContributorFromList(userModel);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -112,12 +112,12 @@ public class ContributorsPresenter implements Presenter {
         });
     }
 
-    public void removeContributor(UserModel userModel) {
+    public void removeContributor(final UserModel userModel) {
         removeContributorInteractor.removeContributor(idStream,
           userModel.getIdUser(),
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  //TODO: refresh list
+                  view.removeContributorFromList(userModel);
               }
           },
           new Interactor.ErrorCallback() {
