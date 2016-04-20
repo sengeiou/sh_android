@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -27,7 +28,7 @@ public class ContributorInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void addRemoveContributor(String idStream, String idUser, Boolean isAdding, CompletedCallback callback,
+    public void manageContributor(String idStream, String idUser, Boolean isAdding, CompletedCallback callback,
       ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.idUser = idUser;
@@ -49,8 +50,8 @@ public class ContributorInteractor implements Interactor {
         try {
             contributorRepository.addContributor(idStream, idUser);
             notifyCompleted();
-        } catch (Exception error) {
-            //TODO: notify error
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
         }
     }
 
@@ -58,8 +59,8 @@ public class ContributorInteractor implements Interactor {
         try {
             contributorRepository.removeContributor(idStream, idUser);
             notifyCompleted();
-        } catch (Exception error) {
-            //TODO: notify error
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
         }
     }
 

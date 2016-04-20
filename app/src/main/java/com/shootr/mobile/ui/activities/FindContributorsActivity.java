@@ -76,6 +76,16 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
         actionBar.setDisplayShowHomeEnabled(false);
     }
 
+    @Override protected void onPause() {
+        super.onPause();
+        findContributorsPresenter.pause();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        findContributorsPresenter.resume();
+    }
+
     @Override protected void initializePresenter() {
         String idStream = getIntent().getStringExtra(ID_STREAM);
         findContributorsPresenter.initialize(this, idStream);

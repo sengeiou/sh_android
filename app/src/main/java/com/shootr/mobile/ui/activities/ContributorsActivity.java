@@ -54,6 +54,16 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
         return intent;
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
+
     //region Lifecycle
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */

@@ -21,6 +21,7 @@ public class ContributorsPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
     private final ContributorInteractor contributorInteractor;
 
+    private Boolean hasBeenPaused = false;
     private ContributorsView view;
     private String idStream;
     private Boolean isHolder;
@@ -98,20 +99,9 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void addContributor(final UserModel userModel) {
-        contributorInteractor.addRemoveContributor(idStream, userModel.getIdUser(), true, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                view.removeContributorFromList(userModel);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO: show error
-            }
-        });
-    }
-
-    public void removeContributor(final UserModel userModel) {
-        contributorInteractor.addRemoveContributor(idStream,
-          userModel.getIdUser(), false,
+        contributorInteractor.manageContributor(idStream,
+          userModel.getIdUser(),
+          true,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   view.removeContributorFromList(userModel);
@@ -119,16 +109,34 @@ public class ContributorsPresenter implements Presenter {
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  //TODO: show error
+                  view.showError(errorMessageFactory.getMessageForError(error));
+              }
+          });
+    }
+
+    public void removeContributor(final UserModel userModel) {
+        contributorInteractor.manageContributor(idStream,
+          userModel.getIdUser(),
+          false,
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  view.removeContributorFromList(userModel);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  view.showError(errorMessageFactory.getMessageForError(error));
               }
           });
     }
 
     @Override public void resume() {
-        //TODO refresh
+        if(hasBeenPaused){
+            loadContributors();
+        }
     }
 
     @Override public void pause() {
-        //TODO pause
+        hasBeenPaused = true;
     }
 }

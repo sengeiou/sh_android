@@ -33,13 +33,13 @@ public class ContributorInteractorTest {
     }
 
     @Test public void shouldAddContributorWhenIsAdding() throws Exception {
-        contributorInteractor.addRemoveContributor(STREAM_ID, USER_ID, IS_ADDING, callback, errorCallback);
+        contributorInteractor.manageContributor(STREAM_ID, USER_ID, IS_ADDING, callback, errorCallback);
 
         verify(contributorRepository).addContributor(STREAM_ID, USER_ID);
     }
 
     @Test public void shouldRemoveContributorWhenIsNotAdding() throws Exception {
-        contributorInteractor.addRemoveContributor(STREAM_ID, USER_ID, IS_NOT_ADDING, callback, errorCallback);
+        contributorInteractor.manageContributor(STREAM_ID, USER_ID, IS_NOT_ADDING, callback, errorCallback);
 
         verify(contributorRepository).removeContributor(STREAM_ID, USER_ID);
     }

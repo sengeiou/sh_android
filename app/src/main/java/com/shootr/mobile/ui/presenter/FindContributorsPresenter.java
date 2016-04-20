@@ -20,11 +20,11 @@ public class FindContributorsPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
+    private Boolean hasBeenPaused = false;
     private FindContributorsView findContributorsView;
     private List<UserModel> contributors;
     private String query;
     private String idStream;
-    private Integer currentPage;
 
     @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor,
       ContributorInteractor contributorInteractor, UserModelMapper userModelMapper,
@@ -52,7 +52,7 @@ public class FindContributorsPresenter implements Presenter {
         findContributorsView.hideKeyboard();
         findContributorsView.showLoading();
         findContributorsView.setCurrentQuery(query);
-        currentPage = 0;
+        Integer currentPage = 0;
         findContributorsInteractor.findContributors(idStream, this.query, currentPage, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 findContributorsView.hideLoading();
@@ -73,19 +73,23 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     public void addContributor(UserModel userModel) {
-        contributorInteractor.addRemoveContributor(idStream, userModel.getIdUser(), true, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                //TODO: refresh list
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO: show error
-            }
-        });
+        contributorInteractor.manageContributor(idStream,
+          userModel.getIdUser(),
+          true,
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  //TODO: refresh list
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  //TODO: show error
+              }
+          });
     }
 
     public void removeContributor(UserModel userModel) {
-        contributorInteractor.addRemoveContributor(idStream,
+        contributorInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           false,
           new Interactor.CompletedCallback() {
@@ -101,10 +105,12 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        //TODO refresh list
+        if(hasBeenPaused){
+            searchContributors(query);
+        }
     }
 
     @Override public void pause() {
-        //TODO refresh pause
+        hasBeenPaused = true;
     }
 }
