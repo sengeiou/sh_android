@@ -196,7 +196,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 authorViewHolder.setName(authorName);
                 break;
             case TYPE_CONTRIBUTOR:
-                contributorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
+                contributorViewHolder.setIcon(R.drawable.ic_contributors);
                 contributorViewHolder.setName(R.string.title_activity_contributors);
                 break;
             case TYPE_MEDIA:
