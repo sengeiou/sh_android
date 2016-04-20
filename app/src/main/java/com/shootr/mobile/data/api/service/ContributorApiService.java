@@ -19,7 +19,9 @@ public interface ContributorApiService {
     @GET("/contributor?includeEmbed=true") List<ContributorEntity> getContributorsWithUser(
       @Query("idStream") String idStream) throws ApiException, IOException;
 
-    @PUT("/stream/{idStream}/contributor/{idUser}") Response addContributor(@Path("idStream") String idStream, @Path("idUser") String idUser) throws ApiException, IOException;
+    @PUT("/stream/{idStream}/contributor/{idUser}") Response addContributor(@Path("idStream") String idStream,
+      @Path("idUser") String idUser) throws ApiException, IOException;
 
-    @DELETE("/stream/{idStream}/contributor/{idUser}") Response removeContributor(@Path("idStream") String idStream, @Path("idUser") String idUser) throws ApiException, IOException;
+    @DELETE("/stream/{idStream}/contributor/{idUser}") Response removeContributor(@Path("idStream") String idStream,
+      @Path("idUser") String idUser) throws ApiException, IOException;
 }

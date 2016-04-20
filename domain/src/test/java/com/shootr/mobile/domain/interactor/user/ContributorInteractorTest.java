@@ -29,7 +29,8 @@ public class ContributorInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        contributorInteractor = new ContributorInteractor(interactorHandler, contributorRepository, postExecutionThread);
+        contributorInteractor =
+          new ContributorInteractor(interactorHandler, contributorRepository, postExecutionThread);
     }
 
     @Test public void shouldAddContributorWhenIsAdding() throws Exception {

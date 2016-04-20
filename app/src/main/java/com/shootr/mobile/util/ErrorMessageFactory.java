@@ -136,7 +136,7 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_message_invalid_change_password);
         } else if (error instanceof CannotFollowBlockedUserException) {
             return context.getString(R.string.error_following_user_blocked);
-        }else if (error instanceof CannotAddContributorException) {
+        } else if (error instanceof CannotAddContributorException) {
             return context.getString(R.string.error_adding_contributor);
         } else {
             return getUnknownErrorMessage();

@@ -43,7 +43,7 @@ public class ServiceContributorDataSource implements ContributorDataSource {
             } else {
                 throw new ServerCommunicationException(apiException);
             }
-        } catch (IOException networkError){
+        } catch (IOException networkError) {
             throw new ServerCommunicationException(networkError);
         }
     }

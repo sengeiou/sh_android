@@ -41,7 +41,7 @@ public class ContributorInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        if(isAdding) {
+        if (isAdding) {
             addRemoteContributor(idStream, idUser);
         } else {
             removeRemoteContributor(idStream, idUser);

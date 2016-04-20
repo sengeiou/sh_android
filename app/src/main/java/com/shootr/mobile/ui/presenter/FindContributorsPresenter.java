@@ -53,23 +53,27 @@ public class FindContributorsPresenter implements Presenter {
         findContributorsView.showLoading();
         findContributorsView.setCurrentQuery(query);
         Integer currentPage = 0;
-        findContributorsInteractor.findContributors(idStream, this.query, currentPage, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                findContributorsView.hideLoading();
-                contributors = userModelMapper.transform(users);
-                if (!contributors.isEmpty()) {
-                    findContributorsView.showContent();
-                    findContributorsView.renderContributors(contributors);
-                } else {
-                    findContributorsView.showEmpty();
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                findContributorsView.hideLoading();
-                findContributorsView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
+        findContributorsInteractor.findContributors(idStream,
+          this.query,
+          currentPage,
+          new Interactor.Callback<List<User>>() {
+              @Override public void onLoaded(List<User> users) {
+                  findContributorsView.hideLoading();
+                  contributors = userModelMapper.transform(users);
+                  if (!contributors.isEmpty()) {
+                      findContributorsView.showContent();
+                      findContributorsView.renderContributors(contributors);
+                  } else {
+                      findContributorsView.showEmpty();
+                  }
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  findContributorsView.hideLoading();
+                  findContributorsView.showError(errorMessageFactory.getMessageForError(error));
+              }
+          });
     }
 
     public void addContributor(final UserModel userModel) {
@@ -105,7 +109,7 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if(hasBeenPaused){
+        if (hasBeenPaused) {
             searchContributors(query);
         }
     }

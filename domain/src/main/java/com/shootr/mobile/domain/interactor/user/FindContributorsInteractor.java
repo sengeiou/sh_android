@@ -32,7 +32,8 @@ public class FindContributorsInteractor implements Interactor {
 
     @Inject
     public FindContributorsInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository, LocaleProvider localeProvider) {
+      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.contributorRepository = contributorRepository;
         this.remoteUserRepository = remoteUserRepository;
@@ -40,7 +41,8 @@ public class FindContributorsInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void findContributors(String idStream, String query, Integer currentPage, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void findContributors(String idStream, String query, Integer currentPage, Callback<List<User>> callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.query = query;
         this.currentPage = currentPage;
@@ -64,7 +66,7 @@ public class FindContributorsInteractor implements Interactor {
             List<Contributor> currentContributors = contributorRepository.getContributorsWithUsers(idStream);
             filterContributors(resultUsers, users, currentContributors);
         } catch (ServerCommunicationException error) {
-           notifyError(error);
+            notifyError(error);
         }
         return resultUsers;
     }
@@ -77,7 +79,7 @@ public class FindContributorsInteractor implements Interactor {
         }
 
         for (User user : users) {
-            if(!contributorUsers.contains(user)){
+            if (!contributorUsers.contains(user)) {
                 resultUsers.add(user);
             }
         }

@@ -40,7 +40,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         this.users = users;
     }
 
-    public void removeUserFromList(UserModel user){
+    public void removeUserFromList(UserModel user) {
         users.remove(user);
         notifyDataSetChanged();
     }
@@ -89,10 +89,10 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
         if (isHolder) {
-            if(isAdding){
+            if (isAdding) {
                 viewHolder.contributorButton.setVisibility(View.VISIBLE);
                 viewHolder.contributorButton.setAddContributor(false);
-            } else{
+            } else {
                 viewHolder.contributorButton.setVisibility(View.VISIBLE);
                 viewHolder.contributorButton.setAddContributor(true);
             }
@@ -105,11 +105,11 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
         viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if(!isAdding){
+                if (!isAdding) {
                     if (callback != null) {
                         callback.remove(position);
                     }
-                }else{
+                } else {
                     if (callback != null) {
                         callback.add(position);
                     }

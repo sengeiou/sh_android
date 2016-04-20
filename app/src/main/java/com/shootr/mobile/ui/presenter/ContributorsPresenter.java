@@ -131,7 +131,7 @@ public class ContributorsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if(hasBeenPaused){
+        if (hasBeenPaused) {
             loadContributors();
         }
     }
