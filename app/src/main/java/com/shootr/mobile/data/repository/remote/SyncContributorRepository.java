@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.mapper.ContributorEntityMapper;
 import com.shootr.mobile.data.repository.datasource.contributor.ContributorDataSource;
 import com.shootr.mobile.domain.Contributor;
+import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,7 +27,7 @@ public class SyncContributorRepository implements ContributorRepository {
         return mapper.transform(contributorDataSource.getContributorsWithUser(idStream));
     }
 
-    @Override public void addContributor(String idStream, String idUser) {
+    @Override public void addContributor(String idStream, String idUser) throws ContributorNumberStreamException {
         contributorDataSource.addContributor(idStream, idUser);
     }
 

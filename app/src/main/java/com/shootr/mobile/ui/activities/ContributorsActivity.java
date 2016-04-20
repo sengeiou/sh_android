@@ -42,7 +42,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @Bind(R.id.add_contributor) FrameLayout addContributor;
     @Bind(R.id.add_contributor_text) TextView addContributorText;
 
-    @BindString(R.string.contributors_limit) String limitContributorsText;
+    @BindString(R.string.error_adding_contributor) String limitContributorsText;
 
     @Inject ContributorsPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;

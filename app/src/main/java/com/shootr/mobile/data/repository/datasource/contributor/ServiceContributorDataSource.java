@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.repository.datasource.contributor;
 
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.entity.ContributorEntity;
+import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.List;
@@ -32,11 +34,17 @@ public class ServiceContributorDataSource implements ContributorDataSource {
         }
     }
 
-    @Override public void addContributor(String idStream, String idUser) {
+    @Override public void addContributor(String idStream, String idUser) throws ContributorNumberStreamException {
         try {
             contributorApiService.addContributor(idStream, idUser);
-        } catch (ApiException | IOException cause) {
-            throw new ServerCommunicationException(cause);
+        } catch (ApiException apiException) {
+            if (ErrorInfo.ContributorNumberStreamException == apiException.getErrorInfo()) {
+                throw new ContributorNumberStreamException(apiException);
+            } else {
+                throw new ServerCommunicationException(apiException);
+            }
+        } catch (IOException networkError){
+            throw new ServerCommunicationException(networkError);
         }
     }
 

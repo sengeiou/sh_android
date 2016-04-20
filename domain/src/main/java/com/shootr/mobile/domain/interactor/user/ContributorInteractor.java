@@ -1,11 +1,13 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ContributorRepository;
+import com.shootr.mobile.domain.service.user.CannotAddContributorException;
 import javax.inject.Inject;
 
 public class ContributorInteractor implements Interactor {
@@ -52,6 +54,8 @@ public class ContributorInteractor implements Interactor {
             notifyCompleted();
         } catch (ServerCommunicationException error) {
             notifyError(error);
+        } catch (ContributorNumberStreamException error) {
+            notifyError(new CannotAddContributorException(error));
         }
     }
 
