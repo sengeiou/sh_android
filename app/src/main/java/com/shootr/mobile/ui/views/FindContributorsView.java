@@ -15,4 +15,6 @@ public interface FindContributorsView extends LoadDataView {
     void showContent();
 
     void hideContent();
+
+    void removeContributorFromList(UserModel userModel);
 }

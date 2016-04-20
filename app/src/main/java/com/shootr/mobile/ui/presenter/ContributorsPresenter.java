@@ -91,7 +91,7 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void onAddContributorClick(Integer countContributors) {
-        if (countContributors > CONTRIBUTORS_LIMIT) {
+        if (countContributors >= CONTRIBUTORS_LIMIT) {
             view.showContributorsLimitSnackbar();
         } else {
             view.goToSearchContributors();

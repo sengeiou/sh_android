@@ -72,34 +72,34 @@ public class FindContributorsPresenter implements Presenter {
         });
     }
 
-    public void addContributor(UserModel userModel) {
+    public void addContributor(final UserModel userModel) {
         contributorInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           true,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  //TODO: refresh list
+                  findContributorsView.removeContributorFromList(userModel);
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  //TODO: show error
+                  findContributorsView.showError(errorMessageFactory.getMessageForError(error));
               }
           });
     }
 
-    public void removeContributor(UserModel userModel) {
+    public void removeContributor(final UserModel userModel) {
         contributorInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           false,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  //TODO: refresh list
+                  findContributorsView.removeContributorFromList(userModel);
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  //TODO: show error
+                  findContributorsView.showError(errorMessageFactory.getMessageForError(error));
               }
           });
     }

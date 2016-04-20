@@ -105,7 +105,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
         viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if(!viewHolder.contributorButton.isAdded()){
+                if(!isAdding){
                     if (callback != null) {
                         callback.remove(position);
                     }

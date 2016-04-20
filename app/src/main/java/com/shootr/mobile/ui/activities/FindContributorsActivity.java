@@ -150,6 +150,10 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
         resultsListView.setVisibility(View.GONE);
     }
 
+    @Override public void removeContributorFromList(UserModel userModel) {
+        adapter.removeUserFromList(userModel);
+    }
+
     @Override public void showEmpty() {
         emptyOrErrorView.setVisibility(View.VISIBLE);
     }

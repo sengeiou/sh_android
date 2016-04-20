@@ -384,6 +384,7 @@ public class StreamDetailPresenter implements Presenter {
         if (hasBeenPaused) {
             selectStream();
             getStreamInfo();
+            getContributorsNumber();
         }
     }
 
