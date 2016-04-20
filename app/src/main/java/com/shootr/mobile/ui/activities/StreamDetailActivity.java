@@ -599,6 +599,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         removeMenuItem.setVisible(false);
     }
 
+    @Override public void showRestoreStreamFeedback() {
+        feedbackMessage.show(getView(), R.string.stream_restored_feedback);
+    }
+
+    @Override public void showRemovedStreamFeedback() {
+        feedbackMessage.show(getView(), R.string.stream_removed_feedback);
+    }
+
     @Override public void showLoading() {
         progressView.setVisibility(View.VISIBLE);
     }

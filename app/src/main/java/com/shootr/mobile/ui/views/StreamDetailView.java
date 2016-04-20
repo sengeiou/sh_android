@@ -68,4 +68,8 @@ public interface StreamDetailView extends DataTransferView {
     void hideRestoreButton();
 
     void hideRemoveButton();
+
+    void showRestoreStreamFeedback();
+
+    void showRemovedStreamFeedback();
 }

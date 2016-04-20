@@ -393,5 +393,7 @@
     <string name="yes">Yes</string>
     <string name="nicers">Nicers</string>
     <string name="niced_by">"Niced by "</string>
+    <string name="stream_restored_feedback">Stream restored</string>
+    <string name="stream_removed_feedback">Stream removed</string>
 
 </resources>

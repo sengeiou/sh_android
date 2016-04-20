@@ -373,6 +373,7 @@ public class StreamDetailPresenter implements Presenter {
             @Override public void onCompleted() {
                 streamDetailView.hideRestoreButton();
                 streamDetailView.showRemoveStreamButton();
+                streamDetailView.showRestoreStreamFeedback();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -387,6 +388,7 @@ public class StreamDetailPresenter implements Presenter {
             @Override public void onCompleted() {
                 streamDetailView.hideRemoveButton();
                 streamDetailView.showRestoreStreamButton();
+                streamDetailView.showRemovedStreamFeedback();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

@@ -8,6 +8,8 @@ import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
@@ -68,6 +70,8 @@ public class StreamDetailPresenterTest {
     @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
     @Mock MuteInteractor muteInteractor;
     @Mock UnmuteInteractor unmuteInteractor;
+    @Mock RemoveStreamInteractor removeStreamInteractor;
+    @Mock RestoreStreamInteractor restoreStreamInteractor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -222,6 +226,44 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
     }
 
+    @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
+        setupStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView).showRemoveStreamButton();
+    }
+
+    @Test public void shouldShowRestoreStreamIfStreamRemoved() throws Exception {
+        setupRemovedStreamInfoCallback();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView).showRestoreStreamButton();
+    }
+
+    @Test public void shouldShowRemoveStreamConfirmationWhenRemoveClicked() throws Exception {
+        setupRemovedStreamInfoCallback();
+
+        presenter.removeStream();
+
+        verify(streamDetailView).askRemoveStreamConfirmation();
+    }
+
+    private void setupRemovedStreamInfoCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                GetStreamInfoInteractor.Callback callback =
+                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(removedStreamInfo());
+                return null;
+            }
+        }).when(streamInfoInteractor)
+          .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+    }
+
     public void setupNoStreamMutedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -314,6 +356,19 @@ public class StreamDetailPresenterTest {
     private StreamInfo streamInfoWith3Participants() {
         return StreamInfo.builder()
           .stream(stream())
+          .watchers(watchers())
+          .currentUserWatching(new User())
+          .numberOfFollowing(NO_WATCHERS)
+          .hasMoreParticipants(false)
+          .isDataComplete(true)
+          .build();
+    }
+
+    private StreamInfo removedStreamInfo() {
+        Stream stream = stream();
+        stream.setRemoved(true);
+        return StreamInfo.builder()
+          .stream(stream)
           .watchers(watchers())
           .currentUserWatching(new User())
           .numberOfFollowing(NO_WATCHERS)
