@@ -82,8 +82,7 @@ public class StreamDetailPresenterTest {
           selectStreamInteractor,
           getMutedStreamsInteractor,
           muteInteractor,
-          unmuteInteractor,
-            streamModelMapper,
+          unmuteInteractor, removeStreamInteractor, restoreStreamInteractor, streamModelMapper,
           userModelMapper,
           errorMessageFactory);
         presenter.setView(streamDetailView);

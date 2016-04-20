@@ -58,4 +58,14 @@ public interface StreamDetailView extends DataTransferView {
     void goToStreamDataInfo(StreamModel streamModel);
 
     void showPhotoPicker();
+
+    void showRestoreStreamButton();
+
+    void showRemoveStreamButton();
+
+    void askRemoveStreamConfirmation();
+
+    void hideRestoreButton();
+
+    void hideRemoveButton();
 }

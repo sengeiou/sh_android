@@ -100,6 +100,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -196,6 +198,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
         dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
+        removeMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_remove));
+        restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_restore));
         dataInfoMenuItem.setVisible(true);
         return true;
     }
@@ -210,6 +214,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return true;
             case R.id.stream_detail_menu_data_info:
                 streamDetailPresenter.dataInfoClicked();
+                return true;
+            case R.id.stream_detail_menu_remove:
+                streamDetailPresenter.removeStream();
+                return true;
+            case R.id.stream_detail_menu_restore:
+                streamDetailPresenter.restoreStream();
                 return true;
             default:
                 return false;
@@ -560,6 +570,33 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 }
             })
             .show();
+    }
+
+    @Override public void showRestoreStreamButton() {
+        restoreMenuItem.setVisible(true);
+    }
+
+    @Override public void showRemoveStreamButton() {
+        removeMenuItem.setVisible(true);
+    }
+
+    @Override public void askRemoveStreamConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  streamDetailPresenter.confirmRemoveStream();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
+    @Override public void hideRestoreButton() {
+        restoreMenuItem.setVisible(false);
+    }
+
+    @Override public void hideRemoveButton() {
+        removeMenuItem.setVisible(false);
     }
 
     @Override public void showLoading() {
