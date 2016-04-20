@@ -61,12 +61,14 @@ public class StreamDetailPresenter implements Presenter {
     private boolean hasBeenPaused = false;
     private Integer totalWatchers;
 
-    @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor, ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
-      ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
+    @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
       RemoveStreamInteractor removeStreamInteractor, RestoreStreamInteractor restoreStreamInteractor,
-      StreamModelMapper streamModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
