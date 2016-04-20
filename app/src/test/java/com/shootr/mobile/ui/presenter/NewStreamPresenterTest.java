@@ -4,8 +4,6 @@ import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -32,8 +30,6 @@ public class NewStreamPresenterTest {
     private static final String USER_ID = "userId";
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
-    @Mock RemoveStreamInteractor removeStreamInteractor;
-    @Mock RestoreStreamInteractor restoreStreamInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewStreamView newStreamView;
@@ -46,8 +42,6 @@ public class NewStreamPresenterTest {
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         presenter = new NewStreamPresenter(createStreamInteractor,
           getStreamInteractor,
-          removeStreamInteractor,
-          restoreStreamInteractor,
           selectStreamInteractor,
           streamModelMapper,
           errorMessageFactory);

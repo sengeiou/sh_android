@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
-
-    <item
-      android:id="@+id/menu_remove"
-      android:icon="@drawable/ic_action_action_remove_white"
-      android:title="@string/remove_stream_label"
-      android:visible="false"
-      app:showAsAction="always"
-      tools:visible="true" />
-
-    <item
-      android:id="@+id/menu_restore"
-      android:icon="@drawable/ic_action_restore_white"
-      android:title="@string/restore_stream_label"
-      android:visible="false"
-      app:showAsAction="always"
-      tools:visible="true" />
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
       android:id="@+id/menu_done"

@@ -12,21 +12,14 @@ public interface NewStreamView extends DataTransferView {
 
     void closeScreenWithResult(String streamId);
 
-    void closeScreenWithExitStream();
-
     void doneButtonEnabled(boolean enable);
 
     void hideKeyboard();
 
     void showNotificationConfirmation();
 
-    void showRemoveStreamButton();
-
-    void askRemoveStreamConfirmation();
-
     String getStreamDescription();
 
     void showDescription(String description);
 
-    void showRestoreStreamButton();
 }

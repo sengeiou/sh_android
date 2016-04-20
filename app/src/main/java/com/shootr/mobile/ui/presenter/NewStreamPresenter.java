@@ -8,8 +8,6 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
@@ -24,13 +22,9 @@ import timber.log.Timber;
 public class NewStreamPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
-    public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
-    public static final int MAX_SHORT_TITLE_LENGTH = 20;
 
     private final CreateStreamInteractor createStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
-    private final RemoveStreamInteractor removeStreamInteractor;
-    private final RestoreStreamInteractor restoreStreamInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -45,13 +39,10 @@ public class NewStreamPresenter implements Presenter {
 
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
-      GetStreamInteractor getStreamInteractor, RemoveStreamInteractor removeStreamInteractor,
-      RestoreStreamInteractor restoreStreamInteractor, SelectStreamInteractor selectStreamInteractor,
+      GetStreamInteractor getStreamInteractor, SelectStreamInteractor selectStreamInteractor,
       StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
-        this.removeStreamInteractor = removeStreamInteractor;
-        this.restoreStreamInteractor = restoreStreamInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -79,12 +70,6 @@ public class NewStreamPresenter implements Presenter {
         String preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showDescription(streamModel.getDescription());
-
-        if (streamModel.isRemoved()) {
-            newStreamView.showRestoreStreamButton();
-        } else {
-            newStreamView.showRemoveStreamButton();
-        }
         if (currentTitle == null) {
             preloadedTitle = streamModel.getTitle();
             currentTitle = preloadedTitle;
@@ -118,36 +103,6 @@ public class NewStreamPresenter implements Presenter {
         notifyCreation = notify;
         newStreamView.showLoading();
         createStream();
-    }
-
-    public void remove() {
-        newStreamView.askRemoveStreamConfirmation();
-    }
-
-    public void restore() {
-        restoreStreamInteractor.restoreStream(preloadedStreamId, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                newStreamView.closeScreenWithExitStream();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                newStreamView.showError(errorMessage);
-            }
-        });
-    }
-
-    public void confirmRemoveStream() {
-        removeStreamInteractor.removeStream(preloadedStreamId, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                newStreamView.closeScreenWithExitStream();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                newStreamView.showError(errorMessage);
-            }
-        });
     }
 
     private void createStream() {
