@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import javax.inject.Inject;
 
-public class RemoveContributorInteractor implements Interactor {
+public class ContributorInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final ContributorRepository contributorRepository;
@@ -15,28 +15,43 @@ public class RemoveContributorInteractor implements Interactor {
 
     private String idStream;
     private String idUser;
-    private Interactor.CompletedCallback callback;
-    private Interactor.ErrorCallback errorCallback;
+    private Boolean isAdding;
+    private CompletedCallback callback;
+    private ErrorCallback errorCallback;
 
     @Inject
-    public RemoveContributorInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
+    public ContributorInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
       PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.contributorRepository = contributorRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void removeContributor(String idStream, String idUser, Interactor.CompletedCallback callback,
-      Interactor.ErrorCallback errorCallback) {
+    public void addRemoveContributor(String idStream, String idUser, Boolean isAdding, CompletedCallback callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.idUser = idUser;
+        this.isAdding = isAdding;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        removeRemoteContributor(idStream, idUser);
+        if(isAdding) {
+            addRemoteContributor(idStream, idUser);
+        } else {
+            removeRemoteContributor(idStream, idUser);
+        }
+    }
+
+    private void addRemoteContributor(String idStream, String idUser) {
+        try {
+            contributorRepository.addContributor(idStream, idUser);
+            notifyCompleted();
+        } catch (Exception error) {
+            //TODO: notify error
+        }
     }
 
     private void removeRemoteContributor(String idStream, String idUser) {

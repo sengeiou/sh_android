@@ -3,9 +3,8 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.AddContributorInteractor;
+import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
 import com.shootr.mobile.domain.interactor.user.FindContributorsInteractor;
-import com.shootr.mobile.domain.interactor.user.RemoveContributorInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.FindContributorsView;
@@ -17,8 +16,7 @@ import javax.inject.Inject;
 public class FindContributorsPresenter implements Presenter {
 
     private final FindContributorsInteractor findContributorsInteractor;
-    private final AddContributorInteractor addContributorInteractor;
-    private final RemoveContributorInteractor removeContributorInteractor;
+    private final ContributorInteractor contributorInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -29,11 +27,10 @@ public class FindContributorsPresenter implements Presenter {
     private Integer currentPage;
 
     @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor,
-      AddContributorInteractor addContributorInteractor, RemoveContributorInteractor removeContributorInteractor,
-      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      ContributorInteractor contributorInteractor, UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.findContributorsInteractor = findContributorsInteractor;
-        this.addContributorInteractor = addContributorInteractor;
-        this.removeContributorInteractor = removeContributorInteractor;
+        this.contributorInteractor = contributorInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -76,7 +73,7 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     public void addContributor(UserModel userModel) {
-        addContributorInteractor.addContributor(idStream, userModel.getIdUser(), new Interactor.CompletedCallback() {
+        contributorInteractor.addRemoveContributor(idStream, userModel.getIdUser(), true, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 //TODO: refresh list
             }
@@ -88,8 +85,9 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     public void removeContributor(UserModel userModel) {
-        removeContributorInteractor.removeContributor(idStream,
+        contributorInteractor.addRemoveContributor(idStream,
           userModel.getIdUser(),
+          false,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   //TODO: refresh list
@@ -103,10 +101,10 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-
+        //TODO refresh list
     }
 
     @Override public void pause() {
-
+        //TODO refresh pause
     }
 }
