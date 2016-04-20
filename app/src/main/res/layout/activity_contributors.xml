@@ -14,7 +14,8 @@
       android:text="@string/add_contributor_text"
       android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
       android:textColor="@color/watching"
-      android:textSize="14sp" />
+      android:textSize="14sp"
+      android:visibility="gone" />
 
     <include android:id="@+id/add_contributor"
       layout="@layout/include_add_contributor"
