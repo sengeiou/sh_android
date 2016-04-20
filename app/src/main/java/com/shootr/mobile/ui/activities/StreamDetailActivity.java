@@ -361,7 +361,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void showPhotoOptions() {
-        new BottomSheet.Builder(this).title(R.string.change_photo)
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
           .sheet(R.menu.photo_options_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
@@ -543,7 +543,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void showPhotoPicker() {
-        new BottomSheet.Builder(this).title(R.string.change_photo)
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
             .sheet(R.menu.photo_picker_bottom_sheet)
             .listener(new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
