@@ -78,6 +78,7 @@ public class ContributorsPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 view.showError(errorMessageFactory.getMessageForError(error));
+                view.hideLoading();
             }
         });
     }
