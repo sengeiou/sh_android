@@ -70,8 +70,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       StreamClickListener streamClickListener, ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
       ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, NicesClickListener nicesClickListener,
-      TimeFormatter timeFormatter, Resources resources, AndroidTimeUtils timeUtils) {
+      OnNiceShotListener onNiceShotListener, NicesClickListener nicesClickListener, TimeFormatter timeFormatter,
+      Resources resources, AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -125,7 +125,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override public int getItemViewType(int position) {
-        if (hasParent() && position < parents.size() ) {
+        if (hasParent() && position < parents.size()) {
             return TYPE_PARENT_SHOT;
         } else if (position == getPositionMainShot()) {
             return TYPE_MAIN_SHOT;
