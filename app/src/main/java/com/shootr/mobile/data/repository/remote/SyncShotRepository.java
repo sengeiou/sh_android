@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
@@ -68,7 +69,11 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
     }
 
     @Override public ShotDetail getShotDetail(String idShot) {
-        return shotEntityMapper.transform(remoteShotDataSource.getShotDetail(idShot));
+        ShotDetailEntity shotDetail = remoteShotDataSource.getShotDetail(idShot);
+        if (shotDetail.getParents() != null) {
+            localShotDataSource.putShots(shotDetail.getParents());
+        }
+        return shotEntityMapper.transform(shotDetail);
     }
 
     @Override public List<Shot> getAllShotsFromUser(String userId) {
