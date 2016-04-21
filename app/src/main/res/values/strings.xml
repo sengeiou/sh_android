@@ -395,5 +395,6 @@
     <string name="niced_by">"Niced by "</string>
     <string name="stream_restored_feedback">Stream restored</string>
     <string name="stream_removed_feedback">Stream removed</string>
+    <string name="restore_stream_snackbar_action">Restore</string>
 
 </resources>

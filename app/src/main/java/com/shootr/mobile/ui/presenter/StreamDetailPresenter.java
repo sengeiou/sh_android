@@ -179,6 +179,7 @@ public class StreamDetailPresenter implements Presenter {
     private void setupRemoveStreamMenuOption() {
         if (streamModel.isRemoved()) {
             streamDetailView.showRestoreStreamButton();
+            streamDetailView.showRemovedFeedback();
         } else {
             streamDetailView.showRemoveStreamButton();
         }
@@ -390,7 +391,7 @@ public class StreamDetailPresenter implements Presenter {
             @Override public void onCompleted() {
                 streamDetailView.hideRemoveButton();
                 streamDetailView.showRestoreStreamButton();
-                streamDetailView.showRemovedStreamFeedback();
+                streamDetailView.showRemovedFeedback();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

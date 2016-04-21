@@ -603,8 +603,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         feedbackMessage.show(getView(), R.string.stream_restored_feedback);
     }
 
-    @Override public void showRemovedStreamFeedback() {
-        feedbackMessage.show(getView(), R.string.stream_removed_feedback);
+    @Override public void showRemovedFeedback() {
+        feedbackMessage.showForever(getView(), R.string.stream_removed_feedback, R.string.restore_stream_snackbar_action, new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                streamDetailPresenter.restoreStream();
+            }
+        });
     }
 
     @Override public void showLoading() {

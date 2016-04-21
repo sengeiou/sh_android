@@ -38,4 +38,10 @@ public class SnackbarFeedbackMessage implements FeedbackMessage {
       View.OnClickListener onClickListener) {
         Snackbar.make(view, multipleActivitiesMessage, Snackbar.LENGTH_LONG).setAction(action, onClickListener).show();
     }
+
+    @Override public void showForever(View view, @StringRes int feedback, @StringRes int action, View.OnClickListener onClickListener) {
+        if (view != null) {
+            Snackbar.make(view, feedback, Snackbar.LENGTH_INDEFINITE).setAction(action, onClickListener).show();
+        }
+    }
 }

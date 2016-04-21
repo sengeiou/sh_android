@@ -71,5 +71,5 @@ public interface StreamDetailView extends DataTransferView {
 
     void showRestoreStreamFeedback();
 
-    void showRemovedStreamFeedback();
+    void showRemovedFeedback();
 }
