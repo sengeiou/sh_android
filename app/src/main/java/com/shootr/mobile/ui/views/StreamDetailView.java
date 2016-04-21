@@ -9,15 +9,13 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
 
-    void setStreamShortTitle(String shortTitle);
-
     void setStreamAuthor(String author);
 
     void setStreamPicture(String picture);
 
     void showEditStreamPhotoOrInfo();
 
-    void showPhotoPicker();
+    void showPhotoOptions();
 
     void showEditPicturePlaceholder();
 
@@ -66,4 +64,20 @@ public interface StreamDetailView extends DataTransferView {
     void hideContributorsNumber();
 
     void showContributorsNumber(Integer contributorsNumber);
+
+    void showPhotoPicker();
+
+    void showRestoreStreamButton();
+
+    void showRemoveStreamButton();
+
+    void askRemoveStreamConfirmation();
+
+    void hideRestoreButton();
+
+    void hideRemoveButton();
+
+    void showRestoreStreamFeedback();
+
+    void showRemovedFeedback();
 }

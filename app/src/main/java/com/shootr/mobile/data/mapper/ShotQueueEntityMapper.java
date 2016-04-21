@@ -39,7 +39,6 @@ public class ShotQueueEntityMapper {
         if (eventInfo != null) {
             entity.setIdStream(eventInfo.getIdStream());
             entity.setStreamTitle(eventInfo.getStreamTitle());
-            entity.setStreamShortTitle(eventInfo.getStreamShortTitle());
         }
 
         entity.setIdUser(shot.getUserInfo().getIdUser());
@@ -82,7 +81,6 @@ public class ShotQueueEntityMapper {
         Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
         eventInfo.setIdStream(entity.getIdStream());
         eventInfo.setStreamTitle(entity.getStreamTitle());
-        eventInfo.setStreamShortTitle(entity.getStreamShortTitle());
         if (eventInfo.getIdStream() != null) {
             shot.setStreamInfo(eventInfo);
         }

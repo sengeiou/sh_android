@@ -9,7 +9,6 @@ public class StreamModel implements Serializable {
     private String authorUsername;
     private String title;
     private String picture;
-    private String shortTitle;
     private String description;
     private String topic;
     private boolean amIAuthor;
@@ -79,14 +78,6 @@ public class StreamModel implements Serializable {
 
     public void setAmIAuthor(boolean amIAuthor) {
         this.amIAuthor = amIAuthor;
-    }
-
-    public String getShortTitle() {
-        return shortTitle;
-    }
-
-    public void setShortTitle(String shortTitle) {
-        this.shortTitle = shortTitle;
     }
 
     public String getAuthorId() {

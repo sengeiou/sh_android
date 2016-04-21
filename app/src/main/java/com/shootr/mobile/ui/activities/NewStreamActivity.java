@@ -34,7 +34,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final String KEY_STREAM_ID = "stream_id";
 
     private static final String EXTRA_EDITED_TITLE = "title";
-    private static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -42,15 +41,12 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Bind(R.id.new_stream_title) EditText titleView;
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
-    @Bind(R.id.new_stream_short_title) EditText shortTitleView;
     @Bind(R.id.new_stream_description) EditText descriptionView;
 
     @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
     @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
     public static Intent newIntent(Context context, String idStream) {
         Intent launchIntent = new Intent(context, NewStreamActivity.class);
@@ -76,10 +72,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
         if (savedInstanceState != null) {
             String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
-            String editedShortTitle = savedInstanceState.getString(EXTRA_EDITED_SHORT_TITLE);
-
             titleView.setText(editedTitle);
-            shortTitleView.setText(editedShortTitle);
         }
         setupTextViews();
     }
@@ -92,7 +85,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_EDITED_TITLE, titleView.getText().toString());
-        outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
     private void setupTextViews() {
@@ -108,19 +100,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 /* no-op */
-            }
-        });
-        shortTitleView.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /* no-op */
-            }
-
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /* no-op */
-            }
-
-            @Override public void afterTextChanged(Editable editable) {
-                presenter.shortTitleTextChanged(editable.toString());
             }
         });
     }
@@ -155,8 +134,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_stream, menu);
         doneMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_done));
-        removeMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove));
-        restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_restore));
         return true;
     }
 
@@ -166,12 +143,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             return true;
         } else if (item.getItemId() == R.id.menu_done) {
             presenter.done();
-            return true;
-        } else if (item.getItemId() == R.id.menu_remove) {
-            presenter.remove();
-            return true;
-        } else if (item.getItemId() == R.id.menu_restore) {
-            presenter.restore();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -197,11 +168,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override public void closeScreenWithResult(String streamId) {
         setResult(RESULT_OK, new Intent() //
           .putExtra(KEY_STREAM_ID, streamId));
-        finish();
-    }
-
-    @Override public void closeScreenWithExitStream() {
-        setResult(RESULT_EXIT_STREAM);
         finish();
     }
 
@@ -232,39 +198,12 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
           .show();
     }
 
-    @Override public void showRemoveStreamButton() {
-        removeMenuItem.setVisible(true);
-    }
-
-    @Override public void askRemoveStreamConfirmation() {
-        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
-          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmRemoveStream();
-              }
-          })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
-    }
-
-    @Override public void showShortTitle(String currentShortTitle) {
-        shortTitleView.setText(currentShortTitle);
-    }
-
-    @Override public String getStreamShortTitle() {
-        return shortTitleView.getText().toString();
-    }
-
     @Override public String getStreamDescription() {
         return descriptionView.getText().toString();
     }
 
     @Override public void showDescription(String description) {
         descriptionView.setText(description);
-    }
-
-    @Override public void showRestoreStreamButton() {
-        restoreMenuItem.setVisible(true);
     }
 
     @Override public void showLoading() {

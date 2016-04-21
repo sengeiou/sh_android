@@ -231,8 +231,8 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         feedbackMessage.show(getView(), errorMessage);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String streamShortTitle, String authorId) {
-        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamShortTitle, authorId));
+    @Override public void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle, authorId));
     }
 
     @Override public void showAddedToFavorites() {

@@ -80,8 +80,6 @@ public class SQLiteUtils {
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotTable.ID_STREAM
       + " TEXT NULL,"
-      + DatabaseContract.ShotTable.STREAM_SHORT_TITLE
-      + " TEXT NULL,"
       + DatabaseContract.ShotTable.STREAM_TITLE
       + " TEXT NULL,"
       + DatabaseContract.ShotTable.NICE_COUNT
@@ -135,8 +133,6 @@ public class SQLiteUtils {
       + DatabaseContract.ShotQueueTable.IMAGE
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotQueueTable.ID_STREAM
-      + " TEXT NULL,"
-      + DatabaseContract.ShotQueueTable.STREAM_SHORT_TITLE
       + " TEXT NULL,"
       + DatabaseContract.ShotQueueTable.STREAM_TITLE
       + " TEXT NULL,"
@@ -267,8 +263,6 @@ public class SQLiteUtils {
       + " VARCHAR(255) NOT NULL,"
       + DatabaseContract.StreamTable.PHOTO
       + " TEXT NULL,"
-      + DatabaseContract.StreamTable.SHORT_TITLE
-      + " TEXT NULL,"
       + DatabaseContract.StreamTable.DESCRIPTION
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.TOPIC
@@ -316,8 +310,6 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.PHOTO
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.COUNTRY
-      + " TEXT NULL,"
-      + DatabaseContract.StreamTable.SHORT_TITLE
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.DESCRIPTION
       + " TEXT NULL,"
@@ -375,8 +367,6 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.USER_PHOTO
       + " TEXT NULL,"
-      + DatabaseContract.ActivityTable.STREAM_SHORT_TITLE
-      + " VARCHAR(255) NULL,"
       + DatabaseContract.ActivityTable.STREAM_TITLE
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ActivityTable.COMMENT

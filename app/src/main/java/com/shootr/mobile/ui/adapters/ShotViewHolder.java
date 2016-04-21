@@ -55,7 +55,7 @@ public class ShotViewHolder {
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
 
-    @BindColor(R.color.short_title_color) int shortTitleColor;
+    @BindColor(R.color.short_title_color) int titleColor;
     public int position;
     private View view;
     private Boolean isCurrentUser;
@@ -77,9 +77,9 @@ public class ShotViewHolder {
         this.isCurrentUser = isCurrentUser;
     }
 
-    protected void render(ShotModel shot, boolean shouldShowShortTitle) {
+    protected void render(ShotModel shot, boolean shouldShowTitle) {
         bindUsername(shot);
-        bindComment(shot, shouldShowShortTitle);
+        bindComment(shot, shouldShowTitle);
         bindElapsedTime(shot);
         bindUserPhoto(shot);
         bindImageInfo(shot);
@@ -101,46 +101,46 @@ public class ShotViewHolder {
         });
     }
 
-    protected void bindComment(ShotModel item, boolean shouldShowShortTitle) {
+    protected void bindComment(ShotModel item, boolean shouldShowTitle) {
         String comment = item.getComment();
-        String shortTitle = null;
-        if (shouldShowShortTitle && item.getStreamShortTitle() != null) {
-            shortTitle = item.getStreamShortTitle();
+        String title = null;
+        if (shouldShowTitle && item.getStreamTitle() != null) {
+            title = item.getStreamTitle();
         }
 
-        SpannableStringBuilder commentWithShortTitle = buildCommentTextWithShortTitle(comment, shortTitle);
-        if (commentWithShortTitle != null) {
-            addShotComment(this, commentWithShortTitle);
+        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title);
+        if (commentWithTitle != null) {
+            addShotComment(this, commentWithTitle);
             text.setVisibility(View.VISIBLE);
         } else {
             text.setVisibility(View.GONE);
         }
     }
 
-    private @Nullable SpannableStringBuilder buildCommentTextWithShortTitle(@Nullable String comment,
-      @Nullable String shortTitle) {
+    private @Nullable SpannableStringBuilder buildCommentTextWithTitle(@Nullable String comment,
+      @Nullable String title) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        if (comment == null && shortTitle == null) {
+        if (comment == null && title == null) {
             return null;
         }
         if (comment != null) {
             builder.append(comment);
         }
-        if (comment != null && shortTitle != null) {
+        if (comment != null && title != null) {
             builder.append(" ");
         }
-        if (shortTitle != null) {
-            builder.append(formatShortTitle(shortTitle));
+        if (title != null) {
+            builder.append(formatTitle(title));
         }
         return builder;
     }
 
-    private SpannableString formatShortTitle(String shortTitle) {
-        ForegroundColorSpan span = new ForegroundColorSpan(shortTitleColor);
+    private SpannableString formatTitle(String title) {
+        ForegroundColorSpan span = new ForegroundColorSpan(titleColor);
 
-        SpannableString shortTitleSpan = new SpannableString(shortTitle);
-        shortTitleSpan.setSpan(span, 0, shortTitleSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return shortTitleSpan;
+        SpannableString titleSpan = new SpannableString(title);
+        titleSpan.setSpan(span, 0, titleSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return titleSpan;
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment) {

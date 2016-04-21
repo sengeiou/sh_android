@@ -402,4 +402,7 @@
     <string name="add_contributor">Add</string>
     <string name="added_contributor">Added</string>
     <string name="add_contributor_confirmation_message">Add %s?</string>
+    <string name="stream_restored_feedback">Stream restored</string>
+    <string name="stream_removed_feedback">Stream removed</string>
+    <string name="restore_stream_snackbar_action">Restore</string>
 </resources>

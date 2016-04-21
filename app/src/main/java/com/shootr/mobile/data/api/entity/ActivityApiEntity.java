@@ -11,7 +11,6 @@ public class ActivityApiEntity {
 
     private String idStream;
     private String streamTitle;
-    private String streamShortTitle;
 
     private String comment;
     private String type;
@@ -65,14 +64,6 @@ public class ActivityApiEntity {
 
     public void setStreamTitle(String streamTitle) {
         this.streamTitle = streamTitle;
-    }
-
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
     }
 
     public String getComment() {

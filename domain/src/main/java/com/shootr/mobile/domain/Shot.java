@@ -247,15 +247,6 @@ public class Shot {
 
         private String idStream;
         private String streamTitle;
-        private String streamShortTitle;
-
-        public String getStreamShortTitle() {
-            return streamShortTitle;
-        }
-
-        public void setStreamShortTitle(String streamShortTitle) {
-            this.streamShortTitle = streamShortTitle;
-        }
 
         public String getStreamTitle() {
             return streamTitle;

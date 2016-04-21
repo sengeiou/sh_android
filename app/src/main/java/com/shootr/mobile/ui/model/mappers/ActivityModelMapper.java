@@ -29,7 +29,6 @@ public class ActivityModelMapper {
         Activity.ActivityStreamInfo streamInfo = activity.getStreamInfo();
         if (streamInfo != null) {
             activityModel.setIdStream(streamInfo.getIdStream());
-            activityModel.setStreamShortTitle(streamInfo.getStreamShortTitle());
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
         }
 

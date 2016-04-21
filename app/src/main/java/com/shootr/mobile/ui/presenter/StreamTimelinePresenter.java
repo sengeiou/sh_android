@@ -180,10 +180,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             @Override public void onLoaded(Stream stream) {
                 setIdAuthor(stream.getAuthorId());
                 setStreamTitle(stream.getTitle());
-                setStreamSubTitle(stream.getShortTitle());
                 setStreamDescription(stream.getDescription());
                 setStreamTopic(stream.getTopic());
-                streamTimelineView.setTitle(stream.getShortTitle());
+                streamTimelineView.setTitle(stream.getTitle());
                 if (streamTopic != null && !streamTopic.isEmpty()) {
                     streamTimelineView.showTopicSnackBar(streamTopic);
                 }
@@ -587,13 +586,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void sendStream(String topic, Boolean notifyMessage) {
         String title = filterTitle(streamTitle);
-        String shortTitle = filterShortTitle(streamSubTitle);
         String description = filterDescription(streamDescription);
         topic = trimTopicAndNullWhenEmpty(topic);
 
         createStreamInteractor.sendStream(streamId,
           title,
-          shortTitle,
           description,
           topic,
           false,
@@ -628,14 +625,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private String filterTitle(String title) {
         return title.trim();
-    }
-
-    private String filterShortTitle(String shortTitle) {
-        if (shortTitle.length() <= 20) {
-            return shortTitle.trim();
-        } else {
-            return shortTitle.substring(0, 20).trim();
-        }
     }
 
     private String filterDescription(String streamDescription) {

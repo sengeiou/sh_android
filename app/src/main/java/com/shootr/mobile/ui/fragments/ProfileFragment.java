@@ -251,7 +251,7 @@ public class ProfileFragment extends BaseFragment
           onUsernameClickListener,
           onHideClickListener,
           profilePresenter.isCurrentUser()) {
-            @Override protected boolean shouldShowShortTitle() {
+            @Override protected boolean shouldShowTitle() {
                 return true;
             }
         };

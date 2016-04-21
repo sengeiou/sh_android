@@ -19,11 +19,11 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject BackStackHandler backStackHandler;
 
-    public static Intent newIntent(Context context, String streamId, String streamShortTitle, String authorId) {
+    public static Intent newIntent(Context context, String streamId, String streamTitle, String authorId) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
         intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
         intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, authorId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_SHORT_TITLE, streamShortTitle);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
         return intent;
     }
 

@@ -122,7 +122,7 @@ public class PushNotification {
         private String idShot;
         private String idStream;
         private String idActivity;
-        private String shortTitle;
+        private String title;
         private String idStreamHolder;
 
         public int getPushType() {
@@ -184,12 +184,12 @@ public class PushNotification {
               '}';
         }
 
-        public String getShortTitle() {
-            return shortTitle;
+        public String getTitle() {
+            return title;
         }
 
-        public void setShortTitle(String shortTitle) {
-            this.shortTitle = shortTitle;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String getIdStreamHolder() {

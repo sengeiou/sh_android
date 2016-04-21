@@ -11,7 +11,6 @@ public class Activity {
     private String username;
     private String idStream;
     private String streamTitle;
-    private String streamShortTitle;
     private String comment;
     private String type;
     private Date publishDate;
@@ -94,14 +93,6 @@ public class Activity {
         this.streamTitle = streamTitle;
     }
 
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -125,7 +116,6 @@ public class Activity {
           ", username='" + username + '\'' +
           ", idStream='" + idStream + '\'' +
           ", streamTitle='" + streamTitle + '\'' +
-          ", streamShortTitle='" + streamShortTitle + '\'' +
           ", comment='" + comment + '\'' +
           ", type='" + type + '\'' +
           ", publishDate=" + publishDate +
@@ -149,10 +139,6 @@ public class Activity {
         if (streamTitle != null ? !streamTitle.equals(activity.streamTitle) : activity.streamTitle != null) {
             return false;
         }
-        if (streamShortTitle != null ? !streamShortTitle.equals(activity.streamShortTitle)
-          : activity.streamShortTitle != null) {
-            return false;
-        }
         if (comment != null ? !comment.equals(activity.comment) : activity.comment != null) return false;
         if (type != null ? !type.equals(activity.type) : activity.type != null) return false;
         if (publishDate != null ? !publishDate.equals(activity.publishDate) : activity.publishDate != null) {
@@ -168,7 +154,6 @@ public class Activity {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (idStream != null ? idStream.hashCode() : 0);
         result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
-        result = 31 * result + (streamShortTitle != null ? streamShortTitle.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
@@ -250,16 +235,7 @@ public class Activity {
 
         private String idStream;
         private String streamTitle;
-        private String streamShortTitle;
         private String idUser;
-
-        public String getStreamShortTitle() {
-            return streamShortTitle;
-        }
-
-        public void setStreamShortTitle(String streamShortTitle) {
-            this.streamShortTitle = streamShortTitle;
-        }
 
         public String getStreamTitle() {
             return streamTitle;
