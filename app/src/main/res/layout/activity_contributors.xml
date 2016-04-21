@@ -17,12 +17,6 @@
       android:textSize="14sp"
       android:visibility="gone" />
 
-    <include android:id="@+id/add_contributor"
-      layout="@layout/include_add_contributor"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/add_contributor_text" />
-
     <ListView android:id="@+id/contributors_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

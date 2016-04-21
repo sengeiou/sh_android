@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -22,6 +22,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
 import com.shootr.mobile.ui.views.ContributorsView;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -39,13 +40,14 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @Bind(R.id.contributors_list) ListView contributorsListView;
     @Bind(R.id.contributors_progress) ProgressBar progressBar;
     @Bind(R.id.contributors_empty) TextView emptyTextView;
-    @Bind(R.id.add_contributor) FrameLayout addContributor;
     @Bind(R.id.add_contributor_text) TextView addContributorText;
 
     @BindString(R.string.error_adding_contributor) String limitContributorsText;
 
     @Inject ContributorsPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+
+    private MenuItemValueHolder addContributorMenu = new MenuItemValueHolder();
 
     public static Intent newIntent(Context context, String idStream, Boolean isHolder) {
         Intent intent = new Intent(context, ContributorsActivity.class);
@@ -76,11 +78,6 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         contributorsListView.setAdapter(getContributorsAdapter());
-        addContributor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                presenter.onAddContributorClick(adapter.getCount());
-            }
-        });
     }
 
     @Override protected void initializePresenter() {
@@ -109,9 +106,19 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     //region View methods
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_contributors, menu);
+        addContributorMenu.bindRealMenuItem(menu.findItem(R.id.menu_add_contributor));
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.menu_add_contributor) {
+            presenter.onAddContributorClick(adapter.getCount());
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -161,7 +168,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void hideAddContributorsButton() {
-        addContributor.setVisibility(View.GONE);
+        addContributorMenu.setVisible(false);
     }
 
     @Override public void hideAddContributorsText() {
