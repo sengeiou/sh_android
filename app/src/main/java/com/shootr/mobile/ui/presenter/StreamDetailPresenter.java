@@ -179,8 +179,10 @@ public class StreamDetailPresenter implements Presenter {
     private void setupRemoveStreamMenuOption() {
         if (streamModel.isRemoved()) {
             streamDetailView.showRestoreStreamButton();
+            streamDetailView.hideRemoveButton();
             streamDetailView.showRemovedFeedback();
         } else {
+            streamDetailView.hideRestoreButton();
             streamDetailView.showRemoveStreamButton();
         }
     }
