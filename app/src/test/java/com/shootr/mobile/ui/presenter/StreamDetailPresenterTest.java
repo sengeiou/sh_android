@@ -227,6 +227,7 @@ public class StreamDetailPresenterTest {
     }
 
     @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
         setupStreamInfoCallback();
 
         presenter.initialize(streamDetailView, ID_STREAM);
@@ -235,6 +236,7 @@ public class StreamDetailPresenterTest {
     }
 
     @Test public void shouldShowRestoreStreamIfStreamRemoved() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         setupRemovedStreamInfoCallback();
 
         presenter.initialize(streamDetailView, ID_STREAM);
@@ -367,6 +369,7 @@ public class StreamDetailPresenterTest {
     private StreamInfo removedStreamInfo() {
         Stream stream = stream();
         stream.setRemoved(true);
+        stream.setAuthorId(ID_USER);
         return StreamInfo.builder()
           .stream(stream)
           .watchers(watchers())
