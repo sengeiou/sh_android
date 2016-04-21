@@ -171,7 +171,9 @@ public class StreamDetailPresenter implements Presenter {
         this.renderWatchersList(streamInfo);
         this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
-        this.setupRemoveStreamMenuOption();
+        if (streamModel.amIAuthor()) {
+            this.setupRemoveStreamMenuOption();
+        }
         this.showViewDetail();
         this.hideViewLoading();
     }
@@ -180,16 +182,10 @@ public class StreamDetailPresenter implements Presenter {
         if (streamModel.isRemoved()) {
             streamDetailView.showRestoreStreamButton();
             streamDetailView.hideRemoveButton();
-            setupRestoreFeedbackOption();
+            streamDetailView.showRemovedFeedback();
         } else {
             streamDetailView.hideRestoreButton();
             streamDetailView.showRemoveStreamButton();
-        }
-    }
-
-    private void setupRestoreFeedbackOption() {
-        if (streamModel.amIAuthor()) {
-            streamDetailView.showRemovedFeedback();
         }
     }
 
