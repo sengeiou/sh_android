@@ -17,7 +17,7 @@ public interface ShotDetailView {
 
     void scrollToBottom();
 
-    void renderParent(ShotModel parentShot);
+    void renderParent(List<ShotModel> parentShot);
 
     void startProfileContainerActivity(String username);
 

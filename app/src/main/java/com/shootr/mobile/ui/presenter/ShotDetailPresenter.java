@@ -147,7 +147,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
         }
         shotDetailView.renderShot(shotModel);
-        shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
+        shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParents()));
         onRepliesLoaded(shotDetail.getReplies());
         shotDetailView.setReplyUsername(shotModel.getUsername());
         setNiceBlocked(false);

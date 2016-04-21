@@ -414,7 +414,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
     }
 
-    @Override public void renderParent(ShotModel parentShot) {
+    @Override public void renderParent(List<ShotModel> parentShot) {
         detailAdapter.renderParentShot(parentShot);
     }
 
