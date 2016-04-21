@@ -62,9 +62,9 @@ public class Contributor {
     }
 
     public static class AlphabeticContributorComparator implements Comparator<Contributor> {
-        @Override public int compare(Contributor c1, Contributor c2) {return String.CASE_INSENSITIVE_ORDER.compare(c1.getUser()
-          .getName()
-          .trim()
-          ,c2.getUser().getName().trim());}
+
+        @Override public int compare(Contributor c1, Contributor c2) {
+            return String.CASE_INSENSITIVE_ORDER.compare(c1.getUser().getName().trim(), c2.getUser().getName().trim());
+        }
     }
 }
