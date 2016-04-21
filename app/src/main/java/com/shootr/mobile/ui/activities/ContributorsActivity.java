@@ -16,7 +16,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
-import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
@@ -188,10 +187,10 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void showContextMenu(final UserModel userModel) {
         new CustomContextMenu.Builder(this).addAction(R.string.remove, new Runnable() {
-              @Override public void run() {
-                  presenter.removeContributor(userModel);
-              }
-          }).show();
+            @Override public void run() {
+                presenter.removeContributor(userModel);
+            }
+        }).show();
     }
 
     @Override public void add(int position) {

@@ -115,8 +115,8 @@ public class ContributorsPresenter implements Presenter {
           });
     }
 
-    public void onLongContributorClick(UserModel userModel){
-        if(isHolder) {
+    public void onLongContributorClick(UserModel userModel) {
+        if (isHolder) {
             view.showContextMenu(userModel);
         }
     }
