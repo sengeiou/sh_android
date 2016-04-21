@@ -15,12 +15,15 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
+import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
 import com.shootr.mobile.ui.views.ContributorsView;
+import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.List;
@@ -89,8 +92,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
 
     private ListAdapter getContributorsAdapter() {
         if (adapter == null) {
-            Boolean isHolder = getIntent().getBooleanExtra(IS_HOLDER, false);
-            adapter = new ContributorsListAdapter(this, imageLoader, isHolder, IS_NOT_ADDING);
+            adapter = new ContributorsListAdapter(this, imageLoader, false, IS_NOT_ADDING);
             adapter.setCallback(this);
         }
         return adapter;
@@ -99,6 +101,11 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @OnItemClick(R.id.contributors_list) public void onUserClick(int position) {
         UserModel user = adapter.getItem(position);
         openUserProfile(user.getIdUser());
+    }
+
+    @OnItemLongClick(R.id.contributors_list) public boolean onUserLongClick(int position) {
+        presenter.onLongContributorClick(adapter.getItem(position));
+        return true;
     }
 
     private void openUserProfile(String idUser) {
@@ -177,6 +184,14 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void removeContributorFromList(UserModel userModel) {
         adapter.removeUserFromList(userModel);
+    }
+
+    @Override public void showContextMenu(final UserModel userModel) {
+        new CustomContextMenu.Builder(this).addAction(R.string.remove, new Runnable() {
+              @Override public void run() {
+                  presenter.removeContributor(userModel);
+              }
+          }).show();
     }
 
     @Override public void add(int position) {

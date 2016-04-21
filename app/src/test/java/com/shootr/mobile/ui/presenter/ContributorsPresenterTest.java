@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
 import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ContributorsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -115,6 +116,22 @@ public class ContributorsPresenterTest {
         verify(contributorsView, never()).showContributorsLimitSnackbar();
     }
 
+    @Test public void shouldShowContexMenuInOnLongClickAndIsHolder() throws Exception {
+        presenter.initialize(contributorsView, ID_STREAM, IS_HOLDER);
+
+        presenter.onLongContributorClick(userModel());
+
+        verify(contributorsView).showContextMenu(any(UserModel.class));
+    }
+
+    @Test public void shouldNotShowContexMenuInOnLongClickAndIsNotHolder() throws Exception {
+        presenter.initialize(contributorsView, ID_STREAM, IS_NOT_HOLDER);
+
+        presenter.onLongContributorClick(userModel());
+
+        verify(contributorsView, never()).showContextMenu(any(UserModel.class));
+    }
+
     private void setupGetContributorsInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -162,5 +179,11 @@ public class ContributorsPresenterTest {
         User user = new User();
         user.setIdUser(ID_USER);
         return user;
+    }
+
+    private UserModel userModel() {
+        UserModel userModel = new UserModel();
+        userModel.setIdUser(ID_USER);
+        return userModel;
     }
 }

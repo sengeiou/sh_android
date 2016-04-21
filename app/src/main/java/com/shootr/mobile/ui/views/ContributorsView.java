@@ -19,4 +19,6 @@ public interface ContributorsView extends LoadDataView {
     void hideAddContributorsText();
 
     void removeContributorFromList(UserModel userModel);
+
+    void showContextMenu(UserModel userModel);
 }
