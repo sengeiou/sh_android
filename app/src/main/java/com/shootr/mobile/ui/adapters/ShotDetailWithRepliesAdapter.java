@@ -58,7 +58,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotModel mainShot;
     private List<ShotModel> replies;
     private float itemElevation;
-    private ShotModel parentShot;
+    private List<ShotModel> parents;
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
     private NicerTextSpannableBuilder nicerTextSpannableBuilder;
@@ -114,9 +114,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return isShowingParent && mainShot != null && mainShot.isReply();
     }
 
-    public void renderParentShot(ShotModel parentShot) {
-        this.parentShot = parentShot;
-        notifyItemChanged(getPositionParentShot());
+    public void renderParentShot(List<ShotModel> parentShot) {
+        this.parents = parentShot;
+        notifyDataSetChanged();
     }
 
     public void renderReplies(List<ShotModel> replies) {
@@ -125,7 +125,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override public int getItemViewType(int position) {
-        if (position == getPositionParentShot()) {
+        if (hasParent() && position < parents.size() ) {
             return TYPE_PARENT_SHOT;
         } else if (position == getPositionMainShot()) {
             return TYPE_MAIN_SHOT;
@@ -136,16 +136,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private int getPositionParentShot() {
-        return hasParent() ? 0 : -1;
-    }
-
     private int getPositionMainShot() {
-        return hasParent() ? 1 : 0;
+        return hasParent() ? parents.size() : 0;
     }
 
     private int getPositionRepliesHeader() {
-        return hasParent() ? 2 : 1;
+        return hasParent() ? parents.size() + 1 : 1;
     }
 
     private int adapterPositionToReplyPosition(int adapterPosition) {
@@ -159,19 +155,19 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void showParent() {
         isShowingParent = true;
-        notifyItemInserted(0);
+        notifyDataSetChanged();
         onParentShownListener.onShown();
     }
 
     private void hideParent() {
         isShowingParent = false;
-        notifyItemRemoved(0);
+        notifyDataSetChanged();
     }
 
     @Override public int getItemCount() {
         int itemCount = 1;
         if (hasParent()) {
-            itemCount++;
+            itemCount += parents.size();
         }
         if (!replies.isEmpty()) {
             itemCount++;
@@ -207,7 +203,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_PARENT_SHOT:
-                bindParentShotViewHolder((ShotDetailParentViewHolder) holder);
+                bindParentsViewHolder((ShotDetailParentViewHolder) holder, position);
                 break;
             case TYPE_MAIN_SHOT:
                 bindMainShotViewHolder((ShotDetailMainViewHolder) holder);
@@ -223,9 +219,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private void bindParentShotViewHolder(ShotDetailParentViewHolder holder) {
-        if (parentShot != null) {
-            holder.bindView(parentShot);
+    private void bindParentsViewHolder(ShotDetailParentViewHolder holder, int adapterPosition) {
+        if (parents != null) {
+            ShotModel shotModel = parents.get(adapterPosition);
+            holder.bindView(shotModel);
         } else if (mainShot.isReply()) {
             holder.showLoading();
         }
