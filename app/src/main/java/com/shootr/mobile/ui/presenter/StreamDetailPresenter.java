@@ -180,10 +180,16 @@ public class StreamDetailPresenter implements Presenter {
         if (streamModel.isRemoved()) {
             streamDetailView.showRestoreStreamButton();
             streamDetailView.hideRemoveButton();
-            streamDetailView.showRemovedFeedback();
+            setupRestoreFeedbackOption();
         } else {
             streamDetailView.hideRestoreButton();
             streamDetailView.showRemoveStreamButton();
+        }
+    }
+
+    private void setupRestoreFeedbackOption() {
+        if (streamModel.amIAuthor()) {
+            streamDetailView.showRemovedFeedback();
         }
     }
 
