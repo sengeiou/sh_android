@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ContributorRepository;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,10 +49,15 @@ public class GetContributorsInteractor implements Interactor {
 
     private List<Contributor> obtainRemoteContributors() {
         if (withUsersEmbed) {
-            return contributorRepository.getContributorsWithUsers(idStream);
+            return orderContributors(contributorRepository.getContributorsWithUsers(idStream));
         } else {
             return contributorRepository.getContributors(idStream);
         }
+    }
+
+    private List<Contributor> orderContributors(List<Contributor> contributors) {
+        Collections.sort(contributors, new Contributor.AlphabeticContributorComparator());
+        return contributors;
     }
 
     private void notifyLoaded(final List<Contributor> results) {
