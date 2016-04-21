@@ -82,7 +82,7 @@ public class FindContributorsPresenter implements Presenter {
           true,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  findContributorsView.removeContributorFromList(userModel);
+                  findContributorsView.finishActivity();
               }
           },
           new Interactor.ErrorCallback() {
@@ -98,7 +98,7 @@ public class FindContributorsPresenter implements Presenter {
           false,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  findContributorsView.removeContributorFromList(userModel);
+                  findContributorsView.finishActivity();
               }
           },
           new Interactor.ErrorCallback() {
@@ -106,6 +106,10 @@ public class FindContributorsPresenter implements Presenter {
                   findContributorsView.showError(errorMessageFactory.getMessageForError(error));
               }
           });
+    }
+
+    public void onContributorClick(UserModel userModel) {
+        findContributorsView.showAddConfirmation(userModel);
     }
 
     @Override public void resume() {

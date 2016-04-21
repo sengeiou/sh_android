@@ -88,18 +88,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
-        if (isHolderAdding) {
-            if (isAdding) {
-                viewHolder.contributorButton.setVisibility(View.VISIBLE);
-                viewHolder.contributorButton.setAddContributor(false);
-            } else {
-                viewHolder.contributorButton.setVisibility(View.VISIBLE);
-                viewHolder.contributorButton.setAddContributor(true);
-            }
-            setupContributorButtonListener(position, viewHolder);
-        } else {
-            viewHolder.contributorButton.setVisibility(View.GONE);
-        }
+        viewHolder.contributorButton.setVisibility(View.GONE);
     }
 
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
@@ -135,10 +124,6 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     private String getUsernameForSubtitle(UserModel item) {
         return String.format("@%s", item.getUsername());
-    }
-
-    public List<UserModel> getItems() {
-        return users;
     }
 
     public static class ViewHolder {

@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -150,8 +152,23 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
         resultsListView.setVisibility(View.GONE);
     }
 
-    @Override public void removeContributorFromList(UserModel userModel) {
-        adapter.removeUserFromList(userModel);
+    @Override public void showAddConfirmation(final UserModel userModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setMessage(String.format(getString(R.string.add_contributor_confirmation_message),
+          userModel.getName()));
+        alertDialogBuilder.setPositiveButton(R.string.add_contributor, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                findContributorsPresenter.addContributor(userModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    @Override public void finishActivity() {
+        finish();
     }
 
     @Override public void showEmpty() {
@@ -174,9 +191,8 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
         feedbackMessage.show(getView(), message);
     }
 
-    @OnItemClick(R.id.find_contributors_search_results_list) public void openUserProfile(int position) {
-        UserModel user = adapter.getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+    @OnItemClick(R.id.find_contributors_search_results_list) public void onContributorClick(int position) {
+        findContributorsPresenter.onContributorClick(adapter.getItem(position));
     }
 
     @Override public void add(int position) {

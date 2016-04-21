@@ -401,4 +401,5 @@
     <string name="add_contributor_text">Add contributors to increase visibility of their shots</string>
     <string name="add_contributor">Add</string>
     <string name="added_contributor">Added</string>
+    <string name="add_contributor_confirmation_message">Add %s?</string>
 </resources>
