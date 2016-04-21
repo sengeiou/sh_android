@@ -225,8 +225,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     pinShotPresenter.pinToProfile(shot);
                 }
             }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-              @Override public void onShown() {
-                  detailList.scrollToPosition(0);
+              @Override public void onShown(Integer parentsNumber) {
+                  detailList.smoothScrollToPosition(parentsNumber);
               }
           }, //
             new OnNiceShotListener() {
