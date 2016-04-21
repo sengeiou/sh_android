@@ -156,14 +156,15 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this)
-                    .setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(
+                    String.format(getString(R.string.unfollow_dialog_message),
                     user.getUsername()))
-                    .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) {
-                            streamDetailPresenter.unfollow(user.getIdUser());
-                        }
-                    })
+                    .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+                      new DialogInterface.OnClickListener() {
+                          @Override public void onClick(DialogInterface dialog, int which) {
+                              streamDetailPresenter.unfollow(user.getIdUser());
+                          }
+                      })
                     .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
                     .create()
                     .show();
@@ -312,7 +313,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return false;
             }
 
-            @Override public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
               boolean isFromMemoryCache, boolean isFirstResource) {
 
                 if (counterToolbarPrintTimes == 0) {
@@ -554,22 +556,22 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void showPhotoPicker() {
         new BottomSheet.Builder(this).title(R.string.title_menu_photo)
-            .sheet(R.menu.photo_picker_bottom_sheet)
-            .listener(new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case R.id.menu_photo_gallery:
-                            handlePhotoSelectionFromGallery();
-                            break;
-                        case R.id.menu_photo_take:
-                            takePhotoFromCamera();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            })
-            .show();
+          .sheet(R.menu.photo_picker_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          handlePhotoSelectionFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                      default:
+                          break;
+                  }
+              }
+          })
+          .show();
     }
 
     @Override public void showRestoreStreamButton() {
@@ -604,11 +606,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void showRemovedFeedback() {
-        feedbackMessage.showForever(getView(), R.string.stream_removed_feedback, R.string.restore_stream_snackbar_action, new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                streamDetailPresenter.restoreStream();
-            }
-        });
+        feedbackMessage.showForever(getView(),
+          R.string.stream_removed_feedback,
+          R.string.restore_stream_snackbar_action,
+          new View.OnClickListener() {
+              @Override public void onClick(View v) {
+                  streamDetailPresenter.restoreStream();
+              }
+          });
     }
 
     @Override public void showLoading() {
