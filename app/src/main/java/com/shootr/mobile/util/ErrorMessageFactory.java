@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.exception.UserNotFoundException;
 import com.shootr.mobile.domain.service.ChangePasswordInvalidException;
 import com.shootr.mobile.domain.service.EmailInUseException;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
+import com.shootr.mobile.domain.service.user.CannotAddContributorException;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.mobile.domain.service.user.LoginException;
 import java.util.HashMap;
@@ -135,6 +136,8 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_message_invalid_change_password);
         } else if (error instanceof CannotFollowBlockedUserException) {
             return context.getString(R.string.error_following_user_blocked);
+        } else if (error instanceof CannotAddContributorException) {
+            return context.getString(R.string.error_adding_contributor);
         } else {
             return getUnknownErrorMessage();
         }

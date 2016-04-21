@@ -45,7 +45,11 @@ public enum ErrorInfo {
     FollowingBlockedUserException(5016, "Cannot follow users you blocked", 400),
 
     ForbiddenRequestException(6001, "Forbidden request", 403),
-    StreamRemovedForbiddenRequestException(6002, "Stream removed forbidden request", 403);
+    StreamRemovedForbiddenRequestException(6002, "Stream removed forbidden request", 403),
+
+    ContributorNumberStreamException(5018, "It has surpassed the number of contributors for this stream", 400);
+
+
 
     private int code;
     private int httpCode;

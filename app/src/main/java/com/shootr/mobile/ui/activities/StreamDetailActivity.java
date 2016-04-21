@@ -68,6 +68,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
+    private static final int NO_CONTRIBUTORS = 0;
     private int counterToolbarPrintTimes = 0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -126,10 +127,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
           }, // author
           new View.OnClickListener() {
-              @Override public void onClick(View v) {
-                  streamDetailPresenter.clickMedia();
+              @Override public void onClick(View view) {
+                  streamDetailPresenter.contributorsClicked();
               }
-          }, // media
+          }, new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                streamDetailPresenter.clickMedia();
+            }
+        }, // media
           new CompoundButton.OnCheckedChangeListener() {
               @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                   if (isChecked) {
@@ -540,6 +545,22 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
+    }
+
+    @Override public void goToContributorsActivityAsHolder(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream, true));
+    }
+
+    @Override public void goToContributorsActivity(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream, false));
+    }
+
+    @Override public void hideContributorsNumber() {
+        adapter.setContributorsNumber(NO_CONTRIBUTORS);
+    }
+
+    @Override public void showContributorsNumber(Integer contributorsNumber) {
+        adapter.setContributorsNumber(contributorsNumber);
     }
 
     @Override public void showLoading() {

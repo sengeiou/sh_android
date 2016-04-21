@@ -12,6 +12,7 @@ import javax.inject.Singleton;
     WatchersRepositoryModule.class, FavoriteRepositoryModule.class, ActivityRepositoryModule.class,
     DatabaseUtilsModule.class, NiceShotRepositoryModule.class, DeviceRepositoryModule.class,
     FollowRepositoryModule.class, MuteRepositoryModule.class, NicerRepositoryModule.class,
+    ContributorRepositoryModule.class,
   },
   complete = false,
   library = true) public class RepositoryModule {

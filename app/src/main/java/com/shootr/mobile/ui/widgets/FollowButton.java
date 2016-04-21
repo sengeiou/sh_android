@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.shootr.mobile.R;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.shootr.mobile.R;
 
 public class FollowButton extends FrameLayout {
 
@@ -38,7 +40,7 @@ public class FollowButton extends FrameLayout {
         setClickable(true);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        inflater.inflate(R.layout.follow_button_layout, this);
+        inflater.inflate(R.layout.generic_state_button_layout, this);
 
         ButterKnife.bind(this);
 
@@ -67,6 +69,10 @@ public class FollowButton extends FrameLayout {
     public void setEditProfile() {
         this.isEditProfile = true;
         editButton.setVisibility(VISIBLE);
+        hideFollowButtons();
+    }
+
+    private void hideFollowButtons() {
         followButton.setVisibility(GONE);
         followingButton.setVisibility(GONE);
     }

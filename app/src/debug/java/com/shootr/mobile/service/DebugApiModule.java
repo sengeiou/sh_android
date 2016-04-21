@@ -6,6 +6,7 @@ import com.shootr.mobile.data.DebugMode;
 import com.shootr.mobile.data.api.service.ActivityApiService;
 import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.ChangePasswordApiService;
+import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
@@ -109,5 +110,10 @@ import retrofit.android.AndroidMockValuePersistence;
     @Provides NicerApiService provideNicerApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter,
       @DebugMode BooleanPreference debugMode) {
         return mockOrRealService(NicerApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter,
+      MockRestAdapter mockRestAdapter, @DebugMode BooleanPreference debugMode) {
+        return mockOrRealService(ContributorApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 }

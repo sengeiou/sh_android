@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <TextView android:id="@+id/add_contributor_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:paddingLeft="@dimen/keyline_1"
+      android:paddingRight="16dp"
+      android:paddingTop="14dp"
+      android:text="@string/add_contributor_text"
+      android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+      android:textColor="@color/watching"
+      android:textSize="14sp"
+      android:visibility="gone" />
+
+    <ListView android:id="@+id/contributors_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/add_contributor"
+      android:divider="@null"
+      android:dividerHeight="0dp"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
+    <ProgressBar android:id="@+id/contributors_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true"
+      android:layout_gravity="center"
+      android:indeterminate="true" />
+
+    <TextView android:id="@+id/contributors_empty"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:text="@string/contributors_empty"
+      android:textColor="@color/gray_50"
+      android:textSize="20sp"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
+</RelativeLayout>
