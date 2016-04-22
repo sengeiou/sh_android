@@ -36,6 +36,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
     private List<ShotModel> repliesModels;
+    private List<ShotModel> parentsModels;
     private boolean justSentReply = false;
     private boolean isNiceBlocked;
 
@@ -113,6 +114,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
+    private void onParentsLoaded(List<Shot> parents) {
+        int previousParentsCount = parentsModels != null ? parentsModels.size() : 0;
+        int newParentCount = parents.size();
+        if (newParentCount > previousParentsCount) {
+            parentsModels = shotModelMapper.transform(parents);
+            shotDetailView.renderParents(parentsModels);
+        }
+    }
+
     private void renderReplies(int previousReplyCount, int newReplyCount) {
         shotDetailView.renderReplies(repliesModels);
         if (justSentReply && previousReplyCount < newReplyCount) {
@@ -147,9 +157,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
         }
         shotDetailView.renderShot(shotModel);
-        if (shotDetail.getParents() != null) {
-            shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParents()));
-        }
+        onParentsLoaded(shotDetail.getParents());
         onRepliesLoaded(shotDetail.getReplies());
         shotDetailView.setReplyUsername(shotModel.getUsername());
         setNiceBlocked(false);

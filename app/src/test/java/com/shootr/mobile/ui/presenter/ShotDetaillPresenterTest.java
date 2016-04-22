@@ -82,7 +82,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderParent(any(ShotModel.class));
+        verify(shotDetailView).renderParents(anyList());
     }
 
     @Test public void shouldSetReplyUsernameWhenNiceIsMarked() throws Exception {
@@ -115,7 +115,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.unmarkNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderParent(any(ShotModel.class));
+        verify(shotDetailView).renderParents(anyList());
     }
 
     @Test public void shouldSetReplyUsernameWhenNiceIsUnmarked() throws Exception {
@@ -169,6 +169,26 @@ public class ShotDetaillPresenterTest {
         presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldRenderParentsWhenNewParentsAreZeroAndIsMarked() throws Exception {
+        setupGetShotDetailInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
+
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView).renderParents(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldNotRenderParentsWhenNewParentsAreEqualsThanPreviousAndIsMarked() throws Exception {
+        setupGetShotDetailWithRepliesInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
+
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView, never()).renderParents(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsUnmarked() throws Exception {
@@ -349,6 +369,7 @@ public class ShotDetaillPresenterTest {
         ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(Collections.<Shot>emptyList());
+        shotDetail.setParents(shotList(2));
         return shotDetail;
     }
 
@@ -356,6 +377,7 @@ public class ShotDetaillPresenterTest {
         ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(shotList(2));
+        shotDetail.setParents(Collections.<Shot>emptyList());
         return shotDetail;
     }
 

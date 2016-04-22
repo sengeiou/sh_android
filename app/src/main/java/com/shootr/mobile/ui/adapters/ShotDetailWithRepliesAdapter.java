@@ -95,7 +95,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public void renderMainShot(ShotModel mainShot) {
         this.mainShot = mainShot;
-        notifyItemChanged(getPositionMainShot());
+        notifyDataSetChanged();
     }
 
     public void hidePinToProfileButton() {
