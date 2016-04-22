@@ -226,7 +226,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 }
             }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
               @Override public void onShown(Integer parentsNumber) {
-                  detailList.smoothScrollToPosition(parentsNumber);
+                  detailList.scrollToPosition(parentsNumber);
               }
           }, //
             new OnNiceShotListener() {

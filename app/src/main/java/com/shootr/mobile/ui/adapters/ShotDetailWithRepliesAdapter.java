@@ -156,7 +156,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private void showParent() {
         isShowingParent = true;
         notifyDataSetChanged();
-        onParentShownListener.onShown(parents.size());
+        if (replies.size() > 0) {
+            onParentShownListener.onShown(parents.size() + 1);
+        } else {
+            onParentShownListener.onShown(parents.size());
+        }
     }
 
     private void hideParent() {
