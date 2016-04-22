@@ -122,7 +122,7 @@ public class ServiceShotDatasource implements ShotDataSource {
             shotDetailEntity.setShot(shotEntity);
             shotDetailEntity.setReplies(repliesEntities);
             if (shotApiEntity.getParent() != null) {
-                List<ShotEntity> parentEntities = shotApiEntityMapper.transform(shotApiEntity.getParents());
+                List<ShotEntity> parentEntities = shotApiEntityMapper.transform(shotApiEntity.getThread());
                 shotDetailEntity.setParents(parentEntities);
             }
             return shotDetailEntity;
