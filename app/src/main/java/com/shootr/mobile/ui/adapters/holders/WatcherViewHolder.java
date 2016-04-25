@@ -45,16 +45,22 @@ public class WatcherViewHolder extends RecyclerView.ViewHolder implements View.O
     public void bind(final UserModel userModel) {
         userId = userModel.getIdUser();
         name.setText(userModel.getUsername());
+        setupVerifiedStatus(userModel);
+        watchingText.setText(userModel.getJoinStreamDate());
+        imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
+        setupFollowButton(userModel);
+    }
+
+    private void setupVerifiedStatus(UserModel userModel) {
         if (verifiedUser(userModel)) {
             name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
             name.setCompoundDrawablePadding(6);
         } else {
             name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
+    }
 
-        watchingText.setText(userModel.getJoinStreamDate());
-        imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
-
+    private void setupFollowButton(final UserModel userModel) {
         switch (userModel.getRelationship()) {
             case FollowEntity.RELATIONSHIP_FOLLOWING:
                 boolean shouldShowButton = keepFollowButtonIds.contains(userModel.getIdUser());

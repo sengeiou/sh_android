@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,53 +123,90 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case TYPE_DESCRIPTION:
-                if (descriptionViewHolder == null) {
-                    v = inflater.inflate(R.layout.item_menu_text, parent, false);
-                    descriptionViewHolder = new TextViewHolder(v);
-                }
-                return descriptionViewHolder;
+                return setupDestriptionViewHolder(parent, inflater);
             case TYPE_AUTHOR:
-                if (authorViewHolder == null) {
-                    v = inflater.inflate(R.layout.item_menu_action, parent, false);
-                    v.setOnClickListener(onAuthorClickListener);
-                    authorViewHolder = new ActionViewHolder(v);
-                }
-                return authorViewHolder;
+                return setupAuthorViewHolder(parent, inflater);
             case TYPE_CONTRIBUTOR:
                 return setupContributorViewHolder(parent, inflater);
             case TYPE_MEDIA:
-                if (mediaViewHolder == null) {
-                    v = inflater.inflate(R.layout.item_menu_action, parent, false);
-                    v.setOnClickListener(onMediaClickListener);
-                    mediaViewHolder = new ActionViewHolder(v);
-                }
-                return mediaViewHolder;
+                return setupMediaViewHolder(parent, inflater);
             case TYPE_MUTE:
-                if (muteViewHolder == null) {
-                    v = inflater.inflate(R.layout.item_mute_switch, parent, false);
-                    muteViewHolder = new SwitchViewHolder(v);
-                }
-                return muteViewHolder;
+                return setupMuteViewHolder(parent, inflater);
             case TYPE_PARTICIPANTS_TITLE:
-                v = inflater.inflate(R.layout.item_card_title_separator, parent, false);
-                return new SeparatorViewHolder(v);
+                return setupSeparatorViewHolder(parent, inflater);
             case TYPE_PARTICIPANT:
-                v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
-                return new WatcherViewHolder(v,
-                  onUserClickListener,
-                  imageLoader,
-                  onFollowUnfollowListener,
-                  keepFollowButtonIds);
+                return setupParticipantViewHolder(parent, inflater);
             case TYPE_ALL_PARTICIPANTS:
-                if (allParticipantsViewHolder == null) {
-                    v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
-                    allParticipantsViewHolder = new AllParticipantsViewHolder(v);
-                    v.setOnClickListener(onAllParticipantsClickListener);
-                }
-                return allParticipantsViewHolder;
+                return setupAllParticipantsViewHolder(parent, inflater);
             default:
                 throw new IllegalStateException("No holder declared for view type " + viewType);
         }
+    }
+
+    private RecyclerView.ViewHolder setupAllParticipantsViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        if (allParticipantsViewHolder == null) {
+            v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
+            allParticipantsViewHolder = new AllParticipantsViewHolder(v);
+            v.setOnClickListener(onAllParticipantsClickListener);
+        }
+        return allParticipantsViewHolder;
+    }
+
+    @NonNull
+    private RecyclerView.ViewHolder setupParticipantViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
+        return new WatcherViewHolder(v,
+          onUserClickListener,
+          imageLoader,
+          onFollowUnfollowListener,
+          keepFollowButtonIds);
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupSeparatorViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        v = inflater.inflate(R.layout.item_card_title_separator, parent, false);
+        return new SeparatorViewHolder(v);
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupMuteViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        if (muteViewHolder == null) {
+            v = inflater.inflate(R.layout.item_mute_switch, parent, false);
+            muteViewHolder = new SwitchViewHolder(v);
+        }
+        return muteViewHolder;
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupMediaViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        if (mediaViewHolder == null) {
+            v = inflater.inflate(R.layout.item_menu_action, parent, false);
+            v.setOnClickListener(onMediaClickListener);
+            mediaViewHolder = new ActionViewHolder(v);
+        }
+        return mediaViewHolder;
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupAuthorViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        if (authorViewHolder == null) {
+            v = inflater.inflate(R.layout.item_menu_action, parent, false);
+            v.setOnClickListener(onAuthorClickListener);
+            authorViewHolder = new ActionViewHolder(v);
+        }
+        return authorViewHolder;
+    }
+
+    @NonNull
+    private RecyclerView.ViewHolder setupDestriptionViewHolder(ViewGroup parent, LayoutInflater inflater) {
+        View v;
+        if (descriptionViewHolder == null) {
+            v = inflater.inflate(R.layout.item_menu_text, parent, false);
+            descriptionViewHolder = new TextViewHolder(v);
+        }
+        return descriptionViewHolder;
     }
 
     private RecyclerView.ViewHolder setupContributorViewHolder(ViewGroup parent, LayoutInflater inflater) {
