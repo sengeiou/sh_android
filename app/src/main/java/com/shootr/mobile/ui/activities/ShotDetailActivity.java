@@ -17,6 +17,9 @@ import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.AvatarClickListener;
+import com.shootr.mobile.ui.adapters.OnParentShownListener;
+import com.shootr.mobile.ui.adapters.ShotClickListener;
 import com.shootr.mobile.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -187,24 +190,24 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private void setupAdapter() {
         detailAdapter =
-          new ShotDetailWithRepliesAdapter(imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+          new ShotDetailWithRepliesAdapter(imageLoader, new AvatarClickListener() {
               @Override public void onClick(String userId) {
                   onShotAvatarClick(userId);
               }
           }, //
-            new ShotDetailWithRepliesAdapter.ShotClickListener() {
+            new ShotClickListener() {
                 @Override public void onClick(ShotModel shot) {
                     onShotClick(shot);
                 }
-            }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
+            }, new ShotClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }
-          }, new ShotDetailWithRepliesAdapter.StreamClickListener() {
+          }, new ShotClickListener() {
               @Override public void onClick(ShotModel shotModel) {
                   onStreamTitleClick(shotModel);
               }
-          }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
+          }, new ShotClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotImageClick(shot);
               }
@@ -219,12 +222,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     onShotUsernameClick(username);
                 }
             }, //
-            new ShotDetailWithRepliesAdapter.ShotClickListener() {
+            new ShotClickListener() {
 
                 @Override public void onClick(ShotModel shot) {
                     pinShotPresenter.pinToProfile(shot);
                 }
-            }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
+            }, new OnParentShownListener() {
               @Override public void onShown(Integer parentsNumber) {
                   detailList.scrollToPosition(parentsNumber);
               }
@@ -238,7 +241,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     detailPresenter.unmarkNiceShot(idShot);
                 }
             }, //
-            new ShotDetailWithRepliesAdapter.NicesClickListener() {
+            new ShotClickListener() {
                 @Override public void onClick(ShotModel shotModel) {
                     detailPresenter.openShotNicers(shotModel);
                 }
