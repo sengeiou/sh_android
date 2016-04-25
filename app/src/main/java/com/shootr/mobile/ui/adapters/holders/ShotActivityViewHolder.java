@@ -1,4 +1,4 @@
-package com.shootr.mobile.ui.adapters;
+package com.shootr.mobile.ui.adapters.holders;
 
 import android.text.style.ForegroundColorSpan;
 import android.view.View;

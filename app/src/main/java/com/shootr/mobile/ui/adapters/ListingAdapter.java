@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.holders.ListingStreamResultViewHolder;
+import com.shootr.mobile.ui.adapters.holders.StreamResultViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.sectionedrecyclerview.HeaderViewHolder;

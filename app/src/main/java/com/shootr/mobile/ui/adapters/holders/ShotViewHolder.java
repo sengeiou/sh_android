@@ -1,4 +1,4 @@
-package com.shootr.mobile.ui.adapters;
+package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
@@ -77,7 +77,7 @@ public class ShotViewHolder {
         this.isCurrentUser = isCurrentUser;
     }
 
-    protected void render(ShotModel shot, boolean shouldShowTitle) {
+    public void render(ShotModel shot, boolean shouldShowTitle) {
         bindUsername(shot);
         bindComment(shot, shouldShowTitle);
         bindElapsedTime(shot);
