@@ -1,4 +1,4 @@
-package com.shootr.mobile.ui.adapters;
+package com.shootr.mobile.ui.adapters.holders;
 
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.holders.StreamResultViewHolder;
+import com.shootr.mobile.ui.adapters.holders.SubheaderViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;

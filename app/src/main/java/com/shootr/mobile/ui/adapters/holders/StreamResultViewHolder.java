@@ -1,4 +1,4 @@
-package com.shootr.mobile.ui.adapters;
+package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
