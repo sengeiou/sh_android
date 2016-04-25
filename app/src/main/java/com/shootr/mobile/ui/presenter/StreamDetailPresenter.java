@@ -164,6 +164,9 @@ public class StreamDetailPresenter implements Presenter {
                     streamDetailView.showContributorsNumber(contributors.size());
                 } else {
                     streamDetailView.hideContributorsNumber();
+                    if(!streamModel.amIAuthor()){
+                        streamDetailView.disableContributors();
+                    }
                 }
             }
         }, new Interactor.ErrorCallback() {

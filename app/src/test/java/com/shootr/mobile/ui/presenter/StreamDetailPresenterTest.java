@@ -272,6 +272,26 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).hideContributorsNumber();
     }
 
+    @Test public void shouldDisableContributorsWhenContributorsListIsZeroAndIamNotHolder() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupStreamInfoCallback();
+        setupContributorsCallBackWithoutContributors();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView).disableContributors();
+    }
+
+    @Test public void shouldNotDisableContributorsWhenContributorsListIsZeroAndIamHolder() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+        setupContributorsCallBackWithoutContributors();
+
+        presenter.initialize(streamDetailView, ID_STREAM);
+
+        verify(streamDetailView, never()).disableContributors();
+    }
+
     @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
         setupStreamInfoCallback();

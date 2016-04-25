@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters;
 
+import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
@@ -244,6 +245,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public void disableContributors() {
+        contributorViewHolder.disable();
+    }
+
     public static class TextViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.text) TextView text;
@@ -264,6 +269,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Bind(R.id.action_icon) ImageView icon;
         @Bind(R.id.action_name) TextView name;
         @Bind(R.id.action_number) TextView optionalNumber;
+        @Bind(R.id.menu_container) FrameLayout container;
 
         public ActionViewHolder(View itemView) {
             super(itemView);
@@ -289,6 +295,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 optionalNumber.setVisibility(View.VISIBLE);
                 optionalNumber.setText(String.valueOf(number));
             }
+        }
+
+        public void disable() {
+            Context context = name.getContext();
+            container.setEnabled(false);
+            name.setTextColor(context.getResources().getColor(R.color.gray_60));
         }
     }
 

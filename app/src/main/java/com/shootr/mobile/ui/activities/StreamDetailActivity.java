@@ -638,6 +638,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           });
     }
 
+    @Override public void disableContributors() {
+        adapter.disableContributors();
+    }
+
     @Override public void showLoading() {
         progressView.setVisibility(View.VISIBLE);
     }
