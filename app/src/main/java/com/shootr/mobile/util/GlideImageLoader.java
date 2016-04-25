@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
 public class GlideImageLoader implements ImageLoader {
@@ -72,8 +71,6 @@ public class GlideImageLoader implements ImageLoader {
               .bitmapTransform(new BlurTransformation(blurView.getContext()))
               .diskCacheStrategy(DiskCacheStrategy.ALL)
               .into(blurView);
-        } else {
-            /* no - op */
         }
     }
 
