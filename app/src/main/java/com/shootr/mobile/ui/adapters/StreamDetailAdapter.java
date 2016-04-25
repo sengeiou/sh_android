@@ -1,32 +1,26 @@
 package com.shootr.mobile.ui.adapters;
 
-import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.ui.adapters.holders.ActionViewHolder;
+import com.shootr.mobile.ui.adapters.holders.AllParticipantsViewHolder;
+import com.shootr.mobile.ui.adapters.holders.SeparatorViewHolder;
+import com.shootr.mobile.ui.adapters.holders.SwitchViewHolder;
+import com.shootr.mobile.ui.adapters.holders.TextViewHolder;
+import com.shootr.mobile.ui.adapters.holders.WatcherViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 import static com.shootr.mobile.domain.utils.Preconditions.checkPositionIndex;
 
 public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -83,7 +77,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
         if (authorViewHolder != null) {
-            authorViewHolder.name.setText(authorName);
+            authorViewHolder.setName(authorName);
         }
     }
 
@@ -247,198 +241,5 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void disableContributors() {
         contributorViewHolder.disable();
-    }
-
-    public static class TextViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.text) TextView text;
-
-        public TextViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void setText(String text) {
-            this.text.setText(text);
-            this.text.setVisibility(text != null ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    public static class ActionViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.action_icon) ImageView icon;
-        @Bind(R.id.action_name) TextView name;
-        @Bind(R.id.action_number) TextView optionalNumber;
-        @Bind(R.id.menu_container) FrameLayout container;
-
-        public ActionViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void setIcon(@DrawableRes int iconRes) {
-            icon.setImageResource(iconRes);
-        }
-
-        public void setName(@StringRes int nameRes) {
-            name.setText(nameRes);
-        }
-
-        public void setName(String actionName) {
-            name.setText(actionName);
-        }
-
-        public void setNumber(int number) {
-            if (number < 1) {
-                optionalNumber.setVisibility(View.GONE);
-            } else {
-                optionalNumber.setVisibility(View.VISIBLE);
-                optionalNumber.setText(String.valueOf(number));
-            }
-        }
-
-        public void disable() {
-            Context context = name.getContext();
-            container.setEnabled(false);
-            name.setTextColor(context.getResources().getColor(R.color.gray_60));
-        }
-    }
-
-    public static class SwitchViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.action_name) TextView name;
-        @Bind(R.id.action_mute_switch) SwitchCompat muteSwitch;
-        @Bind(R.id.action_mute_switch_container) FrameLayout muteContainer;
-
-        public SwitchViewHolder(final View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            setupMuteContainer();
-        }
-
-        private void setupMuteContainer() {
-            muteContainer.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    muteSwitch.setChecked(!muteSwitch.isChecked());
-                }
-            });
-        }
-
-        public void setName(@StringRes int nameRes) {
-            name.setText(nameRes);
-        }
-
-        public void setName(String actionName) {
-            name.setText(actionName);
-        }
-
-        public void setMuteSwitch(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
-            muteSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
-        }
-
-        public void setMuteStatus(Boolean isChecked) {
-            muteSwitch.setChecked(isChecked);
-        }
-    }
-
-    public static class SeparatorViewHolder extends RecyclerView.ViewHolder {
-
-        public SeparatorViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    public static class WatcherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private final OnUserClickListener onUserClickListener;
-        private final ImageLoader imageLoader;
-        private final OnFollowUnfollowListener onFollowUnfollowListener;
-        private final Set<String> keepFollowButtonIds;
-
-        @Bind(R.id.watcher_user_avatar) ImageView avatar;
-        @Bind(R.id.watcher_user_name) TextView name;
-        @Bind(R.id.watcher_user_watching) TextView watchingText;
-        @Bind(R.id.user_follow_button) FollowButton followButton;
-
-        private String userId;
-
-        public WatcherViewHolder(View itemView, OnUserClickListener onUserClickListener, ImageLoader imageLoader,
-          OnFollowUnfollowListener onFollowUnfollowListener, Set<String> keepFollowButtonIds) {
-            super(itemView);
-            this.onUserClickListener = onUserClickListener;
-            this.imageLoader = imageLoader;
-            this.onFollowUnfollowListener = onFollowUnfollowListener;
-            this.keepFollowButtonIds = keepFollowButtonIds;
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        public void bind(final UserModel userModel) {
-            userId = userModel.getIdUser();
-            name.setText(userModel.getUsername());
-            if (verifiedUser(userModel)) {
-                name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
-                name.setCompoundDrawablePadding(6);
-            } else {
-                name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-
-            watchingText.setText(userModel.getJoinStreamDate());
-            imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
-
-            switch (userModel.getRelationship()) {
-                case FollowEntity.RELATIONSHIP_FOLLOWING:
-                    boolean shouldShowButton = keepFollowButtonIds.contains(userModel.getIdUser());
-                    followButton.setVisibility(shouldShowButton ? View.VISIBLE : View.GONE);
-                    followButton.setFollowing(true);
-                    break;
-                case FollowEntity.RELATIONSHIP_OWN:
-                    followButton.setVisibility(View.GONE);
-                    break;
-                default:
-                    followButton.setVisibility(View.VISIBLE);
-                    followButton.setFollowing(false);
-            }
-            followButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if (followButton.isFollowing()) {
-                        onFollowUnfollowListener.onUnfollow(userModel);
-                        followButton.setFollowing(false);
-                    } else {
-                        onFollowUnfollowListener.onFollow(userModel);
-                        followButton.setFollowing(true);
-                        keepFollowButtonIds.add(userModel.getIdUser());
-                    }
-                }
-            });
-        }
-
-        @Override public void onClick(View v) {
-            checkNotNull(userId);
-            if (onUserClickListener != null) {
-                onUserClickListener.onUserClick(userId);
-            }
-        }
-
-        private boolean verifiedUser(UserModel userModel) {
-            if (userModel.isVerifiedUser() != null) {
-                return userModel.isVerifiedUser();
-            }
-            return false;
-        }
-    }
-
-    public static class AllParticipantsViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.all_participants_button) TextView button;
-
-        public AllParticipantsViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void setVisible(boolean visible) {
-            button.setVisibility(visible ? View.VISIBLE : View.GONE);
-        }
     }
 }
