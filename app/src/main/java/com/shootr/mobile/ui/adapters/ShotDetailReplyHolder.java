@@ -60,7 +60,21 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
     public void bindView(final ShotModel reply) {
         this.name.setText(reply.getUsername());
+        setupComment(reply);
+        setupBirthData(reply);
+        loadImage(reply);
+        setupImageListener(reply);
+        setupVideoListener(reply);
+        setupNiceListener(reply);
+        setupReplyClickListener(reply);
+    }
 
+    private void setupBirthData(ShotModel reply) {
+        long creationDate = reply.getBirth().getTime();
+        this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
+    }
+
+    private void setupComment(ShotModel reply) {
         String comment = reply.getComment();
         if (comment != null) {
             this.text.setVisibility(View.VISIBLE);
@@ -71,10 +85,9 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         } else {
             this.text.setVisibility(View.GONE);
         }
+    }
 
-        long creationDate = reply.getBirth().getTime();
-        this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
-
+    private void loadImage(final ShotModel reply) {
         String photo = reply.getPhoto();
         imageLoader.loadProfilePhoto(photo, this.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +95,9 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
                 avatarClickListener.onClick(reply.getIdUser());
             }
         });
+    }
 
+    private void setupImageListener(final ShotModel reply) {
         String imageUrl = reply.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             this.image.setVisibility(View.VISIBLE);
@@ -95,7 +110,9 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         } else {
             this.image.setVisibility(View.GONE);
         }
+    }
 
+    private void setupVideoListener(final ShotModel reply) {
         if (reply.hasVideo()) {
             this.videoFrame.setVisibility(View.VISIBLE);
             this.videoTitle.setText(reply.getVideoTitle());
@@ -109,7 +126,9 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
             this.videoFrame.setVisibility(View.GONE);
             this.videoFrame.setOnClickListener(null);
         }
+    }
 
+    private void setupNiceListener(final ShotModel reply) {
         niceButton.setChecked(reply.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -120,7 +139,9 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+    }
 
+    private void setupReplyClickListener(final ShotModel reply) {
         container.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 replyShotClickListener.onClick(reply);

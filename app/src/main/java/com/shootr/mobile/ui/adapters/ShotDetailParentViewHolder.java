@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.adapters;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,8 +20,6 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
-
-    private Context context;
 
     @Bind(R.id.shot_detail_parent_progress) View progress;
     @Bind(R.id.shot_detail_parent_shot) View shot;
@@ -64,7 +61,6 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         this.parentShotClickListener = parentShotClickListener;
         this.resources = resources;
         ButterKnife.bind(this, itemView);
-        context = itemView.getContext();
     }
 
     public void showLoading() {
@@ -74,9 +70,17 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     public void bindView(final ShotModel shotModel) {
         shot.setVisibility(View.VISIBLE);
         progress.setVisibility(View.GONE);
-
         this.name.setText(getUsernameTitle(shotModel));
+        setupComment(shotModel);
+        setupBirthData(shotModel);
+        setupUserAvatar(shotModel);
+        setupImage(shotModel);
+        setupVideoListener(shotModel);
+        setupNiceListener(shotModel);
+        setupParentListener(shotModel);
+    }
 
+    private void setupComment(ShotModel shotModel) {
         String comment = shotModel.getComment();
         if (comment != null) {
             CharSequence spannedComment =
@@ -86,10 +90,14 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         } else {
             this.text.setVisibility(View.GONE);
         }
+    }
 
+    private void setupBirthData(ShotModel shotModel) {
         long creationDate = shotModel.getBirth().getTime();
         this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
+    }
 
+    private void setupUserAvatar(final ShotModel shotModel) {
         String photo = shotModel.getPhoto();
         imageLoader.loadProfilePhoto(photo, this.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +105,9 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
                 avatarClickListener.onClick(shotModel.getIdUser());
             }
         });
+    }
 
+    private void setupImage(final ShotModel shotModel) {
         String imageUrl = shotModel.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             this.image.setVisibility(View.VISIBLE);
@@ -110,7 +120,9 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         } else {
             this.image.setVisibility(View.GONE);
         }
+    }
 
+    private void setupVideoListener(final ShotModel shotModel) {
         if (shotModel.hasVideo()) {
             this.videoFrame.setVisibility(View.VISIBLE);
             this.videoTitle.setText(shotModel.getVideoTitle());
@@ -124,7 +136,9 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
             this.videoFrame.setVisibility(View.GONE);
             this.videoFrame.setOnClickListener(null);
         }
+    }
 
+    private void setupNiceListener(final ShotModel shotModel) {
         niceButton.setChecked(shotModel.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -135,7 +149,9 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+    }
 
+    private void setupParentListener(final ShotModel shotModel) {
         container.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 parentShotClickListener.onClick(shotModel);

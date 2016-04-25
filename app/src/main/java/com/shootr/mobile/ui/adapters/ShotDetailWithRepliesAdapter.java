@@ -52,7 +52,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
     private NicerTextSpannableBuilder nicerTextSpannableBuilder;
-
     private ShotDetailMainViewHolder mainHolder;
 
     public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
@@ -83,11 +82,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.nicerTextSpannableBuilder = new NicerTextSpannableBuilder();
     }
 
-    public void renderMainShot(ShotModel mainShot) {
-        this.mainShot = mainShot;
-        notifyDataSetChanged();
-    }
-
     public void hidePinToProfileButton() {
         if (mainHolder != null) {
             mainHolder.hidePintToProfileContainer();
@@ -100,30 +94,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    public void disableStreamTitle() {
+        if (mainHolder != null) {
+            mainHolder.disableStreamTitle();
+        }
+    }
+
+    public void enableStreamTitle() {
+        if (mainHolder != null) {
+            mainHolder.enableStreamTitle();
+        }
+    }
+
     private boolean hasParent() {
         return isShowingParent && mainShot != null && mainShot.isReply();
-    }
-
-    public void renderParentShot(List<ShotModel> parentShot) {
-        this.parents = parentShot;
-        notifyDataSetChanged();
-    }
-
-    public void renderReplies(List<ShotModel> replies) {
-        this.replies = replies;
-        notifyDataSetChanged();
-    }
-
-    @Override public int getItemViewType(int position) {
-        if (hasParent() && position < parents.size()) {
-            return TYPE_PARENT_SHOT;
-        } else if (position == getPositionMainShot()) {
-            return TYPE_MAIN_SHOT;
-        } else if (position == getPositionRepliesHeader()) {
-            return TYPE_REPLIES_HEADER;
-        } else {
-            return TYPE_REPLY;
-        }
     }
 
     private int getPositionMainShot() {
@@ -143,9 +127,32 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return isShowingParent;
     }
 
+    private void changeParentToggleButton(int resource) {
+        if (mainHolder != null) {
+            mainHolder.setParentToggleButton(resource);
+        }
+    }
+
+    //region Lifecycle methods
+    @Override public int getItemViewType(int position) {
+        if (hasParent() && position < parents.size()) {
+            return TYPE_PARENT_SHOT;
+        } else if (position == getPositionMainShot()) {
+            return TYPE_MAIN_SHOT;
+        } else if (position == getPositionRepliesHeader()) {
+            return TYPE_REPLIES_HEADER;
+        } else {
+            return TYPE_REPLY;
+        }
+    }
+
     private void showParent() {
         isShowingParent = true;
         notifyDataSetChanged();
+        recalculateShotsListPosition();
+    }
+
+    private void recalculateShotsListPosition() {
         if (replies.size() > 0) {
             onParentShownListener.onShown(parents.size() + 1);
         } else {
@@ -175,75 +182,17 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         View itemView;
         switch (viewType) {
             case TYPE_PARENT_SHOT:
-                itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
-                return new ShotDetailParentViewHolder(itemView,
-                  shotTextSpannableBuilder,
-                  onUsernameClickListener,
-                  timeUtils,
-                  imageLoader,
-                  avatarClickListener,
-                  imageClickListener,
-                  videoClickListener,
-                  onNiceShotListener,
-                  parentShotClickListener,
-                  resources);
+                return setupShotDetailParentViewHolder(parent, layoutInflater);
             case TYPE_MAIN_SHOT:
-                itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
-                ViewCompat.setElevation(itemView, itemElevation);
-                return new ShotDetailMainViewHolder(itemView,
-                  imageLoader,
-                  avatarClickListener,
-                  streamClickListener,
-                  imageClickListener,
-                  videoClickListener,
-                  onUsernameClickListener,
-                  timeFormatter,
-                  resources,
-                  onNiceShotListener,
-                  onClickListenerPinToProfile,
-                  nicesClickListener,
-                  shotTextSpannableBuilder,
-                  nicerTextSpannableBuilder,
-                  setupParentToggleListener());
+                return setupShotDetailMainViewHolder(parent, layoutInflater);
             case TYPE_REPLIES_HEADER:
                 itemView = layoutInflater.inflate(R.layout.item_list_replies_header, parent, false);
                 return new ShotDetailRepliesHeaderHolder(itemView);
             case TYPE_REPLY:
-                itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
-                ViewCompat.setElevation(itemView, itemElevation);
-                return new ShotDetailReplyHolder(itemView,
-                  nicerTextSpannableBuilder,
-                  onUsernameClickListener,
-                  timeUtils,
-                  imageLoader,
-                  avatarClickListener,
-                  imageClickListener,
-                  videoClickListener,
-                  onNiceShotListener,
-                  replyShotClickListener);
+                return setupShotDetailReplyHolder(parent, layoutInflater);
             default:
                 throw new IllegalArgumentException(String.format("ItemViewType %d has no ViewHolder associated",
                   viewType));
-        }
-    }
-
-    @NonNull private View.OnClickListener setupParentToggleListener() {
-        return new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (isShowingParent()) {
-                    hideParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_down_24_gray50);
-                } else {
-                    showParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_up_24_gray50);
-                }
-            }
-        };
-    }
-
-    private void changeParentToggleButton(int resource) {
-        if (mainHolder != null) {
-            mainHolder.setParentToggleButton(resource);
         }
     }
 
@@ -264,6 +213,95 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             default:
                 break;
         }
+    }
+    //endregion
+
+    //region Setups
+    @NonNull
+    private RecyclerView.ViewHolder setupShotDetailReplyHolder(ViewGroup parent, LayoutInflater layoutInflater) {
+        View itemView;
+        itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
+        ViewCompat.setElevation(itemView, itemElevation);
+        return new ShotDetailReplyHolder(itemView,
+          nicerTextSpannableBuilder,
+          onUsernameClickListener,
+          timeUtils,
+          imageLoader,
+          avatarClickListener,
+          imageClickListener,
+          videoClickListener,
+          onNiceShotListener,
+          replyShotClickListener);
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupShotDetailMainViewHolder(ViewGroup parent,
+      LayoutInflater layoutInflater) {
+        View itemView;
+        itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
+        ViewCompat.setElevation(itemView, itemElevation);
+        return new ShotDetailMainViewHolder(itemView,
+          imageLoader,
+          avatarClickListener,
+          streamClickListener,
+          imageClickListener,
+          videoClickListener,
+          onUsernameClickListener,
+          timeFormatter,
+          resources,
+          onNiceShotListener,
+          onClickListenerPinToProfile,
+          nicesClickListener,
+          shotTextSpannableBuilder,
+          nicerTextSpannableBuilder,
+          setupParentToggleListener());
+    }
+
+    @NonNull private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent,
+      LayoutInflater layoutInflater) {
+        View itemView;
+        itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
+        return new ShotDetailParentViewHolder(itemView,
+          shotTextSpannableBuilder,
+          onUsernameClickListener,
+          timeUtils,
+          imageLoader,
+          avatarClickListener,
+          imageClickListener,
+          videoClickListener,
+          onNiceShotListener,
+          parentShotClickListener,
+          resources);
+    }
+    @NonNull private View.OnClickListener setupParentToggleListener() {
+        return new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (isShowingParent()) {
+                    hideParent();
+                    changeParentToggleButton(R.drawable.ic_arrow_down_24_gray50);
+                } else {
+                    showParent();
+                    changeParentToggleButton(R.drawable.ic_arrow_up_24_gray50);
+                }
+            }
+        };
+    }
+
+    //endregion
+
+    //region Renderers
+    public void renderMainShot(ShotModel mainShot) {
+        this.mainShot = mainShot;
+        notifyDataSetChanged();
+    }
+
+    public void renderParentShot(List<ShotModel> parentShot) {
+        this.parents = parentShot;
+        notifyDataSetChanged();
+    }
+
+    public void renderReplies(List<ShotModel> replies) {
+        this.replies = replies;
+        notifyDataSetChanged();
     }
 
     private void bindParentsViewHolder(ShotDetailParentViewHolder holder, int adapterPosition) {
@@ -295,16 +333,5 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         ShotModel shotModel = replies.get(replyPosition);
         holder.bindView(shotModel);
     }
-
-    public void disableStreamTitle() {
-        if (mainHolder != null) {
-            mainHolder.disableStreamTitle();
-        }
-    }
-
-    public void enableStreamTitle() {
-        if (mainHolder != null) {
-            mainHolder.enableStreamTitle();
-        }
-    }
+    //endregion
 }

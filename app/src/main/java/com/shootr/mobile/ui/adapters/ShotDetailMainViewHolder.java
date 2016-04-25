@@ -24,6 +24,7 @@ import java.util.Date;
 
 public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
+    public static final int NICES_TRESHOLD = 2;
     private Context context;
 
     @Bind(R.id.shot_detail_avatar) ImageView avatar;
@@ -164,7 +165,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setNiceCount(final ShotModel shotModel, Integer niceCount) {
-        if (niceCount > 2) {
+        if (niceCount > NICES_TRESHOLD) {
             this.nicers.setVisibility(View.GONE);
             this.niceCount.setVisibility(View.VISIBLE);
             this.niceCount.setText(context.getResources()
