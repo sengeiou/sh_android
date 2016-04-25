@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -333,7 +334,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     private void changeToolbarColor() {
         try {
-            blurLayout.setBackgroundColor(getResources().getColor(R.color.gray_40));
+            blurLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_40));
             streamPicture.buildDrawingCache();
             Bitmap bitmap = streamPicture.getDrawingCache();
             Palette palette = Palette.from(bitmap).generate();
