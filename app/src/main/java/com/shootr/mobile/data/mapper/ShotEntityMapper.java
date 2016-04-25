@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -126,7 +127,11 @@ import javax.inject.Singleton;
         shotDetail.setShot(transform(shotDetailEntity.getShot()));
         shotDetail.setParentShot(transform(shotDetailEntity.getParentShot()));
         shotDetail.setReplies(transform(shotDetailEntity.getReplies()));
-
+        if (shotDetailEntity.getParents() != null) {
+            shotDetail.setParents(transform(shotDetailEntity.getParents()));
+        } else {
+            shotDetail.setParents(Collections.<Shot>emptyList());
+        }
         return shotDetail;
     }
 

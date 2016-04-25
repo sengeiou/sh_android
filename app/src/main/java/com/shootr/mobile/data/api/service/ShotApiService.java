@@ -30,8 +30,8 @@ public interface ShotApiService {
     @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true") ShotApiEntity getShotWithReplies(
       @Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true") ShotApiEntity getShotDetail(
-      @Path("idShot") String idShot) throws ApiException, IOException;
+    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true&includeThread=true")
+    ShotApiEntity getShotDetail(@Path("idShot") String idShot) throws ApiException, IOException;
 
     @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit, @Query("types") String[] types) throws ApiException, IOException;

@@ -225,8 +225,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     pinShotPresenter.pinToProfile(shot);
                 }
             }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-              @Override public void onShown() {
-                  detailList.scrollToPosition(0);
+              @Override public void onShown(Integer parentsNumber) {
+                  detailList.scrollToPosition(parentsNumber);
               }
           }, //
             new OnNiceShotListener() {
@@ -414,7 +414,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
     }
 
-    @Override public void renderParent(ShotModel parentShot) {
+    @Override public void renderParents(List<ShotModel> parentShot) {
         detailAdapter.renderParentShot(parentShot);
     }
 

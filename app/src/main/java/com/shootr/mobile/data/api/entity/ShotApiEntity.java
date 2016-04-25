@@ -26,6 +26,7 @@ public class ShotApiEntity {
     private List<ShotApiEntity> replies;
     private ShotApiEntity parent;
 
+    private List<ShotApiEntity> thread;
     private Long birth;
     private Long modified;
     private Integer revision;
@@ -189,5 +190,13 @@ public class ShotApiEntity {
 
     public void setProfileHidden(Long profileHidden) {
         this.profileHidden = profileHidden;
+    }
+
+    public List<ShotApiEntity> getThread() {
+        return thread;
+    }
+
+    public void setThread(List<ShotApiEntity> thread) {
+        this.thread = thread;
     }
 }
