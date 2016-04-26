@@ -208,8 +208,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     //endregion
 
     //region Setups
-    @NonNull
-    private RecyclerView.ViewHolder setupShotDetailReplyHolder(ViewGroup parent, LayoutInflater layoutInflater) {
+    @NonNull private RecyclerView.ViewHolder setupShotDetailReplyHolder(ViewGroup parent,
+      LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
         ViewCompat.setElevation(itemView, itemElevation);
@@ -225,8 +225,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           replyShotClickListener);
     }
 
-    @NonNull private RecyclerView.ViewHolder setupShotDetailMainViewHolder(ViewGroup parent,
-      LayoutInflater layoutInflater) {
+    @NonNull
+    private RecyclerView.ViewHolder setupShotDetailMainViewHolder(ViewGroup parent, LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
         ViewCompat.setElevation(itemView, itemElevation);
@@ -246,8 +246,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           nicerTextSpannableBuilder);
     }
 
-    @NonNull private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent,
-      LayoutInflater layoutInflater) {
+    @NonNull
+    private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent, LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
         return new ShotDetailParentViewHolder(itemView,
@@ -273,7 +273,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public void renderParentShot(List<ShotModel> parentShot) {
         this.parents = parentShot;
         notifyDataSetChanged();
-        if(!isShowingParent) {
+        if (!isShowingParent) {
             showParent();
         }
     }
