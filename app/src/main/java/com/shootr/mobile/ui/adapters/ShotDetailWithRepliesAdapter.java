@@ -134,12 +134,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return isShowingParent;
     }
 
-    private void changeParentToggleButton(int resource) {
-        if (mainHolder != null) {
-            mainHolder.setParentToggleButton(resource);
-        }
-    }
-
     //region Lifecycle methods
     @Override public int getItemViewType(int position) {
         if (hasParent() && position < parents.size()) {
@@ -255,8 +249,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           onClickListenerPinToProfile,
           nicesClickListener,
           shotTextSpannableBuilder,
-          nicerTextSpannableBuilder,
-          setupParentToggleListener());
+          nicerTextSpannableBuilder);
     }
 
     @NonNull private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent,
@@ -275,20 +268,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           parentShotClickListener,
           resources);
     }
-    @NonNull private View.OnClickListener setupParentToggleListener() {
-        return new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (isShowingParent()) {
-                    hideParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_down_24_gray50);
-                } else {
-                    showParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_up_24_gray50);
-                }
-            }
-        };
-    }
-
     //endregion
 
     //region Renderers
