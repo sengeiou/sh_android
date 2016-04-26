@@ -153,7 +153,6 @@ public class StreamDetailPresenter implements Presenter {
     public void loadStreamInfo() {
         this.showViewLoading();
         this.getStreamInfo();
-        this.getContributorsNumber();
     }
 
     public void getContributorsNumber() {
@@ -196,6 +195,7 @@ public class StreamDetailPresenter implements Presenter {
         this.renderWatchersList(streamInfo);
         this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
+        this.getContributorsNumber();
         if (streamModel.amIAuthor()) {
             this.setupRemoveStreamMenuOption();
         }
