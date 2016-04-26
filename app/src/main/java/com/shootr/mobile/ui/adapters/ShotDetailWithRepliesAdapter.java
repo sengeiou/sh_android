@@ -149,17 +149,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void showParent() {
         isShowingParent = true;
-        notifyDataSetChanged();
         recalculateShotsListPosition();
     }
 
     private void recalculateShotsListPosition() {
         onParentShownListener.onShown(parents.size(), replies.size());
-    }
-
-    private void hideParent() {
-        isShowingParent = false;
-        notifyDataSetChanged();
     }
 
     @Override public int getItemCount() {
@@ -279,7 +273,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public void renderParentShot(List<ShotModel> parentShot) {
         this.parents = parentShot;
         notifyDataSetChanged();
-        showParent();
+        if(!isShowingParent) {
+            showParent();
+        }
     }
 
     public void renderReplies(List<ShotModel> replies) {
