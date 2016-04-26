@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.TextAppearanceSpan;
@@ -144,8 +146,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
         TextDrawable letters = TextDrawable.builder()
           .beginConfig()
-          .width(56)
-          .height(56)
+          .width(52)
+          .height(52)
+          .textColor(Color.WHITE)
+          .useFont(Typeface.DEFAULT)
+          .fontSize(24)
           .endConfig()
           .buildRound(initials, generator.getColor(initials));
         picture.setImageDrawable(letters);
