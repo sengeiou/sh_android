@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -311,8 +314,57 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void setStreamPicture(String picture) {
-
         imageLoader.loadStreamPicture(picture, streamPicture);
+    }
+
+    @Override
+    public void setupStreamInitials(StreamModel streamModel) {
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        String title = streamModel.getTitle();
+        String[] split = title.split(" ");
+        String initials;
+        if (split.length > 1) {
+            String firstWord = split[0];
+            String lastWord = split[split.length - 1];
+            initials = String.valueOf(String.valueOf(firstWord.charAt(0)) + String.valueOf(lastWord.charAt(0)))
+              .toUpperCase();
+        } else {
+            String firstWord = split[0];
+            initials = String.valueOf(firstWord.charAt(0)).toUpperCase();
+        }
+        int backgroundColor = generator.getColor(initials);
+        TextDrawable letters = TextDrawable.builder()
+          .beginConfig()
+          .width(56)
+          .height(56)
+          .endConfig()
+          .buildRound(initials, backgroundColor);
+        streamPicture.setImageDrawable(letters);
+        changeStatusBarColor(backgroundColor);
+    }
+
+    private void changeStatusBarColor(int backgroundColor) {
+        int darkColor = getDarkColor(backgroundColor);
+        blurLayout.setBackgroundColor(darkColor);
+        collapsingToolbar.setContentScrimColor(darkColor);
+        collapsingToolbar.setStatusBarScrimColor(darkColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = getDarkColor(darkColor);
+
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+        }
+    }
+
+    private int getDarkColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.9f;
+        return Color.HSVToColor(hsv);
+    }
+
+    @Override public void loadBlurStreamPicture(String picture) {
         imageLoader.loadBlurStreamPicture(picture, toolbarImage, new RequestListener<String, GlideDrawable>() {
             @Override public boolean onException(Exception e, String model, Target<GlideDrawable> target,
               boolean isFirstResource) {
