@@ -9,16 +9,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
-import com.shootr.mobile.util.NicerTextSpannableBuilder;
+import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
@@ -32,7 +32,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
-    private final NicerTextSpannableBuilder shotTextSpannableBuilder;
+    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ImageLoader imageLoader;
@@ -42,7 +42,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener replyShotClickListener;
 
-    public ShotDetailReplyHolder(View itemView, NicerTextSpannableBuilder shotTextSpannableBuilder,
+    public ShotDetailReplyHolder(View itemView, ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
       AvatarClickListener avatarClickListener, ShotClickListener imageClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
