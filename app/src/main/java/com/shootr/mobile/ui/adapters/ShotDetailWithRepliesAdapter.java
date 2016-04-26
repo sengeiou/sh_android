@@ -230,7 +230,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
         ViewCompat.setElevation(itemView, itemElevation);
         return new ShotDetailReplyHolder(itemView,
-          nicerTextSpannableBuilder,
+          shotTextSpannableBuilder,
           onUsernameClickListener,
           timeUtils,
           imageLoader,
