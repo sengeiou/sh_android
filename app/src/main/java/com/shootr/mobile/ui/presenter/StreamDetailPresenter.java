@@ -69,10 +69,9 @@ public class StreamDetailPresenter implements Presenter {
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
-      GetContributorsInteractor getContributorsInteractor,
-      RemoveStreamInteractor removeStreamInteractor, RestoreStreamInteractor restoreStreamInteractor,
-      StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      GetContributorsInteractor getContributorsInteractor, RemoveStreamInteractor removeStreamInteractor,
+      RestoreStreamInteractor restoreStreamInteractor, StreamModelMapper streamModelMapper,
+      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
@@ -164,6 +163,9 @@ public class StreamDetailPresenter implements Presenter {
                     streamDetailView.showContributorsNumber(contributors.size());
                 } else {
                     streamDetailView.hideContributorsNumber();
+                    if (!streamModel.amIAuthor()) {
+                        streamDetailView.disableContributors();
+                    }
                 }
             }
         }, new Interactor.ErrorCallback() {

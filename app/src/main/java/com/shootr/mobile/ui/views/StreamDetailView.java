@@ -80,4 +80,6 @@ public interface StreamDetailView extends DataTransferView {
     void showRestoreStreamFeedback();
 
     void showRemovedFeedback();
+
+    void disableContributors();
 }
