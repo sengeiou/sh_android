@@ -134,12 +134,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return isShowingParent;
     }
 
-    private void changeParentToggleButton(int resource) {
-        if (mainHolder != null) {
-            mainHolder.setParentToggleButton(resource);
-        }
-    }
-
     //region Lifecycle methods
     @Override public int getItemViewType(int position) {
         if (hasParent() && position < parents.size()) {
@@ -155,21 +149,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void showParent() {
         isShowingParent = true;
-        notifyDataSetChanged();
         recalculateShotsListPosition();
     }
 
     private void recalculateShotsListPosition() {
-        if (replies.size() > 0) {
-            onParentShownListener.onShown(parents.size() + 1);
-        } else {
-            onParentShownListener.onShown(parents.size());
-        }
-    }
-
-    private void hideParent() {
-        isShowingParent = false;
-        notifyDataSetChanged();
+        onParentShownListener.onShown(parents.size(), replies.size());
     }
 
     @Override public int getItemCount() {
@@ -224,8 +208,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     //endregion
 
     //region Setups
-    @NonNull
-    private RecyclerView.ViewHolder setupShotDetailReplyHolder(ViewGroup parent, LayoutInflater layoutInflater) {
+    @NonNull private RecyclerView.ViewHolder setupShotDetailReplyHolder(ViewGroup parent,
+      LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
         ViewCompat.setElevation(itemView, itemElevation);
@@ -241,8 +225,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           replyShotClickListener);
     }
 
-    @NonNull private RecyclerView.ViewHolder setupShotDetailMainViewHolder(ViewGroup parent,
-      LayoutInflater layoutInflater) {
+    @NonNull
+    private RecyclerView.ViewHolder setupShotDetailMainViewHolder(ViewGroup parent, LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
         ViewCompat.setElevation(itemView, itemElevation);
@@ -259,12 +243,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           onClickListenerPinToProfile,
           nicesClickListener,
           shotTextSpannableBuilder,
-          nicerTextSpannableBuilder,
-          setupParentToggleListener());
+          nicerTextSpannableBuilder);
     }
 
-    @NonNull private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent,
-      LayoutInflater layoutInflater) {
+    @NonNull
+    private RecyclerView.ViewHolder setupShotDetailParentViewHolder(ViewGroup parent, LayoutInflater layoutInflater) {
         View itemView;
         itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
         return new ShotDetailParentViewHolder(itemView,
@@ -279,20 +262,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           parentShotClickListener,
           resources);
     }
-    @NonNull private View.OnClickListener setupParentToggleListener() {
-        return new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (isShowingParent()) {
-                    hideParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_down_24_gray50);
-                } else {
-                    showParent();
-                    changeParentToggleButton(R.drawable.ic_arrow_up_24_gray50);
-                }
-            }
-        };
-    }
-
     //endregion
 
     //region Renderers
@@ -304,6 +273,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public void renderParentShot(List<ShotModel> parentShot) {
         this.parents = parentShot;
         notifyDataSetChanged();
+        if (!isShowingParent) {
+            showParent();
+        }
     }
 
     public void renderReplies(List<ShotModel> replies) {

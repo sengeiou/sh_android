@@ -178,17 +178,17 @@ public class ShotDetaillPresenterTest {
         presenter.initialize(shotDetailView, shotModel());
         presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderParents(anyListOf(ShotModel.class));
+        verify(shotDetailView, times(2)).renderParents(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldNotRenderParentsWhenNewParentsAreEqualsThanPreviousAndIsMarked() throws Exception {
+    @Test public void shouldRenderParentsWhenNewParentsAreEqualsThanPreviousAndIsMarked() throws Exception {
         setupGetShotDetailWithRepliesInteractorCallback();
         setupMarkNiceShotInteractorCallback();
 
         presenter.initialize(shotDetailView, shotModel());
         presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView, never()).renderParents(anyListOf(ShotModel.class));
+        verify(shotDetailView, times(2)).renderParents(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsUnmarked() throws Exception {

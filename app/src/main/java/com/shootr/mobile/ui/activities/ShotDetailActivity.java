@@ -17,13 +17,13 @@ import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
-import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.ShotDetailWithRepliesAdapter;
+import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -33,6 +33,7 @@ import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
+import com.shootr.mobile.ui.widgets.EndOffsetItemDecoration;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
@@ -81,6 +82,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
+
+    LinearLayoutManager linearLayoutManager;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -189,65 +192,69 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void setupAdapter() {
-        detailAdapter =
-          new ShotDetailWithRepliesAdapter(imageLoader, new AvatarClickListener() {
-              @Override public void onClick(String userId) {
-                  onShotAvatarClick(userId);
-              }
-          }, //
-            new ShotClickListener() {
-                @Override public void onClick(ShotModel shot) {
-                    onShotClick(shot);
-                }
-            }, new ShotClickListener() {
+        detailAdapter = new ShotDetailWithRepliesAdapter(imageLoader, new AvatarClickListener() {
+            @Override public void onClick(String userId) {
+                onShotAvatarClick(userId);
+            }
+        }, //
+          new ShotClickListener() {
               @Override public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }
           }, new ShotClickListener() {
-              @Override public void onClick(ShotModel shotModel) {
-                  onStreamTitleClick(shotModel);
+            @Override public void onClick(ShotModel shot) {
+                onShotClick(shot);
+            }
+        }, new ShotClickListener() {
+            @Override public void onClick(ShotModel shotModel) {
+                onStreamTitleClick(shotModel);
+            }
+        }, new ShotClickListener() {
+            @Override public void onClick(ShotModel shot) {
+                onShotImageClick(shot);
+            }
+        }, //
+          new OnVideoClickListener() {
+              @Override public void onVideoClick(String url) {
+                  onShotVideoClick(url);
               }
-          }, new ShotClickListener() {
+          }, //
+          new OnUsernameClickListener() {
+              @Override public void onUsernameClick(String username) {
+                  onShotUsernameClick(username);
+              }
+          }, //
+          new ShotClickListener() {
+
               @Override public void onClick(ShotModel shot) {
-                  onShotImageClick(shot);
+                  pinShotPresenter.pinToProfile(shot);
+              }
+          }, new OnParentShownListener() {
+            @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
+                linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
+                if (repliesNumber == 0) {
+                    detailList.addItemDecoration(new EndOffsetItemDecoration(400));
+                }
+            }
+        }, //
+          new OnNiceShotListener() {
+              @Override public void markNice(String idShot) {
+                  detailPresenter.markNiceShot(idShot);
+              }
+
+              @Override public void unmarkNice(String idShot) {
+                  detailPresenter.unmarkNiceShot(idShot);
               }
           }, //
-            new OnVideoClickListener() {
-                @Override public void onVideoClick(String url) {
-                    onShotVideoClick(url);
-                }
-            }, //
-            new OnUsernameClickListener() {
-                @Override public void onUsernameClick(String username) {
-                    onShotUsernameClick(username);
-                }
-            }, //
-            new ShotClickListener() {
-
-                @Override public void onClick(ShotModel shot) {
-                    pinShotPresenter.pinToProfile(shot);
-                }
-            }, new OnParentShownListener() {
-              @Override public void onShown(Integer parentsNumber) {
-                  detailList.scrollToPosition(parentsNumber);
+          new ShotClickListener() {
+              @Override public void onClick(ShotModel shotModel) {
+                  detailPresenter.openShotNicers(shotModel);
               }
-          }, //
-            new OnNiceShotListener() {
-                @Override public void markNice(String idShot) {
-                    detailPresenter.markNiceShot(idShot);
-                }
-
-                @Override public void unmarkNice(String idShot) {
-                    detailPresenter.unmarkNiceShot(idShot);
-                }
-            }, //
-            new ShotClickListener() {
-                @Override public void onClick(ShotModel shotModel) {
-                    detailPresenter.openShotNicers(shotModel);
-                }
-            }, timeFormatter, getResources(), timeUtils);
-        detailList.setLayoutManager(new LinearLayoutManager(this));
+          }, timeFormatter, getResources(), timeUtils);
+        linearLayoutManager = new LinearLayoutManager(this);
+        detailList.setLayoutManager(linearLayoutManager);
         detailList.setAdapter(detailAdapter);
+        detailList.addItemDecoration(new EndOffsetItemDecoration(500));
     }
 
     private void onStreamTitleClick(ShotModel shotModel) {

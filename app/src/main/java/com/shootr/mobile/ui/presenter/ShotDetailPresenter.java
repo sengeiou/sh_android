@@ -117,7 +117,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void onParentsLoaded(List<Shot> parents) {
         int previousParentsCount = parentsModels != null ? parentsModels.size() : 0;
         int newParentCount = parents.size();
-        if (newParentCount > previousParentsCount) {
+        if (newParentCount >= previousParentsCount) {
             parentsModels = shotModelMapper.transform(parents);
             shotDetailView.renderParents(parentsModels);
         }

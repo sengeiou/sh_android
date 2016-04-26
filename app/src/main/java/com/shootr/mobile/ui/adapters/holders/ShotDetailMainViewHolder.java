@@ -11,10 +11,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
@@ -57,7 +57,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     private final ShotClickListener nicesClickListener;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final NicerTextSpannableBuilder nicerTextSpannableBuilder;
-    private final View.OnClickListener parentToggleListener;
 
     public ShotDetailMainViewHolder(View itemView, ImageLoader imageLoader,
       AvatarClickListener avatarClickListener, ShotClickListener streamClickListener,
@@ -65,7 +64,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
       OnUsernameClickListener onUsernameClickListener, TimeFormatter timeFormatter, Resources resources,
       OnNiceShotListener onNiceShotListener, ShotClickListener onClickListenerPinToProfile,
       ShotClickListener nicesClickListener, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      NicerTextSpannableBuilder nicerTextSpannableBuilder, View.OnClickListener parentToggleListener) {
+      NicerTextSpannableBuilder nicerTextSpannableBuilder) {
         super(itemView);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -82,7 +81,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         this.nicerTextSpannableBuilder = nicerTextSpannableBuilder;
         ButterKnife.bind(this, itemView);
         context = itemView.getContext();
-        this.parentToggleListener = parentToggleListener;
     }
 
     public void bindView(final ShotModel shotModel) {
@@ -227,7 +225,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
     public void setReply() {
         parentToggleButton.setVisibility(View.VISIBLE);
-        itemView.setOnClickListener(parentToggleListener);
     }
 
     private String getUsernameTitle(ShotModel shotModel) {
@@ -283,9 +280,5 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
     public void showPintToProfileContainer() {
         pinToProfileContainer.setVisibility(View.VISIBLE);
-    }
-
-    public void setParentToggleButton(int resource) {
-        parentToggleButton.setImageResource(resource);
     }
 }
