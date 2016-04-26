@@ -33,6 +33,7 @@ import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
+import com.shootr.mobile.ui.widgets.EndOffsetItemDecoration;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
@@ -81,6 +82,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
+
+    LinearLayoutManager linearLayoutManager;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -228,8 +231,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     pinShotPresenter.pinToProfile(shot);
                 }
             }, new OnParentShownListener() {
-              @Override public void onShown(Integer parentsNumber) {
-                  detailList.scrollToPosition(parentsNumber);
+              @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
+                  linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
+                  if(repliesNumber == 0) {
+                      detailList.addItemDecoration(new EndOffsetItemDecoration (400));
+                  }
               }
           }, //
             new OnNiceShotListener() {
@@ -246,8 +252,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     detailPresenter.openShotNicers(shotModel);
                 }
             }, timeFormatter, getResources(), timeUtils);
-        detailList.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        detailList.setLayoutManager(linearLayoutManager);
         detailList.setAdapter(detailAdapter);
+        detailList.addItemDecoration(new EndOffsetItemDecoration (500));
     }
 
     private void onStreamTitleClick(ShotModel shotModel) {

@@ -160,11 +160,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     private void recalculateShotsListPosition() {
-        if (replies.size() > 0) {
-            onParentShownListener.onShown(parents.size() + 1);
-        } else {
-            onParentShownListener.onShown(parents.size());
-        }
+        onParentShownListener.onShown(parents.size(), replies.size());
     }
 
     private void hideParent() {
@@ -304,6 +300,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public void renderParentShot(List<ShotModel> parentShot) {
         this.parents = parentShot;
         notifyDataSetChanged();
+        showParent();
     }
 
     public void renderReplies(List<ShotModel> replies) {
