@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.TextAppearanceSpan;
@@ -9,6 +11,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
@@ -32,6 +36,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private boolean isWatchingStateEnabled = false;
 
     @Bind(R.id.stream_picture) ImageView picture;
+    @Bind(R.id.stream_picture_without_text) ImageView pictureWithoutText;
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
@@ -43,8 +48,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @BindString(R.string.watching_stream_connected) String connected;
     @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
 
-    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, ImageLoader imageLoader,
-      List<String> mutedStreamIds) {
+    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
+      ImageLoader imageLoader, List<String> mutedStreamIds) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
@@ -52,7 +57,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, ImageLoader imageLoader) {
+    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
+      ImageLoader imageLoader) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
@@ -89,7 +95,15 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             watchers.setVisibility(View.GONE);
         }
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
-        imageLoader.loadStreamPicture(pictureUrl, picture);
+        if (pictureUrl != null) {
+            picture.setVisibility(View.VISIBLE);
+            pictureWithoutText.setVisibility(View.GONE);
+            imageLoader.loadStreamPicture(pictureUrl, picture);
+        } else {
+            picture.setVisibility(View.GONE);
+            pictureWithoutText.setVisibility(View.VISIBLE);
+            setupInitials(streamResultModel);
+        }
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
@@ -113,8 +127,38 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
 
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
-        imageLoader.loadStreamPicture(pictureUrl, picture);
+        if (pictureUrl != null) {
+            imageLoader.loadStreamPicture(pictureUrl, picture);
+        } else {
+            setupInitials(streamResultModel);
+        }
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupInitials(StreamResultModel streamResultModel) {
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        String title = streamResultModel.getStreamModel().getTitle();
+        String[] split = title.split(" ");
+        String initials;
+        if (split.length > 1) {
+            String firstWord = split[0];
+            String lastWord = split[split.length - 1];
+            initials = String.valueOf(String.valueOf(firstWord.charAt(0)) + String.valueOf(lastWord.charAt(0)))
+              .toUpperCase();
+        } else {
+            String firstWord = split[0];
+            initials = String.valueOf(firstWord.charAt(0)).toUpperCase();
+        }
+        TextDrawable letters = TextDrawable.builder()
+          .beginConfig()
+          .width(52)
+          .height(52)
+          .textColor(Color.WHITE)
+          .useFont(Typeface.DEFAULT)
+          .fontSize(20)
+          .endConfig()
+          .buildRound(initials, generator.getColor(initials));
+        pictureWithoutText.setImageDrawable(letters);
     }
 
     public void setMutedVisibility(StreamResultModel streamResultModel) {

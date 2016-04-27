@@ -267,7 +267,7 @@ public class StreamDetailPresenter implements Presenter {
     private void renderStreamInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
         streamDetailView.setStreamTitle(streamModel.getTitle());
-        streamDetailView.setStreamPicture(streamModel.getPicture());
+        setupStreamPicture();
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
         if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
             streamDetailView.setStreamDescription(streamModel.getDescription());
@@ -280,6 +280,21 @@ public class StreamDetailPresenter implements Presenter {
         }
 
         streamMediaCount = streamModel.getMediaCount();
+    }
+
+    private void setupStreamPicture() {
+        if (streamModel.getPicture() != null) {
+            streamDetailView.showPicture();
+            streamDetailView.hideNoTextPicture();
+            streamDetailView.setStreamPicture(streamModel.getPicture());
+            streamDetailView.loadBlurStreamPicture(streamModel.getPicture());
+        } else {
+            if (!streamModel.amIAuthor()) {
+                streamDetailView.hidePicture();
+                streamDetailView.showNoTextPicture();
+                streamDetailView.setupStreamInitials(streamModel);
+            }
+        }
     }
 
     private void renderFollowingNumber(Integer numberOfFollowing) {

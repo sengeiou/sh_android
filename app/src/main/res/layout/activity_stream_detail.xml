@@ -67,6 +67,13 @@
                     <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/stream_avatar"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent"
+                      android:visibility="gone"
+                      tools:src="@drawable/sample_avatar" />
+
+                    <ImageView android:id="@+id/stream_avatar_without_text"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:visibility="gone"
                       tools:src="@drawable/sample_avatar" />
                 </FrameLayout>
 

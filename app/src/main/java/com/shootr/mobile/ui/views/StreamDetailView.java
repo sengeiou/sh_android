@@ -82,4 +82,16 @@ public interface StreamDetailView extends DataTransferView {
     void showRemovedFeedback();
 
     void disableContributors();
+
+    void setupStreamInitials(StreamModel streamModel);
+
+    void loadBlurStreamPicture(String picture);
+
+    void showPicture();
+
+    void hideNoTextPicture();
+
+    void hidePicture();
+
+    void showNoTextPicture();
 }
