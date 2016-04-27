@@ -57,8 +57,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
     public static final String EXTRA_IS_IN_TIMELINE = "isIntimeline";
-    public static final int OFFSET = 500;
-    public static final int OFFSET_WITH_REPLIES = 400;
+    private static final int OFFSET = 500;
+    private static final int OFFSET_WITH_REPLIES = 400;
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
