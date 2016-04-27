@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -337,8 +338,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           .beginConfig()
           .width(56)
           .height(56)
+          .textColor(Color.WHITE)
+          .useFont(Typeface.DEFAULT)
+          .fontSize(24)
           .endConfig()
-          .buildRound(initials, backgroundColor);
+          .buildRound(initials, generator.getColor(initials));
         streamPicture.setImageDrawable(letters);
         changeStatusBarColor(backgroundColor);
     }
