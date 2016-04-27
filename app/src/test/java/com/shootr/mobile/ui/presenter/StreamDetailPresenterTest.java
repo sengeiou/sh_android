@@ -318,6 +318,27 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView).askRemoveStreamConfirmation();
     }
 
+    @Test public void shouldSetStreamPictureIfExists() throws Exception {
+        presenter.onStreamInfoLoaded(streamInfoWithPhoto());
+
+        verify(streamDetailView).setStreamPicture(anyString());
+    }
+
+    @Test public void shouldSetupStreamInitialsIfNotStreamPicture() throws Exception {
+        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+        verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
+    }
+
+    @Test public void shouldNotSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+
+        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+        verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
+    }
+
     private void setupRemovedStreamInfoCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
