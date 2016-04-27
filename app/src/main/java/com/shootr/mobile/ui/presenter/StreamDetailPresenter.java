@@ -284,10 +284,14 @@ public class StreamDetailPresenter implements Presenter {
 
     private void setupStreamPicture() {
         if (streamModel.getPicture() != null) {
+            streamDetailView.showPicture();
+            streamDetailView.hideNoTextPicture();
             streamDetailView.setStreamPicture(streamModel.getPicture());
             streamDetailView.loadBlurStreamPicture(streamModel.getPicture());
         } else {
             if (!streamModel.amIAuthor()) {
+                streamDetailView.hidePicture();
+                streamDetailView.showNoTextPicture();
                 streamDetailView.setupStreamInitials(streamModel);
             }
         }

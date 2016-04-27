@@ -83,6 +83,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.stream_title_container) View streamTitleContainer;
     @Bind(R.id.cat_avatar) View streamPictureContainer;
     @Bind(R.id.stream_avatar) ImageView streamPicture;
+    @Bind(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
     @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
@@ -343,7 +344,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           .fontSize(24)
           .endConfig()
           .buildRound(initials, generator.getColor(initials));
-        streamPicture.setImageDrawable(letters);
+        streamPictureWithoutText.setImageDrawable(letters);
         changeStatusBarColor(backgroundColor);
     }
 
@@ -386,6 +387,22 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 return false;
             }
         });
+    }
+
+    @Override public void showPicture() {
+        streamPicture.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideNoTextPicture() {
+        streamPictureWithoutText.setVisibility(View.GONE);
+    }
+
+    @Override public void hidePicture() {
+        streamPicture.setVisibility(View.GONE);
+    }
+
+    @Override public void showNoTextPicture() {
+        streamPictureWithoutText.setVisibility(View.VISIBLE);
     }
 
     private void changeToolbarColor() {

@@ -36,6 +36,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private boolean isWatchingStateEnabled = false;
 
     @Bind(R.id.stream_picture) ImageView picture;
+    @Bind(R.id.stream_picture_without_text) ImageView pictureWithoutText;
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
@@ -95,8 +96,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         if (pictureUrl != null) {
+            picture.setVisibility(View.VISIBLE);
+            pictureWithoutText.setVisibility(View.GONE);
             imageLoader.loadStreamPicture(pictureUrl, picture);
         } else {
+            picture.setVisibility(View.GONE);
+            pictureWithoutText.setVisibility(View.VISIBLE);
             setupInitials(streamResultModel);
         }
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
@@ -153,7 +158,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
           .fontSize(20)
           .endConfig()
           .buildRound(initials, generator.getColor(initials));
-        picture.setImageDrawable(letters);
+        pictureWithoutText.setImageDrawable(letters);
     }
 
     public void setMutedVisibility(StreamResultModel streamResultModel) {
