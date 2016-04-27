@@ -128,8 +128,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         if (pictureUrl != null) {
+            picture.setVisibility(View.VISIBLE);
+            pictureWithoutText.setVisibility(View.GONE);
             imageLoader.loadStreamPicture(pictureUrl, picture);
         } else {
+            picture.setVisibility(View.GONE);
+            pictureWithoutText.setVisibility(View.VISIBLE);
             setupInitials(streamResultModel);
         }
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
