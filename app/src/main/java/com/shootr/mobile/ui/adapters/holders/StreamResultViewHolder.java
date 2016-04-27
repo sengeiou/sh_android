@@ -150,7 +150,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
           .height(52)
           .textColor(Color.WHITE)
           .useFont(Typeface.DEFAULT)
-          .fontSize(24)
+          .fontSize(20)
           .endConfig()
           .buildRound(initials, generator.getColor(initials));
         picture.setImageDrawable(letters);
