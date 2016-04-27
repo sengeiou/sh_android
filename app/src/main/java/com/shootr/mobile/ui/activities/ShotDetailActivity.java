@@ -57,6 +57,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
     public static final String EXTRA_IS_IN_TIMELINE = "isIntimeline";
+    public static final int OFFSET = 500;
+    public static final int OFFSET_WITH_REPLIES = 400;
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
@@ -83,7 +85,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private ShotDetailWithRepliesAdapter detailAdapter;
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
 
-    LinearLayoutManager linearLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private int overallYScroll;
+    private int replies = 0;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -231,9 +235,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
               }
           }, new OnParentShownListener() {
             @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
+                replies = repliesNumber;
                 linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
                 if (repliesNumber == 0) {
-                    detailList.addItemDecoration(new EndOffsetItemDecoration(400));
+                    detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET_WITH_REPLIES));
                 }
             }
         }, //
@@ -251,10 +256,24 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                   detailPresenter.openShotNicers(shotModel);
               }
           }, timeFormatter, getResources(), timeUtils);
+        setupDetailList();
+    }
+
+    private void setupDetailList() {
         linearLayoutManager = new LinearLayoutManager(this);
         detailList.setLayoutManager(linearLayoutManager);
         detailList.setAdapter(detailAdapter);
-        detailList.addItemDecoration(new EndOffsetItemDecoration(500));
+        detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET));
+        detailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                overallYScroll = overallYScroll + dy;
+                if (overallYScroll > 0 && replies == 0) {
+                    linearLayoutManager.scrollToPositionWithOffset(detailAdapter.getItemCount() - 1, 0);
+                    overallYScroll = 0;
+                }
+            }
+        });
     }
 
     private void onStreamTitleClick(ShotModel shotModel) {
