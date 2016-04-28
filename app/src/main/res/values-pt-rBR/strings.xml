@@ -224,7 +224,7 @@
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
-  <string name="niced_by">Nice de</string>
+  <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">Te deu um nice</string>
   <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
   <string name="nicers">Nicers</string>
