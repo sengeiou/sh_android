@@ -8,6 +8,7 @@
   <string name="activity_edit_profile_username_hint">用戶名稱</string>
   <string name="activity_edit_profile_website_hint">網站</string>
   <string name="activity_edit_stream_title">編輯stream</string>
+  <string name="activity_find_contributors_hint">搜尋</string>
   <string name="activity_find_friends_cant_load_message">不能載入數據。請檢查您的連接。</string>
   <string name="activity_find_friends_empty_message">找不到任何結果</string>
   <string name="activity_find_friends_hint">搜尋朋友</string>
@@ -37,7 +38,11 @@
   <string name="activity_registration_username_hint">用戶名稱</string>
   <string name="activity_started_following_you">開始關注您</string>
   <string name="activity_timeline_empty_title">沒有動態消息</string>
+  <string name="added_contributor">已新增</string>
   <string name="added_to_favorites">已被加入最愛</string>
+  <string name="add_contributor">新增</string>
+  <string name="add_contributor_button">新增回應者</string>
+  <string name="add_contributor_confirmation_message">新增%s?</string>
   <string name="add_to_favorites_menu_title">加入最愛</string>
   <string name="alert_report_confirmed_email_message">點選帳戶〉編輯個人檔案，並確認您的電郵。</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -64,6 +69,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">解除釘選</string>
   <string name="confirm_hide_shot" formatted="false">解除釘選</string>
   <string name="connection_lost">網絡連接中斷</string>
+  <string name="contributors_empty">沒有回應者</string>
   <string name="copied_to_clipboard">文字已複製到剪貼板。</string>
   <string name="current_password_hint">目前的密碼</string>
   <string name="days">日</string>
@@ -101,6 +107,7 @@
   <string name="entered_just_now">剛登入</string>
   <string name="entered_long_time_ago">多天前登入</string>
   <string name="entered_minutes_ago">%d分鐘前登入</string>
+  <string name="error_adding_contributor">無法新增超過100以上的回應者</string>
   <string name="error_deleted_shot">這個shot已被刪除</string>
   <string name="error_facebook_login">不能用Facebook登錄。請稍後再試</string>
   <string name="error_following_user_blocked">不能關注您忽略的用戶。</string>
@@ -212,12 +219,13 @@
   <string name="new_shot_placeholder">消息</string>
   <string name="new_shot_repeated">Whoops! 您已經發怖過這個shot</string>
   <string name="new_stream_description_label">說明</string>
-  <string name="new_stream_short_title_label">簡稱</string>
   <string name="new_stream_title_label">主題</string>
   <string name="new_topic" formatted="false">新的消息…</string>
   <string name="next">下一步</string>
+  <string name="niced_by">"Nice: "</string>
   <string name="niced_shot_activity">Nice了您的shot</string>
   <string name="niced_shot_activity_with_comment">"Nice了: "</string>
+  <string name="nicers">Nicers</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d 個nice</item>
   </plurals>
@@ -283,6 +291,7 @@
   <string name="reset_password_enter_username_email">請輸入Shootr的用戶名稱或電郵。</string>
   <string name="reset_password_send_email">發送密碼重設電郵</string>
   <string name="restore_stream_label">還原stream</string>
+  <string name="restore_stream_snackbar_action">復原</string>
   <string name="seconds">秒</string>
   <string name="shared_shot_activity">分享了%s的 Shot</string>
   <string name="shared_shot_activity_with_comment">"分享了: "</string>
@@ -320,6 +329,8 @@
   <string name="stream_notification_confirmation_no">不</string>
   <string name="stream_notification_confirmation_yes">通知</string>
   <string name="stream_participants_following_number">在關注%d</string>
+  <string name="stream_removed_feedback">已移除stream</string>
+  <string name="stream_restored_feedback">已復原stream</string>
   <string name="stream_subtitle">在關注%d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在關注%2$s個參與者中的%1$s個參與者</string>
   <string name="stream_timeline_add_favorite">加入最愛</string>
@@ -334,6 +345,7 @@
   <string name="title_activity_all_participants">所有參與者</string>
   <string name="title_activity_all_shots">所有shots</string>
   <string name="title_activity_change_password">更改密碼</string>
+  <string name="title_activity_contributors">回應者</string>
   <string name="title_activity_email_confirmation">電郵</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">登入</string>
