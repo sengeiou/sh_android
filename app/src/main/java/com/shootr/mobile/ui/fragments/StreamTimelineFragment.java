@@ -621,8 +621,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        topicSnackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE);
-        topicSnackbar.show();
+        if (timelineListContainer != null) {
+            feedbackMessage.showForever(timelineListContainer, topic);
+        } else {
+            feedbackMessage.show(getView(), topic);
+        }
     }
 
     @Override public void hideTopicSnackBar() {
