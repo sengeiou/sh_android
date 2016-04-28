@@ -8,6 +8,7 @@
   <string name="activity_edit_profile_username_hint">Nom d\'usuari</string>
   <string name="activity_edit_profile_website_hint">Pàgina web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
+  <string name="activity_find_contributors_hint">Buscar</string>
   <string name="activity_find_friends_cant_load_message">No és possible carregar dades. Comprova la teva connexió.</string>
   <string name="activity_find_friends_empty_message">No hi ha resultats</string>
   <string name="activity_find_friends_hint">Trobar amics</string>
@@ -37,7 +38,11 @@
   <string name="activity_registration_username_hint">Nom d\'usuari</string>
   <string name="activity_started_following_you">Et segueix</string>
   <string name="activity_timeline_empty_title">No hi ha activitat</string>
+  <string name="added_contributor">Afegit</string>
   <string name="added_to_favorites">Afegit a Favorits</string>
+  <string name="add_contributor">Afegir</string>
+  <string name="add_contributor_button">Afegir col·laborador</string>
+  <string name="add_contributor_confirmation_message">Afegir %s?</string>
   <string name="add_to_favorites_menu_title">Afegir a Favorits</string>
   <string name="alert_report_confirmed_email_message">Vés a Compte &gt; Editar Perfil i confirma el teu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -64,6 +69,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">Treure del perfil</string>
   <string name="confirm_hide_shot" formatted="false">Treure</string>
   <string name="connection_lost">S\'ha perdut la connexió</string>
+  <string name="contributors_empty">No n\'hi ha</string>
   <string name="copied_to_clipboard">Text copiat al portapapers.</string>
   <string name="current_password_hint">Contrasenya actual</string>
   <string name="days">d</string>
@@ -101,6 +107,7 @@
   <string name="entered_just_now">Acaba d\'entrar</string>
   <string name="entered_long_time_ago">Va entrar fa dies</string>
   <string name="entered_minutes_ago">Ha entrat fa %d minuts</string>
+  <string name="error_adding_contributor">Pots afegir fins a 100 col·laboradors</string>
   <string name="error_deleted_shot">Aquest shot ha estat eliminat</string>
   <string name="error_facebook_login">No s\'ha pogut iniciar sessió amb Facebook. Prova més tard.</string>
   <string name="error_following_user_blocked">No pots seguir un usuari que ignores.</string>
@@ -215,12 +222,13 @@
   <string name="new_shot_placeholder">Escriu alguna cosa…</string>
   <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
   <string name="new_stream_description_label">Descripció</string>
-  <string name="new_stream_short_title_label">Títol curt</string>
   <string name="new_stream_title_label">Títol</string>
   <string name="new_topic" formatted="false">Nou missatge…</string>
   <string name="next">Següent</string>
+  <string name="niced_by">Nice de</string>
   <string name="niced_shot_activity">T\'ha fet un nice</string>
   <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
+  <string name="nicers">Nicers</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -287,6 +295,7 @@
   <string name="reset_password_enter_username_email">Entra el teu nom d\'usuari o email a Shootr.</string>
   <string name="reset_password_send_email">Envira correu per canviar contrasenya</string>
   <string name="restore_stream_label">Restaurar stream</string>
+  <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="seconds">s</string>
   <string name="shared_shot_activity">Ha compartit un shot de %s</string>
   <string name="shared_shot_activity_with_comment">"Ha compartit: "</string>
@@ -324,6 +333,8 @@
   <string name="stream_notification_confirmation_no">Nop</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">seguint a %d</string>
+  <string name="stream_removed_feedback">Stream esborrat</string>
+  <string name="stream_restored_feedback">Restaurar</string>
   <string name="stream_subtitle">seguint a %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">seguint a %1$s de %2$s participants</string>
   <string name="stream_timeline_add_favorite">Afegir a Favorits</string>
@@ -338,6 +349,7 @@
   <string name="title_activity_all_participants">Tots els participants</string>
   <string name="title_activity_all_shots">Tots els shots</string>
   <string name="title_activity_change_password">Canviar contrasenya</string>
+  <string name="title_activity_contributors">Col·laboradors</string>
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">Iniciar sessió</string>

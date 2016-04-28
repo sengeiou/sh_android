@@ -8,6 +8,7 @@
   <string name="activity_edit_profile_username_hint">ユーザー名</string>
   <string name="activity_edit_profile_website_hint">ウェブサイト</string>
   <string name="activity_edit_stream_title">ストリームを編集</string>
+  <string name="activity_find_contributors_hint">検索</string>
   <string name="activity_find_friends_cant_load_message">データをロードできません。接続を確認してください。</string>
   <string name="activity_find_friends_empty_message">検索結果: 0件</string>
   <string name="activity_find_friends_hint">友達を見つける</string>
@@ -37,7 +38,11 @@
   <string name="activity_registration_username_hint">ユーザー名</string>
   <string name="activity_started_following_you">あなたをフォローしました</string>
   <string name="activity_timeline_empty_title">アクティビティはありません</string>
+  <string name="added_contributor">追加しました</string>
   <string name="added_to_favorites">お気に入りに追加されました</string>
+  <string name="add_contributor">追加</string>
+  <string name="add_contributor_button">投稿者を追加</string>
+  <string name="add_contributor_confirmation_message">%sを追加しますか？</string>
   <string name="add_to_favorites_menu_title">お気に入りに追加</string>
   <string name="alert_report_confirmed_email_message">アカウント&gt;プロフィールの編集&gt;メールアドレスの確認</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -64,6 +69,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">ピン留めを解除</string>
   <string name="confirm_hide_shot" formatted="false">表示を解除</string>
   <string name="connection_lost">接続が中断されました</string>
+  <string name="contributors_empty">投稿者はいません</string>
   <string name="copied_to_clipboard">クリップボードにコピーされました</string>
   <string name="current_password_hint">現在のパスワード</string>
   <string name="days">日</string>
@@ -101,6 +107,7 @@
   <string name="entered_just_now">ついさっきアクセス</string>
   <string name="entered_long_time_ago">ずっと前にアクセス</string>
   <string name="entered_minutes_ago">%d分前にアクセス</string>
+  <string name="error_adding_contributor">投稿者は100人以上追加できません</string>
   <string name="error_deleted_shot">このショットは削除されました</string>
   <string name="error_facebook_login">Facebookでログインすることができませんでした。後程またお試しください。</string>
   <string name="error_following_user_blocked">無視しているユーザーをフォローできません。</string>
@@ -213,12 +220,13 @@
   <string name="new_shot_placeholder">入力してください</string>
   <string name="new_shot_repeated">このショットは既に投稿済みです</string>
   <string name="new_stream_description_label">説明</string>
-  <string name="new_stream_short_title_label">ショートタイトル</string>
   <string name="new_stream_title_label">タイトル</string>
   <string name="new_topic" formatted="false">新しいメッセージ…</string>
   <string name="next">次へ</string>
+  <string name="niced_by">"ナイス！: "</string>
   <string name="niced_shot_activity">あなたにナイス！をしました</string>
   <string name="niced_shot_activity_with_comment">"あなたにナイス！をしました: "</string>
+  <string name="nicers">ナイスをした人</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d件のナイス！ </item>
   </plurals>
@@ -284,6 +292,7 @@
   <string name="reset_password_enter_username_email">Shootrのユーザー名又はメールアドレスを入力してください。</string>
   <string name="reset_password_send_email">パスワードの変更用のメールを送信</string>
   <string name="restore_stream_label">ストリームを復元</string>
+  <string name="restore_stream_snackbar_action">復元する</string>
   <string name="seconds">秒</string>
   <string name="shared_shot_activity">%sのショットを共有しました</string>
   <string name="shared_shot_activity_with_comment">"共有しました: "</string>
@@ -321,6 +330,8 @@
   <string name="stream_notification_confirmation_no">いいえ</string>
   <string name="stream_notification_confirmation_yes">通知する</string>
   <string name="stream_participants_following_number">%d人をフォロー中</string>
+  <string name="stream_removed_feedback">ストリームは削除されました</string>
+  <string name="stream_restored_feedback">ストリームが復元されました</string>
   <string name="stream_subtitle">%d人をフォロー中</string>
   <string name="stream_subtitle_pattern_multiple_participants">参加者%1$s人中%2$s人をフォロー中</string>
   <string name="stream_timeline_add_favorite">お気に入りに追加</string>
@@ -335,6 +346,7 @@
   <string name="title_activity_all_participants">全ての参加者</string>
   <string name="title_activity_all_shots">全てのショット</string>
   <string name="title_activity_change_password">パスワードを変更</string>
+  <string name="title_activity_contributors">投稿者</string>
   <string name="title_activity_email_confirmation">メールアドレス</string>
   <string name="title_activity_listing">ストリーム</string>
   <string name="title_activity_login_email">ログイン</string>

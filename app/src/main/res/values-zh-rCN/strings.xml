@@ -8,6 +8,7 @@
   <string name="activity_edit_profile_username_hint">用户名</string>
   <string name="activity_edit_profile_website_hint">网址</string>
   <string name="activity_edit_stream_title">编辑stream</string>
+  <string name="activity_find_contributors_hint">Search</string>
   <string name="activity_find_friends_cant_load_message">不能载入数据。请检查你的连接</string>
   <string name="activity_find_friends_empty_message">无结果</string>
   <string name="activity_find_friends_hint">查找朋友</string>
@@ -37,7 +38,11 @@
   <string name="activity_registration_username_hint">用户名</string>
   <string name="activity_started_following_you">正在关注你</string>
   <string name="activity_timeline_empty_title">无动态</string>
+  <string name="added_contributor">已新增</string>
   <string name="added_to_favorites">添加到喜爱</string>
+  <string name="add_contributor">新增</string>
+  <string name="add_contributor_button">新增回应者</string>
+  <string name="add_contributor_confirmation_message">新增%s?</string>
   <string name="add_to_favorites_menu_title">添加到喜爱</string>
   <string name="alert_report_confirmed_email_message">个人账号&gt;编辑个人主页并验证您的邮箱。</string>
   <string name="alert_report_confirmed_email_ok">好的</string>
@@ -64,6 +69,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">解除钉选</string>
   <string name="confirm_hide_shot" formatted="false">解除钉选</string>
   <string name="connection_lost">网络连接丢失</string>
+  <string name="contributors_empty">沒有回应者</string>
   <string name="copied_to_clipboard">文章已复制到剪贴板。</string>
   <string name="current_password_hint">当前密码</string>
   <string name="days">日</string>
@@ -101,6 +107,7 @@
   <string name="entered_just_now">刚刚在线</string>
   <string name="entered_long_time_ago">在很多天前登录</string>
   <string name="entered_minutes_ago">在%d分钟前登录</string>
+  <string name="error_adding_contributor">无法新增超过100以上的回应者</string>
   <string name="error_deleted_shot">这条shot已被删除</string>
   <string name="error_facebook_login">不能用Facebook登录。请稍后再试。</string>
   <string name="error_following_user_blocked">不能关注你屏蔽的用户。</string>
@@ -212,12 +219,13 @@
   <string name="new_shot_placeholder">消息</string>
   <string name="new_shot_repeated">Whoops!你已经发布过这个shot</string>
   <string name="new_stream_description_label">说明</string>
-  <string name="new_stream_short_title_label">标签</string>
   <string name="new_stream_title_label">标题</string>
   <string name="new_topic" formatted="false">新的消息…</string>
   <string name="next">继续</string>
+  <string name="niced_by">"Nice: "</string>
   <string name="niced_shot_activity">赞了你的shot</string>
   <string name="niced_shot_activity_with_comment">"赞了: "</string>
+  <string name="nicers">Nicers</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d赞</item>
     <item quantity="zero"/>
@@ -285,6 +293,7 @@
   <string name="reset_password_enter_username_email">在Shootr输入你的用户名或邮箱。</string>
   <string name="reset_password_send_email">发送密码重新设置邮箱</string>
   <string name="restore_stream_label">还原stream</string>
+  <string name="restore_stream_snackbar_action">复原</string>
   <string name="seconds">秒</string>
   <string name="shared_shot_activity">分享了%s的shot</string>
   <string name="shared_shot_activity_with_comment">"分享了: "</string>
@@ -322,6 +331,8 @@
   <string name="stream_notification_confirmation_no">不</string>
   <string name="stream_notification_confirmation_yes">通知</string>
   <string name="stream_participants_following_number">正在关注%d</string>
+  <string name="stream_removed_feedback">已移除stream</string>
+  <string name="stream_restored_feedback">已复原stream</string>
   <string name="stream_subtitle">正在关注 %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在关注%2$s个参与者中的%1$s个参与者</string>
   <string name="stream_timeline_add_favorite">添加到喜爱</string>
@@ -336,6 +347,7 @@
   <string name="title_activity_all_participants">所有参与者</string>
   <string name="title_activity_all_shots">所有shots</string>
   <string name="title_activity_change_password">更改密码</string>
+  <string name="title_activity_contributors">回应者</string>
   <string name="title_activity_email_confirmation">邮箱</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">登录</string>
