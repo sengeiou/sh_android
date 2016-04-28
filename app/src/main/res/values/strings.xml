@@ -8,6 +8,7 @@
     <string name="activity_edit_profile_username_hint">Username</string>
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_stream_title">Edit stream</string>
+    <string name="activity_find_contributors_hint">Search</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
     <string name="activity_find_friends_empty_message">No Results</string>
     <string name="activity_find_friends_hint">Find friends</string>
@@ -37,7 +38,11 @@
     <string name="activity_registration_username_hint">Username</string>
     <string name="activity_started_following_you">Started following you</string>
     <string name="activity_timeline_empty_title">No Activity</string>
+    <string name="added_contributor">Added</string>
     <string name="added_to_favorites">Added to Favorites</string>
+    <string name="add_contributor">Add</string>
+    <string name="add_contributor_button">Add contributor</string>
+    <string name="add_contributor_confirmation_message">Add %s?</string>
     <string name="add_to_favorites_menu_title">Add to Favorites</string>
     <string name="alert_report_confirmed_email_message">Go to Account &gt; Edit Profile and confirm your email.</string>
     <string name="alert_report_confirmed_email_ok">OK</string>
@@ -64,6 +69,7 @@
     <string name="confirmation_hide_shot_message" formatted="false">Unpin shot</string>
     <string name="confirm_hide_shot" formatted="false">Unpin</string>
     <string name="connection_lost">The network connection was lost</string>
+    <string name="contributors_empty">No contributors</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="current_password_hint">Current password</string>
     <string name="days">d</string>
@@ -101,6 +107,7 @@
     <string name="entered_just_now">Entered just now</string>
     <string name="entered_long_time_ago">Entered many days ago</string>
     <string name="entered_minutes_ago">Entered %d minutes ago</string>
+    <string name="error_adding_contributor">You can add up to  100 contributors</string>
     <string name="error_deleted_shot">This shot was deleted</string>
     <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
     <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
@@ -218,12 +225,13 @@
     <string name="new_shot_placeholder">Shoot something…</string>
     <string name="new_shot_repeated">Whoops! You already shot that</string>
     <string name="new_stream_description_label">Description</string>
-    <string name="new_stream_short_title_label">Short title</string>
     <string name="new_stream_title_label">Title</string>
     <string name="new_topic" formatted="false">New message…</string>
     <string name="next">Next</string>
+    <string name="niced_by">Niced by </string>
     <string name="niced_shot_activity">Niced your shot</string>
     <string name="niced_shot_activity_with_comment">Niced: </string>
+    <string name="nicers">Nicers</string>
     <plurals name="nice_count_pattern">
     <item quantity="one">
             %d nice
@@ -298,6 +306,7 @@
     <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
     <string name="reset_password_send_email">Send a Password Reset Email</string>
     <string name="restore_stream_label">Restore stream</string>
+    <string name="restore_stream_snackbar_action">Restore</string>
     <string name="seconds">s</string>
     <string name="shared_shot_activity">Shared %s\'s shot</string>
     <string name="shared_shot_activity_with_comment">Shared: </string>
@@ -335,6 +344,8 @@
     <string name="stream_notification_confirmation_no">Nope</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_participants_following_number">following %d</string>
+    <string name="stream_removed_feedback">Stream removed</string>
+    <string name="stream_restored_feedback">Stream restored</string>
     <string name="stream_subtitle">following %d</string>
     <string name="stream_subtitle_pattern_multiple_participants">following %1$s of %2$s participants</string>
     <string name="stream_timeline_add_favorite">Add to Favorites</string>
@@ -349,6 +360,7 @@
     <string name="title_activity_all_participants">All Participants</string>
     <string name="title_activity_all_shots">All shots</string>
     <string name="title_activity_change_password">Change Password</string>
+    <string name="title_activity_contributors">Contributors</string>
     <string name="title_activity_email_confirmation">Email</string>
     <string name="title_activity_listing">Streams</string>
     <string name="title_activity_login_email">Sign In</string>
@@ -391,18 +403,4 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
-    <string name="nicers">Nicers</string>
-    <string name="niced_by">"Niced by "</string>
-    <string name="contributors_empty">No contributors</string>
-    <string name="add_contributor_button">Add contributor</string>
-    <string name="title_activity_contributors">Contributors</string>
-    <string name="activity_find_contributors_hint">Search</string>
-    <string name="error_adding_contributor">Cannot add more than 100 contributors</string>
-    <string name="add_contributor_text">Add contributors to increase visibility of their shots</string>
-    <string name="add_contributor">Add</string>
-    <string name="added_contributor">Added</string>
-    <string name="add_contributor_confirmation_message">Add %s?</string>
-    <string name="stream_restored_feedback">Stream restored</string>
-    <string name="stream_removed_feedback">Stream removed</string>
-    <string name="restore_stream_snackbar_action">Restore</string>
 </resources>
