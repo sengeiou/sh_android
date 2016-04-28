@@ -339,6 +339,15 @@ public class StreamDetailPresenterTest {
         verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
     }
 
+    @Test public void shouldShowPictureIfNotStreamPictureAndImAuthor() throws Exception {
+        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+        setupStreamInfoCallback();
+
+        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+        verify(streamDetailView).showPicture();
+    }
+
     private void setupRemovedStreamInfoCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
