@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -18,17 +19,15 @@ import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -81,7 +80,8 @@ public class StreamsListInteractorTest {
         setupLocalRepositoryReturnsCurrentUser();
     }
 
-    @Test public void shouldCallbackTwoStreamResultsFirstWhenLocalRepositoryReturnsTwoStreamResults() throws Exception {
+    @Test public void shouldCallbackTwoStreamResultsFirstWhenLocalRepositoryReturnsTwoStreamResults()
+      throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
@@ -90,7 +90,8 @@ public class StreamsListInteractorTest {
         assertThat(spyCallback.firstResult().getStreamSearchResults()).hasSize(2);
     }
 
-    @Test public void shouldLoadRemoteStreamsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
+    @Test
+    public void shouldLoadRemoteStreamsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
       throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(SECONDS_AGO_31);
@@ -100,7 +101,8 @@ public class StreamsListInteractorTest {
         verify(remoteStreamSearchRepository).getDefaultStreams(anyString());
     }
 
-    @Test public void shouldNotLoadRemoteStreamsWhenRefreshLessThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
+    @Test
+    public void shouldNotLoadRemoteStreamsWhenRefreshLessThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
       throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(SECONDS_AGO_29);
@@ -171,13 +173,13 @@ public class StreamsListInteractorTest {
 
     @Test public void shouldNotifyErrorCallbackWhenRefreshRemoteFails() throws Exception {
         setupNeedsRefresh();
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new com.shootr.mobile.domain.exception.ShootrException(
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenThrow(new ShootrException(
           "test exception") {
         });
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
-        verify(dummyErrorCallback).onError(any(com.shootr.mobile.domain.exception.ShootrException.class));
+        verify(dummyErrorCallback).onError(any(ShootrException.class));
     }
 
     private void setupNeedsRefresh() {

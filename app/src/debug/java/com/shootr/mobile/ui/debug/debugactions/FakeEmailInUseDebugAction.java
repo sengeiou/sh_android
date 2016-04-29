@@ -17,19 +17,17 @@ public class FakeEmailInUseDebugAction extends ContextualDebugActions.DebugActio
         this.jsonAdapter = jsonAdapter;
     }
 
-    @Override
-    public String name() {
+    @Override public String name() {
         return "Fake Email in use";
     }
 
-    @Override
-    public void run(EmailRegistrationActivity activity) {
+    @Override public void run(EmailRegistrationActivity activity) {
         ErrorResource errorResource = new ErrorResource();
         errorResource.setCode(ErrorInfo.EmailAlreadyExistsException.code());
         errorResource.setStatus(ErrorInfo.EmailAlreadyExistsException.httpCode());
 
         ResponseFaker.setNextFakeResponse(new JsonFakeResponse(jsonAdapter,
-                errorResource,
-                ErrorInfo.EmailAlreadyExistsException.httpCode()));
+          errorResource,
+          ErrorInfo.EmailAlreadyExistsException.httpCode()));
     }
 }

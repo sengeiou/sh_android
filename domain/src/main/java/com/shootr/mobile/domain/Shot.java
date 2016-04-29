@@ -180,7 +180,9 @@ public class Shot {
         if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) return false;
         if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
         if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
-        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) return false;
+        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) {
+            return false;
+        }
         if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
           : shot.parentShotUserId != null) {
             return false;
@@ -245,15 +247,6 @@ public class Shot {
 
         private String idStream;
         private String streamTitle;
-        private String streamShortTitle;
-
-        public String getStreamShortTitle() {
-            return streamShortTitle;
-        }
-
-        public void setStreamShortTitle(String streamShortTitle) {
-            this.streamShortTitle = streamShortTitle;
-        }
 
         public String getStreamTitle() {
             return streamTitle;

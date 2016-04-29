@@ -9,16 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.Truss;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public final class ExternalIntentActivity extends Activity implements Toolbar.OnMenuItemClickListener {
@@ -42,8 +39,7 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
 
     private Intent baseIntent;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.debug_external_intent_activity);
         ButterKnife.bind(this);
@@ -58,8 +54,7 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
         fillFlags();
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
+    @Override public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.debug_launch:
                 if (Intents.maybeStartActivity(this, baseIntent)) {
@@ -100,7 +95,7 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
             CharSequence valueString;
             if (value.getClass().isArray()) {
                 valueString = Arrays.toString((Object[]) value);
-            }else if(value instanceof Intent) {
+            } else if (value instanceof Intent) {
                 valueString = parseBundle(((Intent) value).getExtras());
             } else {
                 valueString = value.toString();

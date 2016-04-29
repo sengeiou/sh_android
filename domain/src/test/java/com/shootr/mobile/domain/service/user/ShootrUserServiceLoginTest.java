@@ -3,15 +3,17 @@ package com.shootr.mobile.domain.service.user;
 import com.shootr.mobile.domain.LoginResult;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
+import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,6 +38,8 @@ public class ShootrUserServiceLoginTest {
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
+    @Mock NicerRepository nicerRepository;
+    @Mock NiceShotRepository localNiceShotRepository;
 
     private ShootrUserService shootrUserService;
 
@@ -51,7 +55,7 @@ public class ShootrUserServiceLoginTest {
           remoteStreamRepository,
           remoteUserRepository,
           resetPasswordEmailGateway,
-          databaseUtils);
+          databaseUtils, nicerRepository, localNiceShotRepository);
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws Exception {
@@ -86,6 +90,22 @@ public class ShootrUserServiceLoginTest {
         when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
+    }
+
+    @Test public void shouldDownloadNicersWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultCorrect());
+
+        shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
+
+        verify(nicerRepository).getNices(anyString());
+    }
+
+    @Test public void shouldStoreNicesWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultCorrect());
+
+        shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
+
+        verify(localNiceShotRepository).markAll(anyList());
     }
 
     private LoginResult loginResultWithoutStream() {

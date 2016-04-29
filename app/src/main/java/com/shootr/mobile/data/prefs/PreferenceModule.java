@@ -1,17 +1,13 @@
 package com.shootr.mobile.data.prefs;
 
 import android.content.SharedPreferences;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
-        library = true,
-        complete = false
-)
-public class PreferenceModule {
+  library = true,
+  complete = false) public class PreferenceModule {
 
     private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
 
@@ -33,13 +29,11 @@ public class PreferenceModule {
         return new IntPreference(preferences, "preferences_database_version", 0);
     }
 
-    @Provides @Singleton @ActivityBadgeCount IntPreference provideActivityBadgeCount(
-      SharedPreferences preferences) {
+    @Provides @Singleton @ActivityBadgeCount IntPreference provideActivityBadgeCount(SharedPreferences preferences) {
         return new IntPreference(preferences, "activity_badge_count", 0);
     }
 
-    @Provides @Singleton @ShouldShowIntro BooleanPreference provideShouldShowIntro(
-      SharedPreferences preferences) {
+    @Provides @Singleton @ShouldShowIntro BooleanPreference provideShouldShowIntro(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "should_show_intro", true);
     }
 }

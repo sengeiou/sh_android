@@ -21,9 +21,7 @@ public class NestedListView extends ListView implements View.OnTouchListener, Ab
         setOnTouchListener(this);
     }
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,
-      int visibleItemCount, int totalItemCount) {
+    @Override public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (getAdapter() != null && getAdapter().getCount() > MAXIMUM_LIST_ITEMS_VIEWABLE) {
             if (listViewTouchAction == MotionEvent.ACTION_MOVE) {
                 scrollBy(0, -1);
@@ -31,12 +29,10 @@ public class NestedListView extends ListView implements View.OnTouchListener, Ab
         }
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int newHeight = 0;
@@ -46,13 +42,13 @@ public class NestedListView extends ListView implements View.OnTouchListener, Ab
             ListAdapter listAdapter = getAdapter();
             if (listAdapter != null && !listAdapter.isEmpty()) {
                 int listPosition;
-                for (listPosition = 0; listPosition < listAdapter.getCount()
-                  && listPosition < MAXIMUM_LIST_ITEMS_VIEWABLE; listPosition++) {
+                for (listPosition = 0;
+                  listPosition < listAdapter.getCount() && listPosition < MAXIMUM_LIST_ITEMS_VIEWABLE; listPosition++) {
                     View listItem = listAdapter.getView(listPosition, null, this);
                     //now it will not throw a NPE if listItem is a ViewGroup instance
                     if (listItem instanceof ViewGroup) {
-                        listItem.setLayoutParams(new LayoutParams(
-                          LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                        listItem.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                          LayoutParams.WRAP_CONTENT));
                     }
                     listItem.measure(widthMeasureSpec, heightMeasureSpec);
                     newHeight += listItem.getMeasuredHeight();
@@ -70,8 +66,7 @@ public class NestedListView extends ListView implements View.OnTouchListener, Ab
         setMeasuredDimension(getMeasuredWidth(), newHeight);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    @Override public boolean onTouch(View v, MotionEvent event) {
         if (getAdapter() != null && getAdapter().getCount() > MAXIMUM_LIST_ITEMS_VIEWABLE) {
             if (listViewTouchAction == MotionEvent.ACTION_MOVE) {
                 scrollBy(0, 1);

@@ -1,7 +1,6 @@
 package com.shootr.mobile.domain.asserts;
 
 import com.shootr.mobile.domain.StreamTimelineParameters;
-
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 
@@ -22,8 +21,10 @@ public class StreamTimelineParametersAssert
     }
 
     /**
-     * An entry point for TimelineParametersAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
-     * With a static import, one can write directly: <code>assertThat(myTimelineParameters)</code> and get specific
+     * An entry point for TimelineParametersAssert to follow AssertJ standard <code>assertThat()</code>
+     * statements.<br>
+     * With a static import, one can write directly: <code>assertThat(myTimelineParameters)</code> and get
+     * specific
      * assertion with code completion.
      *
      * @param actual the TimelineParameters we want to make assertions on.

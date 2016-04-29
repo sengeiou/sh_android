@@ -10,12 +10,10 @@ import timber.log.Timber;
 
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+    @Override public void onReceive(Context context, Intent intent) {
         Timber.d("Received GCM broadcast intent. Launching IntentService");
         ComponentName comp = new ComponentName(context.getPackageName(), GCMIntentService.class.getName());
-        startWakefulService(context,intent.setComponent(comp));
+        startWakefulService(context, intent.setComponent(comp));
         setResultCode(Activity.RESULT_OK);
     }
-
 }

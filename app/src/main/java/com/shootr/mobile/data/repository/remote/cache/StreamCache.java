@@ -2,18 +2,15 @@ package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.mobile.domain.Stream;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class StreamCache {
+@Singleton public class StreamCache {
 
-    public static final int GET_STREAM_KEEP_ALIVE_SECONDS =  60 * 60 * 1000;
+    public static final int GET_STREAM_KEEP_ALIVE_SECONDS = 60 * 60 * 1000;
     private final QNCache<Stream> streamCache;
 
-    @Inject
-    public StreamCache(QNCache streamCache) {
+    @Inject public StreamCache(QNCache streamCache) {
         this.streamCache = streamCache;
     }
 
@@ -29,5 +26,4 @@ public class StreamCache {
     public void putStream(Stream stream) {
         streamCache.set(stream.getId(), stream, GET_STREAM_KEEP_ALIVE_SECONDS);
     }
-
 }

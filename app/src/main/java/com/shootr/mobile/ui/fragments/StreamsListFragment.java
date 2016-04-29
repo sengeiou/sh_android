@@ -13,7 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -34,15 +37,8 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
@@ -69,13 +65,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     //region Lifecycle
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_streams_list, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         initializePresenter();
@@ -83,8 +77,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         analyticsTool.analyticsStart(getContext(), analyticsScreenStreamList);
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
@@ -98,13 +91,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
         adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
-            @Override
-            public void onStreamClick(StreamResultModel stream) {
+            @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
 
-            @Override
-            public boolean onStreamLongClick(StreamResultModel stream) {
+            @Override public boolean onStreamLongClick(StreamResultModel stream) {
                 presenter.onStreamLongClicked(stream);
                 return true;
             }
@@ -142,8 +133,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     //region Activity methods
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.streams_list, menu);
     }
 
@@ -157,8 +147,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         }
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         presenter.resume();
         redrawStreamListWithCurrentValues();
@@ -168,14 +157,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         presenter.pause();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
             String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
@@ -184,30 +171,27 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
-        return new CustomContextMenu.Builder(getActivity())
-          .addAction(R.string.add_to_favorites_menu_title, new Runnable() {
-            @Override
-            public void run() {
-                presenter.addToFavorites(stream);
+        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.add_to_favorites_menu_title,
+          new Runnable() {
+              @Override public void run() {
+                  presenter.addToFavorites(stream);
+              }
+          }).addAction(R.string.share_via_shootr, new Runnable() {
+            @Override public void run() {
+                presenter.shareStream(stream);
             }
-        })
-          .addAction(R.string.share_via_shootr, new Runnable() {
-              @Override public void run() {
-                  presenter.shareStream(stream);
-              }
-          })
-          .addAction(R.string.share_via, new Runnable() {
-              @Override public void run() {
-                  shareStream(stream);
-              }
-          });
+        }).addAction(R.string.share_via, new Runnable() {
+            @Override public void run() {
+                shareStream(stream);
+            }
+        });
     }
 
     private void shareStream(StreamResultModel stream) {
         Intent shareIntent = intentFactory.shareStreamIntent(getActivity(), stream.getStreamModel());
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
-    
+
     //region View methods
     @Override public void renderStream(List<StreamResultModel> streams) {
         adapter.setStreams(streams);
@@ -229,8 +213,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
 
-    @Override
-    public void showAddedToFavorites() {
+    @Override public void showAddedToFavorites() {
         feedbackMessage.show(getView(), addedToFavorites);
     }
 

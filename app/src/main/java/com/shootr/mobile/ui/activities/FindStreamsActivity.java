@@ -11,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
@@ -24,15 +26,9 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.io.Serializable;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements FindStreamsView {
 
@@ -62,16 +58,14 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     private void setupQueryTextListener() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String queryText) {
+            @Override public boolean onQueryTextSubmit(String queryText) {
                 currentSearchQuery = queryText;
                 searchStreams();
                 hideKeyboard();
                 return true;
             }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
+            @Override public boolean onQueryTextChange(String s) {
                 return false;
             }
         });
@@ -82,19 +76,18 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
 
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        SearchView.SearchAutoComplete searchAutoComplete =
+          (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
     }
 
     private void initializeStreamListAdapter() {
         adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
-            @Override
-            public void onStreamClick(StreamResultModel stream) {
+            @Override public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);
             }
 
-            @Override
-            public boolean onStreamLongClick(StreamResultModel stream) {
+            @Override public boolean onStreamLongClick(StreamResultModel stream) {
                 openContextualMenu(stream);
                 return true;
             }
@@ -104,20 +97,18 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     private void openContextualMenu(final StreamResultModel stream) {
         new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title, new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 findStreamsPresenter.addToFavorites(stream);
             }
         }).addAction(R.string.share_via_shootr, new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.shareStream(stream);
             }
-        })
-          .addAction(R.string.share_via, new Runnable() {
-              @Override public void run() {
-                  shareStream(stream);
-              }
-          }).show();
+        }).addAction(R.string.share_via, new Runnable() {
+            @Override public void run() {
+                shareStream(stream);
+            }
+        }).show();
     }
 
     private void shareStream(StreamResultModel stream) {
@@ -167,20 +158,18 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         return true;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
         outState.putString(EXTRA_SEARCH_TEXT, currentSearchQuery);
     }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    @Override protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         initializePresenter();
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
-        List<StreamResultModel> restoredResults = (List<StreamResultModel>) savedInstanceState.getSerializable(
-          EXTRA_RESULTS);
+        List<StreamResultModel> restoredResults =
+          (List<StreamResultModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
         findStreamsPresenter.restoreStreams(restoredResults);
     }
 
@@ -188,14 +177,12 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         findStreamsPresenter.initialize(this);
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         findStreamsPresenter.resume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         findStreamsPresenter.pause();
     }
@@ -244,12 +231,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         feedbackMessage.show(getView(), errorMessage);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String streamShortTitle, String authorId) {
-        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamShortTitle, authorId));
+    @Override public void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle, authorId));
     }
 
-    @Override
-    public void showAddedToFavorites() {
+    @Override public void showAddedToFavorites() {
         feedbackMessage.show(getView(), addedToFavorites);
     }
 
@@ -258,5 +244,4 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     //endregion
-
 }

@@ -6,14 +6,12 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
-
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -32,7 +30,10 @@ public class GetBlockedIdUsersInteractorTest {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetBlockedIdUsersInteractor(interactorHandler, postExecutionThread, localFollowRepository, remoteFollowRepository);
+        interactor = new GetBlockedIdUsersInteractor(interactorHandler,
+          postExecutionThread,
+          localFollowRepository,
+          remoteFollowRepository);
     }
 
     @Test public void shouldNotLoadRemoteBlockedIdUsersIfThereAreLocalBlockedIdUsers() throws Exception {
@@ -40,7 +41,7 @@ public class GetBlockedIdUsersInteractorTest {
 
         interactor.loadBlockedIdUsers(callback, errorCallback);
 
-        verify(remoteFollowRepository,never()).getBlockedIdUsers();
+        verify(remoteFollowRepository, never()).getBlockedIdUsers();
     }
 
     @Test public void shouldLoadRemoteBlockedIdUsersIfThereAreNotLocalBlockedIdUsers() throws Exception {
@@ -50,5 +51,4 @@ public class GetBlockedIdUsersInteractorTest {
 
         verify(remoteFollowRepository).getBlockedIdUsers();
     }
-
 }

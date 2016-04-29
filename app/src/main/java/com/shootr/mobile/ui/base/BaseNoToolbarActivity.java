@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.AppContainer;
-
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 public class BaseNoToolbarActivity extends ActionBarActivity {
 
@@ -18,8 +15,7 @@ public class BaseNoToolbarActivity extends ActionBarActivity {
 
     private ViewGroup container;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getObjectGraph().inject(this);
         container = appContainer.get(this);

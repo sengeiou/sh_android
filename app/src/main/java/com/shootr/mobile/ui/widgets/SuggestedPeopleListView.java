@@ -10,14 +10,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class SuggestedPeopleListView extends FrameLayout {
 
@@ -78,7 +76,7 @@ public class SuggestedPeopleListView extends FrameLayout {
             setItemBackgroundRetainPaddings(itemView);
             suggestedPeopleList.addView(itemView);
         }
-        if(userListAdapter.getCount() > 0) {
+        if (userListAdapter.getCount() > 0) {
             suggestedPeopleTitle.setVisibility(VISIBLE);
         } else {
             suggestedPeopleTitle.setVisibility(GONE);
@@ -93,5 +91,4 @@ public class SuggestedPeopleListView extends FrameLayout {
         itemView.setBackgroundDrawable(selectableBackground.getConstantState().newDrawable());
         itemView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
-
 }

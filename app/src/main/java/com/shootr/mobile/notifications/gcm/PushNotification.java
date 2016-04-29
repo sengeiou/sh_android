@@ -11,9 +11,7 @@ public class PushNotification {
     private boolean silent;
     private int badgeIncrement;
 
-    public PushNotification(NotificationValues notificationValues,
-      Parameters parameters,
-      boolean silent,
+    public PushNotification(NotificationValues notificationValues, Parameters parameters, boolean silent,
       int badgeIncrement) {
         this.notificationValues = notificationValues;
         this.parameters = parameters;
@@ -37,8 +35,7 @@ public class PushNotification {
         return badgeIncrement;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "PushNotification{" +
           "notificationValues=" + notificationValues +
           ", parameters=" + parameters +
@@ -59,8 +56,7 @@ public class PushNotification {
         private String tickerText;
         private String optionalLongText;
 
-        @Override
-        public String toString() {
+        @Override public String toString() {
             return "NotificationValues{" +
               "title='" + title + '\'' +
               ", contentText='" + contentText + '\'' +
@@ -126,7 +122,7 @@ public class PushNotification {
         private String idShot;
         private String idStream;
         private String idActivity;
-        private String shortTitle;
+        private String title;
         private String idStreamHolder;
 
         public int getPushType() {
@@ -177,8 +173,7 @@ public class PushNotification {
             this.idActivity = idActivity;
         }
 
-        @Override
-        public String toString() {
+        @Override public String toString() {
             return "Parameters{" +
               "pushType=" + pushType +
               ", activityType='" + activityType + '\'' +
@@ -189,12 +184,12 @@ public class PushNotification {
               '}';
         }
 
-        public String getShortTitle() {
-            return shortTitle;
+        public String getTitle() {
+            return title;
         }
 
-        public void setShortTitle(String shortTitle) {
-            this.shortTitle = shortTitle;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String getIdStreamHolder() {

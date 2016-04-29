@@ -13,6 +13,30 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.10.0] - 2016-04-29
+
+### Changed
+- Cuando hay multiples push te redirige a activities
+- Se incrementa la versión de gradle a 2.0
+- Se inicia el Custom Error Activity antes que el Crashlytics
+- Started shooting redirige al detalle del shot
+- Refactor de shotDetail
+- Refactor StreamDetail
+- Se cambia el targetApi del blur image debido a problemas con el renderScript
+- Aumenta versión de crashlytics
+
+### Added
+- Nicers
+- Contributors
+- Threads para cargar hasta 10 shots padres en el detalle de un stream
+- Material Stream letters (para streams sin foto)
+
+### Removed
+- Se elimina el short title de un stream
+
+### Fixed
+- En caso de error al mostrar el topic Message se muestra como un feedback de manera corta
+
 ## [1.9.0] - 2016-04-11
 
 ### Changed

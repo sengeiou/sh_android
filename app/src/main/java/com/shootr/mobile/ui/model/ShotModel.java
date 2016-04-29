@@ -2,20 +2,21 @@ package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class ShotModel implements Serializable{
+public class ShotModel implements Serializable {
 
     //Shot attributes
     private String idShot;
     private String comment;
     private String image;
     private Date birth;
+    private List<String> nicers;
     //User attributes
     private String idUser;
     private String userName;
     private String photo;
     private String streamId;
-    private String streamShortTitle;
     private String streamTitle;
 
     private String replyUsername;
@@ -84,14 +85,6 @@ public class ShotModel implements Serializable{
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {
@@ -180,5 +173,13 @@ public class ShotModel implements Serializable{
 
     public void setHide(Long hide) {
         this.hide = hide;
+    }
+
+    public List<String> getNicers() {
+        return nicers;
+    }
+
+    public void setNicers(List<String> nicers) {
+        this.nicers = nicers;
     }
 }

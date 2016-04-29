@@ -9,15 +9,13 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.PinShotView;
-
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -43,7 +41,8 @@ public class PinShotPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shotModelMapper = new ShotModelMapper();
-        presenter = new PinShotPresenter(pinShotInteractor, getShotDetailInteractor, sessionRepository, shotModelMapper);
+        presenter =
+          new PinShotPresenter(pinShotInteractor, getShotDetailInteractor, sessionRepository, shotModelMapper);
         presenter.setView(pinShotView);
     }
 
@@ -126,7 +125,6 @@ public class PinShotPresenterTest {
         presenter.resume();
 
         verify(pinShotView).hidePinShotButton();
-
     }
 
     @Test public void shouldNotShowPinShotButtonWhenCallResumeAndShotModelIsNull() throws Exception {
@@ -150,8 +148,7 @@ public class PinShotPresenterTest {
     public void setupPinShotCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
@@ -166,9 +163,8 @@ public class PinShotPresenterTest {
                 callback.onLoaded(shotDetail(profileHidden));
                 return null;
             }
-        }).when(getShotDetailInteractor).loadShotDetail(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getShotDetailInteractor)
+          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private ShotModel shotModel(Long hidden) {
@@ -180,13 +176,13 @@ public class PinShotPresenterTest {
     }
 
     private ShotDetail shotDetail(Long profileHidden) {
-        ShotDetail shotDetail= new ShotDetail();
+        ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot(profileHidden));
         shotDetail.setReplies(Collections.<Shot>emptyList());
         return shotDetail;
     }
 
-    private Shot shot(Long profileHidden){
+    private Shot shot(Long profileHidden) {
         Shot shot = new Shot();
         shot.setIdShot(ID_SHOT);
         shot.setProfileHidden(profileHidden);

@@ -4,10 +4,8 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.UserManager;
-
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class DatabaseUserDataSource implements UserDataSource {
@@ -55,8 +53,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         return follow != null;
     }
 
-    @Override
-    public UserEntity getUserByUsername(String username) {
+    @Override public UserEntity getUserByUsername(String username) {
         return userManager.getUserByUsername(username);
     }
 
@@ -68,8 +65,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         throw new IllegalStateException("Find Participants has no local implementation");
     }
 
-    @Override
-    public void updateWatch(UserEntity userEntity) {
+    @Override public void updateWatch(UserEntity userEntity) {
         //TODO save only watching fields?
         userManager.saveUser(userEntity);
     }

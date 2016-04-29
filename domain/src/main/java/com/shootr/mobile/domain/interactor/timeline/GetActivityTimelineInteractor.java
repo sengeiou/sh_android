@@ -9,11 +9,9 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetActivityTimelineInteractor implements Interactor {
@@ -29,7 +27,7 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     @Inject
     public GetActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-                                         @Local ActivityRepository localActivityRepository, SessionRepository sessionRepository) {
+      @Local ActivityRepository localActivityRepository, SessionRepository sessionRepository) {
         this.localActivityRepository = localActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -37,15 +35,15 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadActivityTimeline(Boolean isUserActivityTimeline, String language, Callback<ActivityTimeline> callback) {
+    public void loadActivityTimeline(Boolean isUserActivityTimeline, String language,
+      Callback<ActivityTimeline> callback) {
         this.isUserActivityTimeline = isUserActivityTimeline;
         this.locale = language;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Exception {
+    @Override public void execute() throws Exception {
         loadLocalActivities();
     }
 
@@ -99,9 +97,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
-        return activity
-                .getIdUser() != null && activity
-                .getIdUser().equals(currentUserId);
+        return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
     }
 
     private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
@@ -116,8 +112,7 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     private void notifyLoaded(final ActivityTimeline timeline) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(timeline);
             }
         });

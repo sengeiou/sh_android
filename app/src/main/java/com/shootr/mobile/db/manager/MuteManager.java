@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.MuteStreamEntityDBMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class MuteManager extends AbstractManager {
@@ -26,7 +23,7 @@ public class MuteManager extends AbstractManager {
     }
 
     public void mute(MuteStreamEntity muteStreamEntity) {
-        if(muteStreamEntity!=null){
+        if (muteStreamEntity != null) {
             ContentValues contentValues = muteStreamEntityDBMapper.toContentValues(muteStreamEntity);
             getWritableDatabase().insertWithOnConflict(MUTE_TABLE,
               null,
@@ -37,19 +34,25 @@ public class MuteManager extends AbstractManager {
 
     public void unmute(String idStream) {
         String whereClause = ID_MUTED + "=?";
-        String[] whereArgs = new String[]{idStream};
+        String[] whereArgs = new String[] { idStream };
         getWritableDatabase().delete(MUTE_TABLE, whereClause, whereArgs);
     }
 
     public List<MuteStreamEntity> getMutes() {
         List<MuteStreamEntity> muteStreamEntities = new ArrayList<>();
-        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'S' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
-        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION,args,null,null,null,null);
-        if(c.getCount()>0){
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='N' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "= 'S' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='U'";
+        Cursor c =
+          getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION, args, null, null, null, null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 muteStreamEntities.add(muteStreamEntityDBMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return muteStreamEntities;
@@ -57,13 +60,19 @@ public class MuteManager extends AbstractManager {
 
     public List<MuteStreamEntity> getMutesNotSynchronized() {
         List<MuteStreamEntity> mutesToUpdate = new ArrayList<>();
-        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
-        Cursor c = getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION,args,null,null,null,null);
-        if(c.getCount()>0){
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='N' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "= 'D' OR "
+          + DatabaseContract.SyncColumns.SYNCHRONIZED
+          + "='U'";
+        Cursor c =
+          getReadableDatabase().query(MUTE_TABLE, DatabaseContract.MuteTable.PROJECTION, args, null, null, null, null);
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            do{
+            do {
                 mutesToUpdate.add(muteStreamEntityDBMapper.fromCursor(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return mutesToUpdate;

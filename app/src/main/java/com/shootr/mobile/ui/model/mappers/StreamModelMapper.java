@@ -3,10 +3,8 @@ package com.shootr.mobile.ui.model.mappers;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamModelMapper {
@@ -22,7 +20,6 @@ public class StreamModelMapper {
         streamModel.setIdStream(stream.getId());
         streamModel.setTitle(stream.getTitle());
         streamModel.setPicture(stream.getPicture());
-        streamModel.setShortTitle(stream.getShortTitle());
         streamModel.setAmIAuthor(stream.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         streamModel.setAuthorId(stream.getAuthorId());
         streamModel.setAuthorUsername(stream.getAuthorUsername());
@@ -32,9 +29,9 @@ public class StreamModelMapper {
         streamModel.setRemoved(stream.isRemoved());
         streamModel.setTotalFavorites(stream.getTotalFavorites());
         streamModel.setTotalWatchers(stream.getTotalWatchers());
-        streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null? stream.getHistoricWatchers(): 0);
-        streamModel.setTotalShots(stream.getTotalShots() != null? stream.getTotalShots(): 0);
-        streamModel.setUniqueShots(stream.getUniqueShots() != null? stream.getUniqueShots(): 0);
+        streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null ? stream.getHistoricWatchers() : 0);
+        streamModel.setTotalShots(stream.getTotalShots() != null ? stream.getTotalShots() : 0);
+        streamModel.setUniqueShots(stream.getUniqueShots() != null ? stream.getUniqueShots() : 0);
         return streamModel;
     }
 

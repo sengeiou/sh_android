@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
@@ -17,16 +21,8 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
-
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnLongClick;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
 
@@ -62,44 +58,38 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         supportPresenter.initialize(this);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
     //endregion
 
     //region Click listeners
-    @OnClick(R.id.support_terms_service_text)
-    public void onTermsAndServiceClick() {
+    @OnClick(R.id.support_terms_service_text) public void onTermsAndServiceClick() {
         String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
         Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
         Intents.maybeStartActivity(this, termsIntent);
     }
 
-    @OnClick(R.id.privacy_policy_text)
-    public void onPrivacyPolicyClick() {
+    @OnClick(R.id.privacy_policy_text) public void onPrivacyPolicyClick() {
         String termsUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
         Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
         Intents.maybeStartActivity(this, termsIntent);
     }
 
-    @OnClick(R.id.support_blog_text)
-    public void onBlogClick() {
+    @OnClick(R.id.support_blog_text) public void onBlogClick() {
         supportPresenter.blogClicked();
     }
 
-    @OnClick(R.id.support_help_text)
-    public void onHelpClick() {
+    @OnClick(R.id.support_help_text) public void onHelpClick() {
         supportPresenter.helpClicked();
     }
 
-    @OnLongClick(R.id.support_version_container)
-    public boolean onVersionLongClick() {
+    @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
         Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, EasterEggActivity.class));
         return true;
@@ -115,7 +105,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     }
 
     @Override public void goToStream(Stream blog) {
-        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getShortTitle(), blog.getAuthorId());
+        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getTitle(), blog.getAuthorId());
         startActivity(intent);
     }
 
@@ -123,8 +113,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         supportPresenter.setUpAlertDialog(Locale.getDefault().getLanguage());
     }
 
-    @Override
-    public void showAlertDialog() {
+    @Override public void showAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //

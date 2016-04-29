@@ -128,7 +128,6 @@ public class GCMIntentService extends IntentService {
                 setupGoToProfileNotification(push);
                 break;
             case ActivityType.STREAM_FAVORITED:
-            case ActivityType.STARTED_SHOOTING:
             case ActivityType.CHECKIN:
             case ActivityType.SHARE_STREAM:
             case ActivityType.OPENED_STREAM:
@@ -138,6 +137,7 @@ public class GCMIntentService extends IntentService {
             case ActivityType.SHARE_SHOT:
             case ActivityType.MENTION:
             case ActivityType.REPLY_SHOT:
+            case ActivityType.STARTED_SHOOTING:
                 setupGoToShotDetailNotification(push);
                 break;
             default:
@@ -152,10 +152,10 @@ public class GCMIntentService extends IntentService {
 
     private void setupGoToStreamTimelineNotification(PushNotification push) {
         String idStream = push.getParameters().getIdStream();
-        String shortTitle = push.getParameters().getShortTitle();
+        String title = push.getParameters().getTitle();
         String idStreamHolder = push.getParameters().getIdStreamHolder();
         activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
-          checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(shortTitle));
+          checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(title));
     }
 
     private void setupGoToShotDetailNotification(PushNotification push) {

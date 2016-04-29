@@ -6,16 +6,14 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.UserRepository;
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -36,8 +34,10 @@ public class GetPeopleInteractorTest {
         MockitoAnnotations.initMocks(this);
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        getPeopleInteractor =
-          new GetPeopleInteractor(interactorHandler, postExecutionThread, remoteUserRepository, localUserRepository);
+        getPeopleInteractor = new GetPeopleInteractor(interactorHandler,
+          postExecutionThread,
+          remoteUserRepository,
+          localUserRepository);
     }
 
     @Test public void resultsAreSortedByUsername() throws Exception {

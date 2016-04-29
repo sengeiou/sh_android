@@ -5,7 +5,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.mobile.constant.Constants;
 import com.shootr.mobile.data.dagger.ApplicationContext;
@@ -15,13 +14,10 @@ import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.notifications.gcm.GCMConstants;
 import com.shootr.mobile.util.Version;
-
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class AndroidDeviceFactory implements DeviceFactory {
@@ -31,10 +27,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
     private final Version version;
     private final LocaleProvider localeProvider;
 
-    @Inject
-    public AndroidDeviceFactory(GoogleCloudMessaging gcm,
-      @ApplicationContext Context context,
-      Version version,
+    @Inject public AndroidDeviceFactory(GoogleCloudMessaging gcm, @ApplicationContext Context context, Version version,
       LocaleProvider localeProvider) {
         this.gcm = gcm;
         this.context = context;
@@ -42,8 +35,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
         this.localeProvider = localeProvider;
     }
 
-    @Override
-    public Device createDevice() {
+    @Override public Device createDevice() {
         Device device = new Device();
         device.setUniqueDevideID(generateUniqueDeviceId());
         device.setToken(getNewGcmToken());
@@ -55,8 +47,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
         return device;
     }
 
-    @Override
-    public Device updateDevice(Device device) {
+    @Override public Device updateDevice(Device device) {
         if (needsNewGcmToken(device)) {
             device.setToken(getNewGcmToken());
         }

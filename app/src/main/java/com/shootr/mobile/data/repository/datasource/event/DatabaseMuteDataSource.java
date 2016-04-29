@@ -2,9 +2,7 @@ package com.shootr.mobile.data.repository.datasource.event;
 
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.db.manager.MuteManager;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class DatabaseMuteDataSource implements MuteDataSource {

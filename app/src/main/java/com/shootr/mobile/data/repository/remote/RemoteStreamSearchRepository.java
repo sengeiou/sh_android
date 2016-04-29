@@ -12,11 +12,9 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 
 public class RemoteStreamSearchRepository implements StreamSearchRepository {
@@ -30,7 +28,8 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
 
     @Inject public RemoteStreamSearchRepository(DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource,
       @Remote StreamListDataSource remoteStreamListDataSource, @Local WatchersRepository localWatchersRepository,
-      StreamEntityMapper streamEntityMapper, @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource) {
+      StreamEntityMapper streamEntityMapper, @Local StreamDataSource localStreamDataSource,
+      @Remote StreamDataSource remoteStreamDataSource) {
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.remoteStreamListDataSource = remoteStreamListDataSource;
         this.localWatchersRepository = localWatchersRepository;
@@ -75,7 +74,6 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setIdStream(streamEntity.getIdStream());
         streamSearchEntity.setIdUser(streamEntity.getIdUser());
         streamSearchEntity.setUserName(streamEntity.getUserName());
-        streamSearchEntity.setShortTitle(streamEntity.getShortTitle());
         streamSearchEntity.setTitle(streamEntity.getTitle());
         streamSearchEntity.setPhoto(streamEntity.getPhoto());
         streamSearchEntity.setNotifyCreation(streamEntity.getNotifyCreation());
@@ -85,7 +83,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setDeleted(streamEntity.getDeleted());
         streamSearchEntity.setModified(streamEntity.getModified());
         streamEntity.setRevision(streamEntity.getRevision());
-        if(watchers.get(streamEntity.getIdStream()) != null) {
+        if (watchers.get(streamEntity.getIdStream()) != null) {
             streamSearchEntity.setTotalFollowingWatchers(watchers.get(streamEntity.getIdStream()));
         }
         return streamSearchEntity;

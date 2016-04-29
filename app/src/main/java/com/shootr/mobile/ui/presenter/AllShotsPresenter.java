@@ -13,9 +13,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class AllShotsPresenter implements Presenter {
@@ -34,16 +32,18 @@ public class AllShotsPresenter implements Presenter {
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
     private boolean hasBeenPaused = false;
-    private Boolean isCurrentUser=false;
+    private Boolean isCurrentUser = false;
 
     @Inject public AllShotsPresenter(GetAllShotsByUserInteractor getAllShotsByUserInteractor,
-      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor,MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor, ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
+      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, MarkNiceShotInteractor markNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor,
+      ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
       ShotModelMapper shotModelMapper) {
         this.getAllShotsByUserInteractor = getAllShotsByUserInteractor;
         this.getOlderAllShotsByUserInteractor = getOlderAllShotsByUserInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
-        this.hideShotInteractor= hideShotInteractor;
+        this.hideShotInteractor = hideShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.shotModelMapper = shotModelMapper;
@@ -53,7 +53,7 @@ public class AllShotsPresenter implements Presenter {
         this.setView(allShotsView);
         this.setUserId(userId);
         this.startLoadingAllShots();
-        this.isCurrentUser=isCurrentUser;
+        this.isCurrentUser = isCurrentUser;
     }
 
     protected void setUserId(String userId) {
@@ -144,10 +144,9 @@ public class AllShotsPresenter implements Presenter {
                 /* no - op */
             }
         });
-
     }
 
-    public void hideShot(String idShot){
+    public void hideShot(String idShot) {
         hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 loadAllShots();

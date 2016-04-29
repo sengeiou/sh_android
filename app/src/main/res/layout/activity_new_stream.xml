@@ -5,120 +5,78 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#d9d9d9" />
+    <View android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#d9d9d9" />
 
-  <ScrollView
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    <ScrollView android:layout_width="fill_parent"
+      android:layout_height="fill_parent">
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
-
-      <com.shootr.mobile.ui.widgets.FloatLabelLayout
-        android:id="@+id/new_stream_title_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
-
-        <EditText
-          android:id="@+id/new_stream_title"
-          android:layout_width="match_parent"
+        <LinearLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/new_stream_title_label"
-          android:imeOptions="actionDone"
-          android:inputType="text|textCapSentences|textNoSuggestions"
-          android:lines="1"
-          android:maxLength="50"
-          android:nextFocusDown="@+id/new_stream_short_title"
-          android:singleLine="true"
-          tools:text="My New Stream" />
+          android:orientation="vertical">
 
-      </com.shootr.mobile.ui.widgets.FloatLabelLayout>
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout android:id="@+id/new_stream_title_label"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="16dp"
+              app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
-        <TextView
-          android:id="@+id/new_stream_title_error"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="4dp"
-          android:layout_marginLeft="@dimen/keyline_1"
-          android:paddingLeft="4dp"
-          android:visibility="visible"
-          tools:text="Error title"
-          style="@style/ErrorSubtitle" />
+                <EditText android:id="@+id/new_stream_title"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/new_stream_title_label"
+                  android:imeOptions="actionDone"
+                  android:inputType="text|textCapSentences|textNoSuggestions"
+                  android:lines="1"
+                  android:maxLength="50"
+                  android:nextFocusDown="@+id/new_stream_description"
+                  android:singleLine="true"
+                  tools:text="My New Stream" />
 
-        <com.shootr.mobile.ui.widgets.FloatLabelLayout
-          android:id="@+id/new_stream_short_title_label"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-          <EditText
-            android:id="@+id/new_stream_short_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/new_stream_short_title_label"
-            android:imeOptions="actionDone"
-            android:inputType="text|textCapSentences|textNoSuggestions"
-            android:lines="1"
-            android:maxLength="20"
-            android:nextFocusDown="@+id/new_stream_description"
-            android:singleLine="true"
-            tools:text="MyNewStream" />
-        </com.shootr.mobile.ui.widgets.FloatLabelLayout>
+            <TextView android:id="@+id/new_stream_title_error"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="4dp"
+              android:layout_marginLeft="@dimen/keyline_1"
+              android:paddingLeft="4dp"
+              android:visibility="visible"
+              tools:text="Error title"
+              style="@style/ErrorSubtitle" />
 
-        <TextView
-          android:id="@+id/new_stream_short_title_warning"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="4dp"
-          android:layout_marginLeft="@dimen/keyline_1"
-          android:paddingLeft="4dp"
-          android:textColor="@color/error"
-          android:textSize="12sp"
-          tools:text="3 to 20 characters" />
+            <com.shootr.mobile.ui.widgets.FloatLabelLayout android:id="@+id/new_stream_description_label"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
-        <com.shootr.mobile.ui.widgets.FloatLabelLayout
-          android:id="@+id/new_stream_description_label"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+                <EditText android:id="@+id/new_stream_description"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/new_stream_description_label"
+                  android:imeOptions="actionDone"
+                  android:inputType="text|textCapSentences|textMultiLine"
+                  android:maxLength="60"
+                  android:lines="2"
+                  android:singleLine="false"
+                  tools:text="New stream description" />
+            </com.shootr.mobile.ui.widgets.FloatLabelLayout>
 
-          <EditText
-            android:id="@+id/new_stream_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/new_stream_description_label"
-            android:imeOptions="actionDone"
-            android:inputType="text|textCapSentences|textMultiLine"
-            android:maxLength="60"
-            android:lines="2"
-            android:singleLine="false"
-            tools:text="New stream description" />
-        </com.shootr.mobile.ui.widgets.FloatLabelLayout>
+            <TextView android:id="@+id/new_stream_description_warning"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="4dp"
+              android:layout_marginLeft="@dimen/keyline_1"
+              android:paddingLeft="4dp"
+              android:textColor="@color/error"
+              android:textSize="12sp"
+              tools:text="Max 60 characters" />
 
-        <TextView
-          android:id="@+id/new_stream_description_warning"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="4dp"
-          android:layout_marginLeft="@dimen/keyline_1"
-          android:paddingLeft="4dp"
-          android:textColor="@color/error"
-          android:textSize="12sp"
-          tools:text="Max 60 characters" />
-
-    </LinearLayout>
-  </ScrollView>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

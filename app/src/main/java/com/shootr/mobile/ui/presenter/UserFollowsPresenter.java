@@ -11,9 +11,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class UserFollowsPresenter implements Presenter {
@@ -143,7 +141,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     public void handleNextRemoteSearch() {
-        if(showingFollowers()) {
+        if (showingFollowers()) {
             nextFollowersSearch();
         } else {
             nextFollowingSearch();

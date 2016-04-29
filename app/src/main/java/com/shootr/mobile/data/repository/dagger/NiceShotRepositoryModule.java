@@ -5,7 +5,6 @@ import com.shootr.mobile.data.repository.remote.RemoteNiceShotRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
 import com.shootr.mobile.domain.repository.Remote;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,18 +13,15 @@ import dagger.Provides;
 
   },
   complete = false,
-  library = true)
-public class NiceShotRepositoryModule {
+  library = true) public class NiceShotRepositoryModule {
 
-    @Provides
-    @Local
-    NiceShotRepository provideLocalNiceShotRepository(LocalNiceShotRepository localNiceShotRepository) {
+    @Provides @Local NiceShotRepository provideLocalNiceShotRepository(
+      LocalNiceShotRepository localNiceShotRepository) {
         return localNiceShotRepository;
     }
 
-    @Provides
-    @Remote
-    NiceShotRepository provideRemoteNiceShotRepository(RemoteNiceShotRepository remoteNiceShotRepository) {
+    @Provides @Remote NiceShotRepository provideRemoteNiceShotRepository(
+      RemoteNiceShotRepository remoteNiceShotRepository) {
         return remoteNiceShotRepository;
     }
 }

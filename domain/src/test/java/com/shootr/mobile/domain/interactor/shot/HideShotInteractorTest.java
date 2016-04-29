@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 public class HideShotInteractorTest {
 
-    private static final String SHOT_ID ="shot_id" ;
+    private static final String SHOT_ID = "shot_id";
     private HideShotInteractor hideShotInteractor;
     @Mock ShotRepository remoteShotRepository;
     @Mock Interactor.CompletedCallback callback;
@@ -29,7 +28,7 @@ public class HideShotInteractorTest {
         MockitoAnnotations.initMocks(this);
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        hideShotInteractor= new HideShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
+        hideShotInteractor = new HideShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
     }
 
     @Test public void shouldNotifyCallbackAfterSendingToServer() throws Exception {

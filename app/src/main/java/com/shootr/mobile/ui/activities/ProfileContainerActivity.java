@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.util.BackStackHandler;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
@@ -52,9 +49,9 @@ public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
                 return;
             }
             ProfileFragment profileFragment = null;
-            if(idUser != null){
+            if (idUser != null) {
                 profileFragment = ProfileFragment.newInstance(idUser);
-            }else{
+            } else {
                 profileFragment = ProfileFragment.newInstanceFromUsername(username);
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -67,13 +64,11 @@ public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
         /* no-op */
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

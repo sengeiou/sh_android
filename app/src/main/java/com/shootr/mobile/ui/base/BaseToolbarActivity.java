@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.bus.Main;
@@ -15,10 +14,8 @@ import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 import static butterknife.ButterKnife.findById;
 
@@ -32,8 +29,7 @@ public class BaseToolbarActivity extends ActionBarActivity {
     private Toolbar actionBarToolbar;
     private UpdateWarning.Receiver updateWarningReceiver;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getObjectGraph().inject(this);
         container = appContainer.get(this);
@@ -57,7 +53,6 @@ public class BaseToolbarActivity extends ActionBarActivity {
         getLayoutInflater().inflate(layoutResID, activityContent);
     }
 
-
     /**
      * Base implementation for the Activity object graph.
      * Can be extended to provide different or extended graphs to inject from.
@@ -68,14 +63,14 @@ public class BaseToolbarActivity extends ActionBarActivity {
         return ShootrApplication.get(this).getObjectGraph();
     }
 
-    public Toolbar getToolbar(){
+    public Toolbar getToolbar() {
         return actionBarToolbar;
     }
 
-    protected Toolbar getActionBarToolbar(){
-        if(actionBarToolbar == null){
-            actionBarToolbar = (Toolbar)findViewById(R.id.toolbar_actionbar);
-            if(actionBarToolbar!=null){
+    protected Toolbar getActionBarToolbar() {
+        if (actionBarToolbar == null) {
+            actionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+            if (actionBarToolbar != null) {
                 setSupportActionBar(actionBarToolbar);
             }
         }

@@ -12,11 +12,9 @@ import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {
@@ -25,8 +23,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
 
-    @Inject public ServiceShotDatasource(ShotApiService shotApiService,
-      ShotApiEntityMapper shotApiEntityMapper) {
+    @Inject public ServiceShotDatasource(ShotApiService shotApiService, ShotApiEntityMapper shotApiEntityMapper) {
         this.shotApiService = shotApiService;
         this.shotApiEntityMapper = shotApiEntityMapper;
     }
@@ -105,8 +102,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override
-    public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
+    @Override public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
         try {
             List<ShotApiEntity> userApiShots = shotApiService.getShotsFromUser(idUser, limit, ShotType.TYPES_SHOWN);
             return shotApiEntityMapper.transform(userApiShots);
@@ -115,19 +111,20 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override
-    public ShotDetailEntity getShotDetail(String idShot) throws ShotNotFoundException {
+    @Override public ShotDetailEntity getShotDetail(String idShot) throws ShotNotFoundException {
         try {
             ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
 
             ShotEntity shotEntity = shotApiEntityMapper.transform(shotApiEntity);
             List<ShotEntity> repliesEntities = shotApiEntityMapper.transform(shotApiEntity.getReplies());
-            ShotEntity parentEntity = shotApiEntityMapper.transform(shotApiEntity.getParent());
 
             ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
             shotDetailEntity.setShot(shotEntity);
             shotDetailEntity.setReplies(repliesEntities);
-            shotDetailEntity.setParentShot(parentEntity);
+            if (shotApiEntity.getParent() != null) {
+                List<ShotEntity> parentEntities = shotApiEntityMapper.transform(shotApiEntity.getThread());
+                shotDetailEntity.setParents(parentEntities);
+            }
             return shotDetailEntity;
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
@@ -151,8 +148,8 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
         try {
-            List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserWithMaxDate(userId,
-              currentOldestDate);
+            List<ShotApiEntity> allShotsFromUserAndDate =
+              shotApiService.getAllShotsFromUserWithMaxDate(userId, currentOldestDate);
             return shotApiEntityMapper.transform(allShotsFromUserAndDate);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
@@ -184,7 +181,9 @@ public class ServiceShotDatasource implements ShotDataSource {
     @Override public List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
         try {
             List<ShotApiEntity> shots = shotApiService.getAllShotsFromUserInStream(timelineParameters.getUserId(),
-              timelineParameters.getStreamId(), timelineParameters.getSinceDate(), timelineParameters.getMaxDate());
+              timelineParameters.getStreamId(),
+              timelineParameters.getSinceDate(),
+              timelineParameters.getMaxDate());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
@@ -211,8 +210,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override
-    public List<ShotEntity> getEntitiesNotSynchronized() {
+    @Override public List<ShotEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 }

@@ -1,9 +1,7 @@
 package com.shootr.mobile.util;
 
 import android.content.Context;
-
 import java.io.File;
-
 import javax.inject.Inject;
 
 public class CacheDataUtils implements CacheUtils {
@@ -35,7 +33,8 @@ public class CacheDataUtils implements CacheUtils {
                 }
             }
             return dir.delete();
-        } else
+        } else {
             return dir != null && dir.isFile() && dir.delete();
+        }
     }
 }

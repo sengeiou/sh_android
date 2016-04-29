@@ -10,7 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -29,37 +30,26 @@ import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import dagger.ObjectGraph;
+import java.util.List;
+import javax.inject.Inject;
 
 public class MeActivityTimelineFragment extends BaseFragment implements MeActivityTimelineView {
 
     //region Fields
     @Inject GenericActivityTimelinePresenter timelinePresenter;
 
-    @Inject
-    ImageLoader imageLoader;
-    @Inject
-    AndroidTimeUtils timeUtils;
+    @Inject ImageLoader imageLoader;
+    @Inject AndroidTimeUtils timeUtils;
 
-    @Bind(R.id.timeline_me_activity_list)
-    RecyclerView activityList;
-    @Bind(R.id.timeline_me_activity_swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.timeline_me_activity_list) RecyclerView activityList;
+    @Bind(R.id.timeline_me_activity_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.me_activity_timeline_empty) View emptyView;
-    @Bind(R.id.me_activity_timeline_loading_activity)
-    TextView loadingActivityView;
+    @Bind(R.id.me_activity_timeline_loading_activity) TextView loadingActivityView;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
-    @Inject
-    FeedbackMessage feedbackMessage;
+    @Inject FeedbackMessage feedbackMessage;
     //endregion
 
     public static MeActivityTimelineFragment newInstance() {
@@ -67,37 +57,31 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     }
 
     //region Lifecycle methods
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_me_activity_timeline, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
         timelinePresenter.setView(new NullMeActivityTimelineView());
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializeViews();
         initializePresenter();
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         timelinePresenter.resume();
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         timelinePresenter.pause();
     }
@@ -110,21 +94,19 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
 
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            @Override public void onRefresh() {
                 timelinePresenter.refresh();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-                R.color.refresh_2,
-                R.color.refresh_3,
-                R.color.refresh_4);
+          R.color.refresh_2,
+          R.color.refresh_3,
+          R.color.refresh_4);
     }
 
     private void setupListScrollListeners() {
         activityList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 //TODO: fix that ñapa. It can't be good enough to check this shit
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && activityList != null) {
                     checkIfEndOfListVisible();
@@ -146,30 +128,26 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         activityList.setLayoutManager(layoutManager);
 
         adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
-                new OnAvatarClickListener() {
-                    @Override
-                    public void onAvatarClick(String userId, View avatarView) {
-                        openProfile(userId);
-                    }
-                }, //
-                new OnUsernameClickListener() {
-                    @Override
-                    public void onUsernameClick(String username) {
-                        openProfileFromUsername(username);
-                    }
-                }, //
-                new OnStreamTitleClickListener() {
-                    @Override
-                    public void onStreamTitleClick(String streamId, String streamShortTitle, String authorId) {
-                        openStream(streamId, streamShortTitle, authorId);
-                    }
-                }, //
-                new OnShotClick() {
-                    @Override
-                    public void onShotClick(ShotModel shot) {
-                        openShotDetail(shot);
-                    }
-                });
+          new OnAvatarClickListener() {
+              @Override public void onAvatarClick(String userId, View avatarView) {
+                  openProfile(userId);
+              }
+          }, //
+          new OnUsernameClickListener() {
+              @Override public void onUsernameClick(String username) {
+                  openProfileFromUsername(username);
+              }
+          }, //
+          new OnStreamTitleClickListener() {
+              @Override public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
+                  openStream(streamId, streamTitle, authorId);
+              }
+          }, //
+          new OnShotClick() {
+              @Override public void onShotClick(ShotModel shot) {
+                  openShotDetail(shot);
+              }
+          });
         activityList.setAdapter(adapter);
     }
 
@@ -178,8 +156,8 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         startActivity(profileIntent);
     }
 
-    protected void openStream(String idStream, String streamShortTitle, String authorId) {
-        Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamShortTitle, authorId);
+    protected void openStream(String idStream, String streamTitle, String authorId) {
+        Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle, authorId);
         startActivity(streamIntent);
     }
 
@@ -198,69 +176,56 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     }
     //endregion
 
-    @Override
-    protected ObjectGraph getObjectGraph() {
+    @Override protected ObjectGraph getObjectGraph() {
         return super.getObjectGraph();
     }
 
     //region View methods
-    @Override
-    public void showEmpty() {
+    @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideEmpty() {
+    @Override public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showLoading() {
+    @Override public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    @Override
-    public void hideLoading() {
+    @Override public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void showError(String message) {
+    @Override public void showError(String message) {
         feedbackMessage.show(getView(), message);
     }
 
-    @Override
-    public void setActivities(List<ActivityModel> activities, String currentUserId) {
+    @Override public void setActivities(List<ActivityModel> activities, String currentUserId) {
         adapter.setActivities(activities, currentUserId);
     }
 
-    @Override
-    public void hideActivities() {
+    @Override public void hideActivities() {
         activityList.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showActivities() {
+    @Override public void showActivities() {
         activityList.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void addNewActivities(List<ActivityModel> newActivities) {
+    @Override public void addNewActivities(List<ActivityModel> newActivities) {
         adapter.addActivitiesAbove(newActivities);
     }
 
-    @Override
-    public void addOldActivities(List<ActivityModel> oldActivities) {
+    @Override public void addOldActivities(List<ActivityModel> oldActivities) {
         adapter.addActivitiesBelow(oldActivities);
     }
 
-    @Override
-    public void showLoadingOldActivities() {
+    @Override public void showLoadingOldActivities() {
         adapter.setFooterVisible(true);
     }
 
-    @Override
-    public void hideLoadingOldActivities() {
+    @Override public void hideLoadingOldActivities() {
         adapter.setFooterVisible(false);
     }
 

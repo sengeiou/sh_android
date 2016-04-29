@@ -3,33 +3,34 @@ package com.shootr.mobile.data.prefs;
 import android.content.SharedPreferences;
 
 public class LongPreference {
-  private final SharedPreferences preferences;
-  private final String key;
-  private final long defaultValue;
 
-  public LongPreference(SharedPreferences preferences, String key) {
-    this(preferences, key, 0L);
-  }
+    private final SharedPreferences preferences;
+    private final String key;
+    private final long defaultValue;
 
-  public LongPreference(SharedPreferences preferences, String key, long defaultValue) {
-    this.preferences = preferences;
-    this.key = key;
-    this.defaultValue = defaultValue;
-  }
+    public LongPreference(SharedPreferences preferences, String key) {
+        this(preferences, key, 0L);
+    }
 
-  public long get() {
-    return preferences.getLong(key, defaultValue);
-  }
+    public LongPreference(SharedPreferences preferences, String key, long defaultValue) {
+        this.preferences = preferences;
+        this.key = key;
+        this.defaultValue = defaultValue;
+    }
 
-  public boolean isSet() {
-    return preferences.contains(key);
-  }
+    public long get() {
+        return preferences.getLong(key, defaultValue);
+    }
 
-  public void set(long value) {
-    preferences.edit().putLong(key, value).apply();
-  }
+    public boolean isSet() {
+        return preferences.contains(key);
+    }
 
-  public void delete() {
-    preferences.edit().remove(key).apply();
-  }
+    public void set(long value) {
+        preferences.edit().putLong(key, value).apply();
+    }
+
+    public void delete() {
+        preferences.edit().remove(key).apply();
+    }
 }

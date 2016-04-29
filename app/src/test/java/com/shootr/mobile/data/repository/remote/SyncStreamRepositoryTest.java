@@ -6,7 +6,6 @@ import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.Stream;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -87,8 +86,8 @@ public class SyncStreamRepositoryTest {
         verify(localStreamDataSource, never()).putStream(any(StreamEntity.class));
     }
 
-    private StreamEntity streamEntity(){
-        StreamEntity streamEntity= new StreamEntity();
+    private StreamEntity streamEntity() {
+        StreamEntity streamEntity = new StreamEntity();
         streamEntity.setIdUser(ID_STREAM);
         return streamEntity;
     }

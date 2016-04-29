@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderHoldingStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetStreamHoldingTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshHoldingStreamTimelineInteractor;
-
 import javax.inject.Inject;
 
 public class StreamHoldingTimelineInteractorsWrapper {
@@ -23,12 +22,23 @@ public class StreamHoldingTimelineInteractorsWrapper {
         this.getOlderHoldingStreamTimelineInteractor = getOlderHoldingStreamTimelineInteractor;
     }
 
-    public void loadTimeline(String idStream, String idUser, Boolean hasBeenPaused, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        getStreamHoldingTimelineInteractor.loadStreamHoldingTimeline(idStream, idUser, hasBeenPaused, callback, errorCallback);
+    public void loadTimeline(String idStream, String idUser, Boolean hasBeenPaused,
+      Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+        getStreamHoldingTimelineInteractor.loadStreamHoldingTimeline(idStream,
+          idUser,
+          hasBeenPaused,
+          callback,
+          errorCallback);
     }
 
-    public void refreshTimeline(String streamId, String idUser, Long lastRefreshDate, Boolean hasBeenPaused, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshHoldingStreamTimelineInteractor.refreshHoldingStreamTimeline(streamId, idUser, lastRefreshDate, hasBeenPaused, callback, errorCallback);
+    public void refreshTimeline(String streamId, String idUser, Long lastRefreshDate, Boolean hasBeenPaused,
+      Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+        refreshHoldingStreamTimelineInteractor.refreshHoldingStreamTimeline(streamId,
+          idUser,
+          lastRefreshDate,
+          hasBeenPaused,
+          callback,
+          errorCallback);
     }
 
     public void obtainOlderTimeline(long currentOldestDate, String idUser, Interactor.Callback<Timeline> callback,
@@ -38,5 +48,4 @@ public class StreamHoldingTimelineInteractorsWrapper {
           callback,
           errorCallback);
     }
-
 }

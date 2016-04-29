@@ -2,17 +2,14 @@ package com.shootr.mobile;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
-
+import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DatabaseVersionUtils;
 import com.shootr.mobile.util.LogTreeFactory;
-
-import javax.inject.Inject;
-
-import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShootrApplication extends MultiDexApplication {
@@ -22,16 +19,15 @@ public class ShootrApplication extends MultiDexApplication {
     @Inject CrashReportTool crashReportTool;
     @Inject AnalyticsTool analyticsTool;
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
         buildObjectGraphAndInject();
         plantLoggerTrees();
         analyticsTool.init(this);
         databaseVersionUtils.clearDataOnNewerVersion();
         CustomActivityOnCrash.install(this);
-        crashReportTool.init(this);
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
+        crashReportTool.init(this);
     }
 
     public void plantLoggerTrees() {
@@ -54,8 +50,8 @@ public class ShootrApplication extends MultiDexApplication {
      * Injects the members of {@code instance}, including injectable members
      * inherited from its supertypes.
      *
-     * @throws IllegalArgumentException  if the runtime type of {@code instance} is
-     *     not one of this object graph's {@link dagger.Module#injects injectable types}.
+     * @throws IllegalArgumentException if the runtime type of {@code instance} is
+     * not one of this object graph's {@link dagger.Module#injects injectable types}.
      */
     public <T> void inject(T o) {
         objectGraph.inject(o);

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamInfo;
 import com.shootr.mobile.domain.StreamSearchResult;
@@ -11,10 +12,13 @@ import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -22,13 +26,10 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -45,6 +46,9 @@ public class StreamDetailPresenter implements Presenter {
     private final GetMutedStreamsInteractor getMutedStreamsInteractor;
     private final MuteInteractor muteInteractor;
     private final UnmuteInteractor unmuteInteractor;
+    private final GetContributorsInteractor getContributorsInteractor;
+    private final RemoveStreamInteractor removeStreamInteractor;
+    private final RestoreStreamInteractor restoreStreamInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -60,12 +64,13 @@ public class StreamDetailPresenter implements Presenter {
     private boolean hasBeenPaused = false;
     private Integer totalWatchers;
 
-    @Inject
-    public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
+    @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
-      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor, StreamModelMapper streamModelMapper,
+      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
+      GetContributorsInteractor getContributorsInteractor, RemoveStreamInteractor removeStreamInteractor,
+      RestoreStreamInteractor restoreStreamInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
@@ -76,6 +81,9 @@ public class StreamDetailPresenter implements Presenter {
         this.getMutedStreamsInteractor = getMutedStreamsInteractor;
         this.muteInteractor = muteInteractor;
         this.unmuteInteractor = unmuteInteractor;
+        this.getContributorsInteractor = getContributorsInteractor;
+        this.removeStreamInteractor = removeStreamInteractor;
+        this.restoreStreamInteractor = restoreStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -102,11 +110,6 @@ public class StreamDetailPresenter implements Presenter {
     }
     //endregion
 
-    //region Edit stream
-    public void editStreamClick() {
-        streamDetailView.showEditStreamPhotoOrInfo();
-    }
-
     public void editStreamInfo() {
         streamDetailView.navigateToEditStream(idStream);
     }
@@ -116,7 +119,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void editStreamPhoto() {
-        streamDetailView.showPhotoPicker();
+        streamDetailView.showPhotoOptions();
     }
 
     public void photoSelected(File photoFile) {
@@ -152,6 +155,26 @@ public class StreamDetailPresenter implements Presenter {
         this.getStreamInfo();
     }
 
+    public void getContributorsNumber() {
+        getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
+            @Override public void onLoaded(List<Contributor> contributors) {
+                if (contributors.size() > 0) {
+                    streamDetailView.showContributorsNumber(contributors.size());
+                } else {
+                    streamDetailView.hideContributorsNumber();
+                    if (!streamModel.amIAuthor()) {
+                        streamDetailView.disableContributors();
+                    }
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
+    }
+
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
             @Override public void onLoaded(StreamInfo streamInfo) {
@@ -172,8 +195,23 @@ public class StreamDetailPresenter implements Presenter {
         this.renderWatchersList(streamInfo);
         this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
+        this.getContributorsNumber();
+        if (streamModel.amIAuthor()) {
+            this.setupRemoveStreamMenuOption();
+        }
         this.showViewDetail();
         this.hideViewLoading();
+    }
+
+    private void setupRemoveStreamMenuOption() {
+        if (streamModel.isRemoved()) {
+            streamDetailView.showRestoreStreamButton();
+            streamDetailView.hideRemoveButton();
+            streamDetailView.showRemovedFeedback();
+        } else {
+            streamDetailView.hideRestoreButton();
+            streamDetailView.showRemoveStreamButton();
+        }
     }
 
     private void showViewDetail() {
@@ -187,11 +225,17 @@ public class StreamDetailPresenter implements Presenter {
     //endregion
 
     public void photoClick() {
-        if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
-            editStreamPhoto();
-        } else if (streamModel.getPicture() != null) {
+        if (streamModel.amIAuthor() && streamModel.getPicture() != null) {
+            streamDetailView.showPhotoOptions();
+        } else if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
+            streamDetailView.showPhotoPicker();
+        } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
             zoomPhoto();
         }
+    }
+
+    public void viewPhotoClicked() {
+        zoomPhoto();
     }
 
     public void zoomPhoto() {
@@ -223,8 +267,7 @@ public class StreamDetailPresenter implements Presenter {
     private void renderStreamInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
         streamDetailView.setStreamTitle(streamModel.getTitle());
-        streamDetailView.setStreamShortTitle(streamModel.getShortTitle());
-        streamDetailView.setStreamPicture(streamModel.getPicture());
+        setupStreamPicture();
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
         if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
             streamDetailView.setStreamDescription(streamModel.getDescription());
@@ -237,6 +280,24 @@ public class StreamDetailPresenter implements Presenter {
         }
 
         streamMediaCount = streamModel.getMediaCount();
+    }
+
+    private void setupStreamPicture() {
+        if (streamModel.getPicture() != null) {
+            streamDetailView.showPicture();
+            streamDetailView.hideNoTextPicture();
+            streamDetailView.setStreamPicture(streamModel.getPicture());
+            streamDetailView.loadBlurStreamPicture(streamModel.getPicture());
+        } else {
+            if (!streamModel.amIAuthor()) {
+                streamDetailView.hidePicture();
+                streamDetailView.showNoTextPicture();
+                streamDetailView.setupStreamInitials(streamModel);
+            } else {
+                streamDetailView.showPicture();
+                streamDetailView.hideNoTextPicture();
+            }
+        }
     }
 
     private void renderFollowingNumber(Integer numberOfFollowing) {
@@ -318,12 +379,14 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void selectStream() {
-        if(streamModel!=null) {
-            selectStreamInteractor.selectStream(streamModel.getIdStream(), new Interactor.Callback<StreamSearchResult>() {
+        if (streamModel != null) {
+            selectStreamInteractor.selectStream(streamModel.getIdStream(),
+              new Interactor.Callback<StreamSearchResult>() {
                   @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
                   }
-              }, new Interactor.ErrorCallback() {
+              },
+              new Interactor.ErrorCallback() {
                   @Override public void onError(ShootrException error) {
                       showErrorInView(error);
                   }
@@ -351,16 +414,57 @@ public class StreamDetailPresenter implements Presenter {
         streamDetailView.goToStreamDataInfo(streamModel);
     }
 
-    @Override
-    public void resume() {
-        if (hasBeenPaused) {
-            selectStream();
-            getStreamInfo();
+    public void contributorsClicked() {
+        if (streamModel.amIAuthor()) {
+            streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
+        } else {
+            streamDetailView.goToContributorsActivity(streamModel.getIdStream());
         }
     }
 
-    @Override
-    public void pause() {
+    public void removeStream() {
+        streamDetailView.askRemoveStreamConfirmation();
+    }
+
+    public void restoreStream() {
+        restoreStreamInteractor.restoreStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                streamDetailView.hideRestoreButton();
+                streamDetailView.showRemoveStreamButton();
+                streamDetailView.showRestoreStreamFeedback();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
+    }
+
+    public void confirmRemoveStream() {
+        removeStreamInteractor.removeStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                streamDetailView.hideRemoveButton();
+                streamDetailView.showRestoreStreamButton();
+                streamDetailView.showRemovedFeedback();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
+    }
+
+    @Override public void resume() {
+        if (hasBeenPaused) {
+            selectStream();
+            getStreamInfo();
+            getContributorsNumber();
+        }
+    }
+
+    @Override public void pause() {
         hasBeenPaused = true;
     }
 }

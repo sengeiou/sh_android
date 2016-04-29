@@ -9,10 +9,8 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkArgument;
@@ -23,19 +21,16 @@ public class ServiceFollowDataSource implements FollowDataSource {
     private final SessionRepository sessionRepository;
     private final UserApiService userApiService;
 
-    @Inject
-    public ServiceFollowDataSource(SessionRepository sessionRepository, UserApiService userApiService) {
+    @Inject public ServiceFollowDataSource(SessionRepository sessionRepository, UserApiService userApiService) {
         this.sessionRepository = sessionRepository;
         this.userApiService = userApiService;
     }
 
-    @Override
-    public List<FollowEntity> putFollows(List<FollowEntity> followEntities) {
+    @Override public List<FollowEntity> putFollows(List<FollowEntity> followEntities) {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 
-    @Override
-    public FollowEntity putFollow(FollowEntity followEntity) throws FollowingBlockedUserException {
+    @Override public FollowEntity putFollow(FollowEntity followEntity) throws FollowingBlockedUserException {
         checkArgument(followEntity.getIdUser().equals(sessionRepository.getCurrentUserId()),
           "Only follows from the current user are allowed in service");
 
@@ -53,8 +48,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
-    @Override
-    public void removeFollow(String idUser) {
+    @Override public void removeFollow(String idUser) {
         try {
             userApiService.unfollow(idUser);
         } catch (IOException | ApiException e) {
@@ -118,8 +112,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
-    @Override
-    public List<FollowEntity> getEntitiesNotSynchronized() {
+    @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 }

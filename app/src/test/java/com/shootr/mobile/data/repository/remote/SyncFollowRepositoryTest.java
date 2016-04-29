@@ -8,14 +8,12 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -108,7 +106,7 @@ public class SyncFollowRepositoryTest {
         verify(remoteFollowDataSource).putFollow(any(FollowEntity.class));
     }
 
-    private FollowEntity followEntitySyncDeleted(){
+    private FollowEntity followEntitySyncDeleted() {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(ID_USER);
         followEntity.setSynchronizedStatus(Synchronized.SYNC_DELETED);
@@ -116,7 +114,7 @@ public class SyncFollowRepositoryTest {
         return followEntity;
     }
 
-    private FollowEntity followEntitySyncNew(){
+    private FollowEntity followEntitySyncNew() {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(ID_USER);
         followEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
@@ -124,17 +122,15 @@ public class SyncFollowRepositoryTest {
         return followEntity;
     }
 
-    private List<FollowEntity> followEntitiesSyncDeleted(){
+    private List<FollowEntity> followEntitiesSyncDeleted() {
         ArrayList<FollowEntity> followEntities = new ArrayList<>();
         followEntities.add(followEntitySyncDeleted());
         return followEntities;
     }
 
-    private List<FollowEntity> followEntitiesSyncNew(){
+    private List<FollowEntity> followEntitiesSyncNew() {
         ArrayList<FollowEntity> followEntities = new ArrayList<>();
         followEntities.add(followEntitySyncNew());
         return followEntities;
     }
-
-
 }

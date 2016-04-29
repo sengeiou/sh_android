@@ -3,11 +3,9 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.ShotQueueEntity;
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.Shot;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShotQueueEntityMapper {
@@ -41,7 +39,6 @@ public class ShotQueueEntityMapper {
         if (eventInfo != null) {
             entity.setIdStream(eventInfo.getIdStream());
             entity.setStreamTitle(eventInfo.getStreamTitle());
-            entity.setStreamShortTitle(eventInfo.getStreamShortTitle());
         }
 
         entity.setIdUser(shot.getUserInfo().getIdUser());
@@ -84,7 +81,6 @@ public class ShotQueueEntityMapper {
         Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
         eventInfo.setIdStream(entity.getIdStream());
         eventInfo.setStreamTitle(entity.getStreamTitle());
-        eventInfo.setStreamShortTitle(entity.getStreamShortTitle());
         if (eventInfo.getIdStream() != null) {
             shot.setStreamInfo(eventInfo);
         }

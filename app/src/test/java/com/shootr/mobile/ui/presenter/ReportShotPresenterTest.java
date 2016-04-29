@@ -18,16 +18,14 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -63,11 +61,16 @@ public class ReportShotPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new ReportShotPresenter(deleteShotInteractor, errorMessageFactory,
+        presenter = new ReportShotPresenter(deleteShotInteractor,
+          errorMessageFactory,
           sessionRepository,
           userModelMapper,
-          getBlockedIdUsersInteractor, blockUserInteractor, unblockUserInteractor, getFollowingInteractor,
-          banUserInteractor, unbanUserInteractor);
+          getBlockedIdUsersInteractor,
+          blockUserInteractor,
+          unblockUserInteractor,
+          getFollowingInteractor,
+          banUserInteractor,
+          unbanUserInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -154,22 +157,22 @@ public class ReportShotPresenterTest {
     @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnlgish() throws Exception {
         ShotModel shotModel = shotModel();
 
-        presenter.reportClicked(EN_LOCALE,SESSION_TOKEN,shotModel);
+        presenter.reportClicked(EN_LOCALE, SESSION_TOKEN, shotModel);
 
-        verify(reportShotView,never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
+        verify(reportShotView, never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
     }
 
     @Test public void shouldShowHolderContextMenuWhenIsNotStreamAuthorAndIsNotShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
         ShotModel shotModel = shotModelWithStreamId();
 
-
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ANOTHER_ID_USER);
 
         verify(reportShotView).showHolderContextMenu(shotModel);
     }
 
-    @Test public void shouldShowAuthorContextMenuWithPinWhenUserIsStreamHolderAndIsShotAuthorAndIsShotVisible() throws Exception {
+    @Test public void shouldShowAuthorContextMenuWithPinWhenUserIsStreamHolderAndIsShotAuthorAndIsShotVisible()
+      throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         ShotModel shotModel = shotModelWithStreamId();
 
@@ -198,7 +201,8 @@ public class ReportShotPresenterTest {
         verify(reportShotView).showAuthorContextMenuWithPin(shotModel);
     }
 
-    @Test public void shouldShowAuthorContextMenuWithoutPinIfcurrentUserIsShotAuthorAndIsShotInVisible() throws Exception {
+    @Test public void shouldShowAuthorContextMenuWithoutPinIfcurrentUserIsShotAuthorAndIsShotInVisible()
+      throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         ShotModel shotModel = shotModel();
         shotModel.setHide(HIDE);
@@ -231,27 +235,23 @@ public class ReportShotPresenterTest {
     private void setupUnbanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(unbanUserInteractor).unban(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(unbanUserInteractor)
+          .unban(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     public void setupBanUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(banUserInteractor).ban(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(banUserInteractor)
+          .ban(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetFollowingCallbacksFollowingUser() {
@@ -262,8 +262,8 @@ public class ReportShotPresenterTest {
                 callback.onLoaded(userFollowingList());
                 return null;
             }
-        }).when(getFollowingInteractor).obtainPeople(any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getFollowingInteractor)
+          .obtainPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private UserModel user() {
@@ -280,8 +280,8 @@ public class ReportShotPresenterTest {
                 callback.onLoaded(userList());
                 return null;
             }
-        }).when(getFollowingInteractor).obtainPeople(any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getFollowingInteractor)
+          .obtainPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private List<User> userFollowingList() {
@@ -303,30 +303,27 @@ public class ReportShotPresenterTest {
     private void setupUserBlockedErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback callback =
-                  (Interactor.ErrorCallback) invocation.getArguments()[2];
-                callback.onError(new ShootrException() {});
+                Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                callback.onError(new ShootrException() {
+                });
                 return null;
             }
-        }).when(blockUserInteractor).block(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(blockUserInteractor)
+          .block(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupUserBlockedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(blockUserInteractor).block(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(blockUserInteractor)
+          .block(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupGetBlockedIdUsersInteractor(){
+    private void setupGetBlockedIdUsersInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<String>> callback =
@@ -334,8 +331,8 @@ public class ReportShotPresenterTest {
                 callback.onLoaded(blockedUsers());
                 return null;
             }
-        }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(getBlockedIdUsersInteractor)
+          .loadBlockedIdUsers(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private ShotModel shotModel() {
@@ -360,7 +357,7 @@ public class ReportShotPresenterTest {
         return shotModel;
     }
 
-    private ArrayList blockedUsers(){
+    private ArrayList blockedUsers() {
         ArrayList usersIds = new ArrayList();
         usersIds.add(ANOTHER_ID_USER);
         return usersIds;

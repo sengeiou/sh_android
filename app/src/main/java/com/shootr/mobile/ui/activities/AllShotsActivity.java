@@ -10,7 +10,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
@@ -31,17 +35,9 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -118,7 +114,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void setupListScrollListeners() {
-        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+        new ListViewScrollObserver(listView)
+          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
@@ -192,7 +189,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           onUsernameClickListener,
           onHideClickListener,
           presenter.getIsCurrentUser()) {
-            @Override protected boolean shouldShowShortTitle() {
+            @Override protected boolean shouldShowTitle() {
                 return true;
             }
         };
@@ -230,10 +227,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showBlockFollowingUserAlert() {
@@ -250,8 +247,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(this).setMessage(R.string.block_user_dialog_message)
-          .setPositiveButton(getString(R.string.block_user_dialog_block),
-            new DialogInterface.OnClickListener() {
+          .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     reportShotPresenter.confirmBlock();
                 }
@@ -355,8 +351,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
+          .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     goToReport(sessionToken, shotModel);
                 }

@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.StreamTimelineParameters;
-
 import java.util.List;
 
 public interface ShotDataSource extends SyncableDataSource<ShotEntity> {

@@ -20,5 +20,4 @@ public class BanEntity {
     public void setIdBannedUser(String idBlockedUser) {
         this.idBannedUser = idBlockedUser;
     }
-
 }

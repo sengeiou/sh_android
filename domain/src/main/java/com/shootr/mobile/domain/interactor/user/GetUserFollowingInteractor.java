@@ -10,13 +10,11 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class GetUserFollowingInteractor implements Interactor{
+public class GetUserFollowingInteractor implements Interactor {
 
     public static final int PAGE_SIZE = 50;
     public static final int IS_ME = 1;
@@ -33,9 +31,10 @@ public class GetUserFollowingInteractor implements Interactor{
     private ErrorCallback errorCallback;
     private Integer page;
 
-    @Inject public GetUserFollowingInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+    @Inject
+    public GetUserFollowingInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
@@ -43,7 +42,8 @@ public class GetUserFollowingInteractor implements Interactor{
         this.sessionRepository = sessionRepository;
     }
 
-    public void obtainFollowing(String idUser, Integer page, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainFollowing(String idUser, Integer page, Callback<List<User>> callback,
+      ErrorCallback errorCallback) {
         this.idUser = idUser;
         this.page = page;
         this.callback = callback;
@@ -60,7 +60,8 @@ public class GetUserFollowingInteractor implements Interactor{
             List<User> following = remoteUserRepository.getFollowing(idUser, page, PAGE_SIZE);
             String currentUserId = sessionRepository.getCurrentUserId();
             List<User> currentUserFollowing = localUserRepository.getPeople();
-            List<User> followingWithRelationship = setRelationshipInUsers(following, currentUserId, currentUserFollowing);
+            List<User> followingWithRelationship =
+              setRelationshipInUsers(following, currentUserId, currentUserFollowing);
             notifyResult(followingWithRelationship);
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
@@ -70,7 +71,7 @@ public class GetUserFollowingInteractor implements Interactor{
     private List<User> setRelationshipInUsers(List<User> usersFollowers, String currentUserId,
       List<User> currentUserFollowing) {
         List<User> users = new ArrayList<>();
-        for(User user: usersFollowers){
+        for (User user : usersFollowers) {
             String idUser = user.getIdUser();
             boolean isMe = idUser.equals(currentUserId);
             if (isMe) {
@@ -100,5 +101,4 @@ public class GetUserFollowingInteractor implements Interactor{
             }
         });
     }
-
 }

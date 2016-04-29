@@ -15,7 +15,10 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -44,17 +47,10 @@ import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class LoginSelectionActivity extends BaseActivity {
@@ -82,13 +78,11 @@ public class LoginSelectionActivity extends BaseActivity {
     private CallbackManager callbackManager;
     private LoginManager loginManager;
 
-    @Override
-    protected int getLayoutResource() {
+    @Override protected int getLayoutResource() {
         return R.layout.activity_login;
     }
 
-    @Override
-    protected void initializeViews(Bundle savedInstanceState) {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setupDisclaimerLinks();
         setupStatusBarColor();
@@ -129,8 +123,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @NonNull public DialogInterface.OnClickListener privacyPolicyClickListener() {
         return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
                 Intent privacyIntent = intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
                 Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
@@ -140,8 +133,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @NonNull public DialogInterface.OnClickListener termsOfServiceClickListener() {
         return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
                 Intent termsIntent = intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
                 Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
@@ -166,8 +158,7 @@ public class LoginSelectionActivity extends BaseActivity {
             spannableBuilder.replace(termsStart, termsEnd, replaceText);
 
             CharacterStyle termsSpan = new ClickableSpan() {
-                @Override
-                public void updateDrawState(TextPaint ds) {
+                @Override public void updateDrawState(TextPaint ds) {
                     super.updateDrawState(ds);
                     ds.setColor(getResources().getColor(R.color.white));
                     ds.setUnderlineText(false);
@@ -184,8 +175,7 @@ public class LoginSelectionActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void initializePresenter() {
+    @Override protected void initializePresenter() {
         if (sessionTokenPreference.get() != null) {
             retrieveOnUpgradeInfo();
         } else {
@@ -228,8 +218,7 @@ public class LoginSelectionActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected boolean requiresUserLogin() {
+    @Override protected boolean requiresUserLogin() {
         return false;
     }
 
@@ -239,8 +228,7 @@ public class LoginSelectionActivity extends BaseActivity {
         loginManager = LoginManager.getInstance();
 
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
+            @Override public void onSuccess(LoginResult loginResult) {
                 final AccessToken accessToken = loginResult.getAccessToken();
                 Timber.d("FB Token: %s", accessToken.getToken());
                 performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.Callback<Boolean>() {
@@ -256,46 +244,39 @@ public class LoginSelectionActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 }, new Interactor.ErrorCallback() {
-                    @Override
-                    public void onError(ShootrException error) {
+                    @Override public void onError(ShootrException error) {
                         showFacebookError();
                         hideLoading();
                     }
                 });
             }
 
-            @Override
-            public void onError(FacebookException e) {
+            @Override public void onError(FacebookException e) {
                 Timber.e(e, "Failed to obtain FB access token");
                 showFacebookError();
                 hideLoading();
             }
 
-            @Override
-            public void onCancel() {
+            @Override public void onCancel() {
                 hideLoading();
             }
         });
     }
 
-    @OnClick(R.id.login_btn_login)
-    public void login() {
+    @OnClick(R.id.login_btn_login) public void login() {
         startActivity(new Intent(this, EmailLoginActivity.class));
     }
 
-    @OnClick(R.id.login_btn_email)
-    public void registerWithEmail() {
+    @OnClick(R.id.login_btn_email) public void registerWithEmail() {
         startActivity(new Intent(this, EmailRegistrationActivity.class));
     }
 
-    @OnClick(R.id.login_btn_facebook)
-    public void loginWithFacebook() {
+    @OnClick(R.id.login_btn_facebook) public void loginWithFacebook() {
         showLoading();
         loginManager.logInWithReadPermissions(this, Arrays.asList(FACEBOOK_PERMISIONS));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }

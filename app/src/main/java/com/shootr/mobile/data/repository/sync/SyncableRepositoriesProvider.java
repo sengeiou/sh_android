@@ -5,10 +5,8 @@ import com.shootr.mobile.data.repository.remote.SyncFollowRepository;
 import com.shootr.mobile.data.repository.remote.SyncMuteRepository;
 import com.shootr.mobile.data.repository.remote.SyncShotRepository;
 import com.shootr.mobile.data.repository.remote.SyncUserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -16,10 +14,9 @@ import javax.inject.Singleton;
 
     private final List<SyncableRepository> syncableRepositories;
 
-    @Inject
-    public SyncableRepositoriesProvider(SyncUserRepository syncUserRepository,
-      SyncFavoriteRepository syncFavoriteRepository,
-      SyncFollowRepository syncFollowRepository, SyncShotRepository syncShotRepository, SyncMuteRepository syncMuteRepository) {
+    @Inject public SyncableRepositoriesProvider(SyncUserRepository syncUserRepository,
+      SyncFavoriteRepository syncFavoriteRepository, SyncFollowRepository syncFollowRepository,
+      SyncShotRepository syncShotRepository, SyncMuteRepository syncMuteRepository) {
         syncableRepositories = new ArrayList<>();
         syncableRepositories.add(syncUserRepository);
         syncableRepositories.add(syncFavoriteRepository);

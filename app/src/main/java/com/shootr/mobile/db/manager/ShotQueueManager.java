@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.data.entity.ShotQueueEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.ShotQueueDBMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShotQueueManager extends AbstractManager {
@@ -26,9 +23,9 @@ public class ShotQueueManager extends AbstractManager {
     public ShotQueueEntity saveShotQueue(ShotQueueEntity shotQueueEntity) {
         ContentValues contentValues = shotQueueDBMapper.toContentValues(shotQueueEntity);
         Long id = getWritableDatabase().insertWithOnConflict(DatabaseContract.ShotQueueTable.TABLE,
-                null,
-                contentValues,
-                SQLiteDatabase.CONFLICT_REPLACE);
+          null,
+          contentValues,
+          SQLiteDatabase.CONFLICT_REPLACE);
         shotQueueEntity.setIdQueue(id);
         return shotQueueEntity;
     }

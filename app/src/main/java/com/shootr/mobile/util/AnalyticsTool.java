@@ -12,5 +12,4 @@ public interface AnalyticsTool {
     void analyticsStart(Context context, String name);
 
     void analyticsStop(Context context, Activity activity);
-
 }

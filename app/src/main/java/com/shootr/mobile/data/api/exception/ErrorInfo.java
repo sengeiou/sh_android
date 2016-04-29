@@ -32,7 +32,7 @@ public enum ErrorInfo {
     InternalServerErrorException(4001, "Internal server error", 500),
 
     EmailAlreadyExistsException(5001, "Email already registered", 400),
-    EmailMatchNewEmailException(5011, "Email match new Email" , 400),
+    EmailMatchNewEmailException(5011, "Email match new Email", 400),
     UserNameAlreadyExistsException(5002, "Username already exists", 400),
 
     AccountNotFoundException(5003, "Account not found", 400),
@@ -40,12 +40,16 @@ public enum ErrorInfo {
     InvalidPasswordException(5004, "Invalid password", 400),
     PasswordMatchNewPasswordException(5005, "Password match new Password", 400),
     PasswordMatchUserNameException(5006, "Password match userName", 400),
-    StreamHasWatchersException(5007, "Stream has watchers you cant remove it" , 400),
+    StreamHasWatchersException(5007, "Stream has watchers you cant remove it", 400),
 
-    FollowingBlockedUserException(5016, "Cannot follow users you blocked" , 400),
+    FollowingBlockedUserException(5016, "Cannot follow users you blocked", 400),
 
     ForbiddenRequestException(6001, "Forbidden request", 403),
-    StreamRemovedForbiddenRequestException(6002, "Stream removed forbidden request", 403);
+    StreamRemovedForbiddenRequestException(6002, "Stream removed forbidden request", 403),
+
+    ContributorNumberStreamException(5018, "It has surpassed the number of contributors for this stream", 400);
+
+
 
     private int code;
     private int httpCode;
@@ -78,8 +82,7 @@ public enum ErrorInfo {
         return null;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "ErrorInfo{" +
           "code=" + code +
           ", httpCode=" + httpCode +

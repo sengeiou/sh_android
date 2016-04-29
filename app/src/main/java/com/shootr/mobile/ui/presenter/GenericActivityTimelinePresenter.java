@@ -14,9 +14,7 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GenericActivityTimelinePresenter implements Presenter {
@@ -39,8 +37,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
 
     @Inject
     public GenericActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-                                     ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
-                                     @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
+      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
+      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
@@ -78,23 +76,23 @@ public class GenericActivityTimelinePresenter implements Presenter {
     }
 
     protected void loadTimeline() {
-        activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
-                List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
-                timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
-                isEmpty = activityModels.isEmpty();
-                if (isEmpty) {
-                    timelineView.showEmpty();
-                    timelineView.hideActivities();
-                } else {
-                    timelineView.hideEmpty();
-                    timelineView.showActivities();
-                }
-                loadNewActivities(badgeCount.get());
-                clearActivityBadge();
-            }
-        });
+        activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline,
+          new Interactor.Callback<ActivityTimeline>() {
+              @Override public void onLoaded(ActivityTimeline timeline) {
+                  List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
+                  timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
+                  isEmpty = activityModels.isEmpty();
+                  if (isEmpty) {
+                      timelineView.showEmpty();
+                      timelineView.hideActivities();
+                  } else {
+                      timelineView.hideEmpty();
+                      timelineView.showActivities();
+                  }
+                  loadNewActivities(badgeCount.get());
+                  clearActivityBadge();
+              }
+          });
     }
 
     public void refresh() {
@@ -116,56 +114,57 @@ public class GenericActivityTimelinePresenter implements Presenter {
             timelineView.hideEmpty();
             timelineView.showLoadingActivity();
         }
-        activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
-                List<ActivityModel> newActivity = activityModelMapper.transform(timeline.getActivities());
-                boolean hasNewActivity = !newActivity.isEmpty();
-                if (isEmpty && hasNewActivity) {
-                    isEmpty = false;
-                } else if (isEmpty && !hasNewActivity) {
-                    timelineView.showEmpty();
-                }
-                if (hasNewActivity) {
-                    timelineView.addNewActivities(newActivity);
-                    timelineView.hideEmpty();
-                    timelineView.showActivities();
-                }
-                timelineView.hideLoading();
-                timelineView.hideLoadingActivity();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-                timelineView.hideLoading();
-                timelineView.hideLoadingActivity();
-            }
-        });
+        activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline,
+          new Interactor.Callback<ActivityTimeline>() {
+              @Override public void onLoaded(ActivityTimeline timeline) {
+                  List<ActivityModel> newActivity = activityModelMapper.transform(timeline.getActivities());
+                  boolean hasNewActivity = !newActivity.isEmpty();
+                  if (isEmpty && hasNewActivity) {
+                      isEmpty = false;
+                  } else if (isEmpty && !hasNewActivity) {
+                      timelineView.showEmpty();
+                  }
+                  if (hasNewActivity) {
+                      timelineView.addNewActivities(newActivity);
+                      timelineView.hideEmpty();
+                      timelineView.showActivities();
+                  }
+                  timelineView.hideLoading();
+                  timelineView.hideLoadingActivity();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                  timelineView.hideLoading();
+                  timelineView.hideLoadingActivity();
+              }
+          });
     }
 
     private void loadOlderActivities(long lastActivityInScreenDate) {
         isLoadingOlderActivities = true;
         timelineView.showLoadingOldActivities();
-        activityTimelineInteractorWrapper.obtainOlderTimeline(isUserActivityTimeline, lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
-            @Override
-            public void onLoaded(ActivityTimeline timeline) {
-                isLoadingOlderActivities = false;
-                timelineView.hideLoadingOldActivities();
-                List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
-                if (!activityModels.isEmpty()) {
-                    timelineView.addOldActivities(activityModels);
-                } else {
-                    mightHaveMoreActivities = false;
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                timelineView.hideLoadingOldActivities();
-                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-            }
-        });
+        activityTimelineInteractorWrapper.obtainOlderTimeline(isUserActivityTimeline,
+          lastActivityInScreenDate,
+          new Interactor.Callback<ActivityTimeline>() {
+              @Override public void onLoaded(ActivityTimeline timeline) {
+                  isLoadingOlderActivities = false;
+                  timelineView.hideLoadingOldActivities();
+                  List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
+                  if (!activityModels.isEmpty()) {
+                      timelineView.addOldActivities(activityModels);
+                  } else {
+                      mightHaveMoreActivities = false;
+                  }
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  timelineView.hideLoadingOldActivities();
+                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+              }
+          });
     }
 
     @Override public void resume() {

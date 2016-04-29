@@ -33,11 +33,22 @@ public class StreamResultModel implements Serializable {
     }
 
     @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StreamResultModel)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof StreamResultModel)) {
+            return false;
+        }
 
         StreamResultModel that = (StreamResultModel) o;
 
         return (streamModel != null && streamModel.getIdStream().equals(that.getStreamModel().getIdStream()));
+    }
+
+    @Override public int hashCode() {
+        int result = streamModel != null ? streamModel.hashCode() : 0;
+        result = 31 * result + watchers;
+        result = 31 * result + (isWatching ? 1 : 0);
+        return result;
     }
 }

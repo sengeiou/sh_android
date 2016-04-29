@@ -3,7 +3,6 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.user.CreateAccountInteractor;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -80,8 +79,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showEmailError(anyString());
     }
 
-    @Test
-    public void shouldNotRequestEmailFocusWhenFocusRemovedIfEmailInvalid() throws Exception {
+    @Test public void shouldNotRequestEmailFocusWhenFocusRemovedIfEmailInvalid() throws Exception {
         when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
 
         presenter.emailFocusRemoved();
@@ -89,8 +87,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView, never()).focusOnEmailField();
     }
 
-    @Test
-    public void shouldShowEmailErrorWhenCreateAccountIfEmailInvalid() throws Exception {
+    @Test public void shouldShowEmailErrorWhenCreateAccountIfEmailInvalid() throws Exception {
         when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
 
         presenter.createAccount();
@@ -98,8 +95,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showEmailError(anyString());
     }
 
-    @Test
-    public void shouldRequestEmailFocusWhenCreateAccountIfEmailInvalid() throws Exception {
+    @Test public void shouldRequestEmailFocusWhenCreateAccountIfEmailInvalid() throws Exception {
         when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
 
         presenter.createAccount();
@@ -117,8 +113,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showUsernameError(anyString());
     }
 
-    @Test
-    public void shouldNotRequestUsernameFocusWhenFocusRemovedIfUsernameInvalid() throws Exception {
+    @Test public void shouldNotRequestUsernameFocusWhenFocusRemovedIfUsernameInvalid() throws Exception {
         when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
 
         presenter.usernameFocusRemoved();
@@ -126,8 +121,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView, never()).focusOnUsernameField();
     }
 
-    @Test
-    public void shouldShowUsernameErrorWhenCreateAccountIfUsernameInvalid() throws Exception {
+    @Test public void shouldShowUsernameErrorWhenCreateAccountIfUsernameInvalid() throws Exception {
         when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
 
         presenter.createAccount();
@@ -135,8 +129,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showUsernameError(anyString());
     }
 
-    @Test
-    public void shouldRequestUsernameFocusWhenCreateAccountIfUsernameInvalid() throws Exception {
+    @Test public void shouldRequestUsernameFocusWhenCreateAccountIfUsernameInvalid() throws Exception {
         when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
 
         presenter.createAccount();
@@ -154,8 +147,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showPasswordError(anyString());
     }
 
-    @Test
-    public void shouldNotRequestPasswordFocusWhenFocusRemovedIfPasswordInvalid() throws Exception {
+    @Test public void shouldNotRequestPasswordFocusWhenFocusRemovedIfPasswordInvalid() throws Exception {
         when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
 
         presenter.passwordFocusRemoved();
@@ -163,8 +155,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView, never()).focusOnPasswordField();
     }
 
-    @Test
-    public void shouldShowPasswordErrorWhenCreateAccountIfPasswordInvalid() throws Exception {
+    @Test public void shouldShowPasswordErrorWhenCreateAccountIfPasswordInvalid() throws Exception {
         when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
 
         presenter.createAccount();
@@ -172,8 +163,7 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).showPasswordError(anyString());
     }
 
-    @Test
-    public void shouldRequestPasswordFocusWhenCreateAccountIfPasswordInvalid() throws Exception {
+    @Test public void shouldRequestPasswordFocusWhenCreateAccountIfPasswordInvalid() throws Exception {
         when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
 
         presenter.createAccount();

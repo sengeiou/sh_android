@@ -5,9 +5,7 @@ import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class DatabaseFollowDataSource implements FollowDataSource {
@@ -25,14 +23,12 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         return followEntities;
     }
 
-    @Override
-    public FollowEntity putFollow(FollowEntity followEntity) {
+    @Override public FollowEntity putFollow(FollowEntity followEntity) {
         followManager.saveFollow(followEntity);
         return followEntity;
     }
 
-    @Override
-    public void removeFollow(String idUser) {
+    @Override public void removeFollow(String idUser) {
         followManager.deleteFollow(idUser, sessionRepository.getCurrentUserId());
     }
 
@@ -68,8 +64,7 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.deleteBan(sessionRepository.getCurrentUserId(), idUser);
     }
 
-    @Override
-    public List<FollowEntity> getEntitiesNotSynchronized() {
+    @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();
     }
 }

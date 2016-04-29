@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +29,12 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -51,17 +59,10 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
@@ -71,7 +72,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private static final int REQUEST_TAKE_PHOTO = 5;
 
     private static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
+    private static final int NO_CONTRIBUTORS = 0;
+    public static final String EXTRA_STREAM_TITLE = "title";
     private int counterToolbarPrintTimes = 0;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -81,6 +83,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.stream_title_container) View streamTitleContainer;
     @Bind(R.id.cat_avatar) View streamPictureContainer;
     @Bind(R.id.stream_avatar) ImageView streamPicture;
+    @Bind(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
     @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
@@ -104,6 +107,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -130,10 +135,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
           }, // author
           new View.OnClickListener() {
-              @Override public void onClick(View v) {
-                  streamDetailPresenter.clickMedia();
+              @Override public void onClick(View view) {
+                  streamDetailPresenter.contributorsClicked();
               }
-          }, // media
+          }, new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                streamDetailPresenter.clickMedia();
+            }
+        }, // media
           new CompoundButton.OnCheckedChangeListener() {
               @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                   if (isChecked) {
@@ -158,13 +167,15 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(
+                    String.format(getString(R.string.unfollow_dialog_message),
                     user.getUsername()))
-                    .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) {
-                            streamDetailPresenter.unfollow(user.getIdUser());
-                        }
-                    })
+                    .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+                      new DialogInterface.OnClickListener() {
+                          @Override public void onClick(DialogInterface dialog, int which) {
+                              streamDetailPresenter.unfollow(user.getIdUser());
+                          }
+                      })
                     .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
                     .create()
                     .show();
@@ -199,6 +210,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
         dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
+        removeMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_remove));
+        restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_restore));
         dataInfoMenuItem.setVisible(true);
         return true;
     }
@@ -209,10 +222,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 finish();
                 return true;
             case R.id.stream_detail_menu_edit:
-                streamDetailPresenter.editStreamClick();
+                streamDetailPresenter.editStreamInfo();
                 return true;
             case R.id.stream_detail_menu_data_info:
                 streamDetailPresenter.dataInfoClicked();
+                return true;
+            case R.id.stream_detail_menu_remove:
+                streamDetailPresenter.removeStream();
+                return true;
+            case R.id.stream_detail_menu_restore:
+                streamDetailPresenter.restoreStream();
                 return true;
             default:
                 return false;
@@ -251,8 +270,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         analyticsTool.analyticsStop(getBaseContext(), this);
     }
 
-    private void setShortTitleResultForPreviousActivity(String shortTitle) {
-        setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_SHORT_TITLE, shortTitle));
+    private void setTitleResultForPreviousActivity(String title) {
+        setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_TITLE, title));
     }
 
     //region Edit photo
@@ -289,10 +308,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     //region View methods
     @Override public void setStreamTitle(String title) {
         streamTitle.setText(title);
-    }
-
-    @Override public void setStreamShortTitle(String shortTitle) {
-        setShortTitleResultForPreviousActivity(shortTitle);
+        setTitleResultForPreviousActivity(title);
     }
 
     @Override public void setStreamAuthor(String author) {
@@ -300,15 +316,68 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void setStreamPicture(String picture) {
-
         imageLoader.loadStreamPicture(picture, streamPicture);
+    }
+
+    @Override
+    public void setupStreamInitials(StreamModel streamModel) {
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        String title = streamModel.getTitle();
+        String[] split = title.split(" ");
+        String initials;
+        if (split.length > 1) {
+            String firstWord = split[0];
+            String lastWord = split[split.length - 1];
+            initials = String.valueOf(String.valueOf(firstWord.charAt(0)) + String.valueOf(lastWord.charAt(0)))
+              .toUpperCase();
+        } else {
+            String firstWord = split[0];
+            initials = String.valueOf(firstWord.charAt(0)).toUpperCase();
+        }
+        int backgroundColor = generator.getColor(initials);
+        TextDrawable letters = TextDrawable.builder()
+          .beginConfig()
+          .width(56)
+          .height(56)
+          .textColor(Color.WHITE)
+          .useFont(Typeface.DEFAULT)
+          .fontSize(24)
+          .endConfig()
+          .buildRound(initials, generator.getColor(initials));
+        streamPictureWithoutText.setImageDrawable(letters);
+        changeStatusBarColor(backgroundColor);
+    }
+
+    private void changeStatusBarColor(int backgroundColor) {
+        int darkColor = getDarkColor(backgroundColor);
+        blurLayout.setBackgroundColor(darkColor);
+        collapsingToolbar.setContentScrimColor(darkColor);
+        collapsingToolbar.setStatusBarScrimColor(darkColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = getDarkColor(darkColor);
+
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+        }
+    }
+
+    private int getDarkColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.9f;
+        return Color.HSVToColor(hsv);
+    }
+
+    @Override public void loadBlurStreamPicture(String picture) {
         imageLoader.loadBlurStreamPicture(picture, toolbarImage, new RequestListener<String, GlideDrawable>() {
             @Override public boolean onException(Exception e, String model, Target<GlideDrawable> target,
               boolean isFirstResource) {
                 return false;
             }
 
-            @Override public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
               boolean isFromMemoryCache, boolean isFirstResource) {
 
                 if (counterToolbarPrintTimes == 0) {
@@ -320,25 +389,45 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         });
     }
 
+    @Override public void showPicture() {
+        streamPicture.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideNoTextPicture() {
+        streamPictureWithoutText.setVisibility(View.GONE);
+    }
+
+    @Override public void hidePicture() {
+        streamPicture.setVisibility(View.GONE);
+    }
+
+    @Override public void showNoTextPicture() {
+        streamPictureWithoutText.setVisibility(View.VISIBLE);
+    }
+
     private void changeToolbarColor() {
         try {
-            blurLayout.setBackgroundColor(getResources().getColor(R.color.gray_40));
+            blurLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_40));
             streamPicture.buildDrawingCache();
             Bitmap bitmap = streamPicture.getDrawingCache();
             Palette palette = Palette.from(bitmap).generate();
-            collapsingToolbar.setContentScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
-            collapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            collapsingToolbar.setContentScrimColor(getDarkVibrantColor(palette));
+            collapsingToolbar.setStatusBarScrimColor(getDarkVibrantColor(palette));
             changeStatusBarColor(palette);
-        }catch (IllegalArgumentException exception){
+        } catch (IllegalArgumentException exception) {
             crashReportTool.logException("IllegalArgumentException. Bitmap is not valid");
         }
+    }
+
+    private int getDarkVibrantColor(Palette palette) {
+        return palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material));
     }
 
     private void changeStatusBarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(palette.getDarkVibrantColor(getResources().getColor(R.color.gray_material)));
+            window.setStatusBarColor(getDarkVibrantColor(palette));
         }
     }
 
@@ -354,23 +443,30 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                       case R.id.menu_stream_edit_info:
                           streamDetailPresenter.editStreamInfo();
                           break;
+                      default:
+                          break;
                   }
               }
           })
           .show();
     }
 
-    @Override public void showPhotoPicker() {
-        new BottomSheet.Builder(this).title(R.string.change_photo)
-          .sheet(R.menu.profile_photo_bottom_sheet)
+    @Override public void showPhotoOptions() {
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
+          .sheet(R.menu.photo_options_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
+                      case R.id.menu_photo_view:
+                          streamDetailPresenter.viewPhotoClicked();
+                          break;
                       case R.id.menu_photo_gallery:
                           handlePhotoSelectionFromGallery();
                           break;
                       case R.id.menu_photo_take:
                           takePhotoFromCamera();
+                          break;
+                      default:
                           break;
                   }
               }
@@ -535,6 +631,88 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
         intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
         startActivity(intent);
+    }
+
+    @Override public void goToContributorsActivityAsHolder(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream, true));
+    }
+
+    @Override public void goToContributorsActivity(String idStream) {
+        startActivity(ContributorsActivity.newIntent(this, idStream, false));
+    }
+
+    @Override public void hideContributorsNumber() {
+        adapter.setContributorsNumber(NO_CONTRIBUTORS);
+    }
+
+    @Override public void showContributorsNumber(Integer contributorsNumber) {
+        adapter.setContributorsNumber(contributorsNumber);
+    }
+
+    @Override public void showPhotoPicker() {
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
+          .sheet(R.menu.photo_picker_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          handlePhotoSelectionFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                      default:
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
+    @Override public void showRestoreStreamButton() {
+        restoreMenuItem.setVisible(true);
+    }
+
+    @Override public void showRemoveStreamButton() {
+        removeMenuItem.setVisible(true);
+    }
+
+    @Override public void askRemoveStreamConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  streamDetailPresenter.confirmRemoveStream();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
+    @Override public void hideRestoreButton() {
+        restoreMenuItem.setVisible(false);
+    }
+
+    @Override public void hideRemoveButton() {
+        removeMenuItem.setVisible(false);
+    }
+
+    @Override public void showRestoreStreamFeedback() {
+        feedbackMessage.show(getView(), R.string.stream_restored_feedback);
+    }
+
+    @Override public void showRemovedFeedback() {
+        feedbackMessage.showForever(getView(),
+          R.string.stream_removed_feedback,
+          R.string.restore_stream_snackbar_action,
+          new View.OnClickListener() {
+              @Override public void onClick(View v) {
+                  streamDetailPresenter.restoreStream();
+              }
+          });
+    }
+
+    @Override public void disableContributors() {
+        adapter.disableContributors();
     }
 
     @Override public void showLoading() {

@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.StreamResultModel;
-
 import java.util.List;
 
 public interface FindStreamsView {
@@ -24,7 +23,7 @@ public interface FindStreamsView {
 
     void showError(String errorMessage);
 
-    void navigateToStreamTimeline(String idStream, String streamShortTitle, String authorId);
+    void navigateToStreamTimeline(String idStream, String streamTitle, String authorId);
 
     void showAddedToFavorites();
 

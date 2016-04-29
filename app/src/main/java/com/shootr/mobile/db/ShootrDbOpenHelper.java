@@ -3,7 +3,6 @@ package com.shootr.mobile.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.util.Version;
 
 public class ShootrDbOpenHelper extends SQLiteOpenHelper {
@@ -18,8 +17,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, version.getDatabaseVersion());
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    @Override public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQLiteUtils.CREATE_TABLE_USER);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT);
         db.execSQL(SQLiteUtils.CREATE_TABLE_FOLLOW);
@@ -37,8 +35,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_TIMELINE_SYNC);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.UserTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.FollowTable.TABLE);
@@ -56,8 +53,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    @Override public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 }

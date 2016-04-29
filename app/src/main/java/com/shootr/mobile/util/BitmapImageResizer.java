@@ -6,15 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-
 import com.shootr.mobile.domain.utils.ImageResizer;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class BitmapImageResizer implements ImageResizer {
@@ -39,27 +35,22 @@ public class BitmapImageResizer implements ImageResizer {
         if (orientedImage != originalImage) {
             originalImage.recycle();
         }
-        originalImage = null;
-
 
         Timber.d("Cropping image...");
         Bitmap squareImage = cropSquareImage(orientedImage);
         if (squareImage != orientedImage) {
             orientedImage.recycle();
         }
-        orientedImage = null;
 
         Timber.d("Scaling image to %d px...", MAX_SIZE);
         Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, MAX_SIZE);
         if (bitmapResized != squareImage) {
             squareImage.recycle();
         }
-        squareImage = null;
 
         Timber.d("Storing image in file...");
         File finalImageFile = storeCompressedImageInFile(bitmapResized);
         bitmapResized.recycle();
-        bitmapResized = null;
 
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
@@ -72,20 +63,16 @@ public class BitmapImageResizer implements ImageResizer {
         if (orientedImage != originalImage) {
             originalImage.recycle();
         }
-        originalImage = null;
-
 
         Timber.d("Scaling image to %d px...", MAX_SIZE);
         Bitmap bitmapResized = getScaledBitmapWithMaxDimension(orientedImage, MAX_SIZE);
         if (bitmapResized != orientedImage) {
             orientedImage.recycle();
         }
-        orientedImage = null;
 
         Timber.d("Storing image in file...");
         File finalImageFile = storeCompressedImageInFile(bitmapResized);
         bitmapResized.recycle();
-        bitmapResized = null;
 
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
@@ -104,7 +91,7 @@ public class BitmapImageResizer implements ImageResizer {
         if (isSquareImage) {
             finalWidth = maxDimensionSize;
             finalHeight = maxDimensionSize;
-        }else {
+        } else {
             boolean isLandscape = originalWidth > originalHeight;
             if (isLandscape) {
                 finalWidth = maxDimensionSize;
@@ -137,7 +124,12 @@ public class BitmapImageResizer implements ImageResizer {
         Timber.d("Rotating image %d degrees...", rotationInDegrees);
         Matrix matrix = new Matrix();
         matrix.preRotate(rotationInDegrees);
-        return Bitmap.createBitmap(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), matrix,
+        return Bitmap.createBitmap(originalImage,
+          0,
+          0,
+          originalImage.getWidth(),
+          originalImage.getHeight(),
+          matrix,
           true);
     }
 

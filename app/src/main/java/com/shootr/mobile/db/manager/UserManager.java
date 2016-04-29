@@ -6,25 +6,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
-
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class UserManager extends AbstractManager {
 
     private final UserEntityDBMapper userMapper;
 
-    @Inject
-    public UserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper) {
+    @Inject public UserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper) {
         super(openHelper);
         this.userMapper = userMapper;
     }
@@ -154,8 +150,7 @@ public class UserManager extends AbstractManager {
         return readUser(args, argsString);
     }
 
-    @Nullable
-    private UserEntity readUser(String whereClause, String[] whereArguments) {
+    @Nullable private UserEntity readUser(String whereClause, String[] whereArguments) {
         UserEntity resUser = null;
         Cursor c = getReadableDatabase().query(DatabaseContract.UserTable.TABLE,
           DatabaseContract.UserTable.PROJECTION,
@@ -173,8 +168,7 @@ public class UserManager extends AbstractManager {
         return resUser;
     }
 
-    @NonNull
-    private List<UserEntity> readUsers(String whereClause, String[] whereArguments) {
+    @NonNull private List<UserEntity> readUsers(String whereClause, String[] whereArguments) {
         Cursor queryResults = getReadableDatabase().query(DatabaseContract.UserTable.TABLE,
           DatabaseContract.UserTable.PROJECTION,
           whereClause,

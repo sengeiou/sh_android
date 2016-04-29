@@ -9,7 +9,6 @@ import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.model.mappers.ForgotPasswordUserModelMapper;
 import com.shootr.mobile.ui.views.ResetPasswordRequestView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,53 +34,46 @@ public class ResetPasswordRequestPresenterTest {
 
     private ResetPasswordRequestPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ForgotPasswordUserModelMapper forgotPasswordMapper = new ForgotPasswordUserModelMapper();
-        presenter = new ResetPasswordRequestPresenter(resetPasswordInteractor, forgotPasswordMapper,
-          errorMessageFactory);
+        presenter =
+          new ResetPasswordRequestPresenter(resetPasswordInteractor, forgotPasswordMapper, errorMessageFactory);
         presenter.setView(resetPasswordRequestView);
     }
 
     //region Next button
-    @Test
-    public void shouldDisableNextButtonWhenInitialized() throws Exception {
+    @Test public void shouldDisableNextButtonWhenInitialized() throws Exception {
         presenter.initialize(resetPasswordRequestView);
 
         verify(resetPasswordRequestView).disableNextButton();
     }
 
-    @Test
-    public void shouldEnableNextButtonWhenUsernameOrEmailChangedIfHasText() throws Exception {
+    @Test public void shouldEnableNextButtonWhenUsernameOrEmailChangedIfHasText() throws Exception {
         presenter.onUsernameOrEmailChanged(STUB_USERNAME_OR_EMAIL);
 
         verify(resetPasswordRequestView).enableNextButton();
     }
 
-    @Test
-    public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
+    @Test public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
         presenter.onUsernameOrEmailChanged(EMPTY);
 
         verify(resetPasswordRequestView, never()).enableNextButton();
     }
 
-    @Test
-    public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
+    @Test public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
         presenter.onUsernameOrEmailChanged(WHITESPACES);
 
         verify(resetPasswordRequestView, never()).enableNextButton();
     }
 
-    @Test
-    public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
+    @Test public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
         presenter.onUsernameOrEmailChanged(EMPTY);
 
         verify(resetPasswordRequestView).disableNextButton();
     }
 
-    @Test
-    public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
+    @Test public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
         presenter.onUsernameOrEmailChanged(WHITESPACES);
 
         verify(resetPasswordRequestView).disableNextButton();
@@ -90,15 +82,13 @@ public class ResetPasswordRequestPresenterTest {
 
     //region Next action
 
-    @Test
-    public void shouldHideKeyboardWhenNext() throws Exception {
+    @Test public void shouldHideKeyboardWhenNext() throws Exception {
         presenter.next();
 
         verify(resetPasswordRequestView).hideKeyboard();
     }
 
-    @Test
-    public void shouldNavigateToConfirmationWhenNextIfInteractorCallbacksResult() throws Exception {
+    @Test public void shouldNavigateToConfirmationWhenNextIfInteractorCallbacksResult() throws Exception {
         setupResetPasswordInteractorCallbacksResult();
 
         presenter.next();
@@ -106,15 +96,13 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).navigateToResetPasswordConfirmation(any(ForgotPasswordUserModel.class));
     }
 
-    @Test
-    public void shouldShowLoadingWhenNext() throws Exception {
+    @Test public void shouldShowLoadingWhenNext() throws Exception {
         presenter.next();
 
         verify(resetPasswordRequestView).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenNextIfCallbacksException() throws Exception {
+    @Test public void shouldHideLoadingWhenNextIfCallbacksException() throws Exception {
         setupResetPasswordInteractorCallbacksShootrException();
 
         presenter.next();
@@ -122,15 +110,13 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).hideLoading();
     }
 
-    @Test
-    public void shouldDisableNextButtonWhenNext() throws Exception {
+    @Test public void shouldDisableNextButtonWhenNext() throws Exception {
         presenter.next();
 
         verify(resetPasswordRequestView).disableNextButton();
     }
 
-    @Test
-    public void shouldEnableNextButtonWhenNextIfInteractorCallbackResetPasswordException() throws Exception {
+    @Test public void shouldEnableNextButtonWhenNextIfInteractorCallbackResetPasswordException() throws Exception {
         setupResetPasswordInteractorCallbacksResetPasswordException();
 
         presenter.next();
@@ -138,8 +124,7 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).enableNextButton();
     }
 
-    @Test
-    public void shouldEnableNextButtonWhenNextIfInteractorCallbackShootrException() throws Exception {
+    @Test public void shouldEnableNextButtonWhenNextIfInteractorCallbackShootrException() throws Exception {
         setupResetPasswordInteractorCallbacksShootrException();
 
         presenter.next();
@@ -149,8 +134,8 @@ public class ResetPasswordRequestPresenterTest {
     //endregion
 
     //region Errors
-    @Test
-    public void shouldShowResetPasswordErrorWhenNextIfInteractorCallbacksResetPasswordException() throws Exception {
+    @Test public void shouldShowResetPasswordErrorWhenNextIfInteractorCallbacksResetPasswordException()
+      throws Exception {
         setupResetPasswordInteractorCallbacksResetPasswordException();
 
         presenter.next();
@@ -158,8 +143,7 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).showResetPasswordError();
     }
 
-    @Test
-    public void shouldShowErrorWhenNextIfInteractorCallbacksException() throws Exception {
+    @Test public void shouldShowErrorWhenNextIfInteractorCallbacksException() throws Exception {
         setupResetPasswordInteractorCallbacksShootrException();
 
         presenter.next();
@@ -170,8 +154,7 @@ public class ResetPasswordRequestPresenterTest {
 
     private void setupResetPasswordInteractorCallbacksResetPasswordException() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ResetPasswordException("test"));
                 return null;
             }
@@ -180,9 +163,9 @@ public class ResetPasswordRequestPresenterTest {
 
     private void setupResetPasswordInteractorCallbacksShootrException() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException(){});
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException() {
+                });
                 return null;
             }
         }).when(resetPasswordInteractor).attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
@@ -190,15 +173,13 @@ public class ResetPasswordRequestPresenterTest {
 
     private void setupResetPasswordInteractorCallbacksResult() {
         doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ForgotPasswordResult> callback =
                   (Interactor.Callback<ForgotPasswordResult>) invocation.getArguments()[1];
                 callback.onLoaded(dummyResult());
                 return null;
             }
-        }).when(resetPasswordInteractor)
-          .attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
+        }).when(resetPasswordInteractor).attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private ForgotPasswordResult dummyResult() {

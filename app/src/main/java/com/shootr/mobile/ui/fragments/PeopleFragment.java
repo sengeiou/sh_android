@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -32,18 +35,11 @@ import com.shootr.mobile.ui.views.nullview.NullSuggestedPeopleView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
-
-public class PeopleFragment extends BaseFragment implements PeopleView, SuggestedPeopleView,
-  UserListAdapter.FollowUnfollowAdapterCallback {
+public class PeopleFragment extends BaseFragment
+  implements PeopleView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject ImageLoader imageLoader;
@@ -66,8 +62,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         return new PeopleFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -91,8 +86,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         ButterKnife.bind(this, view);
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
         ButterKnife.unbind(this);
@@ -112,8 +106,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         suggestedPeoplePresenter.pause();
     }
 
-    @OnItemClick(R.id.userlist_list)
-    public void onUserClick(int position) {
+    @OnItemClick(R.id.userlist_list) public void onUserClick(int position) {
         if (position == 0) {
             onInviteFriendClick();
         } else {
@@ -124,8 +117,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     private void openUserProfile(String idUser) {
-        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser),
-          REQUEST_CAN_CHANGE_DATA);
+        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser), REQUEST_CAN_CHANGE_DATA);
     }
 
     public void onInviteFriendClick() {
@@ -133,12 +125,10 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
         intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent,
-          getActivity().getString(R.string.invite_friends_title)));
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.people, menu);
     }
 
@@ -165,12 +155,12 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     private FriendsAdapter getPeopleAdapter() {
         if (peopleAdapter == null) {
             suggestedPeopleAdapter = getSuggestedPeopleAdapter();
-            peopleAdapter = new FriendsAdapter(getActivity(), imageLoader, suggestedPeopleAdapter, new OnUserClickListener() {
-                @Override
-                public void onUserClick(String idUser) {
-                    openUserProfile(idUser);
-                }
-            });
+            peopleAdapter =
+              new FriendsAdapter(getActivity(), imageLoader, suggestedPeopleAdapter, new OnUserClickListener() {
+                  @Override public void onUserClick(String idUser) {
+                      openUserProfile(idUser);
+                  }
+              });
         }
         return peopleAdapter;
     }
@@ -227,7 +217,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void unFollow(final int position) {
         final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
+          userModel.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   suggestedPeoplePresenter.unfollowUser(userModel);

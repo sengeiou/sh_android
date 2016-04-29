@@ -17,7 +17,8 @@ public abstract class ShootrException extends RuntimeException {
         super(cause);
     }
 
-    protected ShootrException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected ShootrException(String message, Throwable cause, boolean enableSuppression,
+      boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

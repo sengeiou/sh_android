@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
-
 import javax.inject.Inject;
 
 public class SessionRepositoryImpl implements SessionRepository {
@@ -22,8 +21,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     private User currentUser;
 
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
-      @CurrentUserId StringPreference currentUserIdPreference,
-      CrashReportTool crashReportTool,
+      @CurrentUserId StringPreference currentUserIdPreference, CrashReportTool crashReportTool,
       AnalyticsTool analyticsTool) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
@@ -31,38 +29,31 @@ public class SessionRepositoryImpl implements SessionRepository {
         this.analyticsTool = analyticsTool;
     }
 
-    @Override
-    public User getCurrentUser() {
+    @Override public User getCurrentUser() {
         return currentUser;
     }
 
-    @Override
-    public void setCurrentUser(User currentUser) {
+    @Override public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
-    @Override
-    public String getSessionToken() {
+    @Override public String getSessionToken() {
         return sessionTokenPreference.get();
     }
 
-    @Override
-    public void setSessionToken(String sessionToken) {
+    @Override public void setSessionToken(String sessionToken) {
         this.sessionTokenPreference.set(sessionToken);
     }
 
-    @Override
-    public String getCurrentUserId() {
+    @Override public String getCurrentUserId() {
         return currentUserIdPreference.get();
     }
 
-    @Override
-    public void setCurrentUserId(String currentUserId) {
+    @Override public void setCurrentUserId(String currentUserId) {
         this.currentUserIdPreference.set(currentUserId);
     }
 
-    @Override
-    public void createSession(String userId, String sessionToken, User loggedInUser) {
+    @Override public void createSession(String userId, String sessionToken, User loggedInUser) {
         setCurrentUserId(userId);
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);
@@ -72,8 +63,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         analyticsTool.setUserId(userId);
     }
 
-    @Override
-    public void destroySession() {
+    @Override public void destroySession() {
         currentUserIdPreference.delete();
         sessionTokenPreference.delete();
         currentUser = null;

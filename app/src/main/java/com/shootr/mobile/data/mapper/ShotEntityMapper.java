@@ -7,15 +7,13 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class ShotEntityMapper {
+@Singleton public class ShotEntityMapper {
 
     private final NiceShotRepository niceShotRepository;
     private final MetadataMapper metadataMapper;
@@ -38,7 +36,6 @@ public class ShotEntityMapper {
             Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
             eventInfo.setIdStream(shotEntity.getIdStream());
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
-            eventInfo.setStreamShortTitle(shotEntity.getStreamShortTitle());
             shot.setStreamInfo(eventInfo);
         }
 
@@ -99,7 +96,6 @@ public class ShotEntityMapper {
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
             shotEntity.setStreamTitle(eventInfo.getStreamTitle());
-            shotEntity.setStreamShortTitle(eventInfo.getStreamShortTitle());
         }
 
         shotEntity.setIdShotParent(shot.getParentShotId());
@@ -131,7 +127,11 @@ public class ShotEntityMapper {
         shotDetail.setShot(transform(shotDetailEntity.getShot()));
         shotDetail.setParentShot(transform(shotDetailEntity.getParentShot()));
         shotDetail.setReplies(transform(shotDetailEntity.getReplies()));
-
+        if (shotDetailEntity.getParents() != null) {
+            shotDetail.setParents(transform(shotDetailEntity.getParents()));
+        } else {
+            shotDetail.setParents(Collections.<Shot>emptyList());
+        }
         return shotDetail;
     }
 

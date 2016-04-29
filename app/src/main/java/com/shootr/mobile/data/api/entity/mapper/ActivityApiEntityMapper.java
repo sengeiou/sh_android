@@ -3,11 +3,9 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.ActivityApiEntity;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.entity.ActivityEntity;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ActivityApiEntityMapper {
@@ -33,7 +31,6 @@ public class ActivityApiEntityMapper {
         }
 
         activityEntity.setIdStream(activityApiEntity.getIdStream());
-        activityEntity.setStreamShortTitle(activityApiEntity.getStreamShortTitle());
         activityEntity.setStreamTitle(activityApiEntity.getStreamTitle());
 
         activityEntity.setIdShot(activityApiEntity.getIdShot());
@@ -52,7 +49,7 @@ public class ActivityApiEntityMapper {
     public List<ActivityEntity> transform(List<ActivityApiEntity> activities) {
         List<ActivityEntity> entities = new ArrayList<>(activities.size());
         for (ActivityApiEntity activity : activities) {
-            if(activity.getUser() != null) {
+            if (activity.getUser() != null) {
                 entities.add(transform(activity));
             }
         }

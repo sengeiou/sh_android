@@ -8,21 +8,20 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -54,12 +53,12 @@ public class ShotDetaillPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
+        NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
           shareShotInteractor,
-          shotModelMapper,
-          bus,
+          shotModelMapper, nicerModelMapper, bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
     }
@@ -83,7 +82,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.markNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderParent(any(ShotModel.class));
+        verify(shotDetailView).renderParents(anyList());
     }
 
     @Test public void shouldSetReplyUsernameWhenNiceIsMarked() throws Exception {
@@ -116,7 +115,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.unmarkNiceShot(ID_SHOT);
 
-        verify(shotDetailView).renderParent(any(ShotModel.class));
+        verify(shotDetailView).renderParents(anyList());
     }
 
     @Test public void shouldSetReplyUsernameWhenNiceIsUnmarked() throws Exception {
@@ -170,6 +169,26 @@ public class ShotDetaillPresenterTest {
         presenter.markNiceShot(ID_SHOT);
 
         verify(shotDetailView, times(2)).renderReplies(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldRenderParentsWhenNewParentsAreZeroAndIsMarked() throws Exception {
+        setupGetShotDetailInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
+
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView, times(2)).renderParents(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldRenderParentsWhenNewParentsAreEqualsThanPreviousAndIsMarked() throws Exception {
+        setupGetShotDetailWithRepliesInteractorCallback();
+        setupMarkNiceShotInteractorCallback();
+
+        presenter.initialize(shotDetailView, shotModel());
+        presenter.markNiceShot(ID_SHOT);
+
+        verify(shotDetailView, times(2)).renderParents(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldRenderRepliesWhenNewRepliesAreZeroAndIsUnmarked() throws Exception {
@@ -350,6 +369,7 @@ public class ShotDetaillPresenterTest {
         ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(Collections.<Shot>emptyList());
+        shotDetail.setParents(shotList(2));
         return shotDetail;
     }
 
@@ -357,18 +377,22 @@ public class ShotDetaillPresenterTest {
         ShotDetail shotDetail = new ShotDetail();
         shotDetail.setShot(shot());
         shotDetail.setReplies(shotList(2));
+        shotDetail.setParents(Collections.<Shot>emptyList());
         return shotDetail;
     }
 
     private void setupUnmarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
         }).when(unmarkNiceShotInteractor)
-          .unmarkNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+          .unmarkNiceShot(anyString(),
+            any(Interactor.CompletedCallback.class),
+            any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailInteractorCallback() {
@@ -398,7 +422,8 @@ public class ShotDetaillPresenterTest {
     private void setupMarkNiceShotInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
@@ -406,14 +431,15 @@ public class ShotDetaillPresenterTest {
           .markNiceShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupShareShotInteractor(){
+    private void setupShareShotInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback callback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(shareShotInteractor).shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(shareShotInteractor)
+          .shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
-
 }

@@ -10,10 +10,8 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserNotFoundException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ServiceUserDataSource implements UserDataSource {
@@ -22,8 +20,7 @@ public class ServiceUserDataSource implements UserDataSource {
     private final UserApiEntityMapper userApiEntityMapper;
     private final SessionRepository sessionRepository;
 
-    @Inject public ServiceUserDataSource(UserApiService userApiService,
-      UserApiEntityMapper userApiEntityMapper,
+    @Inject public ServiceUserDataSource(UserApiService userApiService, UserApiEntityMapper userApiEntityMapper,
       SessionRepository sessionRepository) {
         this.userApiService = userApiService;
         this.userApiEntityMapper = userApiEntityMapper;
@@ -70,8 +67,7 @@ public class ServiceUserDataSource implements UserDataSource {
         throw new RuntimeException("Method not implemented for service.");
     }
 
-    @Override
-    public UserEntity getUserByUsername(String username) {
+    @Override public UserEntity getUserByUsername(String username) {
         try {
             return userApiService.getUserByUsername(username);
         } catch (IOException e) {
@@ -101,13 +97,12 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override
-    public void updateWatch(UserEntity userEntity) {
+    @Override public void updateWatch(UserEntity userEntity) {
         try {
             if (userEntity.getIdWatchingStream() != null) {
                 userApiService.watch(userEntity.getIdWatchingStream());
             } else {
-                userApiService. unwatch();
+                userApiService.unwatch();
             }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
@@ -146,7 +141,7 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override public List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) {
         try {
             return userApiService.search(searchString, pageOffset, locale);
-        } catch (ApiException  | IOException e ) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }

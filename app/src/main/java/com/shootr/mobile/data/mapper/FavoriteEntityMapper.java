@@ -2,16 +2,13 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.domain.Favorite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class FavoriteEntityMapper {
 
-    @Inject
-    public FavoriteEntityMapper() {
+    @Inject public FavoriteEntityMapper() {
     }
 
     public FavoriteEntity transform(Favorite favorite) {

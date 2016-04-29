@@ -6,15 +6,13 @@ import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
+import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -39,8 +37,7 @@ public class WatchNumberPresenterTest {
     private WatchUpdateRequest.Receiver watchUpdateReceiver;
     private StreamChanged.Receiver streamChangedReceiver;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new WatchNumberPresenter(bus, watchNumberInteractor);
         presenter.setView(watchNumberView);
@@ -49,16 +46,13 @@ public class WatchNumberPresenterTest {
         streamChangedReceiver = presenter;
     }
 
-    @Test
-    public void shouldLoadWatchNumberWhenInitialized() throws Exception {
+    @Test public void shouldLoadWatchNumberWhenInitialized() throws Exception {
         presenter.initialize(watchNumberView, STREAM_ID_STUB);
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
-    @Test
-    public void shouldShowCountInViewWhenOnePersonWatching() throws Exception {
+    @Test public void shouldShowCountInViewWhenOnePersonWatching() throws Exception {
         setupWatchNumberInteractorCallbacks(COUNT_1_PERSON);
 
         presenter.retrieveData();
@@ -66,8 +60,7 @@ public class WatchNumberPresenterTest {
         verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_1_PERSON));
     }
 
-    @Test
-    public void shouldShowCountTwoInViewWhenTwoPeopleWatching() throws Exception {
+    @Test public void shouldShowCountTwoInViewWhenTwoPeopleWatching() throws Exception {
         setupWatchNumberInteractorCallbacks(COUNT_2_PEOPLE);
 
         presenter.retrieveData();
@@ -75,8 +68,7 @@ public class WatchNumberPresenterTest {
         verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_2_PEOPLE));
     }
 
-    @Test
-    public void shouldShowCountZeroInViewWhenNobodyWatching() throws Exception {
+    @Test public void shouldShowCountZeroInViewWhenNobodyWatching() throws Exception {
         setupWatchNumberInteractorCallbacks(COUNT_NOBODY);
 
         presenter.retrieveData();
@@ -84,8 +76,7 @@ public class WatchNumberPresenterTest {
         verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_NOBODY));
     }
 
-    @Test
-    public void shouldHideCountViewWhenNoStream() throws Exception {
+    @Test public void shouldHideCountViewWhenNoStream() throws Exception {
         setupWatchNumberInteractorCallbacks(WatchNumberInteractor.NO_STREAM);
 
         presenter.retrieveData();
@@ -93,55 +84,48 @@ public class WatchNumberPresenterTest {
         verify(watchNumberView).hideWatchingPeopleCount();
     }
 
-    @Test
-    public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
+    @Test public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
         watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
-    @Test
-    public void shouldLoadWatchNumberWhenStreamChanged() throws Exception {
+    @Test public void shouldLoadWatchNumberWhenStreamChanged() throws Exception {
         streamChangedReceiver.onStreamChanged(streamChangedStream());
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
-    @Test
-    public void shouldLoadWatchNumberWhenPresenterResumedAfterPause() throws Exception {
+    @Test public void shouldLoadWatchNumberWhenPresenterResumedAfterPause() throws Exception {
         presenter.pause();
         presenter.resume();
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
-    @Test
-    public void shouldHideWatchNumberWhenExitStreamReceivedAlthougInteractorHasntCallback() throws Exception {
-        doNothing().when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
-          any(WatchNumberInteractor.Callback.class));
+    @Test public void shouldHideWatchNumberWhenExitStreamReceivedAlthougInteractorHasntCallback() throws Exception {
+        doNothing().when(watchNumberInteractor)
+          .loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
 
         streamChangedReceiver.onStreamChanged(exitStream());
 
         verify(watchNumberView).hideWatchingPeopleCount();
     }
 
-    @Test
-    public void shouldWatchUpdateReceiverHaveSubscribeAnnotation() throws Exception {
+    @Test public void shouldWatchUpdateReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = WatchUpdateRequest.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Event.class);
+        Method receiverDeclaredMethod =
+          watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
 
-    @Test
-    public void shouldStreamChangedReceiverHaveSubscribeAnnotation() throws Exception {
+    @Test public void shouldStreamChangedReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = StreamChanged.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = streamChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Event.class);
+        Method receiverDeclaredMethod =
+          streamChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
@@ -162,5 +146,4 @@ public class WatchNumberPresenterTest {
             }
         }).when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
-
 }

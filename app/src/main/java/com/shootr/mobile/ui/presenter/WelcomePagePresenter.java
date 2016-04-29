@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.ui.views.WelcomePageView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import javax.inject.Inject;
 
 public class WelcomePagePresenter implements Presenter {
@@ -19,8 +18,8 @@ public class WelcomePagePresenter implements Presenter {
     private boolean streamsLoaded = false;
     private boolean getStartedClicked = false;
 
-    @Inject public WelcomePagePresenter(StreamsListInteractor streamsListInteractor,
-      ErrorMessageFactory errorMessageFactory) {
+    @Inject
+    public WelcomePagePresenter(StreamsListInteractor streamsListInteractor, ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -52,7 +51,7 @@ public class WelcomePagePresenter implements Presenter {
     public void getStartedClicked() {
         getStartedClicked = true;
         welcomePageView.hideGetStarted();
-        if(streamsLoaded) {
+        if (streamsLoaded) {
             welcomePageView.goToStreamList();
         } else {
             welcomePageView.showSpinner();

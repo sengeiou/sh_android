@@ -13,9 +13,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.AllParticipantsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class AllParticipantsPresenter implements Presenter {
@@ -75,15 +73,19 @@ public class AllParticipantsPresenter implements Presenter {
 
     protected void refreshAllParticipants() {
         allParticipantsView.hideEmpty();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, Long.MAX_VALUE, false, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                renderParticipants(users);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
+        getAllParticipantsInteractor.obtainAllParticipants(idStream,
+          Long.MAX_VALUE,
+          false,
+          new Interactor.Callback<List<User>>() {
+              @Override public void onLoaded(List<User> users) {
+                  renderParticipants(users);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+              }
+          });
     }
 
     private void renderParticipants(List<User> users) {
@@ -154,25 +156,28 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     public void searchClicked() {
-     allParticipantsView.goToSearchParticipants();
+        allParticipantsView.goToSearchParticipants();
     }
 
     public void makeNextRemoteSearch(UserModel item) {
         allParticipantsView.showProgressView();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, item.getJoinStreamTimestamp(), true, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                List<UserModel> newParticipants = userModelMapper.transform(users);
-                if (!newParticipants.isEmpty()) {
-                    allParticipantsView.renderParticipantsBelow(newParticipants);
-                } else {
-                    allParticipantsView.hideProgressView();
-
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
+        getAllParticipantsInteractor.obtainAllParticipants(idStream,
+          item.getJoinStreamTimestamp(),
+          true,
+          new Interactor.Callback<List<User>>() {
+              @Override public void onLoaded(List<User> users) {
+                  List<UserModel> newParticipants = userModelMapper.transform(users);
+                  if (!newParticipants.isEmpty()) {
+                      allParticipantsView.renderParticipantsBelow(newParticipants);
+                  } else {
+                      allParticipantsView.hideProgressView();
+                  }
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+              }
+          });
     }
 }

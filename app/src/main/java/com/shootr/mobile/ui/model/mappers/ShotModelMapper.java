@@ -2,10 +2,8 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.ui.model.ShotModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShotModelMapper {
@@ -31,7 +29,6 @@ public class ShotModelMapper {
         Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
         if (streamInfo != null) {
             shotModel.setStreamId(streamInfo.getIdStream());
-            shotModel.setStreamShortTitle(streamInfo.getStreamShortTitle());
             shotModel.setStreamTitle(streamInfo.getStreamTitle());
         }
 

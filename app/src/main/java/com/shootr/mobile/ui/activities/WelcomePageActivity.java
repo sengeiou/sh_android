@@ -3,20 +3,17 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.presenter.WelcomePagePresenter;
 import com.shootr.mobile.ui.views.WelcomePageView;
 import com.shootr.mobile.util.FeedbackMessage;
-
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-public class WelcomePageActivity extends BaseActivity implements WelcomePageView{
+public class WelcomePageActivity extends BaseActivity implements WelcomePageView {
 
     @Inject WelcomePagePresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -36,8 +33,7 @@ public class WelcomePageActivity extends BaseActivity implements WelcomePageView
         presenter.initialize(this);
     }
 
-    @Override
-    protected boolean requiresUserLogin() {
+    @Override protected boolean requiresUserLogin() {
         return false;
     }
 
@@ -60,8 +56,7 @@ public class WelcomePageActivity extends BaseActivity implements WelcomePageView
         getStartedButton.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.button_get_started)
-    public void onGetStartedClick() {
+    @OnClick(R.id.button_get_started) public void onGetStartedClick() {
         presenter.getStartedClicked();
     }
 }

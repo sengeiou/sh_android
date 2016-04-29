@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.EmailConfirmationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,17 +43,18 @@ public class EmailConfirmationPresenterTest {
 
     private EmailConfirmationPresenter presenter;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new EmailConfirmationPresenter(errorMessageFactory, confirmEmailInteractor, changeEmailInteractor,
-          sessionRepository, userModelMapper);
+        presenter = new EmailConfirmationPresenter(errorMessageFactory,
+          confirmEmailInteractor,
+          changeEmailInteractor,
+          sessionRepository,
+          userModelMapper);
         presenter.setView(emailConfirmationView);
     }
 
-    @Test
-    public void shouldShowAlertWhenPresenterInitializedAndEmailNotConfirmed() {
+    @Test public void shouldShowAlertWhenPresenterInitializedAndEmailNotConfirmed() {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
         setupConfirmEmailCallbackCompleted();
 
@@ -63,8 +63,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
-    @Test
-    public void shouldNotShowAlertWhenEmailConfirmed() {
+    @Test public void shouldNotShowAlertWhenEmailConfirmed() {
         setupConfirmEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithEmailConfirmed());
 
@@ -73,8 +72,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView, never()).showConfirmationEmailSentAlert(eq(EMAIL), any(Runnable.class));
     }
 
-    @Test
-    public void shouldShowErrorWhenPresenterInitializedAndNoConnection() {
+    @Test public void shouldShowErrorWhenPresenterInitializedAndNoConnection() {
         setupConfirmEmailErrorCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
@@ -83,8 +81,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showError(anyString());
     }
 
-    @Test
-    public void shouldShowUserEmailWhenPresenterInitialized() {
+    @Test public void shouldShowUserEmailWhenPresenterInitialized() {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
         presenter.initialize(emailConfirmationView, EMAIL);
@@ -92,8 +89,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showUserEmail(EMAIL);
     }
 
-    @Test
-    public void shouldNotShowDoneButtonWhenEmailIsNotValid() {
+    @Test public void shouldNotShowDoneButtonWhenEmailIsNotValid() {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
         presenter.onEmailEdited(INVALID_EMAIL);
@@ -101,8 +97,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView, never()).showDoneButton();
     }
 
-    @Test
-    public void shouldShowDoneButtonWhenEmailIsValid() {
+    @Test public void shouldShowDoneButtonWhenEmailIsValid() {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
         presenter.onEmailEdited(EMAIL);
@@ -110,8 +105,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showDoneButton();
     }
 
-    @Test
-    public void shouldShowErrorWhenEmailIsNotValid() {
+    @Test public void shouldShowErrorWhenEmailIsNotValid() {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
         presenter.onEmailEdited(INVALID_EMAIL);
@@ -119,8 +113,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView, atLeastOnce()).showEmailError(anyString());
     }
 
-    @Test
-    public void shouldShowConfirmationWhenEmailIsValidAndDoneButtonPressed() {
+    @Test public void shouldShowConfirmationWhenEmailIsValidAndDoneButtonPressed() {
         setupConfirmEmailCallbackCompleted();
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
@@ -130,8 +123,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
-    @Test
-    public void shouldHideDoneButtonWhenEmailIsValidAndDoneButtonPressed() {
+    @Test public void shouldHideDoneButtonWhenEmailIsValidAndDoneButtonPressed() {
         setupConfirmEmailCallbackCompleted();
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
@@ -141,11 +133,9 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
-    @Test
-    public void shouldShowAlertWhenEmailChangedAndIsValid() {
+    @Test public void shouldShowAlertWhenEmailChangedAndIsValid() {
         setupChangeEmailCallbackCompleted();
         setupConfirmEmailCallbackCompleted();
-
 
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
@@ -154,8 +144,7 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showConfirmationEmailSentAlert(eq(ANOTHER_EMAIL), any(Runnable.class));
     }
 
-    @Test
-    public void shouldShowErrorWhenEmailChangedAndNoConnection() {
+    @Test public void shouldShowErrorWhenEmailChangedAndNoConnection() {
         setupoChangeEmailInteractorErrorCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
@@ -182,31 +171,32 @@ public class EmailConfirmationPresenterTest {
                 errorCallback.onError(new ServerCommunicationException(new Throwable()));
                 return null;
             }
-        }).when(confirmEmailInteractor).confirmEmail(any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(confirmEmailInteractor)
+          .confirmEmail(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupConfirmEmailCallbackCompleted() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[0];
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(confirmEmailInteractor).confirmEmail(any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(confirmEmailInteractor)
+          .confirmEmail(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupChangeEmailCallbackCompleted() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(changeEmailInteractor).changeEmail(anyString(),
-          any(Interactor.CompletedCallback.class),
-          any(Interactor.ErrorCallback.class));
+        }).when(changeEmailInteractor)
+          .changeEmail(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private User userWithoutEmailConfirmed() {
@@ -220,5 +210,4 @@ public class EmailConfirmationPresenterTest {
         user.setEmailConfirmed(true);
         return user;
     }
-
 }

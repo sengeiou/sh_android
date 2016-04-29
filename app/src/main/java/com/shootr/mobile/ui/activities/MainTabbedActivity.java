@@ -13,7 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
@@ -25,16 +27,10 @@ import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
-
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -56,13 +52,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     private BadgeDrawable activityBadgeIcon;
     private MenuItemValueHolder activityMenu = new MenuItemValueHolder();
 
-    @Override
-    protected int getLayoutResource() {
+    @Override protected int getLayoutResource() {
         return R.layout.activity_main_tabbed;
     }
 
-    @Override
-    protected void initializeViews(Bundle savedInstanceState) {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -79,8 +73,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void loadIntentData() {
-        Uri data=getIntent().getData();
-        if (data!=null) {
+        Uri data = getIntent().getData();
+        if (data != null) {
             String address = data.toString();
             loadPatternMatching(address);
         }
@@ -152,37 +146,32 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             ((FavoritesFragment) currentPage).scrollListToTop();
         } else if (currentPage != null && currentItem == 1) {
             ((StreamsListFragment) currentPage).scrollListToTop();
-        } else if (currentPage != null && currentItem==2) {
+        } else if (currentPage != null && currentItem == 2) {
             ((PeopleFragment) currentPage).scrollListToTop();
         }
     }
 
-    @Override
-    protected void initializePresenter() {
+    @Override protected void initializePresenter() {
         mainScreenPresenter.initialize(this);
     }
 
-    @Override
-    protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         this.toolbarDecorator = toolbarDecorator;
         this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         mainScreenPresenter.resume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
         mainScreenPresenter.pause();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         activityMenu.bindRealMenuItem(menu.findItem(R.id.menu_activity));
 
@@ -210,15 +199,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void updateWatchNumberIcon(int count) {
-        if (activityBadgeIcon == null ) {
+        if (activityBadgeIcon == null) {
             LayerDrawable activityIcon = (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
             setupActivityBadgeIcon(activityIcon);
         }
         activityBadgeIcon.setCount(count);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_activity) {
             navigateToActivity();
             return true;
@@ -231,32 +219,31 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
     }
 
-    @Override
-    public void setUserData(final UserModel userModel) {
+    @Override public void setUserData(final UserModel userModel) {
         toolbarDecorator.setTitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());
         setToolbarClickListener(userModel);
     }
 
-    @Override
-    public void showActivityBadge(int count) {
-       updateWatchNumberIcon(count);
+    @Override public void showActivityBadge(int count) {
+        updateWatchNumberIcon(count);
     }
 
     @Override public void showHasMultipleActivities(Integer badgeCount) {
         String multipleActivities = getString(R.string.multiple_activity_notification, badgeCount);
-        feedbackMessage.showMultipleActivities(getView(), multipleActivities, multipleActivitiesAction, new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                navigateToActivity();
-            }
-        });
+        feedbackMessage.showMultipleActivities(getView(),
+          multipleActivities,
+          multipleActivitiesAction,
+          new View.OnClickListener() {
+              @Override public void onClick(View view) {
+                  navigateToActivity();
+              }
+          });
     }
-
 
     private void setToolbarClickListener(final UserModel userModel) {
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Intent intent = ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
                 startActivity(intent);
             }
@@ -269,8 +256,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             super(fm);
         }
 
-        @Override
-        public Fragment getItem(int position) {
+        @Override public Fragment getItem(int position) {
             switch (position) {
                 case 0:
                     return FavoritesFragment.newInstance();
@@ -283,13 +269,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             }
         }
 
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
+        @Override public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:

@@ -15,9 +15,7 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class CreateStreamInteractor implements Interactor {
@@ -31,7 +29,6 @@ public class CreateStreamInteractor implements Interactor {
 
     private String idStream;
     private String title;
-    private String shortTitle;
     private String description;
     private String topic;
     private boolean notifyCreation;
@@ -51,11 +48,10 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String shortTitle, String description, String topic, boolean notifyCreation,
-      Boolean notifyTopicMessage ,Callback callback, ErrorCallback errorCallback) {
+    public void sendStream(String idStream, String title, String description, String topic,
+      boolean notifyCreation, Boolean notifyTopicMessage, Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
-        this.shortTitle = shortTitle;
         this.description = description;
         this.topic = topic;
         this.notifyCreation = notifyCreation;
@@ -86,7 +82,6 @@ public class CreateStreamInteractor implements Interactor {
             stream = localStreamRepository.getStreamById(idStream);
         }
         stream.setTitle(title);
-        stream.setShortTitle(shortTitle);
         stream.setDescription(removeDescriptionLineBreaks(description));
         stream.setTopic(topic);
         String currentUserId = sessionRepository.getCurrentUserId();
@@ -151,6 +146,7 @@ public class CreateStreamInteractor implements Interactor {
             case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT:
             case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG:
                 return StreamValidator.FIELD_TITLE;
+            default:
         }
         return 0;
     }

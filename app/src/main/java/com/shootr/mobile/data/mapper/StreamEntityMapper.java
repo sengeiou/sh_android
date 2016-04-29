@@ -3,10 +3,8 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.Stream;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class StreamEntityMapper {
@@ -26,7 +24,6 @@ public class StreamEntityMapper {
         stream.setAuthorId(streamEntity.getIdUser());
         stream.setTitle(streamEntity.getTitle());
         stream.setPicture(streamEntity.getPhoto());
-        stream.setShortTitle(streamEntity.getShortTitle());
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setCountry(streamEntity.getCountry());
         stream.setDescription(streamEntity.getDescription());
@@ -40,7 +37,8 @@ public class StreamEntityMapper {
           streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
         stream.setTotalWatchers(
           streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
-        stream.setHistoricWatchers(streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
+        stream.setHistoricWatchers(
+          streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
         stream.setTotalShots(streamEntity.getTotalShots() != null ? streamEntity.getTotalShots() : 0L);
         stream.setUniqueShots(streamEntity.getUniqueShots() != null ? streamEntity.getUniqueShots() : 0L);
         return stream;
@@ -65,7 +63,6 @@ public class StreamEntityMapper {
         entityTemplate.setIdUser(stream.getAuthorId());
         entityTemplate.setTitle(stream.getTitle());
         entityTemplate.setPhoto(stream.getPicture());
-        entityTemplate.setShortTitle(stream.getShortTitle());
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setCountry(stream.getCountry());
         entityTemplate.setDescription(stream.getDescription());

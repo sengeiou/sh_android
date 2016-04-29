@@ -9,9 +9,7 @@ import com.shootr.mobile.domain.validation.ChangePasswordValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.ui.views.ChangePasswordView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ChangePasswordPresenter implements Presenter {
@@ -41,7 +39,7 @@ public class ChangePasswordPresenter implements Presenter {
     }
 
     public void attempToChangePassword(String currentPassword, String newPassword, String newPasswordAgain) {
-        if(validatePasswords(currentPassword, newPassword, newPasswordAgain)) {
+        if (validatePasswords(currentPassword, newPassword, newPasswordAgain)) {
             changePasswordInteractor.attempToChangePassword(currentPassword,
               newPassword,
               new Interactor.CompletedCallback() {
@@ -65,7 +63,6 @@ public class ChangePasswordPresenter implements Presenter {
                   }
               });
         }
-
     }
 
     private void showErrorInView(ShootrException error) {
@@ -81,7 +78,10 @@ public class ChangePasswordPresenter implements Presenter {
     }
 
     private boolean validateFieldOrShowError(String currentPassword, String newPassword, String newPasswordAgain) {
-        List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword, newPassword, newPasswordAgain, sessionRepository.getCurrentUser().getUsername());
+        List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword,
+          newPassword,
+          newPasswordAgain,
+          sessionRepository.getCurrentUser().getUsername());
         showValidationErrors(errors);
         return errors.isEmpty();
     }

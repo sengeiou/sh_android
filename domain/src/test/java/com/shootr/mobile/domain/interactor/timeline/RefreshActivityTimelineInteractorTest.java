@@ -12,15 +12,13 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
@@ -52,7 +50,8 @@ public class RefreshActivityTimelineInteractorTest {
         this.interactor = new RefreshActivityTimelineInteractor(interactorHandler,
           postExecutionThread,
           shootrTimelineService,
-          sessionRepository, localUserRepository);
+          sessionRepository,
+          localUserRepository);
     }
 
     @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
@@ -63,7 +62,8 @@ public class RefreshActivityTimelineInteractorTest {
         verify(spyCallback).onLoaded(timelineForActivity());
     }
 
-    @Test public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStream() throws Exception {
+    @Test public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStream()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
@@ -73,7 +73,8 @@ public class RefreshActivityTimelineInteractorTest {
         verify(shootrTimelineService).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
-    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStream() throws Exception {
+    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStream()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(userWithoutWatchingStream());
@@ -93,7 +94,8 @@ public class RefreshActivityTimelineInteractorTest {
         verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
-    @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivityAndIsUserTimeline() throws Exception {
+    @Test public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivityAndIsUserTimeline()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUser()).thenReturn(user());
 
@@ -102,7 +104,9 @@ public class RefreshActivityTimelineInteractorTest {
         verify(spyCallback).onLoaded(timelineForActivity());
     }
 
-    @Test public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStreamAndIsUserTimeline() throws Exception {
+    @Test
+    public void shouldRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithWatchingStreamAndIsUserTimeline()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(user());
@@ -112,7 +116,9 @@ public class RefreshActivityTimelineInteractorTest {
         verify(shootrTimelineService).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
-    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStreamAndIsUserTimeline() throws Exception {
+    @Test
+    public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsUserWithoutWatchingStreamAndIsUserTimeline()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(userWithoutWatchingStream());
@@ -122,7 +128,8 @@ public class RefreshActivityTimelineInteractorTest {
         verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
     }
 
-    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsNullUserAndIsUserTimeline() throws Exception {
+    @Test public void shouldNotRefreshTimelinesForStreamWhenLocalRepositoryReturnsNullUserAndIsUserTimeline()
+      throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenReturn(timelineForActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(localUserRepository.getUserById(ID_USER)).thenReturn(null);

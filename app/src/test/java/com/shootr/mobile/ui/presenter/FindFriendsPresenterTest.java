@@ -13,16 +13,14 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.FindFriendsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -58,7 +56,10 @@ public class FindFriendsPresenterTest {
         presenter = new FindFriendsPresenter(findFriendsInteractor,
           findFriendsServerInteractor,
           followInteractor,
-          unfollowInteractor, reactiveSearchPeopleInteractor, getLocalPeopleInteractor, userModelMapper,
+          unfollowInteractor,
+          reactiveSearchPeopleInteractor,
+          getLocalPeopleInteractor,
+          userModelMapper,
           errorMessageFactory);
         presenter.setView(findFriendsView);
     }
@@ -112,7 +113,7 @@ public class FindFriendsPresenterTest {
 
         presenter.queryTextChanged(QUERY);
 
-        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(),any(Interactor.Callback.class));
+        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(), any(Interactor.Callback.class));
     }
 
     @Test public void shouldHideEmptyWhenQueryTextChangedAndLocalPeopleIsEmpty() throws Exception {
@@ -236,7 +237,7 @@ public class FindFriendsPresenterTest {
 
         verify(findFriendsView).addFriends(anyList());
     }
-    
+
     private void setupFollowInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -263,7 +264,8 @@ public class FindFriendsPresenterTest {
     private void setupGetLocalPeopleInteractorWithUsers() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                GetLocalPeopleInteractor.Callback callback =
+                  (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(users());
                 return null;
             }
@@ -273,7 +275,8 @@ public class FindFriendsPresenterTest {
     private void setupGetLocalPeopleInteractorWithoutUsers() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetLocalPeopleInteractor.Callback callback = (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
+                GetLocalPeopleInteractor.Callback callback =
+                  (GetLocalPeopleInteractor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(new ArrayList<User>());
                 return null;
             }
@@ -305,7 +308,8 @@ public class FindFriendsPresenterTest {
     private void setupFindFriendsServerInteractorWithUsers() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                FindFriendsServerInteractor.Callback callback = (FindFriendsServerInteractor.Callback) invocation.getArguments()[2];
+                FindFriendsServerInteractor.Callback callback =
+                  (FindFriendsServerInteractor.Callback) invocation.getArguments()[2];
                 callback.onLoaded(users());
                 return null;
             }
@@ -339,7 +343,7 @@ public class FindFriendsPresenterTest {
         return userModel;
     }
 
-    private List<UserModel> userModels(){
+    private List<UserModel> userModels() {
         ArrayList<UserModel> userModels = new ArrayList<>();
         userModels.add(userModel());
         return userModels;

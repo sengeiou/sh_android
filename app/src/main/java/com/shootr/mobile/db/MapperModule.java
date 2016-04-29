@@ -9,7 +9,6 @@ import com.shootr.mobile.db.mappers.SuggestedPeopleDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserEntityModelMapper;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,17 +17,13 @@ import dagger.Provides;
   library = true,
   injects = {
     StreamResultModelMapper.class
-  }
-)
-public class MapperModule {
+  }) public class MapperModule {
 
-    @Provides
-    FollowEntityDBMapper provideFollowMapper() {
+    @Provides FollowEntityDBMapper provideFollowMapper() {
         return new FollowEntityDBMapper();
     }
 
-    @Provides
-    DeviceEntityDBMapper provideDeviceMapper() {
+    @Provides DeviceEntityDBMapper provideDeviceMapper() {
         return new DeviceEntityDBMapper();
     }
 
@@ -36,18 +31,15 @@ public class MapperModule {
         return new UserEntityModelMapper();
     }
 
-    @Provides
-    UserEntityDBMapper provideUserMapper() {
+    @Provides UserEntityDBMapper provideUserMapper() {
         return new UserEntityDBMapper();
     }
 
-    @Provides
-    SuggestedPeopleDBMapper provideSuggestedPeopleMapper(UserEntityDBMapper userEntityDBMapper) {
+    @Provides SuggestedPeopleDBMapper provideSuggestedPeopleMapper(UserEntityDBMapper userEntityDBMapper) {
         return new SuggestedPeopleDBMapper(userEntityDBMapper);
     }
 
-    @Provides
-    StreamEntityDBMapper provideEntityMapper() {
+    @Provides StreamEntityDBMapper provideEntityMapper() {
         return new StreamEntityDBMapper();
     }
 
@@ -58,5 +50,4 @@ public class MapperModule {
     @Provides BanEntityDBMapper provideBanMapper() {
         return new BanEntityDBMapper();
     }
-
 }

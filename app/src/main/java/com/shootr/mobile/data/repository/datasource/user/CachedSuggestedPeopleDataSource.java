@@ -3,14 +3,11 @@ package com.shootr.mobile.data.repository.datasource.user;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.repository.datasource.CachedDataSource;
 import com.shootr.mobile.domain.repository.Local;
-
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSource, CachedDataSource {
+@Singleton public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSource, CachedDataSource {
 
     private static final long EXPIRATION_TIME_MILLIS = 12 * 60 * 60 * 1000;
 

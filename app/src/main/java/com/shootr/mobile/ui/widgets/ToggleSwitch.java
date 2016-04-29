@@ -24,8 +24,9 @@ public class ToggleSwitch extends SwitchCompat {
 
     private OnBeforeCheckedChangeListener mOnBeforeListener;
 
-    public static interface OnBeforeCheckedChangeListener {
-        public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
+    public interface OnBeforeCheckedChangeListener {
+
+        boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
     }
 
     public ToggleSwitch(Context context) {
@@ -44,10 +45,8 @@ public class ToggleSwitch extends SwitchCompat {
         mOnBeforeListener = listener;
     }
 
-    @Override
-    public void setChecked(boolean checked) {
-        if (mOnBeforeListener != null
-                && mOnBeforeListener.onBeforeCheckedChanged(this, checked)) {
+    @Override public void setChecked(boolean checked) {
+        if (mOnBeforeListener != null && mOnBeforeListener.onBeforeCheckedChanged(this, checked)) {
             return;
         }
         super.setChecked(checked);

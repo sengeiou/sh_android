@@ -7,26 +7,21 @@ import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.squareup.otto.Bus;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
-        injects = {
-                EmailLoginActivity.class,
-                EmailRegistrationActivity.class,
+  injects = {
+    EmailLoginActivity.class, EmailRegistrationActivity.class,
 
-                FindFriendsActivity.class,
+    FindFriendsActivity.class,
 
-                ProfileContainerActivity.class,
+    ProfileContainerActivity.class,
 
-                GCMIntentService.class,
-        },
-        complete = false
-)
-public class BusModule {
+    GCMIntentService.class,
+  },
+  complete = false) public class BusModule {
 
     @Provides @Singleton BusPublisher provideBusPublisher(@Default Bus backgroundBus, @Main Bus uiBus) {
         return new MultiBusPublisher(uiBus, backgroundBus);

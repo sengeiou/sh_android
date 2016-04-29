@@ -6,13 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
-
-import com.shootr.mobile.R;
-import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.shootr.mobile.R;
+import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
 
 public class UpdateWarningActivity extends BaseNoToolbarActivity {
 
@@ -30,8 +28,7 @@ public class UpdateWarningActivity extends BaseNoToolbarActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.update_warning_button)
-    public void onUpdateClick() {
+    @OnClick(R.id.update_warning_button) public void onUpdateClick() {
         goToAppDownload(getString(R.string.update_shootr_version_url));
     }
 

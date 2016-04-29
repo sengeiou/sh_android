@@ -2,10 +2,8 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.User;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class UserEntityMapper {
@@ -79,7 +77,7 @@ public class UserEntityMapper {
 
         userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
-        
+
         return userEntity;
     }
 

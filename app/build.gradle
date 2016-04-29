@@ -3,13 +3,14 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://jitpack.io' } // sdk manager
     }
 
     dependencies {
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
-        classpath 'io.fabric.tools:gradle:1.19.2'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -23,7 +24,8 @@ apply plugin: "sonar-runner"
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
-    maven { url 'http://dl.bintray.com/sloy/maven'} //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
+    maven { url 'http://dl.bintray.com/sloy/maven' }
+    //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
     mavenCentral()
 }
 
@@ -31,12 +33,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 9
+def versionMinor = 10
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 24
+def databaseVersion = 25
 
 android {
     compileSdkVersion 23
@@ -64,9 +66,6 @@ android {
         buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        renderscriptTargetApi 20
-        renderscriptSupportModeEnabled true
     }
 
     splits {
@@ -95,7 +94,6 @@ android {
             minifyEnabled false
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
-
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
@@ -220,11 +218,12 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
     androidTestCompile 'com.android.support:support-annotations:23.1.0'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.0') {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }
 
 /**

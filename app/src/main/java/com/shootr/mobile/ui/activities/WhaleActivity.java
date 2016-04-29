@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
-import com.shootr.mobile.R;
-import com.shootr.mobile.ui.base.BaseActivity;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.shootr.mobile.R;
+import com.shootr.mobile.ui.base.BaseActivity;
 
 public class WhaleActivity extends BaseActivity {
 
@@ -19,28 +17,23 @@ public class WhaleActivity extends BaseActivity {
         return intent;
     }
 
-    @Override
-    protected int getLayoutResource() {
+    @Override protected int getLayoutResource() {
         return R.layout.activity_whale;
     }
 
-    @Override
-    protected void initializeViews(Bundle savedInstanceState) {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void initializePresenter() {
+    @Override protected void initializePresenter() {
         /* no-op */
     }
 
-    @OnClick(R.id.whale_ok)
-    public void onRetryClick() {
+    @OnClick(R.id.whale_ok) public void onRetryClick() {
         finish();
     }
 
-    @Override
-    protected boolean requiresUserLogin() {
+    @Override protected boolean requiresUserLogin() {
         return false;
     }
 }

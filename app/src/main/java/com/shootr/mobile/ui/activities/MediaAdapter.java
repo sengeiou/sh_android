@@ -10,17 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -36,22 +33,22 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.imageLoader = imageLoader;
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         switch (viewType) {
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(viewGroup);
             case TYPE_GENERIC_MEDIA:
                 return onCreateMediaViewHolder(viewGroup);
+            default:
         }
         throw new IllegalStateException("View type %d not handled");
     }
 
     @NonNull private RecyclerView.ViewHolder onCreateMediaViewHolder(ViewGroup viewGroup) {
-        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.stream_media_layout, viewGroup, false);
+        View layoutView =
+          LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.stream_media_layout, viewGroup, false);
         return new ViewHolder(layoutView, new OnVideoClickListener() {
-            @Override
-            public void onVideoClick(String url) {
+            @Override public void onVideoClick(String url) {
                 videoClicked(url);
             }
         });
@@ -64,8 +61,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         };
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isFooter(position)) {
             final ShotModel shotModel = shotsWithMedia.get(position);
             ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
@@ -90,8 +86,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return shotsWithMedia.size();
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return showFooter ? shotsWithMedia.size() + 1 : shotsWithMedia.size();
     }
 
@@ -142,24 +137,23 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.videoClickListener = videoClickListener;
         }
 
-        public void bindMedia(final ShotModel shotModel){
+        public void bindMedia(final ShotModel shotModel) {
             this.shotModel = shotModel;
-            if(shotModel.hasVideo()){
+            if (shotModel.hasVideo()) {
                 this.videoFrame.setVisibility(View.VISIBLE);
                 this.videoDuration.setText(shotModel.getVideoDuration());
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    @Override public void onClick(View v) {
                         videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
-            }else{
+            } else {
                 this.videoFrame.setVisibility(View.GONE);
                 bindVideoOrPicture();
             }
         }
 
-        public void bindVideoOrPicture(){
+        public void bindVideoOrPicture() {
             mediaImage.setOnClickListener(this);
         }
 

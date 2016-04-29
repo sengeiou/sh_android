@@ -11,19 +11,16 @@ import com.shootr.mobile.data.repository.remote.SyncUserRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
   injects = {
     LocalUserRepository.class, SyncUserRepository.class, DatabaseUserDataSource.class, ServiceUserDataSource.class,
   },
   complete = false,
-  library = true)
-public class UserRepositoryModule {
+  library = true) public class UserRepositoryModule {
 
     @Provides @Singleton @Local UserRepository provideLocalUserRepository(LocalUserRepository userRepository) {
         return userRepository;
@@ -41,11 +38,13 @@ public class UserRepositoryModule {
         return userDataSource;
     }
 
-    @Provides @Singleton @Local SuggestedPeopleDataSource provideLocalSuggestedPeopleDataSource(DatabaseSuggestedPeopleDataSource suggestedPeopleDataSource) {
+    @Provides @Singleton @Local SuggestedPeopleDataSource provideLocalSuggestedPeopleDataSource(
+      DatabaseSuggestedPeopleDataSource suggestedPeopleDataSource) {
         return suggestedPeopleDataSource;
     }
 
-    @Provides @Singleton @Remote SuggestedPeopleDataSource provideSuggestedPeopleDataSource(ServiceSuggestedPeopleDataSource suggestedPeopleDataSource) {
+    @Provides @Singleton @Remote SuggestedPeopleDataSource provideSuggestedPeopleDataSource(
+      ServiceSuggestedPeopleDataSource suggestedPeopleDataSource) {
         return suggestedPeopleDataSource;
     }
 }

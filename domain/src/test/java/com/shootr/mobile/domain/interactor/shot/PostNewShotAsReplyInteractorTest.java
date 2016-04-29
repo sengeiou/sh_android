@@ -21,7 +21,6 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     private static final String PARENT_SHOT_ID = "1L";
     private static final Long PARENT_STREAM_ID = 2L;
     private static final String PARENT_STREAM_TITLE = "title";
-    private static final String PARENT_STREAM_SHORT_TITLE = "shortTitle";
     private static final Long PARENT_SHOT_USER_ID = 3L;
     private static final String PARENT_SHOT_USERNAME = "parent username";
 
@@ -121,7 +120,6 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
         shotStreamInfo.setIdStream(String.valueOf(PARENT_STREAM_ID));
         shotStreamInfo.setStreamTitle(PARENT_STREAM_TITLE);
-        shotStreamInfo.setStreamShortTitle(PARENT_STREAM_SHORT_TITLE);
         return shotStreamInfo;
     }
 

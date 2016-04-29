@@ -5,19 +5,19 @@
   android:background="@color/gray_92"
   android:orientation="vertical">
 
-  <FrameLayout android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1">
+    <FrameLayout android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1">
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/shot_detail_list"
+        <android.support.v7.widget.RecyclerView android:id="@+id/shot_detail_list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical" />
+
+    </FrameLayout>
+
+    <include android:id="@+id/detail_new_shot_bar"
+      layout="@layout/include_new_shot_bar"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical" />
-
-  </FrameLayout>
-
-  <include android:id="@+id/detail_new_shot_bar"
-    layout="@layout/include_new_shot_bar"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/new_shot_height" />
+      android:layout_height="@dimen/new_shot_height" />
 </LinearLayout>

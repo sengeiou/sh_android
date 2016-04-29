@@ -2,9 +2,7 @@ package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.shootr.mobile.domain.Shot;
-
 import java.util.Date;
 
 public class ParcelableShot implements Parcelable {
@@ -43,7 +41,6 @@ public class ParcelableShot implements Parcelable {
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         dest.writeString(eventInfo != null ? eventInfo.getIdStream() : null);
         dest.writeString(eventInfo != null ? eventInfo.getStreamTitle() : null);
-        dest.writeString(eventInfo != null ? eventInfo.getStreamShortTitle() : null);
 
         dest.writeString(shot.getParentShotId());
         dest.writeString(shot.getParentShotUserId());
@@ -76,7 +73,6 @@ public class ParcelableShot implements Parcelable {
         Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
         eventInfo.setIdStream(parcel.readString());
         eventInfo.setStreamTitle(parcel.readString());
-        eventInfo.setStreamShortTitle(parcel.readString());
         String idEvent = eventInfo.getIdStream();
         if (idEvent != null) {
             shot.setStreamInfo(eventInfo);

@@ -25,7 +25,9 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
@@ -56,7 +58,6 @@ import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.okresponsefaker.EmptyBodyFakeResponse;
 import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -70,13 +71,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit.MockRestAdapter;
 import timber.log.Timber;
 
@@ -90,8 +86,7 @@ import static butterknife.ButterKnife.findById;
  * An {@link AppContainer} for debug builds which wrap the content view with a sliding drawer on
  * the right that holds all of the debug information and settings.
  */
-@Singleton
-public class DebugAppContainer implements AppContainer {
+@Singleton public class DebugAppContainer implements AppContainer {
 
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
@@ -115,22 +110,14 @@ public class DebugAppContainer implements AppContainer {
     Context drawerContext;
     ContextualDebugActions contextualDebugActions;
 
-    @Inject
-    public DebugAppContainer(JsonAdapter jsonAdapter,
-      OkHttpClient client,
-      @ApiEndpoint StringPreference networkEndpoint,
-      @NetworkEnabled BooleanPreference networkEnabled,
-      @DebugMode BooleanPreference debugMode,
-      @NetworkProxy StringPreference networkProxy,
-      @AnimationSpeed IntPreference animationSpeed,
-      @ScalpelEnabled BooleanPreference scalpelEnabled,
+    @Inject public DebugAppContainer(JsonAdapter jsonAdapter, OkHttpClient client,
+      @ApiEndpoint StringPreference networkEndpoint, @NetworkEnabled BooleanPreference networkEnabled,
+      @DebugMode BooleanPreference debugMode, @NetworkProxy StringPreference networkProxy,
+      @AnimationSpeed IntPreference animationSpeed, @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
-      @CaptureIntents BooleanPreference captureIntentsEnabled,
-      @CustomEndpoint StringPreference customEndpoint,
-      @NotificationsEnabled BooleanPreference notificationsEnabled,
-      @PollerEnabled BooleanPreference pollerEnabled,
-      MockRestAdapter mockRestAdapter,
-      Application app) {
+      @CaptureIntents BooleanPreference captureIntentsEnabled, @CustomEndpoint StringPreference customEndpoint,
+      @NotificationsEnabled BooleanPreference notificationsEnabled, @PollerEnabled BooleanPreference pollerEnabled,
+      MockRestAdapter mockRestAdapter, Application app) {
         this.jsonAdapter = jsonAdapter;
         this.client = client;
         this.debugMode = debugMode;
@@ -189,8 +176,7 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_logs_show) TextView deviceLogView;
     @Bind(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
-    @Override
-    public ViewGroup get(final Activity activity) {
+    @Override public ViewGroup get(final Activity activity) {
         this.activity = activity;
         drawerContext = activity;
 
@@ -205,8 +191,7 @@ public class DebugAppContainer implements AppContainer {
 
         drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerOpened(View drawerView) {
+            @Override public void onDrawerOpened(View drawerView) {
             }
         });
 
@@ -224,8 +209,7 @@ public class DebugAppContainer implements AppContainer {
     private void setupContextualActions(Activity activity) {
         contextualDebugActions = new ContextualDebugActions(this, debugActions());
         contextualDebugActions.setActionClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 drawerLayout.closeDrawers();
             }
         });
@@ -242,7 +226,6 @@ public class DebugAppContainer implements AppContainer {
         return debugActions;
     }
 
-
     private void setupNetworkSection() {
         //region Endpoint
         final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
@@ -250,8 +233,7 @@ public class DebugAppContainer implements AppContainer {
         endpointView.setAdapter(endpointAdapter);
         endpointView.setSelection(currentEndpoint.ordinal());
         endpointView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 ApiEndpoints selected = endpointAdapter.getItem(position);
                 if (selected != currentEndpoint) {
                     if (selected == ApiEndpoints.CUSTOM) {
@@ -299,8 +281,7 @@ public class DebugAppContainer implements AppContainer {
         networkDelayView.setAdapter(delayAdapter);
         networkDelayView.setSelection(NetworkDelayAdapter.getPositionForValue(mockRestAdapter.getDelay()));
         networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 long selected = delayAdapter.getItem(position);
                 if (selected != mockRestAdapter.getDelay()) {
                     Timber.d("Setting network delay to %sms", selected);
@@ -318,11 +299,10 @@ public class DebugAppContainer implements AppContainer {
         //region Variance
         final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
         networkVarianceView.setAdapter(varianceAdapter);
-        networkVarianceView.setSelection(
-          NetworkVarianceAdapter.getPositionForValue(mockRestAdapter.getVariancePercentage()));
+        networkVarianceView.setSelection(NetworkVarianceAdapter
+          .getPositionForValue(mockRestAdapter.getVariancePercentage()));
         networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 int selected = varianceAdapter.getItem(position);
                 if (selected != mockRestAdapter.getVariancePercentage()) {
                     Timber.d("Setting network variance to %s%%", selected);
@@ -342,8 +322,7 @@ public class DebugAppContainer implements AppContainer {
         networkErrorView.setAdapter(errorAdapter);
         networkErrorView.setSelection(NetworkErrorAdapter.getPositionForValue(mockRestAdapter.getErrorPercentage()));
         networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 int selected = errorAdapter.getItem(position);
                 if (selected != mockRestAdapter.getErrorPercentage()) {
                     Timber.d("Setting network error to %s%%", selected);
@@ -364,8 +343,7 @@ public class DebugAppContainer implements AppContainer {
         networkProxyView.setAdapter(proxyAdapter);
         networkProxyView.setSelection(currentProxyPosition);
         networkProxyView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 if (position == ProxyAdapter.NONE) {
                     Timber.d("Disabling network proxy");
                     //networkProxy.delete();
@@ -401,8 +379,7 @@ public class DebugAppContainer implements AppContainer {
         boolean pollerEnabledValue = pollerEnabled.get();
         networkPollerView.setChecked(pollerEnabledValue);
         networkPollerView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting Poller Enabled to " + isChecked);
                 pollerEnabled.set(isChecked);
             }
@@ -418,34 +395,32 @@ public class DebugAppContainer implements AppContainer {
     private void setupFakeRequestsSection() {
         fakeRequestOnlyOnce.setChecked(ResponseFaker.isTriggerOnce());
         fakeRequestOnlyOnce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ResponseFaker.setTriggerOnce(isChecked);
             }
         });
     }
 
-    @OnClick(R.id.debug_fake_version)
-    public void onFakeVersionOutdatedRequest() {
-        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(VersionOutdatedErrorInterceptor.CODE_OUTDATED_VERSION));
+    @OnClick(R.id.debug_fake_version) public void onFakeVersionOutdatedRequest() {
+        ResponseFaker.setNextFakeResponse(
+          new EmptyBodyFakeResponse(VersionOutdatedErrorInterceptor.CODE_OUTDATED_VERSION));
     }
 
-    @OnClick(R.id.debug_fake_server_down)
-    public void onFakeServerDownRequest() {
-        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(ServerDownErrorInterceptor.CODE_SERVER_DOWN));
+    @OnClick(R.id.debug_fake_server_down) public void onFakeServerDownRequest() {
+        ResponseFaker.setNextFakeResponse(
+          new EmptyBodyFakeResponse(ServerDownErrorInterceptor.CODE_SERVER_DOWN));
     }
 
-    @OnClick(R.id.debug_fake_unauthorized)
-    public void onFakeUnauthorizedRequest() {
-        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(UnauthorizedErrorInterceptor.CODE_UNAUTHORIZED));
+    @OnClick(R.id.debug_fake_unauthorized) public void onFakeUnauthorizedRequest() {
+        ResponseFaker.setNextFakeResponse(
+          new EmptyBodyFakeResponse(UnauthorizedErrorInterceptor.CODE_UNAUTHORIZED));
     }
 
     private void setupNotificationsSection() {
         boolean showNotifications = notificationsEnabled.get();
         notificationsEnabledView.setChecked(showNotifications);
         notificationsEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting notifications %s", isChecked ? "on" : "off");
                 notificationsEnabled.set(isChecked);
             }
@@ -458,8 +433,7 @@ public class DebugAppContainer implements AppContainer {
         final int animationSpeedValue = animationSpeed.get();
         uiAnimationSpeedView.setSelection(AnimationSpeedAdapter.getPositionForValue(animationSpeedValue));
         uiAnimationSpeedView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            @Override public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 int selected = speedAdapter.getItem(position);
                 if (selected != animationSpeed.get()) {
                     Timber.d("Setting animation speed to %sx", selected);
@@ -530,11 +504,10 @@ public class DebugAppContainer implements AppContainer {
             }
         });*/
 
-        boolean captureIntents  = captureIntentsEnabled.get();
+        boolean captureIntents = captureIntentsEnabled.get();
         uiCaptureIntents.setChecked(captureIntents);
         uiCaptureIntents.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting capture intents to " + isChecked);
                 captureIntentsEnabled.set(isChecked);
             }
@@ -559,14 +532,12 @@ public class DebugAppContainer implements AppContainer {
         deviceApiView.setText(String.valueOf(Build.VERSION.SDK_INT));
     }
 
-    @OnClick(R.id.debug_logs_show)
-    public void openLog() {
+    @OnClick(R.id.debug_logs_show) public void openLog() {
         Intent lynxActivityIntent = LynxActivity.getIntent(drawerContext);
         drawerContext.startActivity(lynxActivityIntent);
     }
 
-    @OnClick(R.id.debug_device_database_extract)
-    public void extractDatabase() {
+    @OnClick(R.id.debug_device_database_extract) public void extractDatabase() {
         try {
             File sd = Environment.getExternalStorageDirectory();
             File data = Environment.getDataDirectory();

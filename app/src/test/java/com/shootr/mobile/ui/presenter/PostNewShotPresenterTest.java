@@ -11,17 +11,15 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
@@ -36,8 +34,8 @@ public class PostNewShotPresenterTest {
     public static final String USERNAME = "username";
     public static final String PART_OF_A_USERNAME = "@use";
     public static final String COMMENT_WITH_USERNAME = "comment @username ";
-    public static final String[] words = {"comment","@username"};
-    public static final Integer wordPosition = 1;
+    public static final String[] WORDS = { "comment", "@username" };
+    public static final Integer WORD_POSITION = 1;
     private PostNewShotPresenter presenter;
 
     @Mock Bus bus;
@@ -51,14 +49,19 @@ public class PostNewShotPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new PostNewShotPresenter(bus, errorMessageFactory, postNewShotInStreamInteractor, postNewShotAsReplyInteractor, getMentionedPeopleInteractor, userModelMapper);
+        presenter = new PostNewShotPresenter(bus,
+          errorMessageFactory,
+          postNewShotInStreamInteractor,
+          postNewShotAsReplyInteractor,
+          getMentionedPeopleInteractor,
+          userModelMapper);
         presenter.setView(postNewShotView);
     }
 
     @Test public void shouldShowMentionSuggestionsIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).showMentionSuggestions();
     }
@@ -66,25 +69,23 @@ public class PostNewShotPresenterTest {
     @Test public void shouldHideImageContainerIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).hideImageContainer();
-
     }
 
     @Test public void shouldRenderMentionSuggestionsIfPeopleObtainedWhenMentioning() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).renderMentionSuggestions(anyList());
-
     }
 
     @Test public void shouldhideMentionSuggestionsIfNoPeopleObtainedWhenMentioning() throws Exception {
         setupNoMentionedPeopleCallback();
 
-        presenter.autocompleteMention(USERNAME, words, wordPosition);
+        presenter.autocompleteMention(USERNAME, WORDS, WORD_POSITION);
 
         verify(postNewShotView).hideMentionSuggestions();
     }
@@ -92,7 +93,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldMentionUserWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).mentionUser(COMMENT_WITH_USERNAME);
@@ -101,7 +102,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldHideMentionSuggestionsWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).hideMentionSuggestions();
@@ -110,7 +111,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldShowImageContainerWhenMentionClickedIfThereWasNoPictureSelected() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView, never()).showImageContainer();
@@ -119,7 +120,7 @@ public class PostNewShotPresenterTest {
     @Test public void shouldSetCursonrToEndOfTextWhenMentionClicked() throws Exception {
         setupMentionedPeopleCallback();
 
-        presenter.autocompleteMention(PART_OF_A_USERNAME, words, wordPosition);
+        presenter.autocompleteMention(PART_OF_A_USERNAME, WORDS, WORD_POSITION);
         presenter.onMentionClicked(userModel());
 
         verify(postNewShotView).setCursorToEndOfText();

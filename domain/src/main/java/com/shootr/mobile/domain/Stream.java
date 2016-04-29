@@ -12,7 +12,6 @@ public class Stream {
     private String authorUsername;
     private String title;
     private String picture;
-    private String shortTitle;
     private String description;
     private String topic;
     private String country;
@@ -89,14 +88,6 @@ public class Stream {
         this.authorId = authorId;
     }
 
-    public String getShortTitle() {
-        return shortTitle;
-    }
-
-    public void setShortTitle(String shortTitle) {
-        this.shortTitle = shortTitle;
-    }
-
     public String getAuthorUsername() {
         return authorUsername;
     }
@@ -121,13 +112,15 @@ public class Stream {
 
         if (id != null ? !id.equals(stream.id) : stream.id != null) return false;
         if (authorId != null ? !authorId.equals(stream.authorId) : stream.authorId != null) return false;
-        if (authorUsername != null ? !authorUsername.equals(stream.authorUsername) : stream.authorUsername != null) {
+        if (authorUsername != null ? !authorUsername.equals(stream.authorUsername)
+          : stream.authorUsername != null) {
             return false;
         }
         if (title != null ? !title.equals(stream.title) : stream.title != null) return false;
         if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
-        if (shortTitle != null ? !shortTitle.equals(stream.shortTitle) : stream.shortTitle != null) return false;
-        if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
+        if (description != null ? !description.equals(stream.description) : stream.description != null) {
+            return false;
+        }
         return !(country != null ? !country.equals(stream.country) : stream.country != null);
     }
 
@@ -137,7 +130,6 @@ public class Stream {
         result = 31 * result + (authorUsername != null ? authorUsername.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (picture != null ? picture.hashCode() : 0);
-        result = 31 * result + (shortTitle != null ? shortTitle.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;

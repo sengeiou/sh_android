@@ -5,5 +5,4 @@ import com.shootr.mobile.ui.model.UserModel;
 public interface OnMentionClickListener {
 
     void mention(UserModel userModel);
-
 }

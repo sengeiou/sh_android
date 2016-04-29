@@ -18,9 +18,12 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ShotDetailWithRepliesAdapter;
+import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -30,6 +33,7 @@ import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
+import com.shootr.mobile.ui.widgets.EndOffsetItemDecoration;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
@@ -53,6 +57,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     public static final String EXTRA_SHOT = "shot";
     public static final String EXTRA_ID_SHOT = "idShot";
     public static final String EXTRA_IS_IN_TIMELINE = "isIntimeline";
+    private static final int OFFSET = 500;
+    private static final int OFFSET_WITH_REPLIES = 400;
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
@@ -78,6 +84,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
+
+    private LinearLayoutManager linearLayoutManager;
+    private int overallYScroll;
+    private int replies = 0;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -166,10 +176,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private void openContextualMenu() {
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
-              @Override public void run() {
-                  detailPresenter.shareShotViaShootr();
-              }
-          }).addAction(R.string.menu_share_shot_via, new Runnable() {
+            @Override public void run() {
+                detailPresenter.shareShotViaShootr();
+            }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShot();
             }
@@ -181,69 +191,89 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         Intents.maybeStartActivity(this, shareIntent);
     }
 
+    @Override public void goToNicers(String idShot) {
+        startActivity(NicersActivity.newIntent(this, idShot));
+    }
+
     private void setupAdapter() {
-        detailAdapter =
-          new ShotDetailWithRepliesAdapter(imageLoader,
-                  new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-                      @Override
-                      public void onClick(String userId) {
-                          onShotAvatarClick(userId);
-                      }
-                  }, //
-                  new ShotDetailWithRepliesAdapter.ShotClickListener() {
-                      @Override
-                      public void onClick(ShotModel shot) {
-                          onShotClick(shot);
-                      }
-                  }, new ShotDetailWithRepliesAdapter.ShotClickListener() {
-              @Override
-              public void onClick(ShotModel shot) {
+        detailAdapter = new ShotDetailWithRepliesAdapter(imageLoader, new AvatarClickListener() {
+            @Override public void onClick(String userId) {
+                onShotAvatarClick(userId);
+            }
+        }, //
+          new ShotClickListener() {
+              @Override public void onClick(ShotModel shot) {
                   onShotClick(shot);
               }
-          },
-                  new ShotDetailWithRepliesAdapter.StreamClickListener() {
-                      @Override
-                      public void onClick(ShotModel shotModel) {
-                          onStreamTitleClick(shotModel);
-                      }
-                  }, new ShotDetailWithRepliesAdapter.ImageClickListener() {
-              @Override
-              public void onClick(ShotModel shot) {
-                  onShotImageClick(shot);
-              }
-          },//
-            new OnVideoClickListener() {
-                @Override public void onVideoClick(String url) {
-                    onShotVideoClick(url);
-                }
-            }, //
-            new OnUsernameClickListener() {
-                @Override public void onUsernameClick(String username) {
-                    onShotUsernameClick(username);
-                }
-            }, //
-            new ShotDetailWithRepliesAdapter.ShotClickListener() {
-
-                @Override public void onClick(ShotModel shot) {
-                    pinShotPresenter.pinToProfile(shot);
-                }
-            }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-              @Override public void onShown() {
-                  detailList.scrollToPosition(0);
+          }, new ShotClickListener() {
+            @Override public void onClick(ShotModel shot) {
+                onShotClick(shot);
+            }
+        }, new ShotClickListener() {
+            @Override public void onClick(ShotModel shotModel) {
+                onStreamTitleClick(shotModel);
+            }
+        }, new ShotClickListener() {
+            @Override public void onClick(ShotModel shot) {
+                onShotImageClick(shot);
+            }
+        }, //
+          new OnVideoClickListener() {
+              @Override public void onVideoClick(String url) {
+                  onShotVideoClick(url);
               }
           }, //
-            new OnNiceShotListener() {
-                @Override public void markNice(String idShot) {
-                    detailPresenter.markNiceShot(idShot);
-                }
+          new OnUsernameClickListener() {
+              @Override public void onUsernameClick(String username) {
+                  onShotUsernameClick(username);
+              }
+          }, //
+          new ShotClickListener() {
 
-                @Override public void unmarkNice(String idShot) {
-                    detailPresenter.unmarkNiceShot(idShot);
+              @Override public void onClick(ShotModel shot) {
+                  pinShotPresenter.pinToProfile(shot);
+              }
+          }, new OnParentShownListener() {
+            @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
+                replies = repliesNumber;
+                linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
+                if (repliesNumber == 0) {
+                    detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET_WITH_REPLIES));
                 }
-            }, //
-            timeFormatter, getResources(), timeUtils);
-        detailList.setLayoutManager(new LinearLayoutManager(this));
+            }
+        }, //
+          new OnNiceShotListener() {
+              @Override public void markNice(String idShot) {
+                  detailPresenter.markNiceShot(idShot);
+              }
+
+              @Override public void unmarkNice(String idShot) {
+                  detailPresenter.unmarkNiceShot(idShot);
+              }
+          }, //
+          new ShotClickListener() {
+              @Override public void onClick(ShotModel shotModel) {
+                  detailPresenter.openShotNicers(shotModel);
+              }
+          }, timeFormatter, getResources(), timeUtils);
+        setupDetailList();
+    }
+
+    private void setupDetailList() {
+        linearLayoutManager = new LinearLayoutManager(this);
+        detailList.setLayoutManager(linearLayoutManager);
         detailList.setAdapter(detailAdapter);
+        detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET));
+        detailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                overallYScroll = overallYScroll + dy;
+                if (overallYScroll > 0 && replies == 0) {
+                    linearLayoutManager.scrollToPositionWithOffset(detailAdapter.getItemCount() - 1, 0);
+                    overallYScroll = 0;
+                }
+            }
+        });
     }
 
     private void onStreamTitleClick(ShotModel shotModel) {
@@ -413,7 +443,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
     }
 
-    @Override public void renderParent(ShotModel parentShot) {
+    @Override public void renderParents(List<ShotModel> parentShot) {
         detailAdapter.renderParentShot(parentShot);
     }
 

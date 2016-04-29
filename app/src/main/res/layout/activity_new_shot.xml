@@ -7,24 +7,20 @@
   android:animateLayoutChanges="true"
   android:background="@drawable/floating_rounded_background">
 
-    <LinearLayout
-      android:layout_width="match_parent"
+    <LinearLayout android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical">
 
-        <RelativeLayout
-          android:layout_width="match_parent"
+        <RelativeLayout android:layout_width="match_parent"
           android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-              android:id="@+id/new_shot_avatar"
+            <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/new_shot_avatar"
               android:layout_width="40dp"
               android:layout_height="40dp"
               android:layout_margin="16dp"
               android:src="@drawable/sample_avatar" />
 
-            <TextView
-              android:id="@+id/new_shot_title"
+            <TextView android:id="@+id/new_shot_title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_above="@+id/new_shot_subtitle"
@@ -36,8 +32,7 @@
               android:textStyle="bold"
               tools:text="Rafa" />
 
-            <TextView
-              android:id="@+id/new_shot_subtitle"
+            <TextView android:id="@+id/new_shot_subtitle"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignBottom="@+id/new_shot_avatar"
@@ -45,8 +40,7 @@
               android:textColor="@color/gray_70"
               tools:text="\@rafa" />
 
-            <TextView
-              android:id="@+id/new_shot_char_counter"
+            <TextView android:id="@+id/new_shot_char_counter"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentRight="true"
@@ -58,18 +52,15 @@
 
         </RelativeLayout>
 
-        <ScrollView
-          android:layout_width="match_parent"
+        <ScrollView android:layout_width="match_parent"
           android:layout_height="0dp"
           android:layout_weight="2">
 
-            <LinearLayout
-              android:layout_width="match_parent"
+            <LinearLayout android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-                <EditText
-                  android:id="@+id/new_shot_text"
+                <EditText android:id="@+id/new_shot_text"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="@color/transparent"
@@ -79,41 +70,36 @@
                   android:inputType="text|textCapSentences|textMultiLine|textShortMessage"
                   android:padding="16dp" />
 
-                <FrameLayout
-                  android:id="@+id/new_shot_mentions_container"
+                <FrameLayout android:id="@+id/new_shot_mentions_container"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:padding="16dp"
                   android:visibility="gone"
                   tools:visibility="visible">
 
-                  <com.shootr.mobile.ui.widgets.NestedListView
-                    android:id="@+id/new_shot_mentions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                    <com.shootr.mobile.ui.widgets.NestedListView android:id="@+id/new_shot_mentions"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:visibility="gone"
+                      tools:visibility="visible" />
 
                 </FrameLayout>
 
-                <FrameLayout
-                  android:id="@+id/new_shot_image_container"
+                <FrameLayout android:id="@+id/new_shot_image_container"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:padding="16dp"
                   android:visibility="gone"
                   tools:visibility="visible">
 
-                    <ImageView
-                      android:id="@+id/new_shot_image"
+                    <ImageView android:id="@+id/new_shot_image"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:adjustViewBounds="true"
                       android:scaleType="fitCenter"
                       tools:src="@drawable/sample_avatar" />
 
-                    <ImageView
-                      android:id="@+id/new_shot_image_remove"
+                    <ImageView android:id="@+id/new_shot_image_remove"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:padding="8dp"
@@ -122,14 +108,12 @@
             </LinearLayout>
         </ScrollView>
 
-        <RelativeLayout
-          android:layout_width="match_parent"
+        <RelativeLayout android:layout_width="match_parent"
           android:layout_height="48dp"
           android:background="@drawable/floating_rounded_background_bottom"
           android:orientation="horizontal">
 
-            <ImageButton
-              android:id="@+id/new_shot_send_button"
+            <ImageButton android:id="@+id/new_shot_send_button"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_alignParentRight="true"
@@ -139,8 +123,7 @@
               android:paddingRight="16dp"
               android:src="@drawable/ic_send" />
 
-            <ProgressBar
-              android:id="@+id/new_shot_send_progress"
+            <ProgressBar android:id="@+id/new_shot_send_progress"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_alignParentRight="true"
@@ -149,8 +132,7 @@
               android:visibility="gone"
               tools:visibility="gone" />
 
-            <ImageButton
-              android:id="@+id/new_shot_gallery_button"
+            <ImageButton android:id="@+id/new_shot_gallery_button"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_alignParentLeft="true"
@@ -159,8 +141,7 @@
               android:paddingRight="16dp"
               android:src="@drawable/ic_shot_gallery" />
 
-            <ImageButton
-              android:id="@+id/new_shot_photo_button"
+            <ImageButton android:id="@+id/new_shot_photo_button"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_toRightOf="@+id/new_shot_gallery_button"

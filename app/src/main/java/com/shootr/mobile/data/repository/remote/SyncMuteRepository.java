@@ -10,13 +10,10 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class SyncMuteRepository implements MuteRepository, SyncableRepository {
@@ -25,7 +22,8 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     private final MuteDataSource remoteMuteDataSource;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncMuteRepository(@Local MuteDataSource localMuteDataSource, @Remote MuteDataSource remoteMuteDataSource,
+    @Inject
+    public SyncMuteRepository(@Local MuteDataSource localMuteDataSource, @Remote MuteDataSource remoteMuteDataSource,
       SyncTrigger syncTrigger) {
         this.localMuteDataSource = localMuteDataSource;
         this.remoteMuteDataSource = remoteMuteDataSource;
@@ -88,9 +86,7 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
     }
 
     private void queueUpload(MuteStreamEntity muteStreamEntity, ServerCommunicationException reason) {
-        Timber.w(reason,
-          "Mute upload queued: idStream %s",
-          muteStreamEntity.getIdStream());
+        Timber.w(reason, "Mute upload queued: idStream %s", muteStreamEntity.getIdStream());
         prepareEntityForSynchronization(muteStreamEntity);
         syncTrigger.notifyNeedsSync(this);
     }

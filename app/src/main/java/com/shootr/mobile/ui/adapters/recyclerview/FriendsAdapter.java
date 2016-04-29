@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -23,7 +22,8 @@ public class FriendsAdapter extends UserListAdapter {
     private SuggestedPeopleListView suggestedPeopleListView;
     private OnUserClickListener onUserClickListener;
 
-    public FriendsAdapter(Context context, ImageLoader imageLoader, UserListAdapter suggestedPeopleAdapter, OnUserClickListener onUserClickListener) {
+    public FriendsAdapter(Context context, ImageLoader imageLoader, UserListAdapter suggestedPeopleAdapter,
+      OnUserClickListener onUserClickListener) {
         super(context, imageLoader);
         this.suggestedPeopleAdapter = suggestedPeopleAdapter;
         this.onUserClickListener = onUserClickListener;
@@ -42,13 +42,13 @@ public class FriendsAdapter extends UserListAdapter {
     }
 
     private String usernameInSubtitleFormat(UserModel item) {
-        return "@"+item.getUsername();
+        return "@" + item.getUsername();
     }
 
     @Override public int getItemViewType(int position) {
         if (position == 0) {
             return INVITE_FIENDS_TYPE;
-        }else if (isSuggestedPeopleView(position)) {
+        } else if (isSuggestedPeopleView(position)) {
             return SUGGESTED_PEOPLE_TYPE;
         } else {
             return DEFAULT_TYPE;
@@ -56,7 +56,7 @@ public class FriendsAdapter extends UserListAdapter {
     }
 
     private boolean isSuggestedPeopleView(int position) {
-        return position == super.getCount()+1;
+        return position == super.getCount() + 1;
     }
 
     @Override public int getViewTypeCount() {
@@ -64,7 +64,7 @@ public class FriendsAdapter extends UserListAdapter {
     }
 
     @Override public int getCount() {
-        return super.getCount()+2;
+        return super.getCount() + 2;
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
@@ -99,8 +99,7 @@ public class FriendsAdapter extends UserListAdapter {
         return layoutPosition == 0 || isSuggestedPeopleView(layoutPosition) ? null : super.getItem(userPosition);
     }
 
-    @Override
-    public boolean isEnabled(int position) {
+    @Override public boolean isEnabled(int position) {
         return !isSuggestedPeopleView(position);
     }
 }

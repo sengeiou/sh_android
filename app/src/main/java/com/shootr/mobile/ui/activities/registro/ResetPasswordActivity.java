@@ -8,7 +8,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
@@ -20,14 +24,7 @@ import com.shootr.mobile.ui.views.ResetPasswordRequestView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
@@ -45,13 +42,11 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
 
     //region Initialization
-    @Override
-    protected int getLayoutResource() {
+    @Override protected int getLayoutResource() {
         return R.layout.activity_reset_password;
     }
 
-    @Override
-    protected void initializeViews(Bundle savedInstanceState) {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         analyticsTool.analyticsStart(getBaseContext(), analyticsScreenForgotPassword);
         setupViewImplementations();
@@ -67,25 +62,21 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         ButterKnife.bind(resetPasswordConfirmationView, resetPasswordConfirmationLayout);
     }
 
-    @Override
-    protected void initializePresenter() {
+    @Override protected void initializePresenter() {
         resetPasswordRequestPresenter.initialize(resetPasswordRequestView);
     }
 
-    @Override
-    protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
     }
 
-    @Override
-    protected boolean requiresUserLogin() {
+    @Override protected boolean requiresUserLogin() {
         return false;
     }
     //endregion
 
     //region Activity lifecycle
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
@@ -94,23 +85,19 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     }
     //endregion
 
-    @OnTextChanged(R.id.reset_password_username_email)
-    public void onInputTextChanged(CharSequence usernameOrEmail) {
+    @OnTextChanged(R.id.reset_password_username_email) public void onInputTextChanged(CharSequence usernameOrEmail) {
         resetPasswordRequestPresenter.onUsernameOrEmailChanged(usernameOrEmail.toString());
     }
 
-    @OnClick(R.id.reset_password_next)
-    public void onNextClicked() {
+    @OnClick(R.id.reset_password_next) public void onNextClicked() {
         resetPasswordRequestPresenter.next();
     }
 
-    @OnClick(R.id.reset_password_confirm)
-    public void onConfirmClicked() {
+    @OnClick(R.id.reset_password_confirm) public void onConfirmClicked() {
         resetPasswordConfirmationPresenter.confirm();
     }
 
-    @OnClick(R.id.reset_password_done)
-    public void onDoneClicked() {
+    @OnClick(R.id.reset_password_done) public void onDoneClicked() {
         resetPasswordConfirmationPresenter.done();
     }
 
@@ -131,49 +118,41 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         @Bind(R.id.reset_password_progress) View progressView;
         @Bind(R.id.reset_password_error_message) TextView resetPasswordError;
 
-        @Override
-        public void enableNextButton() {
+        @Override public void enableNextButton() {
             nextButton.setEnabled(true);
         }
 
-        @Override
-        public void disableNextButton() {
+        @Override public void disableNextButton() {
             nextButton.setEnabled(false);
         }
 
-        @Override
-        public void navigateToResetPasswordConfirmation(ForgotPasswordUserModel forgotPasswordUserModel) {
+        @Override public void navigateToResetPasswordConfirmation(ForgotPasswordUserModel forgotPasswordUserModel) {
             transitionToConfirmationView(forgotPasswordUserModel);
         }
 
-        @Override
-        public void showResetPasswordError() {
+        @Override public void showResetPasswordError() {
             resetPasswordError.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        public void hideKeyboard() {
-            InputMethodManager imm = (InputMethodManager) ResetPasswordActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        @Override public void hideKeyboard() {
+            InputMethodManager imm =
+              (InputMethodManager) ResetPasswordActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(usernameOrEmailInput.getWindowToken(), 0);
         }
 
-        @Override
-        public String getUsernameOrEmail() {
+        @Override public String getUsernameOrEmail() {
             return usernameOrEmailInput.getText().toString();
         }
 
-        @Override
-        public void showLoading() {
+        @Override public void showLoading() {
             progressView.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        public void hideLoading() {
+        @Override public void hideLoading() {
             progressView.setVisibility(View.GONE);
         }
 
-        @Override
-        public void showError(String message) {
+        @Override public void showError(String message) {
             feedbackMessage.show(getView(), message);
         }
     }
@@ -187,54 +166,44 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         @Bind(R.id.reset_password_done) View doneButton;
         @Bind(R.id.reset_password_progress) View progressView;
 
-        @Override
-        public void showAvatar(String avatarUrl) {
+        @Override public void showAvatar(String avatarUrl) {
             imageLoader.loadProfilePhoto(avatarUrl, avatar);
         }
 
-        @Override
-        public void showUsername(String username) {
+        @Override public void showUsername(String username) {
             usernameText.setText(username);
         }
 
-        @Override
-        public void hideConfirmationButton() {
+        @Override public void hideConfirmationButton() {
             confirmButton.setVisibility(View.GONE);
         }
 
-        @Override
-        public void showConfirmationButton() {
+        @Override public void showConfirmationButton() {
             confirmButton.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        public void showDoneButton() {
+        @Override public void showDoneButton() {
             doneButton.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        public void showPostConfirmationMessage(String email) {
+        @Override public void showPostConfirmationMessage(String email) {
             confirmationMessage.setVisibility(View.VISIBLE);
             confirmationMessage.setText(getString(R.string.reset_password_confirmation_message_email_pattern, email));
         }
 
-        @Override
-        public void navigateToLogin() {
+        @Override public void navigateToLogin() {
             closeScreenAndLaunchLogin();
         }
 
-        @Override
-        public void showLoading() {
+        @Override public void showLoading() {
             progressView.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        public void hideLoading() {
+        @Override public void hideLoading() {
             progressView.setVisibility(View.GONE);
         }
 
-        @Override
-        public void showError(String message) {
+        @Override public void showError(String message) {
             feedbackMessage.show(getView(), message);
         }
     }

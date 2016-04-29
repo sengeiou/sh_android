@@ -16,19 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -88,7 +84,6 @@ public class PhotoViewActivity extends BaseActivity {
         loadImages();
     }
 
-
     private void setupActionBar() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -135,14 +130,12 @@ public class PhotoViewActivity extends BaseActivity {
           .translationY(-toolbarHeight);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.photo_view, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
@@ -178,9 +171,7 @@ public class PhotoViewActivity extends BaseActivity {
         downloadManager.enqueue(request);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-      @NonNull String[] permissions,
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
         if (requestCode == writePermissionManager.getWritePermissionRequest()) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -191,8 +182,7 @@ public class PhotoViewActivity extends BaseActivity {
         }
     }
 
-    @NonNull
-    private Uri getDownloadDestination(String downloadSubpath) {
+    @NonNull private Uri getDownloadDestination(String downloadSubpath) {
         File picturesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File destinationFile = new File(picturesFolder, downloadSubpath);
         destinationFile.mkdirs();

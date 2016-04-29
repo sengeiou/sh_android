@@ -26,8 +26,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         this.imageLoader = imageLoader;
     }
 
-    @Override
-    public void setNotificationValues(NotificationCompat.Builder builder) {
+    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
         super.setNotificationValues(builder);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
@@ -59,13 +58,11 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         }
     }
 
-    @Override
-    protected CharSequence getTickerText() {
-        return getTitle()+": "+getContent();
+    @Override protected CharSequence getTickerText() {
+        return getTitle() + ": " + getContent();
     }
 
-    @Override
-    public Bitmap getLargeIcon() {
+    @Override public Bitmap getLargeIcon() {
         return getUserPhoto(shot.getPhoto());
     }
 

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.view.MenuItem;
-
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
-
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
@@ -21,13 +19,10 @@ import static org.hamcrest.core.AllOf.allOf;
 
 public class LogoutEspressoTest {
 
-    @Rule
-    public ActivityTestRule<ProfileContainerActivity> rule =
+    @Rule public ActivityTestRule<ProfileContainerActivity> rule =
       new ActivityTestRule<ProfileContainerActivity>(ProfileContainerActivity.class) {
-          @Override
-          protected Intent getActivityIntent() {
-              Context targetContext = getInstrumentation()
-                .getTargetContext();
+          @Override protected Intent getActivityIntent() {
+              Context targetContext = getInstrumentation().getTargetContext();
               Intent result = new Intent(targetContext, ProfileContainerActivity.class);
               result.putExtra("user", "554c7366e4b0cba72c91a828");
               return result;
@@ -44,8 +39,12 @@ public class LogoutEspressoTest {
     }
 
     private class MenuItemTitleMatcher extends BaseMatcher<Object> {
+
         private final String title;
-        public MenuItemTitleMatcher(String title) { this.title = title; }
+
+        public MenuItemTitleMatcher(String title) {
+            this.title = title;
+        }
 
         @Override public boolean matches(Object o) {
             if (o instanceof MenuItem) {
@@ -53,7 +52,8 @@ public class LogoutEspressoTest {
             }
             return false;
         }
-        @Override public void describeTo(Description description) { }
-    }
 
+        @Override public void describeTo(Description description) {
+        }
+    }
 }

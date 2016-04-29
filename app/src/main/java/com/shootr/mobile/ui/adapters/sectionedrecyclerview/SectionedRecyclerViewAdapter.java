@@ -11,8 +11,7 @@ import android.view.ViewGroup;
  * @param <VH> Class extending RecyclerView.ViewHolder to hold and bind the items view
  */
 public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHolder,
-        VH extends RecyclerView.ViewHolder>
-        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+  VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected static final int TYPE_SECTION_HEADER = -1;
     protected static final int TYPE_ITEM = -3;
@@ -27,8 +26,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
         registerAdapterDataObserver(new SectionDataObserver());
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         setupIndices();
     }
@@ -37,12 +35,11 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
      * Returns the sum of number of items for each section plus headers and footers if they
      * are provided.
      */
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return count;
     }
 
-    private void setupIndices(){
+    private void setupIndices() {
         count = countItems();
         allocateAuxiliaryArrays(count);
         precomputeIndices();
@@ -52,21 +49,21 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
         int items = 0;
         int sections = getSectionCount();
 
-        for(int i = 0; i < sections; i++){
+        for (int i = 0; i < sections; i++) {
             items += 1 + getItemCountForSection(i);
         }
         return items;
     }
 
-    private void precomputeIndices(){
+    private void precomputeIndices() {
         int sections = getSectionCount();
         int index = 0;
 
-        for(int i = 0; i < sections; i++){
+        for (int i = 0; i < sections; i++) {
             setPrecomputedItem(index, true, i, 0);
             index++;
 
-            for(int j = 0; j < getItemCountForSection(i); j++){
+            for (int j = 0; j < getItemCountForSection(i); j++) {
                 setPrecomputedItem(index, false, i, j);
                 index++;
             }
@@ -85,69 +82,64 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
         positionWithinSection[index] = position;
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
 
-        if(isSectionHeaderViewType(viewType)){
+        if (isSectionHeaderViewType(viewType)) {
             viewHolder = onCreateSectionHeaderViewHolder(parent, viewType);
-        }else{
+        } else {
             viewHolder = onCreateItemViewHolder(parent, viewType);
         }
 
         return viewHolder;
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int section = sectionForPosition[position];
         int index = positionWithinSection[position];
 
-        if(isSectionHeaderPosition(position)){
+        if (isSectionHeaderPosition(position)) {
             onBindSectionHeaderViewHolder((H) holder, section);
-        }else{
+        } else {
             onBindItemViewHolder((VH) holder, section, index);
         }
-
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
 
-        if(sectionForPosition == null){
+        if (sectionForPosition == null) {
             setupIndices();
         }
 
         int section = sectionForPosition[position];
         int index = positionWithinSection[position];
 
-        if(isSectionHeaderPosition(position)){
+        if (isSectionHeaderPosition(position)) {
             return getSectionHeaderViewType(section);
-        }else{
+        } else {
             return getSectionItemViewType(section, index);
         }
-
     }
 
-    protected int getSectionHeaderViewType(int section){
+    protected int getSectionHeaderViewType(int section) {
         return TYPE_SECTION_HEADER;
     }
 
-    protected int getSectionItemViewType(int section, int position){
+    protected int getSectionItemViewType(int section, int position) {
         return TYPE_ITEM;
     }
 
     /**
      * Returns true if the argument position corresponds to a header
      */
-    public boolean isSectionHeaderPosition(int position){
-        if(isHeader == null){
+    public boolean isSectionHeaderPosition(int position) {
+        if (isHeader == null) {
             setupIndices();
         }
         return isHeader[position];
     }
 
-    protected boolean isSectionHeaderViewType(int viewType){
+    protected boolean isSectionHeaderViewType(int viewType) {
         return viewType == TYPE_SECTION_HEADER;
     }
 
@@ -164,8 +156,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
     /**
      * Creates a ViewHolder of class H for a Header
      */
-    protected abstract H  onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType);
-
+    protected abstract H onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType);
 
     /**
      * Creates a ViewHolder of class VH for an Item
@@ -182,9 +173,9 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
      */
     protected abstract void onBindItemViewHolder(VH holder, int section, int position);
 
-    class SectionDataObserver extends RecyclerView.AdapterDataObserver{
-        @Override
-        public void onChanged() {
+    class SectionDataObserver extends RecyclerView.AdapterDataObserver {
+
+        @Override public void onChanged() {
             super.onChanged();
             setupIndices();
         }

@@ -8,7 +8,6 @@ public class ShotApiEntity {
     private String comment;
     private String image;
     private String idStream;
-    private String streamShortTitle;
     private String streamTitle;
 
     private Integer niceCount;
@@ -27,6 +26,7 @@ public class ShotApiEntity {
     private List<ShotApiEntity> replies;
     private ShotApiEntity parent;
 
+    private List<ShotApiEntity> thread;
     private Long birth;
     private Long modified;
     private Integer revision;
@@ -62,14 +62,6 @@ public class ShotApiEntity {
 
     public void setIdStream(String idStream) {
         this.idStream = idStream;
-    }
-
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
     }
 
     public String getStreamTitle() {
@@ -198,5 +190,13 @@ public class ShotApiEntity {
 
     public void setProfileHidden(Long profileHidden) {
         this.profileHidden = profileHidden;
+    }
+
+    public List<ShotApiEntity> getThread() {
+        return thread;
+    }
+
+    public void setThread(List<ShotApiEntity> thread) {
+        this.thread = thread;
     }
 }

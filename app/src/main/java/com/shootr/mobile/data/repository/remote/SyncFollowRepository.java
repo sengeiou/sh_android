@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
-
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -16,11 +15,9 @@ import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SyncFollowRepository implements FollowRepository, SyncableRepository {
@@ -32,10 +29,8 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     private final UserCache userCache;
 
     @Inject
-    public SyncFollowRepository(SessionRepository sessionRepository,
-      @Local FollowDataSource localFollowDataSource,
-      @Remote FollowDataSource remoteFollowDataSource,
-      SyncTrigger syncTrigger, UserCache userCache) {
+    public SyncFollowRepository(SessionRepository sessionRepository, @Local FollowDataSource localFollowDataSource,
+      @Remote FollowDataSource remoteFollowDataSource, SyncTrigger syncTrigger, UserCache userCache) {
         this.sessionRepository = sessionRepository;
         this.localFollowDataSource = localFollowDataSource;
         this.remoteFollowDataSource = remoteFollowDataSource;
@@ -43,8 +38,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         this.userCache = userCache;
     }
 
-    @Override
-    public void follow(String idUser) throws FollowingBlockedUserException {
+    @Override public void follow(String idUser) throws FollowingBlockedUserException {
         FollowEntity followEntity = createFollow(idUser);
         try {
             remoteFollowDataSource.putFollow(followEntity);
@@ -58,8 +52,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         }
     }
 
-    @Override
-    public void unfollow(String idUser) {
+    @Override public void unfollow(String idUser) {
         try {
             remoteFollowDataSource.removeFollow(idUser);
             localFollowDataSource.removeFollow(idUser);
@@ -118,8 +111,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         remoteFollowDataSource.unban(idUser);
     }
 
-    @Override
-    public void dispatchSync() {
+    @Override public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
             if (Synchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
@@ -142,8 +134,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         }
     }
 
-    @NonNull
-    protected FollowEntity createFollow(String idUser) {
+    @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());
         followEntity.setFollowedUser(idUser);
@@ -153,16 +144,14 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         return followEntity;
     }
 
-    @NonNull
-    protected BlockEntity createBlock(String idUser) {
+    @NonNull protected BlockEntity createBlock(String idUser) {
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
         return blockEntity;
     }
 
-    @NonNull
-    protected BanEntity createBan(String idUser) {
+    @NonNull protected BanEntity createBan(String idUser) {
         BanEntity blockEntity = new BanEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBannedUser(idUser);

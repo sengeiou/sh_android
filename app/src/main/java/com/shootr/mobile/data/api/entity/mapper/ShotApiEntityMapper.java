@@ -3,19 +3,16 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class ShotApiEntityMapper {
 
-    @Inject
-    public ShotApiEntityMapper() {
+    @Inject public ShotApiEntityMapper() {
     }
 
     public ShotEntity transform(ShotApiEntity shotApiEntity) {
@@ -29,7 +26,9 @@ public class ShotApiEntityMapper {
         shotEntity.setType(shotApiEntity.getType());
 
         EmbedUserApiEntity userApiEntity = shotApiEntity.getUser();
-        checkNotNull(userApiEntity, "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping. idShot=%s", shotApiEntity.getIdShot());
+        checkNotNull(userApiEntity,
+          "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping. idShot=%s",
+          shotApiEntity.getIdShot());
         shotEntity.setIdUser(userApiEntity.getIdUser());
         shotEntity.setUsername(userApiEntity.getUserName());
         shotEntity.setUserPhoto(userApiEntity.getPhoto());
@@ -40,7 +39,6 @@ public class ShotApiEntityMapper {
 
         shotEntity.setIdStream(shotApiEntity.getIdStream());
         shotEntity.setStreamTitle(shotApiEntity.getStreamTitle());
-        shotEntity.setStreamShortTitle(shotApiEntity.getStreamShortTitle());
 
         shotEntity.setVideoUrl(shotApiEntity.getVideoUrl());
         shotEntity.setVideoTitle(shotApiEntity.getVideoTitle());

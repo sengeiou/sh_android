@@ -19,32 +19,32 @@
       android:visible="false"
       app:showAsAction="always" />
 
-  <item
-    android:id="@+id/menu_stream_add_favorite"
-    android:orderInCategory="100"
-    android:title="@string/stream_timeline_add_favorite"
-    android:visible="false"
-    app:showAsAction="always" />
+    <item
+      android:id="@+id/menu_stream_add_favorite"
+      android:orderInCategory="100"
+      android:title="@string/stream_timeline_add_favorite"
+      android:visible="false"
+      app:showAsAction="always" />
 
-  <item
-    android:id="@+id/menu_stream_remove_favorite"
-    android:orderInCategory="100"
-    android:title="@string/stream_timeline_remove_favorite"
-    android:visible="false"
-    app:showAsAction="always" />
+    <item
+      android:id="@+id/menu_stream_remove_favorite"
+      android:orderInCategory="100"
+      android:title="@string/stream_timeline_remove_favorite"
+      android:visible="false"
+      app:showAsAction="always" />
 
-  <item
-    android:id="@+id/menu_mute_stream"
-    android:orderInCategory="100"
-    android:title="@string/mute"
-    android:visible="false"
-    app:showAsAction="always" />
+    <item
+      android:id="@+id/menu_mute_stream"
+      android:orderInCategory="100"
+      android:title="@string/mute"
+      android:visible="false"
+      app:showAsAction="always" />
 
-  <item
-    android:id="@+id/menu_unmute_stream"
-    android:orderInCategory="100"
-    android:title="@string/unmute"
-    android:visible="false"
-    app:showAsAction="always" />
+    <item
+      android:id="@+id/menu_unmute_stream"
+      android:orderInCategory="100"
+      android:title="@string/unmute"
+      android:visible="false"
+      app:showAsAction="always" />
 
 </menu>

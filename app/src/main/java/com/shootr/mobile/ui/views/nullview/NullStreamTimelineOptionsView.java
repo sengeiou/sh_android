@@ -4,28 +4,23 @@ import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 
 public class NullStreamTimelineOptionsView implements StreamTimelineOptionsView {
 
-    @Override
-    public void showAddToFavoritesButton() {
+    @Override public void showAddToFavoritesButton() {
         /* no-op */
     }
 
-    @Override
-    public void hideAddToFavoritesButton() {
+    @Override public void hideAddToFavoritesButton() {
         /* no-op */
     }
 
-    @Override
-    public void showRemoveFromFavoritesButton() {
+    @Override public void showRemoveFromFavoritesButton() {
         /* no-op */
     }
 
-    @Override
-    public void hideRemoveFromFavoritesButton() {
+    @Override public void hideRemoveFromFavoritesButton() {
         /* no-op */
     }
 
-    @Override
-    public void showAddedToFavorites() {
+    @Override public void showAddedToFavorites() {
         /* no-op */
     }
 

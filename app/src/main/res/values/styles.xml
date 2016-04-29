@@ -87,6 +87,7 @@
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">18sp</item>
     </style>
+
     <style name="ActionBar.SubtitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/primary_disabled</item>
         <item name="android:textSize">14sp</item>
@@ -133,7 +134,7 @@
         <item name="android:windowTitleSize">0dp</item>
     </style>
 
-    <style name="ShootrTheme.NoActionBar.Floating" >
+    <style name="ShootrTheme.NoActionBar.Floating">
         <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowIsFloating">true</item>-->
         <item name="android:backgroundDimEnabled">true</item>
@@ -207,7 +208,6 @@
         <item name="android:background">@drawable/btn_follow</item>
     </style>
 
-
     <style name="FollowButtonText">
         <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">bold</item>
@@ -240,10 +240,30 @@
         <item name="android:background">@drawable/btn_follow</item>
     </style>
 
-
     <style name="FollowButtonText.Edit">
         <item name="android:drawableLeft">@drawable/ic_edit_primary</item>
         <item name="android:text">@string/profile_edit_profile</item>
+    </style>
+
+    <!-- Add Contributor -->
+    <style name="FollowButton.Add">
+        <item name="android:background">@drawable/btn_follow</item>
+    </style>
+
+    <style name="FollowButtonText.Add">
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
+        <item name="android:text">@string/add_contributor</item>
+    </style>
+
+    <!-- Added Contributor -->
+    <style name="FollowButton.Added">
+        <item name="android:background">@drawable/btn_following</item>
+    </style>
+
+    <style name="FollowButtonText.Added">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawableLeft">@drawable/ic_check</item>
+        <item name="android:text">@string/added_contributor</item>
     </style>
 
     <!-- Menú drawer -->
@@ -262,8 +282,7 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="TextAppearance.Switch" parent="TextAppearance.AppCompat.Medium">
-    </style>
+    <style name="TextAppearance.Switch" parent="TextAppearance.AppCompat.Medium"></style>
 
     <!-- Used to color the switch bar controls -->
     <style name="ThemeOverlay.SwitchBar" parent="@style/ThemeOverlay.AppCompat">
@@ -281,13 +300,13 @@
         <item name="bs_listItemTitleTextAppearance">@style/BottomSheetMaterial.Item</item>
     </style>
 
-    <style name="BottomSheetMaterial.Title" >
+    <style name="BottomSheetMaterial.Title">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ff757575</item>
     </style>
 
-    <style name="BottomSheetMaterial.Item" >
+    <style name="BottomSheetMaterial.Item">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ff212121</item>
@@ -357,5 +376,4 @@
     <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
         <item name="android:textColor">@color/primary</item>
     </style>
-
 </resources>

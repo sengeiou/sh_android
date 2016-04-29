@@ -11,7 +11,6 @@ public class ActivityEntity extends Synchronized {
     private String username;
     private String idStream;
     private String streamTitle;
-    private String streamShortTitle;
     private String comment;
     private String type;
     private String userPhoto;
@@ -67,14 +66,6 @@ public class ActivityEntity extends Synchronized {
         this.streamTitle = streamTitle;
     }
 
-    public String getStreamShortTitle() {
-        return streamShortTitle;
-    }
-
-    public void setStreamShortTitle(String streamShortTitle) {
-        this.streamShortTitle = streamShortTitle;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -104,7 +95,8 @@ public class ActivityEntity extends Synchronized {
     }
 
     public void setShotForMapping(Shot shotForMapping) {
-        Preconditions.checkState(idShot != null, "Can't set ShotForMapping to an activity without idShot. Activity id: "+idActivity);
+        Preconditions.checkState(idShot != null,
+          "Can't set ShotForMapping to an activity without idShot. Activity id: " + idActivity);
         this.shotForMapping = shotForMapping;
     }
 

@@ -2,14 +2,13 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.db.DatabaseContract;
 
 public class StreamEntityDBMapper extends GenericDBMapper {
 
-    public ContentValues toContentValues(StreamEntity streamEntity){
+    public ContentValues toContentValues(StreamEntity streamEntity) {
         ContentValues contentValues = new ContentValues();
         fillContentValues(streamEntity, contentValues);
         return contentValues;
@@ -21,7 +20,6 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.USERNAME, streamEntity.getUserName());
         contentValues.put(DatabaseContract.StreamTable.TITLE, streamEntity.getTitle());
         contentValues.put(DatabaseContract.StreamTable.PHOTO, streamEntity.getPhoto());
-        contentValues.put(DatabaseContract.StreamTable.SHORT_TITLE, streamEntity.getShortTitle());
         contentValues.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity.getDescription());
         contentValues.put(DatabaseContract.StreamTable.TOPIC, streamEntity.getTopic());
         contentValues.put(DatabaseContract.StreamTable.COUNTRY, streamEntity.getCountry());
@@ -31,7 +29,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.TOTAL_WATCHERS, streamEntity.getTotalWatchers());
         contentValues.put(DatabaseContract.StreamTable.HISTORIC_WATCHERS, streamEntity.getHistoricWatchers());
         contentValues.put(DatabaseContract.StreamTable.TOTAL_SHOTS, streamEntity.getTotalShots());
-        contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS,streamEntity.getUniqueShots());
+        contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS, streamEntity.getUniqueShots());
         setSynchronizedtoContentValues(streamEntity, contentValues);
     }
 
@@ -47,7 +45,6 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.USERNAME)));
         streamEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TITLE)));
         streamEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.PHOTO)));
-        streamEntity.setShortTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.SHORT_TITLE)));
         streamEntity.setDescription(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.DESCRIPTION)));
         streamEntity.setTopic(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TOPIC)));
         streamEntity.setCountry(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.COUNTRY)));
@@ -64,7 +61,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     public StreamSearchEntity fromSearchCursor(Cursor cursor) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(cursor, streamSearchEntity);
-        streamSearchEntity.setTotalFollowingWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
+        streamSearchEntity.setTotalFollowingWatchers(cursor
+          .getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
         return streamSearchEntity;
     }
 
@@ -74,5 +72,4 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getTotalFollowingWatchers());
         return contentValues;
     }
-
 }

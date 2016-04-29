@@ -5,5 +5,4 @@ public class StreamRemovedException extends ShootrException {
     public StreamRemovedException(Throwable cause) {
         super(cause);
     }
-
 }

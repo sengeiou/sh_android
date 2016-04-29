@@ -6,31 +6,25 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.espresso.util.HumanReadables;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 public class TestUtils {
 
     public static <VH extends RecyclerView.ViewHolder> ViewAction actionOnItemViewAtPosition(int position,
-      @IdRes
-      int viewId,
-      ViewAction viewAction) {
+      @IdRes int viewId, ViewAction viewAction) {
         return new ActionOnItemViewAtPositionViewAction(position, viewId, viewAction);
     }
 
-    private static final class ActionOnItemViewAtPositionViewAction<VH extends RecyclerView
-      .ViewHolder>
-      implements
+    private static final class ActionOnItemViewAtPositionViewAction<VH extends RecyclerView.ViewHolder> implements
 
       ViewAction {
+
         private final int position;
         private final ViewAction viewAction;
         private final int viewId;
 
-        private ActionOnItemViewAtPositionViewAction(int position,
-          @IdRes int viewId,
-          ViewAction viewAction) {
+        private ActionOnItemViewAtPositionViewAction(int position, @IdRes int viewId, ViewAction viewAction) {
             this.position = position;
             this.viewAction = viewAction;
             this.viewId = viewId;
@@ -61,11 +55,10 @@ public class TestUtils {
                   .withViewDescription(
 
                     HumanReadables.describe(view))
-                  .withCause(new IllegalStateException(
-                    "No view with id "
-                      + this.viewId
-                      + " found at position: "
-                      + this.position))
+                  .withCause(new IllegalStateException("No view with id "
+                    + this.viewId
+                    + " found at position: "
+                    + this.position))
                   .build();
             } else {
                 this.viewAction.perform(uiController, targetView);
@@ -74,6 +67,7 @@ public class TestUtils {
     }
 
     private static final class ScrollToPositionViewAction implements ViewAction {
+
         private final int position;
 
         private ScrollToPositionViewAction(int position) {
@@ -96,9 +90,7 @@ public class TestUtils {
         }
     }
 
-
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
     }
-
 }

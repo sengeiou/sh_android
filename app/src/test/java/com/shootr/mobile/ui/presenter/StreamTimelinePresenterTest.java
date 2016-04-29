@@ -24,7 +24,11 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -33,12 +37,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -66,7 +64,6 @@ public class StreamTimelinePresenterTest {
     private static final Integer ZERO_NEW_SHOTS = 0;
     private static final String TOPIC = "topic";
     private static final String TITLE = "title";
-    private static final String SHORT_TITLE = "shortTitle";
     private static final String DESCRIPTION = "description";
     private static final String EMPTY_TOPIC = "";
     private static final boolean NOTIFY = true;
@@ -688,7 +685,7 @@ public class StreamTimelinePresenterTest {
 
         verify(streamTimelineView, times(2)).showTopicSnackBar(TOPIC);
     }
-    
+
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
@@ -737,7 +734,6 @@ public class StreamTimelinePresenterTest {
         stream.setId(SELECTED_STREAM_ID);
         stream.setTopic(TOPIC);
         stream.setTitle(TITLE);
-        stream.setShortTitle(SHORT_TITLE);
         stream.setDescription(DESCRIPTION);
         return stream;
     }
@@ -797,11 +793,8 @@ public class StreamTimelinePresenterTest {
                 ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
                 return null;
             }
-        }).when(timelineInteractorWrapper).refreshTimeline(anyString(),
-          anyLong(),
-          anyBoolean(),
-          anyCallback(),
-          anyErrorCallback());
+        }).when(timelineInteractorWrapper)
+          .refreshTimeline(anyString(), anyLong(), anyBoolean(), anyCallback(), anyErrorCallback());
     }
 
     private void setupSelectStreamInteractorCallbacksStream() {
@@ -865,12 +858,11 @@ public class StreamTimelinePresenterTest {
     private void setupCreateStreamInteractorCallbackWithTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[6]).onLoaded(selectedStream());
                 return null;
             }
         }).when(createStreamInteractor)
           .sendStream(anyString(),
-            anyString(),
             anyString(),
             anyString(),
             anyString(),
@@ -883,18 +875,19 @@ public class StreamTimelinePresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStreamWithEmptyTopic());
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[6])
+                  .onLoaded(selectedStreamWithEmptyTopic());
                 return null;
             }
-        }).when(createStreamInteractor).sendStream(anyString(),
-          anyString(),
-          anyString(),
-          anyString(),
-          anyString(),
-          anyBoolean(),
-          anyBoolean(),
-          any(CreateStreamInteractor.Callback.class),
-          anyErrorCallback());
+        }).when(createStreamInteractor)
+          .sendStream(anyString(),
+            anyString(),
+            anyString(),
+            anyString(),
+            anyBoolean(),
+            anyBoolean(),
+            any(CreateStreamInteractor.Callback.class),
+            anyErrorCallback());
     }
 
     private void setupFirstShotPosition() {

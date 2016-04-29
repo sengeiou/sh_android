@@ -3,14 +3,11 @@ package com.shootr.mobile.ui.views;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.base.DataTransferView;
-
 import java.util.List;
 
 public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
-
-    void setStreamShortTitle(String shortTitle);
 
     void setStreamAuthor(String author);
 
@@ -18,7 +15,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void showEditStreamPhotoOrInfo();
 
-    void showPhotoPicker();
+    void showPhotoOptions();
 
     void showEditPicturePlaceholder();
 
@@ -59,4 +56,42 @@ public interface StreamDetailView extends DataTransferView {
     void setMuteStatus(Boolean isChecked);
 
     void goToStreamDataInfo(StreamModel streamModel);
+
+    void goToContributorsActivityAsHolder(String idStream);
+
+    void goToContributorsActivity(String idStream);
+
+    void hideContributorsNumber();
+
+    void showContributorsNumber(Integer contributorsNumber);
+
+    void showPhotoPicker();
+
+    void showRestoreStreamButton();
+
+    void showRemoveStreamButton();
+
+    void askRemoveStreamConfirmation();
+
+    void hideRestoreButton();
+
+    void hideRemoveButton();
+
+    void showRestoreStreamFeedback();
+
+    void showRemovedFeedback();
+
+    void disableContributors();
+
+    void setupStreamInitials(StreamModel streamModel);
+
+    void loadBlurStreamPicture(String picture);
+
+    void showPicture();
+
+    void hideNoTextPicture();
+
+    void hidePicture();
+
+    void showNoTextPicture();
 }

@@ -1,12 +1,10 @@
 package com.shootr.mobile.data.repository.sync;
 
+import dagger.Lazy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.Lazy;
-
-@Singleton
-public class SyncTrigger {
+@Singleton public class SyncTrigger {
 
     private final Lazy<SyncDispatcher> lazySyncDispatcher;
 
@@ -21,5 +19,4 @@ public class SyncTrigger {
     public void notifyNeedsSync(SyncableRepository syncRepository) {
         lazySyncDispatcher.get().notifyNeedsSync(syncRepository);
     }
-
 }

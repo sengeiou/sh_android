@@ -2,16 +2,15 @@ package com.shootr.mobile.db.manager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.shootr.mobile.db.DatabaseContract.NiceShotTable;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
-
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.inject.Inject;
 
 public class NiceManager extends AbstractManager {
@@ -61,6 +60,19 @@ public class NiceManager extends AbstractManager {
         int deletedRows = getWritableDatabase().delete(NiceShotTable.TABLE, where, whereArgs);
         if (deletedRows <= 0) {
             throw new NiceNotMarkedException();
+        }
+    }
+
+    public void mark(List<String> nicedIdShots) throws NiceAlreadyMarkedException {
+        SQLiteDatabase database = getWritableDatabase();
+        try {
+            database.beginTransaction();
+            for (String nicedIdShot : nicedIdShots) {
+                mark(nicedIdShot);
+            }
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
         }
     }
 }

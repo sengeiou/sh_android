@@ -16,9 +16,7 @@ public class StreamSearchRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    public void scrollTo(int x, int y) {
+    @Override public void scrollTo(int x, int y) {
         /* super throws exception, ignore it */
     }
-
 }

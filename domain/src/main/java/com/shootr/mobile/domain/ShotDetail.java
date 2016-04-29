@@ -7,6 +7,16 @@ public class ShotDetail {
     private Shot shot;
     private Shot parentShot;
     private List<Shot> replies;
+    private List<Nicer> nicers;
+    private List<Shot> parents;
+
+    public List<Nicer> getNicers() {
+        return nicers;
+    }
+
+    public void setNicers(List<Nicer> nicers) {
+        this.nicers = nicers;
+    }
 
     public Shot getShot() {
         return shot;
@@ -30,5 +40,13 @@ public class ShotDetail {
 
     public void setReplies(List<Shot> replies) {
         this.replies = replies;
+    }
+
+    public List<Shot> getParents() {
+        return parents;
+    }
+
+    public void setParents(List<Shot> parents) {
+        this.parents = parents;
     }
 }

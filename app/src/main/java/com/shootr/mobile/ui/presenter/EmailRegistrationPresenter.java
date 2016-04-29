@@ -9,12 +9,9 @@ import com.shootr.mobile.domain.validation.CreateUserValidator;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class EmailRegistrationPresenter implements Presenter {
@@ -40,19 +37,19 @@ public class EmailRegistrationPresenter implements Presenter {
 
     //region Interaction methods
     public void usernameFocusRemoved() {
-        if(emailRegistrationView.getUsername() != null) {
+        if (emailRegistrationView.getUsername() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME);
         }
     }
 
     public void emailFocusRemoved() {
-        if(emailRegistrationView.getEmail() != null) {
+        if (emailRegistrationView.getEmail() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL);
         }
     }
 
     public void passwordFocusRemoved() {
-        if(emailRegistrationView.getPassword() != null) {
+        if (emailRegistrationView.getPassword() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD);
         }
     }

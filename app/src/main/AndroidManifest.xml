@@ -12,10 +12,14 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="${packageName}.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <!-- optional -->
 
+    <!-- optional -->
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
+
+    <permission
+      android:name="${packageName}.permission.C2D_MESSAGE"
+      android:protectionLevel="signature" />
 
     <application
       android:name=".ShootrApplication"
@@ -34,25 +38,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="web.shootr.com" android:scheme="http" />
-                <data android:host="web.shootr.com" android:scheme="https" />
-                <data android:host="s" android:scheme="shootr" />
-                <data android:host="st" android:scheme="shootr" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                  android:host="web.shootr.com"
+                  android:scheme="http" />
+                <data
+                  android:host="web.shootr.com"
+                  android:scheme="https" />
+                <data
+                  android:host="s"
+                  android:scheme="shootr" />
+                <data
+                  android:host="st"
+                  android:scheme="shootr" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.StreamTimelineActivity"></activity>
+        <activity android:name=".ui.activities.StreamTimelineActivity" />
         <activity
           android:name=".ui.activities.registro.LoginSelectionActivity"
           android:label="@string/app_name"
           android:launchMode="singleTop"
-          android:theme="@style/ShootrTheme.NoActionBar"></activity>
+          android:theme="@style/ShootrTheme.NoActionBar" />
         <activity
           android:name=".ui.activities.registro.EmailRegistrationActivity"
           android:label="@string/title_activity_registration_email"
-          android:windowSoftInputMode="stateHidden"></activity>
+          android:windowSoftInputMode="stateHidden" />
         <activity
           android:name=".ui.activities.registro.EmailLoginActivity"
           android:label="@string/title_activity_login_email">
@@ -62,13 +76,13 @@
         </activity>
         <activity
           android:name=".ui.activities.PostNewShotActivity"
-          android:theme="@style/ShootrTheme.NoActionBar.Floating"></activity>
+          android:theme="@style/ShootrTheme.NoActionBar.Floating" />
         <activity android:name=".ui.activities.ProfileContainerActivity">
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
               android:value="com.shootr.mobile.ui.activities.MainTabbedActivity" />
         </activity>
-        <activity android:name=".ui.activities.UserFollowsContainerActivity"></activity>
+        <activity android:name=".ui.activities.UserFollowsContainerActivity" />
         <activity
           android:name=".ui.activities.FindFriendsActivity"
           android:label="@string/activity_find_friends_title"
@@ -102,7 +116,7 @@
         </activity>
         <activity
           android:name=".ui.activities.PhotoViewActivity"
-          android:theme="@style/ShootrTheme.PhotoViewer"></activity>
+          android:theme="@style/ShootrTheme.PhotoViewer" />
         <activity
           android:name=".ui.activities.NewStreamActivity"
           android:theme="@style/ShootrTheme.Closable">
@@ -114,7 +128,7 @@
           android:name=".ui.activities.DraftsActivity"
           android:label="@string/activity_drafts_title"
           android:launchMode="singleTop"
-          android:theme="@style/ShootrTheme.DarkToolbar"></activity>
+          android:theme="@style/ShootrTheme.DarkToolbar" />
         <activity android:name=".ui.activities.UpdateWarningActivity" />
         <activity android:name=".ui.activities.WhaleActivity" />
         <activity
@@ -167,14 +181,14 @@
         <activity
           android:name=".ui.activities.registro.ResetPasswordActivity"
           android:configChanges="orientation|screenSize"
-          android:label="@string/title_activity_reset_password"></activity>
+          android:label="@string/title_activity_reset_password" />
         <activity
           android:name=".ui.activities.ListingActivity"
-          android:label="@string/title_activity_listing"></activity>
+          android:label="@string/title_activity_listing" />
         <activity
           android:name=".ui.activities.FindStreamsActivity"
           android:label="@string/activity_find_streams_title"
-          android:theme="@style/ShootrTheme.Closable"></activity>
+          android:theme="@style/ShootrTheme.Closable" />
         <activity
           android:name="com.facebook.FacebookActivity"
           android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -183,40 +197,36 @@
         <activity
           android:name=".ui.activities.EmailConfirmationActivity"
           android:configChanges="orientation|screenSize"
-          android:label="@string/title_activity_email_confirmation"></activity>
+          android:label="@string/title_activity_email_confirmation" />
         <activity
           android:name=".ui.activities.AllShotsActivity"
-          android:label="@string/title_activity_all_shots"></activity>
+          android:label="@string/title_activity_all_shots" />
         <activity
           android:name=".ui.activities.SupportActivity"
-          android:label="@string/title_activity_support"></activity>
+          android:label="@string/title_activity_support" />
         <activity
           android:name=".ui.activities.ChangePasswordActivity"
-          android:label="@string/title_activity_change_password"></activity>
+          android:label="@string/title_activity_change_password" />
         <activity
           android:name=".ui.activities.IntroActivity"
           android:configChanges="orientation"
-          android:screenOrientation="portrait"></activity>
+          android:screenOrientation="portrait" />
         <activity
           android:name=".ui.activities.AllParticipantsActivity"
-          android:label="@string/title_activity_all_participants"></activity>
+          android:label="@string/title_activity_all_participants" />
         <activity
           android:name=".ui.activities.FindParticipantsActivity"
-          android:theme="@style/ShootrTheme.Closable"></activity>
-
+          android:theme="@style/ShootrTheme.Closable" />
         <meta-data
           android:name="com.shootr.mobile.util.GlideConfiguration"
           android:value="GlideModule" />
-
         <activity
           android:name=".ui.activities.WelcomePageActivity"
           android:configChanges="orientation"
-          android:screenOrientation="portrait"></activity>
-
+          android:screenOrientation="portrait" />
         <meta-data
           android:name="com.google.android.gms.version"
           android:value="@integer/google_play_services_version" />
-
         <activity
           android:name=".ui.activities.ErrorActivity"
           android:process=":error_activity"
@@ -227,8 +237,17 @@
         </activity>
         <activity
           android:name=".ui.activities.StreamDataInfoActivity"
-          android:label="@string/title_activity_stream_data_info"></activity>
-        <activity android:name=".ui.activities.EasterEggActivity"></activity>
+          android:label="@string/title_activity_stream_data_info" />
+        <activity android:name=".ui.activities.EasterEggActivity" />
+        <activity
+          android:name=".ui.activities.NicersActivity"
+          android:label="@string/nicers" />
+        <activity
+          android:name=".ui.activities.ContributorsActivity"
+          android:label="@string/title_activity_contributors" />
+        <activity
+          android:name=".ui.activities.FindContributorsActivity"
+          android:label="@string/title_activity_contributors"
+          android:theme="@style/ShootrTheme.Closable" />
     </application>
-
 </manifest>

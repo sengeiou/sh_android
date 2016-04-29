@@ -14,12 +14,10 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.ListingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class ListingListPresenter implements Presenter{
+public class ListingListPresenter implements Presenter {
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -116,7 +114,8 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void loadFavoriteStreams() {
-        getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
+        getFavoriteStreamsInteractor
+          .loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override public void onLoaded(List<StreamSearchResult> favorites) {
                 favoriteStreams = streamResultModelMapper.transform(favorites);
                 renderStreams();
@@ -168,12 +167,12 @@ public class ListingListPresenter implements Presenter{
 
     public void selectStream(StreamResultModel stream) {
         selectStream(stream.getStreamModel().getIdStream(),
-          stream.getStreamModel().getShortTitle(),
+          stream.getStreamModel().getTitle(),
           stream.getStreamModel().getAuthorId());
     }
 
-    private void selectStream(final String idStream, String treamTag, String authorId) {
-        listingView.navigateToStreamTimeline(idStream, treamTag, authorId);
+    private void selectStream(final String idStream, String streamTitle, String authorId) {
+        listingView.navigateToStreamTimeline(idStream, streamTitle, authorId);
     }
 
     public void streamCreated(String streamId) {
@@ -197,7 +196,8 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void openContextualMenu(StreamResultModel stream) {
-        if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel().isRemoved()) {
+        if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel()
+          .isRemoved()) {
             if (favoriteStreams.contains(stream)) {
                 listingView.showCurrentUserContextMenuWithoutAddFavorite(stream);
             } else {

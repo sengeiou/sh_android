@@ -12,7 +12,6 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,8 +29,8 @@ import static org.mockito.Mockito.when;
 public class MainScreenPresenterTest {
 
     public static final int TWO_ACTIVITIES = 2;
-    private static final int ONE_ACTIVITY =1 ;
-    private static final int ZERO_ACTIVITY =0 ;
+    private static final int ONE_ACTIVITY = 1;
+    private static final int ZERO_ACTIVITY = 0;
     public static final String ID_USER = "idUser";
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
@@ -134,8 +133,7 @@ public class MainScreenPresenterTest {
     private void setupCurrentUserCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<User> callback =
-                  (Interactor.Callback<User>) invocation.getArguments()[0];
+                Interactor.Callback<User> callback = (Interactor.Callback<User>) invocation.getArguments()[0];
                 callback.onLoaded(user());
                 return null;
             }

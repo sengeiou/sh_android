@@ -5,9 +5,7 @@ import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.entity.ResetPasswordEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.ResetPasswordEmailGateway;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ServiceResetPasswordEmailGateway implements ResetPasswordEmailGateway {

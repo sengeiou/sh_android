@@ -16,7 +16,6 @@
 
 package com.shootr.mobile.ui.widgets;
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -32,7 +31,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
 import com.shootr.mobile.R;
 
 /**
@@ -41,6 +39,7 @@ import com.shootr.mobile.R;
  * flexible enough for use with other desired aesthetics.
  */
 public class BezelImageView extends ImageView {
+
     private Paint mBlackPaint;
     private Paint mMaskedPaint;
 
@@ -70,8 +69,7 @@ public class BezelImageView extends ImageView {
         super(context, attrs, defStyle);
 
         // Attribute initialization
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BezelImageView,
-                defStyle, 0);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BezelImageView, defStyle, 0);
 
         mMaskDrawable = a.getDrawable(R.styleable.BezelImageView_maskDrawable);
         if (mMaskDrawable != null) {
@@ -83,15 +81,14 @@ public class BezelImageView extends ImageView {
             mBorderDrawable.setCallback(this);
         }
 
-        mDesaturateOnPress = a.getBoolean(R.styleable.BezelImageView_desaturateOnPress,
-                mDesaturateOnPress);
+        mDesaturateOnPress = a.getBoolean(R.styleable.BezelImageView_desaturateOnPress, mDesaturateOnPress);
 
         a.recycle();
 
         // Other initialization
         mBlackPaint = new Paint();
         mBlackPaint.setColor(0xff000000);
-        
+
         mMaskedPaint = new Paint();
         mMaskedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
 
@@ -106,8 +103,7 @@ public class BezelImageView extends ImageView {
         }
     }
 
-    @Override
-    protected boolean setFrame(int l, int t, int r, int b) {
+    @Override protected boolean setFrame(int l, int t, int r, int b) {
         final boolean changed = super.setFrame(l, t, r, b);
         mBounds = new Rect(0, 0, r - l, b - t);
         mBoundsF = new RectF(mBounds);
@@ -126,8 +122,7 @@ public class BezelImageView extends ImageView {
         return changed;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         if (mBounds == null) {
             return;
         }
@@ -157,18 +152,19 @@ public class BezelImageView extends ImageView {
             if (mMaskDrawable != null) {
                 int sc = cacheCanvas.save();
                 mMaskDrawable.draw(cacheCanvas);
-                mMaskedPaint.setColorFilter((mDesaturateOnPress && isPressed())
-                        ? mDesaturateColorFilter : null);
-                cacheCanvas.saveLayer(mBoundsF, mMaskedPaint,
-                        Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
+                mMaskedPaint.setColorFilter((mDesaturateOnPress && isPressed()) ? mDesaturateColorFilter : null);
+                cacheCanvas.saveLayer(mBoundsF,
+                  mMaskedPaint,
+                  Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
                 super.onDraw(cacheCanvas);
                 cacheCanvas.restoreToCount(sc);
             } else if (mDesaturateOnPress && isPressed()) {
                 int sc = cacheCanvas.save();
                 cacheCanvas.drawRect(0, 0, mCachedWidth, mCachedHeight, mBlackPaint);
                 mMaskedPaint.setColorFilter(mDesaturateColorFilter);
-                cacheCanvas.saveLayer(mBoundsF, mMaskedPaint,
-                        Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
+                cacheCanvas.saveLayer(mBoundsF,
+                  mMaskedPaint,
+                  Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
                 super.onDraw(cacheCanvas);
                 cacheCanvas.restoreToCount(sc);
             } else {
@@ -184,8 +180,7 @@ public class BezelImageView extends ImageView {
         canvas.drawBitmap(mCacheBitmap, mBounds.left, mBounds.top, null);
     }
 
-    @Override
-    protected void drawableStateChanged() {
+    @Override protected void drawableStateChanged() {
         super.drawableStateChanged();
         if (mBorderDrawable != null && mBorderDrawable.isStateful()) {
             mBorderDrawable.setState(getDrawableState());
@@ -198,8 +193,7 @@ public class BezelImageView extends ImageView {
         }
     }
 
-    @Override
-    public void invalidateDrawable(Drawable who) {
+    @Override public void invalidateDrawable(Drawable who) {
         if (who == mBorderDrawable || who == mMaskDrawable) {
             invalidate();
         } else {
@@ -207,8 +201,7 @@ public class BezelImageView extends ImageView {
         }
     }
 
-    @Override
-    protected boolean verifyDrawable(Drawable who) {
+    @Override protected boolean verifyDrawable(Drawable who) {
         return who == mBorderDrawable || who == mMaskDrawable || super.verifyDrawable(who);
     }
 }

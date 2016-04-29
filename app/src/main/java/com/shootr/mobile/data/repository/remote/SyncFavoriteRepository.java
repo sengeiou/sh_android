@@ -14,11 +14,8 @@ import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepository {
@@ -30,8 +27,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     private final SyncTrigger syncTrigger;
     private final SessionRepository sessionRepository;
 
-    @Inject
-    public SyncFavoriteRepository(@Remote FavoriteDataSource remoteFavoriteDataSource,
+    @Inject public SyncFavoriteRepository(@Remote FavoriteDataSource remoteFavoriteDataSource,
       @Local FavoriteDataSource localFavoriteDataSource, FavoriteEntityMapper favoriteEntityMapper,
       SyncableFavoriteEntityFactory syncableFavoriteEntityFactory, SyncTrigger syncTrigger,
       SessionRepository sessionRepository) {
@@ -43,8 +39,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         this.sessionRepository = sessionRepository;
     }
 
-    @Override
-    public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
+    @Override public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
         FavoriteEntity updatedOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         try {
             FavoriteEntity remoteFavoriteEntity = remoteFavoriteDataSource.putFavorite(updatedOrNewEntity);
@@ -56,8 +51,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         }
     }
 
-    @Override
-    public List<Favorite> getFavorites(String userId) {
+    @Override public List<Favorite> getFavorites(String userId) {
         syncTrigger.triggerSync();
         List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites(userId);
         if (userId.equals(sessionRepository.getCurrentUserId())) {
@@ -74,14 +68,12 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         return favoriteEntityMapper.transformEntities(remoteFavorites);
     }
 
-    @Override
-    public Favorite getFavoriteByStream(String streamId) {
+    @Override public Favorite getFavoriteByStream(String streamId) {
         FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdStream(streamId);
         return favoriteEntityMapper.transform(favoriteEntity);
     }
 
-    @Override
-    public void removeFavoriteByStream(String streamId) {
+    @Override public void removeFavoriteByStream(String streamId) {
         try {
             syncTrigger.triggerSync();
             remoteFavoriteDataSource.removeFavoriteByIdStream(streamId);
@@ -128,8 +120,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
           || LocalSynchronized.SYNC_DELETED.equals(favoriteEntity.getSynchronizedStatus());
     }
 
-    @Override
-    public void dispatchSync() {
+    @Override public void dispatchSync() {
         List<FavoriteEntity> notSynchronized = localFavoriteDataSource.getEntitiesNotSynchronized();
         for (FavoriteEntity favoriteEntityEntity : notSynchronized) {
             if (LocalSynchronized.SYNC_DELETED.equals(favoriteEntityEntity.getSynchronizedStatus())) {

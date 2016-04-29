@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import javax.inject.Inject;
 
 public class PinShotInteractor implements Interactor {
@@ -25,7 +24,7 @@ public class PinShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void pinShot(String idShot, CompletedCallback completedCallback){
+    public void pinShot(String idShot, CompletedCallback completedCallback) {
         this.idShot = idShot;
         this.completedCallback = completedCallback;
         this.interactorHandler.execute(this);
@@ -40,7 +39,7 @@ public class PinShotInteractor implements Interactor {
         notifyCompleted();
     }
 
-    private void sendUnhideShotToServer(){
+    private void sendUnhideShotToServer() {
         remoteShotRepository.unhideShot(idShot);
     }
 

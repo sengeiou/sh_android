@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
-
 import javax.inject.Inject;
 
 public class UnmarkNiceShotInteractor implements Interactor {
@@ -71,7 +70,8 @@ public class UnmarkNiceShotInteractor implements Interactor {
             remoteNiceShotRepository.unmark(idShot);
             unmarkNiceInLocal();
         } catch (ShootrException | NiceNotMarkedException e) {
-            notifyError(new ShootrException() {});
+            notifyError(new ShootrException() {
+            });
         }
     }
 

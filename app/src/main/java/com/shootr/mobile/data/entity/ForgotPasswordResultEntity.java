@@ -40,13 +40,21 @@ public class ForgotPasswordResultEntity {
     }
 
     @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ForgotPasswordResultEntity)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ForgotPasswordResultEntity)) {
+            return false;
+        }
 
         ForgotPasswordResultEntity that = (ForgotPasswordResultEntity) o;
 
-        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null) return false;
-        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null) {
+            return false;
+        }
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) {
+            return false;
+        }
         if (emailEncrypted != null ? !emailEncrypted.equals(that.emailEncrypted) : that.emailEncrypted != null) {
             return false;
         }

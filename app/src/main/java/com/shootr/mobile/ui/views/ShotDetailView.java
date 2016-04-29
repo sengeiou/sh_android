@@ -1,10 +1,9 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.ShotModel;
-
 import java.util.List;
 
-public interface ShotDetailView  {
+public interface ShotDetailView {
 
     void renderShot(ShotModel shotModel);
 
@@ -18,7 +17,7 @@ public interface ShotDetailView  {
 
     void scrollToBottom();
 
-    void renderParent(ShotModel parentShot);
+    void renderParents(List<ShotModel> parentShot);
 
     void startProfileContainerActivity(String username);
 
@@ -39,4 +38,6 @@ public interface ShotDetailView  {
     void enableStreamTitle();
 
     void shareShot(ShotModel shotModel);
+
+    void goToNicers(String idShot);
 }

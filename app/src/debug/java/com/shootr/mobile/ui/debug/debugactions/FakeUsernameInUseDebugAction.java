@@ -17,13 +17,11 @@ public class FakeUsernameInUseDebugAction extends ContextualDebugActions.DebugAc
         this.jsonAdapter = jsonAdapter;
     }
 
-    @Override
-    public String name() {
+    @Override public String name() {
         return "Fake Username in use";
     }
 
-    @Override
-    public void run(EmailRegistrationActivity activity) {
+    @Override public void run(EmailRegistrationActivity activity) {
         ErrorResource errorResource = new ErrorResource();
         errorResource.setCode(ErrorInfo.UserNameAlreadyExistsException.code());
         errorResource.setStatus(ErrorInfo.UserNameAlreadyExistsException.httpCode());

@@ -10,9 +10,7 @@ import com.shootr.mobile.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.service.user.ConfirmEmailGateway;
-
 import java.io.IOException;
-
 import javax.inject.Inject;
 
 public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
@@ -26,7 +24,7 @@ public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
     @Override public void confirmEmail() throws InvalidEmailConfirmationException {
         try {
             this.authApiService.confirmEmail();
-        }catch (ApiException error) {
+        } catch (ApiException error) {
             throw new InvalidEmailConfirmationException(error);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
@@ -34,13 +32,12 @@ public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
     }
 
     @Override public void changeEmail(String email)
-      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException,
-      UnauthorizedRequestException {
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
         ChangeEmailApiEntity changeEmailApiEntity = new ChangeEmailApiEntity();
         changeEmailApiEntity.setNewEmail(email);
         try {
             this.authApiService.changeEmail(changeEmailApiEntity);
-        }catch (ApiException error) {
+        } catch (ApiException error) {
             captureApiException(error);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
@@ -51,9 +48,9 @@ public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
       throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
         if (ErrorInfo.EmailAlreadyExistsException == error.getErrorInfo()) {
             throw new EmailAlreadyExistsException(error);
-        } else if(ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
+        } else if (ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
             throw new EmailAlreadyConfirmedException(error);
-        } else if(ErrorInfo.InsufficientAuthenticationException == error.getErrorInfo()) {
+        } else if (ErrorInfo.InsufficientAuthenticationException == error.getErrorInfo()) {
             throw new UnauthorizedRequestException(error);
         } else {
             throw new ServerCommunicationException(error);

@@ -2,16 +2,13 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
-
 import javax.inject.Inject;
 
 public class ShotEntityDBMapper extends GenericDBMapper {
 
-    @Inject
-    public ShotEntityDBMapper() {
+    @Inject public ShotEntityDBMapper() {
     }
 
     public ShotEntity fromCursor(Cursor c) {
@@ -22,7 +19,6 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USER_PHOTO)));
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
-        shot.setStreamShortTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.STREAM_SHORT_TITLE)));
         shot.setStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.STREAM_TITLE)));
         shot.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_STREAM)));
         shot.setType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
@@ -46,7 +42,6 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.USER_PHOTO, shot.getUserPhoto());
         cv.put(DatabaseContract.ShotTable.COMMENT, shot.getComment());
         cv.put(DatabaseContract.ShotTable.IMAGE, shot.getImage());
-        cv.put(DatabaseContract.ShotTable.STREAM_SHORT_TITLE, shot.getStreamShortTitle());
         cv.put(DatabaseContract.ShotTable.STREAM_TITLE, shot.getStreamTitle());
         cv.put(DatabaseContract.ShotTable.ID_STREAM, shot.getIdStream());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
@@ -58,7 +53,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.VIDEO_TITLE, shot.getVideoTitle());
         cv.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot.getVideoDuration());
         cv.put(DatabaseContract.ShotTable.PROFILE_HIDDEN, shot.getProfileHidden());
-        setSynchronizedtoContentValues(shot,cv);
+        setSynchronizedtoContentValues(shot, cv);
         return cv;
     }
 }

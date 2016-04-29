@@ -11,9 +11,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.UserRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetLastShotsInteractor implements Interactor {

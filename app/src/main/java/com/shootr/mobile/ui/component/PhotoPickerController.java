@@ -5,14 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.FileChooserUtils;
-
 import java.io.File;
 import java.io.IOException;
-
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -80,7 +77,7 @@ public class PhotoPickerController {
         pickPhotoOption();
     }
 
-    public void pickOption(){
+    public void pickOption() {
         pickHolderOptions();
     }
 
@@ -104,7 +101,7 @@ public class PhotoPickerController {
         builder.show();
     }
 
-    private void pickHolderOptions(){
+    private void pickHolderOptions() {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
           .sheet(R.menu.option_picker_author_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {

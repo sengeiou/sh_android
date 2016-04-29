@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.views.StreamTimelineView;
-
 import java.util.List;
 
 public class NullStreamTimelineView implements StreamTimelineView {
@@ -63,7 +62,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setTitle(String shortTitle) {
+    @Override public void setTitle(String title) {
         /* no-op */
     }
 

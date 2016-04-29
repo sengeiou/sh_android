@@ -2,10 +2,9 @@ package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.views.base.LoadDataView;
-
 import java.util.List;
 
-public interface StreamTimelineView extends LoadDataView{
+public interface StreamTimelineView extends LoadDataView {
 
     void setShots(List<ShotModel> shots);
 
@@ -35,7 +34,7 @@ public interface StreamTimelineView extends LoadDataView{
 
     void hideAllStreamShots();
 
-    void setTitle(String shortTitle);
+    void setTitle(String title);
 
     void setPosition(Integer oldListSize, Integer shots);
 

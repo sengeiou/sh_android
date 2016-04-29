@@ -1,19 +1,15 @@
 package com.shootr.mobile.ui.activities;
 
 import android.support.annotation.LayoutRes;
-
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.ViewContainerDecorator;
 import com.shootr.mobile.ui.base.BaseDecoratedActivity;
 import com.shootr.mobile.ui.dagger.ToolbarDecoratedModule;
 import com.shootr.mobile.util.ImageLoader;
-
+import dagger.ObjectGraph;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import dagger.ObjectGraph;
 
 public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity {
 
@@ -31,8 +27,7 @@ public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity
         return Collections.singletonList((ViewContainerDecorator) toolbarDecorator);
     }
 
-    @Override
-    public ObjectGraph getObjectGraph() {
+    @Override public ObjectGraph getObjectGraph() {
         return super.getObjectGraph().plus(new ToolbarDecoratedModule(this));
     }
 

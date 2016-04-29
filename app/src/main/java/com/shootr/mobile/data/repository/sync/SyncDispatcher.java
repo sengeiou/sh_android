@@ -5,5 +5,4 @@ public interface SyncDispatcher {
     void notifyNeedsSync(SyncableRepository syncableRepository);
 
     void triggerSync();
-
 }

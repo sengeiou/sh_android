@@ -21,7 +21,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -67,19 +72,10 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
@@ -87,7 +83,7 @@ public class StreamTimelineFragment extends BaseFragment
   PinShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_SHORT_TITLE = "streamShortTitle";
+    public static final String EXTRA_STREAM_TITLE = "streamTitle";
     public static final String EXTRA_ID_USER = "userId";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
@@ -176,7 +172,7 @@ public class StreamTimelineFragment extends BaseFragment
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_SHORT_TITLE));
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
         setStreamTitleClickListener(idStream);
         if (streamAuthorIdUser != null) {
             initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser);
@@ -196,8 +192,8 @@ public class StreamTimelineFragment extends BaseFragment
                 getActivity().finish();
             }
         } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
-            String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
-            setStreamTitle(updatedShortTitle);
+            String updatedTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_TITLE);
+            setStreamTitle(updatedTitle);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
         }
@@ -283,8 +279,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     //endregion
 
-    private void setStreamTitle(String streamShortTitle) {
-        toolbarDecorator.setTitle(streamShortTitle);
+    private void setStreamTitle(String streamTitle) {
+        toolbarDecorator.setTitle(streamTitle);
     }
 
     private void setStreamTitleClickListener(final String idStream) {
@@ -457,7 +453,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListScrollListeners() {
-        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+        new ListViewScrollObserver(listView)
+          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta > 10) {
                     hideTimelineIndicator();
@@ -591,8 +588,8 @@ public class StreamTimelineFragment extends BaseFragment
         showAllShotsMenuItem.setVisible(false);
     }
 
-    @Override public void setTitle(String shortTitle) {
-        setStreamTitle(shortTitle);
+    @Override public void setTitle(String title) {
+        setStreamTitle(title);
     }
 
     @Override public void setPosition(Integer oldListSize, Integer shots) {
@@ -624,8 +621,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        topicSnackbar = Snackbar.make(timelineListContainer, topic, Snackbar.LENGTH_INDEFINITE);
-        topicSnackbar.show();
+        if (timelineListContainer != null) {
+            feedbackMessage.showForever(timelineListContainer, topic);
+        } else {
+            feedbackMessage.show(getView(), topic);
+        }
     }
 
     @Override public void hideTopicSnackBar() {
@@ -709,10 +709,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
         getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-              @Override public void run() {
-                  reportShotPresenter.unblockUser(shotModel);
-              }
-          }).show();
+            @Override public void run() {
+                reportShotPresenter.unblockUser(shotModel);
+            }
+        }).show();
     }
 
     @Override public void showBlockFollowingUserAlert() {
@@ -730,10 +730,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void showBlockUserConfirmation() {
         new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
           .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    reportShotPresenter.confirmBlock();
-                }
-            })
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  reportShotPresenter.confirmBlock();
+              }
+          })
           .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
           .create()
           .show();
@@ -851,10 +851,10 @@ public class StreamTimelineFragment extends BaseFragment
         alertDialogBuilder //
           .setMessage(getString(R.string.language_support_alert)) //
           .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    goToReport(sessionToken, shotModel);
-                }
-            }).show();
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  goToReport(sessionToken, shotModel);
+              }
+          }).show();
     }
 
     @Override public void showHolderContextMenu(final ShotModel shot) {

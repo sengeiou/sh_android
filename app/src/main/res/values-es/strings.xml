@@ -8,6 +8,7 @@
   <string name="activity_edit_profile_username_hint">Nombre de usuario</string>
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
+  <string name="activity_find_contributors_hint">Buscar</string>
   <string name="activity_find_friends_cant_load_message">No es posible cargar datos. Comprueba tu conexión.</string>
   <string name="activity_find_friends_empty_message">No hay resultados</string>
   <string name="activity_find_friends_hint">Encontrar amigos</string>
@@ -37,7 +38,11 @@
   <string name="activity_registration_username_hint">Nombre de usuario</string>
   <string name="activity_started_following_you">Te sigue</string>
   <string name="activity_timeline_empty_title">No hay actividad</string>
+  <string name="added_contributor">Añadido</string>
   <string name="added_to_favorites">Añadido a Favoritos</string>
+  <string name="add_contributor">Añadir</string>
+  <string name="add_contributor_button">Añadir colaborador</string>
+  <string name="add_contributor_confirmation_message">¿Añadir a %s?</string>
   <string name="add_to_favorites_menu_title">Añadir a Favoritos</string>
   <string name="alert_report_confirmed_email_message">Ve a Cuenta &gt; Editar Perfil y confirma tu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -64,6 +69,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">Quitar shot</string>
   <string name="confirm_hide_shot" formatted="false">Quitar</string>
   <string name="connection_lost">Se ha perdido la conexión</string>
+  <string name="contributors_empty">No hay</string>
   <string name="copied_to_clipboard">Texto copiado al portapapeles.</string>
   <string name="current_password_hint">Contraseña actual</string>
   <string name="days">d</string>
@@ -101,6 +107,7 @@
   <string name="entered_just_now">Acaba de entrar</string>
   <string name="entered_long_time_ago">Entró hace días</string>
   <string name="entered_minutes_ago">Ha entrado hace %d minutos</string>
+  <string name="error_adding_contributor">Puedes añadir hasta 100 colaboradores</string>
   <string name="error_deleted_shot">Este shot ha sido eliminado</string>
   <string name="error_facebook_login">No se ha podido iniciar sesión con Facebook. Prueba más tarde.</string>
   <string name="error_following_user_blocked">No puedes seguir un usuario que ignoras.</string>
@@ -214,12 +221,13 @@
   <string name="new_shot_placeholder">Escribe algo…</string>
   <string name="new_shot_repeated">Whoops! Ya has publicado eso</string>
   <string name="new_stream_description_label">Descripción</string>
-  <string name="new_stream_short_title_label">Título corto</string>
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nuevo mensaje…</string>
   <string name="next">Siguiente</string>
+  <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">Te ha hecho un nice</string>
   <string name="niced_shot_activity_with_comment">"Ha hecho un nice en: "</string>
+  <string name="nicers">Nicers</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -286,6 +294,7 @@
   <string name="reset_password_enter_username_email">Entra tu nombre de usuario o email en Shootr.</string>
   <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
   <string name="restore_stream_label">Restaurar stream</string>
+  <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="seconds">s</string>
   <string name="shared_shot_activity">Ha compartido un shot de %s</string>
   <string name="shared_shot_activity_with_comment">"Ha compartido: "</string>
@@ -323,6 +332,8 @@
   <string name="stream_notification_confirmation_no">Nop</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">siguiendo a %d</string>
+  <string name="stream_removed_feedback">Stream borrado</string>
+  <string name="stream_restored_feedback">Stream restaurado</string>
   <string name="stream_subtitle">siguiendo a %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
   <string name="stream_timeline_add_favorite">Añadir a Favoritos</string>
@@ -337,6 +348,7 @@
   <string name="title_activity_all_participants">Todos los participantes</string>
   <string name="title_activity_all_shots">Todos los shots</string>
   <string name="title_activity_change_password">Cambiar contraseña</string>
+  <string name="title_activity_contributors">Colaboradores</string>
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">Iniciar sesión</string>

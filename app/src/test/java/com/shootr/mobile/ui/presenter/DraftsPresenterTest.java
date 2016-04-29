@@ -12,16 +12,14 @@ import com.shootr.mobile.ui.model.mappers.DraftModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.DraftsView;
 import com.squareup.otto.Bus;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
@@ -41,8 +39,7 @@ public class DraftsPresenterTest {
     @Mock DeleteDraftInteractor deleteDraftInteractor;
     @Mock Bus bus;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         SessionRepository sessionRepository = mock(SessionRepository.class);
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
@@ -50,8 +47,7 @@ public class DraftsPresenterTest {
         presenter = new DraftsPresenter(interactor, sendDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
     }
 
-    @Test
-    public void shouldShowEmptyViewWhenDraftListIsEmpty() throws Exception {
+    @Test public void shouldShowEmptyViewWhenDraftListIsEmpty() throws Exception {
         setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
@@ -60,8 +56,7 @@ public class DraftsPresenterTest {
         verify(draftsView, never()).hideEmpty();
     }
 
-    @Test
-    public void shouldHideEmptyViewWhenDraftListNotEmpty() throws Exception {
+    @Test public void shouldHideEmptyViewWhenDraftListNotEmpty() throws Exception {
         setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
@@ -70,8 +65,7 @@ public class DraftsPresenterTest {
         verify(draftsView, never()).showEmpty();
     }
 
-    @Test
-    public void shouldShowDraftsInViewWhenDraftListNotEmpty() throws Exception {
+    @Test public void shouldShowDraftsInViewWhenDraftListNotEmpty() throws Exception {
         setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
@@ -79,8 +73,7 @@ public class DraftsPresenterTest {
         verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
-    @Test
-    public void shouldShowDraftsInViewWhenDraftListEmpty() throws Exception {
+    @Test public void shouldShowDraftsInViewWhenDraftListEmpty() throws Exception {
         setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
@@ -88,8 +81,7 @@ public class DraftsPresenterTest {
         verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
-    @Test
-    public void shouldHideShootAllButtonWhenDraftListIsEmpty() throws Exception {
+    @Test public void shouldHideShootAllButtonWhenDraftListIsEmpty() throws Exception {
         setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
@@ -97,8 +89,7 @@ public class DraftsPresenterTest {
         verify(draftsView, times(1)).hideShootAllButton();
     }
 
-    @Test
-    public void shouldHideShootAllButtonWhenDraftListHasOneItems() throws Exception {
+    @Test public void shouldHideShootAllButtonWhenDraftListHasOneItems() throws Exception {
         setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
@@ -106,8 +97,7 @@ public class DraftsPresenterTest {
         verify(draftsView, times(1)).hideShootAllButton();
     }
 
-    @Test
-    public void shouldShowShootAllButtonWhenDraftListHasTwoItems() throws Exception {
+    @Test public void shouldShowShootAllButtonWhenDraftListHasTwoItems() throws Exception {
         setupInteractorReturns(drafts(2));
 
         presenter.initialize(draftsView);
@@ -124,7 +114,6 @@ public class DraftsPresenterTest {
             }
         }).when(interactor).loadDrafts(any(GetDraftsInteractor.Callback.class));
     }
-
 
     private List<QueuedShot> drafts(int count) {
         List<QueuedShot> shots = new ArrayList<>();

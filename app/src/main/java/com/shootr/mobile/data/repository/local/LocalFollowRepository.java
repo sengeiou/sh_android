@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.local;
 
 import android.support.annotation.NonNull;
-
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -10,11 +9,9 @@ import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class LocalFollowRepository implements FollowRepository {
@@ -22,13 +19,13 @@ public class LocalFollowRepository implements FollowRepository {
     private final SessionRepository sessionRepository;
     private final FollowDataSource followDataSource;
 
-    @Inject public LocalFollowRepository(SessionRepository sessionRepository, @Local FollowDataSource followDataSource) {
+    @Inject
+    public LocalFollowRepository(SessionRepository sessionRepository, @Local FollowDataSource followDataSource) {
         this.sessionRepository = sessionRepository;
         this.followDataSource = followDataSource;
     }
 
-    @Override
-    public void follow(String idUser) {
+    @Override public void follow(String idUser) {
         FollowEntity followEntity = createFollow(idUser);
         try {
             followDataSource.putFollow(followEntity);
@@ -37,8 +34,7 @@ public class LocalFollowRepository implements FollowRepository {
         }
     }
 
-    @Override
-    public void unfollow(String idUser) {
+    @Override public void unfollow(String idUser) {
         followDataSource.removeFollow(idUser);
     }
 
@@ -78,8 +74,7 @@ public class LocalFollowRepository implements FollowRepository {
         followDataSource.unban(idUser);
     }
 
-    @NonNull
-    protected FollowEntity createFollow(String idUser) {
+    @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());
         followEntity.setFollowedUser(idUser);
@@ -89,16 +84,14 @@ public class LocalFollowRepository implements FollowRepository {
         return followEntity;
     }
 
-    @NonNull
-    protected BlockEntity createBlock(String idUser) {
+    @NonNull protected BlockEntity createBlock(String idUser) {
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBlockedUser(idUser);
         return blockEntity;
     }
 
-    @NonNull
-    protected BanEntity createBan(String idUser) {
+    @NonNull protected BanEntity createBan(String idUser) {
         BanEntity blockEntity = new BanEntity();
         blockEntity.setIdUser(sessionRepository.getCurrentUserId());
         blockEntity.setIdBannedUser(idUser);

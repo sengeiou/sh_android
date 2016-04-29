@@ -12,11 +12,9 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.shootr.mobile.R;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 
 public class DraftItemView extends FrameLayout {
 

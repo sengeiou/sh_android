@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
-
 import java.io.File;
 import java.util.Date;
 

@@ -11,9 +11,7 @@ import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class SyncStreamRepository implements StreamRepository, SyncableRepository {
@@ -24,9 +22,10 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     private final SyncableStreamEntityFactory syncableStreamEntityFactory;
     private final StreamCache streamCache;
 
-    @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
-      @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource,
-      SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache) {
+    @Inject
+    public SyncStreamRepository(StreamEntityMapper streamEntityMapper, @Local StreamDataSource localStreamDataSource,
+      @Remote StreamDataSource remoteStreamDataSource, SyncableStreamEntityFactory syncableStreamEntityFactory,
+      StreamCache streamCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.remoteStreamDataSource = remoteStreamDataSource;
         this.streamEntityMapper = streamEntityMapper;

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.holders.ShotViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
@@ -15,7 +15,6 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +33,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private boolean isCurrentUser;
 
-    public TimelineAdapter(Context context,
-      ImageLoader imageLoader,
-      AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener,
-      OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener,
-      OnUsernameClickListener onUsernameClickListener,
-      OnHideClickListener onHideClickListener,Boolean isCurrentUser) {
+    public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
+      OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
+      OnHideClickListener onHideClickListener, Boolean isCurrentUser) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -55,28 +50,23 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.isCurrentUser = isCurrentUser;
     }
 
-    @Override
-    public boolean areAllItemsEnabled() {
+    @Override public boolean areAllItemsEnabled() {
         return true;
     }
 
-    @Override
-    public boolean isEnabled(int position) {
+    @Override public boolean isEnabled(int position) {
         return true;
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
         return 0;
     }
 
-    @Override
-    public int getViewTypeCount() {
+    @Override public int getViewTypeCount() {
         return 1;
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
         return shots.size();
     }
 
@@ -84,29 +74,29 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         return position == getCount() - 1;
     }
 
-    @Override
-    public ShotModel getItem(int position) {
+    @Override public ShotModel getItem(int position) {
         return shots.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
+    @Override public long getItemId(int position) {
         return position;
     }
 
-    @Override
-    public View newView(LayoutInflater inflater, int position, ViewGroup container) {
+    @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
         View view = null;
         switch (getItemViewType(position)) {
             case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
-                view.setTag(new ShotViewHolder(view, avatarClickListener, videoClickListener,
+                view.setTag(new ShotViewHolder(view,
+                  avatarClickListener,
+                  videoClickListener,
                   onNiceShotListener,
                   onHideClickListener,
                   onUsernameClickListener,
                   timeUtils,
                   imageLoader,
-                  shotTextSpannableBuilder,isCurrentUser));
+                  shotTextSpannableBuilder,
+                  isCurrentUser));
                 break;
             default:
                 break;
@@ -114,14 +104,13 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         return view;
     }
 
-    @Override
-    public void bindView(final ShotModel item, int position, View view) {
+    @Override public void bindView(final ShotModel item, int position, View view) {
         ShotViewHolder vh = (ShotViewHolder) view.getTag();
         vh.position = position;
-        vh.render(item, this.shouldShowShortTitle());
+        vh.render(item, this.shouldShowTitle());
     }
 
-    protected boolean shouldShowShortTitle() {
+    protected boolean shouldShowTitle() {
         return false;
     }
 
@@ -147,9 +136,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     public ShotModel getLastShot() {
         Integer shotsNumber = shots.size();
-        if(shotsNumber>0){
+        if (shotsNumber > 0) {
             return shots.get(shots.size() - 1);
-        }else{
+        } else {
             return shots.get(0);
         }
     }
