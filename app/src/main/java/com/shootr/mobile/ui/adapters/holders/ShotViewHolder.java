@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.adapters.holders;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -61,10 +60,11 @@ public class ShotViewHolder {
     private View view;
     private Boolean isCurrentUser;
 
-    public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener, OnHideClickListener onHideClickListener,
-      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
-      ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
+    public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
+      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
+      AndroidTimeUtils timeUtils, ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder,
+      Boolean isCurrentUser) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
@@ -130,11 +130,11 @@ public class ShotViewHolder {
             builder.append(comment);
         }
 
-        if (comment != null && replyCount!= null) {
+        if (comment != null && replyCount != null) {
             builder.append(" ");
         }
 
-        if (replyCount!= null && replyCount >= 0L) {
+        if (replyCount != null && replyCount >= 0L) {
             String replies = getReplyCountText(replyCount);
             builder.append(formatAditionalInfo(replies));
         }
@@ -183,7 +183,8 @@ public class ShotViewHolder {
     }
 
     private String getReplyName(ShotModel shot) {
-        return view.getContext().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
+        return view.getContext()
+          .getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
     }
 
     private void bindElapsedTime(ShotModel shot) {
