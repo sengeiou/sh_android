@@ -20,4 +20,6 @@ public interface FollowRepository {
     List<String> getBannedIdUsers();
 
     void unban(String idUser);
+
+    List<String> getMutualIdUsers();
 }

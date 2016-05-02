@@ -255,4 +255,27 @@ public class FollowManager extends AbstractManager {
         String[] whereArgs = new String[] { idUser, currentUserId };
         return getWritableDatabase().delete(BAN_TABLE, whereClause, whereArgs);
     }
+
+    public List<String> getMutuals() {
+        List<String> mutuals = new ArrayList<>();
+        String args = DatabaseContract.FollowTable.IS_FRIEND + " <> 0";
+        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
+          DatabaseContract.FollowTable.PROJECTION,
+          args,
+          null,
+          null,
+          null,
+          null,
+          null);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                mutuals.add(c.getString(c.getColumnIndex(ID_USER)));
+                c.moveToNext();
+            }
+        }
+        c.close();
+        return mutuals;
+    }
 }

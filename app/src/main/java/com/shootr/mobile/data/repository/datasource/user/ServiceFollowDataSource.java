@@ -112,6 +112,10 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
+    @Override public List<String> getMutuals() {
+        throw new IllegalArgumentException("this method should not have remote implementation");
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }

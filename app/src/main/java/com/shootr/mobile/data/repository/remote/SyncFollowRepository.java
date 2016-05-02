@@ -111,6 +111,10 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         remoteFollowDataSource.unban(idUser);
     }
 
+    @Override public List<String> getMutualIdUsers() {
+        throw new IllegalArgumentException("this method should not have remote implementation");
+    }
+
     @Override public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
