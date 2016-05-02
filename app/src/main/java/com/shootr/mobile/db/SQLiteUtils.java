@@ -100,6 +100,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.PROFILE_HIDDEN
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.REPLY_COUNT
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
