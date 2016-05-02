@@ -38,29 +38,23 @@ import javax.inject.Singleton;
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
             shot.setStreamInfo(eventInfo);
         }
-
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(shotEntity.getIdUser());
         userInfo.setUsername(shotEntity.getUsername());
         userInfo.setAvatar(shotEntity.getUserPhoto());
         shot.setUserInfo(userInfo);
-
         shot.setParentShotId(shotEntity.getIdShotParent());
         shot.setParentShotUserId(shotEntity.getIdUserParent());
         shot.setParentShotUsername(shotEntity.getUserNameParent());
-
         shot.setVideoUrl(shotEntity.getVideoUrl());
         shot.setVideoTitle(shotEntity.getVideoTitle());
         shot.setVideoDuration(shotEntity.getVideoDuration());
-
         shot.setType(shotEntity.getType());
         shot.setNiceCount(shotEntity.getNiceCount());
         shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
-
         shot.setProfileHidden(shotEntity.getProfileHidden());
-
         shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
-
+        shot.setReplyCount(shotEntity.getReplyCount());
         return shot;
     }
 
