@@ -88,7 +88,7 @@
     <string name="drawer_activity_me" formatted="false">我</string>
     <string name="drawer_activity_title">动态</string>
     <string name="drawer_favorites_title">喜爱</string>
-    <string name="drawer_friends_activity_title" formatted="false">朋友</string>
+    <string name="drawer_following_activity_title" formatted="false">朋友</string>
     <string name="drawer_friends_title">朋友</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="edit_stream">编辑stream</string>
