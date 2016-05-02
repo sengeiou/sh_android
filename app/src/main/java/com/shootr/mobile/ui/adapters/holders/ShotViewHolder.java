@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -104,11 +105,13 @@ public class ShotViewHolder {
     protected void bindComment(ShotModel item, boolean shouldShowTitle) {
         String comment = item.getComment();
         String title = null;
+        Long replyCount = null;
         if (shouldShowTitle && item.getStreamTitle() != null) {
             title = item.getStreamTitle();
+            replyCount = item.getReplyCount();
         }
 
-        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title);
+        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title, replyCount);
         if (commentWithTitle != null) {
             addShotComment(this, commentWithTitle);
             text.setVisibility(View.VISIBLE);
@@ -118,7 +121,7 @@ public class ShotViewHolder {
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTitle(@Nullable String comment,
-      @Nullable String title) {
+      @Nullable String title, @Nullable Long replyCount) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         if (comment == null && title == null) {
             return null;
@@ -126,16 +129,36 @@ public class ShotViewHolder {
         if (comment != null) {
             builder.append(comment);
         }
+
+        if (comment != null && replyCount!= null) {
+            builder.append(" ");
+        }
+
+        if (replyCount!= null && replyCount >= 0L) {
+            String replies = getReplyCountText(replyCount);
+            builder.append(formatAditionalInfo(replies));
+        }
+
         if (comment != null && title != null) {
             builder.append(" ");
         }
         if (title != null) {
-            builder.append(formatTitle(title));
+            builder.append(formatAditionalInfo(title));
         }
         return builder;
     }
 
-    private SpannableString formatTitle(String title) {
+    private String getReplyCountText(Long replyCount) {
+        String replies;
+        if (replyCount == 0L) {
+            replies = "1 reply";
+        } else {
+            replies = String.valueOf(replyCount) + "replies";
+        }
+        return replies;
+    }
+
+    private SpannableString formatAditionalInfo(String title) {
         ForegroundColorSpan span = new ForegroundColorSpan(titleColor);
 
         SpannableString titleSpan = new SpannableString(title);
