@@ -48,7 +48,7 @@ public interface IntentFactory {
             String shotUrl = String.format(urlPattern, shotModel.getIdShot());
             String subject = String.format(subjectPattern, shotModel.getUsername(), shotModel.getStreamTitle());
             String sharedText =
-              String.format(messagePattern, shotModel.getComment(), shotModel.getStreamTitle(), shotUrl);
+              String.format(messagePattern, shotModel.getComment(), shotUrl);
 
             return ShareCompat.IntentBuilder.from(launchActivity)
               .setType("text/plain")
@@ -63,7 +63,7 @@ public interface IntentFactory {
             String messagePattern = launchActivity.getString(R.string.share_stream_message);
 
             String subject = String.format(subjectPattern, streamModel.getTitle());
-            String sharedText = String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
+            String sharedText = String.format(messagePattern, streamModel.getIdStream());
 
             return ShareCompat.IntentBuilder.from(launchActivity)
               .setType("text/plain")
