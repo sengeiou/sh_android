@@ -85,29 +85,23 @@ import javax.inject.Singleton;
         shotEntity.setIdUser(idUser);
         shotEntity.setUsername(username);
         shotEntity.setUserPhoto(avatar);
-
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
             shotEntity.setStreamTitle(eventInfo.getStreamTitle());
         }
-
         shotEntity.setIdShotParent(shot.getParentShotId());
         shotEntity.setIdUserParent(shot.getParentShotUserId());
         shotEntity.setUserNameParent(shot.getParentShotUsername());
-
         shotEntity.setUsername(shot.getUserInfo().getUsername());
         shotEntity.setBirth(shot.getPublishDate());
-
         shotEntity.setVideoUrl(shot.getVideoUrl());
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
         shotEntity.setNiceCount(shot.getNiceCount());
-
         shotEntity.setProfileHidden(shot.getProfileHidden());
-
+        shotEntity.setReplyCount(shot.getReplyCount());
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
-
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;
     }

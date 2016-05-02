@@ -6,30 +6,25 @@ import java.util.List;
 
 public class ShotModel implements Serializable {
 
-    //Shot attributes
     private String idShot;
     private String comment;
     private String image;
     private Date birth;
     private List<String> nicers;
-    //User attributes
     private String idUser;
     private String userName;
     private String photo;
     private String streamId;
     private String streamTitle;
-
     private String replyUsername;
     private String parentShotId;
-
     private String videoUrl;
     private String videoTitle;
     private String videoDuration;
-
     private Integer niceCount;
     private Boolean isMarkedAsNice;
-
     private Long hide;
+    private Long replyCount;
 
     public String getIdShot() {
         return idShot;
@@ -181,5 +176,13 @@ public class ShotModel implements Serializable {
 
     public void setNicers(List<String> nicers) {
         this.nicers = nicers;
+    }
+
+    public Long getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Long replyCount) {
+        this.replyCount = replyCount;
     }
 }
