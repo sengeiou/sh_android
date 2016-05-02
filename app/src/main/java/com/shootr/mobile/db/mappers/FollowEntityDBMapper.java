@@ -9,11 +9,13 @@ public class FollowEntityDBMapper extends GenericDBMapper {
 
     public static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
     public static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;
+    public static final String IS_FRIEND = DatabaseContract.FollowTable.IS_FRIEND;
 
     public FollowEntity fromCursor(Cursor c) {
         FollowEntity follow = new FollowEntity();
         follow.setIdUser(c.getString(c.getColumnIndex(ID_USER)));
         follow.setFollowedUser(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
+        follow.setIsFriend(c.getLong(c.getColumnIndex(IS_FRIEND)));
         setSynchronizedfromCursor(c, follow);
         return follow;
     }
@@ -22,6 +24,7 @@ public class FollowEntityDBMapper extends GenericDBMapper {
         ContentValues cv = new ContentValues();
         cv.put(ID_USER, f.getIdUser());
         cv.put(ID_FOLLOWED_USER, f.getFollowedUser());
+        cv.put(IS_FRIEND, f.isFriend());
         setSynchronizedtoContentValues(f, cv);
         return cv;
     }
