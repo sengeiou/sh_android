@@ -12,6 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindDimen;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -56,6 +57,9 @@ public class ShotViewHolder {
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
 
     @BindColor(R.color.short_title_color) int titleColor;
+    @BindString(R.string.one_reply_shot_comment) String oneReply;
+    @BindString(R.string.multiple_replies_shot_comment) String multipleReplies;
+
     public int position;
     private View view;
     private Boolean isCurrentUser;
@@ -151,9 +155,9 @@ public class ShotViewHolder {
     private String getReplyCountText(Long replyCount) {
         String replies;
         if (replyCount == 0L) {
-            replies = "1 reply";
+            replies = oneReply;
         } else {
-            replies = String.valueOf(replyCount) + "replies";
+            replies = String.format(multipleReplies, replyCount.intValue());
         }
         return replies;
     }
