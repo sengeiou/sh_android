@@ -37,6 +37,7 @@ import com.shootr.mobile.ui.activities.ChangePasswordActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
+import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -49,6 +50,7 @@ import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -248,8 +250,15 @@ public class ProfileFragment extends BaseFragment
           avatarClickListener,
           videoClickListener,
           onNiceShotListener,
-          onUsernameClickListener,
-          onHideClickListener,
+          onUsernameClickListener, new OnReplyShotListener() {
+            @Override public void reply(ShotModel shotModel) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername())
+                  .build();
+                startActivity(newShotIntent);
+            }
+        }, onHideClickListener,
           profilePresenter.isCurrentUser()) {
             @Override protected boolean shouldShowTitle() {
                 return true;

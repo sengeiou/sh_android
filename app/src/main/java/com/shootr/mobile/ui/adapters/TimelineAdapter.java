@@ -9,6 +9,7 @@ import com.shootr.mobile.ui.adapters.holders.ShotViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -25,6 +26,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
+    private final OnReplyShotListener onReplyShotListener;
     private final AndroidTimeUtils timeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnHideClickListener onHideClickListener;
@@ -36,7 +38,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-      OnHideClickListener onHideClickListener, Boolean isCurrentUser) {
+      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener, Boolean isCurrentUser) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -44,6 +46,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.onNiceShotListener = onNiceShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
+        this.onReplyShotListener = onReplyShotListener;
         this.shots = new ArrayList<>(0);
         shotTextSpannableBuilder = new ShotTextSpannableBuilder();
         this.onHideClickListener = onHideClickListener;
@@ -90,8 +93,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 view.setTag(new ShotViewHolder(view,
                   avatarClickListener,
                   videoClickListener,
-                  onNiceShotListener,
-                  onHideClickListener,
+                  onNiceShotListener, onReplyShotListener, onHideClickListener,
                   onUsernameClickListener,
                   timeUtils,
                   imageLoader,

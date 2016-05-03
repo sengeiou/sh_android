@@ -18,6 +18,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -34,6 +35,7 @@ public class ShotViewHolder {
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
+    private final OnReplyShotListener onReplyShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ImageLoader imageLoader;
@@ -53,6 +55,7 @@ public class ShotViewHolder {
     @Bind(R.id.nices_container) View niceContainer;
     @Bind(R.id.shot_hide_button_container) View hideContainer;
     @Bind(R.id.shot_reply_count) TextView replyCount;
+    @Bind(R.id.shot_reply_button) ImageView reply;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -67,12 +70,13 @@ public class ShotViewHolder {
 
     public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
+      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
       AndroidTimeUtils timeUtils, ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder,
       Boolean isCurrentUser) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
+        this.onReplyShotListener = onReplyShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.imageLoader = imageLoader;
@@ -98,7 +102,7 @@ public class ShotViewHolder {
         bindReplyCount(shot);
     }
 
-    private void bindReplyCount(ShotModel shot) {
+    private void bindReplyCount(final ShotModel shot) {
         Long replies = shot.getReplyCount();
         if (replies > 0L) {
             replyCount.setVisibility(View.VISIBLE);
@@ -106,6 +110,16 @@ public class ShotViewHolder {
         } else {
             replyCount.setVisibility(View.GONE);
         }
+        reply.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onReplyShotListener.reply(shot);
+            }
+        });
+        replyCount.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onReplyShotListener.reply(shot);
+            }
+        });
     }
 
     private void bindHideButton(final ShotModel shot) {
@@ -269,4 +283,5 @@ public class ShotViewHolder {
     private boolean hasImage(ShotModel shot) {
         return shot.getImage() != null;
     }
+
 }

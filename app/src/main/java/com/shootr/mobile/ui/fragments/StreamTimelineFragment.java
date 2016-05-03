@@ -39,6 +39,7 @@ import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
@@ -435,7 +436,15 @@ public class StreamTimelineFragment extends BaseFragment
               @Override public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
-          }, null, false);
+          }, new OnReplyShotListener() {
+            @Override public void reply(ShotModel shotModel) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername())
+                  .build();
+                startActivity(newShotIntent);
+            }
+        }, null, false);
 
         listView.setAdapter(adapter);
     }
