@@ -18,9 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -113,16 +111,15 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
-    @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
-    @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
-    @Bind(R.id.timeline_list_container) View timelineListContainer;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
     @BindString(R.string.added_to_favorites) String addToFavorites;
     @BindString(R.string.shot_shared_message) String shotShared;
 
     @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
+
+    @Bind(R.id.timeline_message) TextView streamMessage;
 
     private TimelineAdapter adapter;
 
@@ -458,7 +455,7 @@ public class StreamTimelineFragment extends BaseFragment
           .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta > 10) {
-                    hideTimelineIndicator();
+                    hideNewShotsIndicator();
                 }
             }
 
@@ -466,7 +463,7 @@ public class StreamTimelineFragment extends BaseFragment
                 if (listView != null) {
                     if (listView.getFirstVisiblePosition() == 0) {
                         streamTimelinePresenter.setIsFirstShotPosition(true);
-                        hideTimelineIndicator();
+                        hideNewShotsIndicator();
                     } else {
                         streamTimelinePresenter.setIsFirstShotPosition(false);
                     }
@@ -607,26 +604,21 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override public void showTimelineIndicator(Integer numberNewShots) {
-        timelineIndicatorContainer.setVisibility(View.VISIBLE);
-        timelineIndicator.setVisibility(View.VISIBLE);
+    @Override public void showNewShotsIndicator(Integer numberNewShots) {
+        timelineIndicatorText.setVisibility(View.VISIBLE);
         String indicatorText =
           getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
         timelineIndicatorText.setText(indicatorText);
     }
 
-    @Override public void hideTimelineIndicator() {
-        timelineIndicatorContainer.setVisibility(View.GONE);
-        timelineIndicator.setVisibility(View.GONE);
+    @Override public void hideNewShotsIndicator() {
+        timelineIndicatorText.setVisibility(View.GONE);
         streamTimelinePresenter.setNewShotsNumber(0);
     }
 
     @Override public void showTopicSnackBar(String topic) {
-        if (timelineListContainer != null) {
-            feedbackMessage.showForever(timelineListContainer, topic);
-        } else {
-            feedbackMessage.show(getView(), topic);
-        }
+        streamMessage.setVisibility(View.VISIBLE);
+        streamMessage.setText(topic);
     }
 
     @Override public void hideTopicSnackBar() {

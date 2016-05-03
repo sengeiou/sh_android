@@ -335,7 +335,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(streamTimelineView).showTimelineIndicator(anyInt());
+        verify(streamTimelineView).showNewShotsIndicator(anyInt());
     }
 
     @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition() throws Exception {
@@ -347,7 +347,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(streamTimelineView, never()).showTimelineIndicator(anyInt());
+        verify(streamTimelineView, never()).showNewShotsIndicator(anyInt());
     }
 
     @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndNumberNewShotsIsZero()
@@ -360,7 +360,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
+        verify(streamTimelineView, never()).showNewShotsIndicator(ZERO_NEW_SHOTS);
     }
 
     //endregion
@@ -554,7 +554,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.resume();
 
-        verify(streamTimelineView, never()).showTimelineIndicator(ZERO_NEW_SHOTS);
+        verify(streamTimelineView, never()).showNewShotsIndicator(ZERO_NEW_SHOTS);
     }
 
     @Test public void shouldCallPollerWhenInitializeWithIdStreamAndAuthor() throws Exception {

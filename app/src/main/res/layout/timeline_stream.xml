@@ -9,9 +9,7 @@
       layout="@layout/include_timeline_message"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:visibility="gone"
-      tools:visibility="visible" />
+      android:layout_alignParentTop="true" />
 
     <android.support.design.widget.CoordinatorLayout android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"

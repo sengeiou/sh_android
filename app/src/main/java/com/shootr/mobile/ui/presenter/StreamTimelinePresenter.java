@@ -251,9 +251,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private void showTimeLineIndicator() {
         if (newShotsNumber != null && newShotsNumber > 0) {
-            streamTimelineView.showTimelineIndicator(newShotsNumber);
+            streamTimelineView.showNewShotsIndicator(newShotsNumber);
         } else {
-            streamTimelineView.hideTimelineIndicator();
+            streamTimelineView.hideNewShotsIndicator();
         }
     }
 
@@ -569,7 +569,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void handleVisibilityTimelineIndicatorInResume() {
-        streamTimelineView.hideTimelineIndicator();
+        streamTimelineView.hideNewShotsIndicator();
     }
 
     public void editStream(String topic) {
