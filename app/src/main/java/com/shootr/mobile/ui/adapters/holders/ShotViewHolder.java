@@ -109,10 +109,9 @@ public class ShotViewHolder {
     protected void bindComment(ShotModel item, boolean shouldShowTitle) {
         String comment = item.getComment();
         String title = null;
-        Long replyCount = null;
+        Long replyCount = item.getReplyCount();
         if (shouldShowTitle && item.getStreamTitle() != null) {
             title = item.getStreamTitle();
-            replyCount = item.getReplyCount();
         }
 
         SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title, replyCount);
@@ -138,7 +137,7 @@ public class ShotViewHolder {
             builder.append(" ");
         }
 
-        if (replyCount != null && replyCount >= 0L) {
+        if (replyCount != null && replyCount >= 1L) {
             String replies = getReplyCountText(replyCount);
             builder.append(formatAditionalInfo(replies));
         }
@@ -154,7 +153,7 @@ public class ShotViewHolder {
 
     private String getReplyCountText(Long replyCount) {
         String replies;
-        if (replyCount == 0L) {
+        if (replyCount == 1L) {
             replies = oneReply;
         } else {
             replies = String.format(multipleReplies, replyCount.intValue());
