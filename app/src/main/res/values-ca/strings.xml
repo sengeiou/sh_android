@@ -303,6 +303,7 @@
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
   <string name="share_stream_activity_text_pattern">Ha compartit (stream)</string>
+  <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/#/st/%2$s</string>
   <string name="share_stream_subject">Fes una ullada a %s a Shootr</string>
   <string name="share_via">Compartir via…</string>
   <string name="share_via_shootr">Compartir via Shootr</string>

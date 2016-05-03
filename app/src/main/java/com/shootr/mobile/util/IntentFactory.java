@@ -63,7 +63,7 @@ public interface IntentFactory {
             String messagePattern = launchActivity.getString(R.string.share_stream_message);
 
             String subject = String.format(subjectPattern, streamModel.getTitle());
-            String sharedText = String.format(messagePattern, streamModel.getIdStream());
+            String sharedText = String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
 
             return ShareCompat.IntentBuilder.from(launchActivity)
               .setType("text/plain")
