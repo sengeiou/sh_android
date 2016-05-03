@@ -31,7 +31,8 @@ public class IncrementReplyCountShotInteractorTest {
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
         incrementReplyCountShotInteractor = new IncrementReplyCountShotInteractor(interactorHandler,
           postExecutionThread,
-          localShotRepository, remoteShotRepository);
+          localShotRepository,
+          remoteShotRepository);
     }
 
     @Test public void shouldObtainLocalShotByIdShot() throws Exception {
@@ -78,7 +79,8 @@ public class IncrementReplyCountShotInteractorTest {
     }
 
     @Test public void shouldNotifyErrorIfGetRemoteShotThrowsServerCommunicationException() throws Exception {
-        doThrow(new ShootrException() {}).when(remoteShotRepository).getShot(ID_SHOT);
+        doThrow(new ShootrException() {
+        }).when(remoteShotRepository).getShot(ID_SHOT);
 
         incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 

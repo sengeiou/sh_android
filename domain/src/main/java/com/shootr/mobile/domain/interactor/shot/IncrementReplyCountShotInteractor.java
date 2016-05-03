@@ -10,7 +10,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import javax.inject.Inject;
 
-public class IncrementReplyCountShotInteractor implements Interactor{
+public class IncrementReplyCountShotInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -21,14 +21,16 @@ public class IncrementReplyCountShotInteractor implements Interactor{
     private String idShot;
 
     @Inject public IncrementReplyCountShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
+      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void incrementReplyCount(String idShot, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void incrementReplyCount(String idShot, CompletedCallback completedCallback,
+      ErrorCallback errorCallback) {
         this.idShot = idShot;
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;

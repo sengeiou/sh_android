@@ -67,9 +67,9 @@ public class ShotViewHolder {
 
     public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
-      AndroidTimeUtils timeUtils, ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      Boolean isCurrentUser) {
+      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener,
+      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
+      ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
@@ -289,5 +289,4 @@ public class ShotViewHolder {
     private boolean hasImage(ShotModel shot) {
         return shot.getImage() != null;
     }
-
 }
