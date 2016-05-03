@@ -31,6 +31,7 @@ public class ShotApiEntity {
     private Long modified;
     private Integer revision;
     private Long profileHidden;
+    private Long replyCount;
 
     public String getIdShot() {
         return idShot;
@@ -198,5 +199,13 @@ public class ShotApiEntity {
 
     public void setThread(List<ShotApiEntity> thread) {
         this.thread = thread;
+    }
+
+    public Long getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Long replyCount) {
+        this.replyCount = replyCount;
     }
 }

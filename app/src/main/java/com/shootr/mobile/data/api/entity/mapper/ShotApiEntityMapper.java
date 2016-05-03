@@ -52,6 +52,7 @@ public class ShotApiEntityMapper {
         shotEntity.setRevision(shotApiEntity.getRevision());
 
         shotEntity.setProfileHidden(shotApiEntity.getProfileHidden());
+        shotEntity.setReplyCount(shotApiEntity.getReplyCount());
 
         return shotEntity;
     }
