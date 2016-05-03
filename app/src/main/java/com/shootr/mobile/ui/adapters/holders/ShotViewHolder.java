@@ -12,7 +12,6 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindDimen;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -55,14 +54,12 @@ public class ShotViewHolder {
     @Bind(R.id.nices_container) View niceContainer;
     @Bind(R.id.shot_hide_button_container) View hideContainer;
     @Bind(R.id.shot_reply_count) TextView replyCount;
-    @Bind(R.id.shot_reply_button) ImageView reply;
+    @Bind(R.id.shot_reply_button) ImageView darkReplyButton;
+    @Bind(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
-    @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
 
     @BindColor(R.color.short_title_color) int titleColor;
-    @BindString(R.string.one_reply_shot_comment) String oneReply;
-    @BindString(R.string.multiple_replies_shot_comment) String multipleReplies;
 
     public int position;
     private View view;
@@ -107,19 +104,28 @@ public class ShotViewHolder {
         if (replies > 0L) {
             replyCount.setVisibility(View.VISIBLE);
             replyCount.setText(String.valueOf(replies));
+            darkReplyButton.setVisibility(View.VISIBLE);
+            lightReplyButton.setVisibility(View.GONE);
+            darkReplyButton.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onReplyShotListener.reply(shot);
+                }
+            });
+            replyCount.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onReplyShotListener.reply(shot);
+                }
+            });
         } else {
             replyCount.setVisibility(View.GONE);
+            darkReplyButton.setVisibility(View.GONE);
+            lightReplyButton.setVisibility(View.VISIBLE);
+            lightReplyButton.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onReplyShotListener.reply(shot);
+                }
+            });
         }
-        reply.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onReplyShotListener.reply(shot);
-            }
-        });
-        replyCount.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onReplyShotListener.reply(shot);
-            }
-        });
     }
 
     private void bindHideButton(final ShotModel shot) {
