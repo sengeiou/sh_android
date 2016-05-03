@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
@@ -45,6 +46,7 @@ public class PostNewShotPresenterTest {
     @Mock PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock PostNewShotView postNewShotView;
+    @Mock IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -53,8 +55,7 @@ public class PostNewShotPresenterTest {
           errorMessageFactory,
           postNewShotInStreamInteractor,
           postNewShotAsReplyInteractor,
-          getMentionedPeopleInteractor,
-          userModelMapper);
+          getMentionedPeopleInteractor, incrementReplyCountShotInteractor, userModelMapper);
         presenter.setView(postNewShotView);
     }
 
