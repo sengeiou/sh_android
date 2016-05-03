@@ -157,11 +157,11 @@ public class PostNewShotPresenter implements Presenter {
     private void incrementParentReplyCount() {
         incrementReplyCountShotInteractor.incrementReplyCount(replyParentId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-
+                /* no-op */
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-
+                /* no-op */
             }
         });
     }
