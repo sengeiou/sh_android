@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -112,8 +113,8 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
-    @Bind(R.id.timeline_new_shots_indicator_container) LinearLayout timelineIndicator;
-    @Bind(R.id.timeline_new_shots_indicator) LinearLayout timelineIndicatorContainer;
+    @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
+    @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
     @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
     @Bind(R.id.timeline_list_container) View timelineListContainer;
 
