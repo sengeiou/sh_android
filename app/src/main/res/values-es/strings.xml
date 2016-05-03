@@ -300,7 +300,6 @@
   <string name="shared_shot_activity_with_comment">"Ha compartido: "</string>
   <string name="shared_stream_notification">Stream compartido</string>
   <string name="share_shot_chooser_title">Compartir</string>
-  <string name="share_shot_message">Shot de %1$s en %2$s: %3$s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
   <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/#/st/%2$s</string>

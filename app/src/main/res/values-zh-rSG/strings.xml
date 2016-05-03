@@ -299,10 +299,9 @@
     <string name="shared_shot_activity_with_comment">"分享了: "</string>
     <string name="shared_stream_notification">被分享的shared</string>
     <string name="share_shot_chooser_title">分享</string>
-    <string name="share_shot_message">%1$s 评论了在%2$s: %3$s</string>
     <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
     <string name="share_stream_activity_text_pattern">分享(stream)</string>
-    <string name="share_stream_message">在Shootr上查看%1$s: https://shootr.com/#/st/%2$s</string>
+    <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/#/st/%2$s</string>
     <string name="share_stream_subject">"在Shootr上查看%s: "</string>
     <string name="share_via">分享到…</string>
     <string name="share_via_shootr">分享到Shootr</string>
