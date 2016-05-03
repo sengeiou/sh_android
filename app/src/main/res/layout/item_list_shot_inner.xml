@@ -138,7 +138,7 @@
     <ImageView android:id="@+id/shot_reply_button"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:src="@drawable/ic_reply_gray_400"
+      android:src="@drawable/ic_reply_gray_600"
       android:paddingRight="8dp"
       android:layout_toEndOf="@+id/shot_avatar"
       android:layout_alignTop="@+id/nices_container"
