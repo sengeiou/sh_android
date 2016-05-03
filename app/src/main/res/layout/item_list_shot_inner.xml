@@ -115,6 +115,35 @@
 
     </LinearLayout>
 
+    <LinearLayout android:id="@+id/replies_container"
+      android:layout_width="wrap_content"
+      android:layout_height="@dimen/nice_button_size"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:layout_alignTop="@+id/shot_reply_button"
+      android:layout_toStartOf="@+id/shot_reply_button">
+
+        <TextView android:id="@+id/shot_reply_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:textColor="@color/gray_80"
+          android:layout_marginRight="2dp"
+          android:textSize="14sp"
+          android:visibility="gone"
+          tools:text="8" />
+
+    </LinearLayout>
+
+    <ImageView android:id="@+id/shot_reply_button"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:src="@drawable/ic_reply_gray_600"
+      android:paddingRight="8dp"
+      android:layout_toEndOf="@+id/shot_avatar"
+      android:layout_alignTop="@+id/nices_container"
+      android:layout_alignBottom="@+id/nices_container" />
+
     <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
       style="@style/NiceButton"
       android:layout_width="@dimen/nice_button_size"

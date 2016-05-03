@@ -52,6 +52,7 @@ public class ShotViewHolder {
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.nices_container) View niceContainer;
     @Bind(R.id.shot_hide_button_container) View hideContainer;
+    @Bind(R.id.shot_reply_count) TextView replyCount;
 
     @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
     @BindDimen(R.dimen.nice_button_margin_top_short) int niceMarginShort;
@@ -94,6 +95,17 @@ public class ShotViewHolder {
         } else {
             bindNiceInfo(shot);
         }
+        bindReplyCount(shot);
+    }
+
+    private void bindReplyCount(ShotModel shot) {
+        Long replies = shot.getReplyCount();
+        if (replies > 0L) {
+            replyCount.setVisibility(View.VISIBLE);
+            replyCount.setText(String.valueOf(replies));
+        } else {
+            replyCount.setVisibility(View.GONE);
+        }
     }
 
     private void bindHideButton(final ShotModel shot) {
@@ -109,12 +121,11 @@ public class ShotViewHolder {
     protected void bindComment(ShotModel item, boolean shouldShowTitle) {
         String comment = item.getComment();
         String title = null;
-        Long replyCount = item.getReplyCount();
         if (shouldShowTitle && item.getStreamTitle() != null) {
             title = item.getStreamTitle();
         }
 
-        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title, replyCount);
+        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title);
         if (commentWithTitle != null) {
             addShotComment(this, commentWithTitle);
             text.setVisibility(View.VISIBLE);
@@ -124,22 +135,13 @@ public class ShotViewHolder {
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTitle(@Nullable String comment,
-      @Nullable String title, @Nullable Long replyCount) {
+      @Nullable String title) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         if (comment == null && title == null) {
             return null;
         }
         if (comment != null) {
             builder.append(comment);
-        }
-
-        if (comment != null && replyCount != null) {
-            builder.append(" ");
-        }
-
-        if (replyCount != null && replyCount >= 1L) {
-            String replies = getReplyCountText(replyCount);
-            builder.append(formatAditionalInfo(replies));
         }
 
         if (comment != null && title != null) {
@@ -149,16 +151,6 @@ public class ShotViewHolder {
             builder.append(formatAditionalInfo(title));
         }
         return builder;
-    }
-
-    private String getReplyCountText(Long replyCount) {
-        String replies;
-        if (replyCount == 1L) {
-            replies = oneReply;
-        } else {
-            replies = String.format(multipleReplies, replyCount.intValue());
-        }
-        return replies;
     }
 
     private SpannableString formatAditionalInfo(String title) {
@@ -232,7 +224,7 @@ public class ShotViewHolder {
 
     private void bindNiceInfo(final ShotModel shot) {
         boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
-        int marginTop = moveNiceButtonUp ? niceMarginShort : niceMarginNormal;
+        int marginTop = moveNiceButtonUp ? niceMarginNormal : niceMarginNormal;
 
         hideContainer.setVisibility(View.GONE);
         niceButton.setVisibility(View.VISIBLE);
