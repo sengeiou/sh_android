@@ -68,6 +68,10 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         return followManager.getMutuals();
     }
 
+    @Override public List<FollowEntity> getFollows(String idUser, Integer page) {
+        throw new IllegalArgumentException("no local implementation");
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();
     }

@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
@@ -36,6 +37,7 @@ import timber.log.Timber;
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     public static final int PAGE_SIZE = 100;
+    public static final int PAGE_SIZE = 100;
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
@@ -48,6 +50,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final SyncTrigger syncTrigger;
     private final Bus bus;
     private final UserCache userCache;
+    private final FollowDataSource serviceFollowDataSource;
 
     @Inject
     public SyncUserRepository(@Local UserDataSource localUserDataSource, @Remote UserDataSource remoteUserDataSource,
@@ -55,7 +58,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
       CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, @Local FollowDataSource localFollowDataSource,
       UserEntityMapper userEntityMapper, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
       SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus,
-      UserCache userCache) {
+      UserCache userCache, @Remote FollowDataSource serviceFollowDataSource) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
@@ -68,6 +71,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         this.syncTrigger = syncTrigger;
         this.bus = bus;
         this.userCache = userCache;
+        this.serviceFollowDataSource = serviceFollowDataSource;
         this.bus.register(this);
     }
 
@@ -97,25 +101,20 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     private void savePeopleInLocal(List<UserEntity> remotePeople) {
         markSynchronized(remotePeople);
-        localFollowDataSource.putFollows(createFollowsFromUsers(remotePeople));
+        List<FollowEntity> follows = getFollows();
+        localFollowDataSource.putFollows(follows);
         localUserDataSource.putUsers(remotePeople);
     }
 
-    private List<FollowEntity> createFollowsFromUsers(List<UserEntity> following) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<FollowEntity> followsByFollowing = new ArrayList<>();
-        for (UserEntity u : following) {
-            FollowEntity f = new FollowEntity();
-            f.setIdUser(currentUserId);
-            f.setFollowedUser(u.getIdUser());
-            f.setBirth(u.getBirth());
-            f.setModified(u.getModified());
-            f.setRevision(u.getRevision());
-            f.setDeleted(u.getDeleted());
-            f.setSynchronizedStatus(u.getSynchronizedStatus());
-            followsByFollowing.add(f);
+    @NonNull private List<FollowEntity> getFollows() {
+        Integer page = 0;
+        List<FollowEntity> follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        while (follows.size() == PAGE_SIZE) {
+            localFollowDataSource.putFollows(follows);
+            page++;
+            follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
         }
-        return followsByFollowing;
+        return follows;
     }
 
     @Override public User getUserById(String id) {

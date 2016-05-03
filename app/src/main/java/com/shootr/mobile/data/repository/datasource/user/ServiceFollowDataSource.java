@@ -35,7 +35,7 @@ public class ServiceFollowDataSource implements FollowDataSource {
           "Only follows from the current user are allowed in service");
 
         try {
-            userApiService.follow(followEntity.getFollowedUser());
+            userApiService.follow(followEntity.getIdFollowedUser());
             return followEntity;
         } catch (ApiException apiException) {
             if (ErrorInfo.FollowingBlockedUserException == apiException.getErrorInfo()) {
@@ -114,6 +114,14 @@ public class ServiceFollowDataSource implements FollowDataSource {
 
     @Override public List<String> getMutuals() {
         throw new IllegalArgumentException("this method should not have remote implementation");
+    }
+
+    @Override public List<FollowEntity> getFollows(String idUser, Integer page) {
+        try {
+            return userApiService.getFollows(idUser, page);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {

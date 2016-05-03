@@ -9,7 +9,7 @@ public class FollowEntity extends Synchronized {
     public static final int RELATIONSHIP_BOTH = 4;
 
     private String idUser;
-    private String followedUser;
+    private String idFollowedUser;
     private Long isFriend;
 
     public String getIdUser() {
@@ -20,12 +20,12 @@ public class FollowEntity extends Synchronized {
         this.idUser = idUser;
     }
 
-    public String getFollowedUser() {
-        return followedUser;
+    public String getIdFollowedUser() {
+        return idFollowedUser;
     }
 
-    public void setFollowedUser(String followedUser) {
-        this.followedUser = followedUser;
+    public void setIdFollowedUser(String idFollowedUser) {
+        this.idFollowedUser = idFollowedUser;
     }
 
     public Long isFriend() {

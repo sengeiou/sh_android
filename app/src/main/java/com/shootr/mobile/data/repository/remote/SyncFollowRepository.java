@@ -119,8 +119,8 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
             if (Synchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
-                remoteFollowDataSource.removeFollow(entity.getFollowedUser());
-                localFollowDataSource.removeFollow(entity.getFollowedUser());
+                remoteFollowDataSource.removeFollow(entity.getIdFollowedUser());
+                localFollowDataSource.removeFollow(entity.getIdFollowedUser());
             } else {
                 syncEntities(entity);
             }
@@ -141,7 +141,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());
-        followEntity.setFollowedUser(idUser);
+        followEntity.setIdFollowedUser(idUser);
         Date now = new Date();
         followEntity.setBirth(now);
         followEntity.setModified(now);

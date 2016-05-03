@@ -81,7 +81,7 @@ public class LocalFollowRepository implements FollowRepository {
     @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());
-        followEntity.setFollowedUser(idUser);
+        followEntity.setIdFollowedUser(idUser);
         Date now = new Date();
         followEntity.setBirth(now);
         followEntity.setModified(now);

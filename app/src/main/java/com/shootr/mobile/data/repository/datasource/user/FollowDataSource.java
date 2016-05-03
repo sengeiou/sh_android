@@ -32,4 +32,6 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     void unban(String idUser);
 
     List<String> getMutuals();
+
+    List<FollowEntity> getFollows(String idUser, Integer page);
 }

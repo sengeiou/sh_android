@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import java.io.IOException;
@@ -68,4 +69,6 @@ public interface UserApiService {
     @GET("/ban/") List<BanEntity> getBannedIdUsers() throws IOException, ApiException;
 
     @DELETE("/ban/{idUser}") Response unban(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @GET("/follow") List<FollowEntity> getFollows(@Query("idUser") String idUser, @Query("page") Integer page) throws IOException, ApiException;
 }

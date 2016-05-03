@@ -58,7 +58,7 @@ public class SyncUserRepositoryCacheTest {
           syncableUserEntityFactory,
           syncTrigger,
           bus,
-          userCache);
+          userCache, serviceFollowDataSource);
     }
 
     @Test public void shouldNotCallRemoteRepoWhenCacheReturnsData() throws Exception {

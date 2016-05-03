@@ -58,7 +58,7 @@ public class FollowManager extends AbstractManager {
             for (FollowEntity follow : followList) {
                 ContentValues contentValues = followMapper.toContentValues(follow);
                 if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                    deleteFollow(follow.getFollowedUser(), follow.getIdUser(), database);
+                    deleteFollow(follow.getIdFollowedUser(), follow.getIdUser(), database);
                 } else {
                     contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
                     database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -271,7 +271,7 @@ public class FollowManager extends AbstractManager {
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                mutuals.add(c.getString(c.getColumnIndex(ID_USER)));
+                mutuals.add(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
                 c.moveToNext();
             }
         }
