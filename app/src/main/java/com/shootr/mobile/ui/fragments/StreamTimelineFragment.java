@@ -522,6 +522,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
         listView.smoothScrollToPosition(0);
+        if (streamMessage.getText().toString().isEmpty()) {
+            timelineIndicator.setVisibility(View.GONE);
+            timelineIndicatorContainer.setVisibility(View.GONE);
+        }
     }
 
     //region View methods
@@ -606,6 +610,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showNewShotsIndicator(Integer numberNewShots) {
+        timelineIndicator.setVisibility(View.VISIBLE);
+        timelineIndicatorContainer.setVisibility(View.VISIBLE);
         timelineIndicatorText.setVisibility(View.VISIBLE);
         String indicatorText =
           getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
@@ -615,6 +621,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void hideNewShotsIndicator() {
         timelineIndicatorText.setVisibility(View.GONE);
         streamTimelinePresenter.setNewShotsNumber(0);
+        if (streamMessage.getText().toString().isEmpty()) {
+            timelineIndicator.setVisibility(View.GONE);
+            timelineIndicatorContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override public void showTopicSnackBar(String topic) {
