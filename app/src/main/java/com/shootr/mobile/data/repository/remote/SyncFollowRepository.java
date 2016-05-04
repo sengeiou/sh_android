@@ -115,15 +115,14 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     @Override public List<String> getMutualIdUsers() {
         Integer page = 0;
         List<String> followedIdUsers = new ArrayList<>();
-        List<FollowEntity> follows =
-          remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        List<FollowEntity> follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
         while (follows.size() == PAGE_SIZE) {
             localFollowDataSource.putFollows(follows);
             page++;
             follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
         }
         for (FollowEntity follow : follows) {
-            if(follow.isFriend() == 1L) {
+            if (follow.isFriend() == 1L) {
                 followedIdUsers.add(follow.getIdFollowedUser());
             }
         }
