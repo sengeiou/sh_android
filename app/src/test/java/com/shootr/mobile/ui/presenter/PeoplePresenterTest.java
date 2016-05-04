@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetMutualsInteractor;
@@ -22,7 +21,6 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 public class PeoplePresenterTest {
@@ -34,7 +32,6 @@ public class PeoplePresenterTest {
     @Mock GetMutualsInteractor getMutualsInteractor;
     private PeoplePresenter presenter;
     @Mock PeopleView view;
-
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -69,18 +66,19 @@ public class PeoplePresenterTest {
         verify(view).showError(anyString());
     }
 
-    private void setupMutualsInteractor(){
-       doAnswer(new Answer() {
-           @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-               Interactor.Callback<List<User>> callback =
-                 (Interactor.Callback<List<User>>) invocation.getArguments()[0];
-               callback.onLoaded(mutuals());
-               return null;
-           }
-       }).when(getMutualsInteractor).obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    private void setupMutualsInteractor() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<User>> callback =
+                  (Interactor.Callback<List<User>>) invocation.getArguments()[0];
+                callback.onLoaded(mutuals());
+                return null;
+            }
+        }).when(getMutualsInteractor)
+          .obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupMutualsInteractorError(){
+    private void setupMutualsInteractorError() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[1];
@@ -88,7 +86,8 @@ public class PeoplePresenterTest {
                 });
                 return null;
             }
-        }).when(getMutualsInteractor).obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getMutualsInteractor)
+          .obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     private List<User> mutuals() {

@@ -33,7 +33,11 @@ public class GetMutualsInteractorTest {
         MockitoAnnotations.initMocks(this);
         TestInteractorHandler interactorHandler = new TestInteractorHandler();
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        getMutualsInteractor = new GetMutualsInteractor(interactorHandler, postExecutionThread, remoteUserRepository, localUserRepository, localFollowRepository);
+        getMutualsInteractor = new GetMutualsInteractor(interactorHandler,
+          postExecutionThread,
+          remoteUserRepository,
+          localUserRepository,
+          localFollowRepository);
     }
 
     @Test public void shouldObtainMutualIdUsers() throws Exception {

@@ -37,7 +37,6 @@ import timber.log.Timber;
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     public static final int PAGE_SIZE = 100;
-    public static final int PAGE_SIZE = 100;
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
