@@ -184,6 +184,6 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     }
 
     @Override public int compareTo(ShotModel shotModel) {
-        return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1:0;
+        return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1 : 0;
     }
 }

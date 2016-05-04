@@ -145,8 +145,7 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
     }
 
-    @Test public void shouldAddAboveInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
-      throws Exception {
+    @Test public void shouldAddAboveInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition() throws Exception {
         setupShotsModels();
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstShotPosition();
@@ -869,8 +868,8 @@ public class StreamTimelinePresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6])
-                  .onLoaded(selectedStreamWithEmptyTopic());
+                ((CreateStreamInteractor.Callback)
+                  invocation.getArguments()[6]).onLoaded(selectedStreamWithEmptyTopic());
                 return null;
             }
         }).when(createStreamInteractor)
@@ -910,7 +909,7 @@ public class StreamTimelinePresenterTest {
         presenter.setNewShotsNumber(ZERO_NEW_SHOTS);
     }
 
-    private void setupShotsModels(){
+    private void setupShotsModels() {
         presenter.setShotModels(new TreeSet<ShotModel>());
     }
     //endregion
