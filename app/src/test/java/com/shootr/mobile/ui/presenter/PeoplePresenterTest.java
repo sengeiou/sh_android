@@ -75,7 +75,7 @@ public class PeoplePresenterTest {
                 return null;
             }
         }).when(getMutualsInteractor)
-          .obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainMutuals(any(Interactor.Callback.class));
     }
 
     private void setupMutualsInteractorError() {
@@ -87,7 +87,7 @@ public class PeoplePresenterTest {
                 return null;
             }
         }).when(getMutualsInteractor)
-          .obtainMutuals(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .obtainMutuals(any(Interactor.Callback.class));
     }
 
     private List<User> mutuals() {
