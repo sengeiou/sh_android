@@ -249,7 +249,7 @@ public class StreamTimelinePresenterTest {
     //endregion
 
     //region Refresh main timeline
-    @Test public void shouldSetShotsWhenRefreshTimelineRespondsShotsAndIsFirstPosition() throws Exception {
+    @Test public void shouldSAddShotsWhenRefresh() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
         setupIsNotFirstLoadAndIsFirstPosition();
@@ -269,7 +269,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView).addAbove(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -313,18 +313,6 @@ public class StreamTimelinePresenterTest {
         presenter.refresh();
 
         verify(streamTimelineView, never()).showShots();
-    }
-
-    @Test public void shouldShowStreamTimelineIndicatorWhenRefreshTimelineAndIsNotInFirstPosition() throws Exception {
-        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
-        setupLoadTimelineInteractorCallbacks(timelineWithShots());
-        setupIsNotFirstShotPosition();
-        setupOldListSize();
-        setupNewShotsNumbers();
-
-        presenter.refresh();
-
-        verify(streamTimelineView).showNewShotsIndicator(anyInt());
     }
 
     @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition() throws Exception {
@@ -714,6 +702,7 @@ public class StreamTimelinePresenterTest {
 
     private Shot shot() {
         Shot shot = new Shot();
+        shot.setPublishDate(new Date());
         shot.setUserInfo(new Shot.ShotUserInfo());
         return shot;
     }

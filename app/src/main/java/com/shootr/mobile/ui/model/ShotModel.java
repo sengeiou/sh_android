@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class ShotModel implements Serializable {
+public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     //Shot attributes
     private String idShot;
@@ -181,5 +181,9 @@ public class ShotModel implements Serializable {
 
     public void setNicers(List<String> nicers) {
         this.nicers = nicers;
+    }
+
+    @Override public int compareTo(ShotModel shotModel) {
+        return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1:0;
     }
 }

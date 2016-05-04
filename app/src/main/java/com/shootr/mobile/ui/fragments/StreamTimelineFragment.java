@@ -530,14 +530,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     //region View methods
     @Override public void setShots(List<ShotModel> shots) {
-        int index = listView.getFirstVisiblePosition() + shots.size();
-        View v = listView.getChildAt(listView.getHeaderViewsCount());
-        int top = (v == null) ? 0 : v.getTop();
-
-        adapter.addShotsAbove(shots);
+        adapter.setShots(shots);
         adapter.notifyDataSetChanged();
-
-        listView.setSelectionFromTop(index, top);
     }
 
     @Override public void hideShots() {
@@ -667,6 +661,17 @@ public class StreamTimelineFragment extends BaseFragment
             })
           .create()
           .show();
+    }
+
+    @Override public void addAbove(List<ShotModel> shotModels) {
+        int index = listView.getFirstVisiblePosition() + shotModels.size();
+        View v = listView.getChildAt(listView.getHeaderViewsCount());
+        int top = (v == null) ? 0 : v.getTop();
+
+        adapter.addShotsAbove(shotModels);
+        adapter.notifyDataSetChanged();
+
+        listView.setSelectionFromTop(index, top);
     }
 
     @Override public void showEmpty() {
