@@ -530,8 +530,14 @@ public class StreamTimelineFragment extends BaseFragment
 
     //region View methods
     @Override public void setShots(List<ShotModel> shots) {
-        adapter.setShots(shots);
+        int index = listView.getFirstVisiblePosition() + shots.size();
+        View v = listView.getChildAt(listView.getHeaderViewsCount());
+        int top = (v == null) ? 0 : v.getTop();
+
+        adapter.addShotsAbove(shots);
         adapter.notifyDataSetChanged();
+
+        listView.setSelectionFromTop(index, top);
     }
 
     @Override public void hideShots() {
@@ -593,20 +599,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void setTitle(String title) {
         setStreamTitle(title);
-    }
-
-    @Override public void setPosition(Integer oldListSize, Integer shots) {
-        if (oldListSize != null && shots != null && listView != null) {
-            int newPosition = Math.abs(oldListSize - shots) + listView.getFirstVisiblePosition();
-            listView.setSelection(newPosition);
-        } else {
-            crashReportTool.logException("NullPointerException in setPosition. Old List Size: "
-              + oldListSize
-              + " shots: "
-              + shots
-              + " listView: "
-              + listView);
-        }
     }
 
     @Override public void showNewShotsIndicator(Integer numberNewShots) {
