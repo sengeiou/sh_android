@@ -74,11 +74,11 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showTopicSnackBar(String topic) {
+    @Override public void showPinnedMessage(String topic) {
         /* no-op */
     }
 
-    @Override public void hideTopicSnackBar() {
+    @Override public void hidePinnedMessage() {
         /* no-op */
     }
 

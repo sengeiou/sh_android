@@ -190,9 +190,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 setStreamTopic(stream.getTopic());
                 streamTimelineView.setTitle(stream.getTitle());
                 if (streamTopic != null && !streamTopic.isEmpty()) {
-                    streamTimelineView.showTopicSnackBar(streamTopic);
+                    streamTimelineView.showPinnedMessage(streamTopic);
                 } else {
-                    streamTimelineView.hideTopicSnackBar();
+                    streamTimelineView.hidePinnedMessage();
                 }
             }
         });
@@ -614,9 +614,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
               @Override public void onLoaded(Stream stream) {
                   streamTopic = stream.getTopic();
                   if (streamTopic != null && !streamTopic.isEmpty()) {
-                      streamTimelineView.showTopicSnackBar(streamTopic);
+                      streamTimelineView.showPinnedMessage(streamTopic);
                   } else {
-                      streamTimelineView.hideTopicSnackBar();
+                      streamTimelineView.hidePinnedMessage();
                   }
               }
           },

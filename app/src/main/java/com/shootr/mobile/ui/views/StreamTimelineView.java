@@ -40,9 +40,9 @@ public interface StreamTimelineView extends LoadDataView {
 
     void hideNewShotsIndicator();
 
-    void showTopicSnackBar(String topic);
+    void showPinnedMessage(String topic);
 
-    void hideTopicSnackBar();
+    void hidePinnedMessage();
 
     void setRemainingCharactersCount(int remainingCharacters);
 

@@ -551,7 +551,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
 
-        verify(streamTimelineView).showTopicSnackBar(anyString());
+        verify(streamTimelineView).showPinnedMessage(anyString());
     }
 
     @Test public void shouldNotShowSnackBarWhenInitializeAndStreamTopicIsNull() throws Exception {
@@ -559,7 +559,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
 
-        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+        verify(streamTimelineView, never()).showPinnedMessage(anyString());
     }
 
     @Test public void shouldNotShowSnackBarWhenInitializeAndStreamTopicIsEmpty() throws Exception {
@@ -567,7 +567,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR);
 
-        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+        verify(streamTimelineView, never()).showPinnedMessage(anyString());
     }
 
     @Test public void shouldShowSnackBarWhenEditStreamAndStreamTopicIsNotEmpty() throws Exception {
@@ -577,7 +577,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.editStream(TOPIC);
 
-        verify(streamTimelineView).showTopicSnackBar(anyString());
+        verify(streamTimelineView).showPinnedMessage(anyString());
     }
 
     @Test public void shouldNotShowSnackBarWhenEditStreamAndStreamTopicIsEmpty() throws Exception {
@@ -587,7 +587,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.editStream(EMPTY_TOPIC);
 
-        verify(streamTimelineView, never()).showTopicSnackBar(anyString());
+        verify(streamTimelineView, never()).showPinnedMessage(anyString());
     }
 
     @Test public void shouldSetRemainingCharactersCountWhenTextChanged() throws Exception {
@@ -660,7 +660,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.notifyMessage(TOPIC, NOTIFY);
 
-        verify(streamTimelineView, times(2)).showTopicSnackBar(TOPIC);
+        verify(streamTimelineView, times(2)).showPinnedMessage(TOPIC);
     }
 
     //region Matchers

@@ -613,14 +613,14 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override public void showTopicSnackBar(String topic) {
+    @Override public void showPinnedMessage(String topic) {
         timelineIndicator.setVisibility(View.VISIBLE);
         timelineIndicatorContainer.setVisibility(View.VISIBLE);
         streamMessage.setVisibility(View.VISIBLE);
         streamMessage.setText(topic);
     }
 
-    @Override public void hideTopicSnackBar() {
+    @Override public void hidePinnedMessage() {
         streamMessage.setVisibility(View.GONE);
         timelineIndicator.setVisibility(View.GONE);
         timelineIndicatorContainer.setVisibility(View.GONE);
