@@ -102,9 +102,10 @@ public class DatabaseContract {
         public static final String TABLE = "Follow";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
+        public static final String IS_FRIEND = "isFriend";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_FOLLOWED_USER, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          ID_USER, ID_FOLLOWED_USER, IS_FRIEND, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 

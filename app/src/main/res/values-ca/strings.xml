@@ -88,7 +88,7 @@
   <string name="drawer_activity_me" formatted="false">Jo</string>
   <string name="drawer_activity_title">Activitat</string>
   <string name="drawer_favorites_title">Favorits</string>
-  <string name="drawer_friends_activity_title" formatted="false">Amics</string>
+  <string name="drawer_following_activity_title" formatted="false">Amics</string>
   <string name="drawer_friends_title">Amics</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="edit_stream">Editar</string>

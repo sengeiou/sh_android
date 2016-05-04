@@ -58,7 +58,7 @@ public class FollowManager extends AbstractManager {
             for (FollowEntity follow : followList) {
                 ContentValues contentValues = followMapper.toContentValues(follow);
                 if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                    deleteFollow(follow.getFollowedUser(), follow.getIdUser(), database);
+                    deleteFollow(follow.getIdFollowedUser(), follow.getIdUser(), database);
                 } else {
                     contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
                     database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -254,5 +254,28 @@ public class FollowManager extends AbstractManager {
         String whereClause = ID_BANNED_USER + "=? AND " + ID_USER + "=?";
         String[] whereArgs = new String[] { idUser, currentUserId };
         return getWritableDatabase().delete(BAN_TABLE, whereClause, whereArgs);
+    }
+
+    public List<String> getMutuals() {
+        List<String> mutuals = new ArrayList<>();
+        String args = DatabaseContract.FollowTable.IS_FRIEND + " <> 0";
+        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
+          DatabaseContract.FollowTable.PROJECTION,
+          args,
+          null,
+          null,
+          null,
+          null,
+          null);
+
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                mutuals.add(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
+                c.moveToNext();
+            }
+        }
+        c.close();
+        return mutuals;
     }
 }

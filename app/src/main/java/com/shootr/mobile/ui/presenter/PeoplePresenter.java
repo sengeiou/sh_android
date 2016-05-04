@@ -2,10 +2,8 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.UserList;
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.GetPeopleInteractor;
+import com.shootr.mobile.domain.interactor.user.GetMutualsInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.PeopleView;
@@ -18,17 +16,17 @@ public class PeoplePresenter implements Presenter {
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final GetPeopleInteractor getPeopleInteractor;
+    private final GetMutualsInteractor getMutualsInteractor;
     private final UserModelMapper userModelMapper;
 
     private PeopleView peopleView;
     private Boolean hasBeenPaused = false;
 
     @Inject public PeoplePresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      GetPeopleInteractor getPeopleInteractor, UserModelMapper userModelMapper) {
+      GetMutualsInteractor getMutualsInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.getPeopleInteractor = getPeopleInteractor;
+        this.getMutualsInteractor = getMutualsInteractor;
         this.userModelMapper = userModelMapper;
     }
 
@@ -47,24 +45,18 @@ public class PeoplePresenter implements Presenter {
     }
 
     private void getPeopleList() {
-        getPeopleInteractor.obtainPeople(new Interactor.Callback<UserList>() {
-            @Override public void onLoaded(UserList userList) {
-                onPeopleListLoaded(userList);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                hideViewLoading();
-                peopleView.showError(errorMessageFactory.getMessageForError(error));
+        getMutualsInteractor.obtainMutuals(new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                onPeopleListLoaded(users);
             }
         });
     }
 
-    private void onPeopleListLoaded(UserList userList) {
+    private void onPeopleListLoaded(List<User> userList) {
         this.hideViewLoading();
-        List<User> people = userList.getUsers();
-        List<UserModel> userModels = userModelMapper.transform(people);
+        List<UserModel> userModels = userModelMapper.transform(userList);
         peopleView.showPeopleList();
-        if (people != null && !people.isEmpty()) {
+        if (userList != null && !userList.isEmpty()) {
             this.showPeopleListInView(userModels);
             this.hideViewEmpty();
         } else {

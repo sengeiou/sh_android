@@ -40,9 +40,8 @@ public class SyncUserRepositoryCacheTest {
     @Mock SyncableUserEntityFactory syncableUserEntityFactory;
     @Mock SyncTrigger syncTrigger;
     @Mock Bus bus;
-
     @Mock UserCache userCache;
-
+    @Mock FollowDataSource serviceFollowDataSource;
     private SyncUserRepository syncUserRepository;
 
     @Before public void setUp() throws Exception {
@@ -58,7 +57,7 @@ public class SyncUserRepositoryCacheTest {
           syncableUserEntityFactory,
           syncTrigger,
           bus,
-          userCache);
+          userCache, serviceFollowDataSource);
     }
 
     @Test public void shouldNotCallRemoteRepoWhenCacheReturnsData() throws Exception {

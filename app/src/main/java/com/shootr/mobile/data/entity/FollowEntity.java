@@ -8,22 +8,31 @@ public class FollowEntity extends Synchronized {
     public static final int RELATIONSHIP_FOLLOWER = 3;
     public static final int RELATIONSHIP_BOTH = 4;
 
-    private String mIdUser;
-    private String mFollowedUser;
+    private String idUser;
+    private String idFollowedUser;
+    private Long isFriend;
 
     public String getIdUser() {
-        return mIdUser;
+        return idUser;
     }
 
     public void setIdUser(String idUser) {
-        mIdUser = idUser;
+        this.idUser = idUser;
     }
 
-    public String getFollowedUser() {
-        return mFollowedUser;
+    public String getIdFollowedUser() {
+        return idFollowedUser;
     }
 
-    public void setFollowedUser(String followedUser) {
-        mFollowedUser = followedUser;
+    public void setIdFollowedUser(String idFollowedUser) {
+        this.idFollowedUser = idFollowedUser;
+    }
+
+    public Long isFriend() {
+        return isFriend;
+    }
+
+    public void setIsFriend(Long isFriend) {
+        this.isFriend = isFriend;
     }
 }

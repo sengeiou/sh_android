@@ -88,7 +88,7 @@
   <string name="drawer_activity_me" formatted="false">私</string>
   <string name="drawer_activity_title">アクティビティ</string>
   <string name="drawer_favorites_title">お気に入り</string>
-  <string name="drawer_friends_activity_title" formatted="false">友達</string>
+  <string name="drawer_following_activity_title" formatted="false">友達</string>
   <string name="drawer_friends_title">友達</string>
   <string name="drawer_streams_title">ストリーム</string>
   <string name="edit_stream">編集</string>

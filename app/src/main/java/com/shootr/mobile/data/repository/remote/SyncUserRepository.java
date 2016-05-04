@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
@@ -48,14 +49,16 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final SyncTrigger syncTrigger;
     private final Bus bus;
     private final UserCache userCache;
+    private final FollowDataSource serviceFollowDataSource;
 
-    @Inject
-    public SyncUserRepository(@Local UserDataSource localUserDataSource, @Remote UserDataSource remoteUserDataSource,
-      SessionRepository sessionRepository, @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
-      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, @Local FollowDataSource localFollowDataSource,
-      UserEntityMapper userEntityMapper, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus,
-      UserCache userCache) {
+    @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
+      @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
+      @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
+      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
+      @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
+      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
+      SyncTrigger syncTrigger, @Default Bus bus, UserCache userCache,
+      @Remote FollowDataSource serviceFollowDataSource) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
@@ -68,6 +71,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         this.syncTrigger = syncTrigger;
         this.bus = bus;
         this.userCache = userCache;
+        this.serviceFollowDataSource = serviceFollowDataSource;
         this.bus.register(this);
     }
 
@@ -97,25 +101,21 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     private void savePeopleInLocal(List<UserEntity> remotePeople) {
         markSynchronized(remotePeople);
-        localFollowDataSource.putFollows(createFollowsFromUsers(remotePeople));
+        List<FollowEntity> follows = getFollows();
+        localFollowDataSource.putFollows(follows);
         localUserDataSource.putUsers(remotePeople);
     }
 
-    private List<FollowEntity> createFollowsFromUsers(List<UserEntity> following) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<FollowEntity> followsByFollowing = new ArrayList<>();
-        for (UserEntity u : following) {
-            FollowEntity f = new FollowEntity();
-            f.setIdUser(currentUserId);
-            f.setFollowedUser(u.getIdUser());
-            f.setBirth(u.getBirth());
-            f.setModified(u.getModified());
-            f.setRevision(u.getRevision());
-            f.setDeleted(u.getDeleted());
-            f.setSynchronizedStatus(u.getSynchronizedStatus());
-            followsByFollowing.add(f);
+    @NonNull private List<FollowEntity> getFollows() {
+        Integer page = 0;
+        List<FollowEntity> follows =
+          serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        while (follows.size() == PAGE_SIZE) {
+            localFollowDataSource.putFollows(follows);
+            page++;
+            follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
         }
-        return followsByFollowing;
+        return follows;
     }
 
     @Override public User getUserById(String id) {
@@ -146,7 +146,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
     }
 
-    private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
+    private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(
+      List<SuggestedPeopleEntity> suggestedPeopleEntities) {
         List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
         for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
             suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
@@ -231,7 +232,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         }
     }
 
-    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException {
+    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
+      throws IOException {
         return transformUserEntitiesForPeople(remoteUserDataSource.findFriends(searchString, pageOffset, locale));
     }
 
