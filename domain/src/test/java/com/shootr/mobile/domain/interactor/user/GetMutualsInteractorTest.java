@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
@@ -25,9 +26,9 @@ public class GetMutualsInteractorTest {
     @Mock UserRepository remoteUserRepository;
     @Mock UserRepository localUserRepository;
     @Mock FollowRepository localFollowRepository;
-    private Interactor.ErrorCallback errorCallback;
     @Mock GetMutualsInteractor getMutualsInteractor;
     @Mock Interactor.Callback<List<User>> callback;
+    @Mock FollowRepository remoteFollowRepository;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -37,33 +38,44 @@ public class GetMutualsInteractorTest {
           postExecutionThread,
           remoteUserRepository,
           localUserRepository,
-          localFollowRepository);
+          localFollowRepository,
+          remoteFollowRepository);
     }
 
     @Test public void shouldObtainMutualIdUsers() throws Exception {
-        getMutualsInteractor.obtainMutuals(callback, errorCallback);
+        when(remoteFollowRepository.getMutualIdUsers()).thenThrow(serverCommunicationException());
+
+        getMutualsInteractor.obtainMutuals(callback);
 
         verify(localFollowRepository).getMutualIdUsers();
     }
 
-    @Test public void shouldGetUsersFromLocalRepository() throws Exception {
-        getMutualsInteractor.obtainMutuals(callback, errorCallback);
+    @Test public void shouldGetUsersFromLocalRepositoryWhenExceptionThrown() throws Exception {
+        when(remoteFollowRepository.getMutualIdUsers()).thenThrow(serverCommunicationException());
+
+        getMutualsInteractor.obtainMutuals(callback);
 
         verify(localUserRepository).getPeople();
     }
 
     @Test public void shouldGetUsersFromRemoteRepository() throws Exception {
-        getMutualsInteractor.obtainMutuals(callback, errorCallback);
+        getMutualsInteractor.obtainMutuals(callback);
 
         verify(remoteUserRepository).getPeople();
     }
 
-    @Test public void shouldGetUsersFromLocalFirstAndThenRemoteRepository() throws Exception {
-        getMutualsInteractor.obtainMutuals(callback, errorCallback);
+    @Test public void shouldGetUsersFromRemoteFirstAndThenLocalRepositoryWhenExceptionThrown() throws Exception {
+        when(remoteUserRepository.getPeople()).thenThrow(serverCommunicationException());
 
-        InOrder inOrder = inOrder(localUserRepository, remoteUserRepository);
-        inOrder.verify(localUserRepository).getPeople();
+        getMutualsInteractor.obtainMutuals(callback);
+
+        InOrder inOrder = inOrder(remoteUserRepository, localUserRepository);
         inOrder.verify(remoteUserRepository).getPeople();
+        inOrder.verify(localUserRepository).getPeople();
+    }
+
+    private ServerCommunicationException serverCommunicationException() {
+        return new ServerCommunicationException(new Throwable());
     }
 
     @Test public void shouldRetainMutuals() throws Exception {
@@ -71,10 +83,10 @@ public class GetMutualsInteractorTest {
         mutual.setIdUser(ID_USER);
         List<User> people = people();
         people.add(mutual);
-        when(localFollowRepository.getMutualIdUsers()).thenReturn(mutualIdUsers());
+        when(remoteFollowRepository.getMutualIdUsers()).thenReturn(mutualIdUsers());
         when(remoteUserRepository.getPeople()).thenReturn(people);
 
-        getMutualsInteractor.obtainMutuals(callback, errorCallback);
+        getMutualsInteractor.obtainMutuals(callback);
 
         verify(callback).onLoaded(Collections.singletonList(mutual));
     }

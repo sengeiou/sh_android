@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 public class SyncFollowRepository implements FollowRepository, SyncableRepository {
 
+    private static final int PAGE_SIZE = 100;
     private final SessionRepository sessionRepository;
     private final FollowDataSource localFollowDataSource;
     private final FollowDataSource remoteFollowDataSource;
@@ -112,7 +113,19 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     }
 
     @Override public List<String> getMutualIdUsers() {
-        throw new IllegalArgumentException("this method should not have remote implementation");
+        Integer page = 0;
+        List<String> followedIdUsers = new ArrayList<>();
+        List<FollowEntity> follows =
+          remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        while (follows.size() == PAGE_SIZE) {
+            localFollowDataSource.putFollows(follows);
+            page++;
+            follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        }
+        for (FollowEntity follow : follows) {
+            followedIdUsers.add(follow.getIdFollowedUser());
+        }
+        return followedIdUsers;
     }
 
     @Override public void dispatchSync() {

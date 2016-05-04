@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetMutualsInteractor;
 import com.shootr.mobile.ui.model.UserModel;
@@ -49,11 +48,6 @@ public class PeoplePresenter implements Presenter {
         getMutualsInteractor.obtainMutuals(new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 onPeopleListLoaded(users);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                hideViewLoading();
-                peopleView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
