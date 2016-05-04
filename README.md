@@ -1,3 +1,7 @@
+Master: [![Build Status](https://api.travis-ci.com/ShootrNetwork/shootr-android.svg?branch=master&token=Xy2vrzsZjoxXgmj3AjRv)](https://api.travis-ci.com/ShootrNetwork/shootr-android.svg)
+
+Develop: [![Build Status](https://api.travis-ci.com/ShootrNetwork/shootr-android.svg?branch=develop&token=Xy2vrzsZjoxXgmj3AjRv)](https://api.travis-ci.com/ShootrNetwork/shootr-android.svg)
+
 # Shootr android
 Welcome to Shootr!
 
