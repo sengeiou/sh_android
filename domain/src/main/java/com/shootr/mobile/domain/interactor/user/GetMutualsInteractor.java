@@ -11,6 +11,8 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.UserRepository;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -63,7 +65,16 @@ public class GetMutualsInteractor implements Interactor {
                 mutualUsers.add(user);
             }
         }
-        notifyResult(mutualUsers);
+        notifyResult(reorderUsersByUsername(mutualUsers));
+    }
+
+    private List<User> reorderUsersByUsername(List<User> userList) {
+        if (userList != null) {
+            Collections.sort(userList, new UsernameComparator());
+            return userList;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private void notifyResult(final List<User> userList) {
@@ -80,5 +91,12 @@ public class GetMutualsInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
+    }
+
+    static class UsernameComparator implements Comparator<User> {
+
+        @Override public int compare(User user1, User user2) {
+            return user1.getUsername().compareToIgnoreCase(user2.getUsername());
+        }
     }
 }
