@@ -185,6 +185,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 streamTimelineView.setTitle(stream.getTitle());
                 if (streamTopic != null && !streamTopic.isEmpty()) {
                     streamTimelineView.showTopicSnackBar(streamTopic);
+                } else {
+                    streamTimelineView.hideTopicSnackBar();
                 }
             }
         });

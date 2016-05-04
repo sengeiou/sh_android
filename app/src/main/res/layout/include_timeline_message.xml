@@ -25,6 +25,7 @@
           android:textColor="@color/white"
           android:textSize="15sp"
           android:visibility="gone"
+          android:clickable="false"
           tools:text="Hola que haces?"
           tools:visibility="visible" />
 
