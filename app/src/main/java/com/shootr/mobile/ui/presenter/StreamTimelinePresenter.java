@@ -219,6 +219,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
+    protected void setShotModels(SortedSet<ShotModel> shotModels){
+        this.shotModels = shotModels;
+    }
+
     protected void loadTimeline() {
         if (!showingHoldingShots) {
             timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, new Interactor.Callback<Timeline>() {
