@@ -123,7 +123,9 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
             follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
         }
         for (FollowEntity follow : follows) {
-            followedIdUsers.add(follow.getIdFollowedUser());
+            if(follow.isFriend() == 1L) {
+                followedIdUsers.add(follow.getIdFollowedUser());
+            }
         }
         return followedIdUsers;
     }
