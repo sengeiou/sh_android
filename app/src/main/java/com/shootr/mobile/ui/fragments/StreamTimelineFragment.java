@@ -674,6 +674,17 @@ public class StreamTimelineFragment extends BaseFragment
         listView.setSelectionFromTop(index, top);
     }
 
+    @Override public void refreshShots(List<ShotModel> shots) {
+        int index = listView.getFirstVisiblePosition() + shots.size();
+        View v = listView.getChildAt(listView.getHeaderViewsCount());
+        int top = (v == null) ? 0 : v.getTop();
+
+        adapter.setShots(shots);
+        adapter.notifyDataSetChanged();
+
+        listView.setSelectionFromTop(index, top);
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

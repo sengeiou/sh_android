@@ -263,10 +263,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             }
             shotModels.addAll(newShots);
             addShotsAbove(newShots);
+            refreshShots(shots);
             showTimeLineIndicator();
         }
         oldListSize = shotModels.size();
         loadNewShots();
+    }
+
+    private void refreshShots(List<ShotModel> shots) {
+        streamTimelineView.refreshShots(shots);
     }
 
     private void showTimeLineIndicator() {

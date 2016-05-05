@@ -102,6 +102,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void refreshShots(List<ShotModel> shots) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

@@ -53,4 +53,6 @@ public interface StreamTimelineView extends LoadDataView {
     void showPinMessageNotification(String topic);
 
     void addAbove(List<ShotModel> shotModels);
+
+    void refreshShots(List<ShotModel> shots);
 }
