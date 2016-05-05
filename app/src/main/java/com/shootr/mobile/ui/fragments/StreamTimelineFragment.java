@@ -685,6 +685,11 @@ public class StreamTimelineFragment extends BaseFragment
         listView.setSelectionFromTop(index, top);
     }
 
+    @Override public void updateShotsInfo(List<ShotModel> shots) {
+        adapter.setShots(shots);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

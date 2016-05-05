@@ -262,8 +262,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
             }
             shotModels.addAll(newShots);
-            addShotsAbove(newShots);
-            refreshShots(shots);
+            if (newShots.isEmpty()) {
+                updateShotsInfo(timeline);
+            } else {
+                addShotsAbove(newShots);
+            }
             showTimeLineIndicator();
         }
         oldListSize = shotModels.size();
@@ -476,7 +479,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadTimeline();
+                refreshForUpdatingShotsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -488,13 +491,42 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadTimeline();
+                refreshForUpdatingShotsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 /* no-op */
             }
         });
+    }
+
+    private void refreshForUpdatingShotsInfo() {
+        if (!showingHoldingShots) {
+            timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, new Interactor.Callback<Timeline>() {
+                @Override public void onLoaded(Timeline timeline) {
+                    updateShotsInfo(timeline);
+                }
+            });
+        } else {
+            streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId,
+              idAuthor,
+              hasBeenPaused,
+              new Interactor.Callback<Timeline>() {
+                  @Override public void onLoaded(Timeline timeline) {
+                      updateShotsInfo(timeline);
+                  }
+              },
+              new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      showErrorLoadingNewShots();
+                  }
+              });
+        }
+    }
+
+    private void updateShotsInfo(Timeline timeline) {
+        List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
+        streamTimelineView.updateShotsInfo(shots);
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {

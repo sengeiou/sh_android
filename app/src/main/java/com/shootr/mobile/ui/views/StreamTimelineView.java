@@ -55,4 +55,6 @@ public interface StreamTimelineView extends LoadDataView {
     void addAbove(List<ShotModel> shotModels);
 
     void refreshShots(List<ShotModel> shots);
+
+    void updateShotsInfo(List<ShotModel> shots);
 }
