@@ -185,7 +185,7 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
     }
-    
+
     @Override public int compareTo(ShotModel shotModel) {
         return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1 : 0;
     }
