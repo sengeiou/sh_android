@@ -25,8 +25,11 @@ import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.inject.Inject;
 
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
@@ -70,6 +73,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isInitialized = false;
     private String currentTextWritten;
     private Long lastRefreshDate;
+    private SortedSet<ShotModel> shotModels;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -106,6 +110,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.oldListSize = 0;
         this.newShotsNumber = 0;
         this.lastRefreshDate = 0L;
+        this.shotModels = new TreeSet<>();
         setIdAuthor(idAuthor);
         this.setView(streamTimelineView);
         this.streamTimelineView.showHoldingShots();
@@ -119,6 +124,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.oldListSize = 0;
         this.newShotsNumber = 0;
         this.lastRefreshDate = 0L;
+        this.shotModels = new TreeSet<>();
         this.setView(streamTimelineView);
         this.loadStream(streamTimelineView, idStream);
         this.streamTimelineView.showHoldingShots();
@@ -184,7 +190,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 setStreamTopic(stream.getTopic());
                 streamTimelineView.setTitle(stream.getTitle());
                 if (streamTopic != null && !streamTopic.isEmpty()) {
-                    streamTimelineView.showTopicSnackBar(streamTopic);
+                    streamTimelineView.showPinnedMessage(streamTopic);
+                } else {
+                    streamTimelineView.hidePinnedMessage();
                 }
             }
         });
@@ -209,6 +217,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 /* no-op */
             }
         });
+    }
+
+    protected void setShotModels(SortedSet<ShotModel> shotModels) {
+        this.shotModels = shotModels;
     }
 
     protected void loadTimeline() {
@@ -236,24 +248,40 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void showShotsInView(Timeline timeline) {
-        List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+        List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
         if (isFirstLoad || isFirstShotPosition) {
-            setShotsWithoutReposition(shotModels);
+            shotModels.addAll(shots);
+            setShotsWithoutReposition(shots);
         }
 
         if (!isFirstShotPosition && !isFirstLoad) {
-            setShotsAndReposition(shotModels);
+            List<ShotModel> newShots = new ArrayList<>();
+            for (ShotModel shot : shots) {
+                if (!shotModels.contains(shot)) {
+                    newShots.add(shot);
+                }
+            }
+            shotModels.addAll(newShots);
+            if (newShots.isEmpty()) {
+                updateShotsInfo(timeline);
+            } else {
+                addShotsAbove(newShots);
+            }
             showTimeLineIndicator();
         }
         oldListSize = shotModels.size();
         loadNewShots();
     }
 
+    private void refreshShots(List<ShotModel> shots) {
+        streamTimelineView.refreshShots(shots);
+    }
+
     private void showTimeLineIndicator() {
         if (newShotsNumber != null && newShotsNumber > 0) {
-            streamTimelineView.showTimelineIndicator(newShotsNumber);
+            streamTimelineView.showNewShotsIndicator(newShotsNumber);
         } else {
-            streamTimelineView.hideTimelineIndicator();
+            streamTimelineView.hideNewShotsIndicator();
         }
     }
 
@@ -264,9 +292,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         handleStreamTimeLineVisibility();
     }
 
-    private void setShotsAndReposition(List<ShotModel> shotModels) {
-        streamTimelineView.setShots(shotModels);
-        streamTimelineView.setPosition(oldListSize, shotModels.size());
+    private void addShotsAbove(List<ShotModel> shotModels) {
+        streamTimelineView.addAbove(shotModels);
     }
 
     private void handleStreamTimeLineVisibility() {
@@ -452,7 +479,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadTimeline();
+                refreshForUpdatingShotsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -464,13 +491,42 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadTimeline();
+                refreshForUpdatingShotsInfo();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 /* no-op */
             }
         });
+    }
+
+    private void refreshForUpdatingShotsInfo() {
+        if (!showingHoldingShots) {
+            timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, new Interactor.Callback<Timeline>() {
+                @Override public void onLoaded(Timeline timeline) {
+                    updateShotsInfo(timeline);
+                }
+            });
+        } else {
+            streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId,
+              idAuthor,
+              hasBeenPaused,
+              new Interactor.Callback<Timeline>() {
+                  @Override public void onLoaded(Timeline timeline) {
+                      updateShotsInfo(timeline);
+                  }
+              },
+              new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      showErrorLoadingNewShots();
+                  }
+              });
+        }
+    }
+
+    private void updateShotsInfo(Timeline timeline) {
+        List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
+        streamTimelineView.updateShotsInfo(shots);
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
@@ -569,7 +625,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void handleVisibilityTimelineIndicatorInResume() {
-        streamTimelineView.hideTimelineIndicator();
+        streamTimelineView.hideNewShotsIndicator();
     }
 
     public void editStream(String topic) {
@@ -599,9 +655,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
               @Override public void onLoaded(Stream stream) {
                   streamTopic = stream.getTopic();
                   if (streamTopic != null && !streamTopic.isEmpty()) {
-                      streamTimelineView.showTopicSnackBar(streamTopic);
+                      streamTimelineView.showPinnedMessage(streamTopic);
                   } else {
-                      streamTimelineView.hideTopicSnackBar();
+                      streamTimelineView.hidePinnedMessage();
                   }
               }
           },

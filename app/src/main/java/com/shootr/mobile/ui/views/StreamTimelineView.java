@@ -36,15 +36,13 @@ public interface StreamTimelineView extends LoadDataView {
 
     void setTitle(String title);
 
-    void setPosition(Integer oldListSize, Integer shots);
+    void showNewShotsIndicator(Integer numberNewShots);
 
-    void showTimelineIndicator(Integer numberNewShots);
+    void hideNewShotsIndicator();
 
-    void hideTimelineIndicator();
+    void showPinnedMessage(String topic);
 
-    void showTopicSnackBar(String topic);
-
-    void hideTopicSnackBar();
+    void hidePinnedMessage();
 
     void setRemainingCharactersCount(int remainingCharacters);
 
@@ -53,4 +51,10 @@ public interface StreamTimelineView extends LoadDataView {
     void setRemainingCharactersColorInvalid();
 
     void showPinMessageNotification(String topic);
+
+    void addAbove(List<ShotModel> shotModels);
+
+    void refreshShots(List<ShotModel> shots);
+
+    void updateShotsInfo(List<ShotModel> shots);
 }

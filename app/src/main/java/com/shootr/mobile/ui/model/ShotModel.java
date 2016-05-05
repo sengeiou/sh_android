@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class ShotModel implements Serializable {
+public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     private String idShot;
     private String comment;
@@ -184,5 +184,9 @@ public class ShotModel implements Serializable {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+    
+    @Override public int compareTo(ShotModel shotModel) {
+        return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1 : 0;
     }
 }
