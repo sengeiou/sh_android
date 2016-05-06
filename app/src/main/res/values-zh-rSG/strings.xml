@@ -88,7 +88,7 @@
     <string name="drawer_activity_me" formatted="false">我</string>
     <string name="drawer_activity_title">动态</string>
     <string name="drawer_favorites_title">喜爱</string>
-    <string name="drawer_following_activity_title" formatted="false">朋友</string>
+    <string name="drawer_following_activity_title" formatted="false">正在关注</string>
     <string name="drawer_friends_title">朋友</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="edit_stream">编辑stream</string>
@@ -281,7 +281,7 @@
         <item quantity="other">%d回复</item>
         <item quantity="zero"/>
     </plurals>
-    <string name="reply_name_pattern">%1$s回复%2$s</string>
+    <string name="reply_name_pattern">%1$s 回复 %2$s</string>
     <string name="reply_placeholder_pattern">回复%s…</string>
     <string name="report_context_menu_block">封锁…</string>
     <string name="report_context_menu_delete">删除</string>
@@ -299,6 +299,7 @@
     <string name="shared_shot_activity_with_comment">"分享了: "</string>
     <string name="shared_stream_notification">被分享的shared</string>
     <string name="share_shot_chooser_title">分享</string>
+    <string name="share_shot_message">%1$s %2$s</string>
     <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
     <string name="share_stream_activity_text_pattern">分享(stream)</string>
     <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/#/st/%2$s</string>

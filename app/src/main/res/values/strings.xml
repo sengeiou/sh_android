@@ -228,7 +228,7 @@
     <string name="new_stream_title_label">Title</string>
     <string name="new_topic" formatted="false">New message…</string>
     <string name="next">Next</string>
-    <string name="niced_by">Niced by </string>
+    <string name="niced_by">"Niced by "</string>
     <string name="niced_shot_activity">Niced your shot</string>
     <string name="niced_shot_activity_with_comment">Niced: </string>
     <string name="nicers">Nicers</string>
@@ -285,7 +285,7 @@
     <string name="remove_stream_label">Remove stream</string>
     <string name="remove_stream_listing_context_menu">Remove</string>
     <string name="replied_activity" formatted="false">Replied</string>
-    <string name="replied_activity_with_comment" formatted="false">Replied: </string>
+    <string name="replied_activity_with_comment" formatted="false">Replied:</string>
     <plurals name="replies_header_count_pattern">
     <item quantity="one">
             %d reply
