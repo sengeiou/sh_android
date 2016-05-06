@@ -88,7 +88,7 @@
   <string name="drawer_activity_me" formatted="false">私</string>
   <string name="drawer_activity_title">動態消息</string>
   <string name="drawer_favorites_title">最愛</string>
-  <string name="drawer_friends_activity_title" formatted="false">朋友</string>
+  <string name="drawer_following_activity_title" formatted="false">關注中</string>
   <string name="drawer_friends_title">朋友</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="edit_stream">編輯Stream</string>
@@ -279,7 +279,7 @@
   <plurals name="replies_header_count_pattern">
     <item quantity="other">%d回覆</item>
   </plurals>
-  <string name="reply_name_pattern">%1$s回覆%2$s</string>
+  <string name="reply_name_pattern">%1$s 回覆 %2$s</string>
   <string name="reply_placeholder_pattern">回覆%s…</string>
   <string name="report_context_menu_block">封鎖…</string>
   <string name="report_context_menu_delete">刪除</string>
@@ -297,10 +297,10 @@
   <string name="shared_shot_activity_with_comment">"分享了: "</string>
   <string name="shared_stream_notification">分享了 Stream</string>
   <string name="share_shot_chooser_title">分享</string>
-  <string name="share_shot_message">%1$s在%2$s發怖了 :%3$s</string>
+  <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s在%2$s發怖了訊息</string>
   <string name="share_stream_activity_text_pattern">分享了(stream)</string>
-  <string name="share_stream_message">在Shootr看看%1$s: https://shootr.com/st/%2$s</string>
+  <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/#/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
   <string name="share_via">透過以下方式分享：</string>
   <string name="share_via_shootr">通過Shootr分享</string>

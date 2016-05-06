@@ -66,23 +66,19 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setPosition(Integer oldListSize, Integer shots) {
+    @Override public void showNewShotsIndicator(Integer numberNewShots) {
         /* no-op */
     }
 
-    @Override public void showTimelineIndicator(Integer numberNewShots) {
+    @Override public void hideNewShotsIndicator() {
         /* no-op */
     }
 
-    @Override public void hideTimelineIndicator() {
+    @Override public void showPinnedMessage(String topic) {
         /* no-op */
     }
 
-    @Override public void showTopicSnackBar(String topic) {
-        /* no-op */
-    }
-
-    @Override public void hideTopicSnackBar() {
+    @Override public void hidePinnedMessage() {
         /* no-op */
     }
 
@@ -99,6 +95,18 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void showPinMessageNotification(String topic) {
+        /* no-op */
+    }
+
+    @Override public void addAbove(List<ShotModel> shotModels) {
+        /* no-op */
+    }
+
+    @Override public void refreshShots(List<ShotModel> shots) {
+        /* no-op */
+    }
+
+    @Override public void updateShotsInfo(List<ShotModel> shots) {
         /* no-op */
     }
 

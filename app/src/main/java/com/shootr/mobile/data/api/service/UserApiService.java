@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import java.io.IOException;
@@ -23,8 +24,8 @@ public interface UserApiService {
 
     @GET("/user?includeLinks=false&includeEmbed=false") UserEntity getUser() throws IOException, ApiException;
 
-    @GET("/user?includeLinks=false&includeEmbed=false") UserEntity getUserByUsername(@Query("userName") String username)
-      throws IOException, ApiException;
+    @GET("/user?includeLinks=false&includeEmbed=false") UserEntity getUserByUsername(
+      @Query("userName") String username) throws IOException, ApiException;
 
     @GET("/user/{idUser}/following?includeLinks=false&includeEmbed=false") List<UserEntity> getFollowing(
       @Path("idUser") String idUser, @Query("page") Integer page, @Query("pageSize") Integer pageSize)
@@ -34,13 +35,14 @@ public interface UserApiService {
       @Path("idUser") String idUser, @Query("page") Integer page, @Query("pageSize") Integer pageSize)
       throws IOException, ApiException;
 
-    @GET("/user/streamParticipants/{idStream}") List<UserEntity> getAllParticipants(@Path("idStream") String idStream,
-      @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
+    @GET("/user/streamParticipants/{idStream}") List<UserEntity> getAllParticipants(
+      @Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
 
     @GET("/user/streamParticipants/{idStream}/search") List<UserEntity> findParticipants(
       @Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
 
-    @PUT("/user/watch/{idStream}") Response watch(@Path("idStream") String idStream) throws IOException, ApiException;
+    @PUT("/user/watch/{idStream}") Response watch(@Path("idStream") String idStream)
+      throws IOException, ApiException;
 
     @PUT("/user/unwatch") Response unwatch() throws IOException, ApiException;
 
@@ -68,4 +70,7 @@ public interface UserApiService {
     @GET("/ban/") List<BanEntity> getBannedIdUsers() throws IOException, ApiException;
 
     @DELETE("/ban/{idUser}") Response unban(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @GET("/follow") List<FollowEntity> getFollows(@Query("idUser") String idUser, @Query("page") Integer page)
+      throws IOException, ApiException;
 }

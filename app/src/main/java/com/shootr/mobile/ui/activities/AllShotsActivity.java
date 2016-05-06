@@ -21,6 +21,7 @@ import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -186,8 +187,15 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           avatarClickListener,
           videoClickListener,
           onNiceShotListener,
-          onUsernameClickListener,
-          onHideClickListener,
+          onUsernameClickListener, new OnReplyShotListener() {
+            @Override public void reply(ShotModel shotModel) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getBaseContext()) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername())
+                  .build();
+                startActivity(newShotIntent);
+            }
+        }, onHideClickListener,
           presenter.getIsCurrentUser()) {
             @Override protected boolean shouldShowTitle() {
                 return true;

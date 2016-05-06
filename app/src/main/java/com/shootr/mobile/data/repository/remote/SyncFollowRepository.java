@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 public class SyncFollowRepository implements FollowRepository, SyncableRepository {
 
+    private static final int PAGE_SIZE = 100;
     private final SessionRepository sessionRepository;
     private final FollowDataSource localFollowDataSource;
     private final FollowDataSource remoteFollowDataSource;
@@ -111,12 +112,29 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         remoteFollowDataSource.unban(idUser);
     }
 
+    @Override public List<String> getMutualIdUsers() {
+        Integer page = 0;
+        List<String> followedIdUsers = new ArrayList<>();
+        List<FollowEntity> follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        while (follows.size() == PAGE_SIZE) {
+            localFollowDataSource.putFollows(follows);
+            page++;
+            follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        }
+        for (FollowEntity follow : follows) {
+            if (follow.isFriend() == 1L) {
+                followedIdUsers.add(follow.getIdFollowedUser());
+            }
+        }
+        return followedIdUsers;
+    }
+
     @Override public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
             if (Synchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
-                remoteFollowDataSource.removeFollow(entity.getFollowedUser());
-                localFollowDataSource.removeFollow(entity.getFollowedUser());
+                remoteFollowDataSource.removeFollow(entity.getIdFollowedUser());
+                localFollowDataSource.removeFollow(entity.getIdFollowedUser());
             } else {
                 syncEntities(entity);
             }
@@ -137,7 +155,7 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());
-        followEntity.setFollowedUser(idUser);
+        followEntity.setIdFollowedUser(idUser);
         Date now = new Date();
         followEntity.setBirth(now);
         followEntity.setModified(now);

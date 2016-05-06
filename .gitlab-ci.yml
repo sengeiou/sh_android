@@ -4,16 +4,14 @@ before_script:
 
 features:
     script:
-        - ./gradlew checkstyle build
-        - gradle test
+        - ./gradlew checkstyle build -Dpre-dex=false -Pcom.android.build.threadPoolSize=1 -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xms512m -Xmx512m" -Dorg.gradle.daemon=false
     stage: test
     only:
         - /^feature\/.*$/
 
 integration:
     script:
-        - ./gradlew checkstyle build
-        - gradle build -PdisablePreDex
+        - ./gradlew checkstyle build -Dpre-dex=false -Pcom.android.build.threadPoolSize=1 -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xms512m -Xmx512m" -Dorg.gradle.daemon=false
     stage: test
     only:
         - master

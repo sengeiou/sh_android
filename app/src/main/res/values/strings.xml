@@ -88,7 +88,7 @@
     <string name="drawer_activity_me" formatted="false">Me</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="drawer_favorites_title">Favorites</string>
-    <string name="drawer_friends_activity_title" formatted="false">Friends</string>
+    <string name="drawer_following_activity_title" formatted="false">Following</string>
     <string name="drawer_friends_title">Friends</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="edit_stream">Edit</string>
@@ -228,7 +228,7 @@
     <string name="new_stream_title_label">Title</string>
     <string name="new_topic" formatted="false">New message…</string>
     <string name="next">Next</string>
-    <string name="niced_by">Niced by </string>
+    <string name="niced_by">"Niced by "</string>
     <string name="niced_shot_activity">Niced your shot</string>
     <string name="niced_shot_activity_with_comment">Niced: </string>
     <string name="nicers">Nicers</string>
@@ -285,7 +285,7 @@
     <string name="remove_stream_label">Remove stream</string>
     <string name="remove_stream_listing_context_menu">Remove</string>
     <string name="replied_activity" formatted="false">Replied</string>
-    <string name="replied_activity_with_comment" formatted="false">Replied: </string>
+    <string name="replied_activity_with_comment" formatted="false">Replied:</string>
     <plurals name="replies_header_count_pattern">
     <item quantity="one">
             %d reply
@@ -312,10 +312,10 @@
     <string name="shared_shot_activity_with_comment">Shared: </string>
     <string name="shared_stream_notification">Stream shared</string>
     <string name="share_shot_chooser_title">Share</string>
-    <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
+    <string name="share_shot_message">%1$s %2$s</string>
     <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="share_stream_activity_text_pattern">Shared (stream)</string>
-    <string name="share_stream_message">Check out %1$s on Shootr: https://shootr.com/#/st/%2$s</string>
+    <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/#/st/%2$s</string>
     <string name="share_stream_subject">Check out %s on Shootr</string>
     <string name="share_via">Share via…</string>
     <string name="share_via_shootr">Share via Shootr</string>

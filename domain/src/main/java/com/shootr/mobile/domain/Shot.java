@@ -26,6 +26,7 @@ public class Shot {
     private Boolean isMarkedAsNice;
     private Long profileHidden;
     private EntityMetadata metadata;
+    private Long replyCount;
 
     public String getIdShot() {
         return idShot;
@@ -241,6 +242,14 @@ public class Shot {
 
     public void setProfileHidden(Long profileHidden) {
         this.profileHidden = profileHidden;
+    }
+
+    public Long getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Long replyCount) {
+        this.replyCount = replyCount;
     }
 
     public static class ShotStreamInfo {

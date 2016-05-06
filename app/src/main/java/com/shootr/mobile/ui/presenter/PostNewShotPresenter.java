@@ -5,6 +5,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
@@ -30,6 +31,7 @@ public class PostNewShotPresenter implements Presenter {
     private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
     private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
     private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
+    private final IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
     private final UserModelMapper userModelMapper;
 
     private PostNewShotView postNewShotView;
@@ -45,12 +47,14 @@ public class PostNewShotPresenter implements Presenter {
     @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
       PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
-      GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
+      GetMentionedPeopleInteractor getMentionedPeopleInteractor,
+      IncrementReplyCountShotInteractor incrementReplyCountShotInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
         this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
+        this.incrementReplyCountShotInteractor = incrementReplyCountShotInteractor;
         this.userModelMapper = userModelMapper;
     }
 
@@ -140,6 +144,7 @@ public class PostNewShotPresenter implements Presenter {
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   onShotSending();
+                  incrementParentReplyCount();
               }
           },
           new Interactor.ErrorCallback() {
@@ -147,6 +152,18 @@ public class PostNewShotPresenter implements Presenter {
                   onShotError();
               }
           });
+    }
+
+    private void incrementParentReplyCount() {
+        incrementReplyCountShotInteractor.incrementReplyCount(replyParentId, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
+        });
     }
 
     private void postStreamShot() {

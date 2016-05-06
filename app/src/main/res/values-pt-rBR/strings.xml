@@ -88,7 +88,7 @@
   <string name="drawer_activity_me" formatted="false">Eu</string>
   <string name="drawer_activity_title">Atividade</string>
   <string name="drawer_favorites_title">Favoritos</string>
-  <string name="drawer_friends_activity_title" formatted="false">Amigos</string>
+  <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
   <string name="drawer_friends_title">Amigos</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="edit_stream">Editar</string>
@@ -301,10 +301,10 @@
   <string name="shared_shot_activity_with_comment">"Compartilhado: "</string>
   <string name="shared_stream_notification">Stream compartilhado</string>
   <string name="share_shot_chooser_title">Compartilhar</string>
-  <string name="share_shot_message">Shot de %1$s em %2$s: %3$s</string>
+  <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s em %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Não compartilhado (stream)</string>
-  <string name="share_stream_message">Confira %1$s em Shootr: https://shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">Confira %1$s em Shootr: https://web.shootr.com/#/st/%2$s</string>
   <string name="share_stream_subject">Confira a %s em Shootr</string>
   <string name="share_via">Compartilhar via…</string>
   <string name="share_via_shootr">Compartilhar via Shootr</string>

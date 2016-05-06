@@ -20,30 +20,24 @@ public class ShotModelMapper {
         shotModel.setComment(shot.getComment());
         shotModel.setImage(shot.getImage());
         shotModel.setBirth(shot.getPublishDate());
-
         Shot.ShotUserInfo userInfo = shot.getUserInfo();
         shotModel.setUsername(userInfo.getUsername());
         shotModel.setIdUser(userInfo.getIdUser());
         shotModel.setPhoto(userInfo.getAvatar());
-
         Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
         if (streamInfo != null) {
             shotModel.setStreamId(streamInfo.getIdStream());
             shotModel.setStreamTitle(streamInfo.getStreamTitle());
         }
-
         shotModel.setReplyUsername(shot.getParentShotUsername());
         shotModel.setParentShotId(shot.getParentShotId());
-
         shotModel.setVideoUrl(shot.getVideoUrl());
         shotModel.setVideoTitle(shot.getVideoTitle());
         shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
-
         shotModel.setNiceCount(shot.getNiceCount());
         shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
-
         shotModel.setHide(shot.getProfileHidden());
-
+        shotModel.setReplyCount(shot.getReplyCount());
         return shotModel;
     }
 

@@ -100,6 +100,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.PROFILE_HIDDEN
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.REPLY_COUNT
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -170,6 +172,8 @@ public class SQLiteUtils {
       + " TEXT NOT NULL,"
       + DatabaseContract.FollowTable.ID_FOLLOWED_USER
       + " TEXT NOT NULL,"
+      + DatabaseContract.FollowTable.IS_FRIEND
+      + " NUMBER,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED

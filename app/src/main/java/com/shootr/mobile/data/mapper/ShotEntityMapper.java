@@ -38,29 +38,23 @@ import javax.inject.Singleton;
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
             shot.setStreamInfo(eventInfo);
         }
-
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(shotEntity.getIdUser());
         userInfo.setUsername(shotEntity.getUsername());
         userInfo.setAvatar(shotEntity.getUserPhoto());
         shot.setUserInfo(userInfo);
-
         shot.setParentShotId(shotEntity.getIdShotParent());
         shot.setParentShotUserId(shotEntity.getIdUserParent());
         shot.setParentShotUsername(shotEntity.getUserNameParent());
-
         shot.setVideoUrl(shotEntity.getVideoUrl());
         shot.setVideoTitle(shotEntity.getVideoTitle());
         shot.setVideoDuration(shotEntity.getVideoDuration());
-
         shot.setType(shotEntity.getType());
         shot.setNiceCount(shotEntity.getNiceCount());
         shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
-
         shot.setProfileHidden(shotEntity.getProfileHidden());
-
         shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
-
+        shot.setReplyCount(shotEntity.getReplyCount());
         return shot;
     }
 
@@ -91,29 +85,23 @@ import javax.inject.Singleton;
         shotEntity.setIdUser(idUser);
         shotEntity.setUsername(username);
         shotEntity.setUserPhoto(avatar);
-
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
             shotEntity.setStreamTitle(eventInfo.getStreamTitle());
         }
-
         shotEntity.setIdShotParent(shot.getParentShotId());
         shotEntity.setIdUserParent(shot.getParentShotUserId());
         shotEntity.setUserNameParent(shot.getParentShotUsername());
-
         shotEntity.setUsername(shot.getUserInfo().getUsername());
         shotEntity.setBirth(shot.getPublishDate());
-
         shotEntity.setVideoUrl(shot.getVideoUrl());
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
         shotEntity.setNiceCount(shot.getNiceCount());
-
         shotEntity.setProfileHidden(shot.getProfileHidden());
-
+        shotEntity.setReplyCount(shot.getReplyCount());
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
-
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;
     }

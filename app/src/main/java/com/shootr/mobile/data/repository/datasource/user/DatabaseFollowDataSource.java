@@ -64,6 +64,14 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.deleteBan(sessionRepository.getCurrentUserId(), idUser);
     }
 
+    @Override public List<String> getMutuals() {
+        return followManager.getMutuals();
+    }
+
+    @Override public List<FollowEntity> getFollows(String idUser, Integer page) {
+        throw new IllegalArgumentException("no local implementation");
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();
     }

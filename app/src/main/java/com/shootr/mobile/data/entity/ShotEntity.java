@@ -23,6 +23,7 @@ public class ShotEntity extends Synchronized {
     private String videoTitle;
     private Long videoDuration;
     private Long profileHidden;
+    private Long replyCount;
 
     public String getIdShot() {
         return idShot;
@@ -158,5 +159,13 @@ public class ShotEntity extends Synchronized {
 
     public void setProfileHidden(Long profileHidden) {
         this.profileHidden = profileHidden;
+    }
+
+    public Long getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Long replyCount) {
+        this.replyCount = replyCount;
     }
 }

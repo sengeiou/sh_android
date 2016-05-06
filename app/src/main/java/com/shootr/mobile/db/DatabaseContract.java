@@ -84,11 +84,12 @@ public class DatabaseContract {
         public static final String VIDEO_TITLE = "videoTitle";
         public static final String VIDEO_DURATION = "videoDuration";
         public static final String PROFILE_HIDDEN = "profileHidden";
+        public static final String REPLY_COUNT = "replyCount";
 
         public static final String[] PROJECTION = {
           ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TITLE,
           NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
-          PROFILE_HIDDEN, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          PROFILE_HIDDEN, REPLY_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -101,9 +102,10 @@ public class DatabaseContract {
         public static final String TABLE = "Follow";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
+        public static final String IS_FRIEND = "isFriend";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_FOLLOWED_USER, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          ID_USER, ID_FOLLOWED_USER, IS_FRIEND, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 

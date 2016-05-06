@@ -119,7 +119,7 @@ public class ActivityTimelinesContainerActivity extends BaseToolbarDecoratedActi
                 case 0:
                     return getString(R.string.drawer_activity_me).toUpperCase(l);
                 case 1:
-                    return getString(R.string.drawer_friends_activity_title).toUpperCase(l);
+                    return getString(R.string.drawer_following_activity_title).toUpperCase(l);
                 default:
                     throw new IllegalStateException(String.format("Item title for position %d doesn't exists",
                       position));
