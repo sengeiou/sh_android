@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.11.0] - 2016-05-06
+
+### Added
+- Shared stream and shot: new literals
+- Travis integration
+- New Shot Bar
+- Replies on Timeline
+
 ## [1.10.0] - 2016-04-29
 
 ### Changed
