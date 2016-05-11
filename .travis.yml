@@ -18,5 +18,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew checkstyle
-  - ./gradlew test
+  - ./gradlew checkstyle test
+
+notifications:
+  slack: observableshootr:ZjkgvI2rMYFMCEIjVEcahnG4
