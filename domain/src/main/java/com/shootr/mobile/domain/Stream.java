@@ -23,6 +23,7 @@ public class Stream {
     private Long historicWatchers;
     private Long totalShots;
     private Long uniqueShots;
+    private String readWriteMode;
 
     public Boolean isRemoved() {
         return removed;
@@ -188,6 +189,14 @@ public class Stream {
 
     public void setUniqueShots(Long uniqueShots) {
         this.uniqueShots = uniqueShots;
+    }
+
+    public String getReadWriteMode() {
+        return readWriteMode;
+    }
+
+    public void setReadWriteMode(String readWriteMode) {
+        this.readWriteMode = readWriteMode;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {

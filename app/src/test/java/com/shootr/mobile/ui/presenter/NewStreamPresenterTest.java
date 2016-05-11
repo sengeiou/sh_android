@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -28,6 +30,8 @@ public class NewStreamPresenterTest {
     public static final String TITLE = "title";
     private static final String STREAM_ID = "streamId";
     private static final String USER_ID = "userId";
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final Integer MODE = 0;
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
@@ -57,11 +61,9 @@ public class NewStreamPresenterTest {
         setupGetStreamInteractorCallbackWithEmptyTopic();
         setupCreateStreamInteractorCallbackWithEmptyTopic();
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(newStreamView.getStreamTitle()).thenReturn(TITLE);
-        when(newStreamView.getStreamDescription()).thenReturn("");
         presenter.initialize(newStreamView, STREAM_ID);
 
-        presenter.done();
+        presenter.done(TITLE, DESCRIPTION, MODE);
 
         verify(newStreamView).closeScreenWithResult(anyString());
     }
@@ -69,12 +71,10 @@ public class NewStreamPresenterTest {
     @Test public void shouldCloseScreenWithResultWhenCreateStreamAndTopicIsNull() throws Exception {
         setupCreateStreamInteractorCallbackWithEmptyTopic();
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(newStreamView.getStreamTitle()).thenReturn(TITLE);
-        when(newStreamView.getStreamDescription()).thenReturn("");
         presenter.initialize(newStreamView, null);
-        presenter.done();
+        presenter.done(TITLE, DESCRIPTION, MODE);
 
-        presenter.confirmNotify(true);
+        presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true);
 
         verify(newStreamView).closeScreenWithResult(anyString());
     }
@@ -91,7 +91,7 @@ public class NewStreamPresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[6])
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[7])
                   .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
@@ -99,6 +99,7 @@ public class NewStreamPresenterTest {
           .sendStream(anyString(),
             anyString(),
             anyString(),
+            anyInt(),
             anyString(),
             anyBoolean(),
             anyBoolean(),

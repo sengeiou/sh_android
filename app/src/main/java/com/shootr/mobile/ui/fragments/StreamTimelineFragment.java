@@ -20,12 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -44,6 +39,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
@@ -72,940 +68,964 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
+
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView, ReportShotView,
-  PinShotView {
+    implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
+    ReportShotView, PinShotView {
 
-    public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_TITLE = "streamTitle";
-    public static final String EXTRA_ID_USER = "userId";
-    private static final int REQUEST_STREAM_DETAIL = 1;
+  public static final String EXTRA_STREAM_ID = "streamId";
+  public static final String EXTRA_STREAM_TITLE = "streamTitle";
+  public static final String EXTRA_ID_USER = "userId";
+  public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
+  private static final int REQUEST_STREAM_DETAIL = 1;
 
-    //region Fields
-    @Inject StreamTimelinePresenter streamTimelinePresenter;
-    @Inject NewShotBarPresenter newShotBarPresenter;
-    @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
-    @Inject ReportShotPresenter reportShotPresenter;
-    @Inject PinShotPresenter pinShotPresenter;
+  //region Fields
+  @Inject StreamTimelinePresenter streamTimelinePresenter;
+  @Inject NewShotBarPresenter newShotBarPresenter;
+  @Inject WatchNumberPresenter watchNumberPresenter;
+  @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
+  @Inject ReportShotPresenter reportShotPresenter;
+  @Inject PinShotPresenter pinShotPresenter;
 
-    @Inject ImageLoader imageLoader;
-    @Inject AndroidTimeUtils timeUtils;
-    @Inject ToolbarDecorator toolbarDecorator;
-    @Inject IntentFactory intentFactory;
-    @Inject FeedbackMessage feedbackMessage;
-    @Inject @TemporaryFilesDir File tmpFiles;
-    @Inject AnalyticsTool analyticsTool;
-    @Inject WritePermissionManager writePermissionManager;
-    @Inject CrashReportTool crashReportTool;
+  @Inject ImageLoader imageLoader;
+  @Inject AndroidTimeUtils timeUtils;
+  @Inject ToolbarDecorator toolbarDecorator;
+  @Inject IntentFactory intentFactory;
+  @Inject FeedbackMessage feedbackMessage;
+  @Inject @TemporaryFilesDir File tmpFiles;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject WritePermissionManager writePermissionManager;
+  @Inject CrashReportTool crashReportTool;
 
-    @Bind(R.id.timeline_shot_list) ListView listView;
-    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @Bind(R.id.timeline_shot_list) ListView listView;
+  @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
-    @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
-    @Bind(R.id.timeline_empty) View emptyView;
-    @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-    @Bind(R.id.shot_bar_drafts) View draftsButton;
+  @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
+  @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
+  @Bind(R.id.timeline_empty) View emptyView;
+  @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
+  @Bind(R.id.shot_bar_drafts) View draftsButton;
 
-    @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
+  @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
 
-    @BindString(R.string.report_base_url) String reportBaseUrl;
-    @BindString(R.string.added_to_favorites) String addToFavorites;
-    @BindString(R.string.shot_shared_message) String shotShared;
+  @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
+  @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
 
-    @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
+  @BindString(R.string.report_base_url) String reportBaseUrl;
+  @BindString(R.string.added_to_favorites) String addToFavorites;
+  @BindString(R.string.shot_shared_message) String shotShared;
 
-    @Bind(R.id.timeline_message) TextView streamMessage;
+  @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
 
-    private TimelineAdapter adapter;
+  @Bind(R.id.timeline_message) TextView streamMessage;
 
-    private PhotoPickerController photoPickerController;
-    private NewShotBarView newShotBarViewDelegate;
-    private Integer watchNumberCount;
-    private View footerProgress;
-    private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
-    private int charCounterColorError;
-    private int charCounterColorNormal;
-    private EditText newTopicText;
-    private TextView topicCharCounter;
-    //endregion
+  private TimelineAdapter adapter;
 
-    public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
-        StreamTimelineFragment fragment = new StreamTimelineFragment();
-        fragment.setArguments(fragmentArguments);
-        return fragment;
-    }
+  private PhotoPickerController photoPickerController;
+  private NewShotBarView newShotBarViewDelegate;
+  private Integer watchNumberCount;
+  private View footerProgress;
+  private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
+  private int charCounterColorError;
+  private int charCounterColorNormal;
+  private EditText newTopicText;
+  private TextView topicCharCounter;
+  //endregion
 
-    //region Lifecycle methods
-    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+  public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
+    StreamTimelineFragment fragment = new StreamTimelineFragment();
+    fragment.setArguments(fragmentArguments);
+    return fragment;
+  }
+
+  //region Lifecycle methods
+  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
-        ButterKnife.bind(this, fragmentView);
-        return fragmentView;
-    }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(), getActivity());
-        ButterKnife.unbind(this);
-        streamTimelinePresenter.setView(new NullStreamTimelineView());
-        newShotBarPresenter.setView(new NullNewShotBarView());
-        watchNumberPresenter.setView(new NullWatchNumberView());
-        streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
-    }
-
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initializeViews();
-        setHasOptionsMenu(true);
-        String idStream = getArguments().getString(EXTRA_STREAM_ID);
-        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
-        setStreamTitleClickListener(idStream);
-        if (streamAuthorIdUser != null) {
-            initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser);
-        } else {
-            initializePresenters(idStream, streamAuthorIdUser);
-        }
-
-        streamTimelinePresenter.setIsFirstLoad(true);
-        streamTimelinePresenter.setIsFirstShotPosition(true);
-
-        analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
-    }
-
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_STREAM_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
-            if (getActivity() != null) {
-                getActivity().finish();
-            }
-        } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
-            String updatedTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_TITLE);
-            setStreamTitle(updatedTitle);
-        } else {
-            photoPickerController.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.timeline, menu);
-
-        showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
-        showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
-        showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
-        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
-
-        muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
-        unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
-
-        if (isAdded()) {
-            updateWatchNumberIcon();
-        }
-    }
-
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_showing_holding_shots:
-                streamTimelinePresenter.onHoldingShotsClick();
-                return true;
-            case R.id.menu_showing_all_shots:
-                streamTimelinePresenter.onAllStreamShotsClick();
-                return true;
-            case R.id.menu_stream_add_favorite:
-                streamTimelineOptionsPresenter.addToFavorites();
-                return true;
-            case R.id.menu_stream_remove_favorite:
-                streamTimelineOptionsPresenter.removeFromFavorites();
-                return true;
-            case R.id.menu_mute_stream:
-                streamTimelineOptionsPresenter.mute();
-                return true;
-            case R.id.menu_unmute_stream:
-                streamTimelineOptionsPresenter.unmute();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override public void onResume() {
-        super.onResume();
-        streamTimelinePresenter.resume();
-        newShotBarPresenter.resume();
-        watchNumberPresenter.resume();
-        streamTimelineOptionsPresenter.resume();
-    }
-
-    @Override public void onPause() {
-        super.onPause();
-        streamTimelinePresenter.pause();
-        newShotBarPresenter.pause();
-        watchNumberPresenter.pause();
-        streamTimelineOptionsPresenter.pause();
-    }
-
-    private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser) {
-        streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser);
-        pinShotPresenter.initialize(this);
-        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
-        watchNumberPresenter.initialize(this, idStream);
-        streamTimelineOptionsPresenter.initialize(this, idStream);
-        reportShotPresenter.initialize(this);
-    }
-
-    private void initializePresenters(String idStream, String streamAuthorIdUser) {
-        streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
-        watchNumberPresenter.initialize(this, idStream);
-        streamTimelineOptionsPresenter.initialize(this, idStream);
-        reportShotPresenter.initialize(this);
-    }
-
-    //endregion
-
-    private void setStreamTitle(String streamTitle) {
-        toolbarDecorator.setTitle(streamTitle);
-    }
-
-    private void setStreamTitleClickListener(final String idStream) {
-        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                navigateToStreamDetail(idStream);
-            }
-        });
-    }
-
-    private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-            @Override public void openNewShotView() {
-                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                  .from(getActivity()) //
-                  .build();
-                startActivity(newShotIntent);
-            }
-
-            @Override public void openNewShotViewWithImage(File image) {
-                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                  .from(getActivity()) //
-                  .withImage(image) //
-                  .build();
-                startActivity(newShotIntent);
-            }
-
-            @Override public void openEditTopicDialog() {
-                setupTopicCustomDialog();
-            }
-        };
-    }
-
-    private void setupTopicCustomDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
-        dialogBuilder.setView(dialogView);
-        newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
-        topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
-
-        newTopicText.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /* no - op */
-            }
-
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (streamTimelinePresenter.isInitialized()) {
-                    streamTimelinePresenter.textChanged(charSequence.toString());
-                }
-            }
-
-            @Override public void afterTextChanged(Editable editable) {
-                /* no-op */
-            }
-        });
-
-        if (streamTimelinePresenter.getStreamTopic() != null) {
-            newTopicText.setText(streamTimelinePresenter.getStreamTopic());
-        }
-
-        dialogBuilder.setTitle(getString(R.string.topic));
-        dialogBuilder.setPositiveButton(getString(R.string.done_pin_topic), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                streamTimelinePresenter.editStream(newTopicText.getText().toString());
-            }
-        });
-        AlertDialog customDialogEditTopic = dialogBuilder.create();
-        customDialogEditTopic.show();
-    }
-
-    private void updateWatchNumberIcon() {
-        if (watchNumberCount != null) {
-            toolbarDecorator.setSubtitle(watchNumberCount);
-        }
-    }
-
-    //region Views manipulation
-    private void initializeViews() {
-        charCounterColorError = getResources().getColor(R.color.error);
-        charCounterColorNormal = getResources().getColor(R.color.gray_70);
-        writePermissionManager.init(getActivity());
-        setupListAdapter();
-        setupSwipeRefreshLayout();
-        setupListScrollListeners();
-        setupPhotoPicker();
-        setupNewShotBarDelegate();
-    }
-
-    private void setupPhotoPicker() {
-        if (tmpFiles != null) {
-            setupPhotoControllerWithTmpFilesDir();
-        } else {
-            crashReportTool.logException("Picker must have a temporary files directory.");
-        }
-    }
-
-    private void setupPhotoControllerWithTmpFilesDir() {
-        photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
-          .withTemporaryDir(tmpFiles)
-          .withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
-                  newShotBarPresenter.newShotImagePicked(imageFile);
-              }
-
-              @Override public void onError(Exception e) {
-                  Timber.e(e, "Error selecting image");
-              }
-
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
-                  startActivityForResult(intent, requestCode);
-              }
-
-              @Override public void openEditTopicDialog() {
-                  newShotBarPresenter.openEditTopicCustomDialog();
-              }
-          })
-          .build();
-    }
-
-    private void setupListAdapter() {
-        View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
-        footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
-
-        footerProgress.setVisibility(View.GONE);
-
-        listView.addFooterView(footerView, null, false);
-
-        adapter = new TimelineAdapter(getActivity(), //
-          imageLoader, //
-          timeUtils, //
-          new OnAvatarClickListener() {
-              @Override public void onAvatarClick(String userId, View avatarView) {
-                  openProfile(userId);
-              }
-          }, //
-          new OnVideoClickListener() {
-              @Override public void onVideoClick(String url) {
-                  openVideo(url);
-              }
-          }, //
-          new OnNiceShotListener() {
-              @Override public void markNice(String idShot) {
-                  streamTimelinePresenter.markNiceShot(idShot);
-              }
-
-              @Override public void unmarkNice(String idShot) {
-                  streamTimelinePresenter.unmarkNiceShot(idShot);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override public void onUsernameClick(String username) {
-                  openProfileFromUsername(username);
-              }
-          }, new OnReplyShotListener() {
-            @Override public void reply(ShotModel shotModel) {
-                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                  .from(getActivity()) //
-                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername())
-                  .build();
-                startActivity(newShotIntent);
-            }
-        }, null, false);
-
-        listView.setAdapter(adapter);
-    }
-
-    private void setupSwipeRefreshLayout() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
-                streamTimelinePresenter.refresh();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-          R.color.refresh_2,
-          R.color.refresh_3,
-          R.color.refresh_4);
-    }
-
-    private void setupListScrollListeners() {
-        new ListViewScrollObserver(listView)
-          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                if (delta > 10) {
-                    hideNewShotsIndicator();
-                }
-            }
-
-            @Override public void onScrollIdle() {
-                if (listView != null) {
-                    if (listView.getFirstVisiblePosition() == 0) {
-                        streamTimelinePresenter.setIsFirstShotPosition(true);
-                        hideNewShotsIndicator();
-                    } else {
-                        streamTimelinePresenter.setIsFirstShotPosition(false);
-                    }
-                    checkIfEndOfListVisible();
-                }
-            }
-        });
-    }
-
-    private void checkIfEndOfListVisible() {
-        int lastItemPosition = listView.getAdapter().getCount() - 1;
-        int lastVisiblePosition = listView.getLastVisiblePosition();
-        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
-            streamTimelinePresenter.showingLastShot(adapter.getLastShot());
-        }
-    }
-    //endregion
-
-    private void openProfile(String idUser) {
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
-        startActivity(profileIntent);
-    }
-
-    private void openProfileFromUsername(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
-    }
-
-    private void openVideo(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-
-    private void shareShotIntent(ShotModel shotModel) {
-        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
-        Intents.maybeStartActivity(getActivity(), shareIntent);
-    }
-
-    private void copyShotCommentToClipboard(ShotModel shotModel) {
-        Clipboard.copyShotComment(getActivity(), shotModel);
-    }
-
-    @OnClick(R.id.shot_bar_text) public void startNewShot() {
-        newShotBarPresenter.newShotFromTextBox();
-    }
-
-    @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-        newShotBarPresenter.newShotFromImage();
-    }
-
-    @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-        startActivity(new Intent(getActivity(), DraftsActivity.class));
-    }
-
-    @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
-        listView.smoothScrollToPosition(0);
-        if (streamMessage.getText().toString().isEmpty()) {
-            timelineIndicator.setVisibility(View.GONE);
-            timelineIndicatorContainer.setVisibility(View.GONE);
-        }
-    }
-
-    //region View methods
-    @Override public void setShots(List<ShotModel> shots) {
-        adapter.setShots(shots);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override public void hideShots() {
-        listView.setVisibility(View.GONE);
-    }
-
-    @Override public void showShots() {
-        listView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void addNewShots(List<ShotModel> newShots) {
-        adapter.addShotsAbove(newShots);
-    }
-
-    @Override public void addOldShots(List<ShotModel> oldShots) {
-        adapter.addShotsBelow(oldShots);
-    }
-
-    @Override public void showLoadingOldShots() {
-        footerProgress.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideLoadingOldShots() {
-        footerProgress.setVisibility(View.GONE);
-    }
-
-    @Override public void navigateToStreamDetail(String idStream) {
-        startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
-    }
-
-    @Override public void showCheckingForShots() {
-        checkingForShotsView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideCheckingForShots() {
-        checkingForShotsView.setVisibility(View.GONE);
-    }
-
-    @Override public void showShotShared() {
-        feedbackMessage.show(getView(), shotShared);
-    }
-
-    @Override public void hideHoldingShots() {
-        showHoldingShotsMenuItem.setVisible(false);
-    }
-
-    @Override public void showAllStreamShots() {
-        showAllShotsMenuItem.setVisible(true);
-        feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
-    }
-
-    @Override public void showHoldingShots() {
-        showHoldingShotsMenuItem.setVisible(true);
-    }
-
-    @Override public void hideAllStreamShots() {
-        showAllShotsMenuItem.setVisible(false);
-    }
-
-    @Override public void setTitle(String title) {
-        setStreamTitle(title);
-    }
-
-    @Override public void showNewShotsIndicator(Integer numberNewShots) {
-        timelineIndicator.setVisibility(View.VISIBLE);
-        timelineIndicatorContainer.setVisibility(View.VISIBLE);
-        timelineIndicatorText.setVisibility(View.VISIBLE);
-        String indicatorText =
-          getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots, numberNewShots);
-        timelineIndicatorText.setText(indicatorText);
-    }
-
-    @Override public void hideNewShotsIndicator() {
-        timelineIndicatorText.setVisibility(View.GONE);
-        streamTimelinePresenter.setNewShotsNumber(0);
-        if (streamMessage.getText().toString().isEmpty()) {
-            timelineIndicator.setVisibility(View.GONE);
-            timelineIndicatorContainer.setVisibility(View.GONE);
-        }
-    }
-
-    @Override public void showPinnedMessage(String topic) {
-        timelineIndicator.setVisibility(View.VISIBLE);
-        timelineIndicatorContainer.setVisibility(View.VISIBLE);
-        streamMessage.setVisibility(View.VISIBLE);
-        streamMessage.setText(topic);
-    }
-
-    @Override public void hidePinnedMessage() {
-        streamMessage.setVisibility(View.GONE);
-        timelineIndicator.setVisibility(View.GONE);
-        timelineIndicatorContainer.setVisibility(View.GONE);
-    }
-
-    @Override public void setRemainingCharactersCount(int remainingCharacters) {
-        if (topicCharCounter != null) {
-            topicCharCounter.setText(String.valueOf(remainingCharacters));
-        }
-    }
-
-    @Override public void setRemainingCharactersColorValid() {
-        if (topicCharCounter != null) {
-            topicCharCounter.setTextColor(charCounterColorNormal);
-        }
-    }
-
-    @Override public void setRemainingCharactersColorInvalid() {
-        if (topicCharCounter != null) {
-            topicCharCounter.setTextColor(charCounterColorError);
-        }
-    }
-
-    @Override public void showPinMessageNotification(final String topic) {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
-          .setMessage(getString(R.string.pin_message_notification_confirmation_text))
-          .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),
-            new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    streamTimelinePresenter.notifyMessage(topic, true);
-                }
-            })
-          .setNegativeButton(getString(R.string.pin_message_notification_confirmation_no),
-            new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
-                    streamTimelinePresenter.notifyMessage(topic, false);
-                }
-            })
-          .create()
-          .show();
-    }
-
-    @Override public void addAbove(List<ShotModel> shotModels) {
-        int index = listView.getFirstVisiblePosition() + shotModels.size();
-        View v = listView.getChildAt(listView.getHeaderViewsCount());
-        int top = (v == null) ? 0 : v.getTop();
-
-        adapter.addShotsAbove(shotModels);
-        adapter.notifyDataSetChanged();
-
-        listView.setSelectionFromTop(index, top);
-    }
-
-    @Override public void refreshShots(List<ShotModel> shots) {
-        int index = listView.getFirstVisiblePosition() + shots.size();
-        View v = listView.getChildAt(listView.getHeaderViewsCount());
-        int top = (v == null) ? 0 : v.getTop();
-
-        adapter.setShots(shots);
-        adapter.notifyDataSetChanged();
-
-        listView.setSelectionFromTop(index, top);
-    }
-
-    @Override public void updateShotsInfo(List<ShotModel> shots) {
-        adapter.setShots(shots);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override public void showEmpty() {
-        emptyView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideEmpty() {
-        emptyView.setVisibility(View.GONE);
-    }
-
-    @Override public void showLoading() {
-        swipeRefreshLayout.setRefreshing(true);
-    }
-
-    @Override public void hideLoading() {
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override public void showError(String message) {
-        feedbackMessage.showLong(getView(), message);
-    }
-
-    @Override public void showUnmuteButton() {
-        unmuteMenuItem.setVisible(true);
-    }
-
-    @Override public void showMuteButton() {
-        muteMenuItem.setVisible(true);
-    }
-
-    @Override public void hideMuteButton() {
-        muteMenuItem.setVisible(false);
-    }
-
-    @Override public void hideUnmuteButton() {
-        unmuteMenuItem.setVisible(false);
-    }
-
-    @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-        getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.unblockUser(shotModel);
-            }
-        }).show();
-    }
-
-    @Override public void showBlockFollowingUserAlert() {
-        feedbackMessage.showLong(getView(), R.string.block_user_error);
-    }
-
-    @Override public void showUserBlocked() {
-        feedbackMessage.show(getView(), R.string.user_blocked);
-    }
-
-    @Override public void showUserUnblocked() {
-        feedbackMessage.show(getView(), R.string.user_unblocked);
-    }
-
-    @Override public void showBlockUserConfirmation() {
-        new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
-          .setPositiveButton(getString(R.string.block_user_dialog_block), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  reportShotPresenter.confirmBlock();
-              }
-          })
-          .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-          .create()
-          .show();
-    }
-
-    @Override public void showErrorLong(String messageForError) {
-        feedbackMessage.showLong(getView(), messageForError);
-    }
-
-    @Override public void showUserBanned() {
-        /* no-op */
-    }
-
-    @Override public void showUserUnbanned() {
-        /* no-op */
-    }
-
-    @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(R.string.report_context_menu_delete, new Runnable() {
-            @Override public void run() {
-                openDeleteConfirmation(shotModel);
-            }
-        }).show();
-    }
-
-    @Override public void notifyPinnedShot(ShotModel shotModel) {
-        adapter.onPinnedShot(shotModel);
-    }
-
-    @Override public void showPinned() {
-        feedbackMessage.show(getView(), R.string.shot_pinned);
-    }
-
-    @Override public void hidePinShotButton() {
-        /* no-op */
-    }
-
-    @Override public void showPinShotButton() {
-        /* no-op */
-    }
-
-    @Override public void openNewShotView() {
-        newShotBarViewDelegate.openNewShotView();
-    }
-
-    @Override public void pickImage() {
-        if (writePermissionManager.hasWritePermission()) {
-            newShotBarViewDelegate.pickImage();
-        } else {
-            writePermissionManager.requestWritePermissionToUser();
-        }
-    }
-
-    @Override public void showHolderOptions() {
-        if (writePermissionManager.hasWritePermission()) {
-            newShotBarViewDelegate.showHolderOptions();
-        } else {
-            writePermissionManager.requestWritePermissionToUser();
-        }
-    }
-
-    @Override public void openNewShotViewWithImage(File image) {
-        newShotBarViewDelegate.openNewShotViewWithImage(image);
-    }
-
-    @Override public void openEditTopicDialog() {
-        newShotBarViewDelegate.openEditTopicDialog();
-    }
-
-    @Override public void showDraftsButton() {
-        newShotBarViewDelegate.showDraftsButton();
-    }
-
-    @Override public void hideDraftsButton() {
-        newShotBarViewDelegate.hideDraftsButton();
-    }
-
-    @Override public void showWatchingPeopleCount(Integer count) {
-        watchNumberCount = count;
-        updateWatchNumberIcon();
-    }
-
-    @Override public void hideWatchingPeopleCount() {
-        watchNumberCount = null;
-        updateWatchNumberIcon();
-    }
-
-    @Override public void showAddToFavoritesButton() {
-        addToFavoritesMenuItem.setVisible(true);
-    }
-
-    @Override public void hideAddToFavoritesButton() {
-        addToFavoritesMenuItem.setVisible(false);
-    }
-
-    @Override public void showRemoveFromFavoritesButton() {
-        removeFromFavoritesMenuItem.setVisible(true);
-    }
-
-    @Override public void hideRemoveFromFavoritesButton() {
-        removeFromFavoritesMenuItem.setVisible(false);
-    }
-
-    @Override public void showAddedToFavorites() {
-        feedbackMessage.show(getView(), addToFavorites);
-    }
-
-    @Override public void handleReport(String sessionToken, ShotModel shotModel) {
-        reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
-    }
-
-    @Override public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder //
-          .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  goToReport(sessionToken, shotModel);
-              }
-          }).show();
-    }
-
-    @Override public void showHolderContextMenu(final ShotModel shot) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
-            @Override public void run() {
-                streamTimelinePresenter.shareShot(shot);
-            }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-            @Override public void run() {
-                shareShotIntent(shot);
-            }
-        }).addAction(R.string.menu_copy_text, new Runnable() {
-            @Override public void run() {
-                copyShotCommentToClipboard(shot);
-            }
-        }).addAction(R.string.report_context_menu_delete, new Runnable() {
-            @Override public void run() {
-                openDeleteConfirmation(shot);
-            }
-        }).show();
-    }
-
-    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent =
-          new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
-        startActivity(browserIntent);
-    }
-
-    @Override public void showEmailNotConfirmedError() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
-          .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
-          .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
-
-        builder.create().show();
-    }
-
-    @Override public void showContextMenu(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-        builder.addAction(R.string.report_context_menu_report, new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).addAction(R.string.report_context_menu_block, new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.blockUserClicked(shotModel);
-            }
-        }).show();
-    }
-
-    @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
-            @Override public void run() {
-                pinShotPresenter.pinToProfile(shotModel);
-            }
-        }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
-            @Override public void run() {
-                streamTimelinePresenter.shareShot(shotModel);
-            }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-            @Override public void run() {
-                shareShotIntent(shotModel);
-            }
-        }).addAction(R.string.menu_copy_text, new Runnable() {
-            @Override public void run() {
-                copyShotCommentToClipboard(shotModel);
-            }
-        }).addAction(R.string.report_context_menu_delete, new Runnable() {
-            @Override public void run() {
-                openDeleteConfirmation(shotModel);
-            }
-        }).show();
-    }
-
-    private void openDeleteConfirmation(final ShotModel shotModel) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-
-        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
-        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                reportShotPresenter.deleteShot(shotModel);
-            }
-        });
-        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
-        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
-          new Runnable() {
-              @Override public void run() {
-                  streamTimelinePresenter.shareShot(shotModel);
-              }
-          }).addAction(R.string.menu_share_shot_via, new Runnable() {
-            @Override public void run() {
-                shareShotIntent(shotModel);
-            }
-        }).addAction(R.string.menu_copy_text, new Runnable() {
-            @Override public void run() {
-                copyShotCommentToClipboard(shotModel);
-            }
-        });
-    }
-
-    @Override public void notifyDeletedShot(ShotModel shotModel) {
-        adapter.removeShot(shotModel);
-        adapter.notifyDataSetChanged();
-        streamTimelinePresenter.onShotDeleted(adapter.getCount());
-    }
-
-    @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position);
-        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
-        startActivity(intent);
-    }
-
-    @OnItemLongClick(R.id.timeline_shot_list) public boolean openContextMenu(int position) {
-        ShotModel shot = adapter.getItem(position);
-        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-        reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
+    View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
+    ButterKnife.bind(this, fragmentView);
+    newShotBarContainer.setVisibility(View.GONE);
+    return fragmentView;
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    analyticsTool.analyticsStop(getContext(), getActivity());
+    ButterKnife.unbind(this);
+    streamTimelinePresenter.setView(new NullStreamTimelineView());
+    newShotBarPresenter.setView(new NullNewShotBarView());
+    watchNumberPresenter.setView(new NullWatchNumberView());
+    streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
+  }
+
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    initializeViews();
+    setHasOptionsMenu(true);
+    String idStream = getArguments().getString(EXTRA_STREAM_ID);
+    String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+    setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
+    setStreamTitleClickListener(idStream);
+    Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
+    if (streamAuthorIdUser != null) {
+      initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser, streamMode);
+    } else {
+      initializePresenters(idStream, streamAuthorIdUser, streamMode);
+    }
+
+    streamTimelinePresenter.setIsFirstLoad(true);
+    streamTimelinePresenter.setIsFirstShotPosition(true);
+
+    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == REQUEST_STREAM_DETAIL
+        && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
+      if (getActivity() != null) {
+        getActivity().finish();
+      }
+    } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
+      String updatedTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_TITLE);
+      setStreamTitle(updatedTitle);
+    } else {
+      photoPickerController.onActivityResult(requestCode, resultCode, data);
+    }
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.timeline, menu);
+
+    showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
+    showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+    showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
+    showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+    addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
+    removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
+
+    muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
+    unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+
+    if (isAdded()) {
+      updateWatchNumberIcon();
+    }
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_showing_holding_shots:
+        streamTimelinePresenter.onHoldingShotsClick();
         return true;
+      case R.id.menu_showing_all_shots:
+        streamTimelinePresenter.onAllStreamShotsClick();
+        return true;
+      case R.id.menu_stream_add_favorite:
+        streamTimelineOptionsPresenter.addToFavorites();
+        return true;
+      case R.id.menu_stream_remove_favorite:
+        streamTimelineOptionsPresenter.removeFromFavorites();
+        return true;
+      case R.id.menu_mute_stream:
+        streamTimelineOptionsPresenter.mute();
+        return true;
+      case R.id.menu_unmute_stream:
+        streamTimelineOptionsPresenter.unmute();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    //endregion
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    streamTimelinePresenter.resume();
+    newShotBarPresenter.resume();
+    watchNumberPresenter.resume();
+    streamTimelineOptionsPresenter.resume();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    streamTimelinePresenter.pause();
+    newShotBarPresenter.pause();
+    watchNumberPresenter.pause();
+    streamTimelineOptionsPresenter.pause();
+  }
+
+  private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser,
+      Integer streamMode) {
+    streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser, streamMode);
+    pinShotPresenter.initialize(this);
+    newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
+    watchNumberPresenter.initialize(this, idStream);
+    streamTimelineOptionsPresenter.initialize(this, idStream);
+    reportShotPresenter.initialize(this);
+  }
+
+  private void initializePresenters(String idStream, String streamAuthorIdUser, Integer streamMode) {
+    streamTimelinePresenter.initialize(this, idStream, streamMode);
+    newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
+    watchNumberPresenter.initialize(this, idStream);
+    streamTimelineOptionsPresenter.initialize(this, idStream);
+    reportShotPresenter.initialize(this);
+  }
+
+  //endregion
+
+  private void setStreamTitle(String streamTitle) {
+    toolbarDecorator.setTitle(streamTitle);
+  }
+
+  private void setStreamTitleClickListener(final String idStream) {
+    toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        navigateToStreamDetail(idStream);
+      }
+    });
+  }
+
+  private void setupNewShotBarDelegate() {
+    newShotBarViewDelegate =
+        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
+          @Override public void openNewShotView() {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .build();
+            startActivity(newShotIntent);
+          }
+
+          @Override public void openNewShotViewWithImage(File image) {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .withImage(image) //
+                .build();
+            startActivity(newShotIntent);
+          }
+
+          @Override public void openEditTopicDialog() {
+            setupTopicCustomDialog();
+          }
+        };
+  }
+
+  private void setupTopicCustomDialog() {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+    final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
+    dialogBuilder.setView(dialogView);
+    newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+    topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
+
+    newTopicText.addTextChangedListener(new TextWatcher() {
+      @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no - op */
+      }
+
+      @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (streamTimelinePresenter.isInitialized()) {
+          streamTimelinePresenter.textChanged(charSequence.toString());
+        }
+      }
+
+      @Override public void afterTextChanged(Editable editable) {
+                /* no-op */
+      }
+    });
+
+    if (streamTimelinePresenter.getStreamTopic() != null) {
+      newTopicText.setText(streamTimelinePresenter.getStreamTopic());
+    }
+
+    dialogBuilder.setTitle(getString(R.string.topic));
+    dialogBuilder.setPositiveButton(getString(R.string.done_pin_topic),
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int whichButton) {
+            streamTimelinePresenter.editStream(newTopicText.getText().toString());
+          }
+        });
+    AlertDialog customDialogEditTopic = dialogBuilder.create();
+    customDialogEditTopic.show();
+  }
+
+  private void updateWatchNumberIcon() {
+    if (watchNumberCount != null) {
+      toolbarDecorator.setSubtitle(watchNumberCount);
+    }
+  }
+
+  //region Views manipulation
+  private void initializeViews() {
+    charCounterColorError = getResources().getColor(R.color.error);
+    charCounterColorNormal = getResources().getColor(R.color.gray_70);
+    writePermissionManager.init(getActivity());
+    setupListAdapter();
+    setupSwipeRefreshLayout();
+    setupListScrollListeners();
+    setupPhotoPicker();
+    setupNewShotBarDelegate();
+  }
+
+  private void setupPhotoPicker() {
+    if (tmpFiles != null) {
+      setupPhotoControllerWithTmpFilesDir();
+    } else {
+      crashReportTool.logException("Picker must have a temporary files directory.");
+    }
+  }
+
+  private void setupPhotoControllerWithTmpFilesDir() {
+    photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
+        .withTemporaryDir(tmpFiles)
+        .withHandler(new PhotoPickerController.Handler() {
+          @Override public void onSelected(File imageFile) {
+            newShotBarPresenter.newShotImagePicked(imageFile);
+          }
+
+          @Override public void onError(Exception e) {
+            Timber.e(e, "Error selecting image");
+          }
+
+          @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+            startActivityForResult(intent, requestCode);
+          }
+
+          @Override public void openEditTopicDialog() {
+            newShotBarPresenter.openEditTopicCustomDialog();
+          }
+        })
+        .build();
+  }
+
+  private void setupListAdapter() {
+    View footerView =
+        LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+    footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
+
+    footerProgress.setVisibility(View.GONE);
+
+    listView.addFooterView(footerView, null, false);
+
+    adapter = new TimelineAdapter(getActivity(), //
+        imageLoader, //
+        timeUtils, //
+        new OnAvatarClickListener() {
+          @Override public void onAvatarClick(String userId, View avatarView) {
+            openProfile(userId);
+          }
+        }, //
+        new OnVideoClickListener() {
+          @Override public void onVideoClick(String url) {
+            openVideo(url);
+          }
+        }, //
+        new OnNiceShotListener() {
+          @Override public void markNice(String idShot) {
+            streamTimelinePresenter.markNiceShot(idShot);
+          }
+
+          @Override public void unmarkNice(String idShot) {
+            streamTimelinePresenter.unmarkNiceShot(idShot);
+          }
+        }, //
+        new OnUsernameClickListener() {
+          @Override public void onUsernameClick(String username) {
+            openProfileFromUsername(username);
+          }
+        }, new OnReplyShotListener() {
+      @Override public void reply(ShotModel shotModel) {
+        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+            .from(getActivity()) //
+            .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
+        startActivity(newShotIntent);
+      }
+    }, null, false);
+
+    listView.setAdapter(adapter);
+  }
+
+  private void setupSwipeRefreshLayout() {
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override public void onRefresh() {
+        streamTimelinePresenter.refresh();
+      }
+    });
+    swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
+        R.color.refresh_3, R.color.refresh_4);
+  }
+
+  private void setupListScrollListeners() {
+    new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
+        new ListViewScrollObserver.OnListViewScrollListener() {
+          @Override
+          public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            if (delta > 10) {
+              hideNewShotsIndicator();
+            }
+          }
+
+          @Override public void onScrollIdle() {
+            if (listView != null) {
+              if (listView.getFirstVisiblePosition() == 0) {
+                streamTimelinePresenter.setIsFirstShotPosition(true);
+                hideNewShotsIndicator();
+              } else {
+                streamTimelinePresenter.setIsFirstShotPosition(false);
+              }
+              checkIfEndOfListVisible();
+            }
+          }
+        });
+  }
+
+  private void checkIfEndOfListVisible() {
+    int lastItemPosition = listView.getAdapter().getCount() - 1;
+    int lastVisiblePosition = listView.getLastVisiblePosition();
+    if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+      streamTimelinePresenter.showingLastShot(adapter.getLastShot());
+    }
+  }
+  //endregion
+
+  private void openProfile(String idUser) {
+    Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+    startActivity(profileIntent);
+  }
+
+  private void openProfileFromUsername(String username) {
+    Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+    startActivity(intentForUser);
+  }
+
+  private void openVideo(String url) {
+    Uri uri = Uri.parse(url);
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    startActivity(intent);
+  }
+
+  private void shareShotIntent(ShotModel shotModel) {
+    Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+    Intents.maybeStartActivity(getActivity(), shareIntent);
+  }
+
+  private void copyShotCommentToClipboard(ShotModel shotModel) {
+    Clipboard.copyShotComment(getActivity(), shotModel);
+  }
+
+  @OnClick(R.id.shot_bar_text) public void startNewShot() {
+    newShotBarPresenter.newShotFromTextBox();
+  }
+
+  @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
+    newShotBarPresenter.newShotFromImage();
+  }
+
+  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
+    startActivity(new Intent(getActivity(), DraftsActivity.class));
+  }
+
+  @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
+    listView.smoothScrollToPosition(0);
+    if (streamMessage.getText().toString().isEmpty()) {
+      timelineIndicator.setVisibility(View.GONE);
+      timelineIndicatorContainer.setVisibility(View.GONE);
+    }
+  }
+
+  //region View methods
+  @Override public void setShots(List<ShotModel> shots) {
+    adapter.setShots(shots);
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override public void hideShots() {
+    listView.setVisibility(View.GONE);
+  }
+
+  @Override public void showShots() {
+    listView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void addNewShots(List<ShotModel> newShots) {
+    adapter.addShotsAbove(newShots);
+  }
+
+  @Override public void addOldShots(List<ShotModel> oldShots) {
+    adapter.addShotsBelow(oldShots);
+  }
+
+  @Override public void showLoadingOldShots() {
+    footerProgress.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoadingOldShots() {
+    footerProgress.setVisibility(View.GONE);
+  }
+
+  @Override public void navigateToStreamDetail(String idStream) {
+    startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream),
+        REQUEST_STREAM_DETAIL);
+  }
+
+  @Override public void showCheckingForShots() {
+    checkingForShotsView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideCheckingForShots() {
+    checkingForShotsView.setVisibility(View.GONE);
+  }
+
+  @Override public void showShotShared() {
+    feedbackMessage.show(getView(), shotShared);
+  }
+
+  @Override public void hideHoldingShots() {
+    showHoldingShotsMenuItem.setVisible(false);
+  }
+
+  @Override public void showAllStreamShots() {
+    showAllShotsMenuItem.setVisible(true);
+    feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
+  }
+
+  @Override public void showHoldingShots() {
+    showHoldingShotsMenuItem.setVisible(true);
+  }
+
+  @Override public void hideAllStreamShots() {
+    showAllShotsMenuItem.setVisible(false);
+  }
+
+  @Override public void setTitle(String title) {
+    setStreamTitle(title);
+  }
+
+  @Override public void showNewShotsIndicator(Integer numberNewShots) {
+    timelineIndicator.setVisibility(View.VISIBLE);
+    timelineIndicatorContainer.setVisibility(View.VISIBLE);
+    timelineIndicatorText.setVisibility(View.VISIBLE);
+    String indicatorText =
+        getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
+            numberNewShots);
+    timelineIndicatorText.setText(indicatorText);
+  }
+
+  @Override public void hideNewShotsIndicator() {
+    timelineIndicatorText.setVisibility(View.GONE);
+    streamTimelinePresenter.setNewShotsNumber(0);
+    if (streamMessage.getText().toString().isEmpty()) {
+      timelineIndicator.setVisibility(View.GONE);
+      timelineIndicatorContainer.setVisibility(View.GONE);
+    }
+  }
+
+  @Override public void showPinnedMessage(String topic) {
+    timelineIndicator.setVisibility(View.VISIBLE);
+    timelineIndicatorContainer.setVisibility(View.VISIBLE);
+    streamMessage.setVisibility(View.VISIBLE);
+    streamMessage.setText(topic);
+  }
+
+  @Override public void hidePinnedMessage() {
+    streamMessage.setVisibility(View.GONE);
+    timelineIndicator.setVisibility(View.GONE);
+    timelineIndicatorContainer.setVisibility(View.GONE);
+  }
+
+  @Override public void setRemainingCharactersCount(int remainingCharacters) {
+    if (topicCharCounter != null) {
+      topicCharCounter.setText(String.valueOf(remainingCharacters));
+    }
+  }
+
+  @Override public void setRemainingCharactersColorValid() {
+    if (topicCharCounter != null) {
+      topicCharCounter.setTextColor(charCounterColorNormal);
+    }
+  }
+
+  @Override public void setRemainingCharactersColorInvalid() {
+    if (topicCharCounter != null) {
+      topicCharCounter.setTextColor(charCounterColorError);
+    }
+  }
+
+  @Override public void showPinMessageNotification(final StreamModel streamModel) {
+    new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
+        .setMessage(getString(R.string.pin_message_notification_confirmation_text))
+        .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                streamTimelinePresenter.notifyMessage(streamModel.getTopic(), true);
+              }
+            })
+        .setNegativeButton(getString(R.string.pin_message_notification_confirmation_no),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                streamTimelinePresenter.notifyMessage(streamModel.getTopic(), false);
+              }
+            })
+        .create()
+        .show();
+  }
+
+  @Override public void addAbove(List<ShotModel> shotModels) {
+    int index = listView.getFirstVisiblePosition() + shotModels.size();
+    View v = listView.getChildAt(listView.getHeaderViewsCount());
+    int top = (v == null) ? 0 : v.getTop();
+
+    adapter.addShotsAbove(shotModels);
+    adapter.notifyDataSetChanged();
+
+    listView.setSelectionFromTop(index, top);
+  }
+
+  @Override public void updateShotsInfo(List<ShotModel> shots) {
+    adapter.setShots(shots);
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override public void hideStreamViewOnlyIndicator() {
+    timelineViewOnlyStreamIndicator.setVisibility(View.GONE);
+    newShotBarContainer.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void showStreamViewOnlyIndicator() {
+    timelineViewOnlyStreamIndicator.setVisibility(View.VISIBLE);
+    newShotBarContainer.setVisibility(View.INVISIBLE);
+  }
+
+  @Override public void showEmpty() {
+    emptyView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideEmpty() {
+    emptyView.setVisibility(View.GONE);
+  }
+
+  @Override public void showLoading() {
+    swipeRefreshLayout.setRefreshing(true);
+  }
+
+  @Override public void hideLoading() {
+    swipeRefreshLayout.setRefreshing(false);
+  }
+
+  @Override public void showError(String message) {
+    feedbackMessage.showLong(getView(), message);
+  }
+
+  @Override public void showUnmuteButton() {
+    unmuteMenuItem.setVisible(true);
+  }
+
+  @Override public void showMuteButton() {
+    muteMenuItem.setVisible(true);
+  }
+
+  @Override public void hideMuteButton() {
+    muteMenuItem.setVisible(false);
+  }
+
+  @Override public void hideUnmuteButton() {
+    unmuteMenuItem.setVisible(false);
+  }
+
+  @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
+    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock,
+        new Runnable() {
+          @Override public void run() {
+            reportShotPresenter.unblockUser(shotModel);
+          }
+        }).show();
+  }
+
+  @Override public void showBlockFollowingUserAlert() {
+    feedbackMessage.showLong(getView(), R.string.block_user_error);
+  }
+
+  @Override public void showUserBlocked() {
+    feedbackMessage.show(getView(), R.string.user_blocked);
+  }
+
+  @Override public void showUserUnblocked() {
+    feedbackMessage.show(getView(), R.string.user_unblocked);
+  }
+
+  @Override public void showBlockUserConfirmation() {
+    new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
+        .setPositiveButton(getString(R.string.block_user_dialog_block),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                reportShotPresenter.confirmBlock();
+              }
+            })
+        .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
+        .create()
+        .show();
+  }
+
+  @Override public void showErrorLong(String messageForError) {
+    feedbackMessage.showLong(getView(), messageForError);
+  }
+
+  @Override public void showUserBanned() {
+        /* no-op */
+  }
+
+  @Override public void showUserUnbanned() {
+        /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
+    CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+    builder.addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shotModel);
+      }
+    }).show();
+  }
+
+  @Override public void notifyPinnedShot(ShotModel shotModel) {
+    adapter.onPinnedShot(shotModel);
+  }
+
+  @Override public void showPinned() {
+    feedbackMessage.show(getView(), R.string.shot_pinned);
+  }
+
+  @Override public void hidePinShotButton() {
+        /* no-op */
+  }
+
+  @Override public void showPinShotButton() {
+        /* no-op */
+  }
+
+  @Override public void openNewShotView() {
+    newShotBarViewDelegate.openNewShotView();
+  }
+
+  @Override public void pickImage() {
+    if (writePermissionManager.hasWritePermission()) {
+      newShotBarViewDelegate.pickImage();
+    } else {
+      writePermissionManager.requestWritePermissionToUser();
+    }
+  }
+
+  @Override public void showHolderOptions() {
+    if (writePermissionManager.hasWritePermission()) {
+      newShotBarViewDelegate.showHolderOptions();
+    } else {
+      writePermissionManager.requestWritePermissionToUser();
+    }
+  }
+
+  @Override public void openNewShotViewWithImage(File image) {
+    newShotBarViewDelegate.openNewShotViewWithImage(image);
+  }
+
+  @Override public void openEditTopicDialog() {
+    newShotBarViewDelegate.openEditTopicDialog();
+  }
+
+  @Override public void showDraftsButton() {
+    newShotBarViewDelegate.showDraftsButton();
+  }
+
+  @Override public void hideDraftsButton() {
+    newShotBarViewDelegate.hideDraftsButton();
+  }
+
+  @Override public void showWatchingPeopleCount(Integer count) {
+    watchNumberCount = count;
+    updateWatchNumberIcon();
+  }
+
+  @Override public void hideWatchingPeopleCount() {
+    watchNumberCount = null;
+    updateWatchNumberIcon();
+  }
+
+  @Override public void showAddToFavoritesButton() {
+    addToFavoritesMenuItem.setVisible(true);
+  }
+
+  @Override public void hideAddToFavoritesButton() {
+    addToFavoritesMenuItem.setVisible(false);
+  }
+
+  @Override public void showRemoveFromFavoritesButton() {
+    removeFromFavoritesMenuItem.setVisible(true);
+  }
+
+  @Override public void hideRemoveFromFavoritesButton() {
+    removeFromFavoritesMenuItem.setVisible(false);
+  }
+
+  @Override public void showAddedToFavorites() {
+    feedbackMessage.show(getView(), addToFavorites);
+  }
+
+  @Override public void handleReport(String sessionToken, ShotModel shotModel) {
+    reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
+  }
+
+  @Override
+  public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+    alertDialogBuilder //
+        .setMessage(getString(R.string.language_support_alert)) //
+        .setPositiveButton(getString(R.string.email_confirmation_ok),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                goToReport(sessionToken, shotModel);
+              }
+            }).show();
+  }
+
+  @Override public void showHolderContextMenu(final ShotModel shot) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
+        new Runnable() {
+          @Override public void run() {
+            streamTimelinePresenter.shareShot(shot);
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shot);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shot);
+      }
+    }).addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shot);
+      }
+    }).show();
+  }
+
+  @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+    Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+        Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
+    startActivity(browserIntent);
+  }
+
+  @Override public void showEmailNotConfirmedError() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+    builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
+        .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
+        .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
+
+    builder.create().show();
+  }
+
+  @Override public void showContextMenu(final ShotModel shotModel) {
+    CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
+    builder.addAction(R.string.report_context_menu_report, new Runnable() {
+      @Override public void run() {
+        reportShotPresenter.report(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_block, new Runnable() {
+      @Override public void run() {
+        reportShotPresenter.blockUserClicked(shotModel);
+      }
+    }).show();
+  }
+
+  @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_pin_shot, new Runnable() {
+      @Override public void run() {
+        pinShotPresenter.pinToProfile(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shotModel);
+      }
+    }).show();
+  }
+
+  private void openDeleteConfirmation(final ShotModel shotModel) {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+    alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+    alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        reportShotPresenter.deleteShot(shotModel);
+      }
+    });
+    alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+    AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialog.show();
+  }
+
+  private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
+    return new CustomContextMenu.Builder(getActivity()).addAction(
+        R.string.menu_share_shot_via_shootr, new Runnable() {
+          @Override public void run() {
+            streamTimelinePresenter.shareShot(shotModel);
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    });
+  }
+
+  @Override public void notifyDeletedShot(ShotModel shotModel) {
+    adapter.removeShot(shotModel);
+    adapter.notifyDataSetChanged();
+    streamTimelinePresenter.onShotDeleted(adapter.getCount());
+  }
+
+  @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
+    ShotModel shot = adapter.getItem(position);
+    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
+    startActivity(intent);
+  }
+
+  @OnItemLongClick(R.id.timeline_shot_list) public boolean openContextMenu(int position) {
+    ShotModel shot = adapter.getItem(position);
+    String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+    reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
+    return true;
+  }
+  //endregion
 }

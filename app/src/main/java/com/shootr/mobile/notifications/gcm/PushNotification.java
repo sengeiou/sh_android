@@ -124,6 +124,7 @@ public class PushNotification {
         private String idActivity;
         private String title;
         private String idStreamHolder;
+        private String streamReadWriteMode;
 
         public int getPushType() {
             return pushType;
@@ -181,6 +182,7 @@ public class PushNotification {
               ", idShot='" + idShot + '\'' +
               ", idStream='" + idStream + '\'' +
               ", idActivity='" + idActivity + '\'' +
+              ", streamReadWriteMode='" + streamReadWriteMode + '\'' +
               '}';
         }
 
@@ -198,6 +200,14 @@ public class PushNotification {
 
         public void setIdStreamHolder(String idStreamHolder) {
             this.idStreamHolder = idStreamHolder;
+        }
+
+        public String getStreamReadWriteMode() {
+            return streamReadWriteMode;
+        }
+
+        public void setStreamReadWriteMode(String streamReadWriteMode) {
+            this.streamReadWriteMode = streamReadWriteMode;
         }
     }
 }

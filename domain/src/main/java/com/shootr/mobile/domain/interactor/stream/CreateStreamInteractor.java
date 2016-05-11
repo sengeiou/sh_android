@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -15,7 +16,9 @@ import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class CreateStreamInteractor implements Interactor {
@@ -36,6 +39,7 @@ public class CreateStreamInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     private boolean notifyTopicMessage;
+    private String streamMode;
 
     @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
@@ -48,11 +52,13 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String description, String topic,
-      boolean notifyCreation, Boolean notifyTopicMessage, Callback callback, ErrorCallback errorCallback) {
+    public void sendStream(String idStream, String title, String description, Integer streamMode, String topic,
+                           boolean notifyCreation, Boolean notifyTopicMessage, Callback callback,
+                           ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
         this.description = description;
+        this.streamMode = getStreamMode(streamMode);
         this.topic = topic;
         this.notifyCreation = notifyCreation;
         this.notifyTopicMessage = notifyTopicMessage;
@@ -72,6 +78,9 @@ public class CreateStreamInteractor implements Interactor {
             }
         }
     }
+    private String getStreamMode(Integer streamMode) {
+        return streamMode == 0 ? StreamMode.PUBLIC :  StreamMode.VIEW_ONLY;
+    }
 
     private Stream streamFromParameters() {
         Stream stream;
@@ -83,6 +92,7 @@ public class CreateStreamInteractor implements Interactor {
         }
         stream.setTitle(title);
         stream.setDescription(removeDescriptionLineBreaks(description));
+        stream.setReadWriteMode(streamMode);
         stream.setTopic(topic);
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);

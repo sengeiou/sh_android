@@ -289,6 +289,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.UNIQUE_SHOTS
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.READ_WRITE_MODE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -333,6 +335,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.UNIQUE_SHOTS
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.READ_WRITE_MODE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -457,6 +461,17 @@ public class SQLiteUtils {
       + " ("
       + DatabaseContract.NiceShotTable.ID_SHOT
       + " TEXT NOT NULL PRIMARY KEY)";
+
+    public static final String CREATE_TABLE_CONTRIBUTOR = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.ContributorTable.TABLE
+        + " ("
+        + DatabaseContract.ContributorTable.ID_STREAM
+        + " TEXT NOT NULL,"
+        + DatabaseContract.ContributorTable.ID_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.ContributorTable.ID_CONTRIBUTOR
+        + " TEXT NOT NULL PRIMARY KEY)";
+
 
     public static final String CREATE_TABLE_TIMELINE_SYNC = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.TimelineSyncTable.TABLE

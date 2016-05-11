@@ -19,6 +19,7 @@ public class StreamModel implements Serializable {
     private Long historicWatchers;
     private Long totalShots;
     private Long uniqueShots;
+    private Integer readWriteMode;
 
     public Boolean isRemoved() {
         return removed;
@@ -156,5 +157,13 @@ public class StreamModel implements Serializable {
         StreamModel that = (StreamModel) o;
 
         return idStream.equals(that.idStream);
+    }
+
+    public Integer getReadWriteMode() {
+        return readWriteMode;
+    }
+
+    public void setReadWriteMode(Integer readWriteMode) {
+        this.readWriteMode = readWriteMode;
     }
 }

@@ -58,4 +58,10 @@
       android:layout_height="@dimen/new_shot_height"
       android:layout_alignParentBottom="true" />
 
+    <include android:id="@+id/timeline_view_only_stream_indicator"
+      layout="@layout/include_view_only_timeline"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/new_shot_height"
+      android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

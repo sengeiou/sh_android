@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.ShotType;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
 import java.io.IOException;
 import java.util.Collections;
@@ -38,6 +39,8 @@ public class ServiceShotDatasource implements ShotDataSource {
                 throw new ShotNotFoundException(e);
             } else if (e.getErrorInfo() == ErrorInfo.StreamRemovedForbiddenRequestException) {
                 throw new StreamRemovedException(e);
+            } else if (e.getErrorInfo() == ErrorInfo.StreamViewOnlyRequestException) {
+                throw new StreamReadOnlyException(e);
             } else {
                 throw new ServerCommunicationException(e);
             }

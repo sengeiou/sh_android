@@ -55,4 +55,12 @@ public class ServiceContributorDataSource implements ContributorDataSource {
             throw new ServerCommunicationException(cause);
         }
     }
+
+    @Override public void putContributors(List<ContributorEntity> contributors) {
+        throw new IllegalArgumentException("no implementation");
+    }
+
+    @Override public void clearContributors(String idStream) {
+        throw new IllegalArgumentException("no implementation");
+    }
 }

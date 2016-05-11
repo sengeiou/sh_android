@@ -60,4 +60,8 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
     @Override public void resetQueue() {
         androidNotificationManager.cancelAll();
     }
+
+    @Override public void onShotIsOnReadOnly(QueuedShot queuedShot, Exception e) {
+        shotQueueNotificationManager.showShotIsOnReadOnlyStreamNotification(queuedShot);
+    }
 }

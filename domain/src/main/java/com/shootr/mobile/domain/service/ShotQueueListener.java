@@ -17,4 +17,6 @@ public interface ShotQueueListener {
     void onQueueShot(QueuedShot queuedShot);
 
     void resetQueue();
+
+    void onShotIsOnReadOnly(QueuedShot queuedShot, Exception e);
 }

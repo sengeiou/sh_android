@@ -403,4 +403,10 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
+    <string name="read_write_mode_public_description">Anyone can shoot</string>
+    <string name="read_write_mode_view_only_description">Only contributors can shoot</string>
+    <string name="read_write_mode_public_title">Public</string>
+    <string name="read_write_mode_view_only_title">View only</string>
+    <string name="stream_timeline_view_only">View-only stream</string>
+    <string name="stream_privacy">Privacy</string>
 </resources>

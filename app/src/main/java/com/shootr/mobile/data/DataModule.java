@@ -15,6 +15,7 @@ import com.shootr.mobile.db.ManagerModule;
 import com.shootr.mobile.db.MapperModule;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import com.shootr.mobile.db.manager.AbstractManager;
+import com.shootr.mobile.db.manager.ContributorManager;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShotManager;
@@ -76,160 +77,170 @@ import timber.log.Timber;
 import static android.content.Context.MODE_PRIVATE;
 
 @Module(
-  injects = {
+    injects = {
 
-    AbstractManager.class,
+        AbstractManager.class,
 
-    BaseSignedInActivity.class,
+        BaseSignedInActivity.class,
 
-    FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
+        FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class,
+        PeopleFragment.class,
 
-    ShotManager.class,
+        ShotManager.class,
 
-    UserManager.class, DeviceManager.class,
+        UserManager.class, DeviceManager.class,
 
-    GCMIntentService.class,
+        GCMIntentService.class,
 
-    LogTreeFactory.class,
+        LogTreeFactory.class,
 
-    ProfileEditPresenter.class,
+        ProfileEditPresenter.class,
 
-    PostNewShotPresenter.class,
+        PostNewShotPresenter.class,
 
-    ShotDetailPresenter.class,
+        ShotDetailPresenter.class,
 
-    WatchNumberPresenter.class,
+        WatchNumberPresenter.class,
 
-    PeoplePresenter.class,
+        PeoplePresenter.class,
 
-    StreamDetailPresenter.class,
+        StreamDetailPresenter.class,
 
-    StreamsListPresenter.class,
+        StreamsListPresenter.class,
 
-    TimeFormatter.class,
+        TimeFormatter.class,
 
-    BitmapImageResizer.class,
+        BitmapImageResizer.class,
 
-    WritePermissionManager.class,
-  },
-  includes = {
-    ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
-    RepositoryModule.class, ServiceModule.class,
-  },
-  complete = false,
-  library = true) public class DataModule {
+        WritePermissionManager.class,
 
-    static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-    private static final long TIMEOUT_SECONDS = 30;
-    private static final long TIMEOUT_CONNECT_SECONDS = 15;
+        ContributorManager.class,
+    },
+    includes = {
+        ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
+        InteractorModule.class, RepositoryModule.class, ServiceModule.class,
+    },
+    complete = false,
+    library = true) public class DataModule {
 
-    @Provides @Singleton DeviceFactory provideDeviceFactory(AndroidDeviceFactory androidDeviceFactory) {
-        return androidDeviceFactory;
-    }
+  static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+  private static final long TIMEOUT_SECONDS = 30;
+  private static final long TIMEOUT_CONNECT_SECONDS = 15;
 
-    @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
-        return androidTimeUtils;
-    }
+  @Provides @Singleton DeviceFactory provideDeviceFactory(
+      AndroidDeviceFactory androidDeviceFactory) {
+    return androidDeviceFactory;
+  }
 
-    @Provides LocaleProvider provideLocaleProvider(ResourcesLocaleProvider resourcesLocaleProvider) {
-        return resourcesLocaleProvider;
-    }
+  @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
+    return androidTimeUtils;
+  }
 
-    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application, Version version) {
-        return new ShootrDbOpenHelper(application.getApplicationContext(), version);
-    }
+  @Provides LocaleProvider provideLocaleProvider(ResourcesLocaleProvider resourcesLocaleProvider) {
+    return resourcesLocaleProvider;
+  }
 
-    @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
-        return app.getSharedPreferences("shootr", MODE_PRIVATE);
-    }
+  @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application,
+      Version version) {
+    return new ShootrDbOpenHelper(application.getApplicationContext(), version);
+  }
 
-    @Provides ImageLoader provideImageLoader(GlideImageLoader imageLoader) {
-        return imageLoader;
-    }
+  @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
+    return app.getSharedPreferences("shootr", MODE_PRIVATE);
+  }
 
-    @Provides FeedbackMessage provideFeedbackLoader(SnackbarFeedbackMessage snackbarFeedbackLoader) {
-        return snackbarFeedbackLoader;
-    }
+  @Provides ImageLoader provideImageLoader(GlideImageLoader imageLoader) {
+    return imageLoader;
+  }
 
-    @Provides @Singleton OkHttpClient provideOkHttpClient(Application app, AuthHeaderInterceptor authHeaderInterceptor,
-      VersionHeaderInterceptor versionHeaderInterceptor, ServerDownErrorInterceptor serverDownErrorInterceptor,
+  @Provides FeedbackMessage provideFeedbackLoader(SnackbarFeedbackMessage snackbarFeedbackLoader) {
+    return snackbarFeedbackLoader;
+  }
+
+  @Provides @Singleton OkHttpClient provideOkHttpClient(Application app,
+      AuthHeaderInterceptor authHeaderInterceptor,
+      VersionHeaderInterceptor versionHeaderInterceptor,
+      ServerDownErrorInterceptor serverDownErrorInterceptor,
       UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
       VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
 
-        OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient();
 
-        try {
-            // Install an HTTP cache in the application cache directory.
-            File cacheDir = new File(app.getCacheDir(), "http");
-            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-            client.setCache(cache);
-        } catch (IOException e) {
-            Timber.e(e, "Unable to install disk cache.");
-        }
-
-        client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
-        client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.networkInterceptors().add(new StethoInterceptor());
-        client.interceptors().add(authHeaderInterceptor);
-        client.interceptors().add(versionHeaderInterceptor);
-        client.interceptors().add(serverDownErrorInterceptor);
-        client.interceptors().add(unauthorizedErrorInterceptor);
-        client.interceptors().add(versionOutdatedErrorInterceptor);
-        client.interceptors().add(ResponseFaker.interceptor());
-
-        return client;
+    try {
+      // Install an HTTP cache in the application cache directory.
+      File cacheDir = new File(app.getCacheDir(), "http");
+      Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+      client.setCache(cache);
+    } catch (IOException e) {
+      Timber.e(e, "Unable to install disk cache.");
     }
 
-    @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
-        return GoogleCloudMessaging.getInstance(application);
-    }
+    client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
+    client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+    client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+    client.networkInterceptors().add(new StethoInterceptor());
+    client.interceptors().add(authHeaderInterceptor);
+    client.interceptors().add(versionHeaderInterceptor);
+    client.interceptors().add(serverDownErrorInterceptor);
+    client.interceptors().add(unauthorizedErrorInterceptor);
+    client.interceptors().add(versionOutdatedErrorInterceptor);
+    client.interceptors().add(ResponseFaker.interceptor());
 
-    @Provides CrashReportTool.Factory provideCrashReportToolFactory() {
-        return new CrashReportToolFactoryImpl();
-    }
+    return client;
+  }
 
-    @Provides @Singleton CrashReportTool provideCrashReportTool(CrashReportTool.Factory factory) {
-        return factory.create();
-    }
+  @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
+    return GoogleCloudMessaging.getInstance(application);
+  }
 
-    @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
-        return new GoogleAnalyticsTool();
-    }
+  @Provides CrashReportTool.Factory provideCrashReportToolFactory() {
+    return new CrashReportToolFactoryImpl();
+  }
 
-    @Provides @Singleton CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
-        return new CacheDataUtils(crashReportTool);
-    }
+  @Provides @Singleton CrashReportTool provideCrashReportTool(CrashReportTool.Factory factory) {
+    return factory.create();
+  }
 
-    @Provides @Singleton BackStackHandler provideBackStackHandler() {
-        return new BackStackHandlerTool();
-    }
+  @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
+    return new GoogleAnalyticsTool();
+  }
 
-    @Provides @Singleton WritePermissionManager provideWritePermissionManager() {
-        return new WritePermissionManager();
-    }
+  @Provides @Singleton CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
+    return new CacheDataUtils(crashReportTool);
+  }
 
-    @Provides LogTreeFactory provideLogTreeFactory() {
-        return new LogTreeFactoryImpl();
-    }
+  @Provides @Singleton BackStackHandler provideBackStackHandler() {
+    return new BackStackHandlerTool();
+  }
 
-    @Provides @Singleton SessionRepository provideSessionManager(SessionRepositoryImpl sessionManager) {
-        return sessionManager;
-    }
+  @Provides @Singleton WritePermissionManager provideWritePermissionManager() {
+    return new WritePermissionManager();
+  }
 
-    @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {
-        return imageResizer;
-    }
+  @Provides LogTreeFactory provideLogTreeFactory() {
+    return new LogTreeFactoryImpl();
+  }
 
-    @Provides @Singleton QNCache provideQNCache() {
-        return new QNCacheBuilder().createQNCache();
-    }
+  @Provides @Singleton SessionRepository provideSessionManager(
+      SessionRepositoryImpl sessionManager) {
+    return sessionManager;
+  }
 
-    @Provides @Singleton PercentageUtils providePercentageUtils(StreamPercentageUtils streamPercentageUtils) {
-        return streamPercentageUtils;
-    }
+  @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {
+    return imageResizer;
+  }
 
-    @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(FollowsFormatUtil followsFormatUtil) {
-        return followsFormatUtil;
-    }
+  @Provides @Singleton QNCache provideQNCache() {
+    return new QNCacheBuilder().createQNCache();
+  }
+
+  @Provides @Singleton PercentageUtils providePercentageUtils(
+      StreamPercentageUtils streamPercentageUtils) {
+    return streamPercentageUtils;
+  }
+
+  @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(
+      FollowsFormatUtil followsFormatUtil) {
+    return followsFormatUtil;
+  }
 }

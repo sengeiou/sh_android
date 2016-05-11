@@ -2,6 +2,7 @@ package com.shootr.mobile.db;
 
 import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
+import com.shootr.mobile.db.mappers.ContributorDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
@@ -13,41 +14,46 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(
-  complete = false,
-  library = true,
-  injects = {
-    StreamResultModelMapper.class
-  }) public class MapperModule {
+    complete = false,
+    library = true,
+    injects = {
+        StreamResultModelMapper.class
+    }) public class MapperModule {
 
-    @Provides FollowEntityDBMapper provideFollowMapper() {
-        return new FollowEntityDBMapper();
-    }
+  @Provides FollowEntityDBMapper provideFollowMapper() {
+    return new FollowEntityDBMapper();
+  }
 
-    @Provides DeviceEntityDBMapper provideDeviceMapper() {
-        return new DeviceEntityDBMapper();
-    }
+  @Provides ContributorDBMapper provideContributorDBMapper() {
+    return new ContributorDBMapper();
+  }
 
-    @Provides UserEntityModelMapper provideUserVOMapper() {
-        return new UserEntityModelMapper();
-    }
+  @Provides DeviceEntityDBMapper provideDeviceMapper() {
+    return new DeviceEntityDBMapper();
+  }
 
-    @Provides UserEntityDBMapper provideUserMapper() {
-        return new UserEntityDBMapper();
-    }
+  @Provides UserEntityModelMapper provideUserVOMapper() {
+    return new UserEntityModelMapper();
+  }
 
-    @Provides SuggestedPeopleDBMapper provideSuggestedPeopleMapper(UserEntityDBMapper userEntityDBMapper) {
-        return new SuggestedPeopleDBMapper(userEntityDBMapper);
-    }
+  @Provides UserEntityDBMapper provideUserMapper() {
+    return new UserEntityDBMapper();
+  }
 
-    @Provides StreamEntityDBMapper provideEntityMapper() {
-        return new StreamEntityDBMapper();
-    }
+  @Provides SuggestedPeopleDBMapper provideSuggestedPeopleMapper(
+      UserEntityDBMapper userEntityDBMapper) {
+    return new SuggestedPeopleDBMapper(userEntityDBMapper);
+  }
 
-    @Provides BlockEntityDBMapper provideBlockMapper() {
-        return new BlockEntityDBMapper();
-    }
+  @Provides StreamEntityDBMapper provideEntityMapper() {
+    return new StreamEntityDBMapper();
+  }
 
-    @Provides BanEntityDBMapper provideBanMapper() {
-        return new BanEntityDBMapper();
-    }
+  @Provides BlockEntityDBMapper provideBlockMapper() {
+    return new BlockEntityDBMapper();
+  }
+
+  @Provides BanEntityDBMapper provideBanMapper() {
+    return new BanEntityDBMapper();
+  }
 }

@@ -8,25 +8,32 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
+
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.adapters.StreamReadWriteModeAdapter;
 import com.shootr.mobile.ui.presenter.NewStreamPresenter;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.ui.widgets.FloatLabelLayout;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
+
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 
 public class NewStreamActivity extends BaseToolbarDecoratedActivity implements NewStreamView {
 
@@ -34,6 +41,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final String KEY_STREAM_ID = "stream_id";
 
     private static final String EXTRA_EDITED_TITLE = "title";
+    private static final String EXTRA_EDITED_MODE = "mode";
 
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
@@ -42,11 +50,13 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
     @Bind(R.id.new_stream_description) EditText descriptionView;
+    @Bind(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
 
     @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
     @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
+    private StreamReadWriteModeAdapter spinnerAadapter;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent launchIntent = new Intent(context, NewStreamActivity.class);
@@ -75,6 +85,24 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             titleView.setText(editedTitle);
         }
         setupTextViews();
+        setupSpinner();
+    }
+
+    private void setupSpinner() {
+        spinnerAadapter =
+            new StreamReadWriteModeAdapter(this, R.layout.item_spinner_read_write_mode);
+        readWriteModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                spinnerAadapter.setSelectedItem(position);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+                /* no-op */
+            }
+        });
+
+        readWriteModeSpinner.setAdapter(spinnerAadapter);
     }
 
     @Override protected void initializePresenter() {
@@ -142,7 +170,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_done) {
-            presenter.done();
+            presenter.done(getStreamTitle(), getStreamDescription(), getStreamMode());
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -155,10 +183,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override public void setStreamTitle(String title) {
         titleLabelView.showLabelWithoutAnimation();
         titleView.setText(title);
-    }
-
-    @Override public String getStreamTitle() {
-        return titleView.getText().toString();
     }
 
     @Override public void showTitleError(String errorMessage) {
@@ -185,25 +209,26 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
           .setPositiveButton(getString(R.string.stream_notification_confirmation_yes),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
-                    presenter.confirmNotify(true);
+                    presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),  true);
                 }
             })
           .setNegativeButton(getString(R.string.stream_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
-                    presenter.confirmNotify(false);
+                    presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(), false);
                 }
             })
           .create()
           .show();
     }
 
-    @Override public String getStreamDescription() {
-        return descriptionView.getText().toString();
-    }
-
     @Override public void showDescription(String description) {
         descriptionView.setText(description);
+    }
+
+    @Override
+    public void setModeValue(Integer readWriteMode) {
+        readWriteModeSpinner.setSelection(readWriteMode);
     }
 
     @Override public void showLoading() {
@@ -218,8 +243,20 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         feedbackMessage.show(getView(), message);
     }
 
+    private String getStreamTitle() {
+        return titleView.getText().toString();
+    }
+
+    private String getStreamDescription() {
+        return descriptionView.getText().toString();
+    }
+
     private void resetTitleError() {
         titleErrorView.setError(null);
+    }
+
+    private Integer getStreamMode() {
+        return readWriteModeSpinner.getSelectedItemPosition();
     }
 
     //endregion

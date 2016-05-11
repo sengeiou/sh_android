@@ -3,8 +3,10 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.Stream;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class StreamEntityMapper {
@@ -41,6 +43,7 @@ public class StreamEntityMapper {
           streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
         stream.setTotalShots(streamEntity.getTotalShots() != null ? streamEntity.getTotalShots() : 0L);
         stream.setUniqueShots(streamEntity.getUniqueShots() != null ? streamEntity.getUniqueShots() : 0L);
+        stream.setReadWriteMode(streamEntity.getReadWriteMode());
         return stream;
     }
 
@@ -76,5 +79,6 @@ public class StreamEntityMapper {
         entityTemplate.setHistoricWatchers(stream.getHistoricWatchers());
         entityTemplate.setTotalShots(stream.getTotalShots());
         entityTemplate.setUniqueShots(stream.getUniqueShots());
+        entityTemplate.setReadWriteMode(stream.getReadWriteMode());
     }
 }

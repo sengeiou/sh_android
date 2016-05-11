@@ -196,11 +196,12 @@ public class DatabaseContract {
         public static final String TOTAL_SHOTS = "totalShots";
         public static final String UNIQUE_SHOTS = "uniqueShots";
         public static final String TOPIC = "topic";
+        public static final String READ_WRITE_MODE = "readWriteMode";
 
         public static final String[] PROJECTION = {
           ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, DESCRIPTION, TOPIC,
           BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS,
-          UNIQUE_SHOTS, REMOVED, DELETED, REVISION, SYNCHRONIZED
+          UNIQUE_SHOTS, READ_WRITE_MODE, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -212,8 +213,8 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, DESCRIPTION, TOPIC, REMOVED,
-          MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, BIRTH, MODIFIED,
-          DELETED, REVISION, SYNCHRONIZED
+          MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE,
+          BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -305,6 +306,20 @@ public class DatabaseContract {
         public static final String ID_SHOT = "idShot";
 
         public static final String[] PROJECTION = { ID_SHOT };
+    }
+
+    public static final class ContributorTable implements SyncColumns {
+
+        private ContributorTable() {
+            /* no instances */
+        }
+
+        public static final String TABLE = "Contributor";
+        public static final String ID_STREAM = "idStream";
+        public static final String ID_USER = "idUser";
+        public static final String ID_CONTRIBUTOR = "idContributor";
+
+        public static final String[] PROJECTION = { ID_STREAM, ID_USER, ID_CONTRIBUTOR };
     }
 
     public static final class TimelineSyncTable {

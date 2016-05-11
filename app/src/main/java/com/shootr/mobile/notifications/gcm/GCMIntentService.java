@@ -154,8 +154,9 @@ public class GCMIntentService extends IntentService {
         String idStream = push.getParameters().getIdStream();
         String title = push.getParameters().getTitle();
         String idStreamHolder = push.getParameters().getIdStreamHolder();
+        String readWriteMode = push.getParameters().getStreamReadWriteMode();
         activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
-          checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(title));
+          checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(title), checkNotNull(readWriteMode));
     }
 
     private void setupGoToShotDetailNotification(PushNotification push) {

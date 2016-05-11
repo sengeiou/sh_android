@@ -21,6 +21,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Long historicWatchers;
     private Long totalShots;
     private Long uniqueShots;
+    private String readWriteMode;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -184,5 +185,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setUniqueShots(Long uniqueShots) {
         this.uniqueShots = uniqueShots;
+    }
+
+    public String getReadWriteMode() {
+        return readWriteMode;
+    }
+
+    public void setReadWriteMode(String readWriteMode) {
+        this.readWriteMode = readWriteMode;
     }
 }

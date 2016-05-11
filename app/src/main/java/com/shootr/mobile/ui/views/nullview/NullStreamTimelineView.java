@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showPinMessageNotification(String topic) {
+    @Override public void showPinMessageNotification(StreamModel streamModel) {
         /* no-op */
     }
 
@@ -102,11 +103,15 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void refreshShots(List<ShotModel> shots) {
+    @Override public void updateShotsInfo(List<ShotModel> shots) {
         /* no-op */
     }
 
-    @Override public void updateShotsInfo(List<ShotModel> shots) {
+    @Override public void hideStreamViewOnlyIndicator() {
+        /* no-op */
+    }
+
+    @Override public void showStreamViewOnlyIndicator() {
         /* no-op */
     }
 
