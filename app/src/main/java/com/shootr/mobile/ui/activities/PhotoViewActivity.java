@@ -163,10 +163,7 @@ public class PhotoViewActivity extends BaseActivity {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDescription(imageUrl);
         request.allowScanningByMediaScanner();
-        // Equivalent to request.setDestinationInExternalPublicDir(), but makes sure the Shootr subfolder exists
         request.setDestinationUri(getDownloadDestination(downloadSubpath));
-
-        request.setMimeType("image/jpeg"); //TODO servidor debe mandarlo correctamente
 
         downloadManager.enqueue(request);
     }
