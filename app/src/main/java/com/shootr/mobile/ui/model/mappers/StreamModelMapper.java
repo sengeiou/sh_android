@@ -35,7 +35,7 @@ public class StreamModelMapper {
         streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null ? stream.getHistoricWatchers() : 0);
         streamModel.setTotalShots(stream.getTotalShots() != null ? stream.getTotalShots() : 0);
         streamModel.setUniqueShots(stream.getUniqueShots() != null ? stream.getUniqueShots() : 0);
-        streamModel.setReadWriteMode(stream.getReadWriteMode() != null &&
+        streamModel.setReadWriteMode(stream.getReadWriteMode() == null ||
                 stream.getReadWriteMode().equals(StreamMode.PUBLIC) ? 0 : 1);
         return streamModel;
     }
