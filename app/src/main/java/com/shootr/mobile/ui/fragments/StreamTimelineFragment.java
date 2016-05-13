@@ -20,7 +20,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -39,7 +44,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
@@ -68,19 +72,10 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.WritePermissionManager;
-
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
@@ -669,19 +664,19 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
-  @Override public void showPinMessageNotification(final StreamModel streamModel) {
+  @Override public void showPinMessageNotification(final String message) {
     new AlertDialog.Builder(getActivity()).setTitle(R.string.title_pin_message_notification)
         .setMessage(getString(R.string.pin_message_notification_confirmation_text))
         .setPositiveButton(getString(R.string.pin_message_notification_confirmation_yes),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                streamTimelinePresenter.notifyMessage(streamModel.getTopic(), true);
+                streamTimelinePresenter.notifyMessage(message, true);
               }
             })
         .setNegativeButton(getString(R.string.pin_message_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                streamTimelinePresenter.notifyMessage(streamModel.getTopic(), false);
+                streamTimelinePresenter.notifyMessage(message, false);
               }
             })
         .create()

@@ -20,7 +20,6 @@ import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.presenter.interactorwrapper.StreamHoldingTimelineInteractorsWrapper;
@@ -44,6 +43,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
@@ -1084,7 +1084,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.editStream(EMPTY_TOPIC);
 
-    verify(streamTimelineView, never()).showPinMessageNotification(any(StreamModel.class));
+    verify(streamTimelineView, never()).showPinMessageNotification(anyString());
   }
 
   @Test public void shouldShowTopicSnackBarWhenNotifyMessageAndTopicIsNotEmpty() throws Exception {

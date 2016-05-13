@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.views.base.LoadDataView;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public interface StreamTimelineView extends LoadDataView {
 
     void setRemainingCharactersColorInvalid();
 
-    void showPinMessageNotification(StreamModel streamModel);
+    void showPinMessageNotification(String message);
 
     void addAbove(List<ShotModel> shotModels);
 
