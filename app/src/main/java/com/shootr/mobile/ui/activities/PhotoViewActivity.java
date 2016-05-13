@@ -1,13 +1,11 @@
 package com.shootr.mobile.ui.activities;
 
 import android.animation.TimeInterpolator;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -18,12 +16,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.artjimlop.altex.AltexImageDownloader;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.WritePermissionManager;
-import java.io.File;
 import javax.inject.Inject;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -157,15 +155,7 @@ public class PhotoViewActivity extends BaseActivity {
         Uri imageUri = Uri.parse(imageUrl);
         String fileName = imageUri.getLastPathSegment();
         String downloadSubpath = getString(R.string.downloaded_pictures_subfolder) + fileName;
-
-        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        DownloadManager.Request request = new DownloadManager.Request(imageUri);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDescription(imageUrl);
-        request.allowScanningByMediaScanner();
-        request.setDestinationUri(getDownloadDestination(downloadSubpath));
-
-        downloadManager.enqueue(request);
+        AltexImageDownloader.writeToDisk(this, imageUrl, downloadSubpath);
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -179,10 +169,4 @@ public class PhotoViewActivity extends BaseActivity {
         }
     }
 
-    @NonNull private Uri getDownloadDestination(String downloadSubpath) {
-        File picturesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File destinationFile = new File(picturesFolder, downloadSubpath);
-        destinationFile.mkdirs();
-        return Uri.fromFile(destinationFile);
-    }
 }

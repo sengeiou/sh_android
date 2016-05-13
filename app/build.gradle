@@ -227,6 +227,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.artjimlop:altex-image-downloader:0.0.4'
 }
 
 /**
