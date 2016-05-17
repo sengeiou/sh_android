@@ -48,6 +48,8 @@ import com.shootr.mobile.util.CacheDataUtils;
 import com.shootr.mobile.util.CacheUtils;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
+import com.shootr.mobile.util.DeeplinkingNavigator;
+import com.shootr.mobile.util.DeeplinkingTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FollowsFormatUtil;
 import com.shootr.mobile.util.FormatNumberUtils;
@@ -248,5 +250,9 @@ import static android.content.Context.MODE_PRIVATE;
 
   @Provides InitialsLoader providesInitialLoader(InitialsLoaderTool initialsLoaderTool) {
     return initialsLoaderTool;
+  }
+
+  @Provides DeeplinkingNavigator providesDeeplinkingNavigator(DeeplinkingTool deeplinkingTool) {
+    return deeplinkingTool;
   }
 }

@@ -2,7 +2,6 @@ package com.shootr.mobile.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.mobile.FacebookController;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
@@ -26,7 +25,6 @@ public class DatabaseVersionUtilsTest {
     @Mock Context context;
     @Mock Version version;
     @Mock SQLiteOpenHelper dbOpenHelper;
-    @Mock FacebookController facebookController;
     @Mock BooleanPreference shouldShowIntro;
     @Mock CacheUtils cacheUtils;
 

@@ -112,28 +112,21 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Bind(R.id.timeline_shot_list) ListView listView;
   @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-
   @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
   @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
   @Bind(R.id.timeline_empty) View emptyView;
   @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @Bind(R.id.shot_bar_drafts) View draftsButton;
-
   @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
-
   @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
-
+  @Bind(R.id.timeline_message) TextView streamMessage;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
-
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
 
-  @Bind(R.id.timeline_message) TextView streamMessage;
-
   private TimelineAdapter adapter;
-
   private PhotoPickerController photoPickerController;
   private NewShotBarView newShotBarViewDelegate;
   private Integer watchNumberCount;
@@ -182,18 +175,21 @@ public class StreamTimelineFragment extends BaseFragment
     String idStream = getArguments().getString(EXTRA_STREAM_ID);
     String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
-    setStreamTitleClickListener(idStream);
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
+    setStreamTitleClickListener(idStream);
+    setupPresentersInitialization(idStream, streamAuthorIdUser, streamMode);
+    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+  }
+
+  protected void setupPresentersInitialization(String idStream, String streamAuthorIdUser,
+      Integer streamMode) {
+    streamTimelinePresenter.setIsFirstLoad(true);
+    streamTimelinePresenter.setIsFirstShotPosition(true);
     if (streamAuthorIdUser != null) {
       initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser, streamMode);
     } else {
       initializePresenters(idStream, streamAuthorIdUser, streamMode);
     }
-
-    streamTimelinePresenter.setIsFirstLoad(true);
-    streamTimelinePresenter.setIsFirstShotPosition(true);
-
-    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -212,19 +208,14 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.timeline, menu);
-
     showHoldingShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
     showHoldingShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
     showAllShotsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
     showAllShotsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
     addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
     removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
-
     muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
     unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
-
     if (isAdded()) {
       updateWatchNumberIcon();
     }
@@ -292,92 +283,12 @@ public class StreamTimelineFragment extends BaseFragment
 
   //endregion
 
-  private void setStreamTitle(String streamTitle) {
-    toolbarDecorator.setTitle(streamTitle);
-  }
-
-  private void setStreamTitleClickListener(final String idStream) {
-    toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
-        navigateToStreamDetail(idStream);
-      }
-    });
-  }
-
-  private void setupNewShotBarDelegate() {
-    newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getActivity()) //
-                .build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openNewShotViewWithImage(File image) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getActivity()) //
-                .withImage(image) //
-                .build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openEditTopicDialog() {
-            setupTopicCustomDialog();
-          }
-        };
-  }
-
-  private void setupTopicCustomDialog() {
-    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-    LayoutInflater inflater = getActivity().getLayoutInflater();
-    final View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
-    dialogBuilder.setView(dialogView);
-    newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
-    topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
-
-    newTopicText.addTextChangedListener(new TextWatcher() {
-      @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /* no - op */
-      }
-
-      @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (streamTimelinePresenter.isInitialized()) {
-          streamTimelinePresenter.textChanged(charSequence.toString());
-        }
-      }
-
-      @Override public void afterTextChanged(Editable editable) {
-                /* no-op */
-      }
-    });
-
-    if (streamTimelinePresenter.getStreamTopic() != null) {
-      newTopicText.setText(streamTimelinePresenter.getStreamTopic());
-    }
-
-    dialogBuilder.setTitle(getString(R.string.topic));
-    dialogBuilder.setPositiveButton(getString(R.string.done_pin_topic),
-        new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            streamTimelinePresenter.editStream(newTopicText.getText().toString());
-          }
-        });
-    AlertDialog customDialogEditTopic = dialogBuilder.create();
-    customDialogEditTopic.show();
-  }
-
-  private void updateWatchNumberIcon() {
-    if (watchNumberCount != null) {
-      toolbarDecorator.setSubtitle(watchNumberCount);
-    }
-  }
-
   //region Views manipulation
   private void initializeViews() {
     charCounterColorError = getResources().getColor(R.color.error);
     charCounterColorNormal = getResources().getColor(R.color.gray_70);
     writePermissionManager.init(getActivity());
+    setupFooter();
     setupListAdapter();
     setupSwipeRefreshLayout();
     setupListScrollListeners();
@@ -416,15 +327,15 @@ public class StreamTimelineFragment extends BaseFragment
         .build();
   }
 
-  private void setupListAdapter() {
+  private void setupFooter() {
     View footerView =
         LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
     footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
-
     footerProgress.setVisibility(View.GONE);
-
     listView.addFooterView(footerView, null, false);
+  }
 
+  private void setupListAdapter() {
     adapter = new TimelineAdapter(getActivity(), //
         imageLoader, //
         timeUtils, //
@@ -459,7 +370,6 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(newShotIntent);
       }
     }, null, false);
-
     listView.setAdapter(adapter);
   }
 
@@ -529,6 +439,91 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void copyShotCommentToClipboard(ShotModel shotModel) {
     Clipboard.copyShotComment(getActivity(), shotModel);
+  }
+
+  private void setStreamTitle(String streamTitle) {
+    toolbarDecorator.setTitle(streamTitle);
+  }
+
+  private void setStreamTitleClickListener(final String idStream) {
+    toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        navigateToStreamDetail(idStream);
+      }
+    });
+  }
+
+  private void setupNewShotBarDelegate() {
+    newShotBarViewDelegate =
+        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
+          @Override public void openNewShotView() {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .build();
+            startActivity(newShotIntent);
+          }
+
+          @Override public void openNewShotViewWithImage(File image) {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .withImage(image) //
+                .build();
+            startActivity(newShotIntent);
+          }
+
+          @Override public void openEditTopicDialog() {
+            setupTopicCustomDialog();
+          }
+        };
+  }
+
+  private void setupTopicCustomDialog() {
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_edit_topic, null);
+    setupNewTopicText(dialogView);
+    createTopicDialog(dialogView);
+  }
+
+  private void setupNewTopicText(View dialogView) {
+    newTopicText = (EditText) dialogView.findViewById(R.id.new_topic_text);
+    topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
+    newTopicText.addTextChangedListener(new TextWatcher() {
+      @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no - op */
+      }
+
+      @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (streamTimelinePresenter.isInitialized()) {
+          streamTimelinePresenter.textChanged(charSequence.toString());
+        }
+      }
+
+      @Override public void afterTextChanged(Editable editable) {
+                /* no-op */
+      }
+    });
+    if (streamTimelinePresenter.getStreamTopic() != null) {
+      newTopicText.setText(streamTimelinePresenter.getStreamTopic());
+    }
+  }
+
+  private void createTopicDialog(View dialogView) {
+    new AlertDialog.Builder(getActivity()).setView(dialogView)
+        .setTitle(getString(R.string.topic))
+        .setPositiveButton(getString(R.string.done_pin_topic),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int whichButton) {
+                streamTimelinePresenter.editStream(newTopicText.getText().toString());
+              }
+            })
+        .create()
+        .show();
+  }
+
+  private void updateWatchNumberIcon() {
+    if (watchNumberCount != null) {
+      toolbarDecorator.setSubtitle(watchNumberCount);
+    }
   }
 
   @OnClick(R.id.shot_bar_text) public void startNewShot() {
@@ -816,12 +811,12 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
-    CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-    builder.addAction(R.string.report_context_menu_delete, new Runnable() {
-      @Override public void run() {
-        openDeleteConfirmation(shotModel);
-      }
-    }).show();
+    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
   }
 
   @Override public void notifyPinnedShot(ShotModel shotModel) {
@@ -912,15 +907,14 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override
   public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-    alertDialogBuilder //
-        .setMessage(getString(R.string.language_support_alert)) //
+    new AlertDialog.Builder(getContext()).setMessage(getString(R.string.language_support_alert))
         .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                 goToReport(sessionToken, shotModel);
               }
-            }).show();
+            })
+        .show();
   }
 
   @Override public void showHolderContextMenu(final ShotModel shot) {
@@ -951,22 +945,21 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showEmailNotConfirmedError() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-    builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
+    new AlertDialog.Builder(getActivity()).setMessage(
+        getActivity().getString(R.string.alert_report_confirmed_email_message))
         .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
-        .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
-
-    builder.create().show();
+        .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null)
+        .create()
+        .show();
   }
 
   @Override public void showContextMenu(final ShotModel shotModel) {
-    CustomContextMenu.Builder builder = getBaseContextMenuOptions(shotModel);
-    builder.addAction(R.string.report_context_menu_report, new Runnable() {
-      @Override public void run() {
-        reportShotPresenter.report(shotModel);
-      }
-    }).addAction(R.string.report_context_menu_block, new Runnable() {
+    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
+        new Runnable() {
+          @Override public void run() {
+            reportShotPresenter.report(shotModel);
+          }
+        }).addAction(R.string.report_context_menu_block, new Runnable() {
       @Override public void run() {
         reportShotPresenter.blockUserClicked(shotModel);
       }
@@ -998,17 +991,15 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openDeleteConfirmation(final ShotModel shotModel) {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-
-    alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
-    alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int id) {
-        reportShotPresenter.deleteShot(shotModel);
-      }
-    });
-    alertDialogBuilder.setNegativeButton(R.string.cancel, null);
-    AlertDialog alertDialog = alertDialogBuilder.create();
-    alertDialog.show();
+    new AlertDialog.Builder(getActivity()).setMessage(R.string.delete_shot_confirmation_message)
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+            reportShotPresenter.deleteShot(shotModel);
+          }
+        })
+        .setNegativeButton(R.string.cancel, null)
+        .create()
+        .show();
   }
 
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
