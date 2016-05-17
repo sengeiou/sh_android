@@ -1,4 +1,6 @@
-package com.shootr.mobile.ui.views;
+package com.shootr.mobile.ui.views.nullview;
+
+import com.shootr.mobile.ui.views.WatchNumberView;
 
 public class NullWatchNumberView implements WatchNumberView {
 

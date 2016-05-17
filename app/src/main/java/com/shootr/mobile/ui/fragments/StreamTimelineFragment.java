@@ -52,8 +52,8 @@ import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.NullNewShotBarView;
-import com.shootr.mobile.ui.views.NullWatchNumberView;
+import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
+import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
@@ -819,11 +819,11 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
   }
 
-  @Override public void notifyPinnedShot(ShotModel shotModel) {
+  public void notifyPinnedShot(ShotModel shotModel) {
     adapter.onPinnedShot(shotModel);
   }
 
-  @Override public void showPinned() {
+  public void showPinned() {
     feedbackMessage.show(getView(), R.string.shot_pinned);
   }
 
