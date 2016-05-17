@@ -26,6 +26,7 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.List;
@@ -38,6 +39,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject InitialsLoader initialsLoader;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -84,7 +86,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavoriteStreamsAdapter(imageLoader, new OnStreamClickListener() {
+        adapter = new FavoriteStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
             }

@@ -54,6 +54,8 @@ import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.GlideImageLoader;
 import com.shootr.mobile.util.GoogleAnalyticsTool;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.InitialsLoaderTool;
 import com.shootr.mobile.util.LogTreeFactory;
 import com.shootr.mobile.util.LogTreeFactoryImpl;
 import com.shootr.mobile.util.PercentageUtils;
@@ -242,5 +244,9 @@ import static android.content.Context.MODE_PRIVATE;
   @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(
       FollowsFormatUtil followsFormatUtil) {
     return followsFormatUtil;
+  }
+
+  @Provides InitialsLoader providesInitialLoader(InitialsLoaderTool initialsLoaderTool) {
+    return initialsLoaderTool;
   }
 }

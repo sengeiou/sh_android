@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.adapters.sectionedrecyclerview.HeaderViewHolder;
 import com.shootr.mobile.ui.adapters.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
     private final boolean isCurrentUser;
     private final OnStreamClickListener onStreamClickListener;
     private final OnFavoriteClickListener onFavoriteClickListener;
+    private final InitialsLoader initialsLoader;
 
     private List<StreamResultModel> createdStreams = Collections.emptyList();
     private List<StreamResultModel> favoritedStreams = Collections.emptyList();
@@ -32,11 +34,12 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
     private boolean showTitles = true;
 
     public ListingAdapter(ImageLoader imageLoader, boolean isCurrentUser, OnStreamClickListener onStreamClickListener,
-      OnFavoriteClickListener onFavoriteClickListener) {
+        OnFavoriteClickListener onFavoriteClickListener, InitialsLoader initialsLoader) {
         this.imageLoader = imageLoader;
         this.isCurrentUser = isCurrentUser;
         this.onStreamClickListener = onStreamClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
+        this.initialsLoader = initialsLoader;
     }
 
     @Override protected int getSectionCount() {
@@ -62,7 +65,8 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
 
         ListingStreamResultViewHolder listingStreamResultViewHolder =
-          new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
+          new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener,
+              initialsLoader);
 
         if (isCurrentUser) {
             listingStreamResultViewHolder.setShowsFavoritesText(true);

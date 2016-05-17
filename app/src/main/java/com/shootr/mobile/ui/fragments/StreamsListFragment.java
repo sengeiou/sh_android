@@ -35,6 +35,7 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.List;
@@ -57,6 +58,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject InitialsLoader initialsLoader;
 
     private StreamsListAdapter adapter;
 
@@ -90,7 +92,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }

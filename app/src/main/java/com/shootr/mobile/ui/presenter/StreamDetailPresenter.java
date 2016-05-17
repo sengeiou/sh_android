@@ -193,7 +193,6 @@ public class StreamDetailPresenter implements Presenter {
           "Received null stream from StreamInfoInteractor. That should never happen >_<");
         this.renderStreamInfo(streamInfo.getStream());
         this.renderWatchersList(streamInfo);
-        this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
         this.getContributorsNumber();
         if (streamModel.amIAuthor()) {
@@ -254,13 +253,6 @@ public class StreamDetailPresenter implements Presenter {
             } else {
                 this.totalWatchers = watchers.size();
             }
-        }
-    }
-
-    private void renderCurrentUserWatching(User currentUserWatch) {
-        if (currentUserWatch != null) {
-            UserModel currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-            streamDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }
 

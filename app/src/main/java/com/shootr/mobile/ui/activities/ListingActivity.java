@@ -26,6 +26,7 @@ import com.shootr.mobile.ui.views.ListingView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.List;
@@ -48,6 +49,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Inject IntentFactory intentFactory;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject InitialsLoader initialsLoader;
 
     private ListingAdapter adapter;
 
@@ -83,7 +85,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
             @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
                 presenter.removeFromFavorites(stream);
             }
-        });
+        }, initialsLoader);
 
         listingList.setAdapter(adapter);
         listingList.setLayoutManager(new LinearLayoutManager(this));
