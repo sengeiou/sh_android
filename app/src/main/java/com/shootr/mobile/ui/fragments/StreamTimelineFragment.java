@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -61,6 +62,7 @@ import com.shootr.mobile.ui.views.WatchNumberView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.ui.widgets.QuickReturnHeaderBehavior;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -87,6 +89,8 @@ public class StreamTimelineFragment extends BaseFragment
   public static final String EXTRA_ID_USER = "userId";
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
+  private static final int TOP_PADDING = 144;
+  private static final int ANIMATION_DURATION = 200;
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -277,7 +281,8 @@ public class StreamTimelineFragment extends BaseFragment
     reportShotPresenter.initialize(this);
   }
 
-  private void initializePresenters(String idStream, String streamAuthorIdUser, Integer streamMode) {
+  private void initializePresenters(String idStream, String streamAuthorIdUser,
+      Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamMode);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
@@ -638,6 +643,19 @@ public class StreamTimelineFragment extends BaseFragment
     timelineIndicatorContainer.setVisibility(View.VISIBLE);
     streamMessage.setVisibility(View.VISIBLE);
     streamMessage.setText(topic);
+    setupTimelineListPadding();
+    setupMessageBehavior();
+  }
+
+  private void setupMessageBehavior() {
+    CoordinatorLayout.LayoutParams params =
+        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
+    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.MESSAGE,
+        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
+  }
+
+  private void setupTimelineListPadding() {
+    swipeRefreshLayout.setPadding(0, TOP_PADDING, 0, 0);
   }
 
   @Override public void hidePinnedMessage() {
@@ -646,6 +664,10 @@ public class StreamTimelineFragment extends BaseFragment
     }
     timelineIndicator.setVisibility(View.GONE);
     timelineIndicatorContainer.setVisibility(View.GONE);
+    CoordinatorLayout.LayoutParams params =
+        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
+    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
+        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
   }
 
   @Override public void setRemainingCharactersCount(int remainingCharacters) {
