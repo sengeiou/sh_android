@@ -124,6 +124,7 @@
   <!-- Profile: Name -->
   <string name="error_message_name_invalid">O nome contém caracteres inválidos</string>
   <string name="error_message_name_long">De 3 a 25 caracteres</string>
+  <string name="error_message_read_write_mode">Este stream é agora só para leitura</string>
   <string name="error_message_registration_email_empty">Introduza um email</string>
   <string name="error_message_registration_email_existing">Este email já está em uso</string>
   <string name="error_message_registration_email_invalid">Email inválido</string>
@@ -272,6 +273,10 @@
   <string name="profile_marks_following">seguindo</string>
   <string name="profile_support">Suporte</string>
   <string name="profile_updated">Perfil atualizado</string>
+  <string name="read_write_mode_public_description">Qualquer um pode escrever</string>
+  <string name="read_write_mode_public_title">Público</string>
+  <string name="read_write_mode_view_only_description">Podem escrever o criador e os colaboradores</string>
+  <string name="read_write_mode_view_only_title">Só leitura</string>
   <string name="registration_create_button_text">Criar conta</string>
   <string name="remove">Apagar</string>
   <string name="remove_stream_confirmation">Apagar stream?</string>
@@ -333,6 +338,7 @@
   <string name="stream_notification_confirmation_no">Nop</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">seguindo a %d</string>
+  <string name="stream_privacy">Privacidade</string>
   <string name="stream_removed_feedback">Stream apagado</string>
   <string name="stream_restored_feedback">Stream restaurado</string>
   <string name="stream_subtitle">seguindo a %d</string>
@@ -340,6 +346,7 @@
   <string name="stream_timeline_add_favorite">Adicionar aos Favoritos</string>
   <string name="stream_timeline_empty_message">Checando shots…</string>
   <string name="stream_timeline_remove_favorite">Remover dos Favoritos</string>
+  <string name="stream_timeline_view_only">Só leitura</string>
   <string name="suggested_people_section_title">Quem seguir</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">Ajuda</string>

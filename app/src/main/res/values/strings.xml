@@ -113,7 +113,7 @@
     <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
     <string name="error_image_upload">Error trying to upload image</string>
     <string name="error_login_credentials_invalid">Id or password are not valid</string>
-    <string name="error_message">Shootr encountered a problem and needs to close.</string>
+    <string name="error_message">Shootr encountered a problem and needs to close</string>
     <!-- Profile: Bio -->
     <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
     <string name="error_message_change_password_new_password_and_again_must_match">Passwords don\'t match</string>
@@ -124,6 +124,7 @@
     <!-- Profile: Name -->
     <string name="error_message_name_invalid">Invalid characters</string>
     <string name="error_message_name_long">Maximum length is 25 characters</string>
+    <string name="error_message_read_write_mode">This stream is now view-only</string>
     <string name="error_message_registration_email_empty">Enter your email</string>
     <string name="error_message_registration_email_existing">Email already in use</string>
     <string name="error_message_registration_email_invalid">Invalid Email</string>
@@ -246,7 +247,7 @@
     <string name="notification_shot_failed">Shot failed</string>
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
     <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
-    <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to reply has been deleted</string>
+    <string name="notification_shot_has_parent_deleted_subtitle">The shot you try to respond to has been deleted</string>
     <string name="notification_shot_has_stream_removed_subtitle">This stream has been removed</string>
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
@@ -279,6 +280,10 @@
     <string name="profile_marks_following">following</string>
     <string name="profile_support">Support</string>
     <string name="profile_updated">Profile updated</string>
+    <string name="read_write_mode_public_description">Anyone can shoot</string>
+    <string name="read_write_mode_public_title">Public</string>
+    <string name="read_write_mode_view_only_description">Owner and contributors can shoot</string>
+    <string name="read_write_mode_view_only_title">View-only</string>
     <string name="registration_create_button_text">Create account</string>
     <string name="remove">Remove</string>
     <string name="remove_stream_confirmation">Remove stream?</string>
@@ -288,14 +293,14 @@
     <string name="replied_activity_with_comment" formatted="false">Replied:</string>
     <plurals name="replies_header_count_pattern">
     <item quantity="one">
-            %d reply
+            %d respond
         </item>
     <item quantity="other">
-            %d replies
+            %d responses
         </item>
     </plurals>
     <string name="reply_name_pattern">%1$s to %2$s</string>
-    <string name="reply_placeholder_pattern">Reply to %s…</string>
+    <string name="reply_placeholder_pattern">Respond to %s…</string>
     <string name="report_context_menu_block">Block…</string>
     <string name="report_context_menu_delete">Delete</string>
     <string name="report_context_menu_report">Report</string>
@@ -344,6 +349,7 @@
     <string name="stream_notification_confirmation_no">Nope</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_participants_following_number">following %d</string>
+    <string name="stream_privacy">Privacy</string>
     <string name="stream_removed_feedback">Stream removed</string>
     <string name="stream_restored_feedback">Stream restored</string>
     <string name="stream_subtitle">following %d</string>
@@ -351,6 +357,7 @@
     <string name="stream_timeline_add_favorite">Add to Favorites</string>
     <string name="stream_timeline_empty_message">Checking for shots…</string>
     <string name="stream_timeline_remove_favorite">Remove from Favorites</string>
+    <string name="stream_timeline_view_only">View-only</string>
     <string name="suggested_people_section_title">Who to follow</string>
     <string name="support_blog">Blog</string>
     <string name="support_help">Help</string>
@@ -403,10 +410,4 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="yes">Yes</string>
-    <string name="read_write_mode_public_description">Anyone can shoot</string>
-    <string name="read_write_mode_view_only_description">Only contributors can shoot</string>
-    <string name="read_write_mode_public_title">Public</string>
-    <string name="read_write_mode_view_only_title">View only</string>
-    <string name="stream_timeline_view_only">View-only stream</string>
-    <string name="stream_privacy">Privacy</string>
 </resources>

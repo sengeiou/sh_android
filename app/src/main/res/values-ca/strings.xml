@@ -124,6 +124,7 @@
   <!-- Profile: Name -->
   <string name="error_message_name_invalid">Caracters invàlids</string>
   <string name="error_message_name_long">De 3 a 25 caràcters</string>
+  <string name="error_message_read_write_mode">Aquest stream és ara només de lectura</string>
   <string name="error_message_registration_email_empty">Introdueix un email</string>
   <string name="error_message_registration_email_existing">Has de triar un email diferent</string>
   <string name="error_message_registration_email_invalid">Email invàlid</string>
@@ -272,6 +273,10 @@
   <string name="profile_marks_following">seguint</string>
   <string name="profile_support">Suport</string>
   <string name="profile_updated">Perfil actualitzat</string>
+  <string name="read_write_mode_public_description">Tothom pot escriure</string>
+  <string name="read_write_mode_public_title">Públic</string>
+  <string name="read_write_mode_view_only_description">Poden escriure el creador i els col·laboradors</string>
+  <string name="read_write_mode_view_only_title">Només lectura</string>
   <string name="registration_create_button_text">Crear compte</string>
   <string name="remove">Esborrar</string>
   <string name="remove_stream_confirmation">Esborrar l\'stream?</string>
@@ -333,6 +338,7 @@
   <string name="stream_notification_confirmation_no">Nop</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">seguint a %d</string>
+  <string name="stream_privacy">Privacitat</string>
   <string name="stream_removed_feedback">Stream esborrat</string>
   <string name="stream_restored_feedback">Restaurar</string>
   <string name="stream_subtitle">seguint a %d</string>
@@ -340,6 +346,7 @@
   <string name="stream_timeline_add_favorite">Afegir a Favorits</string>
   <string name="stream_timeline_empty_message">Comprovant shots…</string>
   <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
+  <string name="stream_timeline_view_only">Només lectura</string>
   <string name="suggested_people_section_title">A qui seguir</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">Ajuda</string>
