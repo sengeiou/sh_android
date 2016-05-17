@@ -641,7 +641,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hidePinnedMessage() {
-    streamMessage.setVisibility(View.GONE);
+    if (streamMessage != null) {
+      streamMessage.setVisibility(View.GONE);
+    }
     timelineIndicator.setVisibility(View.GONE);
     timelineIndicatorContainer.setVisibility(View.GONE);
   }
