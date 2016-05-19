@@ -18,7 +18,6 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'hugo'
-apply plugin: "sonar-runner"
 apply plugin: 'com.github.kt3k.coveralls'
 
 repositories {
@@ -286,23 +285,6 @@ def signingConfigFromFile() {
         println 'signing.properties not found'
     }
     return null
-}
-
-sonarRunner {
-    sonarProperties {
-        property "sonar.projectKey", "Android_build:app"
-        property "sonar.host.url", "http://sonar.fav24.net"
-        property "sonar.jdbc.url",
-          "jdbc:mysql://gm-ci-environment.cttjtyko7rpp.eu-west-1.rds.amazonaws.com:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
-        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
-        property "sonar.jdbc.username", "sonar"
-        property "sonar.jdbc.password", "sonar"
-        property "sonar.login", "admin"
-        property "sonar.password", "14041981"
-        property "sonar.projectName", "Shootr Android"
-        property "sonar.projectVersion", android.defaultConfig.versionName
-        properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
-    }
 }
 
 //TODO Wrap this thing into an indepentent plugin
