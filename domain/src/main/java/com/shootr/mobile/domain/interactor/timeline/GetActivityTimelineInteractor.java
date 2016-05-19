@@ -16,107 +16,108 @@ import javax.inject.Inject;
 
 public class GetActivityTimelineInteractor implements Interactor {
 
-    //region Dependencies
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ActivityRepository localActivityRepository;
-    private final SessionRepository sessionRepository;
-    private Callback callback;
-    private String locale;
-    private Boolean isUserActivityTimeline;
+  //region Dependencies
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ActivityRepository localActivityRepository;
+  private final SessionRepository sessionRepository;
+  private Callback callback;
+  private String locale;
+  private Boolean isUserActivityTimeline;
 
-    @Inject
-    public GetActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ActivityRepository localActivityRepository, SessionRepository sessionRepository) {
-        this.localActivityRepository = localActivityRepository;
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.sessionRepository = sessionRepository;
-    }
-    //endregion
+  @Inject public GetActivityTimelineInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local ActivityRepository localActivityRepository,
+      SessionRepository sessionRepository) {
+    this.localActivityRepository = localActivityRepository;
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.sessionRepository = sessionRepository;
+  }
+  //endregion
 
-    public void loadActivityTimeline(Boolean isUserActivityTimeline, String language,
+  public void loadActivityTimeline(Boolean isUserActivityTimeline, String language,
       Callback<ActivityTimeline> callback) {
-        this.isUserActivityTimeline = isUserActivityTimeline;
-        this.locale = language;
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
+    this.isUserActivityTimeline = isUserActivityTimeline;
+    this.locale = language;
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        loadLocalActivities();
-    }
+  @Override public void execute() throws Exception {
+    loadLocalActivities();
+  }
 
-    private void loadLocalActivities() {
-        ActivityTimelineParameters activityTimelineParameters = buildParameters();
-        activityTimelineParameters.excludeHiddenTypes();
-        List<Activity> activities = loadLocalActivities(activityTimelineParameters);
-        activities = sortActivitiesByPublishDate(activities);
-        notifyTimelineFromActivities(activities);
-    }
+  private void loadLocalActivities() {
+    ActivityTimelineParameters activityTimelineParameters = buildParameters();
+    activityTimelineParameters.excludeHiddenTypes();
+    List<Activity> activities = loadLocalActivities(activityTimelineParameters);
+    activities = sortActivitiesByPublishDate(activities);
+    notifyTimelineFromActivities(activities);
+  }
 
-    private List<Activity> loadLocalActivities(ActivityTimelineParameters timelineParameters) {
-        return localActivityRepository.getActivityTimeline(timelineParameters, locale);
-    }
+  private List<Activity> loadLocalActivities(ActivityTimelineParameters timelineParameters) {
+    return localActivityRepository.getActivityTimeline(timelineParameters, locale);
+  }
 
-    private ActivityTimelineParameters buildParameters() {
-        return ActivityTimelineParameters.builder().build();
-    }
+  private ActivityTimelineParameters buildParameters() {
+    return ActivityTimelineParameters.builder().build();
+  }
 
-    private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
-        Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
-        return remoteActivities;
-    }
+  private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
+    Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
+    return remoteActivities;
+  }
 
-    //region Result
-    private void notifyTimelineFromActivities(List<Activity> activities) {
-        List<Activity> userActivities = retainUsersActivity(activities);
-        if (isUserActivityTimeline) {
-            ActivityTimeline timeline = buildTimeline(userActivities);
-            notifyLoaded(timeline);
-        } else {
-            activities.removeAll(userActivities);
-            ActivityTimeline timeline = buildTimeline(activities);
-            notifyLoaded(timeline);
-        }
+  //region Result
+  private void notifyTimelineFromActivities(List<Activity> activities) {
+    List<Activity> userActivities = retainUsersActivity(activities);
+    if (isUserActivityTimeline) {
+      ActivityTimeline timeline = buildTimeline(userActivities);
+      notifyLoaded(timeline);
+    } else {
+      activities.removeAll(userActivities);
+      ActivityTimeline timeline = buildTimeline(activities);
+      notifyLoaded(timeline);
     }
+  }
 
-    private List<Activity> retainUsersActivity(List<Activity> activities) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<Activity> userActivities = new ArrayList<>();
-        for (Activity activity : activities) {
-            if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
-                userActivities.add(activity);
-            }
-        }
-        return userActivities;
+  private List<Activity> retainUsersActivity(List<Activity> activities) {
+    String currentUserId = sessionRepository.getCurrentUserId();
+    List<Activity> userActivities = new ArrayList<>();
+    for (Activity activity : activities) {
+      if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
+        userActivities.add(activity);
+      }
     }
+    return userActivities;
+  }
 
-    private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
-        return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId, activity);
-    }
+  private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
+    return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId,
+        activity);
+  }
 
-    private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
-        return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
-    }
+  private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
+    return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
+  }
 
-    private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
-        return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
-    }
+  private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
+    return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
+  }
 
-    private ActivityTimeline buildTimeline(List<Activity> activities) {
-        ActivityTimeline timeline = new ActivityTimeline();
-        timeline.setActivities(activities);
-        return timeline;
-    }
+  private ActivityTimeline buildTimeline(List<Activity> activities) {
+    ActivityTimeline timeline = new ActivityTimeline();
+    timeline.setActivities(activities);
+    return timeline;
+  }
 
-    private void notifyLoaded(final ActivityTimeline timeline) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(timeline);
-            }
-        });
-    }
+  private void notifyLoaded(final ActivityTimeline timeline) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(timeline);
+      }
+    });
+  }
 
-    //endregion
+  //endregion
 }

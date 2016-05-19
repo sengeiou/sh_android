@@ -9,35 +9,34 @@ import javax.inject.Inject;
 
 public class UpdateWatchNumberInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final BusPublisher busPublisher;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final BusPublisher busPublisher;
 
-    private Interactor.CompletedCallback callback;
+  private Interactor.CompletedCallback callback;
 
-    @Inject
-    public UpdateWatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      BusPublisher busPublisher) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.busPublisher = busPublisher;
-    }
+  @Inject public UpdateWatchNumberInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, BusPublisher busPublisher) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.busPublisher = busPublisher;
+  }
 
-    public void updateWatchNumber(CompletedCallback callback) {
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
+  public void updateWatchNumber(CompletedCallback callback) {
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        busPublisher.post(new WatchUpdateRequest.Event());
-        notifyLoaded();
-    }
+  @Override public void execute() throws Exception {
+    busPublisher.post(new WatchUpdateRequest.Event());
+    notifyLoaded();
+  }
 
-    protected void notifyLoaded() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onCompleted();
-            }
-        });
-    }
+  protected void notifyLoaded() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onCompleted();
+      }
+    });
+  }
 }

@@ -123,7 +123,8 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   private void setupSessionAndStreamRepository() {
-    when(sessionRepository.getCurrentUser()).thenReturn(user());
+    when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+    when(userRepository.getUserById(USER_ID)).thenReturn(user());
     when(streamRepository.getStreamById(anyString())).thenReturn(stream());
   }
 

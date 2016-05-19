@@ -17,22 +17,24 @@ import static org.mockito.Mockito.verify;
 
 public class UpdateWatchNumberInteractorTest {
 
-    @Mock BusPublisher busPublisher;
-    @Mock Interactor.CompletedCallback callback;
+  @Mock BusPublisher busPublisher;
+  @Mock Interactor.CompletedCallback callback;
 
-    private UpdateWatchNumberInteractor interactor;
+  private UpdateWatchNumberInteractor interactor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new UpdateWatchNumberInteractor(interactorHandler, postExecutionThread, busPublisher);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    interactor =
+        new UpdateWatchNumberInteractor(interactorHandler, postExecutionThread, busPublisher);
+  }
 
-    @Test public void shouldPostInBusPublisher() throws Exception {
-        interactor.updateWatchNumber(callback);
+  @Test public void shouldPostInBusPublisher() throws Exception {
+    interactor.updateWatchNumber(callback);
 
-        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
-        verify(busPublisher).post(captor.capture());
-    }
+    ArgumentCaptor<WatchUpdateRequest.Event> captor =
+        ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+    verify(busPublisher).post(captor.capture());
+  }
 }
