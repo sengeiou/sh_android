@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
+import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
@@ -89,7 +89,7 @@ public class StreamTimelinePresenterTest {
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock Poller poller;
   @Mock StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
-  @Mock DeleteLocalShotsByStream deleteLocalShotsByStream;
+  @Mock DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor;
   @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
   @Mock GetStreamInteractor getStreamInteractor;
   @Mock UpdateWatchNumberInteractor updateWatchNumberInteractor;
@@ -107,7 +107,7 @@ public class StreamTimelinePresenterTest {
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
-        streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStream,
+        streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStreamInteractor,
         updateWatchNumberInteractor, reloadStreamTimelineInteractor, createStreamInteractor,
         getContributorsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
@@ -1337,7 +1337,7 @@ public class StreamTimelinePresenterTest {
         callback.onCompleted();
         return null;
       }
-    }).when(deleteLocalShotsByStream)
+    }).when(deleteLocalShotsByStreamInteractor)
         .deleteShot(anyString(), any(Interactor.CompletedCallback.class));
   }
 

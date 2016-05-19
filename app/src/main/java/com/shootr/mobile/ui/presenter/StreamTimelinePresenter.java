@@ -8,7 +8,7 @@ import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStream;
+import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
@@ -54,7 +54,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final Bus bus;
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
-  private final DeleteLocalShotsByStream deleteLocalShotsByStream;
+  private final DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor;
   private final ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
   private final CreateStreamInteractor createStreamInteractor;
@@ -88,7 +88,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
       GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper,
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      Poller poller, DeleteLocalShotsByStream deleteLocalShotsByStream,
+      Poller poller, DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor,
       UpdateWatchNumberInteractor updateWatchNumberInteractor,
       ReloadStreamTimelineInteractor reloadStreamTimelineInteractor,
       CreateStreamInteractor createStreamInteractor,
@@ -105,7 +105,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.poller = poller;
-    this.deleteLocalShotsByStream = deleteLocalShotsByStream;
+    this.deleteLocalShotsByStreamInteractor = deleteLocalShotsByStreamInteractor;
     this.reloadStreamTimelineInteractor = reloadStreamTimelineInteractor;
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     this.createStreamInteractor = createStreamInteractor;
@@ -616,7 +616,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void handleShotsChange() {
     streamTimelineView.showLoading();
-    deleteLocalShotsByStream.deleteShot(streamId, new Interactor.CompletedCallback() {
+    deleteLocalShotsByStreamInteractor.deleteShot(streamId, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
         reloadStreamTimelineInteractor.loadStreamTimeline(streamId,
             new Interactor.Callback<Timeline>() {

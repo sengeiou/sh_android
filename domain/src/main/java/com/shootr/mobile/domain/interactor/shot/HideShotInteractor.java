@@ -11,45 +11,45 @@ import javax.inject.Inject;
 
 public class HideShotInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotRepository remoteShotRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotRepository remoteShotRepository;
 
-    private String idShot;
-    private CompletedCallback completedCallback;
+  private String idShot;
+  private CompletedCallback completedCallback;
 
-    @Inject HideShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository remoteShotRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.remoteShotRepository = remoteShotRepository;
-    }
+  @Inject HideShotInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.remoteShotRepository = remoteShotRepository;
+  }
 
-    public void hideShot(String idShot, CompletedCallback completedCallback) {
-        this.idShot = idShot;
-        this.completedCallback = completedCallback;
-        this.interactorHandler.execute(this);
-    }
+  public void hideShot(String idShot, CompletedCallback completedCallback) {
+    this.idShot = idShot;
+    this.completedCallback = completedCallback;
+    this.interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        try {
-            sendHideShotToServer();
-        } catch (ServerCommunicationException e) {
+  @Override public void execute() throws Exception {
+    try {
+      sendHideShotToServer();
+    } catch (ServerCommunicationException e) {
             /* Ignore error and notify callback */
-        }
-        notifyCompleted();
     }
+    notifyCompleted();
+  }
 
-    private void sendHideShotToServer() {
-        Date now = new Date();
-        remoteShotRepository.hideShot(idShot, now.getTime());
-    }
+  private void sendHideShotToServer() {
+    Date now = new Date();
+    remoteShotRepository.hideShot(idShot, now.getTime());
+  }
 
-    private void notifyCompleted() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                completedCallback.onCompleted();
-            }
-        });
-    }
+  private void notifyCompleted() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        completedCallback.onCompleted();
+      }
+    });
+  }
 }

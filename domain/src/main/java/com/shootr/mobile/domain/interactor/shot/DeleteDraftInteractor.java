@@ -9,42 +9,42 @@ import javax.inject.Inject;
 
 public class DeleteDraftInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotQueueRepository shotQueueRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotQueueRepository shotQueueRepository;
 
-    private Long queuedShotId;
-    private Callback callback;
+  private Long queuedShotId;
+  private Callback callback;
 
-    @Inject public DeleteDraftInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShotQueueRepository shotQueueRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.shotQueueRepository = shotQueueRepository;
-    }
+  @Inject public DeleteDraftInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, ShotQueueRepository shotQueueRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.shotQueueRepository = shotQueueRepository;
+  }
 
-    public void deleteDraft(Long queuedShotId, Callback callback) {
-        this.queuedShotId = queuedShotId;
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
+  public void deleteDraft(Long queuedShotId, Callback callback) {
+    this.queuedShotId = queuedShotId;
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        QueuedShot queuedShot = shotQueueRepository.getShotQueue(queuedShotId);
-        shotQueueRepository.remove(queuedShot);
-        notifyDeleted();
-    }
+  @Override public void execute() throws Exception {
+    QueuedShot queuedShot = shotQueueRepository.getShotQueue(queuedShotId);
+    shotQueueRepository.remove(queuedShot);
+    notifyDeleted();
+  }
 
-    private void notifyDeleted() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onDeleted();
-            }
-        });
-    }
+  private void notifyDeleted() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onDeleted();
+      }
+    });
+  }
 
-    public interface Callback {
+  public interface Callback {
 
-        void onDeleted();
-    }
+    void onDeleted();
+  }
 }

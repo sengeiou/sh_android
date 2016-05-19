@@ -16,72 +16,72 @@ import javax.inject.Inject;
 
 public class GetShotDetailInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotRepository localShotRepository;
-    private final ShotRepository remoteShotRepository;
-    private final NicerRepository nicerRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotRepository localShotRepository;
+  private final ShotRepository remoteShotRepository;
+  private final NicerRepository nicerRepository;
 
-    private String idShot;
-    private Callback<ShotDetail> callback;
-    private ErrorCallback errorCallback;
+  private String idShot;
+  private Callback<ShotDetail> callback;
+  private ErrorCallback errorCallback;
 
-    @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
-      NicerRepository nicerRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localShotRepository = localShotRepository;
-        this.remoteShotRepository = remoteShotRepository;
-        this.nicerRepository = nicerRepository;
+  @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository, NicerRepository nicerRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localShotRepository = localShotRepository;
+    this.remoteShotRepository = remoteShotRepository;
+    this.nicerRepository = nicerRepository;
+  }
+
+  public void loadShotDetail(String idShot, Callback<ShotDetail> callback,
+      ErrorCallback errorCallback) {
+    this.idShot = idShot;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    try {
+      ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
+      remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
+      notifyLoaded(reorderReplies(remoteShotDetail));
+      localShotRepository.putShot(remoteShotDetail.getShot());
+      ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
+      notifyLoaded(reorderReplies(localShotDetail));
+    } catch (ShootrException error) {
+      notifyError(error);
     }
+  }
 
-    public void loadShotDetail(String idShot, Callback<ShotDetail> callback, ErrorCallback errorCallback) {
-        this.idShot = idShot;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
-    }
+  private ShotDetail reorderReplies(ShotDetail shotDetail) {
+    List<Shot> unorderedReplies = shotDetail.getReplies();
+    List<Shot> reorderedReplies = orderShots(unorderedReplies);
+    shotDetail.setReplies(reorderedReplies);
+    return shotDetail;
+  }
 
-    @Override public void execute() throws Exception {
-        try {
-            ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
-            remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
-            notifyLoaded(reorderReplies(remoteShotDetail));
-            localShotRepository.putShot(remoteShotDetail.getShot());
-            ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
-            notifyLoaded(reorderReplies(localShotDetail));
+  private List<Shot> orderShots(List<Shot> replies) {
+    Collections.sort(replies, new Shot.NewerBelowComparator());
+    return replies;
+  }
 
-        } catch (ShootrException error) {
-            notifyError(error);
-        }
-    }
+  private void notifyLoaded(final ShotDetail shotDetail) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(shotDetail);
+      }
+    });
+  }
 
-    private ShotDetail reorderReplies(ShotDetail shotDetail) {
-        List<Shot> unorderedReplies = shotDetail.getReplies();
-        List<Shot> reorderedReplies = orderShots(unorderedReplies);
-        shotDetail.setReplies(reorderedReplies);
-        return shotDetail;
-    }
-
-    private List<Shot> orderShots(List<Shot> replies) {
-        Collections.sort(replies, new Shot.NewerBelowComparator());
-        return replies;
-    }
-
-    private void notifyLoaded(final ShotDetail shotDetail) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(shotDetail);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }
