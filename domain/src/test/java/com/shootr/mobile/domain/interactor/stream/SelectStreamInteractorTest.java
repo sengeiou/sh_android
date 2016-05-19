@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.stream;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -20,7 +21,9 @@ import org.mockito.MockitoAnnotations;
 
 import static com.shootr.mobile.domain.asserts.UserAssert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -118,6 +121,16 @@ public class SelectStreamInteractorTest {
 
         inOrder.verify(dummyCallback).onLoaded(anyStream());
         inOrder.verify(remoteUserRepository).updateWatch(any(User.class));
+    }
+
+    @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowaServerComunicationError() throws Exception {
+        when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(null);
+        doThrow(ServerCommunicationException.class).
+        when(remoteStreamRepository).getStreamById(OLD_STREAM_ID);
+
+        interactor.selectStream(OLD_STREAM_ID, dummyCallback, errorCallback);
+
+        verify(errorCallback, atLeastOnce()).onError(any(ServerCommunicationException.class));
     }
 
     @Test public void shouldSetStreamIdWhenUpdateWatchWithStreamInfo() throws Exception {

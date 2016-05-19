@@ -42,18 +42,23 @@ public class GetStreamIsReadOnlyInteractor implements Interactor {
     @Override public void execute() throws Exception {
         Stream stream = localStreamRepository.getStreamById(streamId);
         if (stream == null) {
-            try {
-                stream = remoteStreamRepository.getStreamById(streamId);
-                if (stream == null) {
-                    notifyError(new NetworkNotAvailableException(new Throwable()));
-                } else {
-                    notifyLoaded(stream.isRemoved());
-                }
-            } catch (ServerCommunicationException error) {
-                notifyError(error);
-            }
+            getRemoteStream();
         } else {
             notifyLoaded(stream.isRemoved());
+        }
+    }
+
+    private void getRemoteStream() {
+        Stream stream;
+        try {
+            stream = remoteStreamRepository.getStreamById(streamId);
+            if (stream == null) {
+                notifyError(new NetworkNotAvailableException(new Throwable()));
+            } else {
+                notifyLoaded(stream.isRemoved());
+            }
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
         }
     }
 

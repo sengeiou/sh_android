@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.service.NetworkNotAvailableException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -82,7 +83,25 @@ public class GetStreamIsReadOnlyInteractorTest {
 
         interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
+        verify(errorCallback).onError(any(ServerCommunicationException.class));
+    }
+
+    @Test public void shouldNotifyErrorIfRemoteRepositoryReturnNullStream() throws Exception {
+        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
+        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
+
+        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+
+        verify(errorCallback).onError(any(NetworkNotAvailableException.class));
+    }
+
+    @Test public void shouldNotifyLoadedIfRemoteRepositoryReturnNotStream() throws Exception {
+        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
+        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+
+        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+
+        verify(callback).onLoaded(stream().isRemoved());
     }
 
     private Stream stream() {

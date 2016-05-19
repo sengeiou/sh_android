@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -22,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -94,6 +96,26 @@ public class AddToFavoritesInteractorTest {
         InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
         inOrder.verify(callback).onCompleted();
         inOrder.verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+    }
+
+    @Test public void shouldNotifyErrorWhenRemoteRepositoryThrowsException()
+        throws StreamAlreadyInFavoritesException {
+        doThrow(StreamAlreadyInFavoritesException.class).
+            when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+
+        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+
+        verify(errorCallback).onError(any(ShootrException.class));
+    }
+
+    @Test public void shouldNotifyErrorWhenStreamIsAlreadyInFavorites()
+        throws StreamAlreadyInFavoritesException {
+        doThrow(StreamAlreadyInFavoritesException.class).
+            when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+
+        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+
+        verify(errorCallback).onError(any(ShootrException.class));
     }
 
     private List<Favorite> empty() {

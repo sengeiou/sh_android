@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
@@ -29,6 +30,7 @@ public class CreateStreamInteractor implements Interactor {
     private final StreamRepository remoteStreamRepository;
     private final StreamRepository localStreamRepository;
     private final LocaleProvider localeProvider;
+    private final UserRepository localUserRepository;
 
     private String idStream;
     private String title;
@@ -42,14 +44,16 @@ public class CreateStreamInteractor implements Interactor {
     private String streamMode;
 
     @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
-      @Local StreamRepository localStreamRepository, LocaleProvider localeProvider) {
+        SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
+        @Local StreamRepository localStreamRepository, LocaleProvider localeProvider,
+        @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.remoteStreamRepository = remoteStreamRepository;
         this.localStreamRepository = localStreamRepository;
         this.localeProvider = localeProvider;
+        this.localUserRepository = localUserRepository;
     }
 
     public void sendStream(String idStream, String title, String description, Integer streamMode, String topic,
@@ -96,7 +100,7 @@ public class CreateStreamInteractor implements Interactor {
         stream.setTopic(topic);
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
-        stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
+        stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
         stream.setTotalFavorites(0);
         stream.setTotalWatchers(0);
         return stream;

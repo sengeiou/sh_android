@@ -71,7 +71,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
         }
     }
 
-    private void loadUserListingStreamsFromRemote() {
+    private void loadUserListingStreamsFromRemote() throws ServerCommunicationException {
         try {
             loadRemoteFavoriteIds();
             List<Stream> favoriteStreams = remoteStreamRepository.getStreamsByIds(favoriteIds);
@@ -82,7 +82,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
             notifyLoaded(listing);
         } catch (ShootrException error) {
-            /* swallow error */
+            notifyError(error);
         }
     }
 

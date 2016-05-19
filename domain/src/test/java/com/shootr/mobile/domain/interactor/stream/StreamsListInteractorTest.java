@@ -33,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -44,6 +45,8 @@ public class StreamsListInteractorTest {
     private static final Long SECONDS_AGO_31 = NOW - (31L * 1000);
     private static final Long SECONDS_AGO_29 = NOW - (29L * 1000);
     private static final String ID_CURRENT_USER = "current_user";
+    private static final String USER_ID = "userId";
+    private static final String WATCHING_STREAM = "streamId";
 
     @Mock StreamSearchRepository remoteStreamSearchRepository;
     @Mock StreamSearchRepository localStreamSearchRepository;
@@ -182,6 +185,18 @@ public class StreamsListInteractorTest {
         verify(dummyErrorCallback).onError(any(ShootrException.class));
     }
 
+    @Test public void shouldNotifyNotNullStreamSearchResultWhenLocalRepositoryReturnUser()
+        throws Exception {
+        when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(user());
+        when(localStreamRepository.getStreamById(WATCHING_STREAM)).thenReturn(stream());
+        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
+
+        interactor.loadStreams(spyCallback, dummyErrorCallback);
+
+        verify(spyCallback, atLeastOnce()).onLoaded(any(StreamSearchResultList.class));
+    }
+
     private void setupNeedsRefresh() {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(0L);
@@ -214,6 +229,11 @@ public class StreamsListInteractorTest {
         return result;
     }
 
+    private StreamSearchResultList streamResultList() {
+        List<StreamSearchResult> result = Arrays.asList(streamResult());
+        return new StreamSearchResultList(result);
+    }
+
     private void setupLocalRepositoryReturnsCurrentUser() {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUser());
@@ -221,5 +241,16 @@ public class StreamsListInteractorTest {
 
     private User currentUser() {
         return new User();
+    }
+
+    private User user() {
+        User user = new User();
+        user.setIdUser(USER_ID);
+        user.setIdWatchingStream(WATCHING_STREAM);
+        return user;
+    }
+
+    private Stream stream() {
+        return new Stream();
     }
 }

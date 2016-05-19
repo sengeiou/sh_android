@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +30,16 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     private final StreamRepository localStreamRepository;
     private final WatchersRepository watchersRepository;
     private final SessionRepository sessionRepository;
+    private final UserRepository localUserRepository;
 
     private Callback<List<StreamSearchResult>> callback;
     private boolean loadLocalOnly = false;
 
     @Inject
     public GetFavoriteStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FavoriteRepository localFavoriteRepository, @Remote FavoriteRepository remoteFavoriteRepository,
-      @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
-      SessionRepository sessionRepository) {
+        @Local FavoriteRepository localFavoriteRepository, @Remote FavoriteRepository remoteFavoriteRepository,
+        @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
+        SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
@@ -45,6 +47,7 @@ public class GetFavoriteStreamsInteractor implements Interactor {
         this.localStreamRepository = localStreamRepository;
         this.watchersRepository = watchersRepository;
         this.sessionRepository = sessionRepository;
+        this.localUserRepository = localUserRepository;
     }
 
     public void loadFavoriteStreams(Callback<List<StreamSearchResult>> callback) {
@@ -87,13 +90,15 @@ public class GetFavoriteStreamsInteractor implements Interactor {
 
     private void markWatchingStream(List<StreamSearchResult> streams) {
         String watchingId = null;
-        User currentUser = sessionRepository.getCurrentUser();
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         if (currentUser != null) {
-            watchingId = sessionRepository.getCurrentUser().getIdWatchingStream();
+            watchingId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingStream();
         }
+
         if (watchingId == null) {
             return;
         }
+
         for (StreamSearchResult stream : streams) {
             if (stream.getStream().getId().equals(watchingId)) {
                 stream.setIsWatching(true);
