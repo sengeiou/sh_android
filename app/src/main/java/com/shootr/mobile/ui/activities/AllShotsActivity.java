@@ -285,14 +285,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }).show();
     }
 
-    @Override public void notifyPinnedShot(ShotModel shotModel) {
-
-    }
-
-    @Override public void showPinned() {
-        /* no-op */
-    }
-
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
     }

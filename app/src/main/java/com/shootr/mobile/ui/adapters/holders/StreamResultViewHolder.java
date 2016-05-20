@@ -1,7 +1,5 @@
 package com.shootr.mobile.ui.adapters.holders;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.TextAppearanceSpan;
@@ -12,13 +10,13 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Truss;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +27,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
+    private final InitialsLoader initialsLoader;
     private List<String> mutedStreamIds;
     private OnUnwatchClickListener unwatchClickListener;
 
@@ -49,19 +48,21 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      ImageLoader imageLoader, List<String> mutedStreamIds) {
+        ImageLoader imageLoader, InitialsLoader initialsLoader, List<String> mutedStreamIds) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
+        this.initialsLoader = initialsLoader;
         this.mutedStreamIds = mutedStreamIds;
         ButterKnife.bind(this, itemView);
     }
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      ImageLoader imageLoader) {
+        ImageLoader imageLoader, InitialsLoader initialsLoader) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
+        this.initialsLoader = initialsLoader;
         this.mutedStreamIds = Collections.emptyList();
         ButterKnife.bind(this, itemView);
     }
@@ -135,29 +136,10 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupInitials(StreamResultModel streamResultModel) {
-        ColorGenerator generator = ColorGenerator.MATERIAL;
-        String title = streamResultModel.getStreamModel().getTitle();
-        String[] split = title.split(" ");
-        String initials;
-        if (split.length > 1) {
-            String firstWord = split[0];
-            String lastWord = split[split.length - 1];
-            initials = String.valueOf(String.valueOf(firstWord.charAt(0)) + String.valueOf(lastWord.charAt(0)))
-              .toUpperCase();
-        } else {
-            String firstWord = split[0];
-            initials = String.valueOf(firstWord.charAt(0)).toUpperCase();
-        }
-        TextDrawable letters = TextDrawable.builder()
-          .beginConfig()
-          .width(52)
-          .height(52)
-          .textColor(Color.WHITE)
-          .useFont(Typeface.DEFAULT)
-          .fontSize(20)
-          .endConfig()
-          .buildRound(initials, generator.getColor(initials));
-        pictureWithoutText.setImageDrawable(letters);
+        String initials = initialsLoader.getLetters(streamResultModel.getStreamModel().getTitle());
+        int backgroundColor = initialsLoader.getColorForLetters(initials);
+        TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
+        pictureWithoutText.setImageDrawable(textDrawable);
     }
 
     public void setMutedVisibility(StreamResultModel streamResultModel) {

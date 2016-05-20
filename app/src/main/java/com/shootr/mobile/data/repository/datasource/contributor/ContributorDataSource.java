@@ -13,4 +13,8 @@ public interface ContributorDataSource {
     void addContributor(String idStream, String idUser) throws ContributorNumberStreamException;
 
     void removeContributor(String idStream, String idUser);
+
+    void putContributors(List<ContributorEntity> contributors);
+
+    void clearContributors(String idStream);
 }

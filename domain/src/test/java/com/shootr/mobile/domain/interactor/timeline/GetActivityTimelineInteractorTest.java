@@ -35,129 +35,133 @@ import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
 
-    private static final String WATCHING_STREAM_ID = "watching_stream";
-    private static final String STREAM_AUTHOR_ID = "stream_author";
-    private static final String ID_CURRENT_USER = "current_user";
+  private static final String WATCHING_STREAM_ID = "watching_stream";
+  private static final String STREAM_AUTHOR_ID = "stream_author";
+  private static final String ID_CURRENT_USER = "current_user";
 
-    private static final Long DATE_OLDER = 1000L;
-    private static final Long DATE_MIDDLE = 2000L;
-    private static final Long DATE_NEWER = 3000L;
-    public static final String LANGUAGE = "LANGUAGE";
-    public static final boolean NOT_USER_ACTIVITY_TIMELINE = false;
-    public static final boolean IS_USER_ACTIVITY_TIMELINE = true;
+  private static final Long DATE_OLDER = 1000L;
+  private static final Long DATE_MIDDLE = 2000L;
+  private static final Long DATE_NEWER = 3000L;
+  public static final String LANGUAGE = "LANGUAGE";
+  public static final boolean NOT_USER_ACTIVITY_TIMELINE = false;
+  public static final boolean IS_USER_ACTIVITY_TIMELINE = true;
 
-    @Mock ActivityRepository localActivityRepository;
-    @Mock UserRepository localUserRepository;
-    @Spy com.shootr.mobile.domain.interactor.SpyCallback<ActivityTimeline> spyCallback =
+  @Mock ActivityRepository localActivityRepository;
+  @Mock UserRepository localUserRepository;
+  @Spy com.shootr.mobile.domain.interactor.SpyCallback<ActivityTimeline> spyCallback =
       new com.shootr.mobile.domain.interactor.SpyCallback<>();
-    @Mock StreamRepository streamRepository;
-    @Mock SessionRepository sessionRepository;
-    @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-    @Mock Interactor.ErrorCallback errorCallback;
-    @Mock LocaleProvider localeProvider;
+  @Mock StreamRepository streamRepository;
+  @Mock SessionRepository sessionRepository;
+  @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
+  @Mock Interactor.ErrorCallback errorCallback;
+  @Mock LocaleProvider localeProvider;
 
-    private GetActivityTimelineInteractor interactor;
+  private GetActivityTimelineInteractor interactor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        when(localUserRepository.getPeople()).thenReturn(people());
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
+    when(localUserRepository.getPeople()).thenReturn(people());
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetActivityTimelineInteractor(interactorHandler,
-          postExecutionThread,
-          localActivityRepository,
-          sessionRepository);
-    }
+    interactor = new GetActivityTimelineInteractor(interactorHandler, postExecutionThread,
+        localActivityRepository, sessionRepository);
+  }
 
-    @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupWatchingStream();
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
-          anyString())).thenReturn(unorderedActivities());
+  @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
+    setupWatchingStream();
+    when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
+        anyString())).thenReturn(unorderedActivities());
 
-        interactor.loadActivityTimeline(NOT_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(), spyCallback);
-        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
+    interactor.loadActivityTimeline(NOT_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(),
+        spyCallback);
+    List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
-    }
+    assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
+  }
 
-    @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching() throws Exception {
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
-          anyString())).thenReturn(unorderedActivities());
-
-        interactor.loadActivityTimeline(NOT_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(), spyCallback);
-        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
-
-        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
-    }
-
-    @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorAndIsUserTimeline() throws Exception {
-        setupWatchingStream();
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
-          anyString())).thenReturn(unorderedActivities());
-
-        interactor.loadActivityTimeline(IS_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(), spyCallback);
-        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
-
-        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
-    }
-
-    @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatchingAndIsUserTimeline()
+  @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching()
       throws Exception {
-        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
-          anyString())).thenReturn(unorderedActivities());
+    when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
+        anyString())).thenReturn(unorderedActivities());
 
-        interactor.loadActivityTimeline(IS_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(), spyCallback);
-        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
+    interactor.loadActivityTimeline(NOT_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(),
+        spyCallback);
+    List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
+    assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
+  }
+
+  @Test public void shouldCallbackShotsInOrderWithPublishDateComparatorAndIsUserTimeline()
+      throws Exception {
+    setupWatchingStream();
+    when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
+        anyString())).thenReturn(unorderedActivities());
+
+    interactor.loadActivityTimeline(IS_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(),
+        spyCallback);
+    List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
+
+    assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
+  }
+
+  @Test
+  public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatchingAndIsUserTimeline()
+      throws Exception {
+    when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class),
+        anyString())).thenReturn(unorderedActivities());
+
+    interactor.loadActivityTimeline(IS_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(),
+        spyCallback);
+    List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
+
+    assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
+  }
+
+  private User currentUserWatching() {
+    User user = new User();
+    user.setIdUser(ID_CURRENT_USER);
+    user.setIdWatchingStream(WATCHING_STREAM_ID);
+    return user;
+  }
+
+  private List<Activity> unorderedActivities() {
+    return Arrays.asList(activityWithDate(DATE_MIDDLE), activityWithDate(DATE_OLDER),
+        activityWithDate(DATE_NEWER));
+  }
+
+  private Activity activityWithDate(Long date) {
+    Activity activity = new Activity();
+    activity.setPublishDate(new Date(date));
+    return activity;
+  }
+
+  private void setupWatchingStream() {
+    when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
+    when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
+  }
+
+  //region Stubs
+  private List<User> people() {
+    return Arrays.asList(new User());
+  }
+
+  private Stream watchingStream() {
+    Stream stream = new Stream();
+    stream.setId(WATCHING_STREAM_ID);
+    stream.setAuthorId(STREAM_AUTHOR_ID);
+    return stream;
+  }
+
+  static class SpyCallback implements Interactor.Callback<Timeline> {
+
+    public List<Timeline> timelinesReturned = new ArrayList<>();
+
+    @Override public void onLoaded(Timeline timeline) {
+      timelinesReturned.add(timeline);
     }
-
-    private User currentUserWatching() {
-        User user = new User();
-        user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingStream(WATCHING_STREAM_ID);
-        return user;
-    }
-
-    private List<Activity> unorderedActivities() {
-        return Arrays.asList(activityWithDate(DATE_MIDDLE),
-          activityWithDate(DATE_OLDER),
-          activityWithDate(DATE_NEWER));
-    }
-
-    private Activity activityWithDate(Long date) {
-        Activity activity = new Activity();
-        activity.setPublishDate(new Date(date));
-        return activity;
-    }
-
-    private void setupWatchingStream() {
-        when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
-    }
-
-    //region Stubs
-    private List<User> people() {
-        return Arrays.asList(new User());
-    }
-
-    private Stream watchingStream() {
-        Stream stream = new Stream();
-        stream.setId(WATCHING_STREAM_ID);
-        stream.setAuthorId(STREAM_AUTHOR_ID);
-        return stream;
-    }
-
-    static class SpyCallback implements Interactor.Callback<Timeline> {
-
-        public List<Timeline> timelinesReturned = new ArrayList<>();
-
-        @Override public void onLoaded(Timeline timeline) {
-            timelinesReturned.add(timeline);
-        }
-    }
-    //endregion
+  }
+  //endregion
 }

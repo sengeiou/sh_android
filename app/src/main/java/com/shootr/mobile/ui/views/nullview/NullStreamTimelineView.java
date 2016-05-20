@@ -94,7 +94,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showPinMessageNotification(String topic) {
+    @Override public void showPinMessageNotification(String message) {
         /* no-op */
     }
 
@@ -102,11 +102,15 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void refreshShots(List<ShotModel> shots) {
+    @Override public void updateShotsInfo(List<ShotModel> shots) {
         /* no-op */
     }
 
-    @Override public void updateShotsInfo(List<ShotModel> shots) {
+    @Override public void hideStreamViewOnlyIndicator() {
+        /* no-op */
+    }
+
+    @Override public void showStreamViewOnlyIndicator() {
         /* no-op */
     }
 

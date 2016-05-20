@@ -1,5 +1,6 @@
-package com.shootr.mobile.ui.views;
+package com.shootr.mobile.ui.views.nullview;
 
+import com.shootr.mobile.ui.views.NewShotBarView;
 import java.io.File;
 
 public class NullNewShotBarView implements NewShotBarView {

@@ -124,6 +124,7 @@
   <!-- Profile: Name -->
   <string name="error_message_name_invalid">無效字元</string>
   <string name="error_message_name_long">在3到25字元以內</string>
+  <string name="error_message_read_write_mode">在是私人編輯的stream</string>
   <string name="error_message_registration_email_empty">進入你的郵箱</string>
   <string name="error_message_registration_email_existing">郵箱已被使用</string>
   <string name="error_message_registration_email_invalid">無效郵箱</string>
@@ -269,6 +270,10 @@
   <string name="profile_marks_following">關注中</string>
   <string name="profile_support">支援</string>
   <string name="profile_updated">個人檔案已更新</string>
+  <string name="read_write_mode_public_description">每个人皆可shoot</string>
+  <string name="read_write_mode_public_title">公開</string>
+  <string name="read_write_mode_view_only_description">建立者與貢獻者可以shoot</string>
+  <string name="read_write_mode_view_only_title">私人編輯</string>
   <string name="registration_create_button_text">建立帳戶</string>
   <string name="remove">清除</string>
   <string name="remove_stream_confirmation">清除stream?</string>
@@ -329,6 +334,7 @@
   <string name="stream_notification_confirmation_no">不</string>
   <string name="stream_notification_confirmation_yes">通知</string>
   <string name="stream_participants_following_number">在關注%d</string>
+  <string name="stream_privacy">隱私</string>
   <string name="stream_removed_feedback">已移除stream</string>
   <string name="stream_restored_feedback">已復原stream</string>
   <string name="stream_subtitle">在關注%d</string>
@@ -336,6 +342,7 @@
   <string name="stream_timeline_add_favorite">加入最愛</string>
   <string name="stream_timeline_empty_message">正在檢查shots…</string>
   <string name="stream_timeline_remove_favorite">從最愛中清除</string>
+  <string name="stream_timeline_view_only">私人編輯</string>
   <string name="suggested_people_section_title">建議關注</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">幫助</string>

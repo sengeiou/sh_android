@@ -15,8 +15,11 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class NewStreamPresenter implements Presenter {
@@ -38,9 +41,10 @@ public class NewStreamPresenter implements Presenter {
     private String currentStreamTopic;
 
     //region Initialization
-    @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
-      GetStreamInteractor getStreamInteractor, SelectStreamInteractor selectStreamInteractor,
-      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
+    @Inject
+    public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
+                              GetStreamInteractor getStreamInteractor, SelectStreamInteractor selectStreamInteractor,
+                              StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
@@ -59,7 +63,8 @@ public class NewStreamPresenter implements Presenter {
 
     private void preloadStreamToEdit(String optionalIdStreamToEdit) {
         getStreamInteractor.loadStream(optionalIdStreamToEdit, new GetStreamInteractor.Callback() {
-            @Override public void onLoaded(Stream stream) {
+            @Override
+            public void onLoaded(Stream stream) {
                 setDefaultStreamInfo(streamModelMapper.transform(stream));
             }
         });
@@ -70,6 +75,7 @@ public class NewStreamPresenter implements Presenter {
         String preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showDescription(streamModel.getDescription());
+        newStreamView.setModeValue(streamModel.getReadWriteMode());
         if (currentTitle == null) {
             preloadedTitle = streamModel.getTitle();
             currentTitle = preloadedTitle;
@@ -85,13 +91,13 @@ public class NewStreamPresenter implements Presenter {
         this.updateDoneButtonStatus();
     }
 
-    public void done() {
+    public void done(String streamTitle, String streamDescription, Integer streamMode) {
         newStreamView.hideKeyboard();
         if (isNewStream) {
             this.askNotificationConfirmation();
         } else {
             newStreamView.showLoading();
-            this.editStream(preloadedStreamId);
+            editStream(preloadedStreamId, streamTitle, streamDescription, streamMode);
         }
     }
 
@@ -99,50 +105,54 @@ public class NewStreamPresenter implements Presenter {
         newStreamView.showNotificationConfirmation();
     }
 
-    public void confirmNotify(boolean notify) {
+    public void confirmNotify(String streamTitle, String streamDescription, Integer streamMode, boolean notify) {
         notifyCreation = notify;
         newStreamView.showLoading();
-        createStream();
+        createStream(streamTitle, streamDescription, streamMode);
     }
 
-    private void createStream() {
-        sendStream(null);
+    private void createStream(String streamTitle, String streamDescription, Integer streamMode) {
+        sendStream(null, streamTitle, streamDescription, streamMode);
     }
 
-    private void editStream(String preloadedStreamId) {
-        sendStream(preloadedStreamId);
+    private void editStream(String preloadedStreamId, String streamTitle, String streamDescription,
+                            Integer streamMode) {
+        sendStream(preloadedStreamId, streamTitle, streamDescription, streamMode);
     }
 
-    private void sendStream(String preloadedStreamId) {
-        String title = filterTitle(newStreamView.getStreamTitle());
-        String description = filterDescription(newStreamView.getStreamDescription());
-
+    private void sendStream(String preloadedStreamId, String streamTitle, String streamDescription,
+                            Integer streamMode) {
         createStreamInteractor.sendStream(preloadedStreamId,
-          title,
-          description,
-          currentStreamTopic,
-          notifyCreation,
-          false,
-          new CreateStreamInteractor.Callback() {
-              @Override public void onLoaded(Stream stream) {
-                  streamCreated(stream);
-                  seletStream(stream);
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  streamCreationError(error);
-              }
-          });
+                streamTitle,
+                streamDescription,
+                streamMode,
+                currentStreamTopic,
+                notifyCreation,
+                false,
+                new CreateStreamInteractor.Callback() {
+                    @Override
+                    public void onLoaded(Stream stream) {
+                        streamCreated(stream);
+                        seletStream(stream);
+                    }
+                },
+                new Interactor.ErrorCallback() {
+                    @Override
+                    public void onError(ShootrException error) {
+                        streamCreationError(error);
+                    }
+                });
     }
 
     protected void seletStream(Stream stream) {
         selectStreamInteractor.selectStream(stream.getId(), new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+            @Override
+            public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 /* no-op */
             }
         });
@@ -220,11 +230,13 @@ public class NewStreamPresenter implements Presenter {
 
     //endregion
 
-    @Override public void resume() {
+    @Override
+    public void resume() {
         /* no-op */
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         /* no-op */
     }
 }

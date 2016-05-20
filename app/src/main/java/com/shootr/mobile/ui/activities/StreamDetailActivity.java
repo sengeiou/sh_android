@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -54,6 +52,7 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -63,7 +62,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
@@ -103,6 +101,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
     @Inject CrashReportTool crashReportTool;
+    @Inject InitialsLoader initialsLoader;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -127,7 +126,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
         writePermissionManager.init(this);
+        setupAdapter();
+    }
 
+    private void setupAdapter() {
         adapter = new StreamDetailAdapter(imageLoader, //
           new View.OnClickListener() {
               @Override public void onClick(View v) {
@@ -246,16 +248,20 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            try {
-                File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-                streamDetailPresenter.photoSelected(photoFile);
-            } catch (NullPointerException error) {
-                feedbackMessage.show(getView(), R.string.error_message_invalid_image);
-            }
+            obtainPhoto(data);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             File photoFile = getCameraPhotoFile();
             streamDetailPresenter.photoSelected(photoFile);
+        }
+    }
+
+    private void obtainPhoto(Intent data) {
+        Uri selectedImageUri = data.getData();
+        try {
+            File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+            streamDetailPresenter.photoSelected(photoFile);
+        } catch (NullPointerException error) {
+            feedbackMessage.show(getView(), R.string.error_message_invalid_image);
         }
     }
 
@@ -292,8 +298,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 pictureTemporaryFile.getParentFile().mkdirs();
                 pictureTemporaryFile.createNewFile();
             } catch (IOException e) {
-                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
-                //TODO cancelar operación y avisar al usuario
+                crashReportTool.logException("No se pudo crear el archivo temporal para la foto de perfil");
             }
         }
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
@@ -321,30 +326,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void setupStreamInitials(StreamModel streamModel) {
-        ColorGenerator generator = ColorGenerator.MATERIAL;
-        String title = streamModel.getTitle();
-        String[] split = title.split(" ");
-        String initials;
-        if (split.length > 1) {
-            String firstWord = split[0];
-            String lastWord = split[split.length - 1];
-            initials = String.valueOf(String.valueOf(firstWord.charAt(0)) + String.valueOf(lastWord.charAt(0)))
-              .toUpperCase();
-        } else {
-            String firstWord = split[0];
-            initials = String.valueOf(firstWord.charAt(0)).toUpperCase();
-        }
-        int backgroundColor = generator.getColor(initials);
-        TextDrawable letters = TextDrawable.builder()
-          .beginConfig()
-          .width(56)
-          .height(56)
-          .textColor(Color.WHITE)
-          .useFont(Typeface.DEFAULT)
-          .fontSize(24)
-          .endConfig()
-          .buildRound(initials, generator.getColor(initials));
-        streamPictureWithoutText.setImageDrawable(letters);
+        String initials = initialsLoader.getLetters(streamModel.getTitle());
+        int backgroundColor = initialsLoader.getColorForLetters(initials);
+        TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
+        streamPictureWithoutText.setImageDrawable(textDrawable);
         changeStatusBarColor(backgroundColor);
     }
 
@@ -355,7 +340,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         collapsingToolbar.setStatusBarScrimColor(darkColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = getDarkColor(darkColor);
-
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(color);
@@ -431,26 +415,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }
     }
 
-    @Override public void showEditStreamPhotoOrInfo() {
-        new BottomSheet.Builder(this).title(getString(R.string.stream_detail_edit_menu_title))
-          .sheet(R.menu.stream_edit_photo_or_info)
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_stream_edit_photo:
-                          streamDetailPresenter.editStreamPhoto();
-                          break;
-                      case R.id.menu_stream_edit_info:
-                          streamDetailPresenter.editStreamInfo();
-                          break;
-                      default:
-                          break;
-                  }
-              }
-          })
-          .show();
-    }
-
     @Override public void showPhotoOptions() {
         new BottomSheet.Builder(this).title(R.string.title_menu_photo)
           .sheet(R.menu.photo_options_bottom_sheet)
@@ -509,10 +473,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override public void setWatchers(List<UserModel> watchers) {
         adapter.setParticipants(watchers);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override public void setCurrentUserWatching(UserModel userWatchingModel) {
-        //TODO
     }
 
     @Override public void navigateToEditStream(String idStream) {

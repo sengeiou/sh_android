@@ -10,44 +10,44 @@ import javax.inject.Inject;
 
 public class PinShotInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotRepository remoteShotRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotRepository remoteShotRepository;
 
-    private String idShot;
-    private CompletedCallback completedCallback;
+  private String idShot;
+  private CompletedCallback completedCallback;
 
-    @Inject PinShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository remoteShotRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.remoteShotRepository = remoteShotRepository;
-    }
+  @Inject PinShotInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.remoteShotRepository = remoteShotRepository;
+  }
 
-    public void pinShot(String idShot, CompletedCallback completedCallback) {
-        this.idShot = idShot;
-        this.completedCallback = completedCallback;
-        this.interactorHandler.execute(this);
-    }
+  public void pinShot(String idShot, CompletedCallback completedCallback) {
+    this.idShot = idShot;
+    this.completedCallback = completedCallback;
+    this.interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        try {
-            sendUnhideShotToServer();
-        } catch (ServerCommunicationException e) {
+  @Override public void execute() throws Exception {
+    try {
+      sendUnhideShotToServer();
+    } catch (ServerCommunicationException e) {
             /* Ignore error and notify callback */
-        }
-        notifyCompleted();
     }
+    notifyCompleted();
+  }
 
-    private void sendUnhideShotToServer() {
-        remoteShotRepository.unhideShot(idShot);
-    }
+  private void sendUnhideShotToServer() {
+    remoteShotRepository.unhideShot(idShot);
+  }
 
-    private void notifyCompleted() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                completedCallback.onCompleted();
-            }
-        });
-    }
+  private void notifyCompleted() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        completedCallback.onCompleted();
+      }
+    });
+  }
 }

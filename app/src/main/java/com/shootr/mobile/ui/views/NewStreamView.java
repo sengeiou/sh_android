@@ -6,8 +6,6 @@ public interface NewStreamView extends DataTransferView {
 
     void setStreamTitle(String title);
 
-    String getStreamTitle();
-
     void showTitleError(String errorMessage);
 
     void closeScreenWithResult(String streamId);
@@ -18,8 +16,7 @@ public interface NewStreamView extends DataTransferView {
 
     void showNotificationConfirmation();
 
-    String getStreamDescription();
-
     void showDescription(String description);
 
+    void setModeValue(Integer readWriteMode);
 }

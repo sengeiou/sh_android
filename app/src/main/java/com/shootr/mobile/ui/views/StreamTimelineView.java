@@ -50,11 +50,13 @@ public interface StreamTimelineView extends LoadDataView {
 
     void setRemainingCharactersColorInvalid();
 
-    void showPinMessageNotification(String topic);
+    void showPinMessageNotification(String message);
 
     void addAbove(List<ShotModel> shotModels);
 
-    void refreshShots(List<ShotModel> shots);
-
     void updateShotsInfo(List<ShotModel> shots);
+
+    void hideStreamViewOnlyIndicator();
+
+    void showStreamViewOnlyIndicator();
 }

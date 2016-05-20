@@ -2,6 +2,7 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.db.DatabaseContract;
@@ -30,6 +31,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.HISTORIC_WATCHERS, streamEntity.getHistoricWatchers());
         contentValues.put(DatabaseContract.StreamTable.TOTAL_SHOTS, streamEntity.getTotalShots());
         contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS, streamEntity.getUniqueShots());
+        contentValues.put(DatabaseContract.StreamTable.READ_WRITE_MODE, streamEntity.getReadWriteMode());
         setSynchronizedtoContentValues(streamEntity, contentValues);
     }
 
@@ -55,6 +57,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setHistoricWatchers(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.HISTORIC_WATCHERS)));
         streamEntity.setTotalShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_SHOTS)));
         streamEntity.setUniqueShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.UNIQUE_SHOTS)));
+        streamEntity.setReadWriteMode(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.READ_WRITE_MODE)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

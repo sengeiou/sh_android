@@ -12,19 +12,23 @@ import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 
 public class StreamsListAdapter
   extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
 
     private final ImageLoader imageLoader;
+    private final InitialsLoader initialsLoader;
 
     private OnStreamClickListener onStreamClickListener;
     private OnUnwatchClickListener onUnwatchClickListener;
     private List<String> mutedStreamsIds;
 
-    public StreamsListAdapter(ImageLoader imageLoader, OnStreamClickListener onStreamClickListener) {
+    public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
+        OnStreamClickListener onStreamClickListener) {
         this.imageLoader = imageLoader;
+        this.initialsLoader = initialsLoader;
         this.onStreamClickListener = onStreamClickListener;
     }
 
@@ -41,7 +45,8 @@ public class StreamsListAdapter
     @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
         StreamResultViewHolder watchingViewHolder =
-          new StreamResultViewHolder(view, onStreamClickListener, imageLoader, mutedStreamsIds);
+          new StreamResultViewHolder(view, onStreamClickListener, imageLoader, initialsLoader,
+              mutedStreamsIds);
         watchingViewHolder.enableWatchingState(onUnwatchClickListener);
         return watchingViewHolder;
     }
@@ -53,7 +58,8 @@ public class StreamsListAdapter
 
     @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, imageLoader, mutedStreamsIds);
+        return new StreamResultViewHolder(view, onStreamClickListener, imageLoader, initialsLoader,
+            mutedStreamsIds);
     }
 
     @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {

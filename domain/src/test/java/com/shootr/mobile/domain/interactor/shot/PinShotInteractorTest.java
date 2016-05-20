@@ -17,29 +17,30 @@ import static org.mockito.Mockito.verify;
 
 public class PinShotInteractorTest {
 
-    public static final String ID_SHOT = "idShot";
-    private PinShotInteractor interactor;
-    @Mock ShotRepository remoteShotRepository;
-    @Mock Interactor.CompletedCallback completedCallback;
-    @Mock PostExecutionThread postExecutionThread;
+  public static final String ID_SHOT = "idShot";
+  private PinShotInteractor interactor;
+  @Mock ShotRepository remoteShotRepository;
+  @Mock Interactor.CompletedCallback completedCallback;
+  @Mock PostExecutionThread postExecutionThread;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        TestInteractorHandler interactorHandler = new TestInteractorHandler();
-        interactor = new PinShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    TestInteractorHandler interactorHandler = new TestInteractorHandler();
+    interactor =
+        new PinShotInteractor(interactorHandler, postExecutionThread, remoteShotRepository);
+  }
 
-    @Test public void shouldSendUnhideShotToServer() throws Exception {
-        interactor.pinShot(ID_SHOT, completedCallback);
+  @Test public void shouldSendUnhideShotToServer() throws Exception {
+    interactor.pinShot(ID_SHOT, completedCallback);
 
-        verify(remoteShotRepository).unhideShot(ID_SHOT);
-    }
+    verify(remoteShotRepository).unhideShot(ID_SHOT);
+  }
 
-    @Test public void shouldNotifyCompletedWhenSendUnhideShotToServer() throws Exception {
-        interactor.pinShot(ID_SHOT, completedCallback);
+  @Test public void shouldNotifyCompletedWhenSendUnhideShotToServer() throws Exception {
+    interactor.pinShot(ID_SHOT, completedCallback);
 
-        InOrder inOrder = inOrder(remoteShotRepository, postExecutionThread);
-        inOrder.verify(remoteShotRepository).unhideShot(anyString());
-        inOrder.verify(postExecutionThread).post(any(Runnable.class));
-    }
+    InOrder inOrder = inOrder(remoteShotRepository, postExecutionThread);
+    inOrder.verify(remoteShotRepository).unhideShot(anyString());
+    inOrder.verify(postExecutionThread).post(any(Runnable.class));
+  }
 }

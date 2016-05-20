@@ -31,7 +31,7 @@ public class ShootrShotService {
         try {
             File resizedImageFile = getResizedImage(imageFile);
             return uploadPhoto(resizedImageFile);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -53,7 +53,7 @@ public class ShootrShotService {
         return photoService.uploadShotImageAndGetUrl(imageFile);
     }
 
-    private File getResizedImage(File newPhotoFile) throws IOException {
+    private File getResizedImage(File newPhotoFile) throws IOException, NullPointerException {
         return imageResizer.getResizedImageFile(newPhotoFile);
     }
 }

@@ -13,6 +13,28 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.12.0] - 2016-05-20
+
+### Added
+
+- Se crean los strems view-only
+- Añadida la cobertura a los test de dominio
+- Añadida libreria para descargar fotos
+- Añadido LeakCanary al proyecto
+
+### Changed
+
+- La barra de message (topic) e indicador de nuevos shots se esconde cuando se hace scroll
+- Cambio de posición en los fragments de activities
+
+### Fixed
+
+- Se arregla el mimetype al descargar una foto
+
+### Removed
+
+- Se elimina el plugin de sonar
+
 ## [1.11.0] - 2016-05-06
 
 ### Added

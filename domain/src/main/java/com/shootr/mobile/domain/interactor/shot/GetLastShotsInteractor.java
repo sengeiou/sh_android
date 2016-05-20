@@ -16,75 +16,78 @@ import javax.inject.Inject;
 
 public class GetLastShotsInteractor implements Interactor {
 
-    public static final int LAST_SHOTS_TRESHOLD = 11;
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotRepository localShotRepository;
-    private final ShotRepository remoteShotRepository;
-    private final SessionRepository sessionRepository;
-    private final UserRepository localUserRepository;
+  public static final int LAST_SHOTS_TRESHOLD = 11;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotRepository localShotRepository;
+  private final ShotRepository remoteShotRepository;
+  private final SessionRepository sessionRepository;
+  private final UserRepository localUserRepository;
 
-    private String userId;
-    private Callback<List<Shot>> callback;
-    private ErrorCallback errorCallback;
+  private String userId;
+  private Callback<List<Shot>> callback;
+  private ErrorCallback errorCallback;
 
-    @Inject public GetLastShotsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localShotRepository = localShotRepository;
-        this.remoteShotRepository = remoteShotRepository;
-        this.sessionRepository = sessionRepository;
-        this.localUserRepository = localUserRepository;
+  @Inject public GetLastShotsInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository, SessionRepository sessionRepository,
+      @Local UserRepository localUserRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localShotRepository = localShotRepository;
+    this.remoteShotRepository = remoteShotRepository;
+    this.sessionRepository = sessionRepository;
+    this.localUserRepository = localUserRepository;
+  }
+
+  public void loadLastShots(String userId, Callback<List<Shot>> callback,
+      ErrorCallback errorCallback) {
+    this.userId = userId;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    loadLastShotsFromRemote();
+  }
+
+  private void loadLastShotsFromLocal() {
+    List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
+    notifyLoaded(lastShots);
+  }
+
+  private void loadLastShotsFromRemote() {
+    try {
+      List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
+      notifyLoaded(remoteShots);
+      saveShotsForCurrentUserAndFollowing(remoteShots);
+    } catch (ServerCommunicationException error) {
+      loadLastShotsFromLocal();
+      notifyError(error);
     }
+  }
 
-    public void loadLastShots(String userId, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
-        this.userId = userId;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private void saveShotsForCurrentUserAndFollowing(List<Shot> remoteShots) {
+    if (userId.equals(sessionRepository.getCurrentUserId()) || localUserRepository.isFollowing(
+        userId)) {
+      localShotRepository.putShots(remoteShots);
     }
+  }
 
-    @Override public void execute() throws Exception {
-        loadLastShotsFromRemote();
-    }
+  private void notifyLoaded(final List<Shot> result) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(result);
+      }
+    });
+  }
 
-    private void loadLastShotsFromLocal() {
-        List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
-        notifyLoaded(lastShots);
-    }
-
-    private void loadLastShotsFromRemote() {
-        try {
-            List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
-            notifyLoaded(remoteShots);
-            saveShotsForCurrentUserAndFollowing(remoteShots);
-        } catch (ServerCommunicationException error) {
-            loadLastShotsFromLocal();
-            notifyError(error);
-        }
-    }
-
-    private void saveShotsForCurrentUserAndFollowing(List<Shot> remoteShots) {
-        if (userId.equals(sessionRepository.getCurrentUserId()) || localUserRepository.isFollowing(userId)) {
-            localShotRepository.putShots(remoteShots);
-        }
-    }
-
-    private void notifyLoaded(final List<Shot> result) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(result);
-            }
-        });
-    }
-
-    protected void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  protected void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }

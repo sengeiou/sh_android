@@ -13,8 +13,6 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamPicture(String picture);
 
-    void showEditStreamPhotoOrInfo();
-
     void showPhotoOptions();
 
     void showEditPicturePlaceholder();
@@ -26,8 +24,6 @@ public interface StreamDetailView extends DataTransferView {
     void zoomPhoto(String picture);
 
     void setWatchers(List<UserModel> watchers);
-
-    void setCurrentUserWatching(UserModel userWatchingModel);
 
     void navigateToEditStream(String idStream);
 

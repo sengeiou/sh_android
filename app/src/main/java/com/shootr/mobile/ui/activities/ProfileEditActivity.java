@@ -184,10 +184,6 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
         feedbackMessage.show(getView(), communicationError);
     }
 
-    @Override public void alertConnectionNotAvailable() {
-        feedbackMessage.show(getView(), connectionLost);
-    }
-
     @Override public void showEmailNotConfirmedError() {
         email.setError(" ");
     }

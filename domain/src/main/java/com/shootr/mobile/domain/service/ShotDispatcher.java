@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import com.shootr.mobile.domain.utils.Patterns;
@@ -160,6 +161,9 @@ import javax.inject.Singleton;
         } catch (StreamRemovedException e) {
             clearShotFromQueue(queuedShot);
             notifyShotSendingHasRemovedStream(queuedShot, e);
+        } catch (StreamReadOnlyException e) {
+            clearShotFromQueue(queuedShot);
+            notifyShotSendingHasReadOnlyStream(queuedShot, e);
         }
     }
 
@@ -216,6 +220,11 @@ import javax.inject.Singleton;
 
     private void notifyShotSendingHasRemovedStream(QueuedShot queuedShot, Exception e) {
         shotQueueListener.onShotHasStreamRemoved(queuedShot, e);
+        busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
+    }
+
+    private void notifyShotSendingHasReadOnlyStream(QueuedShot queuedShot, Exception e) {
+        shotQueueListener.onShotIsOnReadOnly(queuedShot, e);
         busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
     }
 

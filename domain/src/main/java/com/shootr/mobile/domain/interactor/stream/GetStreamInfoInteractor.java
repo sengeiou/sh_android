@@ -66,12 +66,12 @@ public class GetStreamInfoInteractor implements Interactor {
         }
     }
 
-    protected void obtainLocalStreamInfo() {
+    private void obtainLocalStreamInfo() {
         StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository, true);
         notifyLoaded(streamInfo);
     }
 
-    protected void obtainRemoteStreamInfo() {
+    private void obtainRemoteStreamInfo() {
         StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository, false);
         if (streamInfo != null) {
             notifyLoaded(streamInfo);
@@ -123,7 +123,7 @@ public class GetStreamInfoInteractor implements Interactor {
         return watchesFromPeople;
     }
 
-    protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
+    private List<User> filterUsersWatchingStream(List<User> people, String idStream) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idStream.equals(user.getIdWatchingStream())) {
@@ -133,7 +133,7 @@ public class GetStreamInfoInteractor implements Interactor {
         return watchers;
     }
 
-    protected List<User> removeCurrentUserFromWatchers(List<User> watchers) {
+    private List<User> removeCurrentUserFromWatchers(List<User> watchers) {
         int meIndex = findMeIn(watchers);
         if (meIndex >= 0) {
             watchers.remove(meIndex);

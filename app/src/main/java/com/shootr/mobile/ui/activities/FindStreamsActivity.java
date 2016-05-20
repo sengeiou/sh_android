@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.io.Serializable;
@@ -48,6 +49,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject FeedbackMessage feedbackMessage;
     @Inject IntentFactory intentFactory;
+    @Inject InitialsLoader initialsLoader;
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -82,7 +84,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void initializeStreamListAdapter() {
-        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);
             }

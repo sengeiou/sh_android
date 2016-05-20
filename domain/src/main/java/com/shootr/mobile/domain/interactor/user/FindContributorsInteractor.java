@@ -18,86 +18,88 @@ import javax.inject.Inject;
 
 public class FindContributorsInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final ContributorRepository contributorRepository;
-    private final UserRepository remoteUserRepository;
-    private final PostExecutionThread postExecutionThread;
-    private final LocaleProvider localeProvider;
+  private final InteractorHandler interactorHandler;
+  private final ContributorRepository contributorRepository;
+  private final UserRepository remoteUserRepository;
+  private final PostExecutionThread postExecutionThread;
+  private final LocaleProvider localeProvider;
 
-    private Callback<List<User>> callback;
-    private ErrorCallback errorCallback;
-    private String query;
-    private Integer currentPage;
-    private String idStream;
+  private Callback<List<User>> callback;
+  private ErrorCallback errorCallback;
+  private String query;
+  private Integer currentPage;
+  private String idStream;
 
-    @Inject
-    public FindContributorsInteractor(InteractorHandler interactorHandler, ContributorRepository contributorRepository,
-      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      LocaleProvider localeProvider) {
-        this.interactorHandler = interactorHandler;
-        this.contributorRepository = contributorRepository;
-        this.remoteUserRepository = remoteUserRepository;
-        this.postExecutionThread = postExecutionThread;
-        this.localeProvider = localeProvider;
+  @Inject public FindContributorsInteractor(InteractorHandler interactorHandler,
+      @Remote ContributorRepository contributorRepository, PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository, LocaleProvider localeProvider) {
+    this.interactorHandler = interactorHandler;
+    this.contributorRepository = contributorRepository;
+    this.remoteUserRepository = remoteUserRepository;
+    this.postExecutionThread = postExecutionThread;
+    this.localeProvider = localeProvider;
+  }
+
+  public void findContributors(String idStream, String query, Integer currentPage,
+      Callback<List<User>> callback, ErrorCallback errorCallback) {
+    this.idStream = idStream;
+    this.query = query;
+    this.currentPage = currentPage;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    notifyLoaded(findRemoteContributors());
+  }
+
+  private List<User> findRemoteContributors() throws IOException {
+    return findNotAddedContributors();
+  }
+
+  private List<User> findNotAddedContributors() throws IOException {
+    List<User> resultUsers = new ArrayList<>();
+    try {
+      List<User> users =
+          remoteUserRepository.findFriends(query, currentPage, localeProvider.getLocale());
+      List<Contributor> currentContributors =
+          contributorRepository.getContributorsWithUsers(idStream);
+      filterContributors(resultUsers, users, currentContributors);
+    } catch (ServerCommunicationException error) {
+      notifyError(error);
+    }
+    return resultUsers;
+  }
+
+  private void filterContributors(List<User> resultUsers, List<User> users,
+      List<Contributor> currentContributors) {
+    List<User> contributorUsers = new ArrayList<>(currentContributors.size());
+
+    for (Contributor currentContributor : currentContributors) {
+      contributorUsers.add(currentContributor.getUser());
     }
 
-    public void findContributors(String idStream, String query, Integer currentPage, Callback<List<User>> callback,
-      ErrorCallback errorCallback) {
-        this.idStream = idStream;
-        this.query = query;
-        this.currentPage = currentPage;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+    for (User user : users) {
+      if (!contributorUsers.contains(user)) {
+        resultUsers.add(user);
+      }
     }
+  }
 
-    @Override public void execute() throws Exception {
-        notifyLoaded(findRemoteContributors());
-    }
+  private void notifyLoaded(final List<User> results) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(results);
+      }
+    });
+  }
 
-    private List<User> findRemoteContributors() throws IOException {
-        return findNotAddedContributors();
-    }
-
-    private List<User> findNotAddedContributors() throws IOException {
-        List<User> resultUsers = new ArrayList<>();
-        try {
-            List<User> users = remoteUserRepository.findFriends(query, currentPage, localeProvider.getLocale());
-            List<Contributor> currentContributors = contributorRepository.getContributorsWithUsers(idStream);
-            filterContributors(resultUsers, users, currentContributors);
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
-        return resultUsers;
-    }
-
-    private void filterContributors(List<User> resultUsers, List<User> users, List<Contributor> currentContributors) {
-        List<User> contributorUsers = new ArrayList<>(currentContributors.size());
-
-        for (Contributor currentContributor : currentContributors) {
-            contributorUsers.add(currentContributor.getUser());
-        }
-
-        for (User user : users) {
-            if (!contributorUsers.contains(user)) {
-                resultUsers.add(user);
-            }
-        }
-    }
-
-    private void notifyLoaded(final List<User> results) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(results);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }

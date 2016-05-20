@@ -18,78 +18,80 @@ import static org.mockito.Mockito.when;
 
 public class IncrementReplyCountShotInteractorTest {
 
-    public static final String ID_SHOT = "ID_SHOT";
-    private IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
-    @Mock ShotRepository localShotRepository;
-    @Mock ShotRepository remoteShotRepository;
-    @Mock Interactor.CompletedCallback callback;
-    @Mock Interactor.ErrorCallback errorCallback;
+  public static final String ID_SHOT = "ID_SHOT";
+  private IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
+  @Mock ShotRepository localShotRepository;
+  @Mock ShotRepository remoteShotRepository;
+  @Mock Interactor.CompletedCallback callback;
+  @Mock Interactor.ErrorCallback errorCallback;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        TestInteractorHandler interactorHandler = new TestInteractorHandler();
-        TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        incrementReplyCountShotInteractor = new IncrementReplyCountShotInteractor(interactorHandler,
-          postExecutionThread,
-          localShotRepository,
-          remoteShotRepository);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    TestInteractorHandler interactorHandler = new TestInteractorHandler();
+    TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    incrementReplyCountShotInteractor =
+        new IncrementReplyCountShotInteractor(interactorHandler, postExecutionThread,
+            localShotRepository, remoteShotRepository);
+  }
 
-    @Test public void shouldObtainLocalShotByIdShot() throws Exception {
-        when(localShotRepository.getShot(ID_SHOT)).thenReturn(getShot());
+  @Test public void shouldObtainLocalShotByIdShot() throws Exception {
+    when(localShotRepository.getShot(ID_SHOT)).thenReturn(getShot());
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(localShotRepository).getShot(ID_SHOT);
-    }
+    verify(localShotRepository).getShot(ID_SHOT);
+  }
 
-    @Test public void shouldObtainRemoteShotIfLocalShotIsNull() throws Exception {
-        when(remoteShotRepository.getShot(ID_SHOT)).thenReturn(getShot());
+  @Test public void shouldObtainRemoteShotIfLocalShotIsNull() throws Exception {
+    when(remoteShotRepository.getShot(ID_SHOT)).thenReturn(getShot());
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(remoteShotRepository).getShot(ID_SHOT);
-    }
+    verify(remoteShotRepository).getShot(ID_SHOT);
+  }
 
-    @Test public void shouldIncrementReplyCountWhenShotObtainedFromLocalRepository() throws Exception {
-        Shot shot = getShot();
-        when(localShotRepository.getShot(ID_SHOT)).thenReturn(shot);
+  @Test public void shouldIncrementReplyCountWhenShotObtainedFromLocalRepository()
+      throws Exception {
+    Shot shot = getShot();
+    when(localShotRepository.getShot(ID_SHOT)).thenReturn(shot);
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(localShotRepository).putShot(shot);
-    }
+    verify(localShotRepository).putShot(shot);
+  }
 
-    @Test public void shouldIncrementReplyCountWhenShotObtainedFromRemoteRepository() throws Exception {
-        Shot shot = getShot();
-        when(remoteShotRepository.getShot(ID_SHOT)).thenReturn(shot);
+  @Test public void shouldIncrementReplyCountWhenShotObtainedFromRemoteRepository()
+      throws Exception {
+    Shot shot = getShot();
+    when(remoteShotRepository.getShot(ID_SHOT)).thenReturn(shot);
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(localShotRepository).putShot(shot);
-    }
+    verify(localShotRepository).putShot(shot);
+  }
 
-    @Test public void shouldNotifyCompletedWhenReplyCountIncremented() throws Exception {
-        Shot shot = getShot();
-        when(localShotRepository.getShot(ID_SHOT)).thenReturn(shot);
+  @Test public void shouldNotifyCompletedWhenReplyCountIncremented() throws Exception {
+    Shot shot = getShot();
+    when(localShotRepository.getShot(ID_SHOT)).thenReturn(shot);
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(callback).onCompleted();
-    }
+    verify(callback).onCompleted();
+  }
 
-    @Test public void shouldNotifyErrorIfGetRemoteShotThrowsServerCommunicationException() throws Exception {
-        doThrow(new ShootrException() {
-        }).when(remoteShotRepository).getShot(ID_SHOT);
+  @Test public void shouldNotifyErrorIfGetRemoteShotThrowsServerCommunicationException()
+      throws Exception {
+    doThrow(new ShootrException() {
+    }).when(remoteShotRepository).getShot(ID_SHOT);
 
-        incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
+    incrementReplyCountShotInteractor.incrementReplyCount(ID_SHOT, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
 
-    private Shot getShot() {
-        Shot shot = new Shot();
-        shot.setReplyCount(0L);
-        return shot;
-    }
+  private Shot getShot() {
+    Shot shot = new Shot();
+    shot.setReplyCount(0L);
+    return shot;
+  }
 }

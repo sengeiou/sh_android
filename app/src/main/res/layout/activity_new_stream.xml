@@ -77,6 +77,22 @@
               android:textSize="12sp"
               tools:text="Max 60 characters" />
 
+            <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="20dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="8dp"
+              android:text="@string/stream_privacy"
+              android:textSize="12sp"/>
+            <android.support.v7.widget.AppCompatSpinner android:id="@+id/stream_read_write_mode"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="4dp"
+              android:drawSelectorOnTop="true"
+              style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

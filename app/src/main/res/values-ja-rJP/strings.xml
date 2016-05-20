@@ -124,6 +124,7 @@
   <!-- Profile: Name -->
   <string name="error_message_name_invalid">パスワードが無効です</string>
   <string name="error_message_name_long">3文字以上25文字以内</string>
+  <string name="error_message_read_write_mode">このストリームは現在表示専用です</string>
   <string name="error_message_registration_email_empty">メールアドレスを入力してください</string>
   <string name="error_message_registration_email_existing">このメールアドレスは既に使用されています。</string>
   <string name="error_message_registration_email_invalid">無効なメールアドレスです</string>
@@ -269,6 +270,10 @@
   <string name="profile_marks_following">フォロー中</string>
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
+  <string name="read_write_mode_public_description">誰でも表示、投稿できます</string>
+  <string name="read_write_mode_public_title">公開</string>
+  <string name="read_write_mode_view_only_description">作成者と投稿者のみ投稿できます</string>
+  <string name="read_write_mode_view_only_title">表示専用</string>
   <string name="registration_create_button_text">アカウントの作成</string>
   <string name="remove">削除する</string>
   <string name="remove_stream_confirmation">ストリームを削除しますか？</string>
@@ -330,6 +335,7 @@
   <string name="stream_notification_confirmation_no">いいえ</string>
   <string name="stream_notification_confirmation_yes">通知する</string>
   <string name="stream_participants_following_number">%d人をフォロー中</string>
+  <string name="stream_privacy">プライバシー</string>
   <string name="stream_removed_feedback">ストリームは削除されました</string>
   <string name="stream_restored_feedback">ストリームが復元されました</string>
   <string name="stream_subtitle">%d人をフォロー中</string>
@@ -337,6 +343,7 @@
   <string name="stream_timeline_add_favorite">お気に入りに追加</string>
   <string name="stream_timeline_empty_message">ショットをチェック中…</string>
   <string name="stream_timeline_remove_favorite">お気に入りから削除</string>
+  <string name="stream_timeline_view_only">表示専用</string>
   <string name="suggested_people_section_title">おすすめのユーザー</string>
   <string name="support_blog">ブログ</string>
   <string name="support_help">ヘルプ</string>

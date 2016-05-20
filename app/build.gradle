@@ -18,8 +18,7 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'hugo'
-apply plugin: "sonar-runner"
-
+apply plugin: 'com.github.kt3k.coveralls'
 
 repositories {
     jcenter()
@@ -34,13 +33,22 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 1
 def versionMinor = 11
-def versionRevision = 0
+def versionRevision = 1
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 27
+def databaseVersion = 29
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'test'
+    onlyIf { System.env.'CI' }
+}
 
 android {
     compileSdkVersion 23
@@ -97,6 +105,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
+            testCoverageEnabled true
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
@@ -227,6 +236,10 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.artjimlop:altex-image-downloader:0.0.4'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }
 
 /**
@@ -275,23 +288,6 @@ def signingConfigFromFile() {
         println 'signing.properties not found'
     }
     return null
-}
-
-sonarRunner {
-    sonarProperties {
-        property "sonar.projectKey", "Android_build:app"
-        property "sonar.host.url", "http://sonar.fav24.net"
-        property "sonar.jdbc.url",
-          "jdbc:mysql://gm-ci-environment.cttjtyko7rpp.eu-west-1.rds.amazonaws.com:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
-        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
-        property "sonar.jdbc.username", "sonar"
-        property "sonar.jdbc.password", "sonar"
-        property "sonar.login", "admin"
-        property "sonar.password", "14041981"
-        property "sonar.projectName", "Shootr Android"
-        property "sonar.projectVersion", android.defaultConfig.versionName
-        properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
-    }
 }
 
 //TODO Wrap this thing into an indepentent plugin

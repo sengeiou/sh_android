@@ -1017,14 +1017,6 @@ public class ProfileFragment extends BaseFragment
         }).show();
     }
 
-    @Override public void notifyPinnedShot(ShotModel shotModel) {
-        /* no-op */
-    }
-
-    @Override public void showPinned() {
-        /* no-op */
-    }
-
     private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
         return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
           new Runnable() {

@@ -8,9 +8,19 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'nebula.provided-base'
+apply plugin: 'com.github.kt3k.coveralls'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'test'
+    onlyIf { System.env.'CI' }
+}
 
 dependencies {
     testCompile 'junit:junit:4.12'

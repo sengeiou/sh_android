@@ -34,10 +34,6 @@ public interface ReportShotView {
 
     void showAuthorContextMenuWithoutPin(ShotModel shotModel);
 
-    void notifyPinnedShot(ShotModel shotModel);
-
-    void showPinned();
-
     void goToReport(String sessionToken, ShotModel shotModel);
 
     void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);

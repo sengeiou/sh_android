@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
-    <include android:id="@+id/timeline_new_shots_indicator"
-      layout="@layout/include_timeline_message"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:visibility="gone"/>
-
-    <android.support.design.widget.CoordinatorLayout android:id="@+id/timeline_list_container"
+  <android.support.design.widget.CoordinatorLayout
+      android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/timeline_new_shot_bar"
-      android:layout_below="@+id/timeline_new_shots_indicator">
+      >
 
-        <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/timeline_swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+      <com.shootr.mobile.ui.widgets.ScrollListView
+          android:id="@+id/timeline_shot_list"
           android:layout_width="match_parent"
-          android:layout_height="match_parent">
-
-            <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="center"
-              tools:listitem="@layout/item_list_shot" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-        <TextView android:id="@+id/timeline_empty"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_gravity="center"
-          android:text="@string/shot_timeline_empty_title"
-          android:textColor="@color/gray_50"
-          android:textSize="20sp"
-          android:visibility="gone"
-          tools:visibility="visible" />
+          tools:listitem="@layout/item_list_shot"
+          />
 
-        <TextView android:id="@+id/timeline_checking_for_shots"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:text="@string/stream_timeline_empty_message"
-          android:textColor="@color/gray_50"
-          android:textSize="20sp"
-          android:visibility="gone"
-          tools:visibility="visible" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/timeline_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/shot_timeline_empty_title"
+        android:textColor="@color/gray_50"
+        android:textSize="20sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
-    <include android:id="@+id/timeline_new_shot_bar"
+    <TextView
+        android:id="@+id/timeline_checking_for_shots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/stream_timeline_empty_message"
+        android:textColor="@color/gray_50"
+        android:textSize="20sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    <include
+        layout="@layout/include_timeline_message"
+        android:id="@+id/timeline_new_shots_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        app:layout_behavior="com.shootr.mobile.ui.widgets.QuickReturnHeaderBehavior"
+        />
+
+  </android.support.design.widget.CoordinatorLayout>
+
+  <include
       layout="@layout/include_new_shot_bar"
+      android:id="@+id/timeline_new_shot_bar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/new_shot_height"
-      android:layout_alignParentBottom="true" />
+      android:layout_alignParentBottom="true"
+      android:layout_gravity="bottom"
+      />
 
+  <include
+      layout="@layout/include_view_only_timeline"
+      android:id="@+id/timeline_view_only_stream_indicator"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/new_shot_height"
+      android:layout_alignParentBottom="true"
+      android:layout_gravity="bottom"
+      />
 </RelativeLayout>

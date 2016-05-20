@@ -10,39 +10,39 @@ import javax.inject.Inject;
 
 public class GetDraftsInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final ShotQueueRepository shotQueueRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final ShotQueueRepository shotQueueRepository;
 
-    private Callback callback;
+  private Callback callback;
 
-    @Inject public GetDraftsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShotQueueRepository shotQueueRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.shotQueueRepository = shotQueueRepository;
-    }
+  @Inject public GetDraftsInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, ShotQueueRepository shotQueueRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.shotQueueRepository = shotQueueRepository;
+  }
 
-    public void loadDrafts(Callback callback) {
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
+  public void loadDrafts(Callback callback) {
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        List<QueuedShot> failedShots = shotQueueRepository.getFailedShotQueue();
-        notifyLoaded(failedShots);
-    }
+  @Override public void execute() throws Exception {
+    List<QueuedShot> failedShots = shotQueueRepository.getFailedShotQueue();
+    notifyLoaded(failedShots);
+  }
 
-    private void notifyLoaded(final List<QueuedShot> failedShots) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(failedShots);
-            }
-        });
-    }
+  private void notifyLoaded(final List<QueuedShot> failedShots) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(failedShots);
+      }
+    });
+  }
 
-    public interface Callback {
+  public interface Callback {
 
-        void onLoaded(List<QueuedShot> drafts);
-    }
+    void onLoaded(List<QueuedShot> drafts);
+  }
 }

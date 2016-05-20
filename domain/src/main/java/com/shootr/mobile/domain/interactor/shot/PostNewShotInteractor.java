@@ -15,92 +15,94 @@ import java.util.Date;
 
 public abstract class PostNewShotInteractor implements Interactor {
 
-    private final PostExecutionThread postExecutionThread;
-    private final InteractorHandler interactorHandler;
-    private final SessionRepository sessionRepository;
-    private final ShotSender shotSender;
-    private String comment;
-    private File imageFile;
-    private CompletedCallback callback;
-    private ErrorCallback errorCallback;
+  private final PostExecutionThread postExecutionThread;
+  private final InteractorHandler interactorHandler;
+  private final SessionRepository sessionRepository;
+  private final ShotSender shotSender;
+  private String comment;
+  private File imageFile;
+  private CompletedCallback callback;
+  private ErrorCallback errorCallback;
 
-    public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
-      SessionRepository sessionRepository, @Background ShotSender shotSender) {
-        this.postExecutionThread = postExecutionThread;
-        this.interactorHandler = interactorHandler;
-        this.sessionRepository = sessionRepository;
-        this.shotSender = shotSender;
+  public PostNewShotInteractor(PostExecutionThread postExecutionThread,
+      InteractorHandler interactorHandler, SessionRepository sessionRepository,
+      @Background ShotSender shotSender) {
+    this.postExecutionThread = postExecutionThread;
+    this.interactorHandler = interactorHandler;
+    this.sessionRepository = sessionRepository;
+    this.shotSender = shotSender;
+  }
+
+  protected void postNewShot(String comment, File image, CompletedCallback callback,
+      ErrorCallback errorCallback) {
+    this.comment = comment;
+    this.imageFile = image;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    try {
+      Shot shotToPublish = createShotFromParameters();
+      notifyReadyToSend();
+      sendShotToServer(shotToPublish);
+    } catch (ShootrException error) {
+      notifyError(error);
     }
+  }
 
-    protected void postNewShot(String comment, File image, CompletedCallback callback, ErrorCallback errorCallback) {
-        this.comment = comment;
-        this.imageFile = image;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private void sendShotToServer(Shot shot) {
+    shotSender.sendShot(shot, imageFile);
+  }
+
+  private Shot createShotFromParameters() {
+    Shot shot = new Shot();
+    shot.setComment(filterComment(comment));
+    shot.setPublishDate(new Date());
+    fillShotContextualInfo(shot);
+    shot.setType(ShotType.COMMENT);
+    return shot;
+  }
+
+  private String filterComment(String comment) {
+    if (comment != null && comment.isEmpty()) {
+      return null;
     }
+    return comment;
+  }
 
-    @Override public void execute() throws Exception {
-        try {
-            Shot shotToPublish = createShotFromParameters();
-            notifyReadyToSend();
-            sendShotToServer(shotToPublish);
-        } catch (ShootrException error) {
-            notifyError(error);
-        }
-    }
+  protected void fillShotContextualInfo(Shot shot) {
+    fillShotUserInfo(shot);
+    fillShotStreamInfo(shot);
+  }
 
-    private void sendShotToServer(Shot shot) {
-        shotSender.sendShot(shot, imageFile);
-    }
+  private void fillShotUserInfo(Shot shot) {
+    User currentUser = sessionRepository.getCurrentUser();
+    Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
 
-    private Shot createShotFromParameters() {
-        Shot shot = new Shot();
-        shot.setComment(filterComment(comment));
-        shot.setPublishDate(new Date());
-        fillShotContextualInfo(shot);
-        shot.setType(ShotType.COMMENT);
-        return shot;
-    }
+    userInfo.setIdUser(currentUser.getIdUser());
+    userInfo.setAvatar(currentUser.getPhoto());
+    userInfo.setUsername(currentUser.getUsername());
 
-    private String filterComment(String comment) {
-        if (comment != null && comment.isEmpty()) {
-            return null;
-        }
-        return comment;
-    }
+    shot.setUserInfo(userInfo);
+  }
 
-    protected void fillShotContextualInfo(Shot shot) {
-        fillShotUserInfo(shot);
-        fillShotStreamInfo(shot);
-    }
+  protected abstract void fillShotStreamInfo(Shot shot);
 
-    private void fillShotUserInfo(Shot shot) {
-        User currentUser = sessionRepository.getCurrentUser();
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+  private void notifyReadyToSend() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onCompleted();
+      }
+    });
+  }
 
-        userInfo.setIdUser(currentUser.getIdUser());
-        userInfo.setAvatar(currentUser.getPhoto());
-        userInfo.setUsername(currentUser.getUsername());
-
-        shot.setUserInfo(userInfo);
-    }
-
-    protected abstract void fillShotStreamInfo(Shot shot);
-
-    private void notifyReadyToSend() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onCompleted();
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }
