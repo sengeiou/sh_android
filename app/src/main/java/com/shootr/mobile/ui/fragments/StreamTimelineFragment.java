@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -52,15 +53,15 @@ import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
-import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
+import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
+import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.ui.widgets.QuickReturnHeaderBehavior;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -639,8 +640,10 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       streamMessage.setVisibility(View.VISIBLE);
       streamMessage.setText(topic);
-      setupTimelineListPadding();
-      setupMessageBehavior();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        setupTimelineListPadding();
+        setupMessageBehavior();
+      }
     }
   }
 
@@ -648,6 +651,13 @@ public class StreamTimelineFragment extends BaseFragment
     CoordinatorLayout.LayoutParams params =
         (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
     params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.MESSAGE,
+        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
+  }
+
+  private void setupNoMessageBehavior() {
+    CoordinatorLayout.LayoutParams params =
+        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
+    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
         swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
   }
 
@@ -660,10 +670,9 @@ public class StreamTimelineFragment extends BaseFragment
       streamMessage.setVisibility(View.GONE);
       timelineIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
-      CoordinatorLayout.LayoutParams params =
-          (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
-      params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
-          swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        setupNoMessageBehavior();
+      }
     }
   }
 

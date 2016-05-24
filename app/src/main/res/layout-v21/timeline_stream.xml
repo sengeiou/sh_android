@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
-  <include android:id="@+id/timeline_new_shots_indicator"
-      layout="@layout/include_timeline_message"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:visibility="gone"/>
-
-  <android.support.design.widget.CoordinatorLayout android:id="@+id/timeline_list_container"
+  <android.support.design.widget.CoordinatorLayout
+      android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/timeline_new_shot_bar"
-      android:layout_below="@+id/timeline_new_shots_indicator">
+      >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/timeline_swipe_refresh"
@@ -57,6 +52,15 @@
         android:textSize="20sp"
         android:visibility="gone"
         tools:visibility="visible"
+        />
+    <include
+        layout="@layout/include_timeline_message"
+        android:id="@+id/timeline_new_shots_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        app:layout_behavior="com.shootr.mobile.ui.widgets.QuickReturnHeaderBehavior"
         />
 
   </android.support.design.widget.CoordinatorLayout>
