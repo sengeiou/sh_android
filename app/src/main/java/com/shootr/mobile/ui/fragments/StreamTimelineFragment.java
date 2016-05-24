@@ -634,12 +634,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showPinnedMessage(String topic) {
-    timelineIndicator.setVisibility(View.VISIBLE);
-    timelineIndicatorContainer.setVisibility(View.VISIBLE);
-    streamMessage.setVisibility(View.VISIBLE);
-    streamMessage.setText(topic);
-    setupTimelineListPadding();
-    setupMessageBehavior();
+    if (timelineIndicator != null) {
+      timelineIndicator.setVisibility(View.VISIBLE);
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+      streamMessage.setVisibility(View.VISIBLE);
+      streamMessage.setText(topic);
+      setupTimelineListPadding();
+      setupMessageBehavior();
+    }
   }
 
   private void setupMessageBehavior() {
@@ -656,13 +658,13 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void hidePinnedMessage() {
     if (streamMessage != null) {
       streamMessage.setVisibility(View.GONE);
+      timelineIndicator.setVisibility(View.GONE);
+      timelineIndicatorContainer.setVisibility(View.GONE);
+      CoordinatorLayout.LayoutParams params =
+          (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
+      params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
+          swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
     }
-    timelineIndicator.setVisibility(View.GONE);
-    timelineIndicatorContainer.setVisibility(View.GONE);
-    CoordinatorLayout.LayoutParams params =
-        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
-    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
-        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
   }
 
   @Override public void setRemainingCharactersCount(int remainingCharacters) {
