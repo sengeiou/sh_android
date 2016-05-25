@@ -14,19 +14,22 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
     List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
-    ShotEntity getShot(String shotId);
+    ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes);
 
-    List<ShotEntity> getReplies(String shotId);
+    List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes);
 
-    List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId, Long maxTimestamp);
+    List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId, Long maxTimestamp,
+        String[] streamTypes, String[] shotTypes);
 
-    List<ShotEntity> getShotsFromUser(String idUser, Integer limit);
+    List<ShotEntity> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,
+        String[] shotTypes);
 
-    ShotDetailEntity getShotDetail(String idShot);
+    ShotDetailEntity getShotDetail(String idShot, String[] streamTypes, String[] shotTypes);
 
-    List<ShotEntity> getAllShotsFromUser(String userId);
+    List<ShotEntity> getAllShotsFromUser(String userId, String[] streamTypes, String[] shotTypes);
 
-    List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
+    List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate,
+        String[] streamTypes, String[] shotTypes);
 
     void shareShot(String idShot);
 

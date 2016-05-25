@@ -50,7 +50,8 @@ public class StreamSearchInteractorTest {
   }
 
   @Test public void shouldNotifySuccessfulSearchWhenIsValidQuery() throws Exception {
-    when(streamSearchRepository.getStreams(anyString(), anyString())).thenReturn(streams());
+    when(streamSearchRepository.getStreams(anyString(), anyString(), anyArray())).thenReturn(
+        streams());
 
     interactor.searchStreams(QUERY, callback, errorCallback);
 
@@ -59,5 +60,9 @@ public class StreamSearchInteractorTest {
 
   private List<StreamSearchResult> streams() {
     return Collections.singletonList(new StreamSearchResult());
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

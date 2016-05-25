@@ -2,13 +2,12 @@ package com.shootr.mobile.data.repository.datasource.event;
 
 import com.shootr.mobile.data.entity.StreamEntity;
 import java.util.List;
-import java.util.Map;
 
 public interface StreamDataSource {
 
-    StreamEntity getStreamById(String idStream);
+    StreamEntity getStreamById(String idStream, String[] types);
 
-    List<StreamEntity> getStreamByIds(List<String> streamIds);
+    List<StreamEntity> getStreamByIds(List<String> streamIds, String[] types);
 
     StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
 
@@ -16,11 +15,9 @@ public interface StreamDataSource {
 
     List<StreamEntity> putStreams(List<StreamEntity> streams);
 
-    List<StreamEntity> getStreamsListing(String idUser);
+    List<StreamEntity> getStreamsListing(String idUser, String[] types);
 
     void shareStream(String idStream);
-
-    Map<String, Integer> getHolderFavorites(String idUser);
 
     void removeStream(String idStream);
 

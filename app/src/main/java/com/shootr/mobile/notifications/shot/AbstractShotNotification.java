@@ -25,7 +25,7 @@ public abstract class AbstractShotNotification extends CommonNotification {
     }
 
     @Override
-    public void setNotificationValues(NotificationCompat.Builder builder) {
+    public void setNotificationValues(NotificationCompat.Builder builder, Boolean areShotTypesKnown) {
         builder.setContentIntent(getOpenShotNotificationPendingIntent());
         builder.setDeleteIntent(getDiscardShotNotificationPendingIntent());
     }

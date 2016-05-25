@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.service.user;
 
 import com.shootr.mobile.domain.LoginResult;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.NiceShotRepository;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -27,6 +29,7 @@ public class ShootrUserServiceLoginTest {
     private static final String SESSION_TOKEN_STUB = "sessionToken";
 
     private static final String PASSWORD_STUB = "password";
+    String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock CreateAccountGateway createAccountGateway;
@@ -71,13 +74,13 @@ public class ShootrUserServiceLoginTest {
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
 
-        verify(remoteStreamRepository).getStreamById(WATCHING_STREAM_ID);
+        verify(remoteStreamRepository).getStreamById(WATCHING_STREAM_ID, TYPES_STREAM);
     }
 
     @Test public void shouldNotDownloadAnyStreamIfUserHasNotStreamsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-        verify(remoteStreamRepository, never()).getStreamById(anyString());
+        verify(remoteStreamRepository, never()).getStreamById(anyString(), anyArray());
     }
 
     @Test public void shouldDownloadPeopleIfUserHasStreamsWhenLoginCorrect() throws Exception {
@@ -134,5 +137,9 @@ public class ShootrUserServiceLoginTest {
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
         user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
+    }
+
+    private String[] anyArray() {
+        return any(String[].class);
     }
 }

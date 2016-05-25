@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
@@ -19,25 +21,33 @@ public class ShotActivityNotification extends SingleActivityNotification {
     private final ShotRepository remoteShotRepository;
     private final ShotModelMapper shotModelMapper;
     private final String idShot;
+    private final Boolean updateNeeded;
 
-    public ShotActivityNotification(Context context, NotificationBuilderFactory builderFactory, ImageLoader imageLoader,
-      PushNotification.NotificationValues values, String idShot, ShotRepository remoteShotRepository,
-      ShotModelMapper shotModelMapper) {
+    public ShotActivityNotification(Context context, NotificationBuilderFactory builderFactory,
+        ImageLoader imageLoader, PushNotification.NotificationValues values, String idShot,
+        ShotRepository remoteShotRepository, ShotModelMapper shotModelMapper, Boolean updateNeeded) {
         super(context, builderFactory, imageLoader, values);
         this.idShot = idShot;
         this.remoteShotRepository = remoteShotRepository;
         this.shotModelMapper = shotModelMapper;
+        this.updateNeeded = updateNeeded;
     }
 
-    @Override public void setNotificationValues(final NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
-        builder.setContentIntent(getOpenShotDetailNotificationPendingIntent());
+    @Override public void setNotificationValues(final NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, areShotTypesKnown);
+        builder.setContentIntent(getShotNotificationPendingIntent());
     }
 
-    private PendingIntent getOpenShotDetailNotificationPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
-        Shot shot = remoteShotRepository.getShot(idShot);
-        intent.putExtra(ShotDetailActivity.EXTRA_SHOT, shotModelMapper.transform(shot));
-        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    private PendingIntent getShotNotificationPendingIntent() {
+        if (!updateNeeded) {
+            Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
+            Shot shot = remoteShotRepository.getShot(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+            intent.putExtra(ShotDetailActivity.EXTRA_SHOT, shotModelMapper.transform(shot));
+            return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        } else {
+            Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
+            return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        }
     }
 }

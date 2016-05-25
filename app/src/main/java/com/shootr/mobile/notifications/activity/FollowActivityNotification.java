@@ -22,8 +22,9 @@ public class FollowActivityNotification extends SingleActivityNotification {
         this.idUser = idUser;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentIntent(getOpenProfileNotificationPendingIntent());
     }
 

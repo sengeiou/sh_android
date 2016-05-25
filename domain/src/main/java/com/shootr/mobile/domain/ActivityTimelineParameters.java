@@ -6,6 +6,8 @@ import java.util.List;
 public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
+    private String[] streamTypes;
+    private String[] shotTypes;
 
     public static Builder builder() {
         return new Builder();
@@ -17,6 +19,14 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
     public void excludeHiddenTypes() {
         this.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
+    }
+
+    public String[] getStreamTypes() {
+        return streamTypes;
+    }
+
+    public String[] getShotTypes() {
+        return shotTypes;
     }
 
     public static class Builder {
@@ -31,6 +41,8 @@ public class ActivityTimelineParameters extends TimelineParameters {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
             parameters.includedTypes = allKnownActivityTypes();
+            parameters.streamTypes = allKnownStreamTypes();
+            parameters.shotTypes = allKnownShotTypes();
         }
 
         public Builder since(Long sinceDate) {
@@ -49,6 +61,14 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
         private List<String> allKnownActivityTypes() {
             return Arrays.asList(ActivityType.TYPES_ACTIVITY);
+        }
+
+        private String[] allKnownStreamTypes() {
+            return StreamMode.TYPES_STREAM;
+        }
+
+        private String[] allKnownShotTypes() {
+            return ShotType.TYPES_SHOWN;
         }
     }
 }

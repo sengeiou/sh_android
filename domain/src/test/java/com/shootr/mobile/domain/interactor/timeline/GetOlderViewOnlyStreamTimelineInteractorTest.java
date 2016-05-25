@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -110,10 +111,22 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     verify(callback).onLoaded(timelineWithMyShot());
   }
 
+  @Test public void shouldNotifyErrorWhenRemoteShotRepositoryThrowsShootrException()
+      throws Exception {
+    setupSessionAndStreamRepositories();
+    when(shotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenThrow(
+        new ShootrException() {
+        });
+
+    interactor.loadOlderStreamTimeline(CURRENT_OLDEST_DATE, callback, errorCallback);
+
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
+
   private void setupSessionAndStreamRepositories() {
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     when(userRepository.getUserById(USER_ID)).thenReturn(user());
-    when(streamRepository.getStreamById(anyString())).thenReturn(stream());
+    when(streamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
   }
 
   private List<Shot> contributorShots() {
@@ -223,5 +236,9 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     stream.setAuthorId(HOLDER_ID);
     stream.setId("streamId");
     return stream;
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -25,6 +26,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -122,10 +124,20 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
     verify(callback).onLoaded(timelineWithViewOnlyShots());
   }
 
+  @Test public void shouldNotifyErrorWhenShootrTimelineServiceThrowsException() throws Exception {
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenThrow(
+        new ShootrException() {
+        });
+
+    interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, PAUSED, callback, errorCallback);
+
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
+
   private void setupSessionAndStreamRepository() {
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     when(userRepository.getUserById(USER_ID)).thenReturn(user());
-    when(streamRepository.getStreamById(anyString())).thenReturn(stream());
+    when(streamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
   }
 
   private Timeline timelineWithContributorShot() {
@@ -255,5 +267,9 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
     stream.setAuthorId(HOLDER_ID);
     stream.setId("streamId");
     return stream;
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

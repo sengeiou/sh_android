@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
@@ -54,9 +56,11 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
   }
 
   private Shot getParentShot() {
-    Shot parentShot = localShotRepository.getShot(replyParentId);
+    Shot parentShot =
+        localShotRepository.getShot(replyParentId, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
     if (parentShot == null) {
-      parentShot = remoteShotRepository.getShot(replyParentId);
+      parentShot = remoteShotRepository.getShot(replyParentId, StreamMode.TYPES_STREAM,
+          ShotType.TYPES_SHOWN);
     }
     return parentShot;
   }

@@ -4,11 +4,13 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     private String streamId;
 
-    private String shotType;
+    private String[] shotTypes;
 
     private String userId;
 
     private Boolean isRealTime;
+
+    private String[] streamTypes;
 
     private StreamTimelineParameters() {
         /* private constructor, use builder */
@@ -22,8 +24,12 @@ public class StreamTimelineParameters extends TimelineParameters {
         return streamId;
     }
 
-    public String getShotType() {
-        return shotType;
+    public String[] getShotTypes() {
+        return shotTypes;
+    }
+
+    public void setShotTypes(String[] shotTypes) {
+        this.shotTypes = shotTypes;
     }
 
     public String getUserId() {
@@ -38,6 +44,14 @@ public class StreamTimelineParameters extends TimelineParameters {
         this.isRealTime = isRealTime;
     }
 
+    public String[] getStreamTypes() {
+        return streamTypes;
+    }
+
+    public void setStreamTypes(String[] streamTypes) {
+        this.streamTypes = streamTypes;
+    }
+
     public static class Builder {
 
         private StreamTimelineParameters parameters = new StreamTimelineParameters();
@@ -49,7 +63,8 @@ public class StreamTimelineParameters extends TimelineParameters {
         private void setDefaults() {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
-            parameters.shotType = com.shootr.mobile.domain.ShotType.COMMENT;
+            parameters.shotTypes = ShotType.TYPES_SHOWN;
+            parameters.streamTypes = StreamMode.TYPES_STREAM;
         }
 
         public Builder forStream(Stream stream) {

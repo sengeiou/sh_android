@@ -47,12 +47,13 @@ public abstract class CommonNotification {
 
     protected abstract CharSequence getTickerText();
 
-    public abstract void setNotificationValues(NotificationCompat.Builder builder);
+    public abstract void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown);
 
     public Notification build() {
         NotificationCompat.Builder builder = builderFactory.getNotificationBuilder(context);
         setCommonNotificationValues(builder);
-        setNotificationValues(builder);
+        setNotificationValues(builder, true);
         return builder.build();
     }
 

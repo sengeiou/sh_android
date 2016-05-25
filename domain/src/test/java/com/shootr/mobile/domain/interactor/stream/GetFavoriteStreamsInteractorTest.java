@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -27,6 +28,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
@@ -80,11 +82,12 @@ public class GetFavoriteStreamsInteractorTest {
 
   @Test public void shouldLoadStreamsFromLocal() {
     getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
-    verify(localStreamRepository, atLeastOnce()).getStreamsByIds(anyList());
+    verify(localStreamRepository, atLeastOnce()).getStreamsByIds(anyList(), anyArray());
   }
 
   @Test public void shouldLoadWatchers() {
-    when(localStreamRepository.getStreamsByIds(anyList())).thenReturn(listWithOneStreams());
+    when(localStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
+        listWithOneStreams());
     getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
     verify(watchersRepository, atLeastOnce()).getWatchers();
   }
@@ -104,7 +107,7 @@ public class GetFavoriteStreamsInteractorTest {
     when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(listWithOneFavorite());
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
-    verify(localStreamRepository).getStreamsByIds(favoriteStreamsIds());
+    verify(localStreamRepository).getStreamsByIds(favoriteStreamsIds(), StreamMode.TYPES_STREAM);
   }
 
   @Test public void shouldCallbackWhenLoadFavoriteStreamsFromLocalOnly() {
@@ -171,18 +174,12 @@ public class GetFavoriteStreamsInteractorTest {
     return user;
   }
 
-  private User userWithoutWatchingStream() {
-    User user = new User();
-    user.setIdUser(USER_ID);
-    return user;
-  }
-
   private void setupCurrentUserWatching() {
     when(localUserRepository.getUserById(anyString())).thenReturn(userWatching());
   }
 
   protected void setupStreamRepositoryReturnsStreamsWithInputIds() {
-    when(localStreamRepository.getStreamsByIds(anyListOf(String.class))).thenAnswer(
+    when(localStreamRepository.getStreamsByIds(anyListOf(String.class), anyArray())).thenAnswer(
         new Answer<List<Stream>>() {
           @Override public List<Stream> answer(InvocationOnMock invocation) throws Throwable {
             List<String> ids = (List<String>) invocation.getArguments()[0];
@@ -193,5 +190,9 @@ public class GetFavoriteStreamsInteractorTest {
             return streams;
           }
         });
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

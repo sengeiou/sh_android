@@ -14,70 +14,72 @@ import rx.Subscriber;
 
 public class RemoveFromFavoritesInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final FavoriteRepository localFavoriteRepository;
-    private final FavoriteRepository remoteFavoriteRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final FavoriteRepository localFavoriteRepository;
+  private final FavoriteRepository remoteFavoriteRepository;
 
-    private CompletedCallback callback;
+  private CompletedCallback callback;
 
-    private String idStream;
+  private String idStream;
 
-    @Inject
-    public RemoveFromFavoritesInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FavoriteRepository localFavoriteRepository, @Remote FavoriteRepository remoteFavoriteRepository) {
-        this.localFavoriteRepository = localFavoriteRepository;
-        this.interactorHandler = interactorHandler;
-        this.remoteFavoriteRepository = remoteFavoriteRepository;
-        this.postExecutionThread = postExecutionThread;
+  @Inject public RemoveFromFavoritesInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
+      @Remote FavoriteRepository remoteFavoriteRepository) {
+    this.localFavoriteRepository = localFavoriteRepository;
+    this.interactorHandler = interactorHandler;
+    this.remoteFavoriteRepository = remoteFavoriteRepository;
+    this.postExecutionThread = postExecutionThread;
+  }
+
+  public void removeFromFavorites(String idStream, CompletedCallback callback) {
+    this.callback = callback;
+    this.idStream = idStream;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    Favorite existingFavorite = localFavoriteRepository.getFavoriteByStream(idStream);
+    if (existingFavorite != null) {
+      subscribeOnCompletedObserverToObservable(
+          remoteRemoveFromFavoritesObservable(existingFavorite));
+      subscribeOnCompletedObserverToObservable(
+          localRemoveFromFavoritesObservable(existingFavorite));
     }
+  }
 
-    public void removeFromFavorites(String idStream, CompletedCallback callback) {
-        this.callback = callback;
-        this.idStream = idStream;
-        interactorHandler.execute(this);
-    }
+  private Observable<Void> localRemoveFromFavoritesObservable(final Favorite favorite) {
+    return Observable.create(new Observable.OnSubscribe<Void>() {
+      @Override public void call(Subscriber<? super Void> subscriber) {
+        localFavoriteRepository.removeFavoriteByStream(favorite.getIdStream());
+        subscriber.onCompleted();
+      }
+    });
+  }
 
-    @Override public void execute() throws Exception {
-        Favorite existingFavorite = localFavoriteRepository.getFavoriteByStream(idStream);
-        if (existingFavorite != null) {
-            subscribeOnCompletedObserverToObservable(remoteRemoveFromFavoritesObservable(existingFavorite));
-            subscribeOnCompletedObserverToObservable(localRemoveFromFavoritesObservable(existingFavorite));
-        }
-    }
+  private Observable<Void> remoteRemoveFromFavoritesObservable(final Favorite favorite) {
+    return Observable.create(new Observable.OnSubscribe<Void>() {
+      @Override public void call(Subscriber<? super Void> subscriber) {
+        remoteFavoriteRepository.removeFavoriteByStream(favorite.getIdStream());
+        subscriber.onCompleted();
+        notifyCompleted();
+      }
+    });
+  }
 
-    private Observable<Void> localRemoveFromFavoritesObservable(final Favorite favorite) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override public void call(Subscriber<? super Void> subscriber) {
-                localFavoriteRepository.removeFavoriteByStream(favorite.getIdStream());
-                subscriber.onCompleted();
-            }
-        });
-    }
-
-    private Observable<Void> remoteRemoveFromFavoritesObservable(final Favorite favorite) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override public void call(Subscriber<? super Void> subscriber) {
-                remoteFavoriteRepository.removeFavoriteByStream(favorite.getIdStream());
-                subscriber.onCompleted();
-                notifyCompleted();
-            }
-        });
-    }
-
-    private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
-        observable.subscribe(new OnCompletedObserver<Void>() {
-            @Override public void onError(Throwable error) {
+  private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
+    observable.subscribe(new OnCompletedObserver<Void>() {
+      @Override public void onError(Throwable error) {
                 /* no-op */
-            }
-        });
-    }
+      }
+    });
+  }
 
-    protected void notifyCompleted() {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onCompleted();
-            }
-        });
-    }
+  protected void notifyCompleted() {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onCompleted();
+      }
+    });
+  }
 }

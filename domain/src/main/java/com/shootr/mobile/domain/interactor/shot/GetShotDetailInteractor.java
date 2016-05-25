@@ -2,6 +2,8 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -46,11 +48,13 @@ public class GetShotDetailInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
+      ShotDetail remoteShotDetail =
+          remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
       remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
       notifyLoaded(reorderReplies(remoteShotDetail));
       localShotRepository.putShot(remoteShotDetail.getShot());
-      ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
+      ShotDetail localShotDetail =
+          localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
       notifyLoaded(reorderReplies(localShotDetail));
     } catch (ShootrException error) {
       notifyError(error);

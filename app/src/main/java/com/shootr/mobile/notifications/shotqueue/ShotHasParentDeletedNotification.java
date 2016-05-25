@@ -23,7 +23,7 @@ public class ShotHasParentDeletedNotification extends CommonNotification {
     }
 
     @Override
-    public void setNotificationValues(NotificationCompat.Builder builder) {
+    public void setNotificationValues(NotificationCompat.Builder builder, Boolean areShotTypesKnown) {
         builder.setContentTitle(titleText);
         builder.setContentText(titleText);
         builder.setContentText(subtitleText);

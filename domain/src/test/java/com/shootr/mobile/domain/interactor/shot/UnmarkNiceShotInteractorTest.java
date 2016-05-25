@@ -89,7 +89,11 @@ public class UnmarkNiceShotInteractorTest {
   }
 
   private void setupLocalShot() {
-    when(localShotRepository.getShot(anyString())).thenReturn(shot());
+    when(localShotRepository.getShot(anyString(), anyArray(), anyArray())).thenReturn(shot());
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 
   private Shot shot() {

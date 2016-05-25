@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -104,7 +105,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
   }
 
   private boolean isHolderShot(Shot shot, String idStream) {
-    Stream stream = localStreamRepository.getStreamById(idStream);
+    Stream stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
     return shot.getUserInfo().getIdUser().equals(stream.getAuthorId());
   }
 
@@ -137,7 +138,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     String visibleStreamId = currentUser.getIdWatchingStream();
     if (visibleStreamId != null) {
-      return localStreamRepository.getStreamById(visibleStreamId);
+      return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
     }
     return null;
   }

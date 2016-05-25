@@ -21,50 +21,51 @@ import static org.mockito.Mockito.when;
 
 public class GetFavoriteStatusInteractorTest {
 
-    public static final String STREAM_ID = "stream_id";
+  public static final String STREAM_ID = "stream_id";
 
-    @Mock Interactor.Callback<Boolean> callback;
-    @Mock FavoriteRepository localFavoriteRepository;
+  @Mock Interactor.Callback<Boolean> callback;
+  @Mock FavoriteRepository localFavoriteRepository;
 
-    private GetFavoriteStatusInteractor getFavoriteStatusInteractor;
+  private GetFavoriteStatusInteractor getFavoriteStatusInteractor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        getFavoriteStatusInteractor =
-          new GetFavoriteStatusInteractor(interactorHandler, postExecutionThread, localFavoriteRepository);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    getFavoriteStatusInteractor =
+        new GetFavoriteStatusInteractor(interactorHandler, postExecutionThread,
+            localFavoriteRepository);
+  }
 
-    @Test public void shouldCallbackWhenLoadFavoriteStreams() {
-        getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
-        verify(callback).onLoaded(anyBoolean());
-    }
+  @Test public void shouldCallbackWhenLoadFavoriteStreams() {
+    getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
+    verify(callback).onLoaded(anyBoolean());
+  }
 
-    @Test public void shouldLoadLocalStreamStatus() {
-        when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
-        getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
-        verify(callback).onLoaded(anyBoolean());
-    }
+  @Test public void shouldLoadLocalStreamStatus() {
+    when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
+    getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
+    verify(callback).onLoaded(anyBoolean());
+  }
 
-    @Test public void shouldCallbackTrueIfStreamIsFavorited() {
-        when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
-        getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
-        verify(callback).onLoaded(true);
-    }
+  @Test public void shouldCallbackTrueIfStreamIsFavorited() {
+    when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
+    getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
+    verify(callback).onLoaded(true);
+  }
 
-    @Test public void shouldCallbackFalseIfStreamIsNotFavorited() {
-        when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(null);
-        getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
-        verify(callback).onLoaded(false);
-    }
+  @Test public void shouldCallbackFalseIfStreamIsNotFavorited() {
+    when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(null);
+    getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
+    verify(callback).onLoaded(false);
+  }
 
-    @Test public void shouldLoadLocalStreamStatusBeforeCallback() {
-        when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
-        getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
+  @Test public void shouldLoadLocalStreamStatusBeforeCallback() {
+    when(localFavoriteRepository.getFavoriteByStream(STREAM_ID)).thenReturn(new Favorite());
+    getFavoriteStatusInteractor.loadFavoriteStatus(STREAM_ID, callback);
 
-        InOrder inOrder = inOrder(callback, localFavoriteRepository);
-        inOrder.verify(localFavoriteRepository).getFavoriteByStream(anyString());
-        inOrder.verify(callback).onLoaded(anyBoolean());
-    }
+    InOrder inOrder = inOrder(callback, localFavoriteRepository);
+    inOrder.verify(localFavoriteRepository).getFavoriteByStream(anyString());
+    inOrder.verify(callback).onLoaded(anyBoolean());
+  }
 }

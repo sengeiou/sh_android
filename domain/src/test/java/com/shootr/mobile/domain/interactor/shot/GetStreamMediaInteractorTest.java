@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.interactor.stream;
+package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.User;
@@ -19,43 +19,51 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GetOlderStreamMediaInteractorTest {
+public class GetStreamMediaInteractorTest {
 
   private static final String ID_STREAM = "idStream";
-  private static final Long TIME = 1L;
   @Mock ShotRepository remoteShotRepository;
+  @Mock ShotRepository localShotRepository;
   @Mock UserRepository remoteUserRepository;
+  @Mock UserRepository localUserRepository;
   @Mock SessionRepository sessionRepository;
   @Mock Interactor.Callback<List<Shot>> callback;
   @Mock Interactor.ErrorCallback errorCallback;
 
-  private GetOlderStreamMediaInteractor interactor;
+  private com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor interactor;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     TestInteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-    interactor = new GetOlderStreamMediaInteractor(interactorHandler, postExecutionThread,
-        remoteShotRepository, remoteUserRepository, sessionRepository);
+    interactor =
+        new com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor(interactorHandler,
+            postExecutionThread, remoteShotRepository, localShotRepository, remoteUserRepository,
+            localUserRepository, sessionRepository);
   }
 
-  @Test public void shouldNotifyResultsWhenGetMediaFromRemote() throws Exception {
+  @Test public void shouldNotifyMediaWhenGetShotsFromRepository() throws Exception {
+    when(localUserRepository.getPeople()).thenReturn(users());
     when(remoteUserRepository.getPeople()).thenReturn(users());
 
-    interactor.getOlderStreamMedia(ID_STREAM, TIME, callback, errorCallback);
+    interactor.getStreamMedia(ID_STREAM, callback, errorCallback);
 
-    verify(callback).onLoaded(anyList());
+    verify(callback, atLeastOnce()).onLoaded(anyList());
   }
 
-  @Test public void shouldNotifyErrorWhenRemoteUserRepositoryThrowsServerComunicationException()
+  @Test public void shouldNotifyErrorWhenUserRemoteRepositoryThrowsServerComunicationException()
       throws Exception {
-    when(remoteUserRepository.getPeople()).thenThrow(ServerCommunicationException.class);
+    when(localUserRepository.getPeople()).thenReturn(users());
+    doThrow(ServerCommunicationException.class).
+        when(remoteUserRepository).getPeople();
 
-    interactor.getOlderStreamMedia(ID_STREAM, TIME, callback, errorCallback);
+    interactor.getStreamMedia(ID_STREAM, callback, errorCallback);
 
     verify(errorCallback).onError(any(ServerCommunicationException.class));
   }

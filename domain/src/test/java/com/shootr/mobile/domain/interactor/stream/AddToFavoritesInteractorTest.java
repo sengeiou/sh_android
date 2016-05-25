@@ -30,112 +30,111 @@ import static org.mockito.Mockito.when;
 
 public class AddToFavoritesInteractorTest {
 
-    public static final String ID_STREAM = "id_stream";
-    public static final String USER_ID = "userId";
-    @Mock Interactor.CompletedCallback callback;
-    @Mock Interactor.ErrorCallback errorCallback;
-    @Mock FavoriteRepository localFavoriteRepository;
-    @Mock FavoriteRepository remoteFavoriteRepository;
-    @Mock SessionRepository sessionRepository;
-    @Mock Favorite favorite;
-    @Mock BusPublisher busPublisher;
+  public static final String ID_STREAM = "id_stream";
+  public static final String USER_ID = "userId";
+  @Mock Interactor.CompletedCallback callback;
+  @Mock Interactor.ErrorCallback errorCallback;
+  @Mock FavoriteRepository localFavoriteRepository;
+  @Mock FavoriteRepository remoteFavoriteRepository;
+  @Mock SessionRepository sessionRepository;
+  @Mock Favorite favorite;
+  @Mock BusPublisher busPublisher;
 
-    private AddToFavoritesInteractor addToFavoritesInteractor;
+  private AddToFavoritesInteractor addToFavoritesInteractor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository,
-          remoteFavoriteRepository,
-          interactorHandler,
-          postExecutionThread,
-          sessionRepository,
-          busPublisher);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    addToFavoritesInteractor =
+        new AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
+            interactorHandler, postExecutionThread, sessionRepository, busPublisher);
+  }
 
-    @Test public void shouldCallCompletedCallbackWhenAddToFavorites() {
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(callback).onCompleted();
-    }
+  @Test public void shouldCallCompletedCallbackWhenAddToFavorites() {
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(callback).onCompleted();
+  }
 
-    @Test public void shouldAddFavoriteToLocal() throws StreamAlreadyInFavoritesException {
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(localFavoriteRepository).putFavorite(any(Favorite.class));
-    }
+  @Test public void shouldAddFavoriteToLocal() throws StreamAlreadyInFavoritesException {
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(localFavoriteRepository).putFavorite(any(Favorite.class));
+  }
 
-    @Test public void shouldAddFavoriteToRemote() throws StreamAlreadyInFavoritesException {
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
-    }
+  @Test public void shouldAddFavoriteToRemote() throws StreamAlreadyInFavoritesException {
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+  }
 
-    @Test public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
+  @Test public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavorites());
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
-    }
+    when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavorites());
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
+  }
 
-    @Test public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
+  @Test
+  public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavoritesReversed());
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
-    }
+    when(localFavoriteRepository.getFavorites(anyString())).thenReturn(twoFavoritesReversed());
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
+  }
 
-    @Test public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty()
+  @Test public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty()
       throws StreamAlreadyInFavoritesException {
-        when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(empty());
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
-        verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
-    }
+    when(localFavoriteRepository.getFavorites(USER_ID)).thenReturn(empty());
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
+  }
 
-    @Test public void shouldNotifyCompletedBeforePutFavoriteInRemote() throws StreamAlreadyInFavoritesException {
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+  @Test public void shouldNotifyCompletedBeforePutFavoriteInRemote()
+      throws StreamAlreadyInFavoritesException {
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
 
-        InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
-        inOrder.verify(callback).onCompleted();
-        inOrder.verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
-    }
+    InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
+    inOrder.verify(callback).onCompleted();
+    inOrder.verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+  }
 
-    @Test public void shouldNotifyErrorWhenRemoteRepositoryThrowsException()
-        throws StreamAlreadyInFavoritesException {
-        doThrow(StreamAlreadyInFavoritesException.class).
-            when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+  @Test public void shouldNotifyErrorWhenRemoteRepositoryThrowsException()
+      throws StreamAlreadyInFavoritesException {
+    doThrow(StreamAlreadyInFavoritesException.class).
+        when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
 
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
 
-    @Test public void shouldNotifyErrorWhenStreamIsAlreadyInFavorites()
-        throws StreamAlreadyInFavoritesException {
-        doThrow(StreamAlreadyInFavoritesException.class).
-            when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
+  @Test public void shouldNotifyErrorWhenStreamIsAlreadyInFavorites()
+      throws StreamAlreadyInFavoritesException {
+    doThrow(StreamAlreadyInFavoritesException.class).
+        when(remoteFavoriteRepository).putFavorite(any(Favorite.class));
 
-        addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
+    addToFavoritesInteractor.addToFavorites(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
 
-    private List<Favorite> empty() {
-        return new ArrayList<>();
-    }
+  private List<Favorite> empty() {
+    return new ArrayList<>();
+  }
 
-    private List<Favorite> twoFavoritesReversed() {
-        List<Favorite> twoFavorites = twoFavorites();
-        Collections.reverse(twoFavorites);
-        return twoFavorites;
-    }
+  private List<Favorite> twoFavoritesReversed() {
+    List<Favorite> twoFavorites = twoFavorites();
+    Collections.reverse(twoFavorites);
+    return twoFavorites;
+  }
 
-    private List<Favorite> twoFavorites() {
-        return Arrays.asList(favoriteWithOrder(0), favoriteWithOrder(1));
-    }
+  private List<Favorite> twoFavorites() {
+    return Arrays.asList(favoriteWithOrder(0), favoriteWithOrder(1));
+  }
 
-    private Favorite favoriteWithOrder(int order) {
-        Favorite favorite = new Favorite();
-        favorite.setOrder(order);
-        favorite.setIdStream(ID_STREAM);
-        return favorite;
-    }
+  private Favorite favoriteWithOrder(int order) {
+    Favorite favorite = new Favorite();
+    favorite.setOrder(order);
+    favorite.setIdStream(ID_STREAM);
+    return favorite;
+  }
 }

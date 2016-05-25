@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface StreamRepository {
 
-    Stream getStreamById(String idStream);
+    Stream getStreamById(String idStream, String[] types);
 
-    List<Stream> getStreamsByIds(List<String> streamIds);
+    List<Stream> getStreamsByIds(List<String> streamIds, String[] types);
 
     Stream putStream(Stream stream);
 

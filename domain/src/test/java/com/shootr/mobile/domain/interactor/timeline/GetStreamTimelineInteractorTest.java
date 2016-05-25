@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -28,6 +29,7 @@ import org.mockito.Spy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetStreamTimelineInteractorTest {
@@ -41,6 +43,7 @@ public class GetStreamTimelineInteractorTest {
   private static final Long DATE_MIDDLE = 2000L;
   private static final Long DATE_NEWER = 3000L;
   private static final Boolean NOT_PAUSED = false;
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
   @Mock ShotRepository localShotRepository;
   @Mock UserRepository localUserRepository;
@@ -63,6 +66,12 @@ public class GetStreamTimelineInteractorTest {
         localShotRepository);
   }
 
+  @Test public void shouldLoadLocalShots() throws Exception {
+    interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
+
+    verify(localShotRepository).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
+  }
+
   @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
     setupWatchingStream();
     when(localShotRepository.getShotsForStreamTimeline(
@@ -72,6 +81,16 @@ public class GetStreamTimelineInteractorTest {
     List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
     assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+  }
+
+  @Test public void shouldNotifyLoadedShots() throws Exception {
+    setupWatchingStream();
+    when(localShotRepository.getShotsForStreamTimeline(
+        any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
+
+    interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
+
+    verify(spyCallback).onLoaded(any(Timeline.class));
   }
 
   private User currentUserWatching() {
@@ -94,7 +113,8 @@ public class GetStreamTimelineInteractorTest {
 
   private void setupWatchingStream() {
     when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-    when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
+    when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID), eq(TYPES_STREAM))).thenReturn(
+        watchingStream());
   }
 
   //region Stubs

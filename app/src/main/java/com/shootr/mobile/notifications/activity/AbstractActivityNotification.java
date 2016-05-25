@@ -17,7 +17,8 @@ public abstract class AbstractActivityNotification extends CommonNotification {
         super(context, builderFactory);
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
         builder.setContentIntent(getOpenActivityNotificationPendingIntent());
         builder.setDeleteIntent(getDiscardActivityNotificationPendingIntent());
     }

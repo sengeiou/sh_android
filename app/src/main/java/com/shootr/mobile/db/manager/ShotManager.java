@@ -63,7 +63,7 @@ public class ShotManager extends AbstractManager {
 
         String[] whereArguments = new String[2];
         whereArguments[0] = String.valueOf(parameters.getStreamId());
-        whereArguments[1] = String.valueOf(parameters.getShotType());
+        whereArguments[1] = String.valueOf(parameters.getShotTypes()[0]);
         String whereClause = streamSelection + " AND " + typeSelection;
 
         return readShots(whereClause, whereArguments);
@@ -168,7 +168,7 @@ public class ShotManager extends AbstractManager {
 
         String[] whereArguments = new String[3];
         whereArguments[0] = String.valueOf(timelineParameters.getStreamId());
-        whereArguments[1] = String.valueOf(timelineParameters.getShotType());
+        whereArguments[1] = String.valueOf(timelineParameters.getShotTypes()[0]);
         whereArguments[2] = String.valueOf(timelineParameters.getUserId());
         String whereClause = streamSelection + " AND " + typeSelection + " AND " + userSelection;
 

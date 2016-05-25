@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -53,13 +55,16 @@ public class GetLastShotsInteractor implements Interactor {
   }
 
   private void loadLastShotsFromLocal() {
-    List<Shot> lastShots = localShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
+    List<Shot> lastShots =
+        localShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD, StreamMode.TYPES_STREAM,
+            ShotType.TYPES_SHOWN);
     notifyLoaded(lastShots);
   }
 
   private void loadLastShotsFromRemote() {
     try {
-      List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD);
+      List<Shot> remoteShots = remoteShotRepository.getShotsFromUser(userId, LAST_SHOTS_TRESHOLD,
+          StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
       notifyLoaded(remoteShots);
       saveShotsForCurrentUserAndFollowing(remoteShots);
     } catch (ServerCommunicationException error) {

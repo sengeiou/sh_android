@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 public class GetStreamInteractorTest {
 
   private static final String ID_STREAM = "idStream";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock PostExecutionThread postExecutionThread;
   @Mock StreamRepository localStreamRepository;
   @Mock StreamRepository remoteStreamRepository;
@@ -37,7 +39,7 @@ public class GetStreamInteractorTest {
   }
 
   @Test public void shouldNotifyResultsWhenLoadRemoteStream() throws Exception {
-    when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+    when(remoteStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
     interactor.loadStream(ID_STREAM, callback);
 
@@ -47,8 +49,8 @@ public class GetStreamInteractorTest {
   @Test public void shouldNotifyLocalResultsWhenLoadRemoteStreamThrowsServerComunicationException()
       throws Exception {
     doThrow(ServerCommunicationException.class).
-        when(remoteStreamRepository).getStreamById(ID_STREAM);
-    when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+        when(remoteStreamRepository).getStreamById(ID_STREAM, TYPES_STREAM);
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
     interactor.loadStream(ID_STREAM, callback);
 

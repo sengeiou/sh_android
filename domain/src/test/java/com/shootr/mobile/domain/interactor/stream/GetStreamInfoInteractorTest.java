@@ -27,6 +27,9 @@ public class GetStreamInfoInteractorTest {
   private static final String STREAM_ID = "streamId";
   private static final String USER_ID = "userId";
   private static final String OTHER_USER_ID = "otherUserId";
+  String[] TYPES_STREAM = {
+      "PUBLIC", "VIEW_ONLY"
+  };
   @Mock UserRepository localUserRepository;
   @Mock UserRepository remoteUserRepository;
   @Mock StreamRepository remoteStreamRepository;
@@ -60,13 +63,13 @@ public class GetStreamInfoInteractorTest {
 
   private void setupRemoteRepositories() {
     when(remoteUserRepository.getUserById(anyString())).thenReturn(user());
-    when(remoteStreamRepository.getStreamById(anyString())).thenReturn(stream());
+    when(remoteStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
     when(remoteUserRepository.getPeople()).thenReturn(users());
   }
 
   private void setupLocalRepositories() {
     when(localUserRepository.getUserById(anyString())).thenReturn(user());
-    when(localStreamRepository.getStreamById(anyString())).thenReturn(stream());
+    when(localStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
     when(localUserRepository.getPeople()).thenReturn(users());
   }
 
@@ -85,5 +88,9 @@ public class GetStreamInfoInteractorTest {
 
   private List<User> users() {
     return Collections.singletonList(user());
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

@@ -162,7 +162,7 @@
                 <action android:name="com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL" />
                 <action android:name="com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION" />
                 <action android:name="com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION" />
-
+                <action android:name="com.shootr.mobile.ACTION_NEED_UPDATE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

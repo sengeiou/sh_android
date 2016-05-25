@@ -63,7 +63,6 @@ public class RemoveStreamInteractorTest {
     interactor.removeStream(STREAM_ID, completedCallback, errorCallback);
 
     verify(errorCallback).onError(any(ServerCommunicationException.class));
-
   }
 
   private User user() {

@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -97,7 +98,7 @@ public class GetOlderHoldingStreamTimelineInteractor
     String visibleStreamId = currentUser.getIdWatchingStream();
 
     if (visibleStreamId != null) {
-      return localStreamRepository.getStreamById(visibleStreamId);
+      return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
     }
     return null;
   }

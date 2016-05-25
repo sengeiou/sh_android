@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -59,9 +61,9 @@ public class UnmarkNiceShotInteractor implements Interactor {
   }
 
   private Shot getShotFromLocalIfExists() {
-    Shot shot = localShotRepository.getShot(idShot);
+    Shot shot = localShotRepository.getShot(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
     if (shot == null) {
-      shot = remoteShotRepository.getShot(idShot);
+      shot = remoteShotRepository.getShot(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
     }
     return shot;
   }

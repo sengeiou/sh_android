@@ -33,8 +33,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         this.streamCache = streamCache;
     }
 
-    @Override public Stream getStreamById(String idStream) {
-        StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream);
+    @Override public Stream getStreamById(String idStream, String[] types) {
+        StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream, types);
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
             localStreamDataSource.putStream(streamEntity);
@@ -46,8 +46,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         }
     }
 
-    @Override public List<Stream> getStreamsByIds(List<String> streamIds) {
-        List<StreamEntity> remoteEvents = remoteStreamDataSource.getStreamByIds(streamIds);
+    @Override public List<Stream> getStreamsByIds(List<String> streamIds, String[] types) {
+        List<StreamEntity> remoteEvents = remoteStreamDataSource.getStreamByIds(streamIds, types);
         markEntitiesAsSynchronized(remoteEvents);
         localStreamDataSource.putStreams(remoteEvents);
         return streamEntityMapper.transform(remoteEvents);

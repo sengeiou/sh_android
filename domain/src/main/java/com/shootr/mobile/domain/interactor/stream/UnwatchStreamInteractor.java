@@ -14,65 +14,66 @@ import javax.inject.Inject;
 
 public class UnwatchStreamInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final SessionRepository sessionRepository;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
-    private final BusPublisher busPublisher;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final SessionRepository sessionRepository;
+  private final UserRepository localUserRepository;
+  private final UserRepository remoteUserRepository;
+  private final BusPublisher busPublisher;
 
-    private CompletedCallback completedCallback;
+  private CompletedCallback completedCallback;
 
-    @Inject public UnwatchStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, BusPublisher busPublisher) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.sessionRepository = sessionRepository;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
-        this.busPublisher = busPublisher;
-    }
+  @Inject public UnwatchStreamInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      BusPublisher busPublisher) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.sessionRepository = sessionRepository;
+    this.localUserRepository = localUserRepository;
+    this.remoteUserRepository = remoteUserRepository;
+    this.busPublisher = busPublisher;
+  }
 
-    public void unwatchStream(CompletedCallback completedCallback) {
-        this.completedCallback = completedCallback;
-        interactorHandler.execute(this);
-    }
+  public void unwatchStream(CompletedCallback completedCallback) {
+    this.completedCallback = completedCallback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        User currentUser = getCurrentUser();
-        User updatedUser = removeWatching(currentUser);
-        putInLocal(updatedUser);
-        notifyCompleted();
-        putInRemote(updatedUser);
-    }
+  @Override public void execute() throws Exception {
+    User currentUser = getCurrentUser();
+    User updatedUser = removeWatching(currentUser);
+    putInLocal(updatedUser);
+    notifyCompleted();
+    putInRemote(updatedUser);
+  }
 
-    private void putInRemote(User updatedUser) {
-        remoteUserRepository.updateWatch(updatedUser);
-    }
+  private void putInRemote(User updatedUser) {
+    remoteUserRepository.updateWatch(updatedUser);
+  }
 
-    private void putInLocal(User updatedUser) {
-        sessionRepository.setCurrentUser(updatedUser);
-        localUserRepository.updateWatch(updatedUser);
-    }
+  private void putInLocal(User updatedUser) {
+    sessionRepository.setCurrentUser(updatedUser);
+    localUserRepository.updateWatch(updatedUser);
+  }
 
-    private User getCurrentUser() {
-        return localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-    }
+  private User getCurrentUser() {
+    return localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+  }
 
-    protected User removeWatching(User currentUser) {
-        currentUser.setIdWatchingStream(null);
-        currentUser.setWatchingStreamTitle(null);
-        currentUser.setJoinStreamDate(null);
-        return currentUser;
-    }
+  protected User removeWatching(User currentUser) {
+    currentUser.setIdWatchingStream(null);
+    currentUser.setWatchingStreamTitle(null);
+    currentUser.setJoinStreamDate(null);
+    return currentUser;
+  }
 
-    private void notifyCompleted() {
-        busPublisher.post(new UnwatchDone.Event());
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                completedCallback.onCompleted();
-            }
-        });
-    }
+  private void notifyCompleted() {
+    busPublisher.post(new UnwatchDone.Event());
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        completedCallback.onCompleted();
+      }
+    });
+  }
 }

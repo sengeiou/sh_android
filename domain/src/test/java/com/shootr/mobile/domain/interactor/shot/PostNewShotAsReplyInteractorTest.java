@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -106,12 +107,13 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
   }
 
   private void setupParentShot() {
-    when(localShotRepository.getShot(anyString())).thenReturn(parentShot());
+    when(localShotRepository.getShot(anyString(), anyArray(), anyArray())).thenReturn(parentShot());
   }
 
   private void setupParentShotFromRemote() {
-    when(localShotRepository.getShot(anyString())).thenReturn(null);
-    when(remoteShotRepository.getShot(anyString())).thenReturn(parentShot());
+    when(localShotRepository.getShot(anyString(), anyArray(), anyArray())).thenReturn(null);
+    when(remoteShotRepository.getShot(anyString(), anyArray(), anyArray())).thenReturn(
+        parentShot());
   }
 
   private Shot parentShot() {
@@ -128,5 +130,9 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     shotUserInfo.setIdUser(String.valueOf(PARENT_SHOT_USER_ID));
     shotUserInfo.setUsername(PARENT_SHOT_USERNAME);
     return shotUserInfo;
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

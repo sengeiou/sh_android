@@ -23,105 +23,102 @@ import static org.mockito.Mockito.when;
 
 public class UnwatchStreamInteractorTest {
 
-    public static final String USER_ID = "user_id";
-    public static final String WATCHING_STREAM_ID = "watching_stream_id";
+  public static final String USER_ID = "user_id";
+  public static final String WATCHING_STREAM_ID = "watching_stream_id";
 
-    @Mock SessionRepository sessionRepository;
-    @Mock UserRepository localUserRepository;
-    @Mock UserRepository remoteUserRepository;
-    @Mock CompletedCallback completedCallback;
-    @Mock BusPublisher busPublisher;
+  @Mock SessionRepository sessionRepository;
+  @Mock UserRepository localUserRepository;
+  @Mock UserRepository remoteUserRepository;
+  @Mock CompletedCallback completedCallback;
+  @Mock BusPublisher busPublisher;
 
-    private UnwatchStreamInteractor unwatchStreamInteractor;
+  private UnwatchStreamInteractor unwatchStreamInteractor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
 
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.unwatchStreamInteractor = new UnwatchStreamInteractor(interactorHandler,
-          postExecutionThread,
-          sessionRepository,
-          localUserRepository,
-          remoteUserRepository,
-          busPublisher);
-    }
+    this.unwatchStreamInteractor =
+        new UnwatchStreamInteractor(interactorHandler, postExecutionThread, sessionRepository,
+            localUserRepository, remoteUserRepository, busPublisher);
+  }
 
-    //region tests
-    @Test public void shouldUpdateUserInfoInSessionRepositoryWhenUnwatch() throws Throwable {
-        setupUserWithWatchingStream();
+  //region tests
+  @Test public void shouldUpdateUserInfoInSessionRepositoryWhenUnwatch() throws Throwable {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        verify(sessionRepository).setCurrentUser(user());
-    }
+    verify(sessionRepository).setCurrentUser(user());
+  }
 
-    @Test public void shouldUpdateUserInfoInLocalRepositoryWhenUnwatch() {
-        setupUserWithWatchingStream();
+  @Test public void shouldUpdateUserInfoInLocalRepositoryWhenUnwatch() {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        verify(localUserRepository).updateWatch(user());
-    }
+    verify(localUserRepository).updateWatch(user());
+  }
 
-    @Test public void shouldUpdateUserInfoInRemoteRepositoryWhenUnwatch() {
-        setupUserWithWatchingStream();
+  @Test public void shouldUpdateUserInfoInRemoteRepositoryWhenUnwatch() {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        verify(remoteUserRepository).updateWatch(user());
-    }
+    verify(remoteUserRepository).updateWatch(user());
+  }
 
-    @Test public void shouldupdateWatchWithNoWatchingStreamInSessionRepositoryWhenUnwatch() {
-        setupUserWithWatchingStream();
+  @Test public void shouldupdateWatchWithNoWatchingStreamInSessionRepositoryWhenUnwatch() {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
-        verify(sessionRepository).setCurrentUser(argument.capture());
-        assertThat(argument.getValue().getIdWatchingStream()).isNull();
-    }
+    ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+    verify(sessionRepository).setCurrentUser(argument.capture());
+    assertThat(argument.getValue().getIdWatchingStream()).isNull();
+  }
 
-    @Test public void shouldNotifyCompletedAfterLocalUserInfoUpdated() {
-        setupUserWithWatchingStream();
+  @Test public void shouldNotifyCompletedAfterLocalUserInfoUpdated() {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        InOrder inOrder = inOrder(localUserRepository, completedCallback);
-        inOrder.verify(localUserRepository).updateWatch(user());
-        inOrder.verify(completedCallback).onCompleted();
-    }
+    InOrder inOrder = inOrder(localUserRepository, completedCallback);
+    inOrder.verify(localUserRepository).updateWatch(user());
+    inOrder.verify(completedCallback).onCompleted();
+  }
 
-    @Test public void shouldNotifyCompletedBeforeRemoteUserInfoUpdated() {
-        setupUserWithWatchingStream();
+  @Test public void shouldNotifyCompletedBeforeRemoteUserInfoUpdated() {
+    setupUserWithWatchingStream();
 
-        unwatchStreamInteractor.unwatchStream(completedCallback);
+    unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        InOrder inOrder = inOrder(completedCallback, remoteUserRepository);
-        inOrder.verify(completedCallback).onCompleted();
-        inOrder.verify(remoteUserRepository).updateWatch(user());
-    }
-    //endregion
+    InOrder inOrder = inOrder(completedCallback, remoteUserRepository);
+    inOrder.verify(completedCallback).onCompleted();
+    inOrder.verify(remoteUserRepository).updateWatch(user());
+  }
+  //endregion
 
-    //region stubbers
-    private User user() {
-        User user = new User();
-        user.setIdUser(USER_ID);
-        return user;
-    }
+  //region stubbers
+  private User user() {
+    User user = new User();
+    user.setIdUser(USER_ID);
+    return user;
+  }
 
-    private User userWithWatchingStream() {
-        User user = new User();
-        user.setIdUser(USER_ID);
-        user.setIdWatchingStream(WATCHING_STREAM_ID);
-        return user;
-    }
+  private User userWithWatchingStream() {
+    User user = new User();
+    user.setIdUser(USER_ID);
+    user.setIdWatchingStream(WATCHING_STREAM_ID);
+    return user;
+  }
 
-    //endregion
+  //endregion
 
-    private void setupUserWithWatchingStream() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingStream());
-    }
+  private void setupUserWithWatchingStream() {
+    when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+    when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingStream());
+  }
 }

@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -19,112 +20,117 @@ import javax.inject.Inject;
 
 public class SelectStreamInteractor implements Interactor {
 
-    //region Dependencies
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final StreamRepository localStreamRepository;
-    private final StreamRepository remoteStreamRepository;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
-    private final WatchersRepository localWatchersRepository;
-    private final SessionRepository sessionRepository;
-    private final TimeUtils timeUtils;
+  //region Dependencies
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final StreamRepository localStreamRepository;
+  private final StreamRepository remoteStreamRepository;
+  private final UserRepository localUserRepository;
+  private final UserRepository remoteUserRepository;
+  private final WatchersRepository localWatchersRepository;
+  private final SessionRepository sessionRepository;
+  private final TimeUtils timeUtils;
 
-    private String idSelectedStream;
-    private Callback<StreamSearchResult> callback;
-    private ErrorCallback errorCallback;
+  private String idSelectedStream;
+  private Callback<StreamSearchResult> callback;
+  private ErrorCallback errorCallback;
 
-    @Inject
-    public SelectStreamInteractor(final InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository,
-      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
-      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localStreamRepository = localStreamRepository;
-        this.remoteStreamRepository = remoteStreamRepository;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
-        this.localWatchersRepository = localWatchersRepository;
-        this.sessionRepository = sessionRepository;
-        this.timeUtils = timeUtils;
+  @Inject public SelectStreamInteractor(final InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
+      @Remote StreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository,
+      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository,
+      TimeUtils timeUtils) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localStreamRepository = localStreamRepository;
+    this.remoteStreamRepository = remoteStreamRepository;
+    this.localUserRepository = localUserRepository;
+    this.remoteUserRepository = remoteUserRepository;
+    this.localWatchersRepository = localWatchersRepository;
+    this.sessionRepository = sessionRepository;
+    this.timeUtils = timeUtils;
+  }
+  //endregion
+
+  public void selectStream(String idStream, Callback<StreamSearchResult> callback,
+      ErrorCallback errorCallback) {
+    this.idSelectedStream = idStream;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+    Stream selectedStream = getSelectedStream();
+    if (isSelectingCurrentWatchingStream(currentUser)) {
+      notifyLoaded(selectedStream);
+    } else {
+
+      if (selectedStream != null) {
+        User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+
+        sessionRepository.setCurrentUser(updatedUser);
+        localUserRepository.updateWatch(updatedUser);
+        notifyLoaded(selectedStream);
+        remoteUserRepository.updateWatch(updatedUser);
+      } else {
+        notifyError(new ServerCommunicationException(new Throwable()));
+      }
     }
-    //endregion
+  }
 
-    public void selectStream(String idStream, Callback<StreamSearchResult> callback, ErrorCallback errorCallback) {
-        this.idSelectedStream = idStream;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private Stream getSelectedStream() {
+    Stream selectedStream =
+        localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
+    if (selectedStream == null) {
+      try {
+        selectedStream =
+            remoteStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
+      } catch (ServerCommunicationException error) {
+        notifyError(error);
+      }
     }
+    return selectedStream;
+  }
 
-    @Override public void execute() throws Exception {
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        Stream selectedStream = getSelectedStream();
-        if (isSelectingCurrentWatchingStream(currentUser)) {
-            notifyLoaded(selectedStream);
-        } else {
+  private boolean isSelectingCurrentWatchingStream(User currentUser) {
+    return idSelectedStream.equals(currentUser.getIdWatchingStream());
+  }
 
-            if (selectedStream != null) {
-                User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+  protected User updateUserWithStreamInfo(User currentUser, Stream selectedStream) {
+    currentUser.setIdWatchingStream(selectedStream.getId());
+    currentUser.setWatchingStreamTitle(selectedStream.getTitle());
+    currentUser.setJoinStreamDate(getCurrentTime());
+    return currentUser;
+  }
 
-                sessionRepository.setCurrentUser(updatedUser);
-                localUserRepository.updateWatch(updatedUser);
-                notifyLoaded(selectedStream);
-                remoteUserRepository.updateWatch(updatedUser);
-            } else {
-                notifyError(new ServerCommunicationException(new Throwable()));
-            }
-        }
-    }
+  private long getCurrentTime() {
+    return timeUtils.getCurrentTime();
+  }
 
-    private Stream getSelectedStream() {
-        Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream);
-        if (selectedStream == null) {
-            try {
-                selectedStream = remoteStreamRepository.getStreamById(idSelectedStream);
-            } catch (ServerCommunicationException error) {
-                notifyError(error);
-            }
-        }
-        return selectedStream;
-    }
+  private StreamSearchResult attachWatchNumber(Stream stream) {
+    StreamSearchResult streamSearchResult = new StreamSearchResult();
+    streamSearchResult.setStream(stream);
+    streamSearchResult.setFollowingWatchersNumber(
+        localWatchersRepository.getWatchers(stream.getId()));
+    return streamSearchResult;
+  }
 
-    private boolean isSelectingCurrentWatchingStream(User currentUser) {
-        return idSelectedStream.equals(currentUser.getIdWatchingStream());
-    }
+  private void notifyLoaded(final Stream selectedStream) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(attachWatchNumber(selectedStream));
+      }
+    });
+  }
 
-    protected User updateUserWithStreamInfo(User currentUser, Stream selectedStream) {
-        currentUser.setIdWatchingStream(selectedStream.getId());
-        currentUser.setWatchingStreamTitle(selectedStream.getTitle());
-        currentUser.setJoinStreamDate(getCurrentTime());
-        return currentUser;
-    }
-
-    private long getCurrentTime() {
-        return timeUtils.getCurrentTime();
-    }
-
-    private StreamSearchResult attachWatchNumber(Stream stream) {
-        StreamSearchResult streamSearchResult = new StreamSearchResult();
-        streamSearchResult.setStream(stream);
-        streamSearchResult.setFollowingWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
-        return streamSearchResult;
-    }
-
-    private void notifyLoaded(final Stream selectedStream) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(attachWatchNumber(selectedStream));
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }

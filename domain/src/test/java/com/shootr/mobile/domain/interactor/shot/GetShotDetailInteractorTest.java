@@ -2,6 +2,8 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -31,6 +33,8 @@ public class GetShotDetailInteractorTest {
   private static final Long DATE_OLDER = 1000L;
   private static final Long DATE_MIDDLE = 2000L;
   private static final Long DATE_NEWER = 3000L;
+  private static String[] TYPES_SHOT = ShotType.TYPES_SHOWN;
+  private static String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
   @Mock ShotRepository localShotRepository;
   @Mock ShotRepository remoteShotRepository;
@@ -49,7 +53,8 @@ public class GetShotDetailInteractorTest {
   }
 
   @Test public void shouldCallbackLocalRepliesInOrderNewerBelow() throws Exception {
-    when(localShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(unorderedReplies());
+    when(localShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        unorderedReplies());
 
     interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
@@ -58,7 +63,8 @@ public class GetShotDetailInteractorTest {
   }
 
   @Test public void shouldCallbackRemoteRepliesInOrderNewerBelow() throws Exception {
-    when(remoteShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(unorderedReplies());
+    when(remoteShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        unorderedReplies());
 
     interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
@@ -67,12 +73,17 @@ public class GetShotDetailInteractorTest {
   }
 
   @Test public void shouldNotifyErrorWhenRemoteShotRepositoryThrowsException() throws Exception {
-    when(remoteShotRepository.getShotDetail(anyString())).thenThrow(new ShootrException() {
-    });
+    when(remoteShotRepository.getShotDetail(anyString(), anyArray(), anyArray())).thenThrow(
+        new ShootrException() {
+        });
 
     interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
+  }
+
+  protected String[] anyArray() {
+    return any(String[].class);
   }
 
   private ShotDetail unorderedReplies() {
@@ -98,7 +109,9 @@ public class GetShotDetailInteractorTest {
   }
 
   private void setupDefaultEmptyShotDetail() {
-    when(localShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(emptyShotDetail());
-    when(remoteShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(emptyShotDetail());
+    when(localShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        emptyShotDetail());
+    when(remoteShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        emptyShotDetail());
   }
 }

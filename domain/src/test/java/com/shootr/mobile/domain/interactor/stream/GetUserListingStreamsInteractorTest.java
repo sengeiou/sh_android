@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Favorite;
 import com.shootr.mobile.domain.Listing;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -37,6 +38,7 @@ public class GetUserListingStreamsInteractorTest {
 
   public static final String ID_USER = "idUser";
   public static final String ID_STREAM = "idStream";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock StreamSearchRepository localStreamSearchRepository;
   @Mock StreamSearchRepository remoteStreamSearchRepository;
   @Mock StreamRepository localStreamRepository;
@@ -59,8 +61,8 @@ public class GetUserListingStreamsInteractorTest {
   }
 
   @Test public void shouldReturnListingWithHoldingIfUserHaveHoldingStreams() throws Exception {
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -70,9 +72,10 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldReturnListingWithFavoritesIfUserHaveFavoriteStreams() throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
+    when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
+        favoriteStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -82,8 +85,8 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHaveHoldingStreams()
       throws Exception {
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -94,9 +97,10 @@ public class GetUserListingStreamsInteractorTest {
   @Test public void shouldReturnListingWithIncludeFavoritesIfUserHaveFavoriteStreams()
       throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamRepository.getStreamsByIds(anyList())).thenReturn(favoriteStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
+    when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
+        favoriteStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -114,8 +118,8 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldReturnListingWithIncludeFavoritesTrueIfUserFavoriteStreamsAreEmptyList()
       throws Exception {
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -126,27 +130,27 @@ public class GetUserListingStreamsInteractorTest {
   @Test public void shouldLoadUserListingFromLocal() throws Exception {
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(localStreamSearchRepository).getStreamsListing(anyString());
+    verify(localStreamSearchRepository).getStreamsListing(anyString(), anyArray());
   }
 
   @Test public void shouldLoadUserListingFromRemote() throws Exception {
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(remoteStreamSearchRepository).getStreamsListing(anyString());
+    verify(remoteStreamSearchRepository).getStreamsListing(anyString(), anyArray());
   }
 
   @Test public void shouldLoadFavoritesFromLocal() throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(localStreamRepository).getStreamsByIds(anyList());
+    verify(localStreamRepository).getStreamsByIds(anyList(), anyArray());
   }
 
   @Test public void shouldLoadFavoritesFromRemote() throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(remoteStreamRepository).getStreamsByIds(anyList());
+    verify(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
   }
 
   @Test public void shouldReturnListingWithoutHoldingIfUserHaveNoHoldingStreams() throws Exception {
@@ -158,8 +162,8 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldReturnListingWithoutFavoritesIfUserHaveNoFavoriteStreams()
       throws Exception {
-    when(remoteStreamSearchRepository.getStreamsListing(ID_USER)).thenReturn(listingStreams());
-    when(remoteStreamSearchRepository.getHolderFavorites(ID_USER)).thenReturn(holderWatchers());
+    when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
+        listingStreams());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -170,7 +174,7 @@ public class GetUserListingStreamsInteractorTest {
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowServerComunicationException()
       throws Exception {
     doThrow(ServerCommunicationException.class).
-        when(remoteStreamRepository).getStreamsByIds(anyList());
+        when(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
@@ -224,5 +228,9 @@ public class GetUserListingStreamsInteractorTest {
     favorite.setIdStream(ID_STREAM);
     favorites.add(favorite);
     return favorites;
+  }
+
+  private String[] anyArray() {
+    return any(String[].class);
   }
 }

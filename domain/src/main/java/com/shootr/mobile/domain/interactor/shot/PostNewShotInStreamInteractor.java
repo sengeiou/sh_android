@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
@@ -43,7 +44,7 @@ public class PostNewShotInStreamInteractor extends PostNewShotInteractor {
   private Stream currentVisibleStream() {
     String visibleStreamId = sessionRepository.getCurrentUser().getIdWatchingStream();
     if (visibleStreamId != null) {
-      return localStreamRepository.getStreamById(visibleStreamId);
+      return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
     } else {
       return null;
     }

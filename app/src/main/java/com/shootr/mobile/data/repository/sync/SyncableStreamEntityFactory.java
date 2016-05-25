@@ -5,6 +5,7 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.repository.Local;
 import java.util.Date;
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import javax.inject.Singleton;
     }
 
     @Override protected StreamEntity currentEntity(Stream stream) {
-        return localStreamDataSource.getStreamById(stream.getId());
+        return localStreamDataSource.getStreamById(stream.getId(), StreamMode.TYPES_STREAM);
     }
 
     @Override protected StreamEntity updateValues(StreamEntity currentEntity, Stream stream) {
