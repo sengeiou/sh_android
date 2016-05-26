@@ -25,7 +25,6 @@ import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
-import com.shootr.mobile.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
@@ -90,7 +89,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this, getView());
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
         adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {

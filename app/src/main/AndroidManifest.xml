@@ -15,7 +15,6 @@
 
     <!-- optional -->
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-    <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
 
     <permission
       android:name="${packageName}.permission.C2D_MESSAGE"
