@@ -76,7 +76,7 @@ public class PostNewShotPresenter implements Presenter {
         }
         this.isReply = true;
         this.replyParentId = replyParentId;
-        postNewShotView.showReplyToUsername(replyToUsername);
+        this.postNewShotView.showReplyToUsername(replyToUsername);
     }
 
     public void textChanged(String currentText) {
