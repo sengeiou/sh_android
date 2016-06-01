@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         >
 
-      <com.shootr.mobile.ui.widgets.ScrollListView
+      <android.support.v7.widget.RecyclerView
           android:id="@+id/timeline_shot_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"

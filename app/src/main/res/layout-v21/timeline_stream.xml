@@ -18,9 +18,10 @@
         android:id="@+id/timeline_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="com.shootr.mobile.ui.widgets.SwipeRefreshLayoutBehavior"
         >
 
-      <com.shootr.mobile.ui.widgets.ScrollListView
+      <android.support.v7.widget.RecyclerView
           android:id="@+id/timeline_shot_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
