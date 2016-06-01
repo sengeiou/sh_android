@@ -9,23 +9,16 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
@@ -39,7 +32,6 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -80,7 +72,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
 
     BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
-
+    bottomBar.setMaxFixedTabs(2);
     bottomBar.noNavBarGoodness();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
       @Override
@@ -105,9 +97,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       }
     });
 
-    bottomBar.mapColorForTab(0, getResources().getColor(R.color.primary));
+    bottomBar.mapColorForTab(0, getResources().getColor(R.color.intro_create_background));
     bottomBar.mapColorForTab(1, getResources().getColor(R.color.primary));
-    bottomBar.mapColorForTab(2, getResources().getColor(R.color.primary));
+    bottomBar.mapColorForTab(2, getResources().getColor(R.color.favorite_tab));
     loadIntentData();
     handleUpdateVersion();
   }
