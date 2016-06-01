@@ -8,10 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +21,11 @@ import android.view.View;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import com.ncapdevi.fragnav.FragNavController;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
@@ -31,6 +37,8 @@ import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 
@@ -39,8 +47,6 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
-  @Bind(R.id.pager) ViewPager viewPager;
-  @Bind(R.id.tab_layout) TabLayout tabLayout;
   @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @Inject MainScreenPresenter mainScreenPresenter;
@@ -50,6 +56,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private ToolbarDecorator toolbarDecorator;
   private BadgeDrawable activityBadgeIcon;
   private MenuItemValueHolder activityMenu = new MenuItemValueHolder();
+  private FragNavController fragNavController;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -64,17 +71,43 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
 
-    SectionsPagerAdapter sectionsPagerAdapter =
-        new SectionsPagerAdapter(getSupportFragmentManager());
-    viewPager.setAdapter(sectionsPagerAdapter);
-    viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
-    viewPager.setPageMarginDrawable(R.drawable.page_margin);
-    viewPager.setOffscreenPageLimit(2);
+    List<Fragment> fragments = new ArrayList<>(3);
 
-    tabLayout.setupWithViewPager(viewPager);
-    setupTabLayoutListener();
-    viewPager.setCurrentItem(1);
+    fragments.add(FavoritesFragment.newInstance());
+    fragments.add(StreamsListFragment.newInstance());
+    fragments.add(PeopleFragment.newInstance());
 
+    fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
+
+    BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
+
+    bottomBar.noNavBarGoodness();
+    bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
+      @Override
+      public void onMenuTabSelected(@IdRes int menuItemId) {
+        switch (menuItemId) {
+          case R.id.bottombar_favorites:
+            fragNavController.switchTab(FragNavController.TAB1);
+            break;
+          case R.id.bottombar_streams:
+            fragNavController.switchTab(FragNavController.TAB2);
+            break;
+          case R.id.bottombar_friends:
+            fragNavController.switchTab(FragNavController.TAB3);
+            break;
+          default:
+            break;
+        }
+      }
+
+      @Override
+      public void onMenuTabReSelected(@IdRes int menuItemId) {
+      }
+    });
+
+    bottomBar.mapColorForTab(0, getResources().getColor(R.color.primary));
+    bottomBar.mapColorForTab(1, getResources().getColor(R.color.primary));
+    bottomBar.mapColorForTab(2, getResources().getColor(R.color.primary));
     loadIntentData();
     handleUpdateVersion();
   }
@@ -109,35 +142,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     if (data != null) {
       String address = data.toString();
       deeplinkingNavigator.navigate(this, address);
-    }
-  }
-
-  private void setupTabLayoutListener() {
-    tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-      @Override public void onTabSelected(TabLayout.Tab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-      }
-
-      @Override public void onTabUnselected(TabLayout.Tab tab) {
-                /* no-op */
-      }
-
-      @Override public void onTabReselected(TabLayout.Tab tab) {
-        Fragment currentPage = getSupportFragmentManager().findFragmentByTag(
-            "android:switcher:" + R.id.pager + ":" + viewPager.getCurrentItem());
-        scrollToTop(currentPage, viewPager.getCurrentItem());
-      }
-    });
-  }
-
-  private void scrollToTop(Fragment currentPage, int currentItem) {
-    if (currentPage != null && currentItem == 0) {
-      ((FavoritesFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 1) {
-      ((StreamsListFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 2) {
-      ((PeopleFragment) currentPage).scrollListToTop();
     }
   }
 
@@ -239,45 +243,5 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         startActivity(intent);
       }
     });
-  }
-
-  public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-    public SectionsPagerAdapter(FragmentManager fm) {
-      super(fm);
-    }
-
-    @Override public Fragment getItem(int position) {
-      switch (position) {
-        case 0:
-          return FavoritesFragment.newInstance();
-        case 1:
-          return StreamsListFragment.newInstance();
-        case 2:
-          return PeopleFragment.newInstance();
-        default:
-          throw new IllegalStateException(
-              String.format("Item for position %d doesn't exists", position));
-      }
-    }
-
-    @Override public int getCount() {
-      return 3;
-    }
-
-    @Override public CharSequence getPageTitle(int position) {
-      Locale l = Locale.getDefault();
-      switch (position) {
-        case 0:
-          return getString(R.string.drawer_favorites_title).toUpperCase(l);
-        case 1:
-          return getString(R.string.drawer_streams_title).toUpperCase(l);
-        case 2:
-          return getString(R.string.drawer_friends_title).toUpperCase(l);
-        default:
-          throw new IllegalStateException(
-              String.format("Item title for position %d doesn't exists", position));
-      }
-    }
   }
 }

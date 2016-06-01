@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+      android:id="@+id/bottombar_favorites"
+      android:icon="@drawable/com_facebook_button_icon"
+      android:title="@string/drawer_favorites_title" />
+  <item
+      android:id="@+id/bottombar_streams"
+      android:icon="@drawable/com_facebook_button_icon"
+      android:title="@string/drawer_streams_title" />
+  <item
+      android:id="@+id/bottombar_friends"
+      android:icon="@drawable/com_facebook_button_icon"
+      android:title="@string/drawer_friends_title" />
+</menu>
