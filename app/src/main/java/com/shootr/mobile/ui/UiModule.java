@@ -39,6 +39,7 @@ import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
+import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
@@ -95,7 +96,8 @@ import javax.inject.Singleton;
     NicersActivity.class,
     ContributorsActivity.class,
     FindContributorsActivity.class,
-    PollVoteActivity.class, PollResultsActivity.class
+    PollVoteActivity.class, PollResultsActivity.class,
+    ActivityTimelineContainerFragment.class
   },
   complete = false) public class UiModule {
 

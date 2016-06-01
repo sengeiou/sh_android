@@ -20,6 +20,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
@@ -63,11 +64,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
 
-    List<Fragment> fragments = new ArrayList<>(3);
+    List<Fragment> fragments = new ArrayList<>(4);
 
     fragments.add(FavoritesFragment.newInstance());
     fragments.add(StreamsListFragment.newInstance());
     fragments.add(PeopleFragment.newInstance());
+    fragments.add(ActivityTimelineContainerFragment.newInstance());
 
     fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
 
@@ -87,6 +89,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
           case R.id.bottombar_friends:
             fragNavController.switchTab(FragNavController.TAB3);
             break;
+          case R.id.bottombar_activity:
+            fragNavController.switchTab(FragNavController.TAB4);
           default:
             break;
         }
