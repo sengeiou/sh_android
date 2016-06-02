@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<View xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="6dp"
-  android:layout_height="6dp"
-  android:layout_margin="4dp"
-  android:background="@color/gray_70"
-  tools:showIn="@layout/sample_welcome_indicator" />

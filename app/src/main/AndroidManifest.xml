@@ -237,7 +237,6 @@
         <activity
           android:name=".ui.activities.StreamDataInfoActivity"
           android:label="@string/title_activity_stream_data_info" />
-        <activity android:name=".ui.activities.EasterEggActivity" />
         <activity
           android:name=".ui.activities.NicersActivity"
           android:label="@string/nicers" />
