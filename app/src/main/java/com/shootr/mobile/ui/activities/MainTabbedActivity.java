@@ -44,6 +44,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private FragNavController fragNavController;
   private BottomBar bottomBar;
   private BottomBarBadge unreadActivities;
+  private List<Fragment> fragments;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -57,8 +58,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
+    setupNavigationController();
+    setupBottomBar(savedInstanceState);
+    loadIntentData();
+    handleUpdateVersion();
+  }
 
-    List<Fragment> fragments = new ArrayList<>(4);
+  private void setupBottomBar(Bundle savedInstanceState) {
+    fragments = new ArrayList<>(4);
 
     fragments.add(StreamsListFragment.newInstance());
     fragments.add(FavoritesFragment.newInstance());
@@ -67,12 +74,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
     
-    BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
+    bottomBar = BottomBar.attach(this, savedInstanceState);
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
-      @Override
-      public void onMenuTabSelected(@IdRes int menuItemId) {
+      @Override public void onMenuTabSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
           case R.id.bottombar_streams:
             fragNavController.switchTab(FragNavController.TAB1);
@@ -93,14 +99,49 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
       @Override
       public void onMenuTabReSelected(@IdRes int menuItemId) {
+        switch (menuItemId) {
+          case R.id.bottombar_streams:
+            scrollToTop(fragments.get(FragNavController.TAB1), 0);
+            break;
+          case R.id.bottombar_favorites:
+            scrollToTop(fragments.get(FragNavController.TAB2), 1);
+            break;
+          case R.id.bottombar_friends:
+            scrollToTop(fragments.get(FragNavController.TAB3), 2);
+            break;
+          case R.id.bottombar_activity:
+            scrollToTop(fragments.get(FragNavController.TAB4), 3);
+            break;
+          default:
+            break;
+        }
       }
     });
-
     bottomBar.mapColorForTab(0, getResources().getColor(R.color.intro_create_background));
     bottomBar.mapColorForTab(1, getResources().getColor(R.color.primary));
     bottomBar.mapColorForTab(2, getResources().getColor(R.color.favorite_tab));
     loadIntentData();
     handleUpdateVersion();
+  }
+
+  private void setupNavigationController() {
+    fragments = new ArrayList<>(4);
+    fragments.add(StreamsListFragment.newInstance());
+    fragments.add(FavoritesFragment.newInstance());
+    fragments.add(PeopleFragment.newInstance());
+    fragments.add(ActivityTimelineContainerFragment.newInstance());
+
+    fragNavController = new FragNavController(getSupportFragmentManager(), R.id.container,fragments);
+  }
+
+  private void scrollToTop(Fragment currentPage, int currentItem) {
+    if (currentPage != null && currentItem == 0) {
+      ((StreamsListFragment) currentPage).scrollListToTop();
+    } else if (currentPage != null && currentItem == 1) {
+      ((FavoritesFragment) currentPage).scrollListToTop();
+    } else if (currentPage != null && currentItem == 2) {
+      ((PeopleFragment) currentPage).scrollListToTop();
+    }
   }
 
   private void handleUpdateVersion() {
