@@ -4,19 +4,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -27,15 +25,11 @@ import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
-import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
@@ -47,9 +41,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Inject DeeplinkingNavigator deeplinkingNavigator;
 
   private ToolbarDecorator toolbarDecorator;
-  private BadgeDrawable activityBadgeIcon;
-  private MenuItemValueHolder activityMenu = new MenuItemValueHolder();
   private FragNavController fragNavController;
+  private BottomBar bottomBar;
+  private BottomBarBadge unreadActivities;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -72,9 +66,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragments.add(ActivityTimelineContainerFragment.newInstance());
 
     fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
-
+    
     BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
-    bottomBar.setMaxFixedTabs(2);
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
@@ -92,6 +85,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             break;
           case R.id.bottombar_activity:
             fragNavController.switchTab(FragNavController.TAB4);
+            break;
           default:
             break;
         }
@@ -162,52 +156,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     mainScreenPresenter.pause();
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.main, menu);
-    activityMenu.bindRealMenuItem(menu.findItem(R.id.menu_activity));
-
-    LayerDrawable activityIcon =
-        (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
-    checkNotNull(activityIcon);
-    setupActivityBadgeIcon(activityIcon);
-    activityMenu.setIcon(activityIcon);
-    activityMenu.getIcon();
-
-    return true;
-  }
-
-  public void setupActivityBadgeIcon(LayerDrawable icon) {
-    // Reuse drawable if possible
-    if (activityBadgeIcon == null) {
-      Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
-      if (reuse != null && reuse instanceof BadgeDrawable) {
-        activityBadgeIcon = (BadgeDrawable) reuse;
-      } else {
-        activityBadgeIcon = new BadgeDrawable(this);
-      }
-    }
-    icon.mutate();
-    icon.setDrawableByLayerId(R.id.ic_badge, activityBadgeIcon);
-  }
-
-  private void updateWatchNumberIcon(int count) {
-    if (activityBadgeIcon == null) {
-      LayerDrawable activityIcon =
-          (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
-      setupActivityBadgeIcon(activityIcon);
-    }
-    activityBadgeIcon.setCount(count);
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.menu_activity) {
-      navigateToActivity();
-      return true;
-    } else {
-      return super.onOptionsItemSelected(item);
-    }
-  }
-
   private void navigateToActivity() {
     startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
   }
@@ -219,7 +167,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void showActivityBadge(int count) {
-    updateWatchNumberIcon(count);
+    if (unreadActivities == null) {
+      unreadActivities = bottomBar.makeBadgeForTabAt(3, Color.TRANSPARENT, count);
+    } else {
+      unreadActivities.setCount(count);
+    }
   }
 
   @Override public void showHasMultipleActivities(Integer badgeCount) {
