@@ -66,8 +66,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     List<Fragment> fragments = new ArrayList<>(4);
 
-    fragments.add(FavoritesFragment.newInstance());
     fragments.add(StreamsListFragment.newInstance());
+    fragments.add(FavoritesFragment.newInstance());
     fragments.add(PeopleFragment.newInstance());
     fragments.add(ActivityTimelineContainerFragment.newInstance());
 
@@ -76,14 +76,15 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
     bottomBar.setMaxFixedTabs(2);
     bottomBar.noNavBarGoodness();
+    bottomBar.noTopOffset();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
       @Override
       public void onMenuTabSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
-          case R.id.bottombar_favorites:
+          case R.id.bottombar_streams:
             fragNavController.switchTab(FragNavController.TAB1);
             break;
-          case R.id.bottombar_streams:
+          case R.id.bottombar_favorites:
             fragNavController.switchTab(FragNavController.TAB2);
             break;
           case R.id.bottombar_friends:
