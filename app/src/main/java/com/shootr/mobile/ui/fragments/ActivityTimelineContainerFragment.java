@@ -80,8 +80,8 @@ public class ActivityTimelineContainerFragment extends BaseFragment {
       }
 
       @Override public void onTabReselected(TabLayout.Tab tab) {
-        Fragment currentPage = getActivity().getSupportFragmentManager().findFragmentByTag("android:switcher:"
-            + R.id.activity_pager
+        Fragment currentPage = getFragmentManager().findFragmentByTag("android:switcher:"
+            + R.id.activity_pager_timelines
             + ":"
             + viewPager.getCurrentItem());
         scrollToTop(currentPage, viewPager.getCurrentItem());
