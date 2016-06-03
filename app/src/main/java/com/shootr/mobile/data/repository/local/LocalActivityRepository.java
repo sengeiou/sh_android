@@ -29,24 +29,19 @@ public class LocalActivityRepository implements ActivityRepository {
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
         List<ActivityEntity> activityTimeline = localActivityDataSource.getActivityTimeline(parameters, locale);
-        List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
+        List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline, parameters);
         return activityEntityMapper.transform(activityEntities);
-    }
-
-    @Override public Activity getActivity(String activityId) {
-        ActivityEntity activity = localActivityDataSource.getActivity(activityId);
-        bindActivityShot(activity);
-        return activityEntityMapper.transform(activity);
     }
 
     @Override public void deleteActivitiesWithShot(String idShot) {
         localActivityDataSource.deleteActivitiesWithShot(idShot);
     }
 
-    private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activities) {
+    private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activities,
+        ActivityTimelineParameters parameters) {
         List<ActivityEntity> activityEntities = new ArrayList<>();
         for (ActivityEntity activity : activities) {
-            bindActivityShot(activity);
+            bindActivityShot(activity, parameters);
             if (activity.getIdShot() != null && activity.getShotForMapping() != null) {
                 activityEntities.add(activity);
             } else if (activity.getIdShot() == null) {
@@ -56,14 +51,14 @@ public class LocalActivityRepository implements ActivityRepository {
         return activityEntities;
     }
 
-    private void bindActivityShot(ActivityEntity activity) {
+    private void bindActivityShot(ActivityEntity activity, ActivityTimelineParameters parameters) {
         if (activity.getIdShot() != null) {
-            activity.setShotForMapping(getShotForActivity(activity));
+            activity.setShotForMapping(getShotForActivity(activity, parameters));
         }
     }
 
-    private Shot getShotForActivity(ActivityEntity activity) {
+    private Shot getShotForActivity(ActivityEntity activity, ActivityTimelineParameters parameters) {
         String idShot = checkNotNull(activity.getIdShot());
-        return localShotRepository.getShot(idShot);
+        return localShotRepository.getShot(idShot, parameters.getStreamTypes(), parameters.getShotTypes());
     }
 }

@@ -52,8 +52,8 @@ public class GetLastShotsInteractorTest {
 
   @Test public void shouldPutRemoteShotsInLocalWhenCurrentUser() throws Exception {
     List<Shot> remoteShots = shotList();
-    when(remoteShotRepository.getShotsFromUser(eq(ID_CURRENT_USER), anyInt())).thenReturn(
-        remoteShots);
+    when(remoteShotRepository.getShotsFromUser(eq(ID_CURRENT_USER), anyInt(), anyArray(),
+        anyArray())).thenReturn(remoteShots);
 
     interactor.loadLastShots(ID_CURRENT_USER, callback, errorCallback);
 
@@ -62,7 +62,8 @@ public class GetLastShotsInteractorTest {
 
   @Test public void shouldPutRemoteShotsInLocalWhenFollowing() throws Exception {
     List<Shot> remoteShots = shotList();
-    when(remoteShotRepository.getShotsFromUser(eq(ID_FOLLOWING), anyInt())).thenReturn(remoteShots);
+    when(remoteShotRepository.getShotsFromUser(eq(ID_FOLLOWING), anyInt(), anyArray(),
+        anyArray())).thenReturn(remoteShots);
 
     interactor.loadLastShots(ID_FOLLOWING, callback, errorCallback);
 
@@ -71,8 +72,8 @@ public class GetLastShotsInteractorTest {
 
   @Test public void shouldNotPutRemoteShotsInLocalWhenNotFollowing() throws Exception {
     List<Shot> remoteShots = shotList();
-    when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt())).thenReturn(
-        remoteShots);
+    when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt(), anyArray(),
+        anyArray())).thenReturn(remoteShots);
 
     interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
 
@@ -83,8 +84,8 @@ public class GetLastShotsInteractorTest {
       throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(null);
     List<Shot> remoteShots = shotList();
-    when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt())).thenReturn(
-        remoteShots);
+    when(remoteShotRepository.getShotsFromUser(eq(ID_NOT_FOLLOWING), anyInt(), anyArray(),
+        anyArray())).thenReturn(remoteShots);
 
     interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
 
@@ -94,18 +95,18 @@ public class GetLastShotsInteractorTest {
   @Test
   public void shouldLloadLastShotsFromLocalIfRemoteShotRepositoryThrowsServerCommunicationException()
       throws Exception {
-    when(remoteShotRepository.getShotsFromUser(anyString(), anyInt())).thenThrow(
-        new ServerCommunicationException(new Throwable()));
+    when(remoteShotRepository.getShotsFromUser(anyString(), anyInt(), anyArray(),
+        anyArray())).thenThrow(new ServerCommunicationException(new Throwable()));
 
     interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
 
-    verify(localShotRepository).getShotsFromUser(anyString(), anyInt());
+    verify(localShotRepository).getShotsFromUser(anyString(), anyInt(), anyArray(), anyArray());
   }
 
   @Test public void shouldPostErrorCallbackWhenRemoteShotRepositoryServerCommunicationException()
       throws Exception {
-    when(remoteShotRepository.getShotsFromUser(anyString(), anyInt())).thenThrow(
-        new ServerCommunicationException(new Throwable()));
+    when(remoteShotRepository.getShotsFromUser(anyString(), anyInt(), anyArray(),
+        anyArray())).thenThrow(new ServerCommunicationException(new Throwable()));
 
     interactor.loadLastShots(ID_NOT_FOLLOWING, callback, errorCallback);
 
@@ -120,5 +121,9 @@ public class GetLastShotsInteractorTest {
     Shot shot = new Shot();
     shot.setIdShot("shot");
     return shot;
+  }
+
+  protected String[] anyArray() {
+    return any(String[].class);
   }
 }

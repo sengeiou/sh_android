@@ -31,8 +31,9 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         this.individualNotifications = individualNotifications;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getCollapsedContent());
         builder.setStyle(getInboxStyleFromActivities());

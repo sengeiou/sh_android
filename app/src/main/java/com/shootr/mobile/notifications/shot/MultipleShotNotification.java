@@ -27,8 +27,9 @@ public class MultipleShotNotification extends AbstractShotNotification {
         this.shots = shots;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getCollapsedContent());
         builder.setStyle(getInboxStyleFromShots());

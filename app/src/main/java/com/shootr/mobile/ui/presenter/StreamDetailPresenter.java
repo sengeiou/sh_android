@@ -36,427 +36,425 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class StreamDetailPresenter implements Presenter {
 
-    //region Dependencies
-    private final GetStreamInfoInteractor streamInfoInteractor;
-    private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
-    private final ShareStreamInteractor shareStreamInteractor;
-    private final FollowInteractor followInteractor;
-    private final UnfollowInteractor unfollowInteractor;
-    private final SelectStreamInteractor selectStreamInteractor;
-    private final GetMutedStreamsInteractor getMutedStreamsInteractor;
-    private final MuteInteractor muteInteractor;
-    private final UnmuteInteractor unmuteInteractor;
-    private final GetContributorsInteractor getContributorsInteractor;
-    private final RemoveStreamInteractor removeStreamInteractor;
-    private final RestoreStreamInteractor restoreStreamInteractor;
+  //region Dependencies
+  private final GetStreamInfoInteractor streamInfoInteractor;
+  private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
+  private final ShareStreamInteractor shareStreamInteractor;
+  private final FollowInteractor followInteractor;
+  private final UnfollowInteractor unfollowInteractor;
+  private final SelectStreamInteractor selectStreamInteractor;
+  private final GetMutedStreamsInteractor getMutedStreamsInteractor;
+  private final MuteInteractor muteInteractor;
+  private final UnmuteInteractor unmuteInteractor;
+  private final GetContributorsInteractor getContributorsInteractor;
+  private final RemoveStreamInteractor removeStreamInteractor;
+  private final RestoreStreamInteractor restoreStreamInteractor;
 
-    private final StreamModelMapper streamModelMapper;
-    private final UserModelMapper userModelMapper;
-    private final ErrorMessageFactory errorMessageFactory;
+  private final StreamModelMapper streamModelMapper;
+  private final UserModelMapper userModelMapper;
+  private final ErrorMessageFactory errorMessageFactory;
 
-    private StreamDetailView streamDetailView;
-    private String idStream;
+  private StreamDetailView streamDetailView;
+  private String idStream;
 
-    private StreamModel streamModel;
+  private StreamModel streamModel;
 
-    private Integer streamMediaCount;
-    private List<UserModel> participantsShown = Collections.emptyList();
-    private boolean hasBeenPaused = false;
-    private Integer totalWatchers;
+  private Integer streamMediaCount;
+  private List<UserModel> participantsShown = Collections.emptyList();
+  private boolean hasBeenPaused = false;
+  private Integer totalWatchers;
 
-    @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
-      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
-      SelectStreamInteractor selectStreamInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
-      MuteInteractor muteInteractor, UnmuteInteractor unmuteInteractor,
-      GetContributorsInteractor getContributorsInteractor, RemoveStreamInteractor removeStreamInteractor,
+  @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
+      ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor, SelectStreamInteractor selectStreamInteractor,
+      GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
+      UnmuteInteractor unmuteInteractor, GetContributorsInteractor getContributorsInteractor,
+      RemoveStreamInteractor removeStreamInteractor,
       RestoreStreamInteractor restoreStreamInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.streamInfoInteractor = streamInfoInteractor;
-        this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
-        this.shareStreamInteractor = shareStreamInteractor;
-        this.followInteractor = followInteractor;
-        this.unfollowInteractor = unfollowInteractor;
-        this.selectStreamInteractor = selectStreamInteractor;
-        this.getMutedStreamsInteractor = getMutedStreamsInteractor;
-        this.muteInteractor = muteInteractor;
-        this.unmuteInteractor = unmuteInteractor;
-        this.getContributorsInteractor = getContributorsInteractor;
-        this.removeStreamInteractor = removeStreamInteractor;
-        this.restoreStreamInteractor = restoreStreamInteractor;
-        this.streamModelMapper = streamModelMapper;
-        this.userModelMapper = userModelMapper;
-        this.errorMessageFactory = errorMessageFactory;
-    }
-    //endregion
+    this.streamInfoInteractor = streamInfoInteractor;
+    this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
+    this.shareStreamInteractor = shareStreamInteractor;
+    this.followInteractor = followInteractor;
+    this.unfollowInteractor = unfollowInteractor;
+    this.selectStreamInteractor = selectStreamInteractor;
+    this.getMutedStreamsInteractor = getMutedStreamsInteractor;
+    this.muteInteractor = muteInteractor;
+    this.unmuteInteractor = unmuteInteractor;
+    this.getContributorsInteractor = getContributorsInteractor;
+    this.removeStreamInteractor = removeStreamInteractor;
+    this.restoreStreamInteractor = restoreStreamInteractor;
+    this.streamModelMapper = streamModelMapper;
+    this.userModelMapper = userModelMapper;
+    this.errorMessageFactory = errorMessageFactory;
+  }
+  //endregion
 
-    protected void setView(StreamDetailView streamDetailView) {
-        this.streamDetailView = streamDetailView;
-    }
+  protected void setView(StreamDetailView streamDetailView) {
+    this.streamDetailView = streamDetailView;
+  }
 
-    public void initialize(final StreamDetailView streamDetailView, final String idStream) {
-        setView(streamDetailView);
-        this.idStream = idStream;
-        this.loadMutedStatus();
-        this.loadStreamInfo();
-    }
+  public void initialize(final StreamDetailView streamDetailView, final String idStream) {
+    setView(streamDetailView);
+    this.idStream = idStream;
+    this.loadMutedStatus();
+    this.loadStreamInfo();
+  }
 
-    public void loadMutedStatus() {
-        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
-            @Override public void onLoaded(List<String> ids) {
-                streamDetailView.setMuteStatus(ids.contains(idStream));
-            }
+  public void loadMutedStatus() {
+    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+      @Override public void onLoaded(List<String> ids) {
+        streamDetailView.setMuteStatus(ids.contains(idStream));
+      }
+    });
+  }
+  //endregion
+
+  public void editStreamInfo() {
+    streamDetailView.navigateToEditStream(idStream);
+  }
+
+  public void resultFromEditStreamInfo() {
+    loadStreamInfo();
+  }
+
+  public void photoSelected(File photoFile) {
+    streamDetailView.showLoadingPictureUpload();
+    changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(), photoFile,
+        new ChangeStreamPhotoInteractor.Callback() {
+          @Override public void onLoaded(Stream stream) {
+            renderStreamInfo(stream);
+            streamDetailView.hideLoadingPictureUpload();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            showEditPicturePlaceholderIfEmpty();
+            streamDetailView.hideLoadingPictureUpload();
+            showImageUploadError();
+            Timber.e(error, "Error changing stream photo");
+          }
         });
-    }
-    //endregion
+  }
 
-    public void editStreamInfo() {
-        streamDetailView.navigateToEditStream(idStream);
+  private void showEditPicturePlaceholderIfEmpty() {
+    if (streamModel.getPicture() == null) {
+      streamDetailView.showEditPicturePlaceholder();
     }
+  }
+  //endregion
 
-    public void resultFromEditStreamInfo() {
-        loadStreamInfo();
-    }
+  //region Stream info
+  public void loadStreamInfo() {
+    this.showViewLoading();
+    this.getStreamInfo();
+  }
 
-    public void editStreamPhoto() {
-        streamDetailView.showPhotoOptions();
-    }
-
-    public void photoSelected(File photoFile) {
-        streamDetailView.showLoadingPictureUpload();
-        changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(),
-          photoFile,
-          new ChangeStreamPhotoInteractor.Callback() {
-              @Override public void onLoaded(Stream stream) {
-                  renderStreamInfo(stream);
-                  streamDetailView.hideLoadingPictureUpload();
+  public void getContributorsNumber() {
+    getContributorsInteractor.obtainContributors(idStream, false,
+        new Interactor.Callback<List<Contributor>>() {
+          @Override public void onLoaded(List<Contributor> contributors) {
+            if (contributors.size() > 0) {
+              streamDetailView.showContributorsNumber(contributors.size());
+            } else {
+              streamDetailView.hideContributorsNumber();
+              if (!streamModel.amIAuthor()) {
+                streamDetailView.disableContributors();
               }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showEditPicturePlaceholderIfEmpty();
-                  streamDetailView.hideLoadingPictureUpload();
-                  showImageUploadError();
-                  Timber.e(error, "Error changing stream photo");
-              }
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            String errorMessage = errorMessageFactory.getMessageForError(error);
+            streamDetailView.showError(errorMessage);
+          }
+        });
+  }
+
+  public void getStreamInfo() {
+    streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
+      @Override public void onLoaded(StreamInfo streamInfo) {
+        onStreamInfoLoaded(streamInfo);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        String errorMessage = errorMessageFactory.getMessageForError(error);
+        streamDetailView.showError(errorMessage);
+      }
+    });
+  }
+
+  public void onStreamInfoLoaded(StreamInfo streamInfo) {
+    checkNotNull(streamInfo.getStream(),
+        "Received null stream from StreamInfoInteractor. That should never happen >_<");
+    this.renderStreamInfo(streamInfo.getStream());
+    this.renderWatchersList(streamInfo);
+    this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
+    this.getContributorsNumber();
+    if (streamModel.amIAuthor()) {
+      this.setupRemoveStreamMenuOption();
+    }
+    this.showViewDetail();
+    this.hideViewLoading();
+  }
+
+  private void setupRemoveStreamMenuOption() {
+    if (streamModel.isRemoved()) {
+      streamDetailView.showRestoreStreamButton();
+      streamDetailView.hideRemoveButton();
+      streamDetailView.showRemovedFeedback();
+    } else {
+      streamDetailView.hideRestoreButton();
+      streamDetailView.showRemoveStreamButton();
+    }
+  }
+
+  private void showViewDetail() {
+    streamDetailView.showDetail();
+  }
+  //endregion
+
+  public void clickAuthor() {
+    streamDetailView.navigateToUser(streamModel.getAuthorId());
+  }
+  //endregion
+
+  public void photoClick() {
+    if (streamModel.amIAuthor() && streamModel.getPicture() != null) {
+      streamDetailView.showPhotoOptions();
+    } else if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
+      streamDetailView.showPhotoPicker();
+    } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
+      zoomPhoto();
+    }
+  }
+
+  public void viewPhotoClicked() {
+    zoomPhoto();
+  }
+
+  public void zoomPhoto() {
+    streamDetailView.zoomPhoto(streamModel.getPicture());
+  }
+
+  //region renders
+  private void renderWatchersList(StreamInfo streamInfo) {
+    if (participantsShown.isEmpty() || streamInfo.isDataComplete()) {
+      List<User> watchers = streamInfo.getWatchers();
+      participantsShown = userModelMapper.transform(watchers);
+      streamDetailView.setWatchers(participantsShown);
+      if (streamInfo.hasMoreParticipants()) {
+        this.totalWatchers = streamModel.getTotalWatchers();
+        streamDetailView.showAllParticipantsButton();
+      } else {
+        this.totalWatchers = watchers.size();
+      }
+    }
+  }
+
+  private void renderStreamInfo(Stream stream) {
+    streamModel = streamModelMapper.transform(stream);
+    streamDetailView.setStreamTitle(streamModel.getTitle());
+    setupStreamPicture();
+    streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
+    if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
+      streamDetailView.setStreamDescription(streamModel.getDescription());
+    } else {
+      streamDetailView.hideStreamDescription();
+    }
+    if (streamModel.amIAuthor()) {
+      streamDetailView.showEditStreamButton();
+      showEditPicturePlaceholderIfEmpty();
+    }
+
+    streamMediaCount = streamModel.getMediaCount();
+  }
+
+  private void setupStreamPicture() {
+    if (streamModel.getPicture() != null) {
+      streamDetailView.showPicture();
+      streamDetailView.hideNoTextPicture();
+      streamDetailView.setStreamPicture(streamModel.getPicture());
+      streamDetailView.loadBlurStreamPicture(streamModel.getPicture());
+    } else {
+      if (!streamModel.amIAuthor()) {
+        streamDetailView.hidePicture();
+        streamDetailView.showNoTextPicture();
+        streamDetailView.setupStreamInitials(streamModel);
+      } else {
+        streamDetailView.showPicture();
+        streamDetailView.hideNoTextPicture();
+      }
+    }
+  }
+
+  private void renderFollowingNumber(Integer numberOfFollowing) {
+    streamDetailView.setFollowingNumber(numberOfFollowing, totalWatchers);
+  }
+  //endregion
+
+  //region View methods
+  private void showViewLoading() {
+    streamDetailView.showLoading();
+  }
+
+  private void hideViewLoading() {
+    streamDetailView.hideLoading();
+  }
+  //endregion
+
+  private void showImageUploadError() {
+    streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
+  }
+
+  public void clickMedia() {
+    streamDetailView.navigateToMedia(idStream, streamMediaCount);
+  }
+
+  public void follow(final String idUser) {
+    followInteractor.follow(idUser, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_FOLLOWING);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        showErrorInView(error);
+      }
+    });
+  }
+
+  private void showErrorInView(ShootrException error) {
+    streamDetailView.showError(errorMessageFactory.getMessageForError(error));
+  }
+
+  public void unfollow(final String idUser) {
+    unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_NONE);
+      }
+    });
+  }
+
+  private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
+    for (UserModel participant : participantsShown) {
+      if (participant.getIdUser().equals(idUser)) {
+        participant.setRelationship(relationshipFollowing);
+        streamDetailView.setWatchers(participantsShown);
+        break;
+      }
+    }
+  }
+
+  public void shareStreamViaShootr() {
+    shareStreamInteractor.shareStream(streamModel.getIdStream(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            streamDetailView.showStreamShared();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            String errorMessage = errorMessageFactory.getMessageForError(error);
+            streamDetailView.showError(errorMessage);
+          }
+        });
+  }
+
+  public void shareStreamVia() {
+    streamDetailView.shareStreamVia(streamModel);
+  }
+
+  public void clickAllParticipants() {
+    streamDetailView.goToAllParticipants(idStream);
+  }
+
+  public void selectStream() {
+    if (streamModel != null) {
+      selectStreamInteractor.selectStream(streamModel.getIdStream(),
+          new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                /* no-op */
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              showErrorInView(error);
+            }
           });
     }
+  }
 
-    private void showEditPicturePlaceholderIfEmpty() {
-        if (streamModel.getPicture() == null) {
-            streamDetailView.showEditPicturePlaceholder();
-        }
+  public void onMuteChecked() {
+    muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+                /* no-op */
+      }
+    });
+  }
+
+  public void onUnmuteChecked() {
+    unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+                /* no-op */
+      }
+    });
+  }
+
+  public void dataInfoClicked() {
+    streamDetailView.goToStreamDataInfo(streamModel);
+  }
+
+  public void contributorsClicked() {
+    if (streamModel.amIAuthor()) {
+      streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
+    } else {
+      streamDetailView.goToContributorsActivity(streamModel.getIdStream());
     }
-    //endregion
+  }
 
-    //region Stream info
-    public void loadStreamInfo() {
-        this.showViewLoading();
-        this.getStreamInfo();
-    }
+  public void removeStream() {
+    streamDetailView.askRemoveStreamConfirmation();
+  }
 
-    public void getContributorsNumber() {
-        getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
-            @Override public void onLoaded(List<Contributor> contributors) {
-                if (contributors.size() > 0) {
-                    streamDetailView.showContributorsNumber(contributors.size());
-                } else {
-                    streamDetailView.hideContributorsNumber();
-                    if (!streamModel.amIAuthor()) {
-                        streamDetailView.disableContributors();
-                    }
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
-        });
-    }
-
-    public void getStreamInfo() {
-        streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override public void onLoaded(StreamInfo streamInfo) {
-                onStreamInfoLoaded(streamInfo);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
-        });
-    }
-
-    public void onStreamInfoLoaded(StreamInfo streamInfo) {
-        checkNotNull(streamInfo.getStream(),
-          "Received null stream from StreamInfoInteractor. That should never happen >_<");
-        this.renderStreamInfo(streamInfo.getStream());
-        this.renderWatchersList(streamInfo);
-        this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
-        this.getContributorsNumber();
-        if (streamModel.amIAuthor()) {
-            this.setupRemoveStreamMenuOption();
-        }
-        this.showViewDetail();
-        this.hideViewLoading();
-    }
-
-    private void setupRemoveStreamMenuOption() {
-        if (streamModel.isRemoved()) {
-            streamDetailView.showRestoreStreamButton();
-            streamDetailView.hideRemoveButton();
-            streamDetailView.showRemovedFeedback();
-        } else {
+  public void restoreStream() {
+    restoreStreamInteractor.restoreStream(streamModel.getIdStream(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
             streamDetailView.hideRestoreButton();
             streamDetailView.showRemoveStreamButton();
-        }
-    }
-
-    private void showViewDetail() {
-        streamDetailView.showDetail();
-    }
-    //endregion
-
-    public void clickAuthor() {
-        streamDetailView.navigateToUser(streamModel.getAuthorId());
-    }
-    //endregion
-
-    public void photoClick() {
-        if (streamModel.amIAuthor() && streamModel.getPicture() != null) {
-            streamDetailView.showPhotoOptions();
-        } else if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
-            streamDetailView.showPhotoPicker();
-        } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
-            zoomPhoto();
-        }
-    }
-
-    public void viewPhotoClicked() {
-        zoomPhoto();
-    }
-
-    public void zoomPhoto() {
-        streamDetailView.zoomPhoto(streamModel.getPicture());
-    }
-
-    //region renders
-    private void renderWatchersList(StreamInfo streamInfo) {
-        if (participantsShown.isEmpty() || streamInfo.isDataComplete()) {
-            List<User> watchers = streamInfo.getWatchers();
-            participantsShown = userModelMapper.transform(watchers);
-            streamDetailView.setWatchers(participantsShown);
-            if (streamInfo.hasMoreParticipants()) {
-                this.totalWatchers = streamModel.getTotalWatchers();
-                streamDetailView.showAllParticipantsButton();
-            } else {
-                this.totalWatchers = watchers.size();
-            }
-        }
-    }
-
-    private void renderStreamInfo(Stream stream) {
-        streamModel = streamModelMapper.transform(stream);
-        streamDetailView.setStreamTitle(streamModel.getTitle());
-        setupStreamPicture();
-        streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
-        if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
-            streamDetailView.setStreamDescription(streamModel.getDescription());
-        } else {
-            streamDetailView.hideStreamDescription();
-        }
-        if (streamModel.amIAuthor()) {
-            streamDetailView.showEditStreamButton();
-            showEditPicturePlaceholderIfEmpty();
-        }
-
-        streamMediaCount = streamModel.getMediaCount();
-    }
-
-    private void setupStreamPicture() {
-        if (streamModel.getPicture() != null) {
-            streamDetailView.showPicture();
-            streamDetailView.hideNoTextPicture();
-            streamDetailView.setStreamPicture(streamModel.getPicture());
-            streamDetailView.loadBlurStreamPicture(streamModel.getPicture());
-        } else {
-            if (!streamModel.amIAuthor()) {
-                streamDetailView.hidePicture();
-                streamDetailView.showNoTextPicture();
-                streamDetailView.setupStreamInitials(streamModel);
-            } else {
-                streamDetailView.showPicture();
-                streamDetailView.hideNoTextPicture();
-            }
-        }
-    }
-
-    private void renderFollowingNumber(Integer numberOfFollowing) {
-        streamDetailView.setFollowingNumber(numberOfFollowing, totalWatchers);
-    }
-    //endregion
-
-    //region View methods
-    private void showViewLoading() {
-        streamDetailView.showLoading();
-    }
-
-    private void hideViewLoading() {
-        streamDetailView.hideLoading();
-    }
-    //endregion
-
-    private void showImageUploadError() {
-        streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
-    }
-
-    public void clickMedia() {
-        streamDetailView.navigateToMedia(idStream, streamMediaCount);
-    }
-
-    public void follow(final String idUser) {
-        followInteractor.follow(idUser, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_FOLLOWING);
-            }
+            streamDetailView.showRestoreStreamFeedback();
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showErrorInView(error);
-            }
+          @Override public void onError(ShootrException error) {
+            String errorMessage = errorMessageFactory.getMessageForError(error);
+            streamDetailView.showError(errorMessage);
+          }
         });
-    }
+  }
 
-    private void showErrorInView(ShootrException error) {
-        streamDetailView.showError(errorMessageFactory.getMessageForError(error));
-    }
-
-    public void unfollow(final String idUser) {
-        unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_NONE);
-            }
-        });
-    }
-
-    private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
-        for (UserModel participant : participantsShown) {
-            if (participant.getIdUser().equals(idUser)) {
-                participant.setRelationship(relationshipFollowing);
-                streamDetailView.setWatchers(participantsShown);
-                break;
-            }
-        }
-    }
-
-    public void shareStreamViaShootr() {
-        shareStreamInteractor.shareStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                streamDetailView.showStreamShared();
-            }
+  public void confirmRemoveStream() {
+    removeStreamInteractor.removeStream(streamModel.getIdStream(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            streamDetailView.hideRemoveButton();
+            streamDetailView.showRestoreStreamButton();
+            streamDetailView.showRemovedFeedback();
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
+          @Override public void onError(ShootrException error) {
+            String errorMessage = errorMessageFactory.getMessageForError(error);
+            streamDetailView.showError(errorMessage);
+          }
         });
-    }
+  }
 
-    public void shareStreamVia() {
-        streamDetailView.shareStreamVia(streamModel);
+  @Override public void resume() {
+    if (hasBeenPaused) {
+      selectStream();
+      getStreamInfo();
+      getContributorsNumber();
     }
+  }
 
-    public void clickAllParticipants() {
-        streamDetailView.goToAllParticipants(idStream);
-    }
-
-    public void selectStream() {
-        if (streamModel != null) {
-            selectStreamInteractor.selectStream(streamModel.getIdStream(),
-              new Interactor.Callback<StreamSearchResult>() {
-                  @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-                /* no-op */
-                  }
-              },
-              new Interactor.ErrorCallback() {
-                  @Override public void onError(ShootrException error) {
-                      showErrorInView(error);
-                  }
-              });
-        }
-    }
-
-    public void onMuteChecked() {
-        muteInteractor.mute(idStream, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                /* no-op */
-            }
-        });
-    }
-
-    public void onUnmuteChecked() {
-        unmuteInteractor.unmute(idStream, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                /* no-op */
-            }
-        });
-    }
-
-    public void dataInfoClicked() {
-        streamDetailView.goToStreamDataInfo(streamModel);
-    }
-
-    public void contributorsClicked() {
-        if (streamModel.amIAuthor()) {
-            streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());
-        } else {
-            streamDetailView.goToContributorsActivity(streamModel.getIdStream());
-        }
-    }
-
-    public void removeStream() {
-        streamDetailView.askRemoveStreamConfirmation();
-    }
-
-    public void restoreStream() {
-        restoreStreamInteractor.restoreStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                streamDetailView.hideRestoreButton();
-                streamDetailView.showRemoveStreamButton();
-                streamDetailView.showRestoreStreamFeedback();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
-        });
-    }
-
-    public void confirmRemoveStream() {
-        removeStreamInteractor.removeStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                streamDetailView.hideRemoveButton();
-                streamDetailView.showRestoreStreamButton();
-                streamDetailView.showRemovedFeedback();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
-        });
-    }
-
-    @Override public void resume() {
-        if (hasBeenPaused) {
-            selectStream();
-            getStreamInfo();
-            getContributorsNumber();
-        }
-    }
-
-    @Override public void pause() {
-        hasBeenPaused = true;
-    }
+  @Override public void pause() {
+    hasBeenPaused = true;
+  }
 }

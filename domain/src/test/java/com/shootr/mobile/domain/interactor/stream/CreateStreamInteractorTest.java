@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -64,7 +65,8 @@ public class CreateStreamInteractorTest {
   }
 
   @Test public void shouldNotifyWhenSaveAValidStream() throws Exception {
-    when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(new Stream());
+    when(localStreamRepository.getStreamById(ID_STREAM, StreamMode.TYPES_STREAM)).thenReturn(
+        new Stream());
 
     interactor.sendStream(ID_STREAM, TITLE, DESCRIPTION, PUBLIC_MODE, TOPIC, NOTIFY, NOTIFY_TOPIC,
         callback, errorCallback);

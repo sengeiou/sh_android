@@ -18,7 +18,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
-import com.shootr.mobile.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
@@ -130,7 +129,6 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         streamsList.setLayoutManager(new LinearLayoutManager(this));
-        streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
         initializeStreamListAdapter();
     }
 

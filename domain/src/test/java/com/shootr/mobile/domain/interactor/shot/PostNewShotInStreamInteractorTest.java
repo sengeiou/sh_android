@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTestBase {
 
   private static final String WATCHING_STREAM_ID = "1L";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
   @Mock StreamRepository localStreamRepository;
 
@@ -71,7 +73,8 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
 
   private void setupWatchingStream() {
     when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-    when(localStreamRepository.getStreamById(WATCHING_STREAM_ID)).thenReturn(watchingStream());
+    when(localStreamRepository.getStreamById(WATCHING_STREAM_ID, TYPES_STREAM)).thenReturn(
+        watchingStream());
   }
 
   private Stream watchingStream() {

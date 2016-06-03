@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -87,7 +88,7 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
   private TreeSet<String> getVisibleIdUsers() {
     List<User> people = localUserRepository.getPeople();
     List<Contributor> contributors = localContributorRepository.getContributors(idStream);
-    Stream stream = localStreamRepository.getStreamById(idStream);
+    Stream stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
     TreeSet<String> visibleIdUsers = new TreeSet<>();
     visibleIdUsers.add(stream.getAuthorId());
     visibleIdUsers.add(sessionRepository.getCurrentUserId());

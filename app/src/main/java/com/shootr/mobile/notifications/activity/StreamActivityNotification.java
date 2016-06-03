@@ -17,28 +17,36 @@ public class StreamActivityNotification extends SingleActivityNotification {
     private final String idStreamHolder;
     private final String title;
     private final String readWriteMode;
+    private final Boolean updateNeeded;
 
     public StreamActivityNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
         ImageLoader imageLoader, PushNotification.NotificationValues notificationValues, String idStream,
-        String idStreamHolder, String title, String readWriteMode) {
+        String idStreamHolder, String title, String readWriteMode, Boolean updateNeeded) {
         super(context, notificationBuilderFactory, imageLoader, notificationValues);
         this.idStream = idStream;
         this.idStreamHolder = idStreamHolder;
         this.title = title;
         this.readWriteMode = readWriteMode;
+        this.updateNeeded = updateNeeded;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentIntent(getOpenStreamTimelineNotificationPendingIntent());
     }
 
     private PendingIntent getOpenStreamTimelineNotificationPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STREAM);
-        intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, idStreamHolder);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, idStream);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, title);
-        intent.putExtra(StreamTimelineFragment.EXTRA_READ_WRITE_MODE, readWriteMode);
-        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (!updateNeeded) {
+            Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STREAM);
+            intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, idStreamHolder);
+            intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, idStream);
+            intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, title);
+            intent.putExtra(StreamTimelineFragment.EXTRA_READ_WRITE_MODE, readWriteMode);
+            return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        } else {
+            Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
+            return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        }
     }
 }

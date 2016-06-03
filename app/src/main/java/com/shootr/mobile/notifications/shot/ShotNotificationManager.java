@@ -2,16 +2,13 @@ package com.shootr.mobile.notifications.shot;
 
 import android.app.Application;
 import android.content.Context;
-
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -37,7 +34,7 @@ public class ShotNotificationManager {
         this.imageLoader = imageLoader;
     }
 
-    public void sendNewShotNotification(ShotModel shot) {
+    public void sendNewShotNotification(ShotModel shot, Boolean areShotTypesKnown) {
         checkNotNull(shot);
         shotsCurrentlyNotified.add(shot);
 
@@ -45,14 +42,15 @@ public class ShotNotificationManager {
         if (shotsCurrentlyNotified.size() > 1) {
             notification = buildMultipleShotNotification(shotsCurrentlyNotified);
         } else {
-            notification = buildSingleShotNotification(shot);
+            notification = buildSingleShotNotification(shot, areShotTypesKnown);
         }
         androidNotificationManager.notify(notification, NOTIFICATION_TAG, SHOT_NOTIFICATION_ID);
     }
 
 
-    protected SingleShotNotification buildSingleShotNotification(ShotModel shot) {
-        return new SingleShotNotification(context, notificationBuilderFactory, imageLoader, shot);
+    protected SingleShotNotification buildSingleShotNotification(ShotModel shot,
+        Boolean areShotTypesKnown) {
+        return new SingleShotNotification(context, notificationBuilderFactory, imageLoader, shot, areShotTypesKnown);
     }
 
     protected MultipleShotNotification buildMultipleShotNotification(List<ShotModel> shots) {
@@ -63,5 +61,4 @@ public class ShotNotificationManager {
         androidNotificationManager.removeNotification(NOTIFICATION_TAG, SHOT_NOTIFICATION_ID);
         shotsCurrentlyNotified.clear();
     }
-
 }

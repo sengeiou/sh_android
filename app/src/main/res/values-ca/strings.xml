@@ -396,4 +396,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
+  <string name="alert_shootr_update">Aquest contingut només pot veure\'s amb la darrera versió de Shootr.</string>
 </resources>

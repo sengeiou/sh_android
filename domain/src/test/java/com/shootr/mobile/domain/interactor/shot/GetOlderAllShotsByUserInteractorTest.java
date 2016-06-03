@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -26,6 +28,8 @@ public class GetOlderAllShotsByUserInteractorTest {
 
   public static final String USER_ID = "user_id";
   public static final long CURRENT_OLDEST_DATE = 0L;
+  private static String[] TYPES_SHOT = ShotType.TYPES_SHOWN;
+  private static String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock ShotRepository remoteShotRepository;
   private GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
   @Mock Interactor.Callback<List<Shot>> callback;
@@ -44,12 +48,13 @@ public class GetOlderAllShotsByUserInteractorTest {
     getOlderAllShotsByUserInteractor.loadAllShots(USER_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
-    verify(remoteShotRepository).getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE);
+    verify(remoteShotRepository).getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE,
+        TYPES_STREAM, TYPES_SHOT);
   }
 
   @Test public void shouldNotifyShotsFromUserAndDateFromRemoteRepository() throws Exception {
-    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE)).thenReturn(
-        shots());
+    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE, TYPES_STREAM,
+        TYPES_SHOT)).thenReturn(shots());
 
     getOlderAllShotsByUserInteractor.loadAllShots(USER_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
@@ -58,8 +63,8 @@ public class GetOlderAllShotsByUserInteractorTest {
   }
 
   @Test public void shouldNotifyShotFromUserAndDateFromRemoteRepository() throws Exception {
-    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE)).thenReturn(
-        shot());
+    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE, TYPES_STREAM,
+        TYPES_SHOT)).thenReturn(shot());
 
     getOlderAllShotsByUserInteractor.loadAllShots(USER_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
@@ -68,9 +73,9 @@ public class GetOlderAllShotsByUserInteractorTest {
   }
 
   @Test public void shouldNotifyErrorInRemoteThrowsShootrException() throws Exception {
-    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE)).thenThrow(
-        new ShootrException() {
-        });
+    when(remoteShotRepository.getAllShotsFromUserAndDate(USER_ID, CURRENT_OLDEST_DATE, TYPES_STREAM,
+        TYPES_SHOT)).thenThrow(new ShootrException() {
+    });
 
     getOlderAllShotsByUserInteractor.loadAllShots(USER_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);

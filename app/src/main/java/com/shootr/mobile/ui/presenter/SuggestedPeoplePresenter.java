@@ -109,4 +109,8 @@ public class SuggestedPeoplePresenter implements Presenter {
     @Override public void pause() {
         hasBeenPaused = true;
     }
+
+    protected void setSuggestedPeople(List<UserModel> suggestedPeople) {
+        this.suggestedPeople = suggestedPeople;
+    }
 }

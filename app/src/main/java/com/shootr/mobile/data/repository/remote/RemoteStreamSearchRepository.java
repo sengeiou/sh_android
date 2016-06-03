@@ -38,8 +38,8 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         this.remoteStreamDataSource = remoteStreamDataSource;
     }
 
-    @Override public List<StreamSearchResult> getDefaultStreams(String locale) {
-        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale);
+    @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
+        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale, types);
         localStreamDataSource.putStreams(streamEntityList);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
@@ -89,8 +89,8 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         return streamSearchEntity;
     }
 
-    @Override public List<StreamSearchResult> getStreams(String query, String locale) {
-        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale);
+    @Override public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
+        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale, types);
         localStreamDataSource.putStreams(streamEntityList);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
 
@@ -107,14 +107,10 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         throw new IllegalStateException("Method not implemented in remote repository");
     }
 
-    @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser) {
-        List<StreamEntity> streamEntitiesListing = remoteStreamDataSource.getStreamsListing(listingIdUser);
+    @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser, String[] types) {
+        List<StreamEntity> streamEntitiesListing = remoteStreamDataSource.getStreamsListing(listingIdUser, types);
         localStreamDataSource.putStreams(streamEntitiesListing);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
-    }
-
-    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
-        return remoteStreamDataSource.getHolderFavorites(idUser);
     }
 }

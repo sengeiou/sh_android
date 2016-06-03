@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.interactor.stream;
 
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -16,81 +17,83 @@ import javax.inject.Inject;
 
 public class StreamSearchInteractor implements com.shootr.mobile.domain.interactor.Interactor {
 
-    public static final int MIN_SEARCH_LENGTH = 3;
-    private final InteractorHandler interactorHandler;
-    private final StreamSearchRepository streamSearchRepository;
-    private final PostExecutionThread postExecutionThread;
-    private final LocaleProvider localeProvider;
+  public static final int MIN_SEARCH_LENGTH = 3;
+  private final InteractorHandler interactorHandler;
+  private final StreamSearchRepository streamSearchRepository;
+  private final PostExecutionThread postExecutionThread;
+  private final LocaleProvider localeProvider;
 
-    private String query;
-    private Callback callback;
-    private ErrorCallback errorCallback;
+  private String query;
+  private Callback callback;
+  private ErrorCallback errorCallback;
 
-    @Inject public StreamSearchInteractor(InteractorHandler interactorHandler,
-      @Remote StreamSearchRepository streamSearchRepository, PostExecutionThread postExecutionThread,
-      LocaleProvider localeProvider) {
-        this.interactorHandler = interactorHandler;
-        this.streamSearchRepository = streamSearchRepository;
-        this.postExecutionThread = postExecutionThread;
-        this.localeProvider = localeProvider;
+  @Inject public StreamSearchInteractor(InteractorHandler interactorHandler,
+      @Remote StreamSearchRepository streamSearchRepository,
+      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
+    this.interactorHandler = interactorHandler;
+    this.streamSearchRepository = streamSearchRepository;
+    this.postExecutionThread = postExecutionThread;
+    this.localeProvider = localeProvider;
+  }
+
+  public void searchStreams(String query, Callback callback, ErrorCallback errorCallback) {
+    this.query = query;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    removeInvalidCharactersFromQuery();
+    if (validateSearchQuery()) {
+      try {
+        performSearch();
+      } catch (ServerCommunicationException networkError) {
+        notifyError(networkError);
+      }
     }
+  }
 
-    public void searchStreams(String query, Callback callback, ErrorCallback errorCallback) {
-        this.query = query;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private void removeInvalidCharactersFromQuery() {
+    query = query.replace("%", "").trim();
+  }
+
+  private boolean validateSearchQuery() {
+    if (query == null || query.length() < MIN_SEARCH_LENGTH) {
+      notifyError(new ShootrValidationException(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
+      return false;
     }
+    return true;
+  }
 
-    @Override public void execute() throws Exception {
-        removeInvalidCharactersFromQuery();
-        if (validateSearchQuery()) {
-            try {
-                performSearch();
-            } catch (ServerCommunicationException networkError) {
-                notifyError(networkError);
-            }
-        }
-    }
+  private void performSearch() {
+    List<StreamSearchResult> streams =
+        streamSearchRepository.getStreams(query, localeProvider.getLocale(),
+            StreamMode.TYPES_STREAM);
 
-    private void removeInvalidCharactersFromQuery() {
-        query = query.replace("%", "").trim();
-    }
+    StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 
-    private boolean validateSearchQuery() {
-        if (query == null || query.length() < MIN_SEARCH_LENGTH) {
-            notifyError(new ShootrValidationException(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
-            return false;
-        }
-        return true;
-    }
+    notifySearchResultsSuccessful(streamSearchResultList);
+  }
 
-    private void performSearch() {
-        List<StreamSearchResult> streams = streamSearchRepository.getStreams(query, localeProvider.getLocale());
+  private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(streams);
+      }
+    });
+  }
 
-        StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 
-        notifySearchResultsSuccessful(streamSearchResultList);
-    }
+  public interface Callback {
 
-    private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(streams);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
-
-    public interface Callback {
-
-        void onLoaded(StreamSearchResultList results);
-    }
+    void onLoaded(StreamSearchResultList results);
+  }
 }

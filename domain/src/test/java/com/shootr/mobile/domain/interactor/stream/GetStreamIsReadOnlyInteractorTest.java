@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -22,89 +23,89 @@ import static org.mockito.Mockito.when;
 
 public class GetStreamIsReadOnlyInteractorTest {
 
-    public static final String ID_STREAM = "idStream";
-    private GetStreamIsReadOnlyInteractor interactor;
-    @Mock StreamRepository localStreamRepository;
-    @Mock StreamRepository remoteStreamRepository;
-    @Mock Interactor.Callback<Boolean> callback;
-    @Mock Interactor.ErrorCallback errorCallback;
+  public static final String ID_STREAM = "idStream";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
+  private GetStreamIsReadOnlyInteractor interactor;
+  @Mock StreamRepository localStreamRepository;
+  @Mock StreamRepository remoteStreamRepository;
+  @Mock Interactor.Callback<Boolean> callback;
+  @Mock Interactor.ErrorCallback errorCallback;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetStreamIsReadOnlyInteractor(interactorHandler,
-          postExecutionThread,
-          localStreamRepository,
-          remoteStreamRepository);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    interactor = new GetStreamIsReadOnlyInteractor(interactorHandler, postExecutionThread,
+        localStreamRepository, remoteStreamRepository);
+  }
 
-    @Test public void shouldLoadStreamFromLocalRepository() throws Exception {
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+  @Test public void shouldLoadStreamFromLocalRepository() throws Exception {
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(localStreamRepository).getStreamById(ID_STREAM);
-    }
+    verify(localStreamRepository).getStreamById(ID_STREAM, TYPES_STREAM);
+  }
 
-    @Test public void shouldLoadStreamFromRemoteIfNotFoundInLocalRepository() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
+  @Test public void shouldLoadStreamFromRemoteIfNotFoundInLocalRepository() throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(remoteStreamRepository).getStreamById(ID_STREAM);
-    }
+    verify(remoteStreamRepository).getStreamById(ID_STREAM, TYPES_STREAM);
+  }
 
-    @Test public void shouldNotifyLoadedIfStreamIsInLocalRepository() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+  @Test public void shouldNotifyLoadedIfStreamIsInLocalRepository() throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(callback).onLoaded(anyBoolean());
-    }
+    verify(callback).onLoaded(anyBoolean());
+  }
 
-    @Test public void shouldNotifyLoadedIfStreamIsInRemoteRepository() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+  @Test public void shouldNotifyLoadedIfStreamIsInRemoteRepository() throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
+    when(remoteStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(callback).onLoaded(anyBoolean());
-    }
+    verify(callback).onLoaded(anyBoolean());
+  }
 
-    @Test public void shouldNotifyErrorIfRemoteStreamIsNull() throws Exception {
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+  @Test public void shouldNotifyErrorIfRemoteStreamIsNull() throws Exception {
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
 
-    @Test public void shouldNotifyErrorIfRemoteRepositoryThrowsServerCommunicationException() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM))
-          .thenThrow(new ServerCommunicationException(new Throwable()));
+  @Test public void shouldNotifyErrorIfRemoteRepositoryThrowsServerCommunicationException()
+      throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
+    when(remoteStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenThrow(
+        new ServerCommunicationException(new Throwable()));
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ServerCommunicationException.class));
-    }
+    verify(errorCallback).onError(any(ServerCommunicationException.class));
+  }
 
-    @Test public void shouldNotifyErrorIfRemoteRepositoryReturnNullStream() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
+  @Test public void shouldNotifyErrorIfRemoteRepositoryReturnNullStream() throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
+    when(remoteStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(errorCallback).onError(any(NetworkNotAvailableException.class));
-    }
+    verify(errorCallback).onError(any(NetworkNotAvailableException.class));
+  }
 
-    @Test public void shouldNotifyLoadedIfRemoteRepositoryReturnNotStream() throws Exception {
-        when(localStreamRepository.getStreamById(ID_STREAM)).thenReturn(null);
-        when(remoteStreamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+  @Test public void shouldNotifyLoadedIfRemoteRepositoryReturnNotStream() throws Exception {
+    when(localStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(null);
+    when(remoteStreamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
-        interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
+    interactor.isStreamReadOnly(ID_STREAM, callback, errorCallback);
 
-        verify(callback).onLoaded(stream().isRemoved());
-    }
+    verify(callback).onLoaded(stream().isRemoved());
+  }
 
-    private Stream stream() {
-        return new Stream();
-    }
+  private Stream stream() {
+    return new Stream();
+  }
 }

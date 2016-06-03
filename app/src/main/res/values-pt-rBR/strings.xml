@@ -395,4 +395,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="alert_shootr_update">Este conteúdo só pode ser visto com a última versão de Shootr.</string>
 </resources>

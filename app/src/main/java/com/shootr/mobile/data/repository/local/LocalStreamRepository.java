@@ -27,12 +27,12 @@ public class LocalStreamRepository implements StreamRepository {
         this.streamCache = streamCache;
     }
 
-    @Override public Stream getStreamById(String idStream) {
+    @Override public Stream getStreamById(String idStream, String[] types) {
         Stream cachedStream = streamCache.getStreamById(idStream);
         if (cachedStream != null) {
             return cachedStream;
         } else {
-            StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream);
+            StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream, types);
             if (streamEntity == null) {
                 streamEntity = fallbackOnSearchResults(idStream);
             }
@@ -48,8 +48,8 @@ public class LocalStreamRepository implements StreamRepository {
         return streamEntity;
     }
 
-    @Override public List<Stream> getStreamsByIds(List<String> streamIds) {
-        List<StreamEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds);
+    @Override public List<Stream> getStreamsByIds(List<String> streamIds, String[] types) {
+        List<StreamEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds, types);
         return streamEntityMapper.transform(eventEntities);
     }
 

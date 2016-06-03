@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -12,60 +13,61 @@ import javax.inject.Inject;
 
 public class GetStreamInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final StreamRepository localStreamRepository;
-    private final StreamRepository remoteStreamRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final StreamRepository localStreamRepository;
+  private final StreamRepository remoteStreamRepository;
 
-    private String idStream;
-    private Callback callback;
+  private String idStream;
+  private Callback callback;
 
-    @Inject public GetStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localStreamRepository = localStreamRepository;
-        this.remoteStreamRepository = remoteStreamRepository;
+  @Inject public GetStreamInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
+      @Remote StreamRepository remoteStreamRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localStreamRepository = localStreamRepository;
+    this.remoteStreamRepository = remoteStreamRepository;
+  }
+
+  public void loadStream(String idStream, Callback callback) {
+    this.idStream = idStream;
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    try {
+      loadRemoteStream();
+    } catch (ServerCommunicationException error) {
+      loadLocalStream();
     }
+  }
 
-    public void loadStream(String idStream, Callback callback) {
-        this.idStream = idStream;
-        this.callback = callback;
-        interactorHandler.execute(this);
+  private void loadRemoteStream() {
+    Stream remoteStream = remoteStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+    if (remoteStream != null) {
+      notifyLoaded(remoteStream);
+    } else {
+      // TODO: Notify error
     }
+  }
 
-    @Override public void execute() throws Exception {
-        try {
-            loadRemoteStream();
-        } catch (ServerCommunicationException error) {
-            loadLocalStream();
-        }
-    }
+  private void loadLocalStream() {
+    Stream localStream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+    notifyLoaded(localStream);
+  }
 
-    private void loadRemoteStream() {
-        Stream remoteStream = remoteStreamRepository.getStreamById(idStream);
-        if (remoteStream != null) {
-            notifyLoaded(remoteStream);
-        } else {
-            // TODO: Notify error
-        }
-    }
+  private void notifyLoaded(final Stream stream) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(stream);
+      }
+    });
+  }
 
-    private void loadLocalStream() {
-        Stream localStream = localStreamRepository.getStreamById(idStream);
-        notifyLoaded(localStream);
-    }
+  public interface Callback {
 
-    private void notifyLoaded(final Stream stream) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(stream);
-            }
-        });
-    }
-
-    public interface Callback {
-
-        void onLoaded(Stream stream);
-    }
+    void onLoaded(Stream stream);
+  }
 }

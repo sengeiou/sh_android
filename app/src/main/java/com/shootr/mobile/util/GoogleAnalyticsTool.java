@@ -10,14 +10,10 @@ import java.util.HashMap;
 
 public class GoogleAnalyticsTool implements AnalyticsTool {
 
-    private Tracker tracker;
-    private HashMap<TrackerName, Tracker> mTrackers = new HashMap();
+    private static final String APP_TRACKER = "app_tracker";
 
-    private enum TrackerName {
-        APP_TRACKER,
-        GLOBAL_TRACKER,
-        NAVIGATION_TRACKER,
-    }
+    private Tracker tracker;
+    private HashMap<String, Tracker> trackers = new HashMap();
 
     @Override public void init(Context context) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
@@ -31,7 +27,7 @@ public class GoogleAnalyticsTool implements AnalyticsTool {
     }
 
     @Override public void analyticsStart(Context context, String name) {
-        tracker = getTracker(context, TrackerName.APP_TRACKER);
+        tracker = getTracker(context, APP_TRACKER);
         tracker.setScreenName(name);
         tracker.send(new HitBuilders.AppViewBuilder().build());
     }
@@ -40,12 +36,12 @@ public class GoogleAnalyticsTool implements AnalyticsTool {
         GoogleAnalytics.getInstance(context).reportActivityStop(activity);
     }
 
-    public synchronized Tracker getTracker(Context context, TrackerName appTracker) {
-        if (!mTrackers.containsKey(appTracker)) {
+    public synchronized Tracker getTracker(Context context, String appTracker) {
+        if (!trackers.containsKey(appTracker)) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
             Tracker t = analytics.newTracker(R.xml.navigation_tracker);
-            mTrackers.put(appTracker, t);
+            trackers.put(appTracker, t);
         }
-        return mTrackers.get(appTracker);
+        return trackers.get(appTracker);
     }
 }

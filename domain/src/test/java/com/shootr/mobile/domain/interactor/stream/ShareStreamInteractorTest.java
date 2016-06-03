@@ -47,6 +47,5 @@ public class ShareStreamInteractorTest {
     interactor.shareStream(ID_STREAM, completedCallback, errorCallback);
 
     verify(errorCallback).onError(any(ServerCommunicationException.class));
-
   }
 }

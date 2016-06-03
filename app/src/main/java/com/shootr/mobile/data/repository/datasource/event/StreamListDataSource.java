@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface StreamListDataSource {
 
-    List<StreamEntity> getStreamList(String locale);
+    List<StreamEntity> getStreamList(String locale, String[] types);
 
-    List<StreamEntity> getStreams(String query, String locale);
+    List<StreamEntity> getStreams(String query, String locale, String[] types);
 }

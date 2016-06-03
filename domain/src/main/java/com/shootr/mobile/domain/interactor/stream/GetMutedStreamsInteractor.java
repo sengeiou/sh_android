@@ -12,53 +12,53 @@ import javax.inject.Inject;
 
 public class GetMutedStreamsInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final MuteRepository localMuteRepository;
-    private final MuteRepository remoteMuteRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final MuteRepository localMuteRepository;
+  private final MuteRepository remoteMuteRepository;
 
-    private Callback<List<String>> callback;
+  private Callback<List<String>> callback;
 
-    @Inject
-    public GetMutedStreamsInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local MuteRepository localMuteRepository, @Remote MuteRepository remoteMuteRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localMuteRepository = localMuteRepository;
-        this.remoteMuteRepository = remoteMuteRepository;
+  @Inject public GetMutedStreamsInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local MuteRepository localMuteRepository,
+      @Remote MuteRepository remoteMuteRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localMuteRepository = localMuteRepository;
+    this.remoteMuteRepository = remoteMuteRepository;
+  }
+
+  public void loadMutedStreamIds(Callback<List<String>> callback) {
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    tryLoadingLocalMutesAndThenRemote();
+  }
+
+  private void tryLoadingLocalMutesAndThenRemote() {
+    List<String> mutedIdStreams = localMuteRepository.getMutedIdStreams();
+    if (mutedIdStreams.isEmpty()) {
+      loadRemoteMutes();
+    } else {
+      notifyResult(mutedIdStreams);
     }
+  }
 
-    public void loadMutedStreamIds(Callback<List<String>> callback) {
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
-
-    @Override public void execute() throws Exception {
-        tryLoadingLocalMutesAndThenRemote();
-    }
-
-    private void tryLoadingLocalMutesAndThenRemote() {
-        List<String> mutedIdStreams = localMuteRepository.getMutedIdStreams();
-        if (mutedIdStreams.isEmpty()) {
-            loadRemoteMutes();
-        } else {
-            notifyResult(mutedIdStreams);
-        }
-    }
-
-    private void loadRemoteMutes() {
-        try {
-            notifyResult(remoteMuteRepository.getMutedIdStreams());
-        } catch (ServerCommunicationException error) {
+  private void loadRemoteMutes() {
+    try {
+      notifyResult(remoteMuteRepository.getMutedIdStreams());
+    } catch (ServerCommunicationException error) {
             /* swallow silently */
-        }
     }
+  }
 
-    private void notifyResult(final List<String> user) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(user);
-            }
-        });
-    }
+  private void notifyResult(final List<String> user) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(user);
+      }
+    });
+  }
 }

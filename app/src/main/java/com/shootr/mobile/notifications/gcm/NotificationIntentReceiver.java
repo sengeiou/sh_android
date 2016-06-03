@@ -3,19 +3,18 @@ package com.shootr.mobile.notifications.gcm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
+import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.model.ShotModel;
-
 import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
@@ -29,6 +28,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
       "com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION";
     public static final String ACTION_DISCARD_ACTIVITY_NOTIFICATION =
       "com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION";
+    public static final String ACTION_NEED_UPDATE =
+        "com.shootr.mobile.ACTION_NEED_UPDATE";
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject ActivityNotificationManager activityNotificationManager;
@@ -64,9 +65,12 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
             case ACTION_OPEN_SHOT_DETAIL:
                 openShotDetail(context, intent);
                 break;
+            case ACTION_NEED_UPDATE:
+                openUpdateNeeded(context);
+                break;
             default:
-                throw new IllegalStateException("Action \"" + action + "\" not handled in " + this.getClass()
-                  .getSimpleName());
+                openUpdateNeeded(context);
+                break;
         }
     }
 
@@ -98,6 +102,12 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
         startActivityFromIntent(context,
           ShotDetailActivity.getIntentForActivity(context, shotModel).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public void openUpdateNeeded(Context context) {
+        decrementBadgeCount();
+        startActivityFromIntent(context,
+            MainTabbedActivity.getUpdateNeededIntent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public void startActivityFromIntent(Context context, Intent intent) {

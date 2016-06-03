@@ -11,6 +11,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -36,13 +37,13 @@ public class HideShotInteractorTest {
     hideShotInteractor.hideShot(SHOT_ID, callback);
 
     InOrder inOrder = inOrder(callback, remoteShotRepository);
-    inOrder.verify(remoteShotRepository).hideShot(anyString(), anyLong());
+    inOrder.verify(remoteShotRepository).hideShot(anyString(), anyLong(), anyArray(), anyArray());
     inOrder.verify(callback).onCompleted();
   }
 
   @Test public void shouldNotifyCallbackWhenServiceFails() throws Exception {
     doThrow(new ServerCommunicationException(null)).when(remoteShotRepository)
-        .hideShot(anyString(), anyLong());
+        .hideShot(anyString(), anyLong(), anyArray(), anyArray());
 
     hideShotInteractor.hideShot(SHOT_ID, callback);
 
@@ -52,6 +53,11 @@ public class HideShotInteractorTest {
   @Test public void shouldSendHideShotToServer() throws Exception {
     hideShotInteractor.hideShot(SHOT_ID, callback);
 
-    verify(remoteShotRepository).hideShot(anyString(), anyLong());
+    verify(remoteShotRepository).hideShot(anyString(), anyLong(), anyArray(), anyArray());
   }
+
+  protected String[] anyArray() {
+    return any(String[].class);
+  }
+
 }

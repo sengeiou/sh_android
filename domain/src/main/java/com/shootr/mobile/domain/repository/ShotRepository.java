@@ -7,35 +7,38 @@ import java.util.List;
 
 public interface ShotRepository {
 
-    Shot putShot(Shot shot);
+  List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
-    List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters);
+  List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
 
-    Shot getShot(String shotId);
+  Shot getShot(String shotId, String[] streamTypes, String[] shotTypes);
 
-    List<Shot> getReplies(String shot);
+  List<Shot> getReplies(String shot, String[] streamTypes, String[] shotTypes);
 
-    List<Shot> getMediaByIdStream(String idEvent, List<String> userId, Long maxTimestamp);
+  List<Shot> getMediaByIdStream(String idEvent, List<String> userId, Long maxTimestamp,
+      String[] streamTypes, String[] shotTypes);
 
-    List<Shot> getShotsFromUser(String idUser, Integer limit);
+  List<Shot> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,
+      String[] shotTypes);
 
-    ShotDetail getShotDetail(String idShot);
+  ShotDetail getShotDetail(String idShot, String[] streamTypes, String[] shotTypes);
 
-    List<Shot> getAllShotsFromUser(String userId);
+  List<Shot> getAllShotsFromUser(String userId, String[] streamTypes, String[] shotTypes);
 
-    List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
+  List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate, String[] streamTypes,
+      String[] shotTypes);
 
-    void putShots(List<Shot> shotsFromUser);
+  void putShots(List<Shot> shotsFromUser);
 
-    void shareShot(String idShot);
+  Shot putShot(Shot shot);
 
-    void deleteShot(String idShot);
+  void shareShot(String idShot);
 
-    List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
+  void deleteShot(String idShot);
 
-    void deleteShotsByStream(String idStream);
+  void deleteShotsByStream(String idStream);
 
-    void hideShot(String idShot, Long timestamp);
+  void hideShot(String idShot, Long timestamp, String[] streamTypes, String[] shotTypes);
 
-    void unhideShot(String idShot);
+  void unhideShot(String idShot);
 }

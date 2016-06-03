@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.domain.ActivityTimeline;
 import com.shootr.mobile.domain.ActivityTimelineParameters;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
@@ -42,9 +44,9 @@ public class GetActivityTimelineInteractorTest {
   private static final Long DATE_OLDER = 1000L;
   private static final Long DATE_MIDDLE = 2000L;
   private static final Long DATE_NEWER = 3000L;
-  public static final String LANGUAGE = "LANGUAGE";
   public static final boolean NOT_USER_ACTIVITY_TIMELINE = false;
   public static final boolean IS_USER_ACTIVITY_TIMELINE = true;
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
   @Mock ActivityRepository localActivityRepository;
   @Mock UserRepository localUserRepository;
@@ -120,6 +122,14 @@ public class GetActivityTimelineInteractorTest {
     assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
   }
 
+  @Test public void shouldLoadLocalActivities() throws Exception {
+    interactor.loadActivityTimeline(IS_USER_ACTIVITY_TIMELINE, localeProvider.getLanguage(),
+        spyCallback);
+
+    verify(localActivityRepository).getActivityTimeline(any(ActivityTimelineParameters.class),
+        anyString());
+  }
+
   private User currentUserWatching() {
     User user = new User();
     user.setIdUser(ID_CURRENT_USER);
@@ -140,7 +150,8 @@ public class GetActivityTimelineInteractorTest {
 
   private void setupWatchingStream() {
     when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-    when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
+    when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID), eq(TYPES_STREAM))).thenReturn(
+        watchingStream());
   }
 
   //region Stubs

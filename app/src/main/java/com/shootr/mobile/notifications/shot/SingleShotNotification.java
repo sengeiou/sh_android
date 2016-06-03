@@ -3,31 +3,31 @@ package com.shootr.mobile.notifications.shot;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.io.IOException;
-
 import timber.log.Timber;
 
 public class SingleShotNotification extends AbstractSingleShotNotification {
 
+    private final Boolean areShotTypesKnown;
     private ShotModel shot;
     private ImageLoader imageLoader;
     private Bitmap largeIcon;
 
-    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, ImageLoader imageLoader,
-      ShotModel shot) {
+    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory,
+        ImageLoader imageLoader, ShotModel shot, Boolean areShotTypesKnown) {
         super(context, builderFactory, shot);
         this.shot = shot;
         this.imageLoader = imageLoader;
+        this.areShotTypesKnown = areShotTypesKnown;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        super.setNotificationValues(builder);
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        super.setNotificationValues(builder, this.areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
         if (shot.getImage() == null) {

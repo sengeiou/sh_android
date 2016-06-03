@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
@@ -87,12 +85,6 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @OnClick(R.id.support_help_text) public void onHelpClick() {
         supportPresenter.helpClicked();
-    }
-
-    @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
-        Toast.makeText(this, R.string.app_easter_egg, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, EasterEggActivity.class));
-        return true;
     }
 
     //endregion

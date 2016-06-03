@@ -8,7 +8,5 @@ public interface ActivityRepository {
 
     List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language);
 
-    Activity getActivity(String activityId);
-
     void deleteActivitiesWithShot(String idShot);
 }

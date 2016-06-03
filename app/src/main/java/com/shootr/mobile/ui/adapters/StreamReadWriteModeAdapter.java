@@ -80,9 +80,11 @@ public class StreamReadWriteModeAdapter extends ArrayAdapter {
 
   private void setupDrawable(int position, ImageView streamReadModeDrawable) {
     if (position == 0) {
-      streamReadModeDrawable.setImageDrawable(context.getDrawable(R.drawable.ic_stream_public));
+      streamReadModeDrawable.setImageDrawable(
+          context.getResources().getDrawable(R.drawable.ic_stream_public));
     } else {
-      streamReadModeDrawable.setImageDrawable(context.getDrawable(R.drawable.ic_stream_read_only));
+      streamReadModeDrawable.setImageDrawable(
+          context.getResources().getDrawable(R.drawable.ic_stream_read_only));
     }
   }
 

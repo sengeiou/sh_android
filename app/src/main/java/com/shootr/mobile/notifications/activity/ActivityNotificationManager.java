@@ -68,18 +68,18 @@ import javax.inject.Singleton;
   }
 
   public void sendOpenStreamNotification(PushNotification.NotificationValues notificationValues,
-      String idStream, String idStreamHolder, String title, String readWriteMode) {
+      String idStream, String idStreamHolder, String title, String readWriteMode, Boolean updateNeeded) {
     StreamActivityNotification notification =
         new StreamActivityNotification(context, notificationBuilderFactory, imageLoader,
-            notificationValues, idStream, idStreamHolder, title, readWriteMode);
+            notificationValues, idStream, idStreamHolder, title, readWriteMode, updateNeeded);
     showNotification(notification);
   }
 
   public void sendOpenShotDetailNotification(
-      final PushNotification.NotificationValues notificationValues, String idShot) {
+      final PushNotification.NotificationValues notificationValues, String idShot, Boolean updateNeeded) {
     ShotActivityNotification notification =
         new ShotActivityNotification(context, notificationBuilderFactory, imageLoader,
-            notificationValues, idShot, remoteShotRepository, shotModelMapper);
+            notificationValues, idShot, remoteShotRepository, shotModelMapper, updateNeeded);
     showNotification(notification);
   }
 

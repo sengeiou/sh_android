@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.service.user;
 import com.shootr.mobile.domain.ForgotPasswordResult;
 import com.shootr.mobile.domain.LoginResult;
 import com.shootr.mobile.domain.Nicer;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
@@ -84,7 +85,7 @@ public class ShootrUserService {
         storeSession(loginResult);
         String visibleEventId = loginResult.getUser().getIdWatchingStream();
         if (visibleEventId != null) {
-            remoteStreamRepository.getStreamById(visibleEventId);
+            remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
         }
         storeNicedShots(loginResult);
         remoteUserRepository.getPeople();

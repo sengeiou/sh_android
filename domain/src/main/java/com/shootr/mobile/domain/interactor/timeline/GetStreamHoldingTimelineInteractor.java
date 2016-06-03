@@ -48,7 +48,7 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    List<Shot> shots = loadLoadTimeline();
+    List<Shot> shots = loadLocalTimeline();
     if (shots.isEmpty()) {
       shots = loadRemoteTimeline(shots);
     }
@@ -56,7 +56,7 @@ public class GetStreamHoldingTimelineInteractor implements Interactor {
     notifyTimelineFromShots(shots);
   }
 
-  private List<Shot> loadLoadTimeline() {
+  private List<Shot> loadLocalTimeline() {
     return localShotRepository.getUserShotsForStreamTimeline(buildParameters());
   }
 

@@ -3,7 +3,6 @@ package com.shootr.mobile.data.repository.datasource.event;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class DatabaseStreamDataSource implements StreamDataSource {
@@ -14,11 +13,11 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         this.streamManager = streamManager;
     }
 
-    @Override public StreamEntity getStreamById(String idStream) {
+    @Override public StreamEntity getStreamById(String idStream, String[] types) {
         return streamManager.getStreamById(idStream);
     }
 
-    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
+    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds, String[] types) {
         return streamManager.getStreamsByIds(streamIds);
     }
 
@@ -36,16 +35,12 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streams;
     }
 
-    @Override public List<StreamEntity> getStreamsListing(String idUser) {
+    @Override public List<StreamEntity> getStreamsListing(String idUser, String[] types) {
         return streamManager.getStreamsListingNotRemoved(idUser);
     }
 
     @Override public void shareStream(String idStream) {
         throw new IllegalStateException("Not allowed in local");
-    }
-
-    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
-        throw new IllegalArgumentException("method not implemented in local datasource");
     }
 
     @Override public void removeStream(String idStream) {

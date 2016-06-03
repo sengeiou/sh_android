@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -42,7 +44,7 @@ public class HideShotInteractor implements Interactor {
 
   private void sendHideShotToServer() {
     Date now = new Date();
-    remoteShotRepository.hideShot(idShot, now.getTime());
+    remoteShotRepository.hideShot(idShot, now.getTime(), StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
   }
 
   private void notifyCompleted() {

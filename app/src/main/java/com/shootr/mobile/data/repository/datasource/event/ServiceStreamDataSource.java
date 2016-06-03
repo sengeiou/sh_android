@@ -1,14 +1,11 @@
 package com.shootr.mobile.data.repository.datasource.event;
 
-import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class ServiceStreamDataSource implements StreamDataSource {
@@ -20,17 +17,17 @@ public class ServiceStreamDataSource implements StreamDataSource {
         this.streamApiService = streamApiService;
     }
 
-    @Override public StreamEntity getStreamById(String idStream) {
+    @Override public StreamEntity getStreamById(String idStream, String[] types) {
         try {
-            return streamApiService.getStream(idStream);
+            return streamApiService.getStream(idStream, types);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
+    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds, String[] types) {
         try {
-            return streamApiService.getStreams(streamIds);
+            return streamApiService.getStreams(streamIds, types);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
@@ -56,9 +53,9 @@ public class ServiceStreamDataSource implements StreamDataSource {
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Override public List<StreamEntity> getStreamsListing(String idUser) {
+    @Override public List<StreamEntity> getStreamsListing(String idUser, String[] types) {
         try {
-            return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
+            return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS, types);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -68,19 +65,6 @@ public class ServiceStreamDataSource implements StreamDataSource {
         try {
             streamApiService.shareStream(idStream);
         } catch (ApiException | IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
-    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
-        try {
-            Map<String, Integer> favorites = new HashMap<>();
-            List<FavoritesApiEntity> holderFavorites = streamApiService.getHolderFavorites(idUser);
-            for (FavoritesApiEntity favoritesApiEntity : holderFavorites) {
-                favorites.put(favoritesApiEntity.getIdStream(), favoritesApiEntity.getFavoriteCount());
-            }
-            return favorites;
-        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

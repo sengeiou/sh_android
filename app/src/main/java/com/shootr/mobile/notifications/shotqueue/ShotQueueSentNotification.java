@@ -22,7 +22,8 @@ public class ShotQueueSentNotification extends CommonNotification {
         this.titleText = context.getResources().getString(R.string.notification_shot_sent);
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
         builder.setContentTitle(titleText);
         builder.setContentText(shot.getShot().getComment());
         builder.setPriority(NotificationCompat.PRIORITY_LOW);

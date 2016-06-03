@@ -7,8 +7,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,15 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -36,12 +34,14 @@ import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
-import com.shootr.mobile.ui.adapters.TimelineAdapter;
+import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -52,17 +52,15 @@ import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
-import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
+import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
-import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
-import com.shootr.mobile.ui.widgets.QuickReturnHeaderBehavior;
+import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -89,8 +87,6 @@ public class StreamTimelineFragment extends BaseFragment
   public static final String EXTRA_ID_USER = "userId";
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
-  private static final int TOP_PADDING = 144;
-  private static final int ANIMATION_DURATION = 200;
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -110,7 +106,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
 
-  @Bind(R.id.timeline_shot_list) ListView listView;
+  @Bind(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
   @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
@@ -126,7 +122,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.shot_shared_message) String shotShared;
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
 
-  private TimelineAdapter adapter;
+  private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
   private NewShotBarView newShotBarViewDelegate;
   private Integer watchNumberCount;
@@ -141,6 +137,7 @@ public class StreamTimelineFragment extends BaseFragment
   private int charCounterColorNormal;
   private EditText newTopicText;
   private TextView topicCharCounter;
+  private LinearLayoutManager linearLayoutManager;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -154,6 +151,8 @@ public class StreamTimelineFragment extends BaseFragment
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
     ButterKnife.bind(this, fragmentView);
+    linearLayoutManager = new LinearLayoutManager(getContext());
+    shotsTimeline.setLayoutManager(linearLayoutManager);
     newShotBarContainer.setVisibility(View.GONE);
     return fragmentView;
   }
@@ -328,15 +327,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupFooter() {
-    View footerView =
-        LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+    View footerView = LayoutInflater.from(getActivity())
+        .inflate(R.layout.item_list_loading, shotsTimeline, false);
     footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
     footerProgress.setVisibility(View.GONE);
-    listView.addFooterView(footerView, null, false);
   }
 
   private void setupListAdapter() {
-    adapter = new TimelineAdapter(getActivity(), //
+    adapter = new ShotsTimelineAdapter(getActivity(), //
         imageLoader, //
         timeUtils, //
         new OnAvatarClickListener() {
@@ -369,8 +367,18 @@ public class StreamTimelineFragment extends BaseFragment
             .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
         startActivity(newShotIntent);
       }
-    }, null, false);
-    listView.setAdapter(adapter);
+    }, null, false, new ShotClickListener() {
+      @Override public void onClick(ShotModel shot) {
+        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
+        startActivity(intent);
+      }
+    }, new OnShotLongClick() {
+      @Override public void onShotLongClick(ShotModel shot) {
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+        reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
+      }
+    });
+    shotsTimeline.setAdapter(adapter);
   }
 
   private void setupSwipeRefreshLayout() {
@@ -384,32 +392,34 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupListScrollListeners() {
-    new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
-        new ListViewScrollObserver.OnListViewScrollListener() {
-          @Override
-          public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-            if (delta > 10) {
-              hideNewShotsIndicator();
-            }
-          }
+    shotsTimeline.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
 
-          @Override public void onScrollIdle() {
-            if (listView != null) {
-              if (listView.getFirstVisiblePosition() == 0) {
-                streamTimelinePresenter.setIsFirstShotPosition(true);
-                hideNewShotsIndicator();
-              } else {
-                streamTimelinePresenter.setIsFirstShotPosition(false);
-              }
-              checkIfEndOfListVisible();
-            }
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        if (dy > 10) {
+          hideNewShotsIndicator();
+        }
+
+        if (shotsTimeline != null) {
+          if (linearLayoutManager.findFirstVisibleItemPosition() == 0) {
+            streamTimelinePresenter.setIsFirstShotPosition(true);
+            hideNewShotsIndicator();
+          } else {
+            streamTimelinePresenter.setIsFirstShotPosition(false);
           }
-        });
+          checkIfEndOfListVisible();
+        }
+      }
+    });
   }
 
   private void checkIfEndOfListVisible() {
-    int lastItemPosition = listView.getAdapter().getCount() - 1;
-    int lastVisiblePosition = listView.getLastVisiblePosition();
+    int lastItemPosition = shotsTimeline.getAdapter().getItemCount() - 1;
+    int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
     if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       streamTimelinePresenter.showingLastShot(adapter.getLastShot());
     }
@@ -539,7 +549,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
-    listView.smoothScrollToPosition(0);
+    shotsTimeline.smoothScrollToPosition(0);
     if (streamMessage.getText().toString().isEmpty()) {
       timelineIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
@@ -553,11 +563,11 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hideShots() {
-    listView.setVisibility(View.GONE);
+    shotsTimeline.setVisibility(View.GONE);
   }
 
   @Override public void showShots() {
-    listView.setVisibility(View.VISIBLE);
+    shotsTimeline.setVisibility(View.VISIBLE);
   }
 
   @Override public void addNewShots(List<ShotModel> newShots) {
@@ -634,35 +644,20 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showPinnedMessage(String topic) {
-    timelineIndicator.setVisibility(View.VISIBLE);
-    timelineIndicatorContainer.setVisibility(View.VISIBLE);
-    streamMessage.setVisibility(View.VISIBLE);
-    streamMessage.setText(topic);
-    setupTimelineListPadding();
-    setupMessageBehavior();
-  }
-
-  private void setupMessageBehavior() {
-    CoordinatorLayout.LayoutParams params =
-        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
-    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.MESSAGE,
-        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
-  }
-
-  private void setupTimelineListPadding() {
-    swipeRefreshLayout.setPadding(0, TOP_PADDING, 0, 0);
+    if (timelineIndicator != null) {
+      timelineIndicator.setVisibility(View.VISIBLE);
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+      streamMessage.setVisibility(View.VISIBLE);
+      streamMessage.setText(topic);
+    }
   }
 
   @Override public void hidePinnedMessage() {
     if (streamMessage != null) {
       streamMessage.setVisibility(View.GONE);
+      timelineIndicator.setVisibility(View.GONE);
+      timelineIndicatorContainer.setVisibility(View.GONE);
     }
-    timelineIndicator.setVisibility(View.GONE);
-    timelineIndicatorContainer.setVisibility(View.GONE);
-    CoordinatorLayout.LayoutParams params =
-        (CoordinatorLayout.LayoutParams) timelineIndicatorContainer.getLayoutParams();
-    params.setBehavior(new QuickReturnHeaderBehavior.Builder(QuickReturnHeaderBehavior.NO_MESSAGE,
-        swipeRefreshLayout.getId(), TOP_PADDING, ANIMATION_DURATION).build());
   }
 
   @Override public void setRemainingCharactersCount(int remainingCharacters) {
@@ -703,14 +698,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addAbove(List<ShotModel> shotModels) {
-    int index = listView.getFirstVisiblePosition() + shotModels.size();
-    View v = listView.getChildAt(listView.getHeaderViewsCount());
+    int index = linearLayoutManager.findFirstVisibleItemPosition() + shotModels.size();
+    View v = shotsTimeline.getChildAt(0);
     int top = (v == null) ? 0 : v.getTop();
 
     adapter.addShotsAbove(shotModels);
     adapter.notifyDataSetChanged();
 
-    listView.setSelectionFromTop(index, top);
+    linearLayoutManager.scrollToPositionWithOffset(index, top);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
@@ -1022,20 +1017,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void notifyDeletedShot(ShotModel shotModel) {
     adapter.removeShot(shotModel);
     adapter.notifyDataSetChanged();
-    streamTimelinePresenter.onShotDeleted(adapter.getCount());
-  }
-
-  @OnItemClick(R.id.timeline_shot_list) public void openShot(int position) {
-    ShotModel shot = adapter.getItem(position);
-    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
-    startActivity(intent);
-  }
-
-  @OnItemLongClick(R.id.timeline_shot_list) public boolean openContextMenu(int position) {
-    ShotModel shot = adapter.getItem(position);
-    String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-    reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
-    return true;
+    streamTimelinePresenter.onShotDeleted(adapter.getItemCount());
   }
   //endregion
 }

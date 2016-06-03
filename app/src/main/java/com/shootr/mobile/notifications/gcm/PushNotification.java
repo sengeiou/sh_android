@@ -125,6 +125,7 @@ public class PushNotification {
         private String title;
         private String idStreamHolder;
         private String streamReadWriteMode;
+        private String shotType;
 
         public int getPushType() {
             return pushType;
@@ -208,6 +209,14 @@ public class PushNotification {
 
         public void setStreamReadWriteMode(String streamReadWriteMode) {
             this.streamReadWriteMode = streamReadWriteMode;
+        }
+
+        public String getShotType() {
+            return shotType;
+        }
+
+        public void setShotType(String shotType) {
+            this.shotType = shotType;
         }
     }
 }

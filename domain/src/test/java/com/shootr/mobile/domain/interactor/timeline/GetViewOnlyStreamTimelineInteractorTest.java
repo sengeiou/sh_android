@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -37,6 +38,7 @@ public class GetViewOnlyStreamTimelineInteractorTest {
   public static final String ID_STREAM = "ID_STREAM";
   public static final String ID_USER = "ID_USER";
   public static final String ANTOHER_ID_USER = "antoher_id_user";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
   @Mock ShotRepository localShotRepository;
   @Mock UserRepository localUserRepository;
@@ -55,7 +57,7 @@ public class GetViewOnlyStreamTimelineInteractorTest {
     when(localUserRepository.getPeople()).thenReturn(people());
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
     when(localContributorRepository.getContributors(ID_STREAM)).thenReturn(contributors());
-    when(streamRepository.getStreamById(ID_STREAM)).thenReturn(stream());
+    when(streamRepository.getStreamById(ID_STREAM, TYPES_STREAM)).thenReturn(stream());
 
     getViewOnlyStreamTimelineInteractor =
         new GetViewOnlyStreamTimelineInteractor(interactorHandler, postExecutionThread,

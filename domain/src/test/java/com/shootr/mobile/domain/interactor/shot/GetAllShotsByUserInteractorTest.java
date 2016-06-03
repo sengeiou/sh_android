@@ -1,6 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -27,6 +29,8 @@ public class GetAllShotsByUserInteractorTest {
 
   private static final String USER_ID = "user_id";
   private GetAllShotsByUserInteractor getAllShotsByUserInteractor;
+  private static String[] TYPES_SHOT = ShotType.TYPES_SHOWN;
+  private static String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock ShotRepository localShotRepository;
   @Mock ShotRepository remoteShotRepository;
   @Mock Interactor.Callback<List<Shot>> callback;
@@ -44,11 +48,12 @@ public class GetAllShotsByUserInteractorTest {
   @Test public void shouldGetAllShotsFromUserInLocal() throws Exception {
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
-    verify(localShotRepository).getAllShotsFromUser(USER_ID);
+    verify(localShotRepository).getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT);
   }
 
   @Test public void shouldNotifyLoadedIfThereAreShotsFromUserInLocal() throws Exception {
-    when(localShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shots());
+    when(localShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shots());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -56,7 +61,8 @@ public class GetAllShotsByUserInteractorTest {
   }
 
   @Test public void shouldNotifyLoadedIfThereIsAShotFromUserInLocal() throws Exception {
-    when(localShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shot());
+    when(localShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shot());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -66,11 +72,12 @@ public class GetAllShotsByUserInteractorTest {
   @Test public void shouldGetAllShotsFromUserInRemote() throws Exception {
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
-    verify(remoteShotRepository).getAllShotsFromUser(USER_ID);
+    verify(remoteShotRepository).getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT);
   }
 
   @Test public void shouldNotifyLoadedIfThereAreShotsFromUserInRemote() throws Exception {
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shots());
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shots());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -78,7 +85,8 @@ public class GetAllShotsByUserInteractorTest {
   }
 
   @Test public void shouldNotifyLoadedIfThereIsAShotFromUserInRemote() throws Exception {
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shot());
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shot());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -87,8 +95,10 @@ public class GetAllShotsByUserInteractorTest {
 
   @Test public void shouldNotifyLoadedTwoTimesIfThereAreShotsFromUserInRemoteAndLocal()
       throws Exception {
-    when(localShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shots());
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shots());
+    when(localShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shots());
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shots());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -97,8 +107,10 @@ public class GetAllShotsByUserInteractorTest {
 
   @Test public void shouldNotifyLoadedTwoTimesIfThereIsAShotFromUserInRemoteAndLocal()
       throws Exception {
-    when(localShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shot());
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shot());
+    when(localShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shot());
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shot());
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -107,8 +119,9 @@ public class GetAllShotsByUserInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRemoteShotRepositoryThrowsShootrException()
       throws Exception {
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenThrow(new ShootrException() {
-    });
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenThrow(
+        new ShootrException() {
+        });
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 
@@ -116,9 +129,11 @@ public class GetAllShotsByUserInteractorTest {
   }
 
   @Test public void shouldNotifyShotsFromLocalEvenIfInRemoteThrowsException() throws Exception {
-    when(localShotRepository.getAllShotsFromUser(USER_ID)).thenReturn(shot());
-    when(remoteShotRepository.getAllShotsFromUser(USER_ID)).thenThrow(new ShootrException() {
-    });
+    when(localShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
+        shot());
+    when(remoteShotRepository.getAllShotsFromUser(USER_ID, TYPES_STREAM, TYPES_SHOT)).thenThrow(
+        new ShootrException() {
+        });
 
     getAllShotsByUserInteractor.loadAllShots(USER_ID, callback, errorCallback);
 

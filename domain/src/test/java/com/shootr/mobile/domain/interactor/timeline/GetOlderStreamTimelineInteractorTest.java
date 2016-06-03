@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 
 import com.shootr.mobile.domain.Shot;
 import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.StreamMode;
 import com.shootr.mobile.domain.StreamTimelineParameters;
 import com.shootr.mobile.domain.Timeline;
 import com.shootr.mobile.domain.User;
@@ -32,6 +33,7 @@ public class GetOlderStreamTimelineInteractorTest {
   public static final long CURRENT_OLDEST_DATE = 0L;
   public static final String VISIBLE_STREAM_ID = "visible_stream_id";
   public static final String USER_ID = "user_id";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock SessionRepository sessionRepository;
   @Mock ShotRepository remoteShotRepository;
   @Mock StreamRepository localStreamRepository;
@@ -49,7 +51,7 @@ public class GetOlderStreamTimelineInteractorTest {
             sessionRepository, remoteShotRepository, localStreamRepository, localUserRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     when(localUserRepository.getUserById(USER_ID)).thenReturn(user());
-    when(localStreamRepository.getStreamById(VISIBLE_STREAM_ID)).thenReturn(stream());
+    when(localStreamRepository.getStreamById(VISIBLE_STREAM_ID, TYPES_STREAM)).thenReturn(stream());
   }
 
   @Test public void shouldGetShotsForStreamTimeline() throws Exception {

@@ -16,17 +16,17 @@ public class ServiceStreamListDataSource implements StreamListDataSource {
         this.streamApiService = streamApiService;
     }
 
-    @Override public List<StreamEntity> getStreamList(String locale) {
+    @Override public List<StreamEntity> getStreamList(String locale, String[] types) {
         try {
-            return streamApiService.getStreamList(locale);
+            return streamApiService.getStreamList(locale, types);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<StreamEntity> getStreams(String query, String locale) {
+    @Override public List<StreamEntity> getStreams(String query, String locale, String[] types) {
         try {
-            return streamApiService.getStreams(query, locale);
+            return streamApiService.getStreams(query, locale, types);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }

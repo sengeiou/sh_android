@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.timeline;
 import com.shootr.mobile.domain.Activity;
 import com.shootr.mobile.domain.ActivityTimeline;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -154,6 +156,18 @@ public class RefreshActivityTimelineInteractorTest {
         errorCallback);
 
     verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
+  }
+
+  @Test public void shouldNotifyErrorWhenShootrTimelineServiceThrowsShootrException()
+      throws Exception {
+    when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenThrow(
+        new ShootrException() {
+        });
+
+    interactor.refreshActivityTimeline(IS_USER_ACTIVITY_TIMELINE, anyString(), spyCallback,
+        errorCallback);
+
+    verify(errorCallback).onError(any(ShootrException.class));
   }
 
   private User user() {

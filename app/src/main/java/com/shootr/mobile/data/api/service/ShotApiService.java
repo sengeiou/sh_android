@@ -16,50 +16,73 @@ import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shot/streamTimeline?includeLinks=false&includeAll=true") List<ShotApiEntity> getStreamTimeline(
-      @Query("idStream") String stream, @Query("count") Integer count, @Query("sinceTimestamp") Long sinceTimestamp,
+  @GET("/shot/streamTimeline?includeLinks=false&includeAll=true")
+  List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes,
+      @Query("count") Integer count, @Query("sinceTimestamp") Long sinceTimestamp,
       @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
-    @GET("/shot/streamTimeline/firstCall?includeLinks=false&includeAll=true")
-    List<ShotApiEntity> getStreamTimlinefirstCall(@Query("idStream") String streamId,
-      @Query("types") List<String> comment, @Query("sinceTimestamp") Long sinceDate) throws ApiException, IOException;
+  @GET("/shot/streamTimeline/firstCall?includeLinks=false&includeAll=true")
+  List<ShotApiEntity> getStreamTimlinefirstCall(@Query("idStream") String streamId,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] comment,
+      @Query("sinceTimestamp") Long sinceDate) throws ApiException, IOException;
 
-    @GET("/shot/{idShot}/?includeLinks=false") ShotApiEntity getShot(@Path("idShot") String idShot)
+  @GET("/shot/{idShot}/?includeLinks=false") ShotApiEntity getShot(@Path("idShot") String idShot,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes)
       throws ApiException, IOException;
 
-    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true") ShotApiEntity getShotWithReplies(
-      @Path("idShot") String idShot) throws ApiException, IOException;
+  @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true") ShotApiEntity getShotWithReplies(
+      @Path("idShot") String idShot, @Query("streamReadWriteMode") String[] streamTypes,
+      @Query("shotType") String[] shotTypes) throws ApiException, IOException;
 
-    @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true&includeThread=true")
-    ShotApiEntity getShotDetail(@Path("idShot") String idShot) throws ApiException, IOException;
+  @GET("/shot/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true&includeThread=true")
+  ShotApiEntity getShotDetail(@Path("idShot") String idShot,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes)
+      throws ApiException, IOException;
 
-    @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
-      @Query("count") Integer limit, @Query("types") String[] types) throws ApiException, IOException;
+  @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getShotsFromUser(
+      @Path("idUser") String idUser, @Query("count") Integer limit,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes)
+      throws ApiException, IOException;
 
-    @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getAllShotsFromUser(
-      @Path("idUser") String userId) throws ApiException, IOException;
+  @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getAllShotsFromUser(
+      @Path("idUser") String userId, @Query("streamReadWriteMode") String[] streamTypes,
+      @Query("shotType") String[] shotTypes) throws ApiException, IOException;
 
-    @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getAllShotsFromUserWithMaxDate(
-      @Path("idUser") String userId, @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
+  @GET("/shot/user/{idUser}/?includeLinks=false")
+  List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
+      @Query("maxTimestamp") Long maxDate, @Query("streamReadWriteMode") String[] streamTypes,
+      @Query("shotType") String[] shotTypes) throws ApiException, IOException;
 
-    @PUT("/shot/{idShot}/nice") Response markNice(@Path("idShot") String idShot) throws ApiException, IOException;
+  @PUT("/shot/{idShot}/nice") Response markNice(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 
-    @DELETE("/shot/{idShot}/nice") Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
+  @DELETE("/shot/{idShot}/nice") Response unmarkNice(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 
-    @GET("/shot/media/{idStream}/?count=100&includeLinks=false") List<ShotApiEntity> getMediaShots(
-      @Path("idStream") String idStream, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
+  @GET("/shot/media/{idStream}/?count=100&includeLinks=false") List<ShotApiEntity> getMediaShots(
+      @Path("idStream") String idStream, @Query("streamReadWriteMode") String[] streamTypes,
+      @Query("shotType") String[] shotTypes, @Query("maxTimestamp") Long maxTimestamp)
+      throws ApiException, IOException;
 
-    @POST("/shot/{idShot}/share") Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
+  @POST("/shot/{idShot}/share") Response shareShot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 
-    @DELETE("/shot/{idShot}") Response deleteShot(@Path("idShot") String idShot) throws ApiException, IOException;
+  @DELETE("/shot/{idShot}") Response deleteShot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 
-    @POST("/shot") ShotEntity postNewShot(@Body ShotEntity shotEntity) throws ApiException, IOException;
+  @POST("/shot") ShotEntity postNewShot(@Body ShotEntity shotEntity)
+      throws ApiException, IOException;
 
-    @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getAllShotsFromUserInStream(
-      @Path("idUser") String userId, @Query("idStream") String idStream, @Query("sinceTimestamp") Long sinceTimestamp,
-      @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
+  @GET("/shot/user/{idUser}/?includeLinks=false") List<ShotApiEntity> getAllShotsFromUserInStream(
+      @Path("idUser") String userId, @Query("idStream") String idStream,
+      @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp,
+      @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes)
+      throws ApiException, IOException;
 
-    @PUT("/shot/{idShot}/hide") Response hideShot(@Path("idShot") String idShot) throws ApiException, IOException;
+  @PUT("/shot/{idShot}/hide") Response hideShot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 
-    @DELETE("/shot/{idShot}/hide") Response unhideShot(@Path("idShot") String idShot) throws ApiException, IOException;
+  @DELETE("/shot/{idShot}/hide") Response unhideShot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
 }

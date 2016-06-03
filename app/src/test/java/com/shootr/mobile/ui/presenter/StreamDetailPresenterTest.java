@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Stream;
 import com.shootr.mobile.domain.StreamInfo;
 import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
@@ -48,553 +49,572 @@ import static org.mockito.Mockito.when;
 
 public class StreamDetailPresenterTest {
 
-    public static final int FIFTY_PLUS_WATCHERS = 55;
-    private static final String SELECTED_STREAM_ID = "selected_stream";
-    private static final String SELECTED_STREAM_TITLE = "title";
-    private static final String STREAM_AUTHOR_ID = "author";
-    private static final String ID_USER = "id_user";
-    public static final int THREE_WATCHERS = 3;
-    public static final String ID_STREAM = "id_stream";
-    public static final int NO_WATCHERS = 0;
-    public static final String PICTURE_URL = "picture_url";
-
-    private StreamDetailPresenter presenter;
-    @Mock GetStreamInfoInteractor streamInfoInteractor;
-    @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
-    @Mock ShareStreamInteractor shareStreamInteractor;
-    @Mock FollowInteractor followInteractor;
-    @Mock UnfollowInteractor unfollowInteractor;
-    @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock SessionRepository sessionRepository;
-    @Mock DateRangeTextProvider dateRangeTextProvider;
-    @Mock TimeUtils timeUtils;
-    @Mock StreamDetailView streamDetailView;
-    @Mock SelectStreamInteractor selectStreamInteractor;
-    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
-    @Mock MuteInteractor muteInteractor;
-    @Mock UnmuteInteractor unmuteInteractor;
-    @Mock GetContributorsInteractor getContributorsInteractor;
-    @Mock RemoveStreamInteractor removeStreamInteractor;
-    @Mock RestoreStreamInteractor restoreStreamInteractor;
-
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        UserModelMapper userModelMapper =
-          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        presenter = new StreamDetailPresenter(streamInfoInteractor,
-          changeStreamPhotoInteractor,
-          shareStreamInteractor,
-          followInteractor,
-          unfollowInteractor,
-          selectStreamInteractor,
-          getMutedStreamsInteractor,
-          muteInteractor,
-          unmuteInteractor,
-          getContributorsInteractor,
-          removeStreamInteractor, restoreStreamInteractor, streamModelMapper,
-          userModelMapper,
-          errorMessageFactory);
-        presenter.setView(streamDetailView);
-    }
-
-    @Test public void shouldShowTotalWatchers() throws Exception {
-        setupStreamInfoCallback();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-
-        verify(streamDetailView).setFollowingNumber(anyInt(), anyInt());
-    }
-
-    @Test public void shouldShowTotalWatchersFromParticipantsListIfLessThan50() throws Exception {
-        setupStreamInfoCallback();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-
-        verify(streamDetailView).setFollowingNumber(0, THREE_WATCHERS);
-    }
-
-    @Test public void shouldShowTotalWatchersFromStreamInfoIfMoreThan50() throws Exception {
-        setupStreamInfoWith50PlusParticipantsCallback();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-
-        verify(streamDetailView).setFollowingNumber(0, FIFTY_PLUS_WATCHERS);
-    }
-
-    @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoIsNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
-
-        verify(streamDetailView).showPhotoOptions();
-    }
-
-    @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallbackWithPhoto();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
-
-        verify(streamDetailView).showPhotoOptions();
-    }
-
-    @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
-
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  public static final int FIFTY_PLUS_WATCHERS = 55;
+  private static final String SELECTED_STREAM_ID = "selected_stream";
+  private static final String SELECTED_STREAM_TITLE = "title";
+  private static final String STREAM_AUTHOR_ID = "author";
+  private static final String ID_USER = "id_user";
+  public static final int THREE_WATCHERS = 3;
+  public static final String ID_STREAM = "id_stream";
+  public static final int NO_WATCHERS = 0;
+  public static final String PICTURE_URL = "picture_url";
+
+  private StreamDetailPresenter presenter;
+  @Mock GetStreamInfoInteractor streamInfoInteractor;
+  @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
+  @Mock ShareStreamInteractor shareStreamInteractor;
+  @Mock FollowInteractor followInteractor;
+  @Mock UnfollowInteractor unfollowInteractor;
+  @Mock ErrorMessageFactory errorMessageFactory;
+  @Mock SessionRepository sessionRepository;
+  @Mock DateRangeTextProvider dateRangeTextProvider;
+  @Mock TimeUtils timeUtils;
+  @Mock StreamDetailView streamDetailView;
+  @Mock SelectStreamInteractor selectStreamInteractor;
+  @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+  @Mock MuteInteractor muteInteractor;
+  @Mock UnmuteInteractor unmuteInteractor;
+  @Mock GetContributorsInteractor getContributorsInteractor;
+  @Mock RemoveStreamInteractor removeStreamInteractor;
+  @Mock RestoreStreamInteractor restoreStreamInteractor;
+
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
+    UserModelMapper userModelMapper =
+        new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+    presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor,
+        shareStreamInteractor, followInteractor, unfollowInteractor, selectStreamInteractor,
+        getMutedStreamsInteractor, muteInteractor, unmuteInteractor, getContributorsInteractor,
+        removeStreamInteractor, restoreStreamInteractor, streamModelMapper, userModelMapper,
+        errorMessageFactory);
+    presenter.setView(streamDetailView);
+  }
+
+  @Test public void shouldShowTotalWatchers() throws Exception {
+    setupStreamInfoCallback();
+
+    presenter.initialize(streamDetailView, ID_STREAM);
+
+    verify(streamDetailView).setFollowingNumber(anyInt(), anyInt());
+  }
+
+  @Test public void shouldShowTotalWatchersFromParticipantsListIfLessThan50() throws Exception {
+    setupStreamInfoCallback();
 
-        verify(streamDetailView, never()).showPhotoOptions();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-    @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallbackWithPhoto();
+    verify(streamDetailView).setFollowingNumber(0, THREE_WATCHERS);
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  @Test public void shouldShowTotalWatchersFromStreamInfoIfMoreThan50() throws Exception {
+    setupStreamInfoWith50PlusParticipantsCallback();
 
-        verify(streamDetailView, never()).showPhotoOptions();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-    @Test public void shouldZoomPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallbackWithPhoto();
+    verify(streamDetailView).setFollowingNumber(0, FIFTY_PLUS_WATCHERS);
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoIsNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
 
-        verify(streamDetailView).zoomPhoto(PICTURE_URL);
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldZoomPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallbackWithPhoto();
+    verify(streamDetailView).showPhotoOptions();
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallbackWithPhoto();
 
-        verify(streamDetailView).showPhotoOptions();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamWithoutPictureInfoCallback();
+    verify(streamDetailView).showPhotoOptions();
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallback();
 
-        verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldNotZoomPhotoIfIAmAuthorAndPhotoNull() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
+    verify(streamDetailView, never()).showPhotoOptions();
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
-        presenter.photoClick();
+  @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallbackWithPhoto();
 
-        verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldShowMuteCheckedIfStreamIsMuted() throws Exception {
-        setupMutedStreamCallback();
+    verify(streamDetailView, never()).showPhotoOptions();
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldZoomPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallbackWithPhoto();
 
-        verify(streamDetailView).setMuteStatus(true);
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldShowMuteUncheckedIfStreamIsNotMuted() throws Exception {
-        setupNoStreamMutedCallback();
+    verify(streamDetailView).zoomPhoto(PICTURE_URL);
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldZoomPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallbackWithPhoto();
 
-        verify(streamDetailView).setMuteStatus(false);
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-    @Test public void shouldNeverSelectStreamIfNoStreamInOnResume() throws Exception {
-        presenter.resume();
+    verify(streamDetailView).showPhotoOptions();
+  }
 
-        verify(selectStreamInteractor, never()).selectStream(anyString(),
-          any(Interactor.Callback.class),
-          any(Interactor.ErrorCallback.class));
-    }
+  @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamWithoutPictureInfoCallback();
 
-    @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
-        presenter.dataInfoClicked();
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-        verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
-    }
+    verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
+  }
 
-    @Test public void shouldGoToContributorsActivityAsHolderOncontributorsClicked() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldNotZoomPhotoIfIAmAuthorAndPhotoNull() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
 
-        presenter.contributorsClicked();
+    presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.photoClick();
 
-        verify(streamDetailView).goToContributorsActivityAsHolder(anyString());
-    }
+    verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
+  }
 
-    @Test public void shouldGoToContributorsActivityOncontributorsClicked() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldShowMuteCheckedIfStreamIsMuted() throws Exception {
+    setupMutedStreamCallback();
 
-        presenter.contributorsClicked();
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).goToContributorsActivity(anyString());
-    }
+    verify(streamDetailView).setMuteStatus(true);
+  }
 
-    @Test public void shouldShowContributorsNumberWhenContributorsListSizeIsMoreThanZero() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
-        setupContributorsCallBackWithContributors();
+  @Test public void shouldShowMuteUncheckedIfStreamIsNotMuted() throws Exception {
+    setupNoStreamMutedCallback();
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).showContributorsNumber(anyInt());
-    }
+    verify(streamDetailView).setMuteStatus(false);
+  }
 
-    @Test public void shouldHideContributorsNumberWhenContributorsListSizeIsZero() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
-        setupContributorsCallBackWithoutContributors();
+  @Test public void shouldNeverSelectStreamIfNoStreamInOnResume() throws Exception {
+    presenter.resume();
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+    verify(selectStreamInteractor, never()).selectStream(anyString(),
+        any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+  }
 
-        verify(streamDetailView).hideContributorsNumber();
-    }
+  @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
+    presenter.dataInfoClicked();
 
-    @Test public void shouldDisableContributorsWhenContributorsListIsZeroAndIamNotHolder() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupStreamInfoCallback();
-        setupContributorsCallBackWithoutContributors();
+    verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldGoToContributorsActivityAsHolderOncontributorsClicked() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).disableContributors();
-    }
+    presenter.contributorsClicked();
 
-    @Test public void shouldNotDisableContributorsWhenContributorsListIsZeroAndIamHolder() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
-        setupContributorsCallBackWithoutContributors();
+    verify(streamDetailView).goToContributorsActivityAsHolder(anyString());
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldGoToContributorsActivityOncontributorsClicked() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallback();
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView, never()).disableContributors();
-    }
+    presenter.contributorsClicked();
 
-    @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
+    verify(streamDetailView).goToContributorsActivity(anyString());
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldShowContributorsNumberWhenContributorsListSizeIsMoreThanZero()
+      throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallback();
+    setupContributorsCallBackWithContributors();
 
-        verify(streamDetailView).showRemoveStreamButton();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-    @Test public void shouldShowRestoreStreamIfStreamRemoved() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        setupRemovedStreamInfoCallback();
+    verify(streamDetailView).showContributorsNumber(anyInt());
+  }
 
-        presenter.initialize(streamDetailView, ID_STREAM);
+  @Test public void shouldHideContributorsNumberWhenContributorsListSizeIsZero() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallback();
+    setupContributorsCallBackWithoutContributors();
 
-        verify(streamDetailView).showRestoreStreamButton();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-    @Test public void shouldShowRemoveStreamConfirmationWhenRemoveClicked() throws Exception {
-        setupRemovedStreamInfoCallback();
+    verify(streamDetailView).hideContributorsNumber();
+  }
 
-        presenter.removeStream();
+  @Test public void shouldDisableContributorsWhenContributorsListIsZeroAndIamNotHolder()
+      throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupStreamInfoCallback();
+    setupContributorsCallBackWithoutContributors();
 
-        verify(streamDetailView).askRemoveStreamConfirmation();
-    }
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-    @Test public void shouldSetStreamPictureIfExists() throws Exception {
-        presenter.onStreamInfoLoaded(streamInfoWithPhoto());
+    verify(streamDetailView).disableContributors();
+  }
 
-        verify(streamDetailView).setStreamPicture(anyString());
-    }
+  @Test public void shouldNotDisableContributorsWhenContributorsListIsZeroAndIamHolder()
+      throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
+    setupContributorsCallBackWithoutContributors();
 
-    @Test public void shouldSetupStreamInitialsIfNotStreamPicture() throws Exception {
-        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
-    }
+    verify(streamDetailView, never()).disableContributors();
+  }
 
-    @Test public void shouldNotSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
+  @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
 
-        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
-    }
+    verify(streamDetailView).showRemoveStreamButton();
+  }
 
-    @Test public void shouldShowPictureIfNotStreamPictureAndImAuthor() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-        setupStreamInfoCallback();
+  @Test public void shouldShowRestoreStreamIfStreamRemoved() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    setupRemovedStreamInfoCallback();
 
-        presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+    presenter.initialize(streamDetailView, ID_STREAM);
 
-        verify(streamDetailView).showPicture();
-    }
+    verify(streamDetailView).showRestoreStreamButton();
+  }
 
-    private void setupRemovedStreamInfoCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetStreamInfoInteractor.Callback callback =
-                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(removedStreamInfo());
-                return null;
-            }
-        }).when(streamInfoInteractor)
-          .obtainStreamInfo(anyString(),
+  @Test public void shouldShowRemoveStreamConfirmationWhenRemoveClicked() throws Exception {
+    setupRemovedStreamInfoCallback();
+
+    presenter.removeStream();
+
+    verify(streamDetailView).askRemoveStreamConfirmation();
+  }
+
+  @Test public void shouldSetStreamPictureIfExists() throws Exception {
+    presenter.onStreamInfoLoaded(streamInfoWithPhoto());
+
+    verify(streamDetailView).setStreamPicture(anyString());
+  }
+
+  @Test public void shouldSetupStreamInitialsIfNotStreamPicture() throws Exception {
+    presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+    verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
+  }
+
+  @Test public void shouldNotSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
+
+    presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+    verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
+  }
+
+  @Test public void shouldShowPictureIfNotStreamPictureAndImAuthor() throws Exception {
+    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
+    setupStreamInfoCallback();
+
+    presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
+
+    verify(streamDetailView).showPicture();
+  }
+
+  @Test public void shouldNavigateToEditStream() throws Exception {
+    presenter.editStreamInfo();
+
+    verify(streamDetailView).navigateToEditStream(anyString());
+  }
+
+  @Test public void shouldShowErrorWhenStreamInfoInteractorErrorCallback() throws Exception {
+    setupStreamInfoErrorCallback();
+
+    presenter.getStreamInfo();
+
+    verify(streamDetailView).showError(anyString());
+  }
+
+  private void setupRemovedStreamInfoCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        callback.onLoaded(removedStreamInfo());
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    public void setupNoStreamMutedCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<String>> callback =
-                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-                callback.onLoaded(Collections.<String>emptyList());
-                return null;
-            }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
-    }
+  public void setupNoStreamMutedCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<List<String>> callback =
+            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+        callback.onLoaded(Collections.<String>emptyList());
+        return null;
+      }
+    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+  }
 
-    public void setupMutedStreamCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<String>> callback =
-                  (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-                callback.onLoaded(Arrays.asList(ID_STREAM));
-                return null;
-            }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
-    }
+  public void setupMutedStreamCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<List<String>> callback =
+            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+        callback.onLoaded(Arrays.asList(ID_STREAM));
+        return null;
+      }
+    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+  }
 
-    private void setupStreamWithoutPictureInfoCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetStreamInfoInteractor.Callback callback =
-                    (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(streamInfoWithoutPhoto());
-                return null;
-            }
-        }).when(streamInfoInteractor)
-            .obtainStreamInfo(anyString(),
-                (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
-                any(Interactor.ErrorCallback.class));
-    }
-
-    private void setupStreamInfoCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetStreamInfoInteractor.Callback callback =
-                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(streamInfoWith3Participants());
-                return null;
-            }
-        }).when(streamInfoInteractor)
-          .obtainStreamInfo(anyString(),
+  private void setupStreamWithoutPictureInfoCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        callback.onLoaded(streamInfoWithoutPhoto());
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    public void setupStreamInfoCallbackWithPhoto() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetStreamInfoInteractor.Callback callback =
-                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(streamInfoWithPhoto());
-                return null;
-            }
-        }).when(streamInfoInteractor)
-          .obtainStreamInfo(anyString(),
+  private void setupStreamInfoCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        callback.onLoaded(streamInfoWith3Participants());
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    public void setupStreamInfoWith50PlusParticipantsCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetStreamInfoInteractor.Callback callback =
-                  (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(streamInfoWith50plusParticipants());
-                return null;
-            }
-        }).when(streamInfoInteractor)
-          .obtainStreamInfo(anyString(),
+  public void setupStreamInfoCallbackWithPhoto() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        callback.onLoaded(streamInfoWithPhoto());
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    private void setupContributorsCallBackWithContributors() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetContributorsInteractor.Callback callback =
-                  (GetContributorsInteractor.Callback) invocation.getArguments()[2];
-                callback.onLoaded(contributorList());
-                return null;
-            }
-        }).when(getContributorsInteractor)
-          .obtainContributors(anyString(),
-            anyBoolean(),
-            any(Interactor.Callback.class),
+  public void setupStreamInfoWith50PlusParticipantsCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        callback.onLoaded(streamInfoWith50plusParticipants());
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    private void setupContributorsCallBackWithoutContributors() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                GetContributorsInteractor.Callback callback =
-                  (GetContributorsInteractor.Callback) invocation.getArguments()[2];
-                callback.onLoaded(Collections.emptyList());
-                return null;
-            }
-        }).when(getContributorsInteractor)
-          .obtainContributors(anyString(),
-            anyBoolean(),
-            any(Interactor.Callback.class),
+  public void setupStreamInfoErrorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.ErrorCallback callback =
+            (GetStreamInfoInteractor.ErrorCallback) invocation.getArguments()[2];
+        callback.onError(new ShootrException() {
+        });
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
-    }
+  }
 
-    private StreamInfo streamInfoWith50plusParticipants() {
-        return StreamInfo.builder()
-          .stream(streamWith50plusParticipants())
-          .watchers(moreThan50watchers())
-          .currentUserWatching(new User())
-          .numberOfFollowing(NO_WATCHERS)
-          .hasMoreParticipants(true)
-          .isDataComplete(true)
-          .build();
-    }
+  private void setupContributorsCallBackWithContributors() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetContributorsInteractor.Callback callback =
+            (GetContributorsInteractor.Callback) invocation.getArguments()[2];
+        callback.onLoaded(contributorList());
+        return null;
+      }
+    }).when(getContributorsInteractor)
+        .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+  }
 
-    private StreamInfo streamInfoWith3Participants() {
-        return StreamInfo.builder()
-          .stream(stream())
-          .watchers(watchers())
-          .currentUserWatching(new User())
-          .numberOfFollowing(NO_WATCHERS)
-          .hasMoreParticipants(false)
-          .isDataComplete(true)
-          .build();
-    }
+  private void setupContributorsCallBackWithoutContributors() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetContributorsInteractor.Callback callback =
+            (GetContributorsInteractor.Callback) invocation.getArguments()[2];
+        callback.onLoaded(Collections.emptyList());
+        return null;
+      }
+    }).when(getContributorsInteractor)
+        .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+  }
 
-    private StreamInfo removedStreamInfo() {
-        Stream stream = stream();
-        stream.setRemoved(true);
-        stream.setAuthorId(ID_USER);
-        return StreamInfo.builder()
-          .stream(stream)
-          .watchers(watchers())
-          .currentUserWatching(new User())
-          .numberOfFollowing(NO_WATCHERS)
-          .hasMoreParticipants(false)
-          .isDataComplete(true)
-          .build();
-    }
+  private StreamInfo streamInfoWith50plusParticipants() {
+    return StreamInfo.builder()
+        .stream(streamWith50plusParticipants())
+        .watchers(moreThan50watchers())
+        .currentUserWatching(new User())
+        .numberOfFollowing(NO_WATCHERS)
+        .hasMoreParticipants(true)
+        .isDataComplete(true)
+        .build();
+  }
 
-    private StreamInfo streamInfoWithPhoto() {
-        return StreamInfo.builder()
-          .stream(streamWithPhoto())
-          .watchers(watchers())
-          .currentUserWatching(new User())
-          .numberOfFollowing(NO_WATCHERS)
-          .hasMoreParticipants(false)
-          .isDataComplete(true)
-          .build();
-    }
+  private StreamInfo streamInfoWith3Participants() {
+    return StreamInfo.builder()
+        .stream(stream())
+        .watchers(watchers())
+        .currentUserWatching(new User())
+        .numberOfFollowing(NO_WATCHERS)
+        .hasMoreParticipants(false)
+        .isDataComplete(true)
+        .build();
+  }
 
-    private StreamInfo streamInfoWithoutPhoto() {
-        return StreamInfo.builder()
-            .stream(streamWithoutPhoto())
-            .watchers(watchers())
-            .currentUserWatching(new User())
-            .numberOfFollowing(NO_WATCHERS)
-            .hasMoreParticipants(false)
-            .isDataComplete(true)
-            .build();
-    }
+  private StreamInfo removedStreamInfo() {
+    Stream stream = stream();
+    stream.setRemoved(true);
+    stream.setAuthorId(ID_USER);
+    return StreamInfo.builder()
+        .stream(stream)
+        .watchers(watchers())
+        .currentUserWatching(new User())
+        .numberOfFollowing(NO_WATCHERS)
+        .hasMoreParticipants(false)
+        .isDataComplete(true)
+        .build();
+  }
 
-    private List<User> watchers() {
-        List<User> participants = new ArrayList<>();
-        participants.add(user());
-        participants.add(new User());
-        return participants;
-    }
+  private StreamInfo streamInfoWithPhoto() {
+    return StreamInfo.builder()
+        .stream(streamWithPhoto())
+        .watchers(watchers())
+        .currentUserWatching(new User())
+        .numberOfFollowing(NO_WATCHERS)
+        .hasMoreParticipants(false)
+        .isDataComplete(true)
+        .build();
+  }
 
-    private List<User> moreThan50watchers() {
-        List<User> participants = new ArrayList<>();
-        participants.add(user());
-        for (int i = 0; i < 50; i++) {
-            participants.add(new User());
-        }
-        return participants;
-    }
+  private StreamInfo streamInfoWithoutPhoto() {
+    return StreamInfo.builder()
+        .stream(streamWithoutPhoto())
+        .watchers(watchers())
+        .currentUserWatching(new User())
+        .numberOfFollowing(NO_WATCHERS)
+        .hasMoreParticipants(false)
+        .isDataComplete(true)
+        .build();
+  }
 
-    private User user() {
-        User user = new User();
-        user.setIdUser(ID_USER);
-        return user;
-    }
+  private List<User> watchers() {
+    List<User> participants = new ArrayList<>();
+    participants.add(user());
+    participants.add(new User());
+    return participants;
+  }
 
-    private Stream stream() {
-        Stream stream = new Stream();
-        stream.setId(SELECTED_STREAM_ID);
-        stream.setTitle(SELECTED_STREAM_TITLE);
-        stream.setAuthorId(STREAM_AUTHOR_ID);
-        stream.setTotalWatchers(NO_WATCHERS);
-        stream.setPicture(PICTURE_URL);
-        return stream;
+  private List<User> moreThan50watchers() {
+    List<User> participants = new ArrayList<>();
+    participants.add(user());
+    for (int i = 0; i < 50; i++) {
+      participants.add(new User());
     }
+    return participants;
+  }
 
-    private Stream streamWithPhoto() {
-        Stream stream = new Stream();
-        stream.setId(SELECTED_STREAM_ID);
-        stream.setTitle(SELECTED_STREAM_TITLE);
-        stream.setAuthorId(STREAM_AUTHOR_ID);
-        stream.setTotalWatchers(NO_WATCHERS);
-        stream.setPicture(PICTURE_URL);
-        return stream;
-    }
+  private User user() {
+    User user = new User();
+    user.setIdUser(ID_USER);
+    return user;
+  }
 
-    private Stream streamWithoutPhoto() {
-        Stream stream = new Stream();
-        stream.setId(SELECTED_STREAM_ID);
-        stream.setTitle(SELECTED_STREAM_TITLE);
-        stream.setAuthorId(STREAM_AUTHOR_ID);
-        stream.setTotalWatchers(NO_WATCHERS);
-        return stream;
-    }
+  private Stream stream() {
+    Stream stream = new Stream();
+    stream.setId(SELECTED_STREAM_ID);
+    stream.setTitle(SELECTED_STREAM_TITLE);
+    stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalWatchers(NO_WATCHERS);
+    stream.setPicture(PICTURE_URL);
+    return stream;
+  }
 
-    private Stream streamWith50plusParticipants() {
-        Stream stream = new Stream();
-        stream.setId(SELECTED_STREAM_ID);
-        stream.setTitle(SELECTED_STREAM_TITLE);
-        stream.setAuthorId(STREAM_AUTHOR_ID);
-        stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
-        return stream;
-    }
+  private Stream streamWithPhoto() {
+    Stream stream = new Stream();
+    stream.setId(SELECTED_STREAM_ID);
+    stream.setTitle(SELECTED_STREAM_TITLE);
+    stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalWatchers(NO_WATCHERS);
+    stream.setPicture(PICTURE_URL);
+    return stream;
+  }
 
-    private List<Contributor> contributorList() {
-        List<Contributor> contributors = new ArrayList<>();
-        Contributor contributor = new Contributor();
-        contributor.setIdStream(ID_STREAM);
-        contributor.setUser(user());
-        contributor.setIdUser(ID_USER);
-        contributors.add(contributor);
-        return contributors;
-    }
+  private Stream streamWithoutPhoto() {
+    Stream stream = new Stream();
+    stream.setId(SELECTED_STREAM_ID);
+    stream.setTitle(SELECTED_STREAM_TITLE);
+    stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalWatchers(NO_WATCHERS);
+    return stream;
+  }
+
+  private Stream streamWith50plusParticipants() {
+    Stream stream = new Stream();
+    stream.setId(SELECTED_STREAM_ID);
+    stream.setTitle(SELECTED_STREAM_TITLE);
+    stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
+    return stream;
+  }
+
+  private List<Contributor> contributorList() {
+    List<Contributor> contributors = new ArrayList<>();
+    Contributor contributor = new Contributor();
+    contributor.setIdStream(ID_STREAM);
+    contributor.setUser(user());
+    contributor.setIdUser(ID_USER);
+    contributors.add(contributor);
+    return contributors;
+  }
 }

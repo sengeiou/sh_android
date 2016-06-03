@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
@@ -28,14 +27,24 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
         this.shotModel = shotModel;
     }
 
-    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentIntent(getOpenShotNotificationPendingIntent());
+    @Override public void setNotificationValues(NotificationCompat.Builder builder,
+        Boolean areShotTypesKnown) {
+        if (areShotTypesKnown) {
+            builder.setContentIntent(getOpenShotNotificationPendingIntent());
+        } else {
+            builder.setContentIntent(getOpenUpdateNeededPendingIntent());
+        }
         builder.setDeleteIntent(getDiscardShotNotificationPendingIntent());
     }
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
         intent.putExtra(ShotDetailActivity.EXTRA_SHOT, shotModel);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    protected PendingIntent getOpenUpdateNeededPendingIntent() {
+        Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 

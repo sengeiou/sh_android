@@ -34,12 +34,12 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
         this.streamEntityMapper = streamEntityMapper;
     }
 
-    @Override public List<StreamSearchResult> getDefaultStreams(String locale) {
+    @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
         List<StreamSearchEntity> defaultEvents = localStreamSearchDataSource.getDefaultStreams(locale);
         return streamSearchEntityMapper.transformToDomain(defaultEvents);
     }
 
-    @Override public List<StreamSearchResult> getStreams(String query, String locale) {
+    @Override public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
         throw new IllegalArgumentException("method not implemented in local repository");
     }
 
@@ -51,14 +51,11 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
         localStreamSearchDataSource.deleteDefaultStreams();
     }
 
-    @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser) {
-        List<StreamEntity> eventEntitiesListing = localStreamDataSource.getStreamsListing(listingIdUser);
+    @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser, String[] types) {
+        List<StreamEntity> eventEntitiesListing = localStreamDataSource.getStreamsListing(listingIdUser,
+            types);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformStreamEntitiesWithWatchers(eventEntitiesListing, watchers);
-    }
-
-    @Override public Map<String, Integer> getHolderFavorites(String idUser) {
-        throw new IllegalArgumentException("method not implemented in local repository");
     }
 
     private List<StreamSearchResult> transformStreamEntitiesWithWatchers(List<StreamEntity> eventEntities,

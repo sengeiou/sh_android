@@ -17,64 +17,65 @@ import javax.inject.Inject;
  */
 public class WatchNumberInteractor implements Interactor {
 
-    public static final int NO_STREAM = -1;
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final UserRepository remoteUserRepository;
-    private final UserRepository localUserRepository;
-    private String idStream;
-    private Callback callback;
+  public static final int NO_STREAM = -1;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final UserRepository remoteUserRepository;
+  private final UserRepository localUserRepository;
+  private String idStream;
+  private Callback callback;
 
-    @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.remoteUserRepository = remoteUserRepository;
-        this.localUserRepository = localUserRepository;
-    }
+  @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.remoteUserRepository = remoteUserRepository;
+    this.localUserRepository = localUserRepository;
+  }
 
-    public void loadWatchNumber(String idStream, Callback callback) {
-        this.idStream = idStream;
-        this.callback = callback;
-        interactorHandler.execute(this);
-    }
+  public void loadWatchNumber(String idStream, Callback callback) {
+    this.idStream = idStream;
+    this.callback = callback;
+    interactorHandler.execute(this);
+  }
 
-    @Override public void execute() throws Exception {
-        List<User> people = getRemotePeopleOrFallbackToLocal();
-        List<User> watchers = filterUsersWatchingStream(people, idStream);
-        notifyLoaded(watchers.size());
-    }
+  @Override public void execute() throws Exception {
+    List<User> people = getRemotePeopleOrFallbackToLocal();
+    List<User> watchers = filterUsersWatchingStream(people, idStream);
+    notifyLoaded(watchers.size());
+  }
 
-    protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
-        List<User> watchers = new ArrayList<>();
-        if (people != null) {
-            for (User user : people) {
-                if (idStream.equals(user.getIdWatchingStream())) {
-                    watchers.add(user);
-                }
-            }
+  protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
+    List<User> watchers = new ArrayList<>();
+    if (people != null) {
+      for (User user : people) {
+        if (idStream.equals(user.getIdWatchingStream())) {
+          watchers.add(user);
         }
-        return watchers;
+      }
     }
+    return watchers;
+  }
 
-    private void notifyLoaded(final Integer countIsWatching) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(countIsWatching);
-            }
-        });
+  private void notifyLoaded(final Integer countIsWatching) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(countIsWatching);
+      }
+    });
+  }
+
+  private List<User> getRemotePeopleOrFallbackToLocal() {
+    try {
+      return remoteUserRepository.getPeople();
+    } catch (ServerCommunicationException networkError) {
+      return localUserRepository.getPeople();
     }
+  }
 
-    private List<User> getRemotePeopleOrFallbackToLocal() {
-        try {
-            return remoteUserRepository.getPeople();
-        } catch (ServerCommunicationException networkError) {
-            return localUserRepository.getPeople();
-        }
-    }
+  public interface Callback {
 
-    public interface Callback {
-
-        void onLoaded(Integer count);
-    }
+    void onLoaded(Integer count);
+  }
 }

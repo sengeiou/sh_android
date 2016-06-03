@@ -33,6 +33,8 @@ public class ServiceActivityDataSource implements ActivityDataSource {
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String locale) {
         try {
             List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(),
+              parameters.getStreamTypes(),
+              parameters.getShotTypes(),
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),
