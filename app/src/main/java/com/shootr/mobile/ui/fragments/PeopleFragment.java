@@ -238,6 +238,8 @@ public class PeopleFragment extends BaseFragment
     }
 
     public void scrollListToTop() {
-        userlistListView.setSelection(0);
+        if(userlistListView != null) {
+            userlistListView.setSelection(0);
+        }
     }
 }

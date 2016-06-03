@@ -242,7 +242,9 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void scrollListToTop() {
-        streamsList.scrollToPosition(0);
+        if(streamsList != null) {
+            streamsList.scrollToPosition(0);
+        }
     }
 
     @Override public void showEmpty() {
