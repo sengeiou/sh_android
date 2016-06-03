@@ -8,7 +8,6 @@ import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
-import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
@@ -52,8 +51,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 break;
             case ACTION_OPEN_ACTIVITY_NOTIFICATION:
                 startActivityFromIntent(context,
-                  new Intent(context, ActivityTimelinesContainerActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                  MainTabbedActivity.getMultipleActivitiesIntent(context)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
                 activityNotificationManager.clearActivityNotifications();
@@ -80,8 +79,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     }
 
     public void openActivities(Context context) {
-        context.startActivity(new Intent(context,
-          ActivityTimelinesContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        context.startActivity(MainTabbedActivity.getMultipleActivitiesIntent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         shotNotificationManager.clearShotNotifications();
     }
 

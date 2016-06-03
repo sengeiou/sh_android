@@ -34,6 +34,8 @@ import javax.inject.Inject;
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
+  private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
+  private static final int ACTIVITY_FRAGMENT = 3;
   @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @Inject MainScreenPresenter mainScreenPresenter;
@@ -52,6 +54,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     return intent;
   }
 
+  public static Intent getMultipleActivitiesIntent(Context context) {
+    Intent intent = new Intent(context, MainTabbedActivity.class);
+    intent.putExtra(EXTRA_MULTIPLE_ACTIVITIES, true);
+    return intent;
+  }
+
   @Override protected int getLayoutResource() {
     return R.layout.activity_main_tabbed;
   }
@@ -62,6 +70,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     setupBottomBar(savedInstanceState);
     loadIntentData();
     handleUpdateVersion();
+    handleMultipleActivitiesIntent();
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
@@ -151,6 +160,13 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
   }
 
+  private void handleMultipleActivitiesIntent() {
+    boolean openActivitiesFragment = getIntent().getBooleanExtra(EXTRA_MULTIPLE_ACTIVITIES, false);
+    if (openActivitiesFragment) {
+      bottomBar.selectTabAtPosition(ACTIVITY_FRAGMENT, false);
+    }
+  }
+
   private void showUpdateDialog() {
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
@@ -198,7 +214,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void navigateToActivity() {
-    startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
+    bottomBar.selectTabAtPosition(ACTIVITY_FRAGMENT, false);
   }
 
   @Override public void setUserData(final UserModel userModel) {
@@ -209,7 +225,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void showActivityBadge(int count) {
     if (unreadActivities == null) {
-      unreadActivities = bottomBar.makeBadgeForTabAt(3, Color.TRANSPARENT, count);
+      unreadActivities = bottomBar.makeBadgeForTabAt(ACTIVITY_FRAGMENT, Color.TRANSPARENT, count);
     } else {
       unreadActivities.setCount(count);
     }
