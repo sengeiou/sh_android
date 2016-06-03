@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.13.0] - 2016-06-03
+
+### Added
+
+- Retrocompatibility
+- Incremented test coverage
+
+### Changed
+
+- StreamTimeline now uses a RecyclerView instead a ListView
+- Gradle libraries
+
 ## [1.12.0] - 2016-05-20
 
 ### Added
