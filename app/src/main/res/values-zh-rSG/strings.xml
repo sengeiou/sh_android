@@ -392,4 +392,5 @@
     <string name="whale_retry_button_text">好的</string>
     <string name="whale_title_default">我们将会回来</string>
     <string name="yes">是的</string>
+    <string name="alert_shootr_update">此内容仅能透过最新的Shootr浏览。</string>
 </resources>

@@ -89,7 +89,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void showUpdateDialog() {
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
-        .setMessage(getString(R.string.update_warning_message)) //
+        .setMessage(getString(R.string.alert_shootr_update)) //
         .setPositiveButton(getString(R.string.email_confirmation_ok),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
