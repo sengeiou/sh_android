@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +57,7 @@ public class ActivityTimelineContainerFragment extends BaseFragment {
   //endregion
 
   protected void initializeViews() {
-    SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+    SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
     viewPager.setAdapter(sectionsPagerAdapter);
     viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
     viewPager.setPageMarginDrawable(R.drawable.page_margin);
@@ -97,7 +97,7 @@ public class ActivityTimelineContainerFragment extends BaseFragment {
     }
   }
 
-  public class SectionsPagerAdapter extends FragmentPagerAdapter {
+  public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     public SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
