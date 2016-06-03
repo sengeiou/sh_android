@@ -30,6 +30,7 @@
       android:supportsRtl="false"
       android:theme="@style/ShootrTheme"
       tools:replace="android:allowBackup">
+
     <activity
         android:name=".ui.activities.MainTabbedActivity"
         android:label="@string/app_name">
@@ -132,9 +133,6 @@
         android:theme="@style/ShootrTheme.DarkToolbar"/>
     <activity android:name=".ui.activities.UpdateWarningActivity"/>
     <activity android:name=".ui.activities.WhaleActivity"/>
-    <activity
-        android:name=".ui.activities.ActivityTimelinesContainerActivity"
-        android:label="@string/drawer_activity_title"/>
 
     <service android:name=".data.background.ShotDispatcherBackgroundService"/>
 
@@ -164,7 +162,6 @@
         <action android:name="com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION"/>
         <action android:name="com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION"/>
         <action android:name="com.shootr.mobile.ACTION_NEED_UPDATE"/>
-        <action android:name="com.shootr.mobile.ACTION_OPEN_POLL_VOTE"/>
 
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
@@ -224,12 +221,10 @@
     <meta-data
         android:name="com.shootr.mobile.util.GlideConfiguration"
         android:value="GlideModule"/>
-
     <activity
         android:name=".ui.activities.WelcomePageActivity"
         android:configChanges="orientation"
         android:screenOrientation="portrait"/>
-
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version"/>
@@ -245,6 +240,7 @@
     <activity
         android:name=".ui.activities.StreamDataInfoActivity"
         android:label="@string/title_activity_stream_data_info"/>
+    <activity android:name=".ui.activities.EasterEggActivity"/>
     <activity
         android:name=".ui.activities.NicersActivity"
         android:label="@string/nicers"/>
@@ -255,6 +251,7 @@
         android:name=".ui.activities.FindContributorsActivity"
         android:label="@string/title_activity_contributors"
         android:theme="@style/ShootrTheme.Closable"/>
+
     <activity
         android:name=".ui.activities.PollVoteActivity"
         android:label="@string/poll_vote"
@@ -265,5 +262,5 @@
         android:theme="@style/ShootrTheme">
     </activity>
   </application>
-
 </manifest>
+
