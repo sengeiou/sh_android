@@ -106,8 +106,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         }
       }
 
-      @Override
-      public void onMenuTabReSelected(@IdRes int menuItemId) {
+      @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
           case R.id.bottombar_streams:
             scrollToTop(fragments.get(FragNavController.TAB1), 0);
@@ -140,7 +139,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragments.add(PeopleFragment.newInstance());
     fragments.add(ActivityTimelineContainerFragment.newInstance());
 
-    fragNavController = new FragNavController(getSupportFragmentManager(), R.id.container,fragments);
+    fragNavController =
+        new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
   }
 
   private void scrollToTop(Fragment currentPage, int currentItem) {
