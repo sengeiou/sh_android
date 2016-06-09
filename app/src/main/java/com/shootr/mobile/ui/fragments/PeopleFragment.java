@@ -119,6 +119,7 @@ public class PeopleFragment extends BaseFragment
   private void openUserProfile(String idUser) {
     startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser),
         REQUEST_CAN_CHANGE_DATA);
+    getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
   }
 
   public void onInviteFriendClick() {

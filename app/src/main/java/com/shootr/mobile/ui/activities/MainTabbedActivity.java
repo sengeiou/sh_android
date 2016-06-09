@@ -247,6 +247,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         Intent intent =
             ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
       }
     });
   }

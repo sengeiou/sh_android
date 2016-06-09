@@ -49,6 +49,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
+            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -78,5 +79,10 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Override protected ObjectGraph buildObjectGraph() {
         return super.buildObjectGraph();
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
     }
 }

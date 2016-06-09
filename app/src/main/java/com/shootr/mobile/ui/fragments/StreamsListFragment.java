@@ -206,6 +206,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   @Override public void navigateToStreamTimeline(String idStream, String tag, String authorId) {
     startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, tag, authorId));
+    getActivity().overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
   }
 
   @Override public void navigateToCreatedStreamDetail(String streamId) {
