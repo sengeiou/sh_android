@@ -80,10 +80,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragments.add(FavoritesFragment.newInstance());
     fragments.add(PeopleFragment.newInstance());
     fragments.add(ActivityTimelineContainerFragment.newInstance());
+    fragNavController =
+        new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
 
-    fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
-    
-    bottomBar = BottomBar.attach(this, savedInstanceState);
+    BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
+    bottomBar.setMaxFixedTabs(2);
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
