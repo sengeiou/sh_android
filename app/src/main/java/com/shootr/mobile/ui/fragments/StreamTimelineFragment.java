@@ -30,6 +30,8 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
+import com.shootr.mobile.ui.activities.PollResultsActivity;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -44,16 +46,19 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
+import com.shootr.mobile.ui.presenter.StreamPollIndicatorPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
+import com.shootr.mobile.ui.views.StreamPollView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
@@ -80,13 +85,16 @@ import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, PinShotView {
+    ReportShotView, PinShotView, StreamPollView {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
+  private static final String POLL_STATUS_SHOWING = "showing";
+  private static final String POLL_STATUS_INVISIBLE = "invisible";
+  private static final String POLL_STATUS_GONE = "gone";
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -95,6 +103,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
   @Inject ReportShotPresenter reportShotPresenter;
   @Inject PinShotPresenter pinShotPresenter;
+  @Inject StreamPollIndicatorPresenter streamPollIndicatorPresenter;
 
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
@@ -108,8 +117,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Bind(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineIndicator;
-  @Bind(R.id.timeline_new_shots_indicator) RelativeLayout timelineIndicatorContainer;
+  @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
+  @Bind(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @Bind(R.id.timeline_empty) View emptyView;
   @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @Bind(R.id.shot_bar_drafts) View draftsButton;
@@ -117,10 +126,16 @@ public class StreamTimelineFragment extends BaseFragment
   @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
   @Bind(R.id.timeline_message) TextView streamMessage;
+  @Bind(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
+  @Bind(R.id.poll_question) TextView pollQuestion;
+  @Bind(R.id.poll_action) TextView pollAction;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
+  @BindString(R.string.poll_vote) String pollVoteString;
+  @BindString(R.string.poll_view) String pollViewString;
+  @BindString(R.string.poll_results) String pollResultsString;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -138,6 +153,7 @@ public class StreamTimelineFragment extends BaseFragment
   private EditText newTopicText;
   private TextView topicCharCounter;
   private LinearLayoutManager linearLayoutManager;
+  private String pollIndicatorStatus;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -251,6 +267,7 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarPresenter.resume();
     watchNumberPresenter.resume();
     streamTimelineOptionsPresenter.resume();
+    streamPollIndicatorPresenter.resume();
   }
 
   @Override public void onPause() {
@@ -259,6 +276,7 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarPresenter.pause();
     watchNumberPresenter.pause();
     streamTimelineOptionsPresenter.pause();
+    streamPollIndicatorPresenter.pause();
   }
 
   private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser,
@@ -269,6 +287,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
     reportShotPresenter.initialize(this);
+    streamPollIndicatorPresenter.initialize(this, idStream);
   }
 
   private void initializePresenters(String idStream, String streamAuthorIdUser,
@@ -278,6 +297,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
     reportShotPresenter.initialize(this);
+    streamPollIndicatorPresenter.initialize(this, idStream);
   }
 
   //endregion
@@ -551,7 +571,7 @@ public class StreamTimelineFragment extends BaseFragment
   @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
     shotsTimeline.smoothScrollToPosition(0);
     if (streamMessage.getText().toString().isEmpty()) {
-      timelineIndicator.setVisibility(View.GONE);
+      timelineNewShotsIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
     }
   }
@@ -625,27 +645,35 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
-    timelineIndicator.setVisibility(View.VISIBLE);
+    timelineNewShotsIndicator.setVisibility(View.VISIBLE);
     timelineIndicatorContainer.setVisibility(View.VISIBLE);
     timelineIndicatorText.setVisibility(View.VISIBLE);
     String indicatorText =
         getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
             numberNewShots);
     timelineIndicatorText.setText(indicatorText);
+    if (pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
+      timelinePollIndicator.setVisibility(View.GONE);
+      pollIndicatorStatus = POLL_STATUS_INVISIBLE;
+    }
   }
 
   @Override public void hideNewShotsIndicator() {
     timelineIndicatorText.setVisibility(View.GONE);
     streamTimelinePresenter.setNewShotsNumber(0);
     if (streamMessage.getText().toString().isEmpty()) {
-      timelineIndicator.setVisibility(View.GONE);
-      timelineIndicatorContainer.setVisibility(View.GONE);
+      timelineNewShotsIndicator.setVisibility(View.GONE);
+    }
+    if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_INVISIBLE)) {
+      pollIndicatorStatus = POLL_STATUS_SHOWING;
+      timelinePollIndicator.setVisibility(View.VISIBLE);
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
     }
   }
 
   @Override public void showPinnedMessage(String topic) {
-    if (timelineIndicator != null) {
-      timelineIndicator.setVisibility(View.VISIBLE);
+    if (timelineNewShotsIndicator != null) {
+      timelineNewShotsIndicator.setVisibility(View.VISIBLE);
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       streamMessage.setVisibility(View.VISIBLE);
       streamMessage.setText(topic);
@@ -655,8 +683,13 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void hidePinnedMessage() {
     if (streamMessage != null) {
       streamMessage.setVisibility(View.GONE);
-      timelineIndicator.setVisibility(View.GONE);
+      timelineNewShotsIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
+    }
+    if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
+      timelineNewShotsIndicator.setVisibility(View.GONE);
+      timelinePollIndicator.setVisibility(View.VISIBLE);
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
     }
   }
 
@@ -1018,6 +1051,63 @@ public class StreamTimelineFragment extends BaseFragment
     adapter.removeShot(shotModel);
     adapter.notifyDataSetChanged();
     streamTimelinePresenter.onShotDeleted(adapter.getItemCount());
+  }
+
+  @Override public void showPollIndicatorWithViewAction(final PollModel pollModel) {
+    setupPollIndicator(pollModel);
+    pollAction.setText(pollViewString.toUpperCase());
+  }
+
+  @Override public void showPollIndicatorWithVoteAction(PollModel pollModel) {
+    setupPollIndicator(pollModel);
+    pollAction.setText(pollVoteString.toUpperCase());
+  }
+
+  @Override public void showPollIndicatorWithResultsAction(PollModel pollModel) {
+    setupPollIndicator(pollModel);
+    pollAction.setText(pollResultsString.toUpperCase());
+  }
+
+  private void setupPollIndicator(PollModel pollModel) {
+    pollIndicatorStatus = POLL_STATUS_SHOWING;
+    if (timelinePollIndicator != null) {
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+      timelinePollIndicator.setVisibility(View.VISIBLE);
+      pollQuestion.setText(pollModel.getQuestion());
+    }
+  }
+
+  private void goToVoteActivity(String idStream) {
+    Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
+    startActivity(intent);
+  }
+
+  @Override public void hidePollIndicator() {
+    pollIndicatorStatus = POLL_STATUS_GONE;
+    if (timelinePollIndicator != null) {
+      timelinePollIndicator.setVisibility(View.GONE);
+      timelineIndicatorContainer.setVisibility(View.GONE);
+    }
+    streamTimelinePresenter.onHidePoll();
+  }
+
+  @Override public void goToPollVote(String idStream) {
+    Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
+    startActivity(intent);
+  }
+
+  @Override public void goToPollResults(String idStream) {
+    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idStream);
+    startActivity(intent);
+  }
+
+  @Override public void goToPollLiveResults(String idStream) {
+    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idStream);
+    startActivity(intent);
+  }
+
+  @OnClick(R.id.poll_action) public void onActionPressed() {
+    streamPollIndicatorPresenter.onActionPressed();
   }
   //endregion
 }

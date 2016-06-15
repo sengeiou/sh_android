@@ -15,7 +15,7 @@ public class SwipeRefreshLayoutBehavior extends CoordinatorLayout.Behavior<Swipe
 
   @Override public boolean layoutDependsOn(CoordinatorLayout parent, SwipeRefreshLayout child,
       View dependency) {
-    return dependency.getId() == R.id.timeline_new_shots_indicator;
+    return dependency.getId() == R.id.timeline_indicator;
   }
 
   @Override

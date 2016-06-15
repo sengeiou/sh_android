@@ -1,51 +1,52 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+  <!-- Default screen margins, per the Android Design guidelines. -->
+  <dimen name="activity_horizontal_margin">16dp</dimen>
+  <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="keyline_1">16dp</dimen>
-    <dimen name="keyline_2">72dp</dimen>
-    <dimen name="keyline_1_minus_8dp">8dp</dimen>
-    <dimen name="keyline_2_minus_icon">32dp</dimen>
+  <dimen name="keyline_1">16dp</dimen>
+  <dimen name="keyline_2">72dp</dimen>
+  <dimen name="keyline_1_minus_8dp">8dp</dimen>
+  <dimen name="keyline_2_minus_icon">32dp</dimen>
 
-    <dimen name="card_elevation">3dp</dimen>
+  <dimen name="card_elevation">3dp</dimen>
 
-    <dimen name="shot_avatar_size">52dp</dimen>
+  <dimen name="shot_avatar_size">52dp</dimen>
 
-    <!-- Timeline -->
-    <dimen name="new_shot_height">48dp</dimen>
-    <dimen name="card_radius">2dp</dimen>
+  <!-- Timeline -->
+  <dimen name="new_shot_height">48dp</dimen>
+  <dimen name="card_radius">2dp</dimen>
 
-    <!-- Profile -->
-    <dimen name="profile_avatar_size">120dp</dimen>
-    <dimen name="follow_button_radius">2dp</dimen>
+  <!-- Profile -->
+  <dimen name="profile_avatar_size">120dp</dimen>
+  <dimen name="follow_button_radius">2dp</dimen>
 
-    <!-- User Lists -->
-    <dimen name="userlist_avatar_size">40dp</dimen>
+  <!-- User Lists -->
+  <dimen name="userlist_avatar_size">40dp</dimen>
 
-    <!--Badge-->
-    <dimen name="badge_text_size">10sp</dimen>
-    <dimen name="badge_stroke_width">2dp</dimen>
-    <dimen name="stream_result_picture_height">52dp</dimen>
-    <dimen name="stream_result_picture_width">52dp</dimen>
-    <dimen name="shot_item_image_height">185dp</dimen>
-    <dimen name="view_pager_margin">16dp</dimen>
-    <dimen name="toolbar_title_padding">16dp</dimen>
-    <dimen name="tabbar_shadow_height">4dp</dimen>
-    <dimen name="reset_password_avatar_size">80dp</dimen>
+  <!--Badge-->
+  <dimen name="badge_text_size">10sp</dimen>
+  <dimen name="badge_stroke_width">2dp</dimen>
+  <dimen name="stream_result_picture_height">52dp</dimen>
+  <dimen name="stream_result_picture_width">52dp</dimen>
+  <dimen name="shot_item_image_height">185dp</dimen>
+  <dimen name="view_pager_margin">16dp</dimen>
+  <dimen name="toolbar_title_padding">16dp</dimen>
+  <dimen name="tabbar_shadow_height">4dp</dimen>
+  <dimen name="reset_password_avatar_size">80dp</dimen>
 
-    <dimen name="email_confirmation_message_text_size">18sp</dimen>
+  <dimen name="email_confirmation_message_text_size">18sp</dimen>
 
-    <dimen name="logo_size_104">104dp</dimen>
-    <dimen name="nice_button_size">36dp</dimen>
-    <dimen name="hide_button_container_size">36dp</dimen>
-    <dimen name="hide_button_size">20dp</dimen>
+  <dimen name="logo_size_104">104dp</dimen>
+  <dimen name="nice_button_size">36dp</dimen>
+  <dimen name="hide_button_container_size">36dp</dimen>
+  <dimen name="hide_button_size">20dp</dimen>
 
-    <dimen name="tab_indicator_height">3dp</dimen>
+  <dimen name="tab_indicator_height">3dp</dimen>
 
-    <dimen name="stream_detail_expanded_toolbar_height">160dp</dimen>
+  <dimen name="stream_detail_expanded_toolbar_height">160dp</dimen>
 
-    <dimen name="nice_button_margin_top_normal">4dp</dimen>
-    <dimen name="nice_button_margin_top_short">-16dp</dimen>
+  <dimen name="nice_button_margin_top_normal">4dp</dimen>
+  <dimen name="nice_button_margin_top_short">-16dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
 
 </resources>

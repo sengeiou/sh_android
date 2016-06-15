@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="48dp"
+  android:background="#039BE5">
+
+    <include
+        layout="@layout/include_timeline_message"
+        android:id="@+id/timeline_new_shots_indicator_container"
+        android:visibility="gone"/>
+
+    <include android:id="@+id/timeline_poll_indicator"
+        layout="@layout/include_stream_poll_indicator"
+        android:visibility="gone"/>
+</RelativeLayout>

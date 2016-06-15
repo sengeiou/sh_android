@@ -19,6 +19,8 @@ import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.NicersActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
+import com.shootr.mobile.ui.activities.PollResultsActivity;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
@@ -92,7 +94,8 @@ import javax.inject.Singleton;
     MeActivityTimelineFragment.class,
     NicersActivity.class,
     ContributorsActivity.class,
-    FindContributorsActivity.class
+    FindContributorsActivity.class,
+    PollVoteActivity.class, PollResultsActivity.class
   },
   complete = false) public class UiModule {
 
