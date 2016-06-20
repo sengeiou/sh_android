@@ -1,17 +1,13 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +24,7 @@ import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.SwipeDialog;
 import javax.inject.Inject;
 
 public class PollVoteActivity extends BaseToolbarDecoratedActivity implements PollVoteView {
@@ -92,27 +89,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   private void setupPollOptionDialog(PollOptionModel pollOptionModel) {
-    LayoutInflater inflater = this.getLayoutInflater();
-    View dialogView = inflater.inflate(R.layout.dialog_poll_option_image, null);
-    setupPollOptionText(dialogView, pollOptionModel);
-    setupPollOptionImage(dialogView, pollOptionModel);
-    createOptionDialog(dialogView);
-  }
-
-  private void setupPollOptionImage(View dialogView, PollOptionModel pollOptionModel) {
-    ImageView pollOptionImage = (ImageView) dialogView.findViewById(R.id.poll_option_image);
-    imageLoader.load(pollOptionModel.getImageUrl(), pollOptionImage);
-  }
-
-  private void setupPollOptionText(View dialogView, PollOptionModel pollOptionModel) {
-    TextView pollOptionText = (TextView) dialogView.findViewById(R.id.poll_option_text);
-    pollOptionText.setText(pollOptionModel.getText());
-  }
-
-  private void createOptionDialog(View dialogView) {
-    AlertDialog alertDialog = new AlertDialog.Builder(this).setView(dialogView).create();
-    alertDialog.getWindow().getAttributes().windowAnimations = R.style.growAnimation;
-    alertDialog.show();
+    SwipeDialog.newPollImageDialog(pollOptionModel, imageLoader, this.getLayoutInflater())
+        .show(getFragmentManager(), SwipeDialog.DIALOG);
   }
 
   private void setupActionbar() {

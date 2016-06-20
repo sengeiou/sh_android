@@ -225,6 +225,8 @@ dependencies {
 
     compile 'com.android.support:palette-v7:23.4.0'
 
+    compile 'com.labo.kaji:swipeawaydialog:0.1.0'
+
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'

@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.model;
 
-public class PollOptionModel {
+import java.io.Serializable;
+
+public class PollOptionModel implements Serializable {
 
   private String idPoll;
   private String idPollOption;
