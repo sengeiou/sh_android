@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     >
 
   <TextView
@@ -20,7 +20,6 @@
       android:id="@+id/poll_option_image"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:scaleType="centerCrop"
       tools:src="@drawable/sample_avatar"
       />
 </LinearLayout>
