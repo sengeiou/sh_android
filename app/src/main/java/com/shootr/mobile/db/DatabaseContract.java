@@ -274,10 +274,13 @@ public class DatabaseContract {
     public static final String TYPE = "type";
     public static final String ID_SHOT = "idShot";
     public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
+    public static final String ID_POLL = "idPoll";
+    public static final String POLL_QUESTION = "pollQuestion";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, TYPE, BIRTH, MODIFIED, DELETED,
+        REVISION, SYNCHRONIZED
     };
   }
 

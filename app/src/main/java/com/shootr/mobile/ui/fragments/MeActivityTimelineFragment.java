@@ -18,6 +18,7 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -128,26 +129,30 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         activityList.setLayoutManager(layoutManager);
 
         adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
-          new OnAvatarClickListener() {
-              @Override public void onAvatarClick(String userId, View avatarView) {
-                  openProfile(userId);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override public void onUsernameClick(String username) {
-                  openProfileFromUsername(username);
-              }
-          }, //
-          new OnStreamTitleClickListener() {
-              @Override public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
-                  openStream(streamId, streamTitle, authorId);
-              }
-          }, //
-          new OnShotClick() {
-              @Override public void onShotClick(ShotModel shot) {
-                  openShotDetail(shot);
-              }
-          });
+            new OnAvatarClickListener() {
+                @Override public void onAvatarClick(String userId, View avatarView) {
+                    openProfile(userId);
+                }
+            }, //
+            new OnUsernameClickListener() {
+                @Override public void onUsernameClick(String username) {
+                    openProfileFromUsername(username);
+                }
+            }, //
+            new OnStreamTitleClickListener() {
+                @Override public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
+                    openStream(streamId, streamTitle, authorId);
+                }
+            }, //
+            new OnShotClick() {
+                @Override public void onShotClick(ShotModel shot) {
+                    openShotDetail(shot);
+                }
+            }, new OnPollQuestionClickListener() {
+            @Override public void onPollQuestionClick(String idPoll) {
+                // TODO go to pollVoteActivity
+            }
+        });
         activityList.setAdapter(adapter);
     }
 

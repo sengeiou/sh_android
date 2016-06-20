@@ -10,6 +10,7 @@ import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -30,6 +31,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
       "com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION";
     public static final String ACTION_NEED_UPDATE =
         "com.shootr.mobile.ACTION_NEED_UPDATE";
+    public static final String ACTION_OPEN_POLL_VOTE = "com.shootr.mobile.ACTION_OPEN_POLL_VOTE";
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject ActivityNotificationManager activityNotificationManager;
@@ -64,6 +66,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 break;
             case ACTION_OPEN_SHOT_DETAIL:
                 openShotDetail(context, intent);
+                break;
+            case ACTION_OPEN_POLL_VOTE:
+                openPollVote(context, intent);
                 break;
             case ACTION_NEED_UPDATE:
                 openUpdateNeeded(context);
@@ -102,6 +107,13 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
         startActivityFromIntent(context,
           ShotDetailActivity.getIntentForActivity(context, shotModel).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public void openPollVote(Context context, Intent intent) {
+        String idPoll = intent.getStringExtra(PollVoteActivity.EXTRA_ID_POLL);
+        decrementBadgeCount();
+        startActivityFromIntent(context, PollVoteActivity.newIntentWithIdPoll(context, idPoll)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public void openUpdateNeeded(Context context) {

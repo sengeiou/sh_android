@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.poll;
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.PollOption;
 import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
@@ -54,13 +55,19 @@ public class VotePollOptionInteractor implements Interactor {
     }
   }
 
-  private void notifyLocalPoll() {
+  private void notifyLocalPoll()
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     Poll poll = localPollRepository.getPollByIdPoll(idPoll);
+    poll.setVoteStatus(PollStatus.VOTED);
     Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
+    localPollRepository.putPoll(poll);
     notifyLoaded(poll);
   }
 
-  private void fallbackToLocal() {
+  private void fallbackToLocal()
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     Poll poll = localPollRepository.getPollByIdPoll(idPoll);
     List<PollOption> pollOptions = poll.getPollOptions();
     for (PollOption pollOption : pollOptions) {

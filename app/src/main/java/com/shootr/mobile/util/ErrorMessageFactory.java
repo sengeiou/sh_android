@@ -11,12 +11,12 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.UserNotFoundException;
 import com.shootr.mobile.domain.service.ChangePasswordInvalidException;
 import com.shootr.mobile.domain.service.EmailInUseException;
+import com.shootr.mobile.domain.service.PollHasBeenDeletedException;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.CannotAddContributorException;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.mobile.domain.service.user.LoginException;
-import com.shootr.mobile.domain.service.user.StreamHasTooManyPolls;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
 import java.util.HashMap;
 import java.util.Map;
@@ -145,8 +145,8 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_user_cannot_vote);
         } else if (error instanceof UserHasVotedException) {
             return context.getString(R.string.error_has_voted);
-        } else if (error instanceof StreamHasTooManyPolls) {
-            return context.getString(R.string.error_stream_too_many_polls);
+        } else if (error instanceof PollHasBeenDeletedException) {
+            return context.getString(R.string.error_poll_has_been_deleted);
         } else {
             return getUnknownErrorMessage();
         }

@@ -1,10 +1,11 @@
 package com.shootr.mobile.data.repository.datasource.poll;
 
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.PollApiService;
 import com.shootr.mobile.data.entity.PollEntity;
+import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.StreamTooManyPolls;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import java.io.IOException;
@@ -20,9 +21,10 @@ public class ServicePollDataSource implements PollDataSource {
   }
 
   @Override public List<PollEntity> getPolls(String idStream)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException, StreamTooManyPolls {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     try {
-      return pollApiService.getPoll(idStream);
+      return pollApiService.getPollByIdStream(idStream);
     } catch (IOException e) {
       throw new ServerCommunicationException(e);
     } catch (ApiException e) {
@@ -30,8 +32,8 @@ public class ServicePollDataSource implements PollDataSource {
         throw new UserCannotVoteRequestException(e);
       } else if (e.getErrorInfo().code() == 7002) {
         throw new UserHasVotedRequestException(e);
-      } else if (e.getErrorInfo().code() == 7003) {
-        throw new StreamTooManyPolls(e);
+      } else if (ErrorInfo.ResourceNotFoundException == e.getErrorInfo()) {
+        throw new PollDeletedException(e);
       } else {
         throw new ServerCommunicationException(e);
       }
@@ -42,8 +44,24 @@ public class ServicePollDataSource implements PollDataSource {
     throw new IllegalArgumentException("method not implemented");
   }
 
-  @Override public PollEntity getPollById(String idPoll) {
-    throw new IllegalArgumentException("method not implemented");
+  @Override public PollEntity getPollById(String idPoll)
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
+    try {
+      return pollApiService.getPollById(idPoll);
+    } catch (IOException e) {
+      throw new ServerCommunicationException(e);
+    } catch (ApiException e) {
+      if (e.getErrorInfo().code() == 7001) {
+        throw new UserCannotVoteRequestException(e);
+      } else if (e.getErrorInfo().code() == 7002) {
+        throw new UserHasVotedRequestException(e);
+      } else if (ErrorInfo.ResourceNotFoundException == e.getErrorInfo()) {
+        throw new PollDeletedException(e);
+      } else {
+        throw new ServerCommunicationException(e);
+      }
+    }
   }
 
   @Override public void removePolls(String idStream) {

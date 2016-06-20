@@ -24,6 +24,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
   private String idStream;
   private boolean hasBeenPaused;
   private String action;
+  String idPoll;
 
   @Inject
   public StreamPollIndicatorPresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
@@ -57,6 +58,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
 
   private void handlePollResult(PollModel pollModel) {
     if (canShowIndicator(pollModel)) {
+      idPoll = pollModel.getIdPoll();
       getPollAction(pollModel);
     } else {
       streamPollView.hidePollIndicator();
@@ -102,13 +104,13 @@ public class StreamPollIndicatorPresenter implements Presenter {
   public void onActionPressed() {
     switch (action) {
       case RESULTS:
-        streamPollView.goToPollResults(idStream);
+        streamPollView.goToPollResults(idPoll);
         break;
       case VOTE:
         streamPollView.goToPollVote(idStream);
         break;
       default:
-        streamPollView.goToPollLiveResults(idStream);
+        streamPollView.goToPollLiveResults(idPoll);
         break;
     }
   }

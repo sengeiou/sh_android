@@ -3,12 +3,13 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
+import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
 import com.shootr.mobile.ui.views.PollResultsView;
+import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,44 +25,45 @@ import static org.mockito.Mockito.verify;
 
 public class PollResultsPresenterTest {
 
-  private static final String STREAM_ID = "idStream";
   private static final String POLL_ID = "idPoll";
   private static final String QUESTION = "question";
   private static final String STATUS = "status";
   private static final boolean PUBLISHED = true;
+  private static final String STREAM_ID = "idStream";
 
   @Mock PollResultsView pollResultsView;
-  @Mock GetPollByIdStreamInteractor getPollByIdStreamInteractor;
+  @Mock GetPollByIdPollInteractor getPollByIdPollInteractor;
   @Mock IgnorePollInteractor ignorePollInteractor;
+  @Mock ErrorMessageFactory errorMessageFactory;
 
   private PollResultsPresenter presenter;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
-    presenter = new PollResultsPresenter(getPollByIdStreamInteractor, pollModelMapper,
-        ignorePollInteractor);
+    presenter = new PollResultsPresenter(getPollByIdPollInteractor, pollModelMapper,
+        ignorePollInteractor, errorMessageFactory);
   }
 
   @Test public void shouldRenderResultsWhenInitialize() throws Exception {
     setupGetPollByIdStreamInteractor();
 
-    presenter.initialize(pollResultsView, STREAM_ID);
+    presenter.initialize(pollResultsView, POLL_ID);
 
     verify(pollResultsView).renderPollResults(any(PollModel.class));
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
-    setupGetPollByIdStreamErrorCallback();
+    setupGetPollByIdPollErrorCallback();
 
-    presenter.initialize(pollResultsView, STREAM_ID);
+    presenter.initialize(pollResultsView, POLL_ID);
 
     verify(pollResultsView).showError(anyString());
   }
 
   @Test public void shouldLoadPollWhenResume() throws Exception {
     setupGetPollByIdStreamInteractor();
-    presenter.initialize(pollResultsView, STREAM_ID);
+    presenter.initialize(pollResultsView, POLL_ID);
 
     presenter.resume();
 
@@ -73,7 +75,7 @@ public class PollResultsPresenterTest {
     setupGetPollByIdStreamInteractor();
     setupIgnorePollInteractorCallback();
 
-    presenter.initialize(pollResultsView, STREAM_ID);
+    presenter.initialize(pollResultsView, POLL_ID);
     presenter.ignorePoll();
 
     verify(pollResultsView).ignorePoll();
@@ -99,11 +101,11 @@ public class PollResultsPresenterTest {
         callback.onLoaded(poll());
         return null;
       }
-    }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }).when(getPollByIdPollInteractor)
+        .loadPollByIdPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
-  private void setupGetPollByIdStreamErrorCallback() {
+  private void setupGetPollByIdPollErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.ErrorCallback errorCallback =
@@ -112,8 +114,8 @@ public class PollResultsPresenterTest {
         });
         return null;
       }
-    }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+    }).when(getPollByIdPollInteractor)
+        .loadPollByIdPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private Poll poll() {

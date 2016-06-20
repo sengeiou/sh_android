@@ -4,7 +4,7 @@ import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
 import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.exception.StreamTooManyPolls;
+import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.repository.Local;
@@ -23,7 +23,8 @@ public class LocalPollRepository implements PollRepository {
   }
 
   @Override public List<Poll> getPollByIdStream(String idStream)
-      throws UserCannotVoteRequestException, StreamTooManyPolls, UserHasVotedRequestException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     return mapper.transform(pollDataSource.getPolls(idStream));
   }
 
@@ -32,7 +33,9 @@ public class LocalPollRepository implements PollRepository {
     pollDataSource.putPoll(pollEntity);
   }
 
-  @Override public Poll getPollByIdPoll(String idPoll) {
+  @Override public Poll getPollByIdPoll(String idPoll)
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     return mapper.transform(pollDataSource.getPollById(idPoll));
   }
 

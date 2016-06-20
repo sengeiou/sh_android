@@ -385,6 +385,10 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.ID_STREAM_AUTHOR
       + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.ID_POLL
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.POLL_QUESTION
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED

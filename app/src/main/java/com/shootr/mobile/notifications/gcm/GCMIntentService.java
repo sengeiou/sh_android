@@ -159,9 +159,18 @@ public class GCMIntentService extends IntentService {
       case ActivityType.STARTED_SHOOTING:
         setupGoToShotDetailNotification(push);
         break;
+      case ActivityType.POLL_PUBLISHED:
+        setupGoToPollVote(push);
+        break;
       default:
         Timber.w("Received unknown activity type: %s", activityType);
     }
+  }
+
+  private void setupGoToPollVote(PushNotification push) {
+    String idPoll = push.getParameters().getIdPoll();
+    activityNotificationManager.sendOpenPollVoteNotification(push.getNotificationValues(),
+        checkNotNull(idPoll), !isStreamPushTypeKnown(push));
   }
 
   private void setupGoToProfileNotification(PushNotification push) {

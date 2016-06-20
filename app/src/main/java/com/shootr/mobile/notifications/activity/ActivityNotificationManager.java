@@ -75,6 +75,14 @@ import javax.inject.Singleton;
     showNotification(notification);
   }
 
+  public void sendOpenPollVoteNotification(PushNotification.NotificationValues notificationValues,
+      String idPoll, Boolean updateNeeded) {
+    PollActivityNotification notification =
+        new PollActivityNotification(context, idPoll, notificationBuilderFactory, imageLoader,
+            notificationValues, updateNeeded);
+    showNotification(notification);
+  }
+
   public void sendOpenShotDetailNotification(
       final PushNotification.NotificationValues notificationValues, String idShot, Boolean updateNeeded) {
     ShotActivityNotification notification =

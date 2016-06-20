@@ -16,7 +16,7 @@ public class PollModelMapper {
   }
 
   public PollModel transform(Poll poll) {
-    if (poll == null) {
+    if (poll == null || poll.getIdPoll() == null) {
       return null;
     }
 

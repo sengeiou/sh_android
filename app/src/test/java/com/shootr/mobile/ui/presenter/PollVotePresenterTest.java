@@ -2,8 +2,10 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.PollOption;
+import com.shootr.mobile.domain.PollStatus;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
@@ -40,14 +42,15 @@ public class PollVotePresenterTest {
   @Mock IgnorePollInteractor ignorePollInteractor;
   @Mock VotePollOptionInteractor votePollOptionInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
+  @Mock GetPollByIdPollInteractor getPollByIdPollInteractor;
+
   private PollVotePresenter presenter;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
-    presenter =
-        new PollVotePresenter(getPollByIdStreamInteractor, ignorePollInteractor,
-            votePollOptionInteractor, pollModelMapper, errorMessageFactory);
+    presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
+        ignorePollInteractor, votePollOptionInteractor, pollModelMapper, errorMessageFactory);
   }
 
   @Test public void shouldRenderPollModelInView() throws Exception {
@@ -66,8 +69,7 @@ public class PollVotePresenterTest {
     verify(pollVoteView).showError(anyString());
   }
 
-  @Test
-  public void shouldIgnorePollInViewWhenIgnorePollCallback() throws Exception {
+  @Test public void shouldIgnorePollInViewWhenIgnorePollCallback() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
     setupIgnorePollInteractorCallback();
 
@@ -87,6 +89,30 @@ public class PollVotePresenterTest {
     verify(pollVoteView).goToResults(anyString());
   }
 
+  @Test public void shouldGoToResultsWhenInitializeAndPollIsVoted() throws Exception {
+    setupGetVotedPollByIdStreamInteractorCallback();
+
+    presenter.initialize(pollVoteView, STREAM_ID);
+
+    verify(pollVoteView).goToResults(anyString());
+  }
+
+  @Test public void shouldGoToResultsWhenInitializeAndPollIsClosed() throws Exception {
+    setupGetClosedPollByIdStreamInteractorCallback();
+
+    presenter.initialize(pollVoteView, STREAM_ID);
+
+    verify(pollVoteView).goToResults(anyString());
+  }
+
+  @Test public void shouldLoadByIdPollWhenViewInitializesByIdPoll() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    verify(pollVoteView).renderPoll(any(PollModel.class));
+  }
+
   private void setupIgnorePollInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -95,8 +121,7 @@ public class PollVotePresenterTest {
         callback.onCompleted();
         return null;
       }
-    }).when(ignorePollInteractor)
-        .ignorePoll(anyString(), any(Interactor.CompletedCallback.class));
+    }).when(ignorePollInteractor).ignorePoll(anyString(), any(Interactor.CompletedCallback.class));
   }
 
   private void setupGetPollByIdStreamErrorCallback() {
@@ -124,6 +149,43 @@ public class PollVotePresenterTest {
         .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
+  private void setupGetVotedPollByIdStreamInteractorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Poll> callback =
+            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+        callback.onLoaded(votedPoll());
+        return null;
+      }
+    }).when(getPollByIdStreamInteractor)
+        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+  }
+
+  private void setupGetClosedPollByIdStreamInteractorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Poll> callback =
+            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+        callback.onLoaded(closedPoll());
+        return null;
+      }
+    }).when(getPollByIdStreamInteractor)
+        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+  }
+
+  private void setupGetPollByIdPollInteractorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Poll> callback =
+            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+        callback.onLoaded(poll());
+        return null;
+      }
+    }).when(getPollByIdPollInteractor)
+        .loadPollByIdPoll(anyString(), any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+  }
+
   private void setupVotePollOptionInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -131,7 +193,28 @@ public class PollVotePresenterTest {
         callback.onLoaded(poll());
         return null;
       }
-    }).when(votePollOptionInteractor).vote(anyString(), anyString(), any(Interactor.Callback.class));
+    }).when(votePollOptionInteractor)
+        .vote(anyString(), anyString(), any(Interactor.Callback.class));
+  }
+
+  private Poll votedPoll() {
+    Poll poll = new Poll();
+    poll.setIdStream(STREAM_ID);
+    poll.setIdPoll(POLL_ID);
+    poll.setQuestion(QUESTION);
+    poll.setVoteStatus(PollStatus.VOTED);
+    poll.setStatus(PollStatus.OPEN);
+    return poll;
+  }
+
+  private Poll closedPoll() {
+    Poll poll = new Poll();
+    poll.setIdStream(STREAM_ID);
+    poll.setIdPoll(POLL_ID);
+    poll.setQuestion(QUESTION);
+    poll.setVoteStatus(PollStatus.VOTE);
+    poll.setStatus(PollStatus.CLOSED);
+    return poll;
   }
 
   private Poll poll() {

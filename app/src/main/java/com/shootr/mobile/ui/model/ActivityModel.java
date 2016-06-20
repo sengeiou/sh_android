@@ -16,6 +16,8 @@ public class ActivityModel {
     private Date publishDate;
     private ShotModel shot;
     private String idStreamAuthor;
+    private String idPoll;
+    private String pollQuestion;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -111,5 +113,21 @@ public class ActivityModel {
 
     public void setIdStreamAuthor(String idStreamAuthor) {
         this.idStreamAuthor = idStreamAuthor;
+    }
+
+    public String getIdPoll() {
+        return idPoll;
+    }
+
+    public void setIdPoll(String idPoll) {
+        this.idPoll = idPoll;
+    }
+
+    public String getPollQuestion() {
+        return pollQuestion;
+    }
+
+    public void setPollQuestion(String pollQuestion) {
+        this.pollQuestion = pollQuestion;
     }
 }

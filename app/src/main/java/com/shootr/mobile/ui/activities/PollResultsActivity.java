@@ -29,7 +29,7 @@ import com.shootr.mobile.util.PercentageUtils;
 import javax.inject.Inject;
 
 public class PollResultsActivity extends BaseToolbarDecoratedActivity implements PollResultsView {
-  private static final String EXTRA_STREAM = "streamId";
+  private static final String EXTRA_ID_POLL = "pollId";
   private static final String EXTRA_RESULTS = "results";
 
   @Bind(R.id.results_recycler) RecyclerView results;
@@ -43,16 +43,16 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newResultsIntent(Context context, String idStream) {
+  public static Intent newResultsIntent(Context context, String idPoll) {
     Intent intent = new Intent(context, PollResultsActivity.class);
-    intent.putExtra(EXTRA_STREAM, idStream);
+    intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
     return intent;
   }
 
-  public static Intent newLiveResultsIntent(Context context, String idStream) {
+  public static Intent newLiveResultsIntent(Context context, String idPoll) {
     Intent intent = new Intent(context, PollResultsActivity.class);
-    intent.putExtra(EXTRA_STREAM, idStream);
+    intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
     return intent;
   }
@@ -98,7 +98,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this, getIntent().getStringExtra(EXTRA_STREAM));
+    presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL));
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -125,6 +125,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public void renderPollResults(PollModel pollModel) {
     adapter.setPollModel(pollModel);
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void showError(String message) {

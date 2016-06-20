@@ -6,4 +6,5 @@ public interface PollStatus {
   String VOTED = "VOTED";
   String IGNORED = "IGNORED";
   String CLOSED = "CLOSED";
+  String OPEN = "OPEN";
 }

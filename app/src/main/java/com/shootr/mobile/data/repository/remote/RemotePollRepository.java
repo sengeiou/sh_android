@@ -5,7 +5,7 @@ import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.PollStatus;
-import com.shootr.mobile.domain.exception.StreamTooManyPolls;
+import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.repository.Local;
@@ -29,25 +29,37 @@ public class RemotePollRepository implements PollRepository {
   }
 
   @Override public List<Poll> getPollByIdStream(String idStream)
-      throws UserCannotVoteRequestException, StreamTooManyPolls, UserHasVotedRequestException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
     List<PollEntity> polls = remotePollDataSource.getPolls(idStream);
     if (polls.size() > 0) {
       PollEntity pollEntity = polls.get(0);
-      PollEntity pollById = localPollDataSource.getPollById(pollEntity.getIdPoll());
-      if (pollById != null) {
-        pollEntity.setVoteStatus(pollById.getVoteStatus());
-      }
+      setPollVoteStatus(pollEntity);
       localPollDataSource.removePolls(idStream);
       localPollDataSource.putPoll(pollEntity);
     }
     return pollEntityMapper.transform(polls);
   }
 
-  @Override public void putPoll(Poll poll) {
-    throw new IllegalArgumentException("method not implemented");
+  @Override public Poll getPollByIdPoll(String idPoll)
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
+    PollEntity pollEntity = remotePollDataSource.getPollById(idPoll);
+    setPollVoteStatus(pollEntity);
+    localPollDataSource.putPoll(pollEntity);
+    return pollEntityMapper.transform(pollEntity);
   }
 
-  @Override public Poll getPollByIdPoll(String idPoll) {
+  private void setPollVoteStatus(PollEntity pollEntity)
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      PollDeletedException {
+    PollEntity pollById = localPollDataSource.getPollById(pollEntity.getIdPoll());
+    if (pollById != null) {
+      pollEntity.setVoteStatus(pollById.getVoteStatus());
+    }
+  }
+
+  @Override public void putPoll(Poll poll) {
     throw new IllegalArgumentException("method not implemented");
   }
 

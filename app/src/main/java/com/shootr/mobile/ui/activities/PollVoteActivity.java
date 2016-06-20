@@ -25,6 +25,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
+import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import javax.inject.Inject;
@@ -32,6 +33,7 @@ import javax.inject.Inject;
 public class PollVoteActivity extends BaseToolbarDecoratedActivity implements PollVoteView {
 
   private static final String EXTRA_STREAM = "idStream";
+  public static final String EXTRA_ID_POLL = "idPoll";
 
   @Bind(R.id.poll_option_list) GridView gridView;
   @Bind(R.id.poll_question) TextView pollQuestion;
@@ -39,6 +41,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Inject InitialsLoader initialsLoader;
   @Inject PollOptionHolder pollOptionHolder;
   @Inject PollVotePresenter presenter;
+  @Inject FeedbackMessage feedbackMessage;
 
   private PollOptionAdapter pollOptionAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
@@ -49,12 +52,23 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     return intent;
   }
 
+  public static Intent newIntentWithIdPoll(Context context, String idPoll) {
+    Intent intent = new Intent(context, PollVoteActivity.class);
+    intent.putExtra(EXTRA_ID_POLL, idPoll);
+    return intent;
+  }
+
   @Override protected int getLayoutResource() {
     return R.layout.activity_poll_vote;
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this, getIntent().getStringExtra(EXTRA_STREAM));
+    String idStream = getIntent().getStringExtra(EXTRA_STREAM);
+    if (idStream != null) {
+      presenter.initialize(this, idStream);
+    } else {
+      presenter.initializeWithIdPoll(this, getIntent().getStringExtra(EXTRA_ID_POLL));
+    }
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -118,14 +132,14 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     finish();
   }
 
-  @Override public void goToResults(String idStream) {
-    Intent intent = PollResultsActivity.newResultsIntent(this, idStream);
+  @Override public void goToResults(String idPoll) {
+    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll);
     startActivity(intent);
     finish();
   }
 
   @Override public void showError(String message) {
-    //TODO
+    feedbackMessage.show(getView(), message);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,5 +158,15 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     } else {
       return super.onOptionsItemSelected(item);
     }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    presenter.resume();
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    presenter.pause();
   }
 }

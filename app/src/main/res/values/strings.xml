@@ -413,12 +413,13 @@
   <string name="alert_shootr_update">This content can only be viewed with the latest version of Shootr.</string>
   <string name="error_user_cannot_vote">Cannot vote</string>
   <string name="error_has_voted">Has voted</string>
-  <string name="error_stream_too_many_polls">It has surpassed the number of polls for this stream</string>
-  <string name="poll_vote">Vote</string>
+  <string name="poll_vote">Vote</string>new poll
   <string name="poll_ignore">Ignore</string>
   <string name="poll_view">View</string>
   <string name="poll_results">Results</string>
   <string name="poll_live_results">Live results</string>
   <string name="order_poll_option" formatted="false">%s. %s</string>
   <string formatted="false" name="poll_results_pct">(%s%%)</string>
+  <string name="publish_poll" formatted="false">%s New poll in %s</string>
+  <string name="error_poll_has_been_deleted">The Poll has been deleted</string>
 </resources>

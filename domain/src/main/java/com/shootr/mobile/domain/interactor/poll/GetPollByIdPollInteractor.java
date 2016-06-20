@@ -17,10 +17,9 @@ import com.shootr.mobile.domain.service.PollHasBeenDeletedException;
 import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
 import java.util.Collections;
-import java.util.List;
 import javax.inject.Inject;
 
-public class GetPollByIdStreamInteractor implements Interactor {
+public class GetPollByIdPollInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -28,9 +27,9 @@ public class GetPollByIdStreamInteractor implements Interactor {
   private final PollRepository remotePollRepository;
   private Callback<Poll> callback;
   private ErrorCallback errorCallback;
-  private String idStream;
+  private String idPoll;
 
-  @Inject public GetPollByIdStreamInteractor(InteractorHandler interactorHandler,
+  @Inject public GetPollByIdPollInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local PollRepository localPollRepository,
       @Remote PollRepository remotePollRepository) {
     this.interactorHandler = interactorHandler;
@@ -39,30 +38,28 @@ public class GetPollByIdStreamInteractor implements Interactor {
     this.remotePollRepository = remotePollRepository;
   }
 
-  public void loadPoll(String idStream, Callback<Poll> callback, ErrorCallback errorCallback) {
-    this.idStream = idStream;
+  public void loadPollByIdPoll(String idPoll, Callback<Poll> callback,
+      ErrorCallback errorCallback) {
+    this.idPoll = idPoll;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    obtainPollFromRepository(localPollRepository);
     try {
       obtainPollFromRepository(remotePollRepository);
     } catch (ServerCommunicationException error) {
+      obtainPollFromRepository(localPollRepository);
       notifyError(error);
     }
   }
 
   private void obtainPollFromRepository(PollRepository pollRepository) {
     try {
-      List<Poll> polls = pollRepository.getPollByIdStream(idStream);
-      if (polls != null && polls.size() > 0) {
-        Poll poll = polls.get(0);
-        if (poll != null && poll.getPollOptions() != null) {
-          Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
-        }
+      Poll poll = pollRepository.getPollByIdPoll(idPoll);
+      if (poll != null && poll.getPollOptions() != null) {
+        Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
         notifyLoaded(poll);
       } else {
         notifyLoaded(null);

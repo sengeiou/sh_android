@@ -11,8 +11,11 @@ import retrofit.http.Query;
 
 public interface PollApiService {
 
-  @GET("/poll") List<PollEntity> getPoll(
+  @GET("/poll") List<PollEntity> getPollByIdStream(
       @Query("idStream") String idStream) throws ApiException, IOException;
+
+  @GET("/poll/{idPoll}") PollEntity getPollById(@Path("idPoll") String idPoll)
+      throws ApiException, IOException;
 
   @POST("/poll/{idPoll}/vote/{idPollOption}") PollEntity vote(@Path("idPoll") String idPoll,
       @Path("idPollOption") String idPollOption) throws ApiException, IOException;
