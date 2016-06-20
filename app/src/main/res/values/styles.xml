@@ -380,4 +380,9 @@
   <style name="ShootrTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
   <style name="ShootrTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+  <style name="growAnimation">
+    <item name="@android:windowEnterAnimation">@anim/grow_out</item>
+    <item name="@android:windowExitAnimation">@anim/grow_in</item>
+  </style>
 </resources>

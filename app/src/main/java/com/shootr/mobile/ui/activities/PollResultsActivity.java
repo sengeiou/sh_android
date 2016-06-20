@@ -1,18 +1,25 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollResultsAdapter;
+import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -56,10 +63,38 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    adapter = new PollResultsAdapter(this, imageLoader, initialsLoader, percentageUtils);
+    adapter = new PollResultsAdapter(new OnPollOptionClickListener() {
+      @Override public void onClickPressed(PollOptionModel pollOptionModel) {
+        setupPollOptionDialog(pollOptionModel);
+      }
+    }, this, imageLoader, initialsLoader, percentageUtils);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     results.setLayoutManager(linearLayoutManager);
     results.setAdapter(adapter);
+  }
+
+  private void setupPollOptionDialog(PollOptionModel pollOptionModel) {
+    LayoutInflater inflater = this.getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_poll_option_image, null);
+    setupPollOptionText(dialogView, pollOptionModel);
+    setupPollOptionImage(dialogView, pollOptionModel);
+    createOptionDialog(dialogView);
+  }
+
+  private void setupPollOptionImage(View dialogView, PollOptionModel pollOptionModel) {
+    ImageView pollOptionImage = (ImageView) dialogView.findViewById(R.id.poll_option_image);
+    imageLoader.load(pollOptionModel.getImageUrl(), pollOptionImage);
+  }
+
+  private void setupPollOptionText(View dialogView, PollOptionModel pollOptionModel) {
+    TextView pollOptionText = (TextView) dialogView.findViewById(R.id.poll_option_text);
+    pollOptionText.setText(pollOptionModel.getText());
+  }
+
+  private void createOptionDialog(View dialogView) {
+    AlertDialog alertDialog = new AlertDialog.Builder(this).setView(dialogView).create();
+    alertDialog.getWindow().getAttributes().windowAnimations = R.style.growAnimation;
+    alertDialog.show();
   }
 
   @Override protected void initializePresenter() {

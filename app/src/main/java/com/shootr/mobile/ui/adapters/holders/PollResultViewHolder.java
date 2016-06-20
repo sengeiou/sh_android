@@ -4,12 +4,14 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
@@ -20,6 +22,7 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
 
   @Bind(R.id.progressBar) ProgressBar progressBar;
   @Bind(R.id.option_picture) CircleImageView picture;
+  @Bind(R.id.option_picture_with_text) ImageView pictureWithoutText;
   @Bind(R.id.percentage) TextView percentage;
   @Bind(R.id.poll_question) TextView question;
   @Bind(R.id.votes) TextView votes;
@@ -29,9 +32,10 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
   private final PercentageUtils percentageUtils;
   private final Long totalVotes;
   private final Context context;
+  private final OnPollOptionClickListener onPollOptionClickListener;
 
-  public PollResultViewHolder(View itemView, ImageLoader imageLoader, InitialsLoader initialsLoader,
-      PercentageUtils percentageUtils, Long totalVotes) {
+  public PollResultViewHolder(View itemView, OnPollOptionClickListener onPollOptionClickListener,
+      ImageLoader imageLoader, InitialsLoader initialsLoader, PercentageUtils percentageUtils, Long totalVotes) {
     super(itemView);
     ButterKnife.bind(this, itemView);
     this.context = itemView.getContext();
@@ -39,6 +43,7 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
     this.initialsLoader = initialsLoader;
     this.percentageUtils = percentageUtils;
     this.totalVotes = totalVotes;
+    this.onPollOptionClickListener = onPollOptionClickListener;
   }
 
   public void render(PollOptionModel model, Integer position) {
@@ -59,18 +64,25 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
     votes.setText(String.valueOf(model.getVotes()));
   }
 
-  private void setupImage(PollOptionModel model) {
+  private void setupImage(final PollOptionModel model) {
     if (model.getImageUrl() != null) {
       imageLoader.loadStreamPicture(model.getImageUrl(), picture);
+      picture.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          onPollOptionClickListener.onClickPressed(model);
+        }
+      });
     } else {
-      setupInitials(model, picture);
+      pictureWithoutText.setVisibility(View.VISIBLE);
+      picture.setVisibility(View.GONE);
+      setupInitials(model, pictureWithoutText);
     }
   }
 
-  private void setupInitials(PollOptionModel model, CircleImageView picture) {
+  private void setupInitials(PollOptionModel model, ImageView picture) {
     String initials = initialsLoader.getLetters(model.getText());
     int backgroundColor = initialsLoader.getColorForLetters(initials);
-    TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
+    TextDrawable textDrawable = initialsLoader.getCustomTextDrawable(initials, backgroundColor, 56, 56, 24);
     picture.setImageDrawable(textDrawable);
   }
 }

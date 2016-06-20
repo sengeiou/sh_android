@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.PollResultViewHolder;
+import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.util.ImageLoader;
@@ -25,6 +26,7 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private static final int TYPE_POLL_OPTION = 1;
 
   private List<Object> items;
+  private final OnPollOptionClickListener onPollOptionClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
   private final PercentageUtils percentageUtils;
@@ -34,8 +36,9 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private int screenHeight;
   private int lastAnimatedPosition = -1;
 
-  public PollResultsAdapter(Context context, ImageLoader imageLoader, InitialsLoader initialsLoader,
-      PercentageUtils percentageUtils) {
+  public PollResultsAdapter(OnPollOptionClickListener onPollOptionClickListener, Context context,
+      ImageLoader imageLoader, InitialsLoader initialsLoader, PercentageUtils percentageUtils) {
+    this.onPollOptionClickListener = onPollOptionClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     this.percentageUtils = percentageUtils;
@@ -62,7 +65,8 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       view = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.item_poll_result, parent, false);
       viewHolder =
-          new PollResultViewHolder(view, imageLoader, initialsLoader, percentageUtils, totalVotes);
+          new PollResultViewHolder(view, onPollOptionClickListener, imageLoader, initialsLoader,
+              percentageUtils, totalVotes);
     }
 
     return viewHolder;

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.shootr.mobile.R;
@@ -56,18 +57,23 @@ public class PollOptionHolder {
   }
 
   private void setupPicture(View view, PollOptionModel pollOptionModel) {
-    CircleImageView picture = (CircleImageView) view.findViewById(R.id.option_picture);
+    CircleImageView circleImage = (CircleImageView) view.findViewById(R.id.option_picture_without_text);
+    ImageView pictureWithText = (ImageView) view.findViewById(R.id.option_picture);
     if (pollOptionModel.getImageUrl() != null) {
-      imageLoader.loadStreamPicture(pollOptionModel.getImageUrl(), picture);
+      circleImage.setVisibility(View.VISIBLE);
+      pictureWithText.setVisibility(View.GONE);
+      imageLoader.loadStreamPicture(pollOptionModel.getImageUrl(), circleImage);
     } else {
-      setupInitials(pollOptionModel, picture);
+      circleImage.setVisibility(View.GONE);
+      pictureWithText.setVisibility(View.VISIBLE);
+      setupInitials(pollOptionModel, pictureWithText);
     }
   }
 
-  private void setupInitials(PollOptionModel pollOptionModel, CircleImageView picture) {
+  private void setupInitials(PollOptionModel pollOptionModel, ImageView picture) {
     String initials = initialsLoader.getLetters(pollOptionModel.getText());
     int backgroundColor = initialsLoader.getColorForLetters(initials);
-    TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
+    TextDrawable textDrawable = initialsLoader.getCustomTextDrawable(initials, backgroundColor, 64, 64, 24);
     picture.setImageDrawable(textDrawable);
   }
 }

@@ -9,21 +9,35 @@
     android:layout_marginRight="16dp"
     android:orientation="vertical"
     >
+  <RelativeLayout
+      android:id="@+id/option_picture_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/option_picture"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
+        android:src="@color/default_photo_background"
+        />
 
-  <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/option_picture"
-      android:layout_width="56dp"
-      android:layout_height="56dp"
-      android:layout_marginRight="16dp"
-      android:scaleType="centerCrop"
-      android:src="@color/default_photo_background"
-      />
+    <ImageView
+        android:id="@+id/option_picture_with_text"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
+        android:src="@color/default_photo_background"
+        />
+  </RelativeLayout>
   <RelativeLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
-      android:layout_toRightOf="@+id/option_picture"
-      android:layout_toEndOf="@+id/option_picture"
+      android:layout_toRightOf="@+id/option_picture_container"
+      android:layout_toEndOf="@+id/option_picture_container"
       >
   <ProgressBar
       android:id="@+id/progressBar"
