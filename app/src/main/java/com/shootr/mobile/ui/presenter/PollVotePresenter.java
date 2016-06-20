@@ -27,6 +27,7 @@ public class PollVotePresenter implements Presenter {
   private String idStream;
   private String idPoll;
   private boolean hasBeenPaused;
+  private boolean hasBeenInitializedWithIdPoll;
   private PollModel pollModel;
 
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
@@ -44,12 +45,14 @@ public class PollVotePresenter implements Presenter {
   public void initialize(PollVoteView pollVoteView, String idStream) {
     this.idStream = idStream;
     this.pollVoteView = pollVoteView;
-    loadPoll();
+    this.hasBeenInitializedWithIdPoll = false;
+    loadPollByIdStream();
   }
 
   public void initializeWithIdPoll(PollVoteView pollVoteView, String idPoll) {
     this.idPoll = idPoll;
     this.pollVoteView = pollVoteView;
+    this.hasBeenInitializedWithIdPoll = true;
     loadPollByIdPoll();
   }
 
@@ -65,7 +68,7 @@ public class PollVotePresenter implements Presenter {
     });
   }
 
-  public void loadPoll() {
+  public void loadPollByIdStream() {
     getPollByIdStreamInteractor.loadPoll(idStream, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         handlePollModel(poll);
@@ -80,6 +83,7 @@ public class PollVotePresenter implements Presenter {
   private void handlePollModel(Poll poll) {
     pollModel = pollModelMapper.transform(poll);
     if (canRenderPoll()) {
+      idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
     } else {
       if (pollModel != null) {
@@ -104,7 +108,15 @@ public class PollVotePresenter implements Presenter {
 
   @Override public void resume() {
     if (hasBeenPaused) {
-      loadPoll();
+      loadPollInResume();
+    }
+  }
+
+  private void loadPollInResume() {
+    if (hasBeenInitializedWithIdPoll) {
+      loadPollByIdPoll();
+    } else {
+      loadPollByIdStream();
     }
   }
 

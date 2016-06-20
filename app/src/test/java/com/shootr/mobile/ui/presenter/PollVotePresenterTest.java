@@ -26,6 +26,7 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class PollVotePresenterTest {
@@ -111,6 +112,26 @@ public class PollVotePresenterTest {
     presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
 
     verify(pollVoteView).renderPoll(any(PollModel.class));
+  }
+
+  @Test public void shouldLoadPollByIdPollInResumeWhenInitializeWithIdPoll() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+    presenter.pause();
+
+    presenter.resume();
+
+    verify(pollVoteView, times(2)).renderPoll(any(PollModel.class));
+  }
+
+  @Test public void shouldLoadPollByIdStreeamInResumeWhenInitializeWithIdStream() throws Exception {
+    setupGetPollByIdStreamInteractorCallback();
+    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.pause();
+
+    presenter.resume();
+
+    verify(pollVoteView, times(2)).renderPoll(any(PollModel.class));
   }
 
   private void setupIgnorePollInteractorCallback() {
