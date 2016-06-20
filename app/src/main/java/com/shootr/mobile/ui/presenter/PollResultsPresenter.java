@@ -40,16 +40,19 @@ public class PollResultsPresenter implements Presenter {
   }
 
   private void loadPoll() {
+    pollResultsView.showLoading();
     getPollByIdPollInteractor.loadPollByIdPoll(idPoll, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         orderPollOptions(poll);
         handlePollModel(poll);
+        pollResultsView.hideLoading();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
         pollResultsView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
+
   }
 
   private void handlePollModel(Poll poll) {

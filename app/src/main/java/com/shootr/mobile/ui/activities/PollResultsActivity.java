@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -29,6 +31,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   private static final String EXTRA_RESULTS = "results";
 
   @Bind(R.id.results_recycler) RecyclerView results;
+  @Bind(R.id.pollresults_progress) ProgressBar progressBar;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;
@@ -121,5 +124,23 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override protected void onPause() {
     super.onPause();
     presenter.pause();
+  }
+
+  @Override public void showEmpty() {
+    /* no-op */
+  }
+
+  @Override public void hideEmpty() {
+    /* no-op */
+  }
+
+  @Override public void showLoading() {
+    progressBar.setVisibility(View.VISIBLE);
+    results.setVisibility(View.GONE);
+  }
+
+  @Override public void hideLoading() {
+    results.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
   }
 }

@@ -7,7 +7,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Bind(R.id.poll_option_list) GridView gridView;
   @Bind(R.id.poll_question) TextView pollQuestion;
+  @Bind(R.id.pollvote_progress) ProgressBar progressBar;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollOptionHolder pollOptionHolder;
@@ -146,5 +149,23 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override protected void onPause() {
     super.onPause();
     presenter.pause();
+  }
+
+  @Override public void showEmpty() {
+    /* no-op */
+  }
+
+  @Override public void hideEmpty() {
+    /* no-op */
+  }
+
+  @Override public void showLoading() {
+    progressBar.setVisibility(View.VISIBLE);
+    gridView.setVisibility(View.GONE);
+  }
+
+  @Override public void hideLoading() {
+    gridView.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
   }
 }

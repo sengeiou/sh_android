@@ -57,9 +57,11 @@ public class PollVotePresenter implements Presenter {
   }
 
   private void loadPollByIdPoll() {
+    pollVoteView.showLoading();
     getPollByIdPollInteractor.loadPollByIdPoll(idPoll, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         handlePollModel(poll);
+        pollVoteView.hideLoading();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -69,9 +71,11 @@ public class PollVotePresenter implements Presenter {
   }
 
   public void loadPollByIdStream() {
+    pollVoteView.showLoading();
     getPollByIdStreamInteractor.loadPoll(idStream, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         handlePollModel(poll);
+        pollVoteView.hideLoading();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
