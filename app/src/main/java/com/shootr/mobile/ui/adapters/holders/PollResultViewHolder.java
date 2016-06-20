@@ -22,7 +22,7 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
 
   @Bind(R.id.progressBar) ProgressBar progressBar;
   @Bind(R.id.option_picture) CircleImageView picture;
-  @Bind(R.id.option_picture_with_text) ImageView pictureWithoutText;
+  @Bind(R.id.option_picture_with_text) ImageView pictureWithText;
   @Bind(R.id.percentage) TextView percentage;
   @Bind(R.id.poll_question) TextView question;
   @Bind(R.id.votes) TextView votes;
@@ -66,6 +66,8 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
 
   private void setupImage(final PollOptionModel model) {
     if (model.getImageUrl() != null) {
+      pictureWithText.setVisibility(View.GONE);
+      picture.setVisibility(View.VISIBLE);
       imageLoader.loadStreamPicture(model.getImageUrl(), picture);
       picture.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
@@ -73,9 +75,9 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
         }
       });
     } else {
-      pictureWithoutText.setVisibility(View.VISIBLE);
+      pictureWithText.setVisibility(View.VISIBLE);
       picture.setVisibility(View.GONE);
-      setupInitials(model, pictureWithoutText);
+      setupInitials(model, pictureWithText);
     }
   }
 
