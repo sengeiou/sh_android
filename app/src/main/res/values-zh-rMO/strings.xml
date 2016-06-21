@@ -177,7 +177,7 @@
     <string name="intro_streams">Streams</string>
     <string name="intro_streams_text">通讯软件已经开通。\n他们叫做streams。</string>
     <string name="invite_friends_button">邀请朋友</string>
-    <string name="invite_friends_message">嘿，让我们一起使用Shootr吧: https://shootr.com/</string>
+    <string name="invite_friends_message">嘿，让我们一起使用Shootr吧: http://shootr.com/</string>
     <string name="invite_friends_title">邀请朋友</string>
     <string name="language_support_alert" formatted="false">我们目前只支持英语。</string>
     <plurals name="listing_favorites">

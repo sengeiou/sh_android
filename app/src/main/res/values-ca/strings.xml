@@ -177,7 +177,7 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
   <string name="invite_friends_button">Convidar amics</string>
-  <string name="invite_friends_message">Hola! Et recomano Shootr: https://shootr.com/</string>
+  <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Convidar amics</string>
   <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <plurals name="listing_favorites">
