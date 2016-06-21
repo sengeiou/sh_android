@@ -177,7 +177,7 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">一個開放對話的通訊軟件。所有開放的對話叫 Streams。</string>
   <string name="invite_friends_button">邀請朋友</string>
-  <string name="invite_friends_message">嘿，一起使用Shootr吧: https://shootr.com/</string>
+  <string name="invite_friends_message">嘿，一起使用Shootr吧: http://shootr.com/</string>
   <string name="invite_friends_title">邀請朋友</string>
   <string name="language_support_alert" formatted="false">我們目前只支持英文。</string>
   <plurals name="listing_favorites">

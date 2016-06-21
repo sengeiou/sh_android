@@ -177,7 +177,7 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">O app de mensagens onde os chats são abertos. Se chamam streams.</string>
   <string name="invite_friends_button">Convidar amigos</string>
-  <string name="invite_friends_message">Olá! Te recomendo Shootr: https://shootr.com/</string>
+  <string name="invite_friends_message">Olá! Te recomendo Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Convidar amigos</string>
   <string name="language_support_alert" formatted="false">No momento só oferecemos suporte em inglês. Obrigado pela compreensão.</string>
   <plurals name="listing_favorites">
