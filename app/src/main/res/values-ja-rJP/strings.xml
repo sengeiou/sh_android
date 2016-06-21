@@ -177,7 +177,7 @@
   <string name="intro_streams">ストリーム</string>
   <string name="intro_streams_text">オープンチャット「ストリーム」を楽しめるメッセージアプリです。</string>
   <string name="invite_friends_button">友達を招待</string>
-  <string name="invite_friends_message">あなたもShootrを始めてみませんか？: https://shootr.com/</string>
+  <string name="invite_friends_message">あなたもShootrを始めてみませんか？: http://shootr.com/</string>
   <string name="invite_friends_title">友達を招待</string>
   <string name="language_support_alert" formatted="false">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
   <plurals name="listing_favorites">
