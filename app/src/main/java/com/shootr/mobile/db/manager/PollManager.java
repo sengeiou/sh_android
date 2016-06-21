@@ -80,7 +80,7 @@ public class PollManager extends AbstractManager {
   }
 
   public void removePolls(String idStream) {
-    String whereClause = DatabaseContract.FavoriteTable.ID_STREAM + " = ?";
+    String whereClause = DatabaseContract.PollTable.ID_STREAM + " = ?";
     String[] whereArgs = new String[] { idStream };
     getWritableDatabase().delete(DatabaseContract.PollTable.TABLE, whereClause, whereArgs);
   }
