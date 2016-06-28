@@ -83,8 +83,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragNavController =
         new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
 
-    BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
-    bottomBar.setMaxFixedTabs(2);
+    bottomBar = BottomBar.attach(this, savedInstanceState);
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
     bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
@@ -126,9 +125,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         }
       }
     });
-    bottomBar.mapColorForTab(0, getResources().getColor(R.color.intro_create_background));
-    bottomBar.mapColorForTab(1, getResources().getColor(R.color.primary));
-    bottomBar.mapColorForTab(2, getResources().getColor(R.color.favorite_tab));
     loadIntentData();
     handleUpdateVersion();
   }
