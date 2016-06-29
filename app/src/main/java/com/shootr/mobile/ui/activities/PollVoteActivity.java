@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
+import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -42,6 +43,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Inject PollOptionHolder pollOptionHolder;
   @Inject PollVotePresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
+  @Inject BackStackHandler backStackHandler;
 
   private PollOptionAdapter pollOptionAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
@@ -131,6 +133,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == android.R.id.home) {
+      backStackHandler.handleBackStack(this);
       finish();
       return true;
     } else if (item.getItemId() == R.id.menu_ignore_poll) {

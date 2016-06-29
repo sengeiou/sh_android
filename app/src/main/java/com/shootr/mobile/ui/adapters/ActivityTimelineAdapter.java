@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.adapters.holders.NiceShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OpenedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PinnedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PollPublishedViewHolder;
+import com.shootr.mobile.ui.adapters.holders.PollVotedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ReplyViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShareShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.SharedStreamViewHolder;
@@ -27,6 +28,7 @@ import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.PollQuestionSpannableBuilder;
+import com.shootr.mobile.util.PollVotedSpannableBuilder;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +50,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_PINNED_SHOT = 10;
     public static final int TYPE_REPLY_SHOT = 11;
     public static final int TYPE_POLL_PUBLISHED = 12;
+    public static final int TYPE_POLL_VOTED = 13;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -56,6 +59,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnStreamTitleClickListener streamTitleClickListener;
     private final OnShotClick onShotClick;
     private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
+    private final PollVotedSpannableBuilder pollVotedSpannableBuilder;
     private final OnPollQuestionClickListener onPollQuestionClickListener;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -75,6 +79,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.onShotClick = onShotClick;
         this.onPollQuestionClickListener = onPollQuestionClickListener;
         this.pollQuestionSpannableBuilder = new PollQuestionSpannableBuilder();
+        this.pollVotedSpannableBuilder = new PollVotedSpannableBuilder();
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -108,6 +113,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_REPLY_SHOT;
                 case ActivityType.POLL_PUBLISHED:
                     return TYPE_POLL_PUBLISHED;
+                case ActivityType.VOTED_IN_POLL:
+                    return TYPE_POLL_VOTED;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -148,9 +155,11 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateReplyViewHolder(parent);
             case TYPE_POLL_PUBLISHED:
                 return onCreatePollPublishedViewHolder(parent);
+            case TYPE_POLL_VOTED:
+                return onCreatePollVotedViewHolder(parent);
             default:
+                throw new IllegalStateException("View type %d not handled");
         }
-        throw new IllegalStateException("View type %d not handled");
     }
 
     private View createActivityView(ViewGroup parent) {
@@ -254,7 +263,12 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         View view = createActivityView(parent);
         return new PollPublishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
             pollQuestionSpannableBuilder, onPollQuestionClickListener);
+    }
 
+    private PollVotedViewHolder onCreatePollVotedViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
+        return new PollVotedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
+            pollVotedSpannableBuilder, onPollQuestionClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {

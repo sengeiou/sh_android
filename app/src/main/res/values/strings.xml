@@ -422,4 +422,5 @@
   <string formatted="false" name="poll_results_pct">(%s%%)</string>
   <string name="publish_poll" formatted="false">%s New poll in %s</string>
   <string name="error_poll_has_been_deleted">The Poll has been deleted</string>
+  <string name="voted_poll" formatted="false">Voted in (question) Poll in %s</string>
 </resources>

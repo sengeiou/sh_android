@@ -160,6 +160,7 @@ public class GCMIntentService extends IntentService {
         setupGoToShotDetailNotification(push);
         break;
       case ActivityType.POLL_PUBLISHED:
+      case ActivityType.VOTED_IN_POLL:
         setupGoToPollVote(push);
         break;
       default:

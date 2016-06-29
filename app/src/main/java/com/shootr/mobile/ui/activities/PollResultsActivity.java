@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
+import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -37,6 +38,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Inject PercentageUtils percentageUtils;
   @Inject FeedbackMessage feedbackMessage;
   @Inject PollResultsPresenter presenter;
+  @Inject BackStackHandler backStackHandler;
 
   private PollResultsAdapter adapter;
 
@@ -93,6 +95,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == android.R.id.home) {
+      backStackHandler.handleBackStack(this);
       finish();
       return true;
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
