@@ -52,6 +52,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FAVORITED_STREAMS_COUNT
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.SOCIAL_LOGIN
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -448,6 +450,8 @@ public class SQLiteUtils {
       + DatabaseContract.UserTable.CREATED_STREAMS_COUNT
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FAVORITED_STREAMS_COUNT
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.SOCIAL_LOGIN
       + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"

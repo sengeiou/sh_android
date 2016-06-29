@@ -40,6 +40,7 @@ public class UserEntityMapper {
         user.setFollowing(isFollowing);
 
         user.setJoinStreamDate(userEntity.getJoinStreamDate());
+        user.setSocialLogin(userEntity.getSocialLogin());
 
         user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
@@ -74,7 +75,7 @@ public class UserEntityMapper {
         userEntity.setJoinStreamDate(user.getJoinStreamDate());
 
         metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
-
+        userEntity.setSocialLogin(user.isSocialLogin());
         userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
 

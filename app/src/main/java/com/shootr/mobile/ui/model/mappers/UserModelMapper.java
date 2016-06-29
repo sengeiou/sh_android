@@ -34,6 +34,7 @@ public class UserModelMapper {
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        userModel.setSocialLogin(user.isSocialLogin());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {

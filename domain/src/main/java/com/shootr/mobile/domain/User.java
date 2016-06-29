@@ -31,6 +31,7 @@ public class User {
     private Long favoritedStreamsCount;
 
     private Integer relationship;
+    private Boolean socialLogin;
 
     public Long getFavoritedStreamsCount() {
         return favoritedStreamsCount;
@@ -158,6 +159,14 @@ public class User {
 
     public void setEmailConfirmed(Boolean emailConfirmed) {
         this.emailConfirmed = emailConfirmed;
+    }
+
+    public Boolean isSocialLogin() {
+        return socialLogin;
+    }
+
+    public void setSocialLogin(Boolean socialLogin) {
+        this.socialLogin = socialLogin;
     }
 
     @Override public boolean equals(Object o) {
