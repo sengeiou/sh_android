@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.PollOption;
 import com.shootr.mobile.domain.PollStatus;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
@@ -14,7 +15,6 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.PollRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import java.util.Collections;
-import java.util.List;
 import javax.inject.Inject;
 
 public class VotePollOptionInteractor implements Interactor {
@@ -24,6 +24,7 @@ public class VotePollOptionInteractor implements Interactor {
   private final PollRepository localPollRepository;
   private final PollRepository remotePollRepository;
   private Callback<Poll> callback;
+  private ErrorCallback errorCallback;
   private String idPoll;
   private String idPollOption;
 
@@ -36,10 +37,11 @@ public class VotePollOptionInteractor implements Interactor {
     this.remotePollRepository = remotePollRepository;
   }
 
-  public void vote(String idPoll, String idPollOption, Callback<Poll> callback) {
+  public void vote(String idPoll, String idPollOption, Callback<Poll> callback, ErrorCallback errorCallback) {
     this.idPoll = idPoll;
     this.idPollOption = idPollOption;
     this.callback = callback;
+    this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
@@ -49,7 +51,7 @@ public class VotePollOptionInteractor implements Interactor {
       Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
       notifyLoaded(poll);
     } catch (ServerCommunicationException error) {
-      fallbackToLocal();
+      notifyError(error);
     } catch (UserCannotVoteRequestException | UserHasVotedRequestException error) {
       notifyLocalPoll();
     }
@@ -65,27 +67,18 @@ public class VotePollOptionInteractor implements Interactor {
     notifyLoaded(poll);
   }
 
-  private void fallbackToLocal()
-      throws UserCannotVoteRequestException, UserHasVotedRequestException,
-      PollDeletedException {
-    Poll poll = localPollRepository.getPollByIdPoll(idPoll);
-    List<PollOption> pollOptions = poll.getPollOptions();
-    for (PollOption pollOption : pollOptions) {
-      if (pollOption.getIdPollOption().equals(idPollOption)) {
-        pollOption.setVotes(pollOption.getVotes() + 1);
-        poll.setVoteStatus(PollStatus.VOTED);
-        localPollRepository.putPoll(poll);
-        break;
-      }
-    }
-    Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
-    notifyLoaded(poll);
-  }
-
   private void notifyLoaded(final Poll poll) {
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
         callback.onLoaded(poll);
+      }
+    });
+  }
+
+  protected void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
       }
     });
   }

@@ -134,6 +134,38 @@ public class PollVotePresenterTest {
     verify(pollVoteView, times(2)).renderPoll(any(PollModel.class));
   }
 
+  @Test public void shouldShowErrorAlertWhenVotePollOptionError() throws Exception {
+    setupGetPollByIdStreamInteractorCallback();
+    setupVotePollOptionInteractorErrorCallback();
+    presenter.initialize(pollVoteView, STREAM_ID);
+
+    presenter.voteOption(POLL_OPTION_ID);
+
+    verify(pollVoteView).showTimeoutAlert();
+  }
+
+  @Test public void shouldGoToPollResultsWhenVRetryVote() throws Exception {
+    setupGetPollByIdStreamInteractorCallback();
+    setupVotePollOptionInteractorCallback();
+    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.setVotedPollOption(POLL_OPTION_ID);
+
+    presenter.retryVote();
+
+    verify(pollVoteView).goToResults(anyString());
+  }
+
+  @Test public void shouldShowErrorAlertWhenRetryVoteError() throws Exception {
+    setupGetPollByIdStreamInteractorCallback();
+    setupVotePollOptionInteractorErrorCallback();
+    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.setVotedPollOption(POLL_OPTION_ID);
+
+    presenter.voteOption(POLL_OPTION_ID);
+
+    verify(pollVoteView).showTimeoutAlert();
+  }
+
   private void setupIgnorePollInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -215,7 +247,20 @@ public class PollVotePresenterTest {
         return null;
       }
     }).when(votePollOptionInteractor)
-        .vote(anyString(), anyString(), any(Interactor.Callback.class));
+        .vote(anyString(), anyString(), any(Interactor.Callback.class), any(
+            Interactor.ErrorCallback.class));
+  }
+
+  private void setupVotePollOptionInteractorErrorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[3];
+        errorCallback.onError(new ShootrException() { });
+        return null;
+      }
+    }).when(votePollOptionInteractor)
+        .vote(anyString(), anyString(), any(Interactor.Callback.class), any(
+            Interactor.ErrorCallback.class));
   }
 
   private Poll votedPoll() {

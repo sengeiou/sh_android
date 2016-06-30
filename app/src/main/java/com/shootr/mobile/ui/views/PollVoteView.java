@@ -12,4 +12,6 @@ public interface PollVoteView  extends LoadDataView {
   void goToResults(String idStream);
 
   void showError(String message);
+
+  void showTimeoutAlert();
 }

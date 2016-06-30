@@ -29,6 +29,7 @@ public class PollVotePresenter implements Presenter {
   private boolean hasBeenPaused;
   private boolean hasBeenInitializedWithIdPoll;
   private PollModel pollModel;
+  private String votedPollOptionId;
 
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
       GetPollByIdPollInteractor getPollByIdPollInteractor,
@@ -110,12 +111,6 @@ public class PollVotePresenter implements Presenter {
     });
   }
 
-  @Override public void resume() {
-    if (hasBeenPaused) {
-      loadPollInResume();
-    }
-  }
-
   private void loadPollInResume() {
     if (hasBeenInitializedWithIdPoll) {
       loadPollByIdPoll();
@@ -124,16 +119,50 @@ public class PollVotePresenter implements Presenter {
     }
   }
 
-  @Override public void pause() {
-    hasBeenPaused = true;
-  }
-
   public void voteOption(String pollOptionId) {
+    pollVoteView.showLoading();
+    setVotedPollOption(pollOptionId);
     votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId,
         new Interactor.Callback<Poll>() {
           @Override public void onLoaded(Poll poll) {
+            pollVoteView.hideLoading();
             pollVoteView.goToResults(pollModel.getIdPoll());
           }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            pollVoteView.hideLoading();
+            pollVoteView.showTimeoutAlert();
+          }
         });
+  }
+
+  public void retryVote() {
+    pollVoteView.showLoading();
+    votePollOptionInteractor.vote(pollModel.getIdPoll(), votedPollOptionId,
+        new Interactor.Callback<Poll>() {
+          @Override public void onLoaded(Poll poll) {
+            pollVoteView.hideLoading();
+            pollVoteView.goToResults(pollModel.getIdPoll());
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            pollVoteView.hideLoading();
+            pollVoteView.showTimeoutAlert();
+          }
+        });
+  }
+
+  protected void setVotedPollOption(String pollOptionId) {
+    this.votedPollOptionId = pollOptionId;
+  }
+
+  @Override public void resume() {
+    if (hasBeenPaused) {
+      loadPollInResume();
+    }
+  }
+
+  @Override public void pause() {
+    hasBeenPaused = true;
   }
 }
