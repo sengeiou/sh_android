@@ -56,7 +56,7 @@ public class GetUserListingStreamsInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor = new GetUserListingStreamsInteractor(interactorHandler, postExecutionThread,
         localStreamSearchRepository, remoteStreamSearchRepository, localStreamRepository,
-        remoteStreamRepository, localFavoriteRepository);
+        remoteStreamRepository, remoteFavoriteRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
   }
 
@@ -148,6 +148,7 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldLoadFavoritesFromRemote() throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
+
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
     verify(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
@@ -173,6 +174,7 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowServerComunicationException()
       throws Exception {
+    when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
     doThrow(ServerCommunicationException.class).
         when(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
 
