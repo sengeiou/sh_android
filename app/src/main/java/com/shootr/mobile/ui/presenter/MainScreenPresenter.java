@@ -72,7 +72,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     }
 
     private void updateActivityBadge() {
-        mainScreenView.showActivityBadge(badgeCount.get());
+        int activities = badgeCount.get();
+        if (activities > 0) {
+            mainScreenView.showActivityBadge(activities);
+        }
     }
 
     @Override public void resume() {

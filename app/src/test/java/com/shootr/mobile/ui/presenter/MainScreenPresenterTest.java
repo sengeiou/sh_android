@@ -125,9 +125,27 @@ public class MainScreenPresenterTest {
     }
 
     @Test public void shouldUpdateActivityBadge() throws Exception {
+        setupNumberOfNewActivities(1);
+
         mainScreenPresenter.initialize(view);
 
         verify(view).showActivityBadge(anyInt());
+    }
+
+    @Test public void shouldNotUpdateActivityBadgeWhenNegativeValue() throws Exception {
+        setupNumberOfNewActivities(-1);
+
+        mainScreenPresenter.initialize(view);
+
+        verify(view, never()).showActivityBadge(anyInt());
+    }
+
+    @Test public void shouldNotUpdateActivityBadgeWhenZeroValue() throws Exception {
+        setupNumberOfNewActivities(ZERO_ACTIVITY);
+
+        mainScreenPresenter.initialize(view);
+
+        verify(view, never()).showActivityBadge(anyInt());
     }
 
     private void setupCurrentUserCallback() {
