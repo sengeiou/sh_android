@@ -66,7 +66,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             final ShotModel shotModel = shotsWithMedia.get(position);
             ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
             mediaItemHolder.shotModel = shotModel;
-            imageLoader.load(shotModel.getImage(), mediaItemHolder.mediaImage);
+            imageLoader.load(shotModel.getImage().getImageUrl(), mediaItemHolder.mediaImage);
             mediaItemHolder.bindMedia(shotModel);
         }
     }
@@ -157,9 +157,10 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mediaImage.setOnClickListener(this);
         }
 
-        @Override public void onClick(View view) {
-            Intent intentForImage = PhotoViewActivity.getIntentForActivity(view.getContext(), shotModel.getImage());
-            view.getContext().startActivity(intentForImage);
-        }
+      @Override public void onClick(View view) {
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(view.getContext(),
+            shotModel.getImage().getImageUrl());
+        view.getContext().startActivity(intentForImage);
+      }
     }
 }

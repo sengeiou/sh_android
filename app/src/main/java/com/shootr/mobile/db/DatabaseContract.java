@@ -72,6 +72,8 @@ public class DatabaseContract {
     public static final String USER_PHOTO = "userPhoto";
     public static final String COMMENT = "comment";
     public static final String IMAGE = "image";
+    public static final String IMAGE_WIDTH = "imageWidth";
+    public static final String IMAGE_HEIGHT = "imageHeight";
     public static final String ID_STREAM = "idStream";
     public static final String STREAM_TITLE = "streamTitle";
     public static final String NICE_COUNT = "niceCount";
@@ -88,10 +90,10 @@ public class DatabaseContract {
     public static final String REPLY_COUNT = "replyCount";
 
     public static final String[] PROJECTION = {
-        ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TITLE, NICE_COUNT,
-        TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE,
-        VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, BIRTH, MODIFIED, DELETED, REVISION,
-        SYNCHRONIZED
+        ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
+        ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
+        VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, BIRTH, MODIFIED,
+        DELETED, REVISION, SYNCHRONIZED
     };
   }
 

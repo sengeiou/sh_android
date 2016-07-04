@@ -51,6 +51,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:

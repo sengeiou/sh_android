@@ -78,6 +78,10 @@ public class SQLiteUtils {
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotTable.IMAGE
       + " VARCHAR(255) NULL,"
+      + DatabaseContract.ShotTable.IMAGE_WIDTH
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.ShotTable.IMAGE_HEIGHT
+      + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotTable.ID_STREAM
       + " TEXT NULL,"
       + DatabaseContract.ShotTable.STREAM_TITLE

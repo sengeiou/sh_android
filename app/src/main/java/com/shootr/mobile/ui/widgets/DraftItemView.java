@@ -23,7 +23,6 @@ public class DraftItemView extends FrameLayout {
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_image) ImageView image;
     @Bind(R.id.shot_draft_buttons) View draftButtons;
-    @Bind(R.id.shot_separator) View separator;
 
     private boolean isExpanded;
     private float expandedElevation;
@@ -84,7 +83,6 @@ public class DraftItemView extends FrameLayout {
         ViewCompat.setTranslationZ(this, expand ? expandedElevation : 0);
         draftButtons.setVisibility(expand ? VISIBLE : View.GONE);
         draftButtons.setAlpha(expand ? 1f : 0f);
-        separator.setVisibility(expand ? INVISIBLE : View.VISIBLE);
         if (animate) {
             handleExpandCollapseAnimation();
         }

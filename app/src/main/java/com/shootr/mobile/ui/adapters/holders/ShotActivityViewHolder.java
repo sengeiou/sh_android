@@ -53,7 +53,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     }
 
     @Override protected void renderImage(ActivityModel activity) {
-        String shotImage = activity.getShot().getImage();
+        String shotImage = activity.getShot().getImage().getImageUrl();
         if (shotImage != null) {
             image.setVisibility(View.VISIBLE);
             imageLoader.load(shotImage, image);

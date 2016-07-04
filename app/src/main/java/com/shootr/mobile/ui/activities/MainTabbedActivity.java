@@ -66,7 +66,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    setupNavigationController();
     setupBottomBar(savedInstanceState);
     loadIntentData();
     handleUpdateVersion();
@@ -74,8 +73,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
-    fragments = new ArrayList<>(4);
+    bottomBar = BottomBar.attach(this, savedInstanceState);
 
+    fragments = new ArrayList<>(4);
     fragments.add(StreamsListFragment.newInstance());
     fragments.add(FavoritesFragment.newInstance());
     fragments.add(PeopleFragment.newInstance());
@@ -83,10 +83,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     fragNavController =
         new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
 
-    bottomBar = BottomBar.attach(this, savedInstanceState);
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
-    bottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
+    bottomBar.setItems(R.menu.bottombar_menu);
+    bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
       @Override public void onMenuTabSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
           case R.id.bottombar_streams:
@@ -107,6 +107,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       }
 
       @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
+        fragNavController.clearStack();
         switch (menuItemId) {
           case R.id.bottombar_streams:
             scrollToTop(fragments.get(FragNavController.TAB1), 0);
@@ -127,17 +128,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     });
     loadIntentData();
     handleUpdateVersion();
-  }
-
-  private void setupNavigationController() {
-    fragments = new ArrayList<>(4);
-    fragments.add(StreamsListFragment.newInstance());
-    fragments.add(FavoritesFragment.newInstance());
-    fragments.add(PeopleFragment.newInstance());
-    fragments.add(ActivityTimelineContainerFragment.newInstance());
-
-    fragNavController =
-        new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
   }
 
   private void scrollToTop(Fragment currentPage, int currentItem) {
@@ -236,6 +226,19 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             navigateToActivity();
           }
         });
+  }
+
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    bottomBar.onSaveInstanceState(outState);
+  }
+
+  @Override public void onBackPressed() {
+    if (fragNavController.getCurrentStack().size() > 1) {
+      fragNavController.pop();
+    } else {
+      super.onBackPressed();
+    }
   }
 
   private void setToolbarClickListener(final UserModel userModel) {

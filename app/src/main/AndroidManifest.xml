@@ -33,6 +33,7 @@
 
     <activity
         android:name=".ui.activities.MainTabbedActivity"
+        android:configChanges="orientation|screenSize"
         android:label="@string/app_name">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -59,7 +60,8 @@
             android:scheme="shootr"/>
       </intent-filter>
     </activity>
-    <activity android:name=".ui.activities.StreamTimelineActivity"/>
+    <activity android:name=".ui.activities.StreamTimelineActivity"
+        android:theme="@style/ShootrAnimation"/>
     <activity
         android:name=".ui.activities.registro.LoginSelectionActivity"
         android:label="@string/app_name"

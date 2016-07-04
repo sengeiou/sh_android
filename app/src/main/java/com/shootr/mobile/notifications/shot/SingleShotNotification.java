@@ -30,7 +30,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         super.setNotificationValues(builder, this.areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
-        if (shot.getImage() == null) {
+        if (shot.getImage().getImageUrl() == null) {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
         } else {
             builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getImageBitmap()));
@@ -39,7 +39,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
 
     private Bitmap getImageBitmap() {
         try {
-            return imageLoader.load(shot.getImage());
+            return imageLoader.load(shot.getImage().getImageUrl());
         } catch (IOException e) {
             Timber.e(e, "Error obteniendo imagen del shot con id %d y url %s", shot.getIdShot(), shot.getImage());
             return null;

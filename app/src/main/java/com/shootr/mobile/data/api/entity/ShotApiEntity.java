@@ -7,6 +7,8 @@ public class ShotApiEntity {
     private String idShot;
     private String comment;
     private String image;
+    private Long imageWidth;
+    private Long imageHeight;
     private String idStream;
     private String streamTitle;
 
@@ -55,6 +57,22 @@ public class ShotApiEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Long getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(Long imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public Long getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(Long imageHeight) {
+        this.imageHeight = imageHeight;
     }
 
     public String getIdStream() {
