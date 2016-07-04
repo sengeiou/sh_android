@@ -73,9 +73,9 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
@@ -108,7 +108,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
   @Inject ToolbarDecorator toolbarDecorator;
-  @Inject IntentFactory intentFactory;
+  @Inject ShareManager shareManager;
   @Inject FeedbackMessage feedbackMessage;
   @Inject @TemporaryFilesDir File tmpFiles;
   @Inject AnalyticsTool analyticsTool;
@@ -463,7 +463,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void shareShotIntent(ShotModel shotModel) {
-    Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+    Intent shareIntent = shareManager.shareShotIntent(getActivity(), shotModel);
     Intents.maybeStartActivity(getActivity(), shareIntent);
   }
 

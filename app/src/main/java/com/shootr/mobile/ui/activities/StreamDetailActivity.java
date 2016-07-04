@@ -53,9 +53,9 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
@@ -96,7 +96,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
@@ -571,7 +571,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void shareStreamVia(StreamModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(this, stream);
+        Intent shareIntent = shareManager.shareStreamIntent(this, stream);
         Intents.maybeStartActivity(this, shareIntent);
     }
 

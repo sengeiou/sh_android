@@ -35,8 +35,8 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -52,12 +52,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
 
-    @Inject StreamsListPresenter presenter;
-    @Inject ImageLoader imageLoader;
-    @Inject IntentFactory intentFactory;
-    @Inject FeedbackMessage feedbackMessage;
-    @Inject AnalyticsTool analyticsTool;
-    @Inject InitialsLoader initialsLoader;
+  @Inject StreamsListPresenter presenter;
+  @Inject ImageLoader imageLoader;
+  @Inject ShareManager shareManager;
+  @Inject FeedbackMessage feedbackMessage;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject InitialsLoader initialsLoader;
 
     private StreamsListAdapter adapter;
 
@@ -187,10 +187,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         });
     }
 
-    private void shareStream(StreamResultModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(getActivity(), stream.getStreamModel());
-        Intents.maybeStartActivity(getActivity(), shareIntent);
-    }
+  private void shareStream(StreamResultModel stream) {
+    Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream.getStreamModel());
+    Intents.maybeStartActivity(getActivity(), shareIntent);
+  }
 
     //region View methods
     @Override public void renderStream(List<StreamResultModel> streams) {

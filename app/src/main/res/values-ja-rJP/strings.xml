@@ -306,7 +306,7 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$sが%2$sにショット</string>
   <string name="share_stream_activity_text_pattern">(stream)を共有しました</string>
-  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/st/%2$s?%3$s</string>
   <string name="share_stream_subject">Shootrで%sをチェックしてみよう</string>
   <string name="share_via">共有する</string>
   <string name="share_via_shootr">Shootrで共有</string>
