@@ -8,6 +8,8 @@ public class Shot {
     private String idShot;
     private String comment;
     private String image;
+    private Long imageWidth;
+    private Long imageHeight;
     private ShotUserInfo userInfo;
     private ShotStreamInfo streamInfo;
     private Date publishDate;
@@ -50,6 +52,22 @@ public class Shot {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Long getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(Long imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public Long getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(Long imageHeight) {
+        this.imageHeight = imageHeight;
     }
 
     public ShotUserInfo getUserInfo() {

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,9 +17,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -30,6 +33,7 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
+import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
@@ -38,6 +42,8 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -77,6 +83,7 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
+import de.hdodenhof.circleimageview.CircleImageView;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
@@ -154,6 +161,7 @@ public class StreamTimelineFragment extends BaseFragment
   private TextView topicCharCounter;
   private LinearLayoutManager linearLayoutManager;
   private String pollIndicatorStatus;
+  private AlertDialog shotImageDialog;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -397,6 +405,28 @@ public class StreamTimelineFragment extends BaseFragment
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
       }
+    }, new OnImageLongClickListener() {
+      @Override public void onImageLongClick(ShotModel shot) {
+        setupImageDialog(shot);
+      }
+    }, new View.OnTouchListener() {
+
+      @Override public boolean onTouch(View view, MotionEvent event) {
+        switch (event.getAction()) {
+          case MotionEvent.ACTION_UP:
+          case MotionEvent.ACTION_CANCEL:
+            if (shotImageDialog != null) {
+              shotImageDialog.hide();
+            }
+          default:
+            break;
+        }
+        return false;
+      }
+    }, new OnImageClickListener() {
+      @Override public void onImageClick(View sharedImage, ShotModel shot) {
+        openImage(sharedImage, shot.getImage().getImageUrl());
+      }
     });
     shotsTimeline.setAdapter(adapter);
   }
@@ -449,6 +479,18 @@ public class StreamTimelineFragment extends BaseFragment
   private void openProfile(String idUser) {
     Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
     startActivity(profileIntent);
+  }
+
+  private void openImage(View sharedImage, String imageUrl) {
+    Intent intent = PhotoViewActivity.getIntentForActivity(getContext(), imageUrl, imageUrl);
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+      ActivityOptions activityOptions =
+          ActivityOptions.makeSceneTransitionAnimation(getActivity(), sharedImage,
+              sharedImage.getTransitionName());
+      startActivity(intent, activityOptions.toBundle());
+    } else {
+      startActivity(intent);
+    }
   }
 
   private void openProfileFromUsername(String username) {
@@ -505,6 +547,24 @@ public class StreamTimelineFragment extends BaseFragment
             setupTopicCustomDialog();
           }
         };
+  }
+
+  private void setupImageDialog(ShotModel shot) {
+    LayoutInflater inflater = getActivity().getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_shot_image, null);
+    TextView user = (TextView) dialogView.findViewById(R.id.shot_user_name);
+    ImageView image = (ImageView) dialogView.findViewById(R.id.shot_image);
+    CircleImageView avatar = (CircleImageView) dialogView.findViewById(R.id.shot_avatar);
+
+    user.setText(shot.getUsername());
+    imageLoader.load(shot.getImage().getImageUrl(), image);
+    imageLoader.load(shot.getPhoto(), avatar);
+
+    shotImageDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
+
+    shotImageDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+
+    shotImageDialog.show();
   }
 
   private void setupTopicCustomDialog() {

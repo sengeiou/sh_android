@@ -10,10 +10,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
@@ -30,7 +30,8 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_user_name) public TextView name;
     @Bind(R.id.shot_timestamp) public TextView timestamp;
     @Bind(R.id.shot_text) public ClickableTextView text;
-    @Bind(R.id.shot_image) public ImageView image;
+    @Bind(R.id.shot_image_landscape) public ImageView imageLandscape;
+    @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -76,7 +77,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         setupComment(shotModel);
         setupBirthData(shotModel);
         setupUserAvatar(shotModel);
-        setupImage(shotModel);
+        bindImageInfo(shotModel, imageClickListener);
         setupVideoListener(shotModel);
         setupNiceListener(shotModel);
         setupParentListener(shotModel);
@@ -109,19 +110,61 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private void setupImage(final ShotModel shotModel) {
-        String imageUrl = shotModel.getImage();
+    private void bindImageInfo(final ShotModel shot,
+        ShotClickListener onImageClickListener) {
+        String imageUrl = shot.getImage().getImageUrl();
+        Long imageWidth = shot.getImage().getImageWidth();
+        Long imageHeight = shot.getImage().getImageHeight();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            this.image.setVisibility(View.VISIBLE);
-            imageLoader.loadTimelineImage(imageUrl, this.image);
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    imageClickListener.onClick(shotModel);
-                }
-            });
+            handleImage(shot, onImageClickListener, imageUrl,
+                imageWidth, imageHeight);
         } else {
-            this.image.setVisibility(View.GONE);
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.GONE);
         }
+    }
+
+    private void handleImage(final ShotModel shot, ShotClickListener onImageClickListener,
+        String imageUrl, Long imageWidth, Long imageHeight) {
+        if (isImageValid(imageWidth, imageHeight)) {
+            setImageLayout(shot, onImageClickListener, imageUrl,
+                imageWidth, imageHeight);
+        } else {
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.VISIBLE);
+            setupImage(imageLandscape, shot, onImageClickListener,
+                imageUrl);
+        }
+    }
+
+    private void setImageLayout(final ShotModel shot,
+        ShotClickListener onImageClickListener, String imageUrl, Long imageWidth,
+        Long imageHeight) {
+        if (imageWidth > imageHeight) {
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.VISIBLE);
+            setupImage(imageLandscape, shot, onImageClickListener,
+                imageUrl);
+        } else {
+            imageLandscape.setVisibility(View.GONE);
+            imagePortrait.setVisibility(View.VISIBLE);
+            setupImage(imagePortrait, shot, onImageClickListener,
+                imageUrl);
+        }
+    }
+
+    private void setupImage(ImageView imageView, final ShotModel shot,
+        final ShotClickListener onImageClickListener, String imageUrl) {
+        imageLoader.loadTimelineImage(imageUrl, imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                onImageClickListener.onClick(shot);
+            }
+        });
+    }
+
+    private boolean isImageValid(Long imageWidth, Long imageHeight) {
+        return imageWidth != null && imageWidth != 0 && imageHeight != null && imageHeight != 0;
     }
 
     private void setupVideoListener(final ShotModel shotModel) {

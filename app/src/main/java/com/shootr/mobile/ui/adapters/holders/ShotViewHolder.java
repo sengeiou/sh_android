@@ -45,7 +45,8 @@ public class ShotViewHolder {
     @Bind(R.id.shot_user_name) TextView name;
     @Bind(R.id.shot_timestamp) TextView timestamp;
     @Bind(R.id.shot_text) ClickableTextView text;
-    @Bind(R.id.shot_image) ImageView image;
+    @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
+    @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -217,13 +218,49 @@ public class ShotViewHolder {
     }
 
     private void bindImageInfo(final ShotModel shot) {
-        String imageUrl = shot.getImage();
+        String imageUrl = shot.getImage().getImageUrl();
+        Long imageWidth = shot.getImage().getImageWidth();
+        Long imageHeight = shot.getImage().getImageHeight();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            image.setVisibility(View.VISIBLE);
-            imageLoader.loadTimelineImage(imageUrl, image);
+            handleImage(shot, imageUrl,
+                imageWidth, imageHeight);
         } else {
-            image.setVisibility(View.GONE);
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.GONE);
         }
+    }
+
+    private void handleImage(final ShotModel shot,
+        String imageUrl, Long imageWidth, Long imageHeight) {
+        if (isImageValid(imageWidth, imageHeight)) {
+            setImageLayout(shot, imageUrl,
+                imageWidth, imageHeight);
+        } else {
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.VISIBLE);
+            setupImage(imageLandscape, imageUrl);
+        }
+    }
+
+    private void setImageLayout(final ShotModel shot, String imageUrl, Long imageWidth,
+        Long imageHeight) {
+        if (imageWidth > imageHeight) {
+            imagePortrait.setVisibility(View.GONE);
+            imageLandscape.setVisibility(View.VISIBLE);
+            setupImage(imageLandscape, imageUrl);
+        } else {
+            imageLandscape.setVisibility(View.GONE);
+            imagePortrait.setVisibility(View.VISIBLE);
+            setupImage(imagePortrait, imageUrl);
+        }
+    }
+
+    private void setupImage(ImageView imageView, String imageUrl) {
+        imageLoader.loadTimelineImage(imageUrl, imageView);
+    }
+
+    private boolean isImageValid(Long imageWidth, Long imageHeight) {
+        return imageWidth != null && imageWidth != 0 && imageHeight != null && imageHeight != 0;
     }
 
     private void bindVideoInfo(final ShotModel shot) {

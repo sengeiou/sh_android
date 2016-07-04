@@ -148,6 +148,11 @@
           android:text="@string/profile_listing"
           tools:text="Streams" />
 
+        <View android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/separator"
+            android:layout_gravity="center_horizontal|bottom"
+            />
     </FrameLayout>
 
     <!-- Follow buttons -->

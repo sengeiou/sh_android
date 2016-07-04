@@ -6,10 +6,9 @@ import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
-
 import java.io.File;
 import java.io.IOException;
-
+import java.util.List;
 import javax.inject.Inject;
 
 public class ShootrShotService {
@@ -27,7 +26,7 @@ public class ShootrShotService {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public String uploadShotImage(File imageFile) {
+    public List<String> uploadShotImage(File imageFile) {
         try {
             File resizedImageFile = getResizedImage(imageFile);
             return uploadPhoto(resizedImageFile);
@@ -49,7 +48,7 @@ public class ShootrShotService {
         return remoteShotRepository.putShot(shot);
     }
 
-    private String uploadPhoto(File imageFile) throws IOException {
+    private List<String> uploadPhoto(File imageFile) throws IOException {
         return photoService.uploadShotImageAndGetUrl(imageFile);
     }
 

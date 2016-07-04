@@ -1,2 +1,8 @@
 <resources>
+  <style name="ShootrAnimation" parent="ShootrTheme">
+    <item name="android:windowContentTransitions">true</item>
+    <item name="android:windowAllowEnterTransitionOverlap">false</item>
+    <item name="android:windowAllowReturnTransitionOverlap">false</item>
+    <item name="android:windowSharedElementsUseOverlay">false</item>
+  </style>
 </resources>
