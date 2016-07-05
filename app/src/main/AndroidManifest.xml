@@ -33,7 +33,7 @@
 
     <activity
         android:name=".ui.activities.MainTabbedActivity"
-        android:configChanges="orientation|screenSize"
+        android:screenOrientation="portrait"
         android:label="@string/app_name">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -242,7 +242,6 @@
     <activity
         android:name=".ui.activities.StreamDataInfoActivity"
         android:label="@string/title_activity_stream_data_info"/>
-    <activity android:name=".ui.activities.EasterEggActivity"/>
     <activity
         android:name=".ui.activities.NicersActivity"
         android:label="@string/nicers"/>

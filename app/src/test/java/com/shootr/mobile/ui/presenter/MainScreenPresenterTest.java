@@ -50,57 +50,6 @@ public class MainScreenPresenterTest {
         mainScreenPresenter.setView(view);
     }
 
-    @Test public void shouldShowMultipleActivitiesWhenActivitiesAreMoreThanOneOnInitialize() throws Exception {
-        setupNumberOfNewActivities(TWO_ACTIVITIES);
-
-        mainScreenPresenter.initialize(view);
-
-        verify(view).showHasMultipleActivities(TWO_ACTIVITIES);
-    }
-
-    @Test public void shouldNotShowMultipleActivitiesWhenOnlyOneActivityOnInitialize() throws Exception {
-        setupNumberOfNewActivities(ONE_ACTIVITY);
-
-        mainScreenPresenter.initialize(view);
-
-        verify(view, never()).showHasMultipleActivities(anyInt());
-    }
-
-    @Test public void shouldNotShowMultipleActivitiesWhenZeroActivitiesOnInitialize() throws Exception {
-        setupNumberOfNewActivities(ZERO_ACTIVITY);
-
-        mainScreenPresenter.initialize(view);
-
-        verify(view, never()).showHasMultipleActivities(anyInt());
-    }
-
-    @Test public void shouldShowMultipleActivitiesWhenActivitiesGreaterThanOneOnResume() throws Exception {
-        setupNumberOfNewActivities(TWO_ACTIVITIES);
-
-        mainScreenPresenter.pause();
-        mainScreenPresenter.resume();
-
-        verify(view).showHasMultipleActivities(TWO_ACTIVITIES);
-    }
-
-    @Test public void shouldNotShowMultipleActivitiesWhenOnlyOneActivityOnResume() throws Exception {
-        setupNumberOfNewActivities(ONE_ACTIVITY);
-
-        mainScreenPresenter.pause();
-        mainScreenPresenter.resume();
-
-        verify(view, never()).showHasMultipleActivities(anyInt());
-    }
-
-    @Test public void shouldNotShowMultipleActivitiesWhenZeroActivitiesOnResume() throws Exception {
-        setupNumberOfNewActivities(ZERO_ACTIVITY);
-
-        mainScreenPresenter.pause();
-        mainScreenPresenter.resume();
-
-        verify(view, never()).showHasMultipleActivities(anyInt());
-    }
-
     @Test public void shouldSetUserDataWhenLoadCurrentUserOnInitialize() throws Exception {
         setupCurrentUserCallback();
 

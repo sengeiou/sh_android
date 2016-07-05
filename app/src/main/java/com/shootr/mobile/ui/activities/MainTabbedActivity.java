@@ -73,7 +73,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
-    bottomBar = BottomBar.attach(this, savedInstanceState);
+    bottomBar = BottomBar.attach(findViewById(R.id.container), savedInstanceState);
 
     fragments = new ArrayList<>(4);
     fragments.add(StreamsListFragment.newInstance());
@@ -107,7 +107,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       }
 
       @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
-        fragNavController.clearStack();
         switch (menuItemId) {
           case R.id.bottombar_streams:
             scrollToTop(fragments.get(FragNavController.TAB1), 0);
@@ -216,16 +215,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     } else {
       unreadActivities.setCount(count);
     }
-  }
-
-  @Override public void showHasMultipleActivities(Integer badgeCount) {
-    String multipleActivities = getString(R.string.multiple_activity_notification, badgeCount);
-    feedbackMessage.showMultipleActivities(getView(), multipleActivities, multipleActivitiesAction,
-        new View.OnClickListener() {
-          @Override public void onClick(View view) {
-            navigateToActivity();
-          }
-        });
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
