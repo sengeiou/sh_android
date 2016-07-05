@@ -47,6 +47,10 @@
         <item name="toolbar">@style/ToolBar.Overlay</item>
     </style>
 
+    <style name="ShootrTheme.ShotDetail">
+        <item name="android:windowBackground">@color/gray_92</item>
+    </style>
+
     <style name="ToolBar">
         <item name="android:background">?colorPrimary</item>
         <item name="theme">@style/ActionBarThemeOverlay</item>

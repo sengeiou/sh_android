@@ -13,6 +13,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -150,10 +151,15 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
                 }
             }, new OnPollQuestionClickListener() {
             @Override public void onPollQuestionClick(String idPoll) {
-                // TODO go to pollVoteActivity
+                openPollVote(idPoll);
             }
         });
         activityList.setAdapter(adapter);
+    }
+
+    private void openPollVote(String idPoll) {
+        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll);
+        startActivity(pollVoteIntent);
     }
 
     protected void openProfile(String idUser) {

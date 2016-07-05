@@ -113,6 +113,7 @@
     </activity>
     <activity
         android:name=".ui.activities.ShotDetailActivity"
+        android:theme="@style/ShootrTheme.ShotDetail"
         android:parentActivityName=".ui.activities.StreamTimelineActivity">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
@@ -164,6 +165,7 @@
         <action android:name="com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION"/>
         <action android:name="com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION"/>
         <action android:name="com.shootr.mobile.ACTION_NEED_UPDATE"/>
+        <action android:name="com.shootr.mobile.ACTION_OPEN_POLL_VOTE"/>
 
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
