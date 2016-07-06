@@ -47,6 +47,8 @@
   <string name="alert_report_confirmed_email_message">Vá para conta &gt; Editar Perfil e confirme seu email</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Um email confirmado é requerido</string>
+  <string name="alert_shootr_update">Este conteúdo só pode ser visto com a última versão de Shootr.</string>
+  <string name="alert_update_shootr">Este conteúdo só pode ser visto com a última versão de Shootr</string>
   <string name="all_participants_button">Todos os participantes</string>
   <string name="ban_user_dialog_message">Os shots que publique nos seus streams só serão exibidos aos seus seguidores.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
@@ -111,6 +113,7 @@
   <string name="error_deleted_shot">Este shot foi eliminado</string>
   <string name="error_facebook_login">Não foi possível fazer login com o Facebook. Tente mais tarde.</string>
   <string name="error_following_user_blocked">Não é possível seguir usuários que ignora</string>
+  <string name="error_has_voted">Já votou</string>
   <string name="error_image_upload">Erro de foto</string>
   <string name="error_login_credentials_invalid">Id ou senha inválidos.</string>
   <string name="error_message">Shootr encontrou um problema e necessita ser encerrado.</string>
@@ -153,12 +156,14 @@
   <!-- Profile: Website -->
   <string name="error_message_website_invalid">A web tem um formato inválido</string>
   <string name="error_message_website_too_long">A página web pode conter até 100 caracteres.</string>
+  <string name="error_poll_has_been_deleted">O inquérito não está disponível</string>
   <!-- Forgot password -->
   <string name="error_reset_password">Conta não encontrada</string>
   <string name="error_restart_button">Reiniciar</string>
   <string name="error_stream_already_favorites">Já está nos Favoritos</string>
   <string name="error_stream_read_only">Este stream foi apagado e é só para leitura.</string>
   <string name="error_title">Ooops!</string>
+  <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -250,6 +255,7 @@
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Criou (stream)</string>
+  <string name="order_poll_option">%1$s.%2$s</string>
   <string name="participants_list_empty">Nenhum participante</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Apagar</string>
@@ -261,6 +267,13 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">A notificação será enviada aos participantes atuais e aos usuários que tenham o stream como favorito.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Linkar mensagem</string>
+  <string name="poll_ignore">Ignorar</string>
+  <string name="poll_live_results">Resultados ao vivo</string>
+  <string name="poll_results">Resultados</string>
+  <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_view">Ver</string>
+  <string name="poll_vote">Vota</string>
+  <string name="poll_vote_timeout_retry">Tentar novamente</string>
   <string name="profile_all_shots">Todos os shots</string>
   <string name="profile_edit_done_button">Feito</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -273,9 +286,10 @@
   <string name="profile_marks_following">seguindo</string>
   <string name="profile_support">Suporte</string>
   <string name="profile_updated">Perfil atualizado</string>
+  <string name="publish_poll">%1$s Novo inquérito em %2$s</string>
   <string name="read_write_mode_public_description">Qualquer um pode escrever</string>
   <string name="read_write_mode_public_title">Público</string>
-  <string name="read_write_mode_view_only_description">Podem escrever o criador e os colaboradores</string>
+  <string name="read_write_mode_view_only_description">Podem escrever o criador e os colaboradores.</string>
   <string name="read_write_mode_view_only_title">Só leitura</string>
   <string name="registration_create_button_text">Criar conta</string>
   <string name="remove">Apagar</string>
@@ -385,6 +399,7 @@
   <string name="user_not_found_message">Usuário não encontrado</string>
   <string name="user_unbanned">Banimento removido.</string>
   <string name="user_unblocked">Ignorar desfeito.</string>
+  <string name="voted_poll">Votou em (question) em %s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">ver</string>
@@ -395,5 +410,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="alert_shootr_update">Este conteúdo só pode ser visto com a última versão de Shootr.</string>
 </resources>
