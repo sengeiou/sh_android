@@ -47,6 +47,8 @@
   <string name="alert_report_confirmed_email_message">Vés a Compte &gt; Editar Perfil i confirma el teu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Cal un email confirmat</string>
+  <string name="alert_shootr_update">Aquest contingut només pot veure\'s amb la darrera versió de Shootr.</string>
+  <string name="alert_update_shootr">Aquest contingut només pot veure\'s amb la darrera versió de Shootr</string>
   <string name="all_participants_button">Tots els participants</string>
   <string name="ban_user_dialog_message">Els shots que publiqui als teus streams només es mostraràn als seus seguidors.</string>
   <string name="block_cannot_shoot_streams">Vetar usuari</string>
@@ -111,6 +113,7 @@
   <string name="error_deleted_shot">Aquest shot ha estat eliminat</string>
   <string name="error_facebook_login">No s\'ha pogut iniciar sessió amb Facebook. Prova més tard.</string>
   <string name="error_following_user_blocked">No pots seguir un usuari que ignores.</string>
+  <string name="error_has_voted">Ja has votat</string>
   <string name="error_image_upload">Si us plau, tria una altra imatge</string>
   <string name="error_login_credentials_invalid">Id o contrasenya no vàlids</string>
   <string name="error_message">Shootr ha trobat un problema i necessita tancar-se.</string>
@@ -153,12 +156,14 @@
   <!-- Profile: Website -->
   <string name="error_message_website_invalid">La web té un format invàlid</string>
   <string name="error_message_website_too_long">La pàgina web pot tenir fins a 100 caràcters</string>
+  <string name="error_poll_has_been_deleted">L\'enquesta no està disponible</string>
   <!-- Forgot password -->
   <string name="error_reset_password">Compte no trobat.</string>
   <string name="error_restart_button">Reiniciar</string>
   <string name="error_stream_already_favorites">Ja és a Favorits</string>
   <string name="error_stream_read_only">Aquest stream ha estat esborrat i és només de lectura.</string>
   <string name="error_title">Ooops!</string>
+  <string name="error_user_cannot_vote">No es pot votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">No hi ha favorits</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -186,7 +191,7 @@
     <item quantity="zero"/>
   </plurals>
   <string name="listing_title_favorites">Favorits</string>
-  <string name="listing_title_holding">Creats</string>
+  <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Carregant…</string>
   <string name="main_activity_title">Activitat</string>
   <string name="mentioned_shot_activity_with_comment">"T\'ha mencionat: "</string>
@@ -250,6 +255,7 @@
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Ha creat (stream)</string>
+  <string name="order_poll_option">%1$s.%2$s</string>
   <string name="participants_list_empty">No hi ha participants</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Treure</string>
@@ -261,6 +267,13 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als participants actuals i als usuaris que tinguin l\'stream com a favorit.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
+  <string name="poll_ignore">Llevar enquesta</string>
+  <string name="poll_live_results">Resultats en viu</string>
+  <string name="poll_results">Resultats</string>
+  <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_view">Veure</string>
+  <string name="poll_vote">Vota</string>
+  <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="profile_all_shots">Tots els shots</string>
   <string name="profile_edit_done_button">Fet</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -273,6 +286,7 @@
   <string name="profile_marks_following">seguint</string>
   <string name="profile_support">Suport</string>
   <string name="profile_updated">Perfil actualitzat</string>
+  <string name="publish_poll">%1$s Nova enquesta a %2$s</string>
   <string name="read_write_mode_public_description">Tothom pot escriure</string>
   <string name="read_write_mode_public_title">Públic</string>
   <string name="read_write_mode_view_only_description">Poden escriure el creador i els col·laboradors</string>
@@ -386,6 +400,7 @@
   <string name="user_not_found_message">Usuari no trobat.</string>
   <string name="user_unbanned">Vet desfet</string>
   <string name="user_unblocked">Ignorar suprimit.</string>
+  <string name="voted_poll">Ha votat a (question) a %s</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
@@ -396,5 +411,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="alert_shootr_update">Aquest contingut només pot veure\'s amb la darrera versió de Shootr.</string>
 </resources>
