@@ -22,6 +22,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
 
   private StreamPollView streamPollView;
   private String idStream;
+  private String streamAuthorIdUser;
   private boolean hasBeenPaused;
   private String action;
   String idPoll;
@@ -34,8 +35,10 @@ public class StreamPollIndicatorPresenter implements Presenter {
     this.errorMessageFactory = errorMessageFactory;
   }
 
-  public void initialize(StreamPollView streamPollView, String idStream) {
+  public void initialize(StreamPollView streamPollView, String idStream,
+      String streamAuthorIdUser) {
     this.idStream = idStream;
+    this.streamAuthorIdUser = streamAuthorIdUser;
     this.streamPollView = streamPollView;
     loadPoll();
   }
@@ -107,7 +110,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
         streamPollView.goToPollResults(idPoll);
         break;
       case VOTE:
-        streamPollView.goToPollVote(idStream);
+        streamPollView.goToPollVote(idStream, streamAuthorIdUser);
         break;
       default:
         streamPollView.goToPollLiveResults(idPoll);

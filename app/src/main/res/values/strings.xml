@@ -413,8 +413,8 @@
   <string name="alert_shootr_update">This content can only be viewed with the latest version of Shootr.</string>
   <string name="error_user_cannot_vote">Cannot vote</string>
   <string name="error_has_voted">Has voted</string>
-  <string name="poll_vote">Vote</string>new poll
-  <string name="poll_ignore">Ignore</string>
+  <string name="poll_vote">Vote</string>
+  <string name="poll_ignore">Don\'t show again</string>
   <string name="poll_view">View</string>
   <string name="poll_results">Results</string>
   <string name="poll_live_results">Live results</string>

@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollOptionAdapter;
@@ -36,10 +37,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   private static final String EXTRA_STREAM = "idStream";
   public static final String EXTRA_ID_POLL = "idPoll";
+  public static final String EXTRA_ID_USER_OWNER = "userIdOwner";
 
   @Bind(R.id.poll_option_list) GridView gridView;
   @Bind(R.id.poll_question) TextView pollQuestion;
   @Bind(R.id.pollvote_progress) ProgressBar progressBar;
+  @Bind(R.id.poll_results) TextView viewResults;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollOptionHolder pollOptionHolder;
@@ -68,8 +71,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Override protected void initializePresenter() {
     String idStream = getIntent().getStringExtra(EXTRA_STREAM);
+    String idStreamOwner = getIntent().getStringExtra(EXTRA_ID_USER_OWNER);
     if (idStream != null) {
-      presenter.initialize(this, idStream);
+      presenter.initialize(this, idStream, idStreamOwner);
     } else {
       presenter.initializeWithIdPoll(this, getIntent().getStringExtra(EXTRA_ID_POLL));
     }
@@ -137,6 +141,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
         }).show();
   }
 
+  @Override public void showViewResultsButton() {
+    viewResults.setVisibility(View.VISIBLE);
+  }
+
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_poll_vote, menu);
     ignorePollMenu.bindRealMenuItem(menu.findItem(R.id.menu_ignore_poll));
@@ -151,7 +159,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
       return true;
-    } else {
+    }  else {
       return super.onOptionsItemSelected(item);
     }
   }
@@ -182,5 +190,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override public void hideLoading() {
     gridView.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
+  }
+
+  @OnClick(R.id.poll_results) public void goToResults() {
+    presenter.viewResults();
   }
 }

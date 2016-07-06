@@ -25,6 +25,7 @@ import static org.mockito.Mockito.verify;
 public class StreamPollIndicatorPresenterTest {
 
   private static final String STREAM_ID = "idStream";
+  private static final String HOLDER_USER_ID = "idUserHolder";
   private static final String POLL_ID = "idPoll";
   private static final String QUESTION = "question";
   private static final String STATUS = "status";
@@ -52,7 +53,7 @@ public class StreamPollIndicatorPresenterTest {
       throws Exception {
     setupGetVotePollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).showPollIndicatorWithVoteAction(any(PollModel.class));
   }
@@ -61,7 +62,7 @@ public class StreamPollIndicatorPresenterTest {
       throws Exception {
     setupGetVotedPollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).showPollIndicatorWithViewAction(any(PollModel.class));
   }
@@ -70,7 +71,7 @@ public class StreamPollIndicatorPresenterTest {
       throws Exception {
     setupGetClosedPollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).showPollIndicatorWithResultsAction(any(PollModel.class));
   }
@@ -78,7 +79,7 @@ public class StreamPollIndicatorPresenterTest {
   @Test public void shouldNotShowPollIndicatorWhenStreamHaveANotPublishedPoll() throws Exception {
     setupGetNotPublishedPollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).hidePollIndicator();
   }
@@ -86,7 +87,7 @@ public class StreamPollIndicatorPresenterTest {
   @Test public void shouldNotShowPollIndicatorWhenStreamPollIsIgnored() throws Exception {
     setupGetIgnoredPollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).hidePollIndicator();
   }
@@ -94,7 +95,7 @@ public class StreamPollIndicatorPresenterTest {
   @Test public void shouldNotShowPollIndicatorWhenStreamPollIsNull() throws Exception {
     setupGetNullPollByIdStreamInteractor();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).hidePollIndicator();
   }
@@ -102,14 +103,14 @@ public class StreamPollIndicatorPresenterTest {
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
     setupGetPollByIdStreamErrorCallback();
 
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     verify(streamPollView).showError(anyString());
   }
 
   @Test public void shouldLoadPollWhenResume() throws Exception {
     setupGetVotePollByIdStreamInteractor();
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.resume();
 
@@ -118,7 +119,7 @@ public class StreamPollIndicatorPresenterTest {
 
   @Test public void shouldGoToPollResultsInOnActionPressedAndActionIsResults() throws Exception {
     setupGetClosedPollByIdStreamInteractor();
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.onActionPressed();
 
@@ -127,17 +128,17 @@ public class StreamPollIndicatorPresenterTest {
 
   @Test public void shouldGoToPollVoteInOnActionPressedAndActionIsVote() throws Exception {
     setupGetVotePollByIdStreamInteractor();
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.onActionPressed();
 
-    verify(streamPollView).goToPollVote(anyString());
+    verify(streamPollView).goToPollVote(anyString(), anyString());
   }
 
   @Test public void shouldGoToPollLiveResultsInOnActionPressedAndActionIsLiveResults()
       throws Exception {
     setupGetVotedPollByIdStreamInteractor();
-    presenter.initialize(streamPollView, STREAM_ID);
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.onActionPressed();
 

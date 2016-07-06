@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
@@ -20,11 +21,13 @@ public class PollVotePresenter implements Presenter {
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final IgnorePollInteractor ignorePollInteractor;
   private final VotePollOptionInteractor votePollOptionInteractor;
+  private final SessionRepository sessionRepository;
   private final PollModelMapper pollModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
   private PollVoteView pollVoteView;
   private String idStream;
+  private String idStreamOwner;
   private String idPoll;
   private boolean hasBeenPaused;
   private boolean hasBeenInitializedWithIdPoll;
@@ -34,20 +37,25 @@ public class PollVotePresenter implements Presenter {
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
       GetPollByIdPollInteractor getPollByIdPollInteractor,
       IgnorePollInteractor ignorePollInteractor, VotePollOptionInteractor votePollOptionInteractor,
-      PollModelMapper pollModelMapper, ErrorMessageFactory errorMessageFactory) {
+      SessionRepository sessionRepository, PollModelMapper pollModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getPollByIdStreamInteractor = getPollByIdStreamInteractor;
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.ignorePollInteractor = ignorePollInteractor;
     this.votePollOptionInteractor = votePollOptionInteractor;
+    this.sessionRepository = sessionRepository;
     this.pollModelMapper = pollModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
 
-  public void initialize(PollVoteView pollVoteView, String idStream) {
+  public void initialize(PollVoteView pollVoteView, String idStream, String idStreamOwner) {
     this.idStream = idStream;
+    this.idStreamOwner = idStreamOwner;
     this.pollVoteView = pollVoteView;
     this.hasBeenInitializedWithIdPoll = false;
     loadPollByIdStream();
+    if (sessionRepository.getCurrentUserId().equals(idStreamOwner)) {
+      pollVoteView.showViewResultsButton();
+    }
   }
 
   public void initializeWithIdPoll(PollVoteView pollVoteView, String idPoll) {
@@ -164,5 +172,9 @@ public class PollVotePresenter implements Presenter {
 
   @Override public void pause() {
     hasBeenPaused = true;
+  }
+
+  public void viewResults() {
+    pollVoteView.goToResults(pollModel.getIdPoll());
   }
 }

@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
@@ -28,10 +29,12 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PollVotePresenterTest {
 
   private static final String STREAM_ID = "idStream";
+  private static final String HOLDER_USER_ID = "idUserHolder";
   private static final String POLL_ID = "idPoll";
   private static final String QUESTION = "question";
   private static final String STATUS = "status";
@@ -44,28 +47,31 @@ public class PollVotePresenterTest {
   @Mock VotePollOptionInteractor votePollOptionInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock GetPollByIdPollInteractor getPollByIdPollInteractor;
+  @Mock SessionRepository sessionRepository;
 
   private PollVotePresenter presenter;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
+    when(sessionRepository.getCurrentUserId()).thenReturn(HOLDER_USER_ID);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
-        ignorePollInteractor, votePollOptionInteractor, pollModelMapper, errorMessageFactory);
+        ignorePollInteractor, votePollOptionInteractor, sessionRepository, pollModelMapper, errorMessageFactory);
   }
 
   @Test public void shouldRenderPollModelInView() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
 
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     verify(pollVoteView).renderPoll(any(PollModel.class));
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
+
     setupGetPollByIdStreamErrorCallback();
 
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     verify(pollVoteView).showError(anyString());
   }
@@ -74,7 +80,7 @@ public class PollVotePresenterTest {
     setupGetPollByIdStreamInteractorCallback();
     setupIgnorePollInteractorCallback();
 
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
     presenter.ignorePoll();
 
     verify(pollVoteView).ignorePoll();
@@ -83,7 +89,7 @@ public class PollVotePresenterTest {
   @Test public void shouldGoToPollResultsWhenVoteOption() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
     setupVotePollOptionInteractorCallback();
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.voteOption(POLL_OPTION_ID);
 
@@ -93,7 +99,7 @@ public class PollVotePresenterTest {
   @Test public void shouldGoToResultsWhenInitializeAndPollIsVoted() throws Exception {
     setupGetVotedPollByIdStreamInteractorCallback();
 
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     verify(pollVoteView).goToResults(anyString());
   }
@@ -101,7 +107,7 @@ public class PollVotePresenterTest {
   @Test public void shouldGoToResultsWhenInitializeAndPollIsClosed() throws Exception {
     setupGetClosedPollByIdStreamInteractorCallback();
 
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     verify(pollVoteView).goToResults(anyString());
   }
@@ -126,7 +132,7 @@ public class PollVotePresenterTest {
 
   @Test public void shouldLoadPollByIdStreeamInResumeWhenInitializeWithIdStream() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
     presenter.pause();
 
     presenter.resume();
@@ -137,7 +143,7 @@ public class PollVotePresenterTest {
   @Test public void shouldShowErrorAlertWhenVotePollOptionError() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
     setupVotePollOptionInteractorErrorCallback();
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     presenter.voteOption(POLL_OPTION_ID);
 
@@ -147,7 +153,7 @@ public class PollVotePresenterTest {
   @Test public void shouldGoToPollResultsWhenVRetryVote() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
     setupVotePollOptionInteractorCallback();
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
     presenter.setVotedPollOption(POLL_OPTION_ID);
 
     presenter.retryVote();
@@ -158,7 +164,7 @@ public class PollVotePresenterTest {
   @Test public void shouldShowErrorAlertWhenRetryVoteError() throws Exception {
     setupGetPollByIdStreamInteractorCallback();
     setupVotePollOptionInteractorErrorCallback();
-    presenter.initialize(pollVoteView, STREAM_ID);
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
     presenter.setVotedPollOption(POLL_OPTION_ID);
 
     presenter.voteOption(POLL_OPTION_ID);

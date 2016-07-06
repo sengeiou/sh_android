@@ -14,7 +14,7 @@ public interface StreamPollView {
 
   void showError(String message);
 
-  void goToPollVote(String idStream);
+  void goToPollVote(String idStream, String streamAuthorIdUser);
 
   void goToPollResults(String idStream);
 

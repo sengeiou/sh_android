@@ -53,6 +53,7 @@
 
             <TextView android:id="@+id/profile_all_shots_button"
               style="@style/BorderlessButton.Primary"
+              android:fontFamily="sans-serif-light"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="center"

@@ -97,6 +97,7 @@ public class StreamTimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
+
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
   private static final String POLL_STATUS_SHOWING = "showing";
@@ -295,7 +296,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
     reportShotPresenter.initialize(this);
-    streamPollIndicatorPresenter.initialize(this, idStream);
+    streamPollIndicatorPresenter.initialize(this, idStream, streamAuthorIdUser);
   }
 
   private void initializePresenters(String idStream, String streamAuthorIdUser,
@@ -305,7 +306,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
     reportShotPresenter.initialize(this);
-    streamPollIndicatorPresenter.initialize(this, idStream);
+    streamPollIndicatorPresenter.initialize(this, idStream, streamAuthorIdUser);
   }
 
   //endregion
@@ -1151,8 +1152,9 @@ public class StreamTimelineFragment extends BaseFragment
     streamTimelinePresenter.onHidePoll();
   }
 
-  @Override public void goToPollVote(String idStream) {
+  @Override public void goToPollVote(String idStream, String streamAuthorIdUser) {
     Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
+    intent.putExtra(PollVoteActivity.EXTRA_ID_USER_OWNER, streamAuthorIdUser);
     startActivity(intent);
   }
 
