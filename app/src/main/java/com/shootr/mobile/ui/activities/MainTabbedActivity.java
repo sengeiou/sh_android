@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
-import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -27,8 +26,6 @@ import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.FeedbackMessage;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
@@ -36,17 +33,15 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
   private static final int ACTIVITY_FRAGMENT = 3;
-  @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @Inject MainScreenPresenter mainScreenPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject DeeplinkingNavigator deeplinkingNavigator;
 
   private ToolbarDecorator toolbarDecorator;
-  private FragNavController fragNavController;
   private BottomBar bottomBar;
   private BottomBarBadge unreadActivities;
-  private List<Fragment> fragments;
+  private Fragment currentFragment;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -75,14 +70,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void setupBottomBar(Bundle savedInstanceState) {
     bottomBar = BottomBar.attach(findViewById(R.id.container), savedInstanceState);
 
-    fragments = new ArrayList<>(4);
-    fragments.add(StreamsListFragment.newInstance());
-    fragments.add(FavoritesFragment.newInstance());
-    fragments.add(PeopleFragment.newInstance());
-    fragments.add(ActivityTimelineContainerFragment.newInstance());
-    fragNavController =
-        new FragNavController(getSupportFragmentManager(), R.id.container, fragments);
-
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
     bottomBar.setItems(R.menu.bottombar_menu);
@@ -90,16 +77,25 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       @Override public void onMenuTabSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
           case R.id.bottombar_streams:
-            fragNavController.switchTab(FragNavController.TAB1);
+            StreamsListFragment streamsListFragment = StreamsListFragment.newInstance();
+            currentFragment = streamsListFragment;
+            switchTab(streamsListFragment);
             break;
           case R.id.bottombar_favorites:
-            fragNavController.switchTab(FragNavController.TAB2);
+            Fragment favoritesFragment = FavoritesFragment.newInstance();
+            currentFragment = favoritesFragment;
+            switchTab(favoritesFragment);
             break;
           case R.id.bottombar_friends:
-            fragNavController.switchTab(FragNavController.TAB3);
+            PeopleFragment peopleFragment = PeopleFragment.newInstance();
+            currentFragment = peopleFragment;
+            switchTab(peopleFragment);
             break;
           case R.id.bottombar_activity:
-            fragNavController.switchTab(FragNavController.TAB4);
+            ActivityTimelineContainerFragment activityTimelineFragment =
+                ActivityTimelineContainerFragment.newInstance();
+            currentFragment = activityTimelineFragment;
+            switchTab(activityTimelineFragment);
             break;
           default:
             break;
@@ -109,16 +105,16 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
           case R.id.bottombar_streams:
-            scrollToTop(fragments.get(FragNavController.TAB1), 0);
+            scrollToTop(0);
             break;
           case R.id.bottombar_favorites:
-            scrollToTop(fragments.get(FragNavController.TAB2), 1);
+            scrollToTop(1);
             break;
           case R.id.bottombar_friends:
-            scrollToTop(fragments.get(FragNavController.TAB3), 2);
+            scrollToTop(2);
             break;
           case R.id.bottombar_activity:
-            scrollToTop(fragments.get(FragNavController.TAB4), 3);
+            scrollToTop(3);
             break;
           default:
             break;
@@ -129,13 +125,20 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     handleUpdateVersion();
   }
 
-  private void scrollToTop(Fragment currentPage, int currentItem) {
-    if (currentPage != null && currentItem == 0) {
-      ((StreamsListFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 1) {
-      ((FavoritesFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 2) {
-      ((PeopleFragment) currentPage).scrollListToTop();
+  protected void switchTab(Fragment fragment) {
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.container, fragment, fragment.getClass().getName())
+        .commit();
+  }
+
+  private void scrollToTop(int currentItem) {
+    if (currentItem == 0) {
+      ((StreamsListFragment) currentFragment).scrollListToTop();
+    } else if (currentItem == 1) {
+      ((FavoritesFragment) currentFragment).scrollListToTop();
+    } else if (currentItem == 2) {
+      ((PeopleFragment) currentFragment).scrollListToTop();
     }
   }
 
@@ -199,10 +202,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     mainScreenPresenter.pause();
   }
 
-  private void navigateToActivity() {
-    bottomBar.selectTabAtPosition(ACTIVITY_FRAGMENT, false);
-  }
-
   @Override public void setUserData(final UserModel userModel) {
     toolbarDecorator.setTitle(userModel.getUsername());
     toolbarDecorator.setAvatarImage(userModel.getPhoto());
@@ -220,14 +219,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     bottomBar.onSaveInstanceState(outState);
-  }
-
-  @Override public void onBackPressed() {
-    if (fragNavController.getCurrentStack().size() > 1) {
-      fragNavController.pop();
-    } else {
-      super.onBackPressed();
-    }
   }
 
   private void setToolbarClickListener(final UserModel userModel) {
