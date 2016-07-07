@@ -76,6 +76,7 @@ public class UpdateUserProfileInteractor implements Interactor {
         user.setWebsite(updatedUser.getWebsite());
         user.setEmail(updatedUser.getEmail());
         user.setEmailConfirmed(updatedUser.isEmailConfirmed());
+        user.setSocialLogin(updatedUser.isSocialLogin());
         return user;
     }
 

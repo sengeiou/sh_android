@@ -48,6 +48,8 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
         }
 
         activity.setIdAuthorStream(activityEntity.getIdStreamAuthor());
+        activity.setIdPoll(activityEntity.getIdPoll());
+        activity.setPollQuestion(activityEntity.getPollQuestion());
 
         return activity;
     }
@@ -89,6 +91,9 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
         activityEntity.setIdTargetUser(activity.getIdTargetUser());
 
         activityEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
+        activityEntity.setIdPoll(activity.getIdPoll());
+        activityEntity.setPollQuestion(activity.getPollQuestion());
+
         return activityEntity;
     }
 }

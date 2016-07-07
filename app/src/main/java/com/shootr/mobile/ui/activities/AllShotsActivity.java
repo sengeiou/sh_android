@@ -34,8 +34,8 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -50,7 +50,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.all_shots_list) ListView listView;
@@ -205,7 +205,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+        Intent shareIntent = shareManager.shareShotIntent(this, shotModel);
         Intents.maybeStartActivity(this, shareIntent);
     }
 

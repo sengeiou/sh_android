@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,13 @@ public class ShotModelMapper {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setComment(shot.getComment());
-        shotModel.setImage(shot.getImage());
+        ShotImageModel shotImageModel = new ShotImageModel();
+        if (shot.getImage() != null) {
+            shotImageModel.setImageUrl(shot.getImage());
+            shotImageModel.setImageHeight(shot.getImageHeight());
+            shotImageModel.setImageWidth(shot.getImageWidth());
+        }
+        shotModel.setImage(shotImageModel);
         shotModel.setBirth(shot.getPublishDate());
         Shot.ShotUserInfo userInfo = shot.getUserInfo();
         shotModel.setUsername(userInfo.getUsername());

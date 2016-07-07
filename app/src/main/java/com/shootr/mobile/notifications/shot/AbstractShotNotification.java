@@ -41,7 +41,7 @@ public abstract class AbstractShotNotification extends CommonNotification {
     }
 
     protected String getShotText(ShotModel shot) {
-        if (shot.getImage() == null) {
+        if (shot.getImage().getImageUrl() == null) {
             return shot.getComment();
         } else {
             return getContentTextWithImage(shot);

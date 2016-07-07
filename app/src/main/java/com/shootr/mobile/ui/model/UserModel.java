@@ -5,192 +5,200 @@ import timber.log.Timber;
 
 public class UserModel implements Serializable, Cloneable {
 
-    private String idUser;
-    private String userName;
-    private String name;
-    private String photo;
-    private Long numFollowings;
-    private Long numFollowers;
-    private String website;
-    private String bio;
-    private int relationship;
-    private Long points;
-    private String streamWatchingId;
-    private String streamWatchingTitle;
-    private String joinStreamDate;
-    private Long joinStreamTimestamp;
-    private String email;
-    private Boolean emailConfirmed;
-    private Boolean verifiedUser;
-    private Long createdStreamsCount;
-    private Long favoritedStreamsCount;
+  private String idUser;
+  private String userName;
+  private String name;
+  private String photo;
+  private Long numFollowings;
+  private Long numFollowers;
+  private String website;
+  private String bio;
+  private int relationship;
+  private Long points;
+  private String streamWatchingId;
+  private String streamWatchingTitle;
+  private String joinStreamDate;
+  private Long joinStreamTimestamp;
+  private String email;
+  private Boolean emailConfirmed;
+  private Boolean verifiedUser;
+  private Boolean socialLogin;
+  private Long createdStreamsCount;
+  private Long favoritedStreamsCount;
 
-    public Long getFavoritedStreamsCount() {
-        return favoritedStreamsCount;
-    }
+  public Long getFavoritedStreamsCount() {
+    return favoritedStreamsCount;
+  }
 
-    public void setFavoritedStreamsCount(Long favoritedStreamsCount) {
-        this.favoritedStreamsCount = favoritedStreamsCount;
-    }
+  public void setFavoritedStreamsCount(Long favoritedStreamsCount) {
+    this.favoritedStreamsCount = favoritedStreamsCount;
+  }
 
-    public Long getCreatedStreamsCount() {
-        return createdStreamsCount;
-    }
+  public Long getCreatedStreamsCount() {
+    return createdStreamsCount;
+  }
 
-    public void setCreatedStreamsCount(Long createdStreamsCount) {
-        this.createdStreamsCount = createdStreamsCount;
-    }
+  public void setCreatedStreamsCount(Long createdStreamsCount) {
+    this.createdStreamsCount = createdStreamsCount;
+  }
 
-    public Boolean isEmailConfirmed() {
-        return emailConfirmed;
-    }
+  public Boolean isEmailConfirmed() {
+    return emailConfirmed;
+  }
 
-    public void setEmailConfirmed(Boolean emailConfirmed) {
-        this.emailConfirmed = emailConfirmed;
-    }
+  public void setEmailConfirmed(Boolean emailConfirmed) {
+    this.emailConfirmed = emailConfirmed;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public Boolean isSocialLogin() {
+    return socialLogin;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setSocialLogin(Boolean socialLogin) {
+    this.socialLogin = socialLogin;
+  }
 
-    public Long getPoints() {
-        return points;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setPoints(Long points) {
-        this.points = points;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getIdUser() {
-        return idUser;
-    }
+  public Long getPoints() {
+    return points;
+  }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
+  public void setPoints(Long points) {
+    this.points = points;
+  }
 
-    public String getUsername() {
-        return userName;
-    }
+  public String getIdUser() {
+    return idUser;
+  }
 
-    public void setUsername(String userName) {
-        this.userName = userName;
-    }
+  public void setIdUser(String idUser) {
+    this.idUser = idUser;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getUsername() {
+    return userName;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setUsername(String userName) {
+    this.userName = userName;
+  }
 
-    public String getPhoto() {
-        return photo;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public Long getNumFollowings() {
-        return numFollowings;
-    }
+  public String getPhoto() {
+    return photo;
+  }
 
-    public void setNumFollowings(Long numFollowings) {
-        this.numFollowings = numFollowings;
-    }
+  public void setPhoto(String photo) {
+    this.photo = photo;
+  }
 
-    public Long getNumFollowers() {
-        return numFollowers;
-    }
+  public Long getNumFollowings() {
+    return numFollowings;
+  }
 
-    public void setNumFollowers(Long numFollowers) {
-        this.numFollowers = numFollowers;
-    }
+  public void setNumFollowings(Long numFollowings) {
+    this.numFollowings = numFollowings;
+  }
 
-    public String getWebsite() {
-        return website;
-    }
+  public Long getNumFollowers() {
+    return numFollowers;
+  }
 
-    public void setWebsite(String website) {
-        this.website = website;
-    }
+  public void setNumFollowers(Long numFollowers) {
+    this.numFollowers = numFollowers;
+  }
 
-    public String getBio() {
-        return bio;
-    }
+  public String getWebsite() {
+    return website;
+  }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+  public void setWebsite(String website) {
+    this.website = website;
+  }
 
-    public int getRelationship() {
-        return relationship;
-    }
+  public String getBio() {
+    return bio;
+  }
 
-    public void setRelationship(int relationship) {
-        this.relationship = relationship;
-    }
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
 
-    public Long getJoinStreamTimestamp() {
-        return joinStreamTimestamp;
-    }
+  public int getRelationship() {
+    return relationship;
+  }
 
-    public void setJoinStreamTimestamp(Long joinStreamTimestamp) {
-        this.joinStreamTimestamp = joinStreamTimestamp;
-    }
+  public void setRelationship(int relationship) {
+    this.relationship = relationship;
+  }
 
-    @Override public UserModel clone() {
-        try {
-            return (UserModel) super.clone();
-        } catch (CloneNotSupportedException e) {
-            Timber.w(e,
-              "UserModel has thrown CloneNotSupportedException. This should never happen.");
-            return this;
-        }
-    }
+  public Long getJoinStreamTimestamp() {
+    return joinStreamTimestamp;
+  }
 
-    @Override public String toString() {
-        return "UserModel{" +
-          "idUser=" + idUser +
-          ", userName='" + userName + '\'' +
-          '}';
-    }
+  public void setJoinStreamTimestamp(Long joinStreamTimestamp) {
+    this.joinStreamTimestamp = joinStreamTimestamp;
+  }
 
-    public String getStreamWatchingId() {
-        return streamWatchingId;
+  @Override public UserModel clone() {
+    try {
+      return (UserModel) super.clone();
+    } catch (CloneNotSupportedException e) {
+      Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen.");
+      return this;
     }
+  }
 
-    public void setStreamWatchingId(String streamWatchingId) {
-        this.streamWatchingId = streamWatchingId;
-    }
+  @Override public String toString() {
+    return "UserModel{" +
+        "idUser=" + idUser +
+        ", userName='" + userName + '\'' +
+        '}';
+  }
 
-    public String getStreamWatchingTitle() {
-        return streamWatchingTitle;
-    }
+  public String getStreamWatchingId() {
+    return streamWatchingId;
+  }
 
-    public void setStreamWatchingTitle(String streamWatchingTitle) {
-        this.streamWatchingTitle = streamWatchingTitle;
-    }
+  public void setStreamWatchingId(String streamWatchingId) {
+    this.streamWatchingId = streamWatchingId;
+  }
 
-    public String getJoinStreamDate() {
-        return joinStreamDate;
-    }
+  public String getStreamWatchingTitle() {
+    return streamWatchingTitle;
+  }
 
-    public void setJoinStreamDate(String joinStreamDate) {
-        this.joinStreamDate = joinStreamDate;
-    }
+  public void setStreamWatchingTitle(String streamWatchingTitle) {
+    this.streamWatchingTitle = streamWatchingTitle;
+  }
 
-    public Boolean isVerifiedUser() {
-        return verifiedUser;
-    }
+  public String getJoinStreamDate() {
+    return joinStreamDate;
+  }
 
-    public void setVerifiedUser(Boolean verifiedUser) {
-        this.verifiedUser = verifiedUser;
-    }
+  public void setJoinStreamDate(String joinStreamDate) {
+    this.joinStreamDate = joinStreamDate;
+  }
+
+  public Boolean isVerifiedUser() {
+    return verifiedUser;
+  }
+
+  public void setVerifiedUser(Boolean verifiedUser) {
+    this.verifiedUser = verifiedUser;
+  }
 }

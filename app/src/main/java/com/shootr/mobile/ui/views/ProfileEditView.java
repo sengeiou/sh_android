@@ -43,4 +43,6 @@ public interface ProfileEditView {
     void showError(String errorMessage);
 
     void navigateToEditEmail();
+
+
 }

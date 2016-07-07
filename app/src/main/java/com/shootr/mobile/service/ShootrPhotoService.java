@@ -15,6 +15,8 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +55,7 @@ public class ShootrPhotoService implements PhotoService {
         }
     }
 
-    @Override public String uploadShotImageAndGetUrl(File imageFile) throws IOException {
+    @Override public List<String> uploadShotImageAndGetUrl(File imageFile) throws IOException {
         Timber.d("Uploading image with file path %s", imageFile.getAbsolutePath());
         RequestBody body = buildRequestBody(imageFile);
         Response response = executeShotImageRequest(body);
@@ -109,7 +111,7 @@ public class ShootrPhotoService implements PhotoService {
         return client.newCall(request).execute();
     }
 
-    private String parseShotImageResponse(Response response) throws IOException {
+    private List<String> parseShotImageResponse(Response response) throws IOException {
         try {
             JSONObject responseJson = getJsonFromResponse(response);
             return readJsonFromShotImage(responseJson);
@@ -153,19 +155,21 @@ public class ShootrPhotoService implements PhotoService {
             Timber.d("Photo uploaded to url: %s", profileThumbnailImageUrl);
             return profileThumbnailImageUrl;
         } else {
-            return throwParsedError(jsonObject);
+            throwParsedError(jsonObject);
+            return  null;
         }
     }
 
-    private String readJsonFromShotImage(JSONObject jsonObject) throws IOException, JSONException {
-        String imageUrl = getShotImageUrlFromJson(jsonObject);
+    private List<String> readJsonFromShotImage(JSONObject jsonObject) throws IOException, JSONException {
+        List<String> shotImage = getShotImageFromJson(jsonObject);
 
-        boolean imageUploadedSuccessfully = imageUrl != null && !imageUrl.isEmpty();
+        boolean imageUploadedSuccessfully = shotImage != null;
         if (imageUploadedSuccessfully) {
-            Timber.d("Image uploaded to url: %s", imageUrl);
-            return imageUrl;
+            Timber.d("Image uploaded to url: %s", shotImage);
+            return shotImage;
         } else {
-            return throwParsedError(jsonObject);
+            throwParsedError(jsonObject);
+            return  null;
         }
     }
 
@@ -177,11 +181,12 @@ public class ShootrPhotoService implements PhotoService {
             Timber.d("Image uploaded to url: %s", imageUrl);
             return imageUrl;
         } else {
-            return throwParsedError(jsonObject);
+            throwParsedError(jsonObject);
+            return null;
         }
     }
 
-    private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
+    private void throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
         ShootrPhotoUploadError shootrError =
           jsonAdapter.fromJson(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
@@ -196,8 +201,12 @@ public class ShootrPhotoService implements PhotoService {
         return responseJson.optString("profileThumbnailImageUrl");
     }
 
-    private String getShotImageUrlFromJson(JSONObject responseJson) {
-        return responseJson.optString("shotImageUrl");
+    private List<String> getShotImageFromJson(JSONObject responseJson) {
+        ArrayList<String> image = new ArrayList<>();
+        image.add(responseJson.optString("shotImageUrl"));
+        image.add(responseJson.optString("imageWidth"));
+        image.add(responseJson.optString("imageHeight"));
+        return image;
     }
 
     private String getStreamImageUrlFromJson(JSONObject responseJson) {

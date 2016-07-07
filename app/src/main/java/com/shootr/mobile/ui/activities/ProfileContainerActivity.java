@@ -67,6 +67,7 @@ public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -77,5 +78,10 @@ public class ProfileContainerActivity extends BaseToolbarDecoratedActivity {
         ActionBar actionBar = toolbarDecorator.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }

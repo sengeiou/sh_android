@@ -12,18 +12,23 @@ import com.shootr.mobile.ui.adapters.holders.MentionViewHolder;
 import com.shootr.mobile.ui.adapters.holders.NiceShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OpenedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PinnedShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.PollPublishedViewHolder;
+import com.shootr.mobile.ui.adapters.holders.PollVotedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ReplyViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShareShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.SharedStreamViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StartedShootingViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StreamFavoritedViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.PollQuestionSpannableBuilder;
+import com.shootr.mobile.util.PollVotedSpannableBuilder;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +49,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_FOLLOW = 9;
     public static final int TYPE_PINNED_SHOT = 10;
     public static final int TYPE_REPLY_SHOT = 11;
+    public static final int TYPE_POLL_PUBLISHED = 12;
+    public static final int TYPE_POLL_VOTED = 13;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -51,6 +58,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnUsernameClickListener onUsernameClickListener;
     private final OnStreamTitleClickListener streamTitleClickListener;
     private final OnShotClick onShotClick;
+    private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
+    private final PollVotedSpannableBuilder pollVotedSpannableBuilder;
+    private final OnPollQuestionClickListener onPollQuestionClickListener;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
@@ -58,14 +68,18 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private boolean showFooter = false;
 
     public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener streamTitleClickListener, OnShotClick onShotClick) {
+        OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
+        OnStreamTitleClickListener streamTitleClickListener, OnShotClick onShotClick,
+        OnPollQuestionClickListener onPollQuestionClickListener) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.streamTitleClickListener = streamTitleClickListener;
         this.onShotClick = onShotClick;
+        this.onPollQuestionClickListener = onPollQuestionClickListener;
+        this.pollQuestionSpannableBuilder = new PollQuestionSpannableBuilder();
+        this.pollVotedSpannableBuilder = new PollVotedSpannableBuilder();
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -97,6 +111,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_PINNED_SHOT;
                 case ActivityType.REPLY_SHOT:
                     return TYPE_REPLY_SHOT;
+                case ActivityType.POLL_PUBLISHED:
+                    return TYPE_POLL_PUBLISHED;
+                case ActivityType.VOTED_IN_POLL:
+                    return TYPE_POLL_VOTED;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -135,9 +153,13 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateFooterViewHolder(parent);
             case TYPE_REPLY_SHOT:
                 return onCreateReplyViewHolder(parent);
+            case TYPE_POLL_PUBLISHED:
+                return onCreatePollPublishedViewHolder(parent);
+            case TYPE_POLL_VOTED:
+                return onCreatePollVotedViewHolder(parent);
             default:
+                throw new IllegalStateException("View type %d not handled");
         }
-        throw new IllegalStateException("View type %d not handled");
     }
 
     private View createActivityView(ViewGroup parent) {
@@ -235,6 +257,18 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           onUsernameClickListener);
         viewHolder.setCurrentUserId(currentUserId);
         return viewHolder;
+    }
+
+    private PollPublishedViewHolder onCreatePollPublishedViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
+        return new PollPublishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
+            pollQuestionSpannableBuilder, onPollQuestionClickListener);
+    }
+
+    private PollVotedViewHolder onCreatePollVotedViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
+        return new PollVotedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
+            pollVotedSpannableBuilder, onPollQuestionClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {

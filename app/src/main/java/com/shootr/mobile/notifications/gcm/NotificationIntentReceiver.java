@@ -8,8 +8,8 @@ import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
-import com.shootr.mobile.ui.activities.ActivityTimelinesContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -19,104 +19,115 @@ import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
 
-    public static final String ACTION_OPEN_PROFILE = "com.shootr.mobile.ACTION_OPEN_PROFILE";
-    public static final String ACTION_OPEN_STREAM = "com.shootr.mobile.ACTION_OPEN_STREAM";
-    public static final String ACTION_OPEN_SHOT_DETAIL = "com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL";
-    public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION";
-    public static final String ACTION_OPEN_SHOT_NOTIFICATION = "com.shootr.mobile.ACTION_OPEN_SHOT_NOTIFICATION";
-    public static final String ACTION_OPEN_ACTIVITY_NOTIFICATION =
+  public static final String ACTION_OPEN_PROFILE = "com.shootr.mobile.ACTION_OPEN_PROFILE";
+  public static final String ACTION_OPEN_STREAM = "com.shootr.mobile.ACTION_OPEN_STREAM";
+  public static final String ACTION_OPEN_SHOT_DETAIL = "com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL";
+  public static final String ACTION_DISCARD_SHOT_NOTIFICATION =
+      "com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION";
+  public static final String ACTION_OPEN_SHOT_NOTIFICATION =
+      "com.shootr.mobile.ACTION_OPEN_SHOT_NOTIFICATION";
+  public static final String ACTION_OPEN_ACTIVITY_NOTIFICATION =
       "com.shootr.mobile.ACTION_OPEN_ACTIVITY_NOTIFICATION";
-    public static final String ACTION_DISCARD_ACTIVITY_NOTIFICATION =
+  public static final String ACTION_DISCARD_ACTIVITY_NOTIFICATION =
       "com.shootr.mobile.ACTION_DISCARD_ACTIVITY_NOTIFICATION";
-    public static final String ACTION_NEED_UPDATE =
-        "com.shootr.mobile.ACTION_NEED_UPDATE";
 
-    @Inject ShotNotificationManager shotNotificationManager;
-    @Inject ActivityNotificationManager activityNotificationManager;
-    @Inject @ActivityBadgeCount
-    IntPreference badgeCount;
+  public static final String ACTION_NEED_UPDATE = "com.shootr.mobile.ACTION_NEED_UPDATE";
+  public static final String ACTION_OPEN_POLL_VOTE = "com.shootr.mobile.ACTION_OPEN_POLL_VOTE";
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        ShootrApplication.get(context).inject(this);
+  @Inject ShotNotificationManager shotNotificationManager;
+  @Inject ActivityNotificationManager activityNotificationManager;
+  @Inject @ActivityBadgeCount IntPreference badgeCount;
 
-        String action = intent.getAction();
-        switch (action) {
-            case ACTION_DISCARD_SHOT_NOTIFICATION:
-                shotNotificationManager.clearShotNotifications();
-                break;
-            case ACTION_OPEN_SHOT_NOTIFICATION:
-                openActivities(context);
-                break;
-            case ACTION_OPEN_ACTIVITY_NOTIFICATION:
-                startActivityFromIntent(context,
-                  new Intent(context, ActivityTimelinesContainerActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                break;
-            case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
-                activityNotificationManager.clearActivityNotifications();
-                break;
-            case ACTION_OPEN_PROFILE:
-                openProfile(context, intent);
-                break;
-            case ACTION_OPEN_STREAM:
-                openStream(context, intent);
-                break;
-            case ACTION_OPEN_SHOT_DETAIL:
-                openShotDetail(context, intent);
-                break;
-            case ACTION_NEED_UPDATE:
-                openUpdateNeeded(context);
-                break;
-            default:
-                openUpdateNeeded(context);
-                break;
-        }
-    }
+  @Override public void onReceive(Context context, Intent intent) {
+    ShootrApplication.get(context).inject(this);
 
-    public void openActivities(Context context) {
-        context.startActivity(new Intent(context,
-          ActivityTimelinesContainerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    String action = intent.getAction();
+    switch (action) {
+      case ACTION_DISCARD_SHOT_NOTIFICATION:
         shotNotificationManager.clearShotNotifications();
-    }
-
-    public void openProfile(Context context, Intent intent) {
-        decrementBadgeCount();
-        String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
-        startActivityFromIntent(context,
-                ProfileContainerActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    public void openStream(Context context, Intent intent) {
-        decrementBadgeCount();
-        String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
-        String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
-        String title = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_TITLE);
-        startActivityFromIntent(context,
-          StreamTimelineActivity.newIntent(context, idStream, title, idStreamHolder)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    public void openShotDetail(Context context, Intent intent) {
-        decrementBadgeCount();
-        ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
-        startActivityFromIntent(context,
-          ShotDetailActivity.getIntentForActivity(context, shotModel).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    public void openUpdateNeeded(Context context) {
-        decrementBadgeCount();
-        startActivityFromIntent(context,
-            MainTabbedActivity.getUpdateNeededIntent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
-    public void startActivityFromIntent(Context context, Intent intent) {
-        context.startActivity(intent);
+        break;
+      case ACTION_OPEN_SHOT_NOTIFICATION:
+        openActivities(context);
+        break;
+      case ACTION_OPEN_ACTIVITY_NOTIFICATION:
+        startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        break;
+      case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
+        break;
+      case ACTION_OPEN_PROFILE:
+        openProfile(context, intent);
+        break;
+      case ACTION_OPEN_STREAM:
+        openStream(context, intent);
+        break;
+      case ACTION_OPEN_SHOT_DETAIL:
+        openShotDetail(context, intent);
+        break;
+      case ACTION_OPEN_POLL_VOTE:
+        openPollVote(context, intent);
+        break;
+      case ACTION_NEED_UPDATE:
+        openUpdateNeeded(context);
+        break;
+      default:
+        openUpdateNeeded(context);
+        break;
     }
+  }
 
-    private void decrementBadgeCount() {
-        int numberOfActivities = badgeCount.get();
-        badgeCount.set(numberOfActivities - 1);
-    }
+  public void openActivities(Context context) {
+    context.startActivity(MainTabbedActivity.getMultipleActivitiesIntent(context)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    shotNotificationManager.clearShotNotifications();
+  }
+
+  public void openProfile(Context context, Intent intent) {
+    decrementBadgeCount();
+    String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
+    startActivityFromIntent(context, ProfileContainerActivity.getIntent(context, idUser)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void openStream(Context context, Intent intent) {
+    decrementBadgeCount();
+    String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
+    String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
+    String title = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_TITLE);
+    startActivityFromIntent(context,
+        StreamTimelineActivity.newIntent(context, idStream, title, idStreamHolder)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void openShotDetail(Context context, Intent intent) {
+    decrementBadgeCount();
+    ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
+    startActivityFromIntent(context, ShotDetailActivity.getIntentForActivity(context, shotModel)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void openPollVote(Context context, Intent intent) {
+    String idPoll = intent.getStringExtra(PollVoteActivity.EXTRA_ID_POLL);
+    decrementBadgeCount();
+    startActivityFromIntent(context, PollVoteActivity.newIntentWithIdPoll(context, idPoll)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void openUpdateNeeded(Context context) {
+    decrementBadgeCount();
+    startActivityFromIntent(context,
+        MainTabbedActivity.getUpdateNeededIntent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void startActivityFromIntent(Context context, Intent intent) {
+    context.startActivity(intent);
+    activityNotificationManager.clearActivityNotifications();
+  }
+
+  private void decrementBadgeCount() {
+    int numberOfActivities = badgeCount.get();
+    badgeCount.set(numberOfActivities - 1);
+  }
 }

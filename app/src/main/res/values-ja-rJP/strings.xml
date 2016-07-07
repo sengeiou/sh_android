@@ -47,6 +47,8 @@
   <string name="alert_report_confirmed_email_message">アカウント&gt;プロフィールの編集&gt;メールアドレスの確認</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">メールアドレスの確認を済ませてください</string>
+  <string name="alert_shootr_update">このコンテンツはShootrの最新バージョンでのみ表示できます。</string>
+  <string name="alert_update_shootr">このコンテンツはShootrの最新バージョンでのみ表示できます</string>
   <string name="all_participants_button">全ての参加者</string>
   <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
   <string name="block_cannot_shoot_streams">投稿を禁止</string>
@@ -111,6 +113,7 @@
   <string name="error_deleted_shot">このショットは削除されました</string>
   <string name="error_facebook_login">Facebookでログインすることができませんでした。後程またお試しください。</string>
   <string name="error_following_user_blocked">無視しているユーザーをフォローできません。</string>
+  <string name="error_has_voted">既に投票済みです</string>
   <string name="error_image_upload">別の画像を使用してください。</string>
   <string name="error_login_credentials_invalid">ID又はパスワードが正しくありません。</string>
   <string name="error_message">Shootrに問題が発生しました。一度アプリを終了してください。</string>
@@ -153,12 +156,14 @@
   <!-- Profile: Website -->
   <string name="error_message_website_invalid">ウェブサイトのフォーマットが無効です</string>
   <string name="error_message_website_too_long">ウェブサイトは100文字以内で入力してください</string>
+  <string name="error_poll_has_been_deleted">投票機能がご利用できません</string>
   <!-- Forgot password -->
   <string name="error_reset_password">アカウントが見つかりません</string>
   <string name="error_restart_button">再起動</string>
   <string name="error_stream_already_favorites">既に登録されています</string>
   <string name="error_stream_read_only">このストリームは削除されたため、読むことのみ可能です。</string>
   <string name="error_title">おっと！</string>
+  <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -247,6 +252,7 @@
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">(stream)を作成しました</string>
+  <string name="order_poll_option">%1$s.%2$s</string>
   <string name="participants_list_empty">参加者はいません</string>
   <string name="photo_edit_gallery">ギャラリー</string>
   <string name="photo_edit_remove">削除する</string>
@@ -258,6 +264,13 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">現在の参加者やストリームをお気に入り登録しているユーザーに、通知が送信されます。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知する</string>
   <string name="pin_topic" formatted="false">メッセージをピン留め</string>
+  <string name="poll_ignore">無視する</string>
+  <string name="poll_live_results">現在の結果</string>
+  <string name="poll_results">結果</string>
+  <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_view">表示</string>
+  <string name="poll_vote">投票</string>
+  <string name="poll_vote_timeout_retry">もう一度試す</string>
   <string name="profile_all_shots">全てのショット</string>
   <string name="profile_edit_done_button">完了</string>
   <string name="profile_edit_profile">プロフィールを編集</string>
@@ -270,6 +283,7 @@
   <string name="profile_marks_following">フォロー中</string>
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
+  <string name="publish_poll">%1$s：%2$sに新しいアンケート</string>
   <string name="read_write_mode_public_description">誰でも表示、投稿できます</string>
   <string name="read_write_mode_public_title">公開</string>
   <string name="read_write_mode_view_only_description">作成者と投稿者のみ投稿できます</string>
@@ -306,7 +320,7 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$sが%2$sにショット</string>
   <string name="share_stream_activity_text_pattern">(stream)を共有しました</string>
-  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/st/%2$s?%3$s</string>
   <string name="share_stream_subject">Shootrで%sをチェックしてみよう</string>
   <string name="share_via">共有する</string>
   <string name="share_via_shootr">Shootrで共有</string>
@@ -381,6 +395,7 @@
   <string name="user_not_found_message">ユーザーが見つかりませんでした。</string>
   <string name="user_unbanned">解除しました</string>
   <string name="user_unblocked">解除しました</string>
+  <string name="voted_poll">%s の (question) に投票しました</string>
   <string name="watching_stream_connected">オンライン</string>
   <string name="watching_stream_connected_muted">オンライン (通知なし)</string>
   <string name="watch_profile_photo" formatted="false">見る</string>
@@ -391,5 +406,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">暫くお待ちください</string>
   <string name="yes">はい</string>
-  <string name="alert_shootr_update">このコンテンツはShootrの最新バージョンでのみ表示できます。</string>
 </resources>

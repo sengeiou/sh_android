@@ -24,8 +24,8 @@ import com.shootr.mobile.ui.views.FindStreamsView;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.ShareManager;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
@@ -47,7 +47,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject FeedbackMessage feedbackMessage;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject InitialsLoader initialsLoader;
 
     private void setupQuery() {
@@ -113,7 +113,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(this, stream.getStreamModel());
+        Intent shareIntent = shareManager.shareStreamIntent(this, stream.getStreamModel());
         Intents.maybeStartActivity(this, shareIntent);
     }
 

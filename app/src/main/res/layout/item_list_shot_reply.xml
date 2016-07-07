@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:id="@+id/shot_reply_container"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="@color/white"
-  android:descendantFocusability="blocksDescendants"
-  android:orientation="vertical">
-
-    <View android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:background="@color/separator" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
-      android:layout_width="@dimen/shot_avatar_size"
-      android:layout_height="@dimen/shot_avatar_size"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:layout_marginLeft="@dimen/keyline_1"
       android:layout_marginRight="8dp"
       android:layout_marginTop="16dp"
@@ -50,7 +48,7 @@
       android:layout_marginRight="@dimen/keyline_1"
       android:textColor="@color/material_black"
       android:textColorLink="@color/links"
-      android:textSize="16sp"
+      android:textSize="14sp"
       tools:text="Who's the referee?" />
 
     <RelativeLayout android:id="@+id/shot_media_content"
@@ -60,27 +58,46 @@
       android:layout_below="@+id/shot_text"
       android:focusable="false"
       android:focusableInTouchMode="false"
-      android:paddingRight="16dp">
+        android:layout_toLeftOf="@+id/shot_timestamp"
+        android:layout_toStartOf="@+id/shot_timestamp"
+        >
 
-        <com.shootr.mobile.ui.widgets.ImageView169 android:id="@+id/shot_image"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/shot_item_image_height"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp"
-          android:scaleType="centerCrop"
-          android:visibility="gone"
-          tools:src="@drawable/sample_avatar"
-          tools:visibility="visible" />
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shot_image_landscape"
+            android:layout_width="match_parent"
+            android:layout_height="156dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:riv_corner_radius="10dp"
+            tools:src="@drawable/sample_avatar"
+            tools:visibility="visible"
+            />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shot_image_portrait"
+            android:layout_width="168dp"
+            android:layout_height="296dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="10dp"
+            tools:src="@drawable/sample_avatar"
+            tools:visibility="gone"
+            />
 
         <FrameLayout android:id="@+id/shot_video_frame"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_alignBottom="@+id/shot_image"
-          android:layout_alignTop="@+id/shot_image"
-          android:background="#66000000"
+          android:layout_alignBottom="@+id/shot_image_landscape"
+          android:layout_alignTop="@+id/shot_image_landscape"
+          android:background="@drawable/round_corner"
           android:foreground="?selectableItemBackground"
           android:visibility="visible"
-          tools:visibility="visible">
+          tools:visibility="visible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            >
 
             <TextView android:id="@+id/shot_video_title"
               android:layout_width="wrap_content"
@@ -124,10 +141,13 @@
           android:textSize="14sp"
           tools:text="8 nices" />
 
-        <com.shootr.mobile.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
-          style="@style/NiceButton"
-          android:layout_width="@dimen/nice_button_size"
-          android:layout_height="@dimen/nice_button_size" />
+        <com.shootr.mobile.ui.widgets.NiceButtonView
+            android:id="@+id/shot_nice_button"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            style="@style/HearthButton"
+            />
 
     </LinearLayout>
 

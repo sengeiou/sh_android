@@ -93,8 +93,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
         ShotModel shotModel = draftModel.getShotModel();
-        if (shotModel.getImage() != null) {
-            imageLoader.loadTimelineImage(shotModel.getImage(), holder.image);
+        if (shotModel.getImage() != null && shotModel.getImage().getImageUrl() != null) {
+            imageLoader.loadTimelineImage(shotModel.getImage().getImageUrl(), holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else if (draftModel.getImageFile() != null) {
             imageLoader.load(draftModel.getImageFile(), holder.image);
@@ -148,7 +148,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         @Bind(R.id.shot_text) ClickableTextView text;
         @Bind(R.id.shot_image) ImageView image;
         @Bind(R.id.shot_draft_buttons) View draftButtons;
-        @Bind(R.id.shot_separator) View separator;
         DraftItemView draftItemView;
 
         public DraftViewHolder(View itemView) {

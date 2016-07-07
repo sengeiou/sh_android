@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 public class DeeplinkingTool implements DeeplinkingNavigator {
 
-  public static final String SHARE_STREAM_PATTERN_HTTPS = "https://web.shootr.com/#/st/";
-  public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/#/st/";
-  public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/#/s/";
-  public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/#/s/";
+  public static final String SHARE_STREAM_PATTERN_HTTPS = "https://web.shootr.com/st/";
+  public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/st/";
+  public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/s/";
+  public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/s/";
   public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
   public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
 
@@ -40,22 +40,32 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
 
     if (matcherShareStreamHttps.find()) {
       String idStream = address.substring(matcherShareStreamHttps.end());
-      context.startActivity(StreamTimelineActivity.newIntent(context, idStream));
+      context.startActivity(StreamTimelineActivity.newIntent(context, removeLocale(idStream)));
     } else if (matcherShateStreamHttp.find()) {
       String idStream = address.substring(matcherShateStreamHttp.end());
-      context.startActivity(StreamTimelineActivity.newIntent(context, idStream));
+      context.startActivity(StreamTimelineActivity.newIntent(context, removeLocale(idStream)));
     } else if (matcherShateStreamShootr.find()) {
       String idStream = address.substring(matcherShateStreamShootr.end());
-      context.startActivity(StreamTimelineActivity.newIntent(context, idStream));
+      context.startActivity(StreamTimelineActivity.newIntent(context, removeLocale(idStream)));
     } else if (matcherShareShotHttp.find()) {
       String idShot = address.substring(matcherShareShotHttp.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, idShot));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherShareShotHttps.find()) {
       String idShot = address.substring(matcherShareShotHttps.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, idShot));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherShareShotShootr.find()) {
       String idShot = address.substring(matcherShareShotShootr.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, idShot));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     }
   }
+
+  private String removeLocale(String anyIdPlusLocale) {
+    Pattern localePattern = Pattern.compile("\\?");
+    Matcher matcherLocale = localePattern.matcher(anyIdPlusLocale);
+    if (matcherLocale.find()) {
+      return anyIdPlusLocale.substring(0, matcherLocale.start());
+    } else {
+      return anyIdPlusLocale;
+    }
+    }
 }

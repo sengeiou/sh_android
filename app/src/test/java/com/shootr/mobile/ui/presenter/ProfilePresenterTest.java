@@ -841,6 +841,12 @@ public class ProfilePresenterTest {
         verify(profileView).showHideShotConfirmation(ID_SHOT);
     }
 
+    @Test public void shouldNotShowChangePasswordOptionIfUserHasSocialLogin() throws Exception {
+        setupUserById();
+
+        verify(profileView, never()).showChangePasswordButton();
+    }
+
     private void setupUserInBannedIdsCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

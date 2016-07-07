@@ -8,7 +8,7 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     private String idShot;
     private String comment;
-    private String image;
+    private ShotImageModel image;
     private Date birth;
     private List<String> nicers;
     private String idUser;
@@ -74,11 +74,11 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
         this.photo = photo;
     }
 
-    public String getImage() {
+    public ShotImageModel getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(ShotImageModel image) {
         this.image = image;
     }
 

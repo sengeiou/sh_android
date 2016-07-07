@@ -55,8 +55,8 @@
         tools:visibility="visible"
         />
     <include
-        layout="@layout/include_timeline_message"
-        android:id="@+id/timeline_new_shots_indicator"
+        layout="@layout/include_timeline_indicator"
+        android:id="@+id/timeline_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

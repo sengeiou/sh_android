@@ -27,19 +27,19 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesListView {
 
-    @Inject FavoritesListPresenter favoritesListPresenter;
-    @Inject ImageLoader imageLoader;
-    @Inject IntentFactory intentFactory;
-    @Inject FeedbackMessage feedbackMessage;
-    @Inject AnalyticsTool analyticsTool;
-    @Inject InitialsLoader initialsLoader;
+  @Inject FavoritesListPresenter favoritesListPresenter;
+  @Inject ImageLoader imageLoader;
+  @Inject ShareManager shareManager;
+  @Inject FeedbackMessage feedbackMessage;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject InitialsLoader initialsLoader;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -125,10 +125,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
           });
     }
 
-    private void shareStream(StreamResultModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(getActivity(), stream.getStreamModel());
-        Intents.maybeStartActivity(getActivity(), shareIntent);
-    }
+  private void shareStream(StreamResultModel stream) {
+    Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream.getStreamModel());
+    Intents.maybeStartActivity(getActivity(), shareIntent);
+  }
 
     @Override public void renderFavorites(List<StreamResultModel> streamModels) {
         adapter.setStreams(streamModels);

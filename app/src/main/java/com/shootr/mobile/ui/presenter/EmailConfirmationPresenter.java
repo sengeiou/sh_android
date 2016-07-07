@@ -48,12 +48,12 @@ public class EmailConfirmationPresenter implements Presenter {
     public void initialize(EmailConfirmationView emailConfirmationView, String email) {
         this.setView(emailConfirmationView);
         this.setCurrentEmail(email);
-        this.requestEmailConfirmataionIfNotConfirmed();
+        this.requestEmailConfirmationIfNotConfirmed();
     }
 
-    protected void requestEmailConfirmataionIfNotConfirmed() {
+    protected void requestEmailConfirmationIfNotConfirmed() {
         UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        if (!currentUserModel.isEmailConfirmed()) {
+        if (!currentUserModel.isEmailConfirmed() && !currentEmail.isEmpty()) {
             requestEmailConfirmation(currentEmail);
         }
     }

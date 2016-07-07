@@ -78,8 +78,11 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private void loadUserListingStreamsFromRemote() throws ServerCommunicationException {
     try {
       loadRemoteFavoriteIds();
-      List<Stream> favoriteStreams =
-          remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
+      List<Stream> favoriteStreams = new ArrayList<>();
+      if (!favoriteIds.isEmpty()) {
+        favoriteStreams =
+            remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
+      }
       List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
 

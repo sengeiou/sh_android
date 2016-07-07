@@ -47,6 +47,8 @@
   <string name="alert_report_confirmed_email_message">Ve a Cuenta &gt; Editar Perfil y confirma tu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Se requiere un email confirmado</string>
+  <string name="alert_shootr_update">Este contenido solo puede verse con la última versión de Shootr.</string>
+  <string name="alert_update_shootr">Este contenido solo puede verse con la última versión de Shootr</string>
   <string name="all_participants_button">Todos los participantes</string>
   <string name="ban_user_dialog_message">Los shots que publique en tus streams solo se mostrarán a sus seguidores.</string>
   <string name="block_cannot_shoot_streams">Vetar usuario</string>
@@ -111,6 +113,7 @@
   <string name="error_deleted_shot">Este shot ha sido eliminado</string>
   <string name="error_facebook_login">No se ha podido iniciar sesión con Facebook. Prueba más tarde.</string>
   <string name="error_following_user_blocked">No puedes seguir un usuario que ignoras.</string>
+  <string name="error_has_voted">Ya has votado</string>
   <string name="error_image_upload">Error subiendo la imagen</string>
   <string name="error_login_credentials_invalid">Id o contraseña no válidos.</string>
   <string name="error_message">Shootr ha encontrado un problema y necesita cerrarse.</string>
@@ -153,12 +156,14 @@
   <!-- Profile: Website -->
   <string name="error_message_website_invalid">La web tiene un formato inválido</string>
   <string name="error_message_website_too_long">La web puede tener como máximo 100 caracteres</string>
+  <string name="error_poll_has_been_deleted">La encuesta no está disponible</string>
   <!-- Forgot password -->
   <string name="error_reset_password">Cuenta no encontrada.</string>
   <string name="error_restart_button">Reiniciar</string>
   <string name="error_stream_already_favorites">Ya está en Favoritos</string>
   <string name="error_stream_read_only">Este stream ha sido borrado y es solo de lectura.</string>
   <string name="error_title">Ooops!</string>
+  <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">No hay favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -185,7 +190,7 @@
     <item quantity="other">%d favoritos</item>
   </plurals>
   <string name="listing_title_favorites">Favoritos</string>
-  <string name="listing_title_holding">Creados</string>
+  <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Cargando…</string>
   <string name="main_activity_title">Actividad</string>
   <string name="mentioned_shot_activity_with_comment">"Te ha mencionado: "</string>
@@ -249,6 +254,7 @@
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Ha creado (stream)</string>
+  <string name="order_poll_option">%1$s.%2$s</string>
   <string name="participants_list_empty">No hay participantes</string>
   <string name="photo_edit_gallery">Galería</string>
   <string name="photo_edit_remove">Quitar</string>
@@ -260,6 +266,13 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificación se enviará a los participantes actuales y a los usuarios que tengan el stream como favorito.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
+  <string name="poll_ignore">Quitar encuesta</string>
+  <string name="poll_live_results">Resultados en vivo</string>
+  <string name="poll_results">Resultados</string>
+  <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_view">Ver</string>
+  <string name="poll_vote">Vota</string>
+  <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="profile_all_shots">Todos los shots</string>
   <string name="profile_edit_done_button">Hecho</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -272,6 +285,7 @@
   <string name="profile_marks_following">siguiendo</string>
   <string name="profile_support">Soporte</string>
   <string name="profile_updated">Perfil actualizado</string>
+  <string name="publish_poll">%1$s Nueva encuesta en %2$s</string>
   <string name="read_write_mode_public_description">Cualquiera puede escribir</string>
   <string name="read_write_mode_public_title">Público</string>
   <string name="read_write_mode_view_only_description">Pueden escribir el creador y los colaboradores</string>
@@ -308,7 +322,7 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
-  <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s?%3$s</string>
   <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
   <string name="share_via">Compartir vía…</string>
   <string name="share_via_shootr">Compartir vía Shootr</string>
@@ -384,6 +398,7 @@
   <string name="user_not_found_message">Usuario no encontrado.</string>
   <string name="user_unbanned">Veto suprimido.</string>
   <string name="user_unblocked">Ignorar suprimido.</string>
+  <string name="voted_poll">Ha votado en (question) en %s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">Ver</string>
@@ -394,5 +409,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="alert_shootr_update">Este contenido solo puede verse con la última versión de Shootr.</string>
 </resources>

@@ -172,7 +172,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void imageClick(ShotModel shot) {
-        shotDetailView.openImage(shot.getImage());
+        shotDetailView.openImage(shot.getImage().getImageUrl());
     }
 
     public void avatarClick(String userId) {

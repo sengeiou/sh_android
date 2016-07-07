@@ -26,6 +26,11 @@ public class ClickableTextView extends TextView {
 
     private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
     private static final String DEFAULT_SCHEMA = ALLOWED_SCHEMAS[0];
+    public static final String EMPTY_STRING = "";
+    public static final String PREFIX = "www.";
+    public static final int URL_LENGTH = 20;
+    public static final int START = 0;
+    public static final String ELLIPSIS = "...";
 
     private Pattern urlPattern;
     private PressableSpan alreadyPressedSpan;
@@ -49,6 +54,7 @@ public class ClickableTextView extends TextView {
 
     @Override public void setText(CharSequence text, BufferType type) {
         // Force spannable text
+        String bla = text.toString();
         super.setText(text, BufferType.SPANNABLE);
     }
 
@@ -62,14 +68,41 @@ public class ClickableTextView extends TextView {
         }
         CharSequence text = getText();
         Matcher matcher = urlPattern.matcher(text);
-        SpannableStringBuilder ss = new SpannableStringBuilder(text);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
         while (matcher.find()) {
             int start = matcher.start();
             int end = matcher.end();
             String url = makeUrl(matcher.group());
-            ss.setSpan(new TouchableUrlSpan(url), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            stringBuilder.setSpan(new TouchableUrlSpan(url), start, end,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        setText(ss, BufferType.SPANNABLE);
+        formatSpans(stringBuilder);
+        setText(stringBuilder, BufferType.SPANNABLE);
+    }
+
+    private void formatSpans(SpannableStringBuilder stringBuilder) {
+        TouchableUrlSpan[] spans =
+            stringBuilder.getSpans(START, stringBuilder.length(), TouchableUrlSpan.class);
+
+        for (TouchableUrlSpan span : spans) {
+            int spanStart = stringBuilder.getSpanStart(span);
+            int spanEnd = stringBuilder.getSpanEnd(span);
+            String newUrl = span.getURL();
+
+            newUrl = formatUrlInComment(newUrl);
+            stringBuilder.replace(spanStart, spanEnd, newUrl);
+        }
+    }
+
+    @NonNull private String formatUrlInComment(String newUrl) {
+        for (String allowedSchema : ALLOWED_SCHEMAS) {
+            newUrl = newUrl.replace(allowedSchema, EMPTY_STRING);
+        }
+        newUrl = newUrl.replace(PREFIX, EMPTY_STRING);
+        if (newUrl.length() > URL_LENGTH) {
+            newUrl = newUrl.substring(START, URL_LENGTH) + ELLIPSIS;
+        }
+        return newUrl;
     }
 
     /**

@@ -197,6 +197,6 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op*/
+        /* no-op */
     }
 }

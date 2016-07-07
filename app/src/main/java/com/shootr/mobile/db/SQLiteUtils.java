@@ -52,6 +52,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FAVORITED_STREAMS_COUNT
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.SOCIAL_LOGIN
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -77,6 +79,10 @@ public class SQLiteUtils {
       + DatabaseContract.ShotTable.COMMENT
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotTable.IMAGE
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.ShotTable.IMAGE_WIDTH
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.ShotTable.IMAGE_HEIGHT
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ShotTable.ID_STREAM
       + " TEXT NULL,"
@@ -385,6 +391,10 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.ID_STREAM_AUTHOR
       + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.ID_POLL
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.POLL_QUESTION
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -445,6 +455,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FAVORITED_STREAMS_COUNT
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.SOCIAL_LOGIN
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -480,4 +492,38 @@ public class SQLiteUtils {
       + " TEXT NOT NULL PRIMARY KEY,"
       + DatabaseContract.TimelineSyncTable.DATE
       + " DATETIME NOT NULL);";
+
+    public static final String CREATE_TABLE_POLL = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.PollTable.TABLE
+        + " ("
+        + DatabaseContract.PollTable.ID_POLL
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.PollTable.ID_STREAM
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.QUESTION
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.HAS_VOTED
+        + " NUMBER NULL,"
+        + DatabaseContract.PollTable.STATUS
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.VOTE_STATUS
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.PUBLISHED
+        + " NUMBER NOT NULL)";
+
+    public static final String CREATE_TABLE_POLL_OPTION = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.PollOptionTable.TABLE
+        + " ("
+        + DatabaseContract.PollOptionTable.ID_POLL_OPTION
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.PollOptionTable.ID_POLL
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollOptionTable.IMAGE_URL
+        + " TEXT NULL,"
+        + DatabaseContract.PollOptionTable.TEXT
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PollOptionTable.ORDER
+        + " INT NOT NULL,"
+        + DatabaseContract.PollOptionTable.VOTES
+        + " NUMBER NULL)";
 }

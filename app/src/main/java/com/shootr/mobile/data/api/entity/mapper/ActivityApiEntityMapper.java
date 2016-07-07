@@ -38,6 +38,8 @@ public class ActivityApiEntityMapper {
         activityEntity.setBirth(new Date(activityApiEntity.getBirth()));
         activityEntity.setModified(new Date(activityApiEntity.getModified()));
         activityEntity.setRevision(activityApiEntity.getRevision());
+        activityEntity.setIdPoll(activityApiEntity.getIdPoll());
+        activityEntity.setPollQuestion(activityApiEntity.getPollQuestion());
 
         if (activityApiEntity.getStream() != null) {
             activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());

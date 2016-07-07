@@ -46,6 +46,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
         contentValues.put(UserTable.WATCHING_SYNCHRONIZED, entity.getWatchSynchronizedStatus());
         contentValues.put(UserTable.CREATED_STREAMS_COUNT, entity.getCreatedStreamsCount());
         contentValues.put(UserTable.FAVORITED_STREAMS_COUNT, entity.getFavoritedStreamsCount());
+        contentValues.put(UserTable.SOCIAL_LOGIN, (entity.getSocialLogin()) ? true : false);
         setSynchronizedtoContentValues(entity, contentValues);
     }
 
@@ -70,6 +71,8 @@ public class UserEntityDBMapper extends GenericDBMapper {
         entity.setWatchSynchronizedStatus(cursor.getString(cursor.getColumnIndex(UserTable.WATCHING_SYNCHRONIZED)));
         entity.setCreatedStreamsCount(cursor.getLong(cursor.getColumnIndex(UserTable.CREATED_STREAMS_COUNT)));
         entity.setFavoritedStreamsCount(cursor.getLong(cursor.getColumnIndex(UserTable.FAVORITED_STREAMS_COUNT)));
+        entity.setSocialLogin(
+            (cursor.getInt(cursor.getColumnIndex(UserTable.SOCIAL_LOGIN)) == 1) ? true : false);
 
         setSynchronizedfromCursor(cursor, entity);
     }

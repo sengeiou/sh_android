@@ -17,6 +17,7 @@ import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
+import com.shootr.mobile.data.api.service.PollApiService;
 import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.api.service.StreamApiService;
@@ -37,112 +38,118 @@ import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 @Module(
-  injects = {
-    ShootrPhotoService.class, PhotoService.class,
-  },
-  complete = false,
-  library = true) public final class ApiModule {
+    injects = {
+        ShootrPhotoService.class, PhotoService.class,
+    },
+    complete = false,
+    library = true) public final class ApiModule {
 
-    public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
-    public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api.shootr.com/v1";
+  public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
+  public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api.shootr.com/v1";
 
-    @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
-        return photoService;
-    }
+  @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
+    return photoService;
+  }
 
-    @Provides RestAdapter.LogLevel provideRetrofitLogLevel() {
-        return RestAdapter.LogLevel.NONE;
-    }
+  @Provides RestAdapter.LogLevel provideRetrofitLogLevel() {
+    return RestAdapter.LogLevel.NONE;
+  }
 
-    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, OkHttpClient okHttpClient, Gson gson,
+  @Provides RestAdapter provideRestAdapter(Endpoint endpoint, OkHttpClient okHttpClient, Gson gson,
       RetrofitErrorHandler errorHandler, RestAdapter.LogLevel logLevel) {
-        return new RestAdapter.Builder() //
-          .setEndpoint(endpoint.getUrl()) //
-          .setClient(new OkClient(okHttpClient)) //
-          .setConverter(new GsonConverter(gson)).setErrorHandler(errorHandler) //
-          .setLogLevel(logLevel).setLog(new RestAdapter.Log() {
-              @Override public void log(String message) {
-                  Timber.tag("Retrofit");
-                  Timber.d(message);
-              }
-          }).build();
-    }
+    return new RestAdapter.Builder() //
+        .setEndpoint(endpoint.getUrl()) //
+        .setClient(new OkClient(okHttpClient)) //
+        .setConverter(new GsonConverter(gson)).setErrorHandler(errorHandler) //
+        .setLogLevel(logLevel).setLog(new RestAdapter.Log() {
+          @Override public void log(String message) {
+            Timber.tag("Retrofit");
+            Timber.d(message);
+          }
+        }).build();
+  }
 
-    @Provides AuthApiService provideAuthApiService(RestAdapter restAdapter) {
-        return restAdapter.create(AuthApiService.class);
-    }
+  @Provides AuthApiService provideAuthApiService(RestAdapter restAdapter) {
+    return restAdapter.create(AuthApiService.class);
+  }
 
-    @Provides ResetPasswordApiService provideResetPasswordApiService(RestAdapter restAdapter) {
-        return restAdapter.create(ResetPasswordApiService.class);
-    }
+  @Provides ResetPasswordApiService provideResetPasswordApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ResetPasswordApiService.class);
+  }
 
-    @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter) {
-        return restAdapter.create(StreamApiService.class);
-    }
+  @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter) {
+    return restAdapter.create(StreamApiService.class);
+  }
 
-    @Provides UserApiService provideUserApiService(RestAdapter restAdapter) {
-        return restAdapter.create(UserApiService.class);
-    }
+  @Provides UserApiService provideUserApiService(RestAdapter restAdapter) {
+    return restAdapter.create(UserApiService.class);
+  }
 
-    @Provides ShotApiService provideShotApiService(RestAdapter restAdapter) {
-        return restAdapter.create(ShotApiService.class);
-    }
+  @Provides ShotApiService provideShotApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ShotApiService.class);
+  }
 
-    @Provides VideoApiService provideVideoApiService(RestAdapter restAdapter) {
-        return restAdapter.create(VideoApiService.class);
-    }
+  @Provides VideoApiService provideVideoApiService(RestAdapter restAdapter) {
+    return restAdapter.create(VideoApiService.class);
+  }
 
-    @Provides FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter) {
-        return restAdapter.create(FavoriteApiService.class);
-    }
+  @Provides FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter) {
+    return restAdapter.create(FavoriteApiService.class);
+  }
 
-    @Provides ActivityApiService provideActivityApiService(RestAdapter restAdapter) {
-        return restAdapter.create(ActivityApiService.class);
-    }
+  @Provides ActivityApiService provideActivityApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ActivityApiService.class);
+  }
 
-    @Provides ChangePasswordApiService provideChangePasswordApiService(RestAdapter restAdapter) {
-        return restAdapter.create(ChangePasswordApiService.class);
-    }
+  @Provides ChangePasswordApiService provideChangePasswordApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ChangePasswordApiService.class);
+  }
 
-    @Provides DeviceApiService provideDeviceApiService(RestAdapter restAdapter) {
-        return restAdapter.create(DeviceApiService.class);
-    }
+  @Provides DeviceApiService provideDeviceApiService(RestAdapter restAdapter) {
+    return restAdapter.create(DeviceApiService.class);
+  }
 
-    @Provides @Singleton Gson provideGson() {
-        return new GsonBuilder() //
-          .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-              @Override public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-                  return new Date(json.getAsJsonPrimitive().getAsLong());
-              }
-          }).registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
-              @Override public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
-                  return new JsonPrimitive(src.getTime());
-              }
-          }).create();
-    }
+  @Provides @Singleton Gson provideGson() {
+    return new GsonBuilder() //
+        .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+          @Override public Date deserialize(JsonElement json, Type typeOfT,
+              JsonDeserializationContext context) throws JsonParseException {
+            return new Date(json.getAsJsonPrimitive().getAsLong());
+          }
+        }).registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+          @Override
+          public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.getTime());
+          }
+        }).create();
+  }
 
-    @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {
-        return new GsonAdapter(gson);
-    }
+  @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {
+    return new GsonAdapter(gson);
+  }
 
-    @Provides @Singleton Endpoint provideEndpoint() {
-        return new Endpoint() {
-            @Override public String getUrl() {
-                return BuildConfig.USE_PRE_PRODUCTION ? PRE_PRODUCTION_ENDPOINT_URL : PRODUCTION_ENDPOINT_URL;
-            }
+  @Provides @Singleton Endpoint provideEndpoint() {
+    return new Endpoint() {
+      @Override public String getUrl() {
+        return BuildConfig.USE_PRE_PRODUCTION ? PRE_PRODUCTION_ENDPOINT_URL
+            : PRODUCTION_ENDPOINT_URL;
+      }
 
-            @Override public String getName() {
-                return "Production";
-            }
-        };
-    }
+      @Override public String getName() {
+        return "Production";
+      }
+    };
+  }
 
-    @Provides NicerApiService provideNicerApiService(RestAdapter restAdapter) {
-        return restAdapter.create(NicerApiService.class);
-    }
+  @Provides NicerApiService provideNicerApiService(RestAdapter restAdapter) {
+    return restAdapter.create(NicerApiService.class);
+  }
 
-    @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter) {
-        return restAdapter.create(ContributorApiService.class);
-    }
+  @Provides ContributorApiService provideContributorApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ContributorApiService.class);
+  }
+
+  @Provides PollApiService providePollApiService(RestAdapter restAdapter) {
+    return restAdapter.create(PollApiService.class);
+  }
 }

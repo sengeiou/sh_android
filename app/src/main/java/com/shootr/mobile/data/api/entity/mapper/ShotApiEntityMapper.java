@@ -23,6 +23,8 @@ public class ShotApiEntityMapper {
         shotEntity.setIdShot(shotApiEntity.getIdShot());
         shotEntity.setComment(shotApiEntity.getComment());
         shotEntity.setImage(shotApiEntity.getImage());
+        shotEntity.setImageHeight(shotApiEntity.getImageHeight());
+        shotEntity.setImageWidth(shotApiEntity.getImageWidth());
         shotEntity.setType(shotApiEntity.getType());
 
         EmbedUserApiEntity userApiEntity = shotApiEntity.getUser();

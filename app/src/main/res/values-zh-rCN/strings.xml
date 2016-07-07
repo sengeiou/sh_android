@@ -47,6 +47,8 @@
   <string name="alert_report_confirmed_email_message">个人账号&gt;编辑个人主页并验证您的邮箱。</string>
   <string name="alert_report_confirmed_email_ok">好的</string>
   <string name="alert_report_confirmed_email_title">必须确认邮箱。</string>
+  <string name="alert_shootr_update">此内容仅能透过最新的Shootr浏览。</string>
+  <string name="alert_update_shootr">此内容仅能透过最新的Shootr浏览</string>
   <string name="all_participants_button">所有参与者</string>
   <string name="ban_user_dialog_message">用户在你的streams上发布的shots只对他/她的关注者可见。</string>
   <string name="block_cannot_shoot_streams">禁止用户</string>
@@ -111,6 +113,7 @@
   <string name="error_deleted_shot">这条shot已被删除</string>
   <string name="error_facebook_login">不能用Facebook登录。请稍后再试。</string>
   <string name="error_following_user_blocked">不能关注你屏蔽的用户。</string>
+  <string name="error_has_voted">你已投票</string>
   <string name="error_image_upload">上传图片失败</string>
   <string name="error_login_credentials_invalid">用户名或密码无效</string>
   <string name="error_message">Shootr发生了一个问题需要关闭。</string>
@@ -153,12 +156,14 @@
   <!-- Profile: Website -->
   <string name="error_message_website_invalid">无效网址</string>
   <string name="error_message_website_too_long">网址不能超过100字符</string>
+  <string name="error_poll_has_been_deleted">投票不存在</string>
   <!-- Forgot password -->
   <string name="error_reset_password">我们没有找到任何账户。</string>
   <string name="error_restart_button">重启</string>
   <string name="error_stream_already_favorites">已经添加到喜爱</string>
   <string name="error_stream_read_only">这条stream已被清除，只能阅读</string>
   <string name="error_title">Ooops!</string>
+  <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">没有喜爱</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -248,6 +253,7 @@
 </string>
   <string name="ok">好的</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
+  <string name="order_poll_option">%1$s.%2$s</string>
   <string name="participants_list_empty">没有参与者</string>
   <string name="photo_edit_gallery">相册</string>
   <string name="photo_edit_remove">清除</string>
@@ -259,6 +265,13 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">信息将传送给喜爱Stream的参与者与使用者。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
   <string name="pin_topic" formatted="false">钉选信息</string>
+  <string name="poll_ignore">忽略投票</string>
+  <string name="poll_live_results">当前投票结果</string>
+  <string name="poll_results">投票结果</string>
+  <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_view">查看</string>
+  <string name="poll_vote">投票</string>
+  <string name="poll_vote_timeout_retry">重试</string>
   <string name="profile_all_shots">所有发送</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">编辑个人主页</string>
@@ -271,6 +284,7 @@
   <string name="profile_marks_following">正在关注</string>
   <string name="profile_support">辅助</string>
   <string name="profile_updated">个人主页已更新</string>
+  <string name="publish_poll">%1$s %2$s 新的投票</string>
   <string name="read_write_mode_public_description">每个人皆可shoot</string>
   <string name="read_write_mode_public_title">公开</string>
   <string name="read_write_mode_view_only_description">建立者与贡献者可以shoot</string>
@@ -307,7 +321,7 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
   <string name="share_stream_activity_text_pattern">分享(stream)</string>
-  <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/#/st/%2$s</string>
+  <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/st/%2$s?%3$s</string>
   <string name="share_stream_subject">"在Shootr上查看%s: "</string>
   <string name="share_via">分享到…</string>
   <string name="share_via_shootr">分享到Shootr</string>
@@ -382,6 +396,7 @@
   <string name="user_not_found_message">用户无法被找到。</string>
   <string name="user_unbanned">已清除禁止</string>
   <string name="user_unblocked">屏蔽已被清除。</string>
+  <string name="voted_poll">投了 (question) 在 %s</string>
   <string name="watching_stream_connected">已连接</string>
   <string name="watching_stream_connected_muted">已连接（已静音）</string>
   <string name="watch_profile_photo" formatted="false">点开</string>
@@ -392,5 +407,4 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
-  <string name="alert_shootr_update">此内容仅能透过最新的Shootr浏览。</string>
 </resources>

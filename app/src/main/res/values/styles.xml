@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
     <style name="None"></style>
 
     <!-- Base application themes. -->
@@ -46,6 +45,10 @@
         <item name="android:windowBackground">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="toolbar">@style/ToolBar.Overlay</item>
+    </style>
+
+    <style name="ShootrTheme.ShotDetail">
+        <item name="android:windowBackground">@color/gray_92</item>
     </style>
 
     <style name="ToolBar">
@@ -345,6 +348,10 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="HearthButton">
+        <item name="android:src">@drawable/ic_checkable</item>
+    </style>
+
     <style name="NiceButton">
         <item name="android:background">@drawable/bg_nice_action</item>
         <item name="android:scaleType">center</item>
@@ -373,7 +380,24 @@
         <item name="android:textColor">@color/gray_60</item>
     </style>
 
-    <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
-        <item name="android:textColor">@color/primary</item>
+  <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
+    <item name="android:textColor">@color/primary</item>
+  </style>
+
+  <style name="ShootrTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+  <style name="ShootrTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+  <style name="growAnimation">
+    <item name="@android:windowEnterAnimation">@anim/grow_out</item>
+    <item name="@android:windowExitAnimation">@anim/grow_in</item>
+  </style>
+
+    <style name="dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/shot_image_animation_in</item>
+    </style>
+
+    <style name="ShootrAnimation" parent="ShootrTheme">
+
     </style>
 </resources>

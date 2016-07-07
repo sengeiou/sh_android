@@ -169,4 +169,14 @@ public class PhotoViewActivity extends BaseActivity {
         }
     }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        attacher.cleanup();
+        ButterKnife.unbind(this);
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        attacher.cleanup();
+    }
 }

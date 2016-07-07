@@ -14,11 +14,13 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileContainerActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -114,26 +116,30 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         activityList.setLayoutManager(layoutManager);
 
         adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
-          new OnAvatarClickListener() {
-              @Override public void onAvatarClick(String userId, View avatarView) {
-                  openProfile(userId);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override public void onUsernameClick(String username) {
-                  openProfileFromUsername(username);
-              }
-          }, //
-          new OnStreamTitleClickListener() {
-              @Override public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
-                  openStream(streamId, streamTitle, authorId);
-              }
-          }, //
-          new OnShotClick() {
-              @Override public void onShotClick(ShotModel shot) {
-                  openShotDetail(shot);
-              }
-          });
+            new OnAvatarClickListener() {
+                @Override public void onAvatarClick(String userId, View avatarView) {
+                    openProfile(userId);
+                }
+            }, //
+            new OnUsernameClickListener() {
+                @Override public void onUsernameClick(String username) {
+                    openProfileFromUsername(username);
+                }
+            }, //
+            new OnStreamTitleClickListener() {
+                @Override public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
+                    openStream(streamId, streamTitle, authorId);
+                }
+            }, //
+            new OnShotClick() {
+                @Override public void onShotClick(ShotModel shot) {
+                    openShotDetail(shot);
+                }
+            }, new OnPollQuestionClickListener() {
+            @Override public void onPollQuestionClick(String idPoll) {
+                openPollVote(idPoll);
+            }
+        });
         activityList.setAdapter(adapter);
     }
 
@@ -187,6 +193,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void openShotDetail(ShotModel shot) {
         Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
         startActivity(shotIntent);
+    }
+
+    private void openPollVote(String idPoll) {
+        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll);
+        startActivity(pollVoteIntent);
     }
 
     //region View methods

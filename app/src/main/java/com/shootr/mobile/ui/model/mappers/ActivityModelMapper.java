@@ -38,6 +38,8 @@ public class ActivityModelMapper {
 
         activityModel.setIdStreamAuthor(activity.getIdAuthorStream());
 
+        activityModel.setIdPoll(activity.getIdPoll());
+        activityModel.setPollQuestion(activity.getPollQuestion());
         return activityModel;
     }
 

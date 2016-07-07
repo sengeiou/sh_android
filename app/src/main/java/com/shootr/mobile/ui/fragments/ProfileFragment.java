@@ -79,6 +79,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.io.IOException;
@@ -135,6 +136,7 @@ public class ProfileFragment extends BaseFragment
 
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject ProfilePresenter profilePresenter;
@@ -409,7 +411,7 @@ public class ProfileFragment extends BaseFragment
 
     //region Shot methods
     private void shareShot(ShotModel shotModel) {
-        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+        Intent shareIntent = shareManager.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 

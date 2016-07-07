@@ -39,7 +39,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
-    @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
     @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
@@ -96,7 +95,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             watchers.setVisibility(View.GONE);
         }
         setupStreamPicture(streamResultModel);
-        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
     public void render(StreamResultModel streamResultModel, boolean showSeparator,
@@ -117,9 +115,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             watchers.setVisibility(View.GONE);
         }
-
         setupStreamPicture(streamResultModel);
-        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
     private void setupStreamPicture(StreamResultModel streamResultModel) {

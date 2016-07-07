@@ -26,6 +26,9 @@ import javax.inject.Singleton;
 
 @Singleton public class ShotDispatcher implements ShotSender {
 
+    private static final int IMAGE_URL = 0;
+    private static final int IMAGE_WIDTH = 1;
+    private static final int IMAGE_HEIGHT = 2;
     private final ShotQueueRepository shotQueueRepository;
     private final ShootrShotService shootrShotService;
     private final BusPublisher busPublisher;
@@ -187,8 +190,10 @@ import javax.inject.Singleton;
 
     private void fillImageUrlFromQueuedShot(QueuedShot queuedShot) {
         if (queuedShot.getShot().getImage() == null && queuedShot.getImageFile() != null) {
-            String imageUrl = shootrShotService.uploadShotImage(queuedShot.getImageFile());
-            queuedShot.getShot().setImage(imageUrl);
+            List<String> shotImage = shootrShotService.uploadShotImage(queuedShot.getImageFile());
+            queuedShot.getShot().setImage(shotImage.get(IMAGE_URL));
+            queuedShot.getShot().setImageWidth(Long.valueOf(shotImage.get(IMAGE_WIDTH)));
+            queuedShot.getShot().setImageHeight(Long.valueOf(shotImage.get(IMAGE_HEIGHT)));
             queuedShot.getImageFile().delete();
             queuedShot.setImageFile(null);
         }

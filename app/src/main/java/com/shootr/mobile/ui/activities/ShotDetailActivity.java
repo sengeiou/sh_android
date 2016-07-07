@@ -41,9 +41,9 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
@@ -72,7 +72,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
@@ -187,7 +187,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void shareShot(ShotModel shotModel) {
-        Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+        Intent shareIntent = shareManager.shareShotIntent(this, shotModel);
         Intents.maybeStartActivity(this, shareIntent);
     }
 
