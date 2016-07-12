@@ -22,9 +22,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.regex.Matcher;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton public class ShotDispatcher implements ShotSender {
+public class ShotDispatcher implements ShotSender {
 
     private static final int IMAGE_URL = 0;
     private static final int IMAGE_WIDTH = 1;
