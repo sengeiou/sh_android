@@ -210,7 +210,7 @@ public class StreamTimelineFragment extends BaseFragment
     streamTimelinePresenter.setIsFirstLoad(true);
     streamTimelinePresenter.setIsFirstShotPosition(true);
     if (streamAuthorIdUser != null) {
-      initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser, streamMode);
+      initializePresentersWithStreamAuthorId(idStream, streamAuthorIdUser, streamMode);
     } else {
       initializePresenters(idStream, streamAuthorIdUser, streamMode);
     }
@@ -288,7 +288,7 @@ public class StreamTimelineFragment extends BaseFragment
     streamPollIndicatorPresenter.pause();
   }
 
-  private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser,
+  private void initializePresentersWithStreamAuthorId(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser, streamMode);
     pinShotPresenter.initialize(this);
@@ -302,6 +302,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void initializePresenters(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamMode);
+    pinShotPresenter.initialize(this);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
