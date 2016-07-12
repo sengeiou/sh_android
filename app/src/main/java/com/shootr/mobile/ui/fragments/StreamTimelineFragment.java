@@ -1116,17 +1116,27 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showPollIndicatorWithViewAction(final PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollViewString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollViewString.toUpperCase());
+    }
   }
 
   @Override public void showPollIndicatorWithVoteAction(PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollVoteString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollVoteString.toUpperCase());
+    }
   }
 
   @Override public void showPollIndicatorWithResultsAction(PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollResultsString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollResultsString.toUpperCase());
+    }
+  }
+
+  private boolean canSetPollAction() {
+    return pollAction != null;
   }
 
   private void setupPollIndicator(PollModel pollModel) {
@@ -1136,11 +1146,6 @@ public class StreamTimelineFragment extends BaseFragment
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
     }
-  }
-
-  private void goToVoteActivity(String idStream) {
-    Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
-    startActivity(intent);
   }
 
   @Override public void hidePollIndicator() {
