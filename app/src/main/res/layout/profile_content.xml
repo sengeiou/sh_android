@@ -14,7 +14,7 @@
       android:orientation="vertical">
 
     <include android:id="@+id/profile_header"
-        layout="@layout/profile_deatil" />
+        layout="@layout/profile_header" />
 
     <View android:id="@+id/header_shadow"
         android:layout_width="match_parent"

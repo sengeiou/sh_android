@@ -162,7 +162,7 @@ public class ProfileActivity extends BaseActivity
     }
 
     @Override protected int getLayoutResource() {
-        return R.layout.fragment_profile_rework;
+        return R.layout.activity_profile;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {

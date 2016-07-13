@@ -70,6 +70,6 @@
   </android.support.design.widget.AppBarLayout>
 
   <include
-      layout="@layout/fragment_profile_content"/>
+      layout="@layout/profile_content"/>
 
 </android.support.design.widget.CoordinatorLayout>
