@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/instagrammer_detail_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
+
+  <RelativeLayout android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <include android:id="@+id/profile_header"
+        layout="@layout/profile_deatil" />
+
+    <View android:id="@+id/header_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@+id/profile_header"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/shadow_top_down" />
+
+    <FrameLayout android:id="@+id/profile_shots_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header_shadow">
+
+      <com.shootr.mobile.ui.widgets.ShotListView android:id="@+id/profile_shots_list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+          android:showDividers="middle"
+          android:divider="@null"
+          tools:visibility="visible" />
+
+      <TextView android:id="@+id/profile_shots_empty"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:padding="16dp"
+          android:text="@string/shot_timeline_empty_title"
+          android:textColor="@color/gray_50"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:visibility="gone"
+          android:textSize="20sp" />
+    </FrameLayout>
+
+    <FrameLayout android:id="@+id/profile_all_shots_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_shots_container"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+      <TextView android:id="@+id/profile_all_shots_button"
+          style="@style/BorderlessButton.Primary"
+          android:fontFamily="sans-serif-light"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:text="@string/profile_all_shots"
+          android:textSize="14sp" />
+
+    </FrameLayout>
+
+    <com.shootr.mobile.ui.widgets.SuggestedPeopleListView android:id="@+id/profile_suggested_people"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/profile_all_shots_container"
+        android:layout_height="wrap_content" />
+
+  </RelativeLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

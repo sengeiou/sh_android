@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/instagrammer_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_collapseParallaxMultiplier="0.9"
+    >
+
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      >
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+        app:expandedTitleMarginStart="16dp"
+        app:contentScrim="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        >
+
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+        <ImageView
+            android:id="@+id/profile_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            android:tint="#11000000"
+            app:layout_collapseMode="parallax"
+            tools:src="@drawable/ic_contact_picture_default"
+            />
+        <ProgressBar
+            android:id="@+id/profile_avatar_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="gone"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_background"
+            />
+      </FrameLayout>
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          app:layout_collapseMode="pin"
+          />
+
+
+    </android.support.design.widget.CollapsingToolbarLayout>
+  </android.support.design.widget.AppBarLayout>
+
+  <include
+      layout="@layout/fragment_profile_content"/>
+
+</android.support.design.widget.CoordinatorLayout>
