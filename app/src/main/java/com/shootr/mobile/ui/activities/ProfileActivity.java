@@ -14,12 +14,9 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -34,7 +31,6 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
-import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -48,7 +44,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
-import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ProfilePresenter;
@@ -81,20 +76,17 @@ import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ProfileContainerActivity extends BaseActivity
+public class ProfileActivity extends BaseActivity
     implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback,
     ReportShotView {
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_USERNAME = "username";
-    private static final int REQUEST_CHOOSE_PHOTO = 1;
-    private static final int REQUEST_TAKE_PHOTO = 2;
-    private static final int REQUEST_NEW_STREAM = 3;
-
-    public static final String ARGUMENT_USER = "user";
-    public static final String ARGUMENT_USERNAME = "username";
-    public static final String TAG = "profile";
     public static final int LOGOUT_DISMISS_DELAY = 1500;
+
+    private static final int REQUEST_CHOOSE_PHOTO = 1;
+    private static final int REQUEST_NEW_STREAM = 3;
+    private static final int REQUEST_TAKE_PHOTO = 2;
 
     //region injected
     @Bind(R.id.profile_name) TextView nameTextView;
@@ -103,10 +95,6 @@ public class ProfileContainerActivity extends BaseActivity
     @Bind(R.id.profile_avatar) ImageView avatarImageView;
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
-
-    //@Bind(R.id.profile_listing_container) View listingContainerView;
-
-    //@Bind(R.id.profile_open_stream_container) View openStreamContainerView;
     @Bind(R.id.profile_streams_number) TextView streamsCountView;
 
     @Bind(R.id.profile_marks_followers) TextView followersTextView;
@@ -162,13 +150,13 @@ public class ProfileContainerActivity extends BaseActivity
     String username;
 
     public static Intent getIntent(Context context, String idUser) {
-        Intent i = new Intent(context, ProfileContainerActivity.class);
+        Intent i = new Intent(context, ProfileActivity.class);
         i.putExtra(EXTRA_USER, idUser);
         return i;
     }
 
     public static Intent getIntentWithUsername(Context context, String username) {
-        Intent i = new Intent(context, ProfileContainerActivity.class);
+        Intent i = new Intent(context, ProfileActivity.class);
         i.putExtra(EXTRA_USERNAME, username);
         return i;
     }
@@ -222,7 +210,7 @@ public class ProfileContainerActivity extends BaseActivity
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
             @Override public void onUserClick(String idUser) {
-                Intent suggestedUserIntent = ProfileContainerActivity.getIntent(context, idUser);
+                Intent suggestedUserIntent = ProfileActivity.getIntent(context, idUser);
                 startActivity(suggestedUserIntent);
             }
         });
@@ -444,7 +432,7 @@ public class ProfileContainerActivity extends BaseActivity
     //endregion
 
     private void goToUserProfile(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
+        Intent intentForUser = ProfileActivity.getIntentWithUsername(this, username);
         startActivity(intentForUser);
     }
 
@@ -549,11 +537,6 @@ public class ProfileContainerActivity extends BaseActivity
 
     @Override public void hideAllShotsButton() {
         allShotContainer.setVisibility(View.GONE);
-    }
-
-    @Override public void showListing() {
-        /*openStreamContainerView.setVisibility(View.GONE);
-        listingContainerView.setVisibility(View.VISIBLE);*/
     }
 
     @Override public void setUserInfo(UserModel userModel) {

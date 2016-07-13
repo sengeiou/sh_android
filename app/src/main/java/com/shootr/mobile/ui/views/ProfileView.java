@@ -26,8 +26,6 @@ public interface ProfileView {
 
     void setFollowing(Boolean following);
 
-    void showListing();
-
     void setUserInfo(UserModel userModel);
 
     void showAllShotsButton();

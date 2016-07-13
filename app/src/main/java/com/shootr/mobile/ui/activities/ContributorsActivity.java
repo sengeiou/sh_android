@@ -108,7 +108,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     private void openUserProfile(String idUser) {
-        startActivityForResult(ProfileContainerActivity.getIntent(this, idUser), REQUEST_CAN_CHANGE_DATA);
+        startActivityForResult(ProfileActivity.getIntent(this, idUser), REQUEST_CAN_CHANGE_DATA);
     }
 
     //region View methods

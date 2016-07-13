@@ -15,7 +15,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
@@ -176,7 +176,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     //endregion
 
     protected void openProfile(String idUser) {
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+        Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
         startActivity(profileIntent);
     }
 
@@ -186,7 +186,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void openProfileFromUsername(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        Intent intentForUser = ProfileActivity.getIntentWithUsername(getActivity(), username);
         startActivity(intentForUser);
     }
 

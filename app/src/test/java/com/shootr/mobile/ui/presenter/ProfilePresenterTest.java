@@ -691,14 +691,6 @@ public class ProfilePresenterTest {
         verify(profileView).showLogoutButton();
     }
 
-    @Test public void shouldShowListing() throws Exception {
-        setupUnverifiedUserById();
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView).showListing();
-    }
-
     @Test public void shouldShowAvatarPhotoIfNotCurrentUserAndHasPhoto() throws Exception {
         setupUserById();
 

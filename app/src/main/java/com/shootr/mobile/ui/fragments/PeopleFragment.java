@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.FriendsAdapter;
@@ -117,7 +117,7 @@ public class PeopleFragment extends BaseFragment
   }
 
   private void openUserProfile(String idUser) {
-    startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser),
+    startActivityForResult(ProfileActivity.getIntent(getActivity(), idUser),
         REQUEST_CAN_CHANGE_DATA);
     getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
   }

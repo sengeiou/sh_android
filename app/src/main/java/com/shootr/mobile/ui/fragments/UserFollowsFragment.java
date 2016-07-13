@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
@@ -142,7 +142,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
         UserModel user = getAdapter().getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
     private void followUser(UserModel user) {
