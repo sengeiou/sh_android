@@ -498,11 +498,11 @@ public class ProfileActivity extends BaseActivity
         profilePresenter.avatarClicked();
     }
 
-    @OnClick({ R.id.profile_marks_following, R.id.profile_following }) public void openFollowingList() {
+    @OnClick(R.id.following_container) public void openFollowingList() {
         profilePresenter.followingButtonClicked();
     }
 
-    @OnClick({ R.id.profile_marks_followers, R.id.profile_followers }) public void openFollowersList() {
+    @OnClick(R.id.followers_container) public void openFollowersList() {
         profilePresenter.followersButtonClicked();
     }
 
@@ -520,7 +520,7 @@ public class ProfileActivity extends BaseActivity
         profilePresenter.websiteClicked();
     }
 
-    @OnClick({R.id.profile_listing, R.id.profile_streams_number}) public void onListingClick() {
+    @OnClick(R.id.streams_container) public void onListingClick() {
         profilePresenter.clickListing();
     }
 
