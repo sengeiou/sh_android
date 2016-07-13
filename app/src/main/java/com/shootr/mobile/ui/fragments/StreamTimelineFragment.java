@@ -559,14 +559,16 @@ public class StreamTimelineFragment extends BaseFragment
     CircleImageView avatar = (CircleImageView) dialogView.findViewById(R.id.shot_avatar);
 
     user.setText(shot.getUsername());
-    imageLoader.load(shot.getImage().getImageUrl(), image);
-    imageLoader.load(shot.getPhoto(), avatar);
+    loadImages(shot, image, avatar);
 
     shotImageDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
-
     shotImageDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-
     shotImageDialog.show();
+  }
+
+  private void loadImages(ShotModel shot, ImageView image, CircleImageView avatar) {
+    imageLoader.load(shot.getImage().getImageUrl(), image);
+    imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
   }
 
   private void setupTopicCustomDialog() {
