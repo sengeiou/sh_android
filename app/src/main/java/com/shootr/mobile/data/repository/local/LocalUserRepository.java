@@ -53,7 +53,8 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public User getUserByUsername(String username) {
-        return userEntityMapper.transform(localUserDataSource.getUserByUsername(username));
+        return userEntityMapper.transform(localUserDataSource.getUserByUsername(username),
+            sessionRepository.getCurrentUserId());
     }
 
     @Override public boolean isFollower(String userId) {
