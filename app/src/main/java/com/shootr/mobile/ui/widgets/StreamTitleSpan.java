@@ -4,7 +4,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class StreamTitleSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
+public abstract class StreamTitleSpan extends ClickableSpan implements ClickableEmojiconTextView.PressableSpan {
 
     private String idAuthor;
     private String streamId;

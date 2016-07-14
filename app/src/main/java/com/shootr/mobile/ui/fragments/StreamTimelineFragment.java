@@ -214,7 +214,7 @@ public class StreamTimelineFragment extends BaseFragment
     if (streamAuthorIdUser != null) {
       initializePresentersWithStreamAuthorId(idStream, streamAuthorIdUser, streamMode);
     } else {
-      initializePresenters(idStream, streamAuthorIdUser, streamMode);
+      initializePresenters(idStream, null, streamMode);
     }
   }
 
@@ -399,7 +399,7 @@ public class StreamTimelineFragment extends BaseFragment
             .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
         startActivity(newShotIntent);
       }
-    }, null, false, new ShotClickListener() {
+    }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
         Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);

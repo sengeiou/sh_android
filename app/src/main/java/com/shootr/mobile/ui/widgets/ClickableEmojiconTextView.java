@@ -1,8 +1,7 @@
 package com.shootr.mobile.ui.widgets;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
+import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.text.Layout;
@@ -11,50 +10,83 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.DynamicDrawableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import com.rockerhieu.emojicon.EmojiconHandler;
 import com.shootr.mobile.domain.utils.Patterns;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ClickableTextView extends TextView {
+public class ClickableEmojiconTextView extends TextView {
 
   private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
   private static final String DEFAULT_SCHEMA = ALLOWED_SCHEMAS[0];
-  public static final String EMPTY_STRING = "";
-  public static final String PREFIX = "www.";
-  public static final int URL_LENGTH = 20;
-  public static final int START = 0;
-  public static final String ELLIPSIS = "...";
-
+  private static final String EMPTY_STRING = "";
+  private static final String PREFIX = "www.";
+  private static final int URL_LENGTH = 20;
+  private static final int START = 0;
+  private static final String ELLIPSIS = "...";
   private Pattern urlPattern;
   private PressableSpan alreadyPressedSpan;
 
-  public ClickableTextView(Context context) {
+  private int emojiconSize;
+  private int emojiconAlignment;
+  private int emojiconTextSize;
+  private int textStart = 0;
+  private int textLength = -1;
+  private boolean useSystemDefault = false;
+
+  public ClickableEmojiconTextView(Context context) {
     super(context);
+    init(null);
   }
 
-  public ClickableTextView(Context context, AttributeSet attrs) {
+  public ClickableEmojiconTextView(Context context, AttributeSet attrs) {
     super(context, attrs);
+    init(attrs);
   }
 
-  public ClickableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+  public ClickableEmojiconTextView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    init(attrs);
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public ClickableTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
+  private void init(AttributeSet attrs) {
+    emojiconTextSize = (int) getTextSize();
+    if (attrs == null) {
+      emojiconSize = (int) getTextSize();
+    } else {
+      TypedArray a =
+          getContext().obtainStyledAttributes(attrs, com.rockerhieu.emojicon.R.styleable.Emojicon);
+      emojiconSize = (int) a.getDimension(com.rockerhieu.emojicon.R.styleable.Emojicon_emojiconSize,
+          getTextSize());
+      emojiconAlignment = a.getInt(com.rockerhieu.emojicon.R.styleable.Emojicon_emojiconAlignment,
+          DynamicDrawableSpan.ALIGN_BASELINE);
+      textStart = a.getInteger(com.rockerhieu.emojicon.R.styleable.Emojicon_emojiconTextStart, 0);
+      textLength =
+          a.getInteger(com.rockerhieu.emojicon.R.styleable.Emojicon_emojiconTextLength, -1);
+      useSystemDefault =
+          a.getBoolean(com.rockerhieu.emojicon.R.styleable.Emojicon_emojiconUseSystemDefault,
+              false);
+      a.recycle();
+    }
+    setText(getText());
   }
 
   @Override public void setText(CharSequence text, BufferType type) {
-    // Force spannable text
-    String bla = text.toString();
+    if (!TextUtils.isEmpty(text)) {
+      SpannableStringBuilder builder = new SpannableStringBuilder(text);
+      EmojiconHandler.addEmojis(getContext(), builder, emojiconSize, emojiconAlignment,
+          emojiconTextSize, textStart, textLength, useSystemDefault);
+      text = builder;
+    }
     super.setText(text, BufferType.SPANNABLE);
   }
 
@@ -85,12 +117,10 @@ public class ClickableTextView extends TextView {
         stringBuilder.getSpans(START, stringBuilder.length(), TouchableUrlSpan.class);
 
     for (TouchableUrlSpan span : spans) {
-      int spanStart = stringBuilder.getSpanStart(span);
-      int spanEnd = stringBuilder.getSpanEnd(span);
       String newUrl = span.getURL();
-
       newUrl = formatUrlInComment(newUrl);
-      stringBuilder.replace(spanStart, spanEnd, newUrl);
+      stringBuilder.replace(stringBuilder.getSpanStart(span), stringBuilder.getSpanEnd(span),
+          newUrl);
     }
   }
 
@@ -111,13 +141,13 @@ public class ClickableTextView extends TextView {
   private String makeUrl(String url) {
     boolean hasPrefix = false;
     String newUrl = url;
-    for (int i = 0; i < ALLOWED_SCHEMAS.length; i++) {
-      if (url.regionMatches(true, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
+    for (String ALLOWED_SCHEMA : ALLOWED_SCHEMAS) {
+      if (url.regionMatches(true, 0, ALLOWED_SCHEMA, 0, ALLOWED_SCHEMA.length())) {
         hasPrefix = true;
 
         // Fix capitalization if necessary
-        if (!url.regionMatches(false, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
-          newUrl = ALLOWED_SCHEMAS[i] + url.substring(ALLOWED_SCHEMAS[i].length());
+        if (!url.regionMatches(false, 0, ALLOWED_SCHEMA, 0, ALLOWED_SCHEMA.length())) {
+          newUrl = ALLOWED_SCHEMA + url.substring(ALLOWED_SCHEMA.length());
         }
 
         break;
@@ -129,10 +159,6 @@ public class ClickableTextView extends TextView {
     }
 
     return newUrl;
-  }
-
-  public void setUrlPattern(Pattern pattern) {
-    this.urlPattern = pattern;
   }
 
   /**

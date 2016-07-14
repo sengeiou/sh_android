@@ -400,4 +400,8 @@
     <style name="ShootrAnimation" parent="ShootrTheme">
 
     </style>
+
+    <style name="TimelineIndicator">
+        <item name="android:background">#039BE5</item>
+    </style>
 </resources>

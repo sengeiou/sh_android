@@ -40,7 +40,7 @@
       android:textColor="@color/gray_60"
       tools:text="22m" />
 
-    <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/shot_text"
+    <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView android:id="@+id/shot_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_user_name"

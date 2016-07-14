@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="#039BE5"
+    style="@style/TimelineIndicator"
     >
 
   <com.shootr.mobile.ui.widgets.ClickableTextView

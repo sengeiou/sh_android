@@ -4,14 +4,12 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class PollQuestionSpan extends ClickableSpan implements ClickableEmojiconTextView.PressableSpan {
+public abstract class NicerSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
 
-  private String pollQuestion;
-  private String idStream;
+  private String username;
 
-  public PollQuestionSpan(String idStream, String pollQuestion) {
-    this.pollQuestion = pollQuestion;
-    this.idStream = idStream;
+  public NicerSpan(String username) {
+    this.username = username;
   }
 
   private boolean isPressed = false;
@@ -21,10 +19,10 @@ public abstract class PollQuestionSpan extends ClickableSpan implements Clickabl
   }
 
   @Override public void onClick(View widget) {
-    onPollQuestionClick(idStream);
+    onUsernameClick(username);
   }
 
-  public abstract void onPollQuestionClick(String pollQuestion);
+  public abstract void onUsernameClick(String username);
 
   @Override public void updateDrawState(TextPaint ds) {
     super.updateDrawState(ds);

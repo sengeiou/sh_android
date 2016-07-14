@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.ClickableEmojiconTextView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -23,7 +23,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.activity_avatar) ImageView avatar;
     @Bind(R.id.ativity_user_name) TextView name;
     @Bind(R.id.activity_timestamp) TextView elapsedTime;
-    @Bind(R.id.activity_text) ClickableTextView text;
+    @Bind(R.id.activity_text) ClickableEmojiconTextView text;
     @Bind(R.id.shot_image) ImageView image;
 
     public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
@@ -57,7 +57,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     protected void renderAvatar(final ActivityModel activity) {
         imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
-
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
