@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="16dp"
+    >
+
+  <LinearLayout
+      android:id="@+id/title_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:orientation="vertical"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:gravity="center"
+        >
+      <TextView
+          android:id="@+id/profile_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/material_black"
+          android:textSize="24sp"
+          tools:text="Juanito"
+          />
+
+      <ImageView android:id="@+id/profile_user_verified"
+          android:layout_width="18dp"
+          android:layout_height="18dp"
+          android:layout_marginLeft="4dp"
+          android:layout_gravity="center"
+          android:src="@drawable/ic_action_verified_user"
+          android:visibility="gone"
+          tools:visibility="visible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/profile_bio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom|center"
+        android:textSize="14sp"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        tools:text="Juanito"
+        />
+    <TextView
+        android:id="@+id/profile_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom|center"
+        android:textSize="14sp"
+        android:textColor="@color/links"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        tools:text="www.juanito.com"
+        />
+  </LinearLayout>
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:layout_marginTop="16dp"
+      android:padding="8dp"
+      >
+    <LinearLayout
+        android:id="@+id/streams_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+      <TextView
+          android:id="@+id/profile_streams_number"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/primary"
+          android:textSize="16sp"
+          tools:text="749"
+          />
+
+      <TextView
+          android:id="@+id/profile_listing"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?selectableItemBackground"
+          android:gravity="center_vertical"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:text="@string/profile_listing"
+          android:textSize="14sp"
+          android:textAllCaps="true"
+          tools:text="Streams" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/followers_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+      <TextView
+          android:id="@+id/profile_marks_followers"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/primary"
+          android:textSize="16sp"
+          tools:text="749"
+          />
+
+      <TextView android:id="@+id/profile_followers"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?selectableItemBackground"
+          android:gravity="center_vertical"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textSize="14sp"
+          android:textAllCaps="true"
+          android:text="@string/profile_marks_followers"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/following_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+      <TextView
+          android:id="@+id/profile_marks_following"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/primary"
+          android:textSize="16sp"
+          tools:text="749"
+          />
+
+      <TextView  android:id="@+id/profile_following"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?selectableItemBackground"
+          android:gravity="center_vertical"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textSize="14sp"
+          android:textAllCaps="true"
+          android:text="@string/profile_marks_following" />
+    </LinearLayout>
+
+
+  </LinearLayout>
+
+  <com.shootr.mobile.ui.widgets.FollowButton android:id="@+id/profile_follow_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="30dp"
+      android:clickable="true" />
+
+</LinearLayout>

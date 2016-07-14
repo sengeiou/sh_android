@@ -431,7 +431,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void openProfile(String idUser) {
-        Intent intentForUser = ProfileContainerActivity.getIntent(this, idUser);
+        Intent intentForUser = ProfileActivity.getIntent(this, idUser);
         startActivity(intentForUser);
     }
 
@@ -448,7 +448,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void startProfileContainerActivity(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
+        Intent intentForUser = ProfileActivity.getIntentWithUsername(this, username);
         startActivity(intentForUser);
     }
 

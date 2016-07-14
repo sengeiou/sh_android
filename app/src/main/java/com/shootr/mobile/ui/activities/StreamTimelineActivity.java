@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.fragments.ProfileFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
@@ -64,7 +63,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
             StreamTimelineFragment streamTimelineFragment = StreamTimelineFragment.newInstance(fragmentArguments);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, streamTimelineFragment, ProfileFragment.TAG);
+            transaction.add(R.id.container, streamTimelineFragment, StreamTimelineFragment.TAG);
             transaction.commit();
         }
     }

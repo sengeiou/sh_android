@@ -135,7 +135,6 @@ public class ProfilePresenter implements Presenter {
     setRelationshipButtonStatus(user);
     setupVerifiedUserIcon();
     profileView.setUserInfo(userModel);
-    profileView.showListing();
     renderStreamsNumber();
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();

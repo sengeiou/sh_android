@@ -10,7 +10,7 @@ import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
@@ -86,8 +86,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   public void openProfile(Context context, Intent intent) {
     decrementBadgeCount();
-    String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
-    startActivityFromIntent(context, ProfileContainerActivity.getIntent(context, idUser)
+    String idUser = intent.getExtras().getString(ProfileActivity.EXTRA_USER);
+    startActivityFromIntent(context, ProfileActivity.getIntent(context, idUser)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 

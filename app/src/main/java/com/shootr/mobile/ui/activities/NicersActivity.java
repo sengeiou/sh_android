@@ -134,6 +134,6 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
 
     @OnItemClick(R.id.nicerslist_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
     }
 }

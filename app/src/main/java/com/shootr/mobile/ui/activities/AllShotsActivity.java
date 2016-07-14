@@ -210,12 +210,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     protected void openProfile(String idUser) {
-        Intent profileIntent = ProfileContainerActivity.getIntent(this, idUser);
+        Intent profileIntent = ProfileActivity.getIntent(this, idUser);
         startActivity(profileIntent);
     }
 
     private void startProfileContainerActivity(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
+        Intent intentForUser = ProfileActivity.getIntentWithUsername(this, username);
         startActivity(intentForUser);
     }
 

@@ -81,7 +81,7 @@
     <activity
         android:name=".ui.activities.PostNewShotActivity"
         android:theme="@style/ShootrTheme.NoActionBar.Floating"/>
-    <activity android:name=".ui.activities.ProfileContainerActivity">
+    <activity android:name=".ui.activities.ProfileActivity">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
           android:value="com.shootr.mobile.ui.activities.MainTabbedActivity"/>
@@ -105,11 +105,11 @@
     <activity
         android:name=".ui.activities.ProfileEditActivity"
         android:label="@string/profile_edit_profile"
-        android:parentActivityName=".ui.activities.ProfileContainerActivity"
+        android:parentActivityName=".ui.activities.ProfileActivity"
         android:theme="@style/ShootrTheme.Closable">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.shootr.mobile.ui.activities.ProfileContainerActivity"/>
+          android:value=".ui.activities.ProfileActivity"/>
     </activity>
     <activity
         android:name=".ui.activities.ShotDetailActivity"

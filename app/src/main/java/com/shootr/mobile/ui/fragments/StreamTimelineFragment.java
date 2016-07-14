@@ -38,7 +38,7 @@ import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
@@ -99,6 +99,7 @@ public class StreamTimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
+  public static final String TAG = "timeline";
 
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
@@ -481,7 +482,7 @@ public class StreamTimelineFragment extends BaseFragment
   //endregion
 
   private void openProfile(String idUser) {
-    Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+    Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
     startActivity(profileIntent);
   }
 
@@ -498,7 +499,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openProfileFromUsername(String username) {
-    Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+    Intent intentForUser = ProfileActivity.getIntentWithUsername(getActivity(), username);
     startActivity(intentForUser);
   }
 

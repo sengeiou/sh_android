@@ -21,7 +21,7 @@ import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
@@ -59,7 +59,7 @@ import javax.inject.Singleton;
     EmailLoginActivity.class,
     EmailRegistrationActivity.class,
     PostNewShotActivity.class,
-    ProfileContainerActivity.class,
+    ProfileActivity.class,
     UserFollowsContainerActivity.class,
     FindFriendsActivity.class,
     StreamDetailActivity.class,

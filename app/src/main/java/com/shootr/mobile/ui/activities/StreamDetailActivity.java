@@ -482,7 +482,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void navigateToUser(String userId) {
-        Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
+        Intent userProfileIntent = ProfileActivity.getIntent(this, userId);
         startActivity(userProfileIntent);
     }
 
