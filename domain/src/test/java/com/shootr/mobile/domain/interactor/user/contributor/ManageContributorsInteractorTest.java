@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.interactor.user;
+package com.shootr.mobile.domain.interactor.user.contributor;
 
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
 
-public class ContributorInteractorTest {
+public class ManageContributorsInteractorTest {
 
     private static final String STREAM_ID = "streamId";
     private static final String USER_ID = "userId";
@@ -23,24 +23,24 @@ public class ContributorInteractorTest {
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ContributorRepository contributorRepository;
 
-    private ContributorInteractor contributorInteractor;
+    private ManageContributorsInteractor manageContributorsInteractor;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        contributorInteractor =
-          new ContributorInteractor(interactorHandler, contributorRepository, postExecutionThread);
+        manageContributorsInteractor =
+          new ManageContributorsInteractor(interactorHandler, contributorRepository, postExecutionThread);
     }
 
     @Test public void shouldAddContributorWhenIsAdding() throws Exception {
-        contributorInteractor.manageContributor(STREAM_ID, USER_ID, IS_ADDING, callback, errorCallback);
+        manageContributorsInteractor.manageContributor(STREAM_ID, USER_ID, IS_ADDING, callback, errorCallback);
 
         verify(contributorRepository).addContributor(STREAM_ID, USER_ID);
     }
 
     @Test public void shouldRemoveContributorWhenIsNotAdding() throws Exception {
-        contributorInteractor.manageContributor(STREAM_ID, USER_ID, IS_NOT_ADDING, callback, errorCallback);
+        manageContributorsInteractor.manageContributor(STREAM_ID, USER_ID, IS_NOT_ADDING, callback, errorCallback);
 
         verify(contributorRepository).removeContributor(STREAM_ID, USER_ID);
     }

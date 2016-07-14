@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.interactor.user;
+package com.shootr.mobile.domain.interactor.user.contributor;
 
 import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;

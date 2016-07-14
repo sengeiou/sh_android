@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -72,6 +73,7 @@ import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
+import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -133,7 +135,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
   @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
-  @Bind(R.id.timeline_message) TextView streamMessage;
+  @Bind(R.id.timeline_message) ClickableTextView streamMessage;
   @Bind(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
   @Bind(R.id.poll_question) TextView pollQuestion;
   @Bind(R.id.poll_action) TextView pollAction;
@@ -741,6 +743,8 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       streamMessage.setVisibility(View.VISIBLE);
       streamMessage.setText(topic);
+      streamMessage.addLinks();
+      streamMessage.setLinkTextColor(Color.WHITE);
     }
   }
 
@@ -1178,6 +1182,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @OnClick(R.id.poll_action) public void onActionPressed() {
     streamPollIndicatorPresenter.onActionPressed();
+  }
+
+  @OnClick(R.id.timeline_new_shots_indicator_container) public void onShotBarPressed() {
+    newShotBarPresenter.editTopicPressed();
   }
   //endregion
 }

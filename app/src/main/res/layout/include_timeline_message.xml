@@ -6,7 +6,7 @@
     android:background="#039BE5"
     >
 
-  <TextView
+  <com.shootr.mobile.ui.widgets.ClickableTextView
       android:id="@+id/timeline_message"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"

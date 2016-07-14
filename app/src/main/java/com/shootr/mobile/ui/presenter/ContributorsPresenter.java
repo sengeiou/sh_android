@@ -3,8 +3,8 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
-import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ContributorsView;
@@ -19,7 +19,7 @@ public class ContributorsPresenter implements Presenter {
     private final GetContributorsInteractor getContributorsInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
-    private final ContributorInteractor contributorInteractor;
+    private final ManageContributorsInteractor manageContributorsInteractor;
 
     private Boolean hasBeenPaused = false;
     private ContributorsView view;
@@ -27,10 +27,10 @@ public class ContributorsPresenter implements Presenter {
     private Boolean isHolder;
 
     @Inject public ContributorsPresenter(GetContributorsInteractor getContributorsInteractor,
-      ContributorInteractor contributorInteractor, ErrorMessageFactory errorMessageFactory,
+      ManageContributorsInteractor manageContributorsInteractor, ErrorMessageFactory errorMessageFactory,
       UserModelMapper userModelMapper) {
         this.getContributorsInteractor = getContributorsInteractor;
-        this.contributorInteractor = contributorInteractor;
+        this.manageContributorsInteractor = manageContributorsInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
     }
@@ -100,7 +100,7 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void addContributor(final UserModel userModel) {
-        contributorInteractor.manageContributor(idStream,
+        manageContributorsInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           true,
           new Interactor.CompletedCallback() {
@@ -122,7 +122,7 @@ public class ContributorsPresenter implements Presenter {
     }
 
     public void removeContributor(final UserModel userModel) {
-        contributorInteractor.manageContributor(idStream,
+        manageContributorsInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           false,
           new Interactor.CompletedCallback() {

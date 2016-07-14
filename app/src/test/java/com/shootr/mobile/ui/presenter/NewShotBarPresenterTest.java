@@ -2,9 +2,10 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.QueuedShot;
 import com.shootr.mobile.domain.bus.ShotFailed;
+import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
-import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.interactor.user.GetUserCanPinMessageInteractor;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -22,152 +23,200 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class NewShotBarPresenterTest {
 
-    private static final ShotFailed.Event SHOT_FAILED_EVENT = null;
-    private static final String STREAM_ID = "stream";
-    private static final Boolean IS_IN_STREAMTIMELINE = true;
-    public static final String AUTHOR_ID = "authorId";
-    private static final Boolean IS_NOT_IN_STREAMTIMELINE = false;
-    private static final String ANOTHER_ID = "anotherId";
+  private static final ShotFailed.Event SHOT_FAILED_EVENT = null;
+  private static final String STREAM_ID = "stream";
+  private static final Boolean IS_IN_STREAMTIMELINE = true;
+  public static final String AUTHOR_ID = "authorId";
+  private static final Boolean IS_NOT_IN_STREAMTIMELINE = false;
+  private static final String ANOTHER_ID = "anotherId";
 
-    @Mock GetStreamIsReadOnlyInteractor getStreamIsRemovedInteractor;
-    @Mock GetDraftsInteractor getDraftsInteractor;
-    @Mock NewShotBarView newShotBarView;
-    @Mock Bus bus;
-    @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock SessionRepository sessionRepository;
+  @Mock GetStreamIsReadOnlyInteractor getStreamIsRemovedInteractor;
+  @Mock GetDraftsInteractor getDraftsInteractor;
+  @Mock NewShotBarView newShotBarView;
+  @Mock Bus bus;
+  @Mock ErrorMessageFactory errorMessageFactory;
+  @Mock GetUserCanPinMessageInteractor getUserCanPinMessageInteractor;
 
-    private NewShotBarPresenter presenter;
-    private ShotFailed.Receiver shotFailedReceiver;
+  private NewShotBarPresenter presenter;
+  private ShotFailed.Receiver shotFailedReceiver;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        presenter = new NewShotBarPresenter(getStreamIsRemovedInteractor,
-          getDraftsInteractor,
-          errorMessageFactory,
-          bus,
-          sessionRepository);
-        presenter.setView(newShotBarView);
-        shotFailedReceiver = presenter;
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    presenter =
+        new NewShotBarPresenter(getStreamIsRemovedInteractor, getUserCanPinMessageInteractor,
+            getDraftsInteractor, errorMessageFactory, bus);
+    presenter.setView(newShotBarView);
+    shotFailedReceiver = presenter;
+  }
 
-    @Test public void shouldCheckDraftsWhenInitialized() throws Exception {
-        presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
+  @Test public void shouldCheckDraftsWhenInitialized() throws Exception {
+    presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
 
-        verify(getDraftsInteractor).loadDrafts(any(GetDraftsInteractor.Callback.class));
-    }
+    verify(getDraftsInteractor).loadDrafts(any(GetDraftsInteractor.Callback.class));
+  }
 
-    @Test public void shouldShowDraftsButtonWhenGetDraftsReturnsDrafts() throws Exception {
-        setupDraftsInteractorCallbacks(draftsList());
+  @Test public void shouldShowDraftsButtonWhenGetDraftsReturnsDrafts() throws Exception {
+    setupDraftsInteractorCallbacks(draftsList());
 
-        presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
+    presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
 
-        verify(newShotBarView).showDraftsButton();
-    }
+    verify(newShotBarView).showDraftsButton();
+  }
 
-    @Test public void shouldHideDraftsButtonWhenGetDraftsReturnsEmpty() throws Exception {
-        setupDraftsInteractorCallbacks(emptyDraftsList());
+  @Test public void shouldHideDraftsButtonWhenGetDraftsReturnsEmpty() throws Exception {
+    setupDraftsInteractorCallbacks(emptyDraftsList());
 
-        presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
+    presenter.initialize(newShotBarView, STREAM_ID, IS_IN_STREAMTIMELINE);
 
-        verify(newShotBarView).hideDraftsButton();
-    }
+    verify(newShotBarView).hideDraftsButton();
+  }
 
-    @Test public void shouldShowDraftsButtonWhenShotFailedStreamReceived() throws Exception {
-        setupDraftsInteractorCallbacks(draftsList());
+  @Test public void shouldShowDraftsButtonWhenShotFailedStreamReceived() throws Exception {
+    setupDraftsInteractorCallbacks(draftsList());
 
-        shotFailedReceiver.onShotFailed(SHOT_FAILED_EVENT);
+    shotFailedReceiver.onShotFailed(SHOT_FAILED_EVENT);
 
-        verify(newShotBarView).showDraftsButton();
-    }
+    verify(newShotBarView).showDraftsButton();
+  }
 
-    @Test public void shouldHideDraftsButtonWhenResumedAndNoDraftsReturned() throws Exception {
-        setupDraftsInteractorCallbacks(emptyDraftsList());
+  @Test public void shouldHideDraftsButtonWhenResumedAndNoDraftsReturned() throws Exception {
+    setupDraftsInteractorCallbacks(emptyDraftsList());
 
-        presenter.pause();
-        presenter.resume();
+    presenter.pause();
+    presenter.resume();
 
-        verify(newShotBarView).hideDraftsButton();
-    }
+    verify(newShotBarView).hideDraftsButton();
+  }
 
-    @Test public void shouldShowDraftsButtonWhenResumedAndDraftsReturned() throws Exception {
-        setupDraftsInteractorCallbacks(draftsList());
+  @Test public void shouldShowDraftsButtonWhenResumedAndDraftsReturned() throws Exception {
+    setupDraftsInteractorCallbacks(draftsList());
 
-        presenter.pause();
-        presenter.resume();
+    presenter.pause();
+    presenter.resume();
 
-        verify(newShotBarView).showDraftsButton();
-    }
+    verify(newShotBarView).showDraftsButton();
+  }
 
-    @Test public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
-        String receiverMethodName = ShotFailed.Receiver.class.getDeclaredMethods()[0].getName();
+  @Test public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
+    String receiverMethodName = ShotFailed.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod =
-          shotFailedReceiver.getClass().getMethod(receiverMethodName, ShotFailed.Event.class);
-        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
-        assertThat(annotationPresent).isTrue();
-    }
+    Method receiverDeclaredMethod =
+        shotFailedReceiver.getClass().getMethod(receiverMethodName, ShotFailed.Event.class);
+    boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
+    assertThat(annotationPresent).isTrue();
+  }
 
-    @Test public void shouldShowHolderOptionsWhenIsInStreamTimelineAndIsStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS_IN_STREAMTIMELINE);
-        when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
+  @Test public void shouldShowHolderOptionsWhenIsInStreamTimelineAndIsStreamHolder()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
+        IS_IN_STREAMTIMELINE);
+    setupUserCanViewHolderOptions();
 
-        presenter.newShotFromImage();
+    presenter.newShotFromImage();
 
-        verify(newShotBarView).showHolderOptions();
-    }
+    verify(newShotBarView).showHolderOptions();
+  }
 
-    @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID, IS_NOT_IN_STREAMTIMELINE);
-        when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
+  @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
+        IS_NOT_IN_STREAMTIMELINE);
+    setupUserCannotViewHolderOptions();
 
-        presenter.newShotFromImage();
+    presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).showHolderOptions();
-    }
+    verify(newShotBarView, never()).showHolderOptions();
+  }
 
-    @Test public void shouldNotShowHolderOptionsWhenIsInStreamTimelineAndIsNotStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS_IN_STREAMTIMELINE);
-        when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
+  @Test public void shouldNotShowHolderOptionsWhenIsInStreamTimelineAndIsNotStreamHolder()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID,
+        IS_IN_STREAMTIMELINE);
+    setupUserCannotViewHolderOptions();
 
-        presenter.newShotFromImage();
+    presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).showHolderOptions();
-    }
+    verify(newShotBarView, never()).showHolderOptions();
+  }
 
-    @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsNotStreamHolder() throws Exception {
-        presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID, IS_NOT_IN_STREAMTIMELINE);
-        when(sessionRepository.getCurrentUserId()).thenReturn(AUTHOR_ID);
+  @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsNotStreamHolder()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID,
+        IS_NOT_IN_STREAMTIMELINE);
+    setupUserCannotViewHolderOptions();
 
-        presenter.newShotFromImage();
+    presenter.newShotFromImage();
 
-        verify(newShotBarView, never()).showHolderOptions();
-    }
+    verify(newShotBarView, never()).showHolderOptions();
+  }
 
-    private List<QueuedShot> draftsList() {
-        return Arrays.asList(queuedShot());
-    }
+  @Test public void shouldOpenEditTopicDialogWhenUserCanPinMessageInteractorIsTrue()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
+        IS_IN_STREAMTIMELINE);
+    setupUserCanViewHolderOptions();
 
-    private List<QueuedShot> emptyDraftsList() {
-        return new ArrayList<>();
-    }
+    presenter.editTopicPressed();
 
-    private QueuedShot queuedShot() {
-        return new QueuedShot();
-    }
+    verify(newShotBarView).openEditTopicDialog();
+  }
 
-    private void setupDraftsInteractorCallbacks(final List<QueuedShot> drafts) {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((GetDraftsInteractor.Callback) invocation.getArguments()[0]).onLoaded(drafts);
-                return null;
-            }
-        }).when(getDraftsInteractor).loadDrafts(any(GetDraftsInteractor.Callback.class));
-    }
+  @Test public void shouldNotOpenEditTopicDialogWhenUserCanPinMessageInteractorIsFalse()
+      throws Exception {
+    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, ANOTHER_ID,
+        IS_NOT_IN_STREAMTIMELINE);
+    setupUserCannotViewHolderOptions();
+
+    presenter.editTopicPressed();
+
+    verify(newShotBarView, never()).openEditTopicDialog();
+  }
+
+  private void setupUserCanViewHolderOptions() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((Interactor.Callback) invocation.getArguments()[2]).onLoaded(true);
+        return null;
+      }
+    }).when(getUserCanPinMessageInteractor)
+        .canUserPinMessage(anyString(), anyString(), any(Interactor.Callback.class));
+  }
+
+  private void setupUserCannotViewHolderOptions() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((Interactor.Callback) invocation.getArguments()[2]).onLoaded(false);
+        return null;
+      }
+    }).when(getUserCanPinMessageInteractor)
+        .canUserPinMessage(anyString(), anyString(), any(Interactor.Callback.class));
+  }
+
+  private List<QueuedShot> draftsList() {
+    return Arrays.asList(queuedShot());
+  }
+
+  private List<QueuedShot> emptyDraftsList() {
+    return new ArrayList<>();
+  }
+
+  private QueuedShot queuedShot() {
+    return new QueuedShot();
+  }
+
+  private void setupDraftsInteractorCallbacks(final List<QueuedShot> drafts) {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((GetDraftsInteractor.Callback) invocation.getArguments()[0]).onLoaded(drafts);
+        return null;
+      }
+    }).when(getDraftsInteractor).loadDrafts(any(GetDraftsInteractor.Callback.class));
+  }
 }
