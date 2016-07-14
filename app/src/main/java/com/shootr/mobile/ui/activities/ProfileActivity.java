@@ -124,7 +124,6 @@ public class ProfileActivity extends BaseActivity
   @Inject IntentFactory intentFactory;
   @Inject ShareManager shareManager;
   @Inject FeedbackMessage feedbackMessage;
-  // @Inject ToolbarDecorator toolbarDecorator;
   @Inject ProfilePresenter profilePresenter;
   @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
   @Inject ReportShotPresenter reportShotPresenter;
@@ -534,7 +533,6 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void setUserInfo(UserModel userModel) {
-    //TODO modificar esta linea
     collapsingToolbarLayout.setTitle("@" + userModel.getUsername());
     nameTextView.setText(userModel.getName());
     renderWebsite(userModel);
