@@ -21,5 +21,5 @@ public interface PollRepository {
   Poll vote(String idPoll, String idPollOption)
       throws UserCannotVoteRequestException, UserHasVotedRequestException;
 
-  void sharePoll(String idPoll);
+  void sharePoll(String idPoll) throws PollDeletedException;
 }

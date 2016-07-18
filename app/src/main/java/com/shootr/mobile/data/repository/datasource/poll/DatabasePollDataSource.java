@@ -50,4 +50,7 @@ public class DatabasePollDataSource implements PollDataSource {
     throw new IllegalArgumentException("method not implemented");
   }
 
+  @Override public void sharePoll(String idPoll) {
+    throw new IllegalArgumentException("method not implemented");
+  }
 }

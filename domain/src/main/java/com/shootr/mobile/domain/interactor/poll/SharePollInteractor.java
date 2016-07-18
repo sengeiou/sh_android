@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.PollRepository;
 import com.shootr.mobile.domain.repository.Remote;
 
-public class SharePollInteractor implements Interactor{
+public class SharePollInteractor implements Interactor {
 
   private final PollRepository remotePollRepository;
   private final InteractorHandler interactorHandler;
