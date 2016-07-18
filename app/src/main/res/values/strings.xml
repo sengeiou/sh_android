@@ -423,4 +423,12 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <plurals name="poll_votes_count">
+    <item quantity="one">
+            %d vote
+        </item>
+    <item quantity="other">
+            %d votes
+        </item>
+  </plurals>
 </resources>

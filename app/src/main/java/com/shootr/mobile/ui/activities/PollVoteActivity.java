@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -43,6 +44,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Bind(R.id.poll_question) TextView pollQuestion;
   @Bind(R.id.pollvote_progress) ProgressBar progressBar;
   @Bind(R.id.poll_results) TextView viewResults;
+  @Bind(R.id.poll_votes) TextView pollVotesCount;
+  @Bind(R.id.poll_votes_container) LinearLayout pollVotesContainer;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollOptionHolder pollOptionHolder;
@@ -118,7 +121,11 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   @Override public void showPollVotes(Long votes) {
-    //TODO
+    pollVotesContainer.setVisibility(View.VISIBLE);
+    Integer pollVotes = votes.intValue();
+    String pollVotesText =
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    pollVotesCount.setText(pollVotesText);
   }
 
   @Override public void ignorePoll() {
