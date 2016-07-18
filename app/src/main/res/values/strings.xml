@@ -294,6 +294,7 @@
   <string name="profile_support">Support</string>
   <string name="profile_updated">Profile updated</string>
   <string name="publish_poll">%1$s New poll in %2$s</string>
+  <string name="shared_poll">Shared poll %s</string>
   <string name="read_write_mode_public_description">Anyone can shoot</string>
   <string name="read_write_mode_public_title">Public</string>
   <string name="read_write_mode_view_only_description">Owner and contributors can shoot</string>
