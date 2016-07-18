@@ -25,6 +25,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -40,6 +41,7 @@ public class PollVotePresenterTest {
   private static final String STATUS = "status";
   private static final String TITLE = "title";
   private static final String POLL_OPTION_ID = "idPollOption";
+  private static final long POLL_VOTES = 25L;
 
   @Mock PollVoteView pollVoteView;
   @Mock GetPollByIdStreamInteractor getPollByIdStreamInteractor;
@@ -65,6 +67,14 @@ public class PollVotePresenterTest {
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
     verify(pollVoteView).renderPoll(any(PollModel.class));
+  }
+
+  @Test public void shouldShowPollVotesWhenPollModelLoaded() throws Exception {
+    setupGetPollByIdStreamInteractorCallback();
+
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
+
+    verify(pollVoteView).showPollVotes(anyLong());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
@@ -304,6 +314,7 @@ public class PollVotePresenterTest {
     pollOption.setTitle(TITLE);
     pollOption.setIdPoll(POLL_ID);
     pollOption.setIdPollOption(POLL_OPTION_ID);
+    pollOption.setVotes(POLL_VOTES);
     return Collections.singletonList(pollOption);
   }
 }

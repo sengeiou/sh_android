@@ -117,6 +117,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollOptionAdapter.notifyDataSetChanged();
   }
 
+  @Override public void showPollVotes(Long votes) {
+    //TODO
+  }
+
   @Override public void ignorePoll() {
     finish();
   }
