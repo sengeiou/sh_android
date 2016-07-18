@@ -100,7 +100,7 @@ public interface IntentFactory {
       String messagePattern = activity.getString(R.string.share_poll_message);
 
       String sharedText =
-          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdStream(), locale);
+          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
