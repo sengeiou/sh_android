@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
 import com.shootr.mobile.util.BackStackHandler;
+import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -98,12 +99,13 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
       backStackHandler.handleBackStack(this);
       finish();
       return true;
+    } else if (item.getItemId() == R.id.menu_share) {
+      openSharePollMenu();
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
       return true;
-    } else {
-      return super.onOptionsItemSelected(item);
     }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override public void renderPollResults(PollModel pollModel) {
@@ -145,5 +147,17 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override public void hideLoading() {
     results.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
+  }
+
+  private void openSharePollMenu() {
+    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        // TODO
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        // TODO
+      }
+    }).show();
   }
 }
