@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 
@@ -21,6 +22,8 @@ public interface IntentFactory {
   Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel, String locale);
 
   Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId);
+
+  Intent sharePollIntent(Activity activity, PollModel pollModel, String locale);
 
   IntentFactory REAL = new IntentFactory() {
     @Override public Intent openUrlIntent(String url) {
@@ -91,6 +94,19 @@ public interface IntentFactory {
       Intent.createChooser(intent, launchActivity.getString(R.string.report_context_menu_report));
 
       return intent;
+    }
+
+    @Override public Intent sharePollIntent(Activity activity, PollModel pollModel, String locale) {
+      String messagePattern = activity.getString(R.string.share_poll_message);
+
+      String sharedText =
+          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdStream(), locale);
+
+      return ShareCompat.IntentBuilder.from(activity)
+          .setType("text/plain")
+          .setText(sharedText)
+          .setChooserTitle(R.string.share_via)
+          .createChooserIntent();
     }
   };
 }

@@ -333,6 +333,7 @@
   <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Shared (stream)</string>
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_stream_subject">Check out %s on Shootr</string>
   <string name="share_via">Share via…</string>
   <string name="share_via_shootr">Share via Shootr</string>

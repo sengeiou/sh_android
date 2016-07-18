@@ -23,8 +23,10 @@ import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.PercentageUtils;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.SwipeDialog;
 import javax.inject.Inject;
 
@@ -40,6 +42,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Inject FeedbackMessage feedbackMessage;
   @Inject PollResultsPresenter presenter;
   @Inject BackStackHandler backStackHandler;
+  @Inject ShareManager shareManager;
 
   private PollResultsAdapter adapter;
 
@@ -121,6 +124,11 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     finish();
   }
 
+  @Override public void share(PollModel pollModel) {
+    Intent shareIntent = shareManager.sharePollIntent(this, pollModel);
+    Intents.maybeStartActivity(this, shareIntent);
+  }
+
   @Override protected void onResume() {
     super.onResume();
     presenter.resume();
@@ -152,11 +160,11 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   private void openSharePollMenu() {
     new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
-        // TODO
+        presenter.shareViaShootr();
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
-        // TODO
+        presenter.share();
       }
     }).show();
   }

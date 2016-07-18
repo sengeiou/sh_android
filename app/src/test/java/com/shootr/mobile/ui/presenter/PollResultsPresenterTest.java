@@ -81,6 +81,13 @@ public class PollResultsPresenterTest {
     verify(pollResultsView).ignorePoll();
   }
 
+  @Test public void shouldShareInViewWhenSharePressed() throws Exception {
+    presenter.setView(pollResultsView);
+    presenter.share();
+
+    verify(pollResultsView).share(any(PollModel.class));
+  }
+
   private void setupIgnorePollInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {

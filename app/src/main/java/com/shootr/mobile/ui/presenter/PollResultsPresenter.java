@@ -23,6 +23,7 @@ public class PollResultsPresenter implements Presenter {
   private PollResultsView pollResultsView;
   private boolean hasBeenPaused;
   private String idPoll;
+  private PollModel pollModel;
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
@@ -34,9 +35,13 @@ public class PollResultsPresenter implements Presenter {
   }
 
   public void initialize(PollResultsView pollResultsView, String idPoll) {
-    this.pollResultsView = pollResultsView;
+    setView(pollResultsView);
     this.idPoll = idPoll;
     loadPoll();
+  }
+
+  protected void setView(PollResultsView pollResultsView) {
+    this.pollResultsView = pollResultsView;
   }
 
   private void loadPoll() {
@@ -57,6 +62,7 @@ public class PollResultsPresenter implements Presenter {
 
   private void handlePollModel(Poll poll) {
     PollModel pollModel = pollModelMapper.transform(poll);
+    this.pollModel = pollModel;
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel);
@@ -85,5 +91,13 @@ public class PollResultsPresenter implements Presenter {
         pollResultsView.ignorePoll();
       }
     });
+  }
+
+  public void shareViaShootr() {
+
+  }
+
+  public void share() {
+    pollResultsView.share(pollModel);
   }
 }
