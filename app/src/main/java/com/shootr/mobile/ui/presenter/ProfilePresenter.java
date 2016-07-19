@@ -144,12 +144,8 @@ public class ProfilePresenter implements Presenter {
     Integer streamsCount =
         userModel.getFavoritedStreamsCount().intValue() + userModel.getCreatedStreamsCount()
             .intValue();
-    if (streamsCount > 0) {
-      profileView.showStreamsCount();
-      profileView.setStreamsCount(streamsCount);
-    } else {
-      profileView.hideStreamsCount();
-    }
+    profileView.showStreamsCount();
+    profileView.setStreamsCount(streamsCount);
   }
 
   private void setupVerifiedUserIcon() {
