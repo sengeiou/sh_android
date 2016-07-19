@@ -42,7 +42,7 @@ public class PollQuestionSpannableBuilder {
           clickListener.onPollQuestionClick(idPoll);
         }
       };
-      spannableBuilder.setSpan(pollQuestionSpan, matcher.start(), matcher.end(),
+      spannableBuilder.setSpan(pollQuestionSpan, matcher.start(), matcher.end() + 1,
           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
     return spannableBuilder;
