@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.PollRepository;
 import com.shootr.mobile.domain.repository.Remote;
+import javax.inject.Inject;
 
 public class SharePollInteractor implements Interactor {
 
@@ -16,7 +17,7 @@ public class SharePollInteractor implements Interactor {
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  public SharePollInteractor(@Remote PollRepository remotePollRepository,
+  @Inject public SharePollInteractor(@Remote PollRepository remotePollRepository,
       InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
     this.remotePollRepository = remotePollRepository;
     this.interactorHandler = interactorHandler;
