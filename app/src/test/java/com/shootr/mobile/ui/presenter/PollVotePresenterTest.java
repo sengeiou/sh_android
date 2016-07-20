@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.PollOption;
 import com.shootr.mobile.domain.PollStatus;
@@ -8,13 +9,16 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
+import com.shootr.mobile.domain.interactor.poll.ShowPollResultsInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -25,8 +29,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,6 +46,8 @@ public class PollVotePresenterTest {
   private static final String STATUS = "status";
   private static final String TITLE = "title";
   private static final String POLL_OPTION_ID = "idPollOption";
+  private static final String ID_USER = "idUser";
+  private static final String ANOTHER_USER_ID = "anotherIdUser";
 
   @Mock PollVoteView pollVoteView;
   @Mock GetPollByIdStreamInteractor getPollByIdStreamInteractor;
@@ -47,6 +55,8 @@ public class PollVotePresenterTest {
   @Mock VotePollOptionInteractor votePollOptionInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock GetPollByIdPollInteractor getPollByIdPollInteractor;
+  @Mock GetContributorsInteractor getContributorsInteractor;
+  @Mock ShowPollResultsInteractor showPollResultsInteractor;
   @Mock SessionRepository sessionRepository;
 
   private PollVotePresenter presenter;
@@ -56,7 +66,8 @@ public class PollVotePresenterTest {
     when(sessionRepository.getCurrentUserId()).thenReturn(HOLDER_USER_ID);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
-        ignorePollInteractor, votePollOptionInteractor, sessionRepository, pollModelMapper, errorMessageFactory);
+        ignorePollInteractor, votePollOptionInteractor, getContributorsInteractor,
+        showPollResultsInteractor, sessionRepository, pollModelMapper, errorMessageFactory);
   }
 
   @Test public void shouldRenderPollModelInView() throws Exception {
@@ -106,6 +117,14 @@ public class PollVotePresenterTest {
 
   @Test public void shouldGoToResultsWhenInitializeAndPollIsClosed() throws Exception {
     setupGetClosedPollByIdStreamInteractorCallback();
+
+    presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
+
+    verify(pollVoteView).goToResults(anyString());
+  }
+
+  @Test public void shouldGoToResultsWhenInitializeAndHadSeenPollResults() throws Exception {
+    setupGetSeenResultsPollByIdStreamInteractorCallback();
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
@@ -172,6 +191,70 @@ public class PollVotePresenterTest {
     verify(pollVoteView).showTimeoutAlert();
   }
 
+  @Test public void shouldShowPollResultsDialogWhenUserIsNotContributor() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    setupGetContributorsInteractor();
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    presenter.onShowPollResults();
+
+    verify(pollVoteView).showResultsWithoutVotingDialog();
+  }
+
+  @Test public void shouldNotShowPollResultsDialogWhenUserIsContributor() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    setupGetContributorsInteractor();
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    presenter.onShowPollResults();
+
+    verify(pollVoteView, never()).showResultsWithoutVotingDialog();
+  }
+
+  @Test public void shouldShowPollResultsDialogWhenUserIsNotPollOwner() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    setupGetContributorsInteractor();
+    when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_USER_ID);
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    presenter.onShowPollResults();
+
+    verify(pollVoteView).showResultsWithoutVotingDialog();
+  }
+
+  @Test public void shouldNotShowPollResultsDialogWhenUserIsPollOwner() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    setupGetContributorsInteractor();
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    presenter.onShowPollResults();
+
+    verify(pollVoteView, never()).showResultsWithoutVotingDialog();
+  }
+
+  @Test public void shouldGoToResultsWhenShowPollResultsWithoutVoting() throws Exception {
+    setupGetPollByIdPollInteractorCallback();
+    setupShowPollResultsInteractorCallback();
+    presenter.initializeWithIdPoll(pollVoteView, POLL_ID);
+
+    presenter.showPollResultsWithoutVoting();
+
+    verify(pollVoteView).goToResults(anyString());
+  }
+
+  private void setupShowPollResultsInteractorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.CompletedCallback callback =
+            (Interactor.CompletedCallback) invocation.getArguments()[1];
+        callback.onCompleted();
+        return null;
+      }
+    }).when(showPollResultsInteractor)
+        .showPollResults(anyString(), any(Interactor.CompletedCallback.class));
+  }
+
   private void setupIgnorePollInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -232,6 +315,18 @@ public class PollVotePresenterTest {
         .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
+  private void setupGetSeenResultsPollByIdStreamInteractorCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Poll> callback =
+            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+        callback.onLoaded(seenResultsPoll());
+        return null;
+      }
+    }).when(getPollByIdStreamInteractor)
+        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+  }
+
   private void setupGetPollByIdPollInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -269,6 +364,33 @@ public class PollVotePresenterTest {
             Interactor.ErrorCallback.class));
   }
 
+  private void setupGetContributorsInteractor() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<List<Contributor>> callback =
+            (Interactor.Callback<List<Contributor>>) invocation.getArguments()[2];
+        callback.onLoaded(contributors());
+        return null;
+      }
+    }).when(getContributorsInteractor)
+        .obtainContributors(anyString(),
+            anyBoolean(),
+            any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+  }
+
+  private List<Contributor> contributors() {
+    List<Contributor> contributors = new ArrayList<>();
+    contributors.add(contributor());
+    return contributors;
+  }
+
+  private Contributor contributor() {
+    Contributor contributor = new Contributor();
+    contributor.setIdUser(HOLDER_USER_ID);
+    return contributor;
+  }
+
   private Poll votedPoll() {
     Poll poll = new Poll();
     poll.setIdStream(STREAM_ID);
@@ -289,10 +411,21 @@ public class PollVotePresenterTest {
     return poll;
   }
 
+  private Poll seenResultsPoll() {
+    Poll poll = new Poll();
+    poll.setIdStream(STREAM_ID);
+    poll.setIdPoll(POLL_ID);
+    poll.setQuestion(QUESTION);
+    poll.setVoteStatus(PollStatus.HASSEENRESULTS);
+    poll.setStatus(PollStatus.CLOSED);
+    return poll;
+  }
+
   private Poll poll() {
     Poll poll = new Poll();
     poll.setIdStream(STREAM_ID);
     poll.setIdPoll(POLL_ID);
+    poll.setIdUser(HOLDER_USER_ID);
     poll.setQuestion(QUESTION);
     poll.setStatus(STATUS);
     poll.setPollOptions(pollOptions());

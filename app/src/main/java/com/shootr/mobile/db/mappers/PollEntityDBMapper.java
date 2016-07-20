@@ -17,6 +17,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)));
     pollEntity.setIdPoll(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL)));
     pollEntity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_STREAM)));
+    pollEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_USER)));
     pollEntity.setPublished(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.PUBLISHED)));
     pollEntity.setStatus(c.getString(c.getColumnIndex(DatabaseContract.PollTable.STATUS)));
     pollEntity.setVoteStatus(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_STATUS)));
@@ -29,6 +30,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getHasVoted());
     cv.put(DatabaseContract.PollTable.ID_POLL, pollEntity.getIdPoll());
     cv.put(DatabaseContract.PollTable.ID_STREAM, pollEntity.getIdStream());
+    cv.put(DatabaseContract.PollTable.ID_USER, pollEntity.getIdStream());
     cv.put(DatabaseContract.PollTable.PUBLISHED, pollEntity.getPublished());
     cv.put(DatabaseContract.PollTable.QUESTION, pollEntity.getQuestion());
     cv.put(DatabaseContract.PollTable.STATUS, pollEntity.getStatus());

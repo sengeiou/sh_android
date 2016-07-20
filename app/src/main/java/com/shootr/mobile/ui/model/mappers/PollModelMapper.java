@@ -23,6 +23,7 @@ public class PollModelMapper {
     PollModel pollModel = new PollModel();
     pollModel.setIdPoll(poll.getIdPoll());
     pollModel.setIdStream(poll.getIdStream());
+    pollModel.setIdUser(poll.getIdUser());
     pollModel.setQuestion(poll.getQuestion());
     pollModel.setStatus(poll.getStatus());
     pollModel.setPublished(poll.getPublished());

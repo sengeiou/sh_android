@@ -78,7 +78,8 @@ public class StreamPollIndicatorPresenter implements Presenter {
   }
 
   private void handleVoteStatus(PollModel pollModel) {
-    if (pollModel.getVoteStatus().equals(PollStatus.VOTED)) {
+    if (pollModel.getVoteStatus().equals(PollStatus.VOTED) ||
+        pollModel.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
       action = VIEW;
       streamPollView.showPollIndicatorWithViewAction(pollModel);
     } else {

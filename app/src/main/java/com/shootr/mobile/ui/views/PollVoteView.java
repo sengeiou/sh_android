@@ -16,4 +16,6 @@ public interface PollVoteView  extends LoadDataView {
   void showTimeoutAlert();
 
   void showViewResultsButton();
+
+  void showResultsWithoutVotingDialog();
 }

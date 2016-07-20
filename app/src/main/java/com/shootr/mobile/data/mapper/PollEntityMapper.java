@@ -21,6 +21,7 @@ public class PollEntityMapper {
       poll.setPublished(pollEntity.getPublished() != 0L);
       poll.setIdStream(pollEntity.getIdStream());
       poll.setIdPoll(pollEntity.getIdPoll());
+      poll.setIdUser(pollEntity.getIdUser());
       poll.setHasVoted(pollEntity.getHasVoted() != null);
       poll.setPollOptions(mapper.transform(pollEntity.getPollOptions()));
       poll.setQuestion(pollEntity.getQuestion());
@@ -35,6 +36,7 @@ public class PollEntityMapper {
     pollEntity.setStatus(poll.getStatus());
     pollEntity.setQuestion(poll.getQuestion());
     pollEntity.setIdStream(poll.getIdStream());
+    pollEntity.setIdUser(poll.getIdUser());
     pollEntity.setHasVoted(poll.hasVoted() ? 1L : 0L);
     pollEntity.setIdPoll(poll.getIdPoll());
     pollEntity.setPublished(poll.getPublished() ? 1L : 0L);

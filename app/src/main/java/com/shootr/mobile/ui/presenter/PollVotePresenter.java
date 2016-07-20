@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.Contributor;
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.PollStatus;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -7,12 +8,15 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
+import com.shootr.mobile.domain.interactor.poll.ShowPollResultsInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.List;
 import javax.inject.Inject;
 
 public class PollVotePresenter implements Presenter {
@@ -21,6 +25,8 @@ public class PollVotePresenter implements Presenter {
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final IgnorePollInteractor ignorePollInteractor;
   private final VotePollOptionInteractor votePollOptionInteractor;
+  private final GetContributorsInteractor getContributorsInteractor;
+  private final ShowPollResultsInteractor showPollResultsInteractor;
   private final SessionRepository sessionRepository;
   private final PollModelMapper pollModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
@@ -37,11 +43,15 @@ public class PollVotePresenter implements Presenter {
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
       GetPollByIdPollInteractor getPollByIdPollInteractor,
       IgnorePollInteractor ignorePollInteractor, VotePollOptionInteractor votePollOptionInteractor,
-      SessionRepository sessionRepository, PollModelMapper pollModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetContributorsInteractor getContributorsInteractor,
+      ShowPollResultsInteractor showPollResultsInteractor, SessionRepository sessionRepository,
+      PollModelMapper pollModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getPollByIdStreamInteractor = getPollByIdStreamInteractor;
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.ignorePollInteractor = ignorePollInteractor;
     this.votePollOptionInteractor = votePollOptionInteractor;
+    this.getContributorsInteractor = getContributorsInteractor;
+    this.showPollResultsInteractor = showPollResultsInteractor;
     this.sessionRepository = sessionRepository;
     this.pollModelMapper = pollModelMapper;
     this.errorMessageFactory = errorMessageFactory;
@@ -108,7 +118,8 @@ public class PollVotePresenter implements Presenter {
   private boolean canRenderPoll() {
     return pollModel != null
         && !pollModel.getStatus().equals(PollStatus.CLOSED)
-        && !pollModel.getVoteStatus().equals(PollStatus.VOTED);
+        && !pollModel.getVoteStatus().equals(PollStatus.VOTED)
+        && !pollModel.getVoteStatus().equals(PollStatus.HASSEENRESULTS);
   }
 
   public void ignorePoll() {
@@ -176,5 +187,44 @@ public class PollVotePresenter implements Presenter {
 
   public void viewResults() {
     pollVoteView.goToResults(pollModel.getIdPoll());
+  }
+
+  public void onShowPollResults() {
+    getContributorsInteractor.obtainContributors(idStream, false,
+        new Interactor.Callback<List<Contributor>>() {
+          @Override public void onLoaded(List<Contributor> contributors) {
+            if (!isPollOwner() && !isContributor(contributors)) {
+              pollVoteView.showResultsWithoutVotingDialog();
+            } else {
+              pollVoteView.goToResults(pollModel.getIdPoll());
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            pollVoteView.showError(errorMessageFactory.getMessageForError(error));
+          }
+        });
+  }
+
+  private boolean isPollOwner() {
+    return pollModel.getIdUser().equals(sessionRepository.getCurrentUserId());
+  }
+
+  private boolean isContributor(List<Contributor> contributors) {
+    for (Contributor contributor : contributors) {
+      if (contributor.getIdUser().equals(sessionRepository.getCurrentUserId())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void showPollResultsWithoutVoting() {
+    showPollResultsInteractor.showPollResults(pollModel.getIdPoll(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            pollVoteView.goToResults(pollModel.getIdPoll());
+          }
+        });
   }
 }

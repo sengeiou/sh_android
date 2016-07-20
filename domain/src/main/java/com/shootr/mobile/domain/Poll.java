@@ -6,6 +6,7 @@ public class Poll {
 
   private String idPoll;
   private String idStream;
+  private String idUser;
   private String title;
   private String question;
   private Boolean hasVoted;
@@ -84,5 +85,13 @@ public class Poll {
 
   public void setVoteStatus(String voteStatus) {
     this.voteStatus = voteStatus;
+  }
+
+  public String getIdUser() {
+    return idUser;
+  }
+
+  public void setIdUser(String idUser) {
+    this.idUser = idUser;
   }
 }

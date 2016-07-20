@@ -145,6 +145,18 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     viewResults.setVisibility(View.VISIBLE);
   }
 
+  @Override public void showResultsWithoutVotingDialog() {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder //
+        .setMessage(getString(R.string.poll_results_dialog)) //
+        .setPositiveButton(getString(R.string.poll_results),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialogInterface, int action) {
+                presenter.showPollResultsWithoutVoting();
+              }
+            }).setNegativeButton(getString(R.string.cancel), null).show();
+  }
+
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_poll_vote, menu);
     ignorePollMenu.bindRealMenuItem(menu.findItem(R.id.menu_ignore_poll));
@@ -156,10 +168,13 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
       backStackHandler.handleBackStack(this);
       finish();
       return true;
+    } else if (item.getItemId() == R.id.menu_show_results) {
+      presenter.onShowPollResults();
+      return true;
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
       return true;
-    }  else {
+    } else {
       return super.onOptionsItemSelected(item);
     }
   }

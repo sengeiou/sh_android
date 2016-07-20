@@ -500,6 +500,8 @@ public class SQLiteUtils {
         + " TEXT NOT NULL PRIMARY KEY,"
         + DatabaseContract.PollTable.ID_STREAM
         + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.ID_USER
+        + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.QUESTION
         + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.HAS_VOTED
