@@ -37,6 +37,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -84,7 +85,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
     @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
-    @Bind(R.id.cat_title) TextView streamTitle;
+    @Bind(R.id.cat_title) EmojiconTextView streamTitle;
     @Bind(R.id.subtitle) TextView streamSubtitle;
     @Bind(R.id.blurLayout) FrameLayout blurLayout;
 

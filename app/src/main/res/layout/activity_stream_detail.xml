@@ -84,7 +84,7 @@
                   android:layout_marginLeft="16dp"
                   android:orientation="vertical">
 
-                    <TextView android:id="@id/cat_title"
+                    <com.rockerhieu.emojicon.EmojiconTextView android:id="@id/cat_title"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:fontFamily="sans-serif-medium"
