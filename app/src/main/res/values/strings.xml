@@ -57,7 +57,7 @@
   <string name="block_user_dialog_ban">Ban</string>
   <string name="block_user_dialog_block">Ignore</string>
   <string name="block_user_dialog_cancel">Cancel</string>
-  <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
+  <string name="block_user_dialog_message">Ignoring will prevent you from sº eeing this user\'s shots.</string>
   <string name="block_user_error">To ignore this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
   <string name="cancel_hide_shot" formatted="false">Cancel</string>
@@ -425,4 +425,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="share_poll_subject">Watch the poll %s</string>
 </resources>

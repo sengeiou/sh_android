@@ -98,12 +98,17 @@ public interface IntentFactory {
 
     @Override public Intent sharePollIntent(Activity activity, PollModel pollModel, String locale) {
       String messagePattern = activity.getString(R.string.share_poll_message);
+      String subjectPattern = activity.getString(R.string.share_poll_subject);
 
       String sharedText =
           String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
 
+      String subject =
+          String.format(subjectPattern, pollModel.getQuestion());
+
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
+          .setSubject(subject)
           .setText(sharedText)
           .setChooserTitle(R.string.share_via)
           .createChooserIntent();
