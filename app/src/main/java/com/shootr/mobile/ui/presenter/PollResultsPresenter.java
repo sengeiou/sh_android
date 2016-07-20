@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollResultsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 
 public class PollResultsPresenter implements Presenter {
 
+  private static final long ZERO_VOTES = 0;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final PollModelMapper pollModelMapper;
   private final IgnorePollInteractor ignorePollInteractor;
@@ -23,6 +25,8 @@ public class PollResultsPresenter implements Presenter {
   private PollResultsView pollResultsView;
   private boolean hasBeenPaused;
   private String idPoll;
+  private long pollVotes = ZERO_VOTES;
+  private PollModel pollModel;
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
@@ -56,10 +60,11 @@ public class PollResultsPresenter implements Presenter {
   }
 
   private void handlePollModel(Poll poll) {
-    PollModel pollModel = pollModelMapper.transform(poll);
+    pollModel = pollModelMapper.transform(poll);
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel);
+      showPollVotes();
     }
   }
 
@@ -69,8 +74,21 @@ public class PollResultsPresenter implements Presenter {
     }
   }
 
+  private void showPollVotes() {
+    countPollVotes();
+    pollResultsView.showPollVotes(pollVotes);
+  }
+
+  private void countPollVotes() {
+    pollVotes = ZERO_VOTES;
+    for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
+      pollVotes += pollOptionModel.getVotes();
+    }
+  }
+
   @Override public void resume() {
     if (hasBeenPaused) {
+      pollVotes = ZERO_VOTES;
       loadPoll();
     }
   }

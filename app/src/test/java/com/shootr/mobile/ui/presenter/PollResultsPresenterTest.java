@@ -19,6 +19,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -51,6 +52,14 @@ public class PollResultsPresenterTest {
     presenter.initialize(pollResultsView, POLL_ID);
 
     verify(pollResultsView).renderPollResults(any(PollModel.class));
+  }
+
+  @Test public void shouldShowPollVotesWhenInitialize() throws Exception {
+    setupGetPollByIdStreamInteractor();
+
+    presenter.initialize(pollResultsView, POLL_ID);
+
+    verify(pollResultsView).showPollVotes(anyLong());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {

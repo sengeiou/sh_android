@@ -18,6 +18,8 @@ import javax.inject.Inject;
 
 public class PollVotePresenter implements Presenter {
 
+  private static final long ZERO_VOTES = 0;
+
   private final GetPollByIdStreamInteractor getPollByIdStreamInteractor;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final IgnorePollInteractor ignorePollInteractor;
@@ -114,6 +116,7 @@ public class PollVotePresenter implements Presenter {
   }
 
   private void countPollVotes() {
+    pollVotes = ZERO_VOTES;
     for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
       pollVotes += pollOptionModel.getVotes();
     }
@@ -180,6 +183,7 @@ public class PollVotePresenter implements Presenter {
 
   @Override public void resume() {
     if (hasBeenPaused) {
+      pollVotes = ZERO_VOTES;
       loadPollInResume();
     }
   }
