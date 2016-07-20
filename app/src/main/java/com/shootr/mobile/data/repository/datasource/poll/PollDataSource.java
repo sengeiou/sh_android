@@ -22,4 +22,6 @@ public interface PollDataSource {
 
   PollEntity vote(String idPoll, String idPollOption)
       throws UserCannotVoteRequestException, UserHasVotedRequestException;
+
+  void sharePoll(String idPoll) throws PollDeletedException;
 }

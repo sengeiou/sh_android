@@ -42,4 +42,8 @@ public class LocalPollRepository implements PollRepository {
   @Override public Poll vote(String idPoll, String idPollOption) {
     throw new IllegalArgumentException("method not implemented");
   }
+
+  @Override public void sharePoll(String idPoll) {
+    throw new IllegalArgumentException("method not implemented");
+  }
 }

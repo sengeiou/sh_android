@@ -70,4 +70,8 @@ public class RemotePollRepository implements PollRepository {
     localPollDataSource.putPoll(pollEntity);
     return pollEntityMapper.transform(pollEntity);
   }
+
+  @Override public void sharePoll(String idPoll) throws PollDeletedException {
+    remotePollDataSource.sharePoll(idPoll);
+  }
 }

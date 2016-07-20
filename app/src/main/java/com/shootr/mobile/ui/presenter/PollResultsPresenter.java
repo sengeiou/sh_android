@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
+import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollResultsView;
@@ -18,25 +19,32 @@ public class PollResultsPresenter implements Presenter {
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final PollModelMapper pollModelMapper;
   private final IgnorePollInteractor ignorePollInteractor;
+  private final SharePollInteractor sharePollInteractor;
   private final ErrorMessageFactory errorMessageFactory;
 
   private PollResultsView pollResultsView;
   private boolean hasBeenPaused;
   private String idPoll;
+  private PollModel pollModel;
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
-      ErrorMessageFactory errorMessageFactory) {
+      SharePollInteractor sharePollInteractor, ErrorMessageFactory errorMessageFactory) {
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.pollModelMapper = pollModelMapper;
     this.ignorePollInteractor = ignorePollInteractor;
+    this.sharePollInteractor = sharePollInteractor;
     this.errorMessageFactory = errorMessageFactory;
   }
 
   public void initialize(PollResultsView pollResultsView, String idPoll) {
-    this.pollResultsView = pollResultsView;
+    setView(pollResultsView);
     this.idPoll = idPoll;
     loadPoll();
+  }
+
+  protected void setView(PollResultsView pollResultsView) {
+    this.pollResultsView = pollResultsView;
   }
 
   private void loadPoll() {
@@ -57,6 +65,7 @@ public class PollResultsPresenter implements Presenter {
 
   private void handlePollModel(Poll poll) {
     PollModel pollModel = pollModelMapper.transform(poll);
+    this.pollModel = pollModel;
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel);
@@ -85,5 +94,21 @@ public class PollResultsPresenter implements Presenter {
         pollResultsView.ignorePoll();
       }
     });
+  }
+
+  public void shareViaShootr() {
+    sharePollInteractor.sharePoll(idPoll, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        pollResultsView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
+
+  public void share() {
+    pollResultsView.share(pollModel);
   }
 }

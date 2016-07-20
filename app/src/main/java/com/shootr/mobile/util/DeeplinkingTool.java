@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import butterknife.BindString;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import java.util.regex.Matcher;
@@ -13,6 +14,8 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
 
   public static final String SHARE_STREAM_PATTERN_HTTPS = "https://web.shootr.com/st/";
   public static final String SHARE_STREAM_PATTERN_HTTP = "http://web.shootr.com/st/";
+  public static final String SHARE_POLL_PATTERN_HTTPS = "https://web.shootr.com/poll/";
+  public static final String SHARE_POLL_PATTERN_HTTP = "http://web.shootr.com/poll/";
   public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/s/";
   public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/s/";
   public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
@@ -26,6 +29,9 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
   }
 
   @Override public void navigate(Context context, String address) {
+    analyticsTool.analyticsSendAction(context, analyticsActionOpenLink,
+        analyticsLabelOpenLink);
+
     Pattern shareStreamPatternWithHttps = Pattern.compile(SHARE_STREAM_PATTERN_HTTPS);
     Matcher matcherShareStreamHttps = shareStreamPatternWithHttps.matcher(address);
 
@@ -44,8 +50,11 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
     Pattern shareStreamPatternWithShootr = Pattern.compile(SHARE_STREAM_PATTERN_SHOOTR);
     Matcher matcherShateStreamShootr = shareStreamPatternWithShootr.matcher(address);
 
-    analyticsTool.analyticsSendAction(context, analyticsActionOpenLink,
-        analyticsLabelOpenLink);
+    Pattern sharePollPatternWithHttps = Pattern.compile(SHARE_POLL_PATTERN_HTTPS);
+    Matcher matcherSharePollHttps = sharePollPatternWithHttps.matcher(address);
+
+    Pattern sharePollPatternWithHttp = Pattern.compile(SHARE_POLL_PATTERN_HTTP);
+    Matcher matcherSharePollHttp = sharePollPatternWithHttp.matcher(address);
 
     if (matcherShareStreamHttps.find()) {
       String idStream = address.substring(matcherShareStreamHttps.end());
@@ -65,6 +74,12 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
     } else if (matcherShareShotShootr.find()) {
       String idShot = address.substring(matcherShareShotShootr.end());
       context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+    } else if (matcherSharePollHttps.find()) {
+      String idPoll = address.substring(matcherSharePollHttps.end());
+      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll)));
+    } else if (matcherSharePollHttp.find()) {
+      String idPoll = address.substring(matcherSharePollHttp.end());
+      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll)));
     }
   }
 

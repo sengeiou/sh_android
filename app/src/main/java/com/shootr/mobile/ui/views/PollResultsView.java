@@ -10,4 +10,6 @@ public interface PollResultsView extends LoadDataView {
   void showError(String error);
 
   void ignorePoll();
+
+  void share(PollModel pollModel);
 }

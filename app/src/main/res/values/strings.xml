@@ -57,7 +57,7 @@
   <string name="block_user_dialog_ban">Ban</string>
   <string name="block_user_dialog_block">Ignore</string>
   <string name="block_user_dialog_cancel">Cancel</string>
-  <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
+  <string name="block_user_dialog_message">Ignoring will prevent you from sº eeing this user\'s shots.</string>
   <string name="block_user_error">To ignore this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
   <string name="cancel_hide_shot" formatted="false">Cancel</string>
@@ -294,6 +294,7 @@
   <string name="profile_support">Support</string>
   <string name="profile_updated">Profile updated</string>
   <string name="publish_poll">%1$s New poll in %2$s</string>
+  <string name="shared_poll">Shared poll %s</string>
   <string name="read_write_mode_public_description">Anyone can shoot</string>
   <string name="read_write_mode_public_title">Public</string>
   <string name="read_write_mode_view_only_description">Owner and contributors can shoot</string>
@@ -333,6 +334,7 @@
   <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Shared (stream)</string>
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_stream_subject">Check out %s on Shootr</string>
   <string name="share_via">Share via…</string>
   <string name="share_via_shootr">Share via Shootr</string>
@@ -424,4 +426,5 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="poll_results_dialog">If you see the results you won\'t be able to vote in this poll.</string>
+  <string name="share_poll_subject">Watch the poll %s</string>
 </resources>
