@@ -147,6 +147,16 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.poll_vote) String pollVoteString;
   @BindString(R.string.poll_view) String pollViewString;
   @BindString(R.string.poll_results) String pollResultsString;
+  @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
+  @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
+  @BindString(R.string.analytics_action_nice) String analyticsActionNice;
+  @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
+  @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
+  @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+  @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -258,6 +268,8 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
+            analyticsLabelFavoriteStream);
         return true;
       case R.id.menu_stream_remove_favorite:
         streamTimelineOptionsPresenter.removeFromFavorites();
@@ -383,6 +395,8 @@ public class StreamTimelineFragment extends BaseFragment
         new OnNiceShotListener() {
           @Override public void markNice(String idShot) {
             streamTimelinePresenter.markNiceShot(idShot);
+            analyticsTool.analyticsSendAction(getContext(), analyticsActionNice,
+                analyticsLabelNice);
           }
 
           @Override public void unmarkNice(String idShot) {
@@ -555,6 +569,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupImageDialog(ShotModel shot) {
+    analyticsTool.analyticsSendAction(getContext(), analyticsActionPhoto,
+        analyticsLabelPhoto);
     LayoutInflater inflater = getActivity().getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_shot_image, null);
     TextView user = (TextView) dialogView.findViewById(R.id.shot_user_name);
@@ -1019,10 +1035,14 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
+            analyticsTool.analyticsSendAction(getContext(), analyticsActionShareShot,
+                analyticsLabelShareShot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionExternalShare,
+            analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1071,10 +1091,14 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionShareShot,
+            analyticsLabelShareShot);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionExternalShare,
+            analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1104,10 +1128,14 @@ public class StreamTimelineFragment extends BaseFragment
         R.string.menu_share_shot_via_shootr, new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shotModel);
+            analyticsTool.analyticsSendAction(getContext(), analyticsActionShareShot,
+                analyticsLabelShareShot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionExternalShare,
+            analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {

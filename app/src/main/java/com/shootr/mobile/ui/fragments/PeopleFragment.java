@@ -54,6 +54,8 @@ public class PeopleFragment extends BaseFragment
   @Bind(R.id.userlist_empty) TextView emptyTextView;
 
   @BindString(R.string.analytics_screen_friends) String analyticsScreenFriends;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
   private FriendsAdapter peopleAdapter;
   private UserListAdapter suggestedPeopleAdapter;
@@ -217,6 +219,8 @@ public class PeopleFragment extends BaseFragment
 
   @Override public void follow(int position) {
     suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
+    analyticsTool.analyticsSendAction(getContext(), analyticsActionFollow,
+        analyticsLabelFollow);
   }
 
   @Override public void unFollow(final int position) {

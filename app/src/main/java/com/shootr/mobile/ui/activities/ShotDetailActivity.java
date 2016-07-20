@@ -34,6 +34,7 @@ import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.ui.widgets.EndOffsetItemDecoration;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
@@ -61,11 +62,18 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private static final int OFFSET_WITH_REPLIES = 400;
 
     @Bind(R.id.shot_detail_list) RecyclerView detailList;
-    @Bind(R.id.detail_new_shot_bar) View newShotBar;
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
     @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
     @BindString(R.string.shot_shared_message) String shotShared;
-    @BindString(R.string.user_not_found_message) String userNotFoundMessage;
+    @BindString(R.string.analytics_screen_shot_detail) String analyticsScreenShotDetail;
+    @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
+    @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
+    @BindString(R.string.analytics_action_nice) String analyticsActionNice;
+    @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+    @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
+    @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
+    @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
     @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
@@ -79,6 +87,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Inject BackStackHandler backStackHandler;
     @Inject CrashReportTool crashReportTool;
     @Inject PinShotPresenter pinShotPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -118,6 +127,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
         writePermissionManager.init(this);
         setupPhotoPicker();
         ShotModel shotModel = extractShotFromIntent();
@@ -178,10 +188,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShotViaShootr();
+                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionShareShot,
+                    analyticsLabelShareShot);
             }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShot();
+                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
+                    analyticsLabelExternalShare);
             }
         }).show();
     }
@@ -245,6 +259,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           new OnNiceShotListener() {
               @Override public void markNice(String idShot) {
                   detailPresenter.markNiceShot(idShot);
+                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
+                      analyticsLabelNice);
               }
 
               @Override public void unmarkNice(String idShot) {
@@ -372,6 +388,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     //region Listeners
     public void onShotImageClick(ShotModel shot) {
         detailPresenter.imageClick(shot);
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionPhoto,
+            analyticsLabelPhoto);
     }
 
     public void onShotAvatarClick(String userId) {

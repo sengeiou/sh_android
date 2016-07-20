@@ -3,6 +3,8 @@ package com.shootr.mobile.notifications.gcm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import butterknife.BindString;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -15,6 +17,7 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.util.AnalyticsTool;
 import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
@@ -34,9 +37,13 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   public static final String ACTION_NEED_UPDATE = "com.shootr.mobile.ACTION_NEED_UPDATE";
   public static final String ACTION_OPEN_POLL_VOTE = "com.shootr.mobile.ACTION_OPEN_POLL_VOTE";
 
+  @BindString(R.string.analytics_action_push_open) String analyticsActionPushOpen;
+  @BindString(R.string.analytics_label_push_open) String analyticsLabelPushOpen;
+
   @Inject ShotNotificationManager shotNotificationManager;
   @Inject ActivityNotificationManager activityNotificationManager;
   @Inject @ActivityBadgeCount IntPreference badgeCount;
+  @Inject AnalyticsTool analyticsTool;
 
   @Override public void onReceive(Context context, Intent intent) {
     ShootrApplication.get(context).inject(this);
@@ -48,29 +55,36 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         break;
       case ACTION_OPEN_SHOT_NOTIFICATION:
         openActivities(context);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
         break;
       case ACTION_OPEN_PROFILE:
         openProfile(context, intent);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_OPEN_STREAM:
         openStream(context, intent);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_OPEN_SHOT_DETAIL:
         openShotDetail(context, intent);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_OPEN_POLL_VOTE:
         openPollVote(context, intent);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
+        sendGoogleAnalythicsPushOpen(context);
         break;
       default:
         openUpdateNeeded(context);
@@ -129,5 +143,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   private void decrementBadgeCount() {
     int numberOfActivities = badgeCount.get();
     badgeCount.set(numberOfActivities - 1);
+  }
+
+  private void sendGoogleAnalythicsPushOpen(Context context) {
+    analyticsTool.analyticsSendAction(context, analyticsActionPushOpen, analyticsLabelPushOpen);
   }
 }

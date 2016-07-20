@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
@@ -17,6 +18,7 @@ import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.mobile.ui.activities.WelcomePageActivity;
 import com.shootr.mobile.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -28,8 +30,12 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.registration_create_button) View createButton;
     @Bind(R.id.registration_create_progress) View progress;
 
+    @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
+    @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
+
     @Inject EmailRegistrationPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -138,6 +144,8 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
           .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmAccountCreation();
+                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionSignup,
+                      analyticsLabelSignup);
               }
           })
           .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

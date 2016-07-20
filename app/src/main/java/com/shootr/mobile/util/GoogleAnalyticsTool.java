@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class GoogleAnalyticsTool implements AnalyticsTool {
 
     private static final String APP_TRACKER = "app_tracker";
+    private final String ACTION = "action";
 
     private Tracker tracker;
     private HashMap<String, Tracker> trackers = new HashMap();
@@ -36,7 +37,15 @@ public class GoogleAnalyticsTool implements AnalyticsTool {
         GoogleAnalytics.getInstance(context).reportActivityStop(activity);
     }
 
-    public synchronized Tracker getTracker(Context context, String appTracker) {
+    @Override public void analyticsSendAction(Context context, String actionId, String labelId) {
+        tracker = getTracker(context, APP_TRACKER);
+        tracker.send(new HitBuilders.EventBuilder().setCategory(ACTION)
+            .setAction(actionId)
+            .setLabel(labelId)
+            .build());
+    }
+
+    private synchronized Tracker getTracker(Context context, String appTracker) {
         if (!trackers.containsKey(appTracker)) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
             Tracker t = analytics.newTracker(R.xml.navigation_tracker);

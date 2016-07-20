@@ -119,6 +119,14 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
   @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
   @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+  @BindString(R.string.analytics_action_nice) String analyticsActionNice;
+  @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+  @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
+  @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
+  @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+  @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
   @Inject ImageLoader imageLoader;
   @Inject IntentFactory intentFactory;
@@ -194,6 +202,8 @@ public class ProfileActivity extends BaseActivity
     OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
       @Override public void markNice(String idShot) {
         profilePresenter.markNiceShot(idShot);
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
+            analyticsLabelNice);
       }
 
       @Override public void unmarkNice(String idShot) {
@@ -431,6 +441,8 @@ public class ProfileActivity extends BaseActivity
 
   private void followUser() {
     profilePresenter.follow();
+    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+        analyticsLabelFollow);
   }
 
   private void unfollowUser() {
@@ -1009,10 +1021,14 @@ public class ProfileActivity extends BaseActivity
         new Runnable() {
           @Override public void run() {
             profilePresenter.shareShot(shotModel);
+            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionShareShot,
+                analyticsLabelShareShot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
+            analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {

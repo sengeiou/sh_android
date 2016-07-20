@@ -51,6 +51,8 @@ public class UserFollowsFragment extends BaseFragment
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
     @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
@@ -147,6 +149,8 @@ public class UserFollowsFragment extends BaseFragment
 
     private void followUser(UserModel user) {
         userFollowsPresenter.follow(user);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     public void unfollowUser(final UserModel user) {

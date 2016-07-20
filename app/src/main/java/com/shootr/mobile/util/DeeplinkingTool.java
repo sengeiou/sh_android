@@ -1,6 +1,8 @@
 package com.shootr.mobile.util;
 
 import android.content.Context;
+import butterknife.BindString;
+import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import java.util.regex.Matcher;
@@ -16,6 +18,10 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
   public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
   public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
 
+  @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
+  @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenLink;
+
+  @Inject AnalyticsTool analyticsTool;
   @Inject public DeeplinkingTool() {
   }
 
@@ -37,6 +43,9 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
 
     Pattern shareStreamPatternWithShootr = Pattern.compile(SHARE_STREAM_PATTERN_SHOOTR);
     Matcher matcherShateStreamShootr = shareStreamPatternWithShootr.matcher(address);
+
+    analyticsTool.analyticsSendAction(context, analyticsActionOpenLink,
+        analyticsLabelOpenLink);
 
     if (matcherShareStreamHttps.find()) {
       String idStream = address.substring(matcherShareStreamHttps.end());

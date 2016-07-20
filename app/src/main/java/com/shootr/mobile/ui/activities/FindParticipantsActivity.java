@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FindParticipantsPresenter;
 import com.shootr.mobile.ui.views.FindParticipantsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
@@ -39,10 +41,14 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.find_participants_search_results_list) ListView resultsListView;
     @Bind(R.id.find_participants_search_results_empty) TextView emptyOrErrorView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
+
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, FindParticipantsActivity.class);
@@ -132,6 +138,8 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void follow(int position) {
         findParticipantsPresenter.followUser(adapter.getItem(position));
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     @Override public void unFollow(int position) {

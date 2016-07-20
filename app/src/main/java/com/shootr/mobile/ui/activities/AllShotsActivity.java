@@ -30,6 +30,7 @@ import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
@@ -52,6 +53,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
@@ -60,6 +62,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
     @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
     @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
+    @BindString(R.string.analytics_action_nice) String analyticsActionNice;
+    @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+    @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
+    @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
+    @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
@@ -161,6 +169,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
             @Override public void markNice(String idShot) {
                 presenter.markNiceShot(idShot);
+                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
+                    analyticsLabelNice);
             }
 
             @Override public void unmarkNice(String idShot) {
@@ -414,10 +424,14 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareShot(shotModel);
+                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionShareShot,
+                    analyticsLabelShareShot);
             }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 shareShot(shotModel);
+                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
+                    analyticsLabelExternalShare);
             }
         }).addAction(R.string.menu_copy_text, new Runnable() {
             @Override public void run() {

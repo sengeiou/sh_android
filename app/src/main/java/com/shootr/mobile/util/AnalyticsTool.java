@@ -12,4 +12,6 @@ public interface AnalyticsTool {
     void analyticsStart(Context context, String name);
 
     void analyticsStop(Context context, Activity activity);
+
+    void analyticsSendAction(Context context, String actionId, String labelId);
 }
