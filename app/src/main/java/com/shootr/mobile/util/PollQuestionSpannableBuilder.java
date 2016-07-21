@@ -36,13 +36,13 @@ public class PollQuestionSpannableBuilder {
 
     if (matcher.find()) {
       String pollQuestion =
-          spannableBuilder.subSequence(matcher.start(), matcher.end()).toString();
+          spannableBuilder.subSequence(matcher.start(), spannableBuilder.length()).toString();
       PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll, pollQuestion) {
         @Override public void onPollQuestionClick(String pollQuestion) {
           clickListener.onPollQuestionClick(idPoll);
         }
       };
-      spannableBuilder.setSpan(pollQuestionSpan, matcher.start(), matcher.end() + 1,
+      spannableBuilder.setSpan(pollQuestionSpan, matcher.start(), spannableBuilder.length(),
           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
     return spannableBuilder;
