@@ -1177,6 +1177,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupPollIndicator(PollModel pollModel) {
+    timelineNewShotsIndicator.setVisibility(View.GONE);
     pollIndicatorStatus = POLL_STATUS_SHOWING;
     if (timelinePollIndicator != null) {
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
@@ -1215,7 +1216,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.timeline_new_shots_indicator_container) public void onShotBarPressed() {
-    newShotBarPresenter.editTopicPressed();
+    if (timelineNewShotsIndicator.getVisibility() != View.GONE) {
+      newShotBarPresenter.editTopicPressed();
+    }
   }
   //endregion
 }
