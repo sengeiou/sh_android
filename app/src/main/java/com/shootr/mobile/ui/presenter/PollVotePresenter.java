@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -20,6 +21,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class PollVotePresenter implements Presenter {
+
+  private static final long ZERO_VOTES = 0;
 
   private final GetPollByIdStreamInteractor getPollByIdStreamInteractor;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
@@ -39,6 +42,7 @@ public class PollVotePresenter implements Presenter {
   private boolean hasBeenInitializedWithIdPoll;
   private PollModel pollModel;
   private String votedPollOptionId;
+  private long pollVotes = 0;
 
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
       GetPollByIdPollInteractor getPollByIdPollInteractor,
@@ -108,10 +112,23 @@ public class PollVotePresenter implements Presenter {
     if (canRenderPoll()) {
       idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
+      showPollVotes();
     } else {
       if (pollModel != null) {
         pollVoteView.goToResults(pollModel.getIdPoll());
       }
+    }
+  }
+
+  private void showPollVotes() {
+    countPollVotes();
+    pollVoteView.showPollVotes(pollVotes);
+  }
+
+  private void countPollVotes() {
+    pollVotes = ZERO_VOTES;
+    for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
+      pollVotes += pollOptionModel.getVotes();
     }
   }
 
@@ -177,6 +194,7 @@ public class PollVotePresenter implements Presenter {
 
   @Override public void resume() {
     if (hasBeenPaused) {
+      pollVotes = ZERO_VOTES;
       loadPollInResume();
     }
   }

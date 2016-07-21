@@ -117,6 +117,13 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollOptionAdapter.notifyDataSetChanged();
   }
 
+  @Override public void showPollVotes(Long votes) {
+    Integer pollVotes = votes.intValue();
+    String pollVotesText =
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    getToolbarDecorator().setSubtitle(pollVotesText);
+  }
+
   @Override public void ignorePoll() {
     finish();
   }

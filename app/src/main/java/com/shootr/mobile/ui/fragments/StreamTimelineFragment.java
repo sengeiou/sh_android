@@ -634,8 +634,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null) {
-      toolbarDecorator.setSubtitle(watchNumberCount);
+    if (watchNumberCount != null && watchNumberCount != 0) {
+      toolbarDecorator.setSubtitle(
+          getContext().getString(R.string.stream_subtitle, watchNumberCount));
     }
   }
 

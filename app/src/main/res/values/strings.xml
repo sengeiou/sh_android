@@ -427,4 +427,12 @@
   <string name="yes">Yes</string>
   <string name="poll_results_dialog">If you see the results you won\'t be able to vote in this poll.</string>
   <string name="share_poll_subject">Watch the poll %s</string>
+  <plurals name="poll_votes_count">
+    <item quantity="one">
+            %d vote
+        </item>
+    <item quantity="other">
+            %d votes
+        </item>
+  </plurals>
 </resources>

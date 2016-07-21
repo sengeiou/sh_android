@@ -7,6 +7,8 @@ public interface PollVoteView  extends LoadDataView {
 
   void renderPoll(PollModel pollModel);
 
+  void showPollVotes(Long votes);
+
   void ignorePoll();
 
   void goToResults(String idStream);
