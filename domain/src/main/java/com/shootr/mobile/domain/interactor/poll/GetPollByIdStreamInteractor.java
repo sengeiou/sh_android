@@ -10,9 +10,9 @@ import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.PollRepository;
-import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.poll.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
 import com.shootr.mobile.domain.service.PollHasBeenDeletedException;
 import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
@@ -24,15 +24,15 @@ public class GetPollByIdStreamInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final PollRepository localPollRepository;
-  private final PollRepository remotePollRepository;
+  private final InternalPollRepository localPollRepository;
+  private final ServerPollRepository remotePollRepository;
   private Callback<Poll> callback;
   private ErrorCallback errorCallback;
   private String idStream;
 
   @Inject public GetPollByIdStreamInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local PollRepository localPollRepository,
-      @Remote PollRepository remotePollRepository) {
+      PostExecutionThread postExecutionThread, InternalPollRepository localPollRepository,
+      ServerPollRepository remotePollRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localPollRepository = localPollRepository;

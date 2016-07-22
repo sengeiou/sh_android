@@ -5,22 +5,21 @@ import com.shootr.mobile.domain.PollStatus;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import javax.inject.Inject;
 
 public class IgnorePollInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final PollRepository localPollRepository;
+  private final InternalPollRepository localPollRepository;
 
   private String idPoll;
   private CompletedCallback completedCallback;
 
   @Inject IgnorePollInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      @Local PollRepository localPollRepository) {
+      InternalPollRepository localPollRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localPollRepository = localPollRepository;

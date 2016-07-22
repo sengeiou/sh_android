@@ -9,7 +9,8 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,8 +32,8 @@ public class GetPollByIdStreamInteractorTest {
 
   public static final String ID_STREAM = "ID_STREAM";
   private GetPollByIdStreamInteractor interactor;
-  @Mock PollRepository localPollRepository;
-  @Mock PollRepository remotePollRepository;
+  @Mock InternalPollRepository localPollRepository;
+  @Mock ServerPollRepository remotePollRepository;
   @Mock Interactor.Callback<Poll> callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Captor ArgumentCaptor<Poll> pollArgumentCaptor;

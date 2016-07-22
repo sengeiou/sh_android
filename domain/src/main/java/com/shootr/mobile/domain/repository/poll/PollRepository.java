@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.poll;
 
 import com.shootr.mobile.domain.Poll;
 import com.shootr.mobile.domain.exception.PollDeletedException;
@@ -12,14 +12,7 @@ public interface PollRepository {
       throws UserCannotVoteRequestException, UserHasVotedRequestException,
       PollDeletedException;
 
-  void putPoll(Poll poll);
-
   Poll getPollByIdPoll(String idPoll)
       throws UserCannotVoteRequestException, UserHasVotedRequestException,
       PollDeletedException;
-
-  Poll vote(String idPoll, String idPollOption)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException;
-
-  void sharePoll(String idPoll) throws PollDeletedException;
 }

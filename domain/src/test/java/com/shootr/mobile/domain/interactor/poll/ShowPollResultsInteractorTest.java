@@ -6,7 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,7 +24,7 @@ public class ShowPollResultsInteractorTest {
   private static final String HASSEENRESULTS = "HASSEENRESULTS";
   private static final String VOTE = "VOTE";
   private ShowPollResultsInteractor showPollResultsInteractor;
-  @Mock PollRepository localPollRepository;
+  @Mock InternalPollRepository localPollRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Captor ArgumentCaptor<Poll> pollArgumentCaptor;
