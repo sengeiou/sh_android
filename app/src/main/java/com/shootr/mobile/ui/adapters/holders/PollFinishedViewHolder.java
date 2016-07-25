@@ -9,13 +9,13 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.PollQuestionSpannableBuilder;
 
-public class PollSharedViewHolder extends GenericActivityViewHolder {
+public class PollFinishedViewHolder extends GenericActivityViewHolder {
 
   private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
   private final OnPollQuestionClickListener onPollQuestionClickListener;
 
-  public PollSharedViewHolder(View view, ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
+  public PollFinishedViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener,
       PollQuestionSpannableBuilder pollQuestionSpannableBuilder,
       OnPollQuestionClickListener onPollQuestionClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
@@ -29,9 +29,8 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
 
   protected CharSequence formatActivityComment(final ActivityModel activity) {
     activity.setComment(itemView.getResources()
-        .getString(R.string.shared_poll, activity.getPollQuestion()));
+        .getString(R.string.finished_poll, activity.getPollQuestion()));
     return pollQuestionSpannableBuilder.formatPollQuestionSpans(activity.getIdPoll(),
-        activity.getPollQuestion(),
-        activity.getComment(), onPollQuestionClickListener);
+        activity.getPollQuestion(), activity.getComment(), onPollQuestionClickListener);
   }
 }

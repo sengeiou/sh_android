@@ -435,4 +435,5 @@
             %d votes
         </item>
   </plurals>
+  <string name="finished_poll">Final results for %s</string>
 </resources>

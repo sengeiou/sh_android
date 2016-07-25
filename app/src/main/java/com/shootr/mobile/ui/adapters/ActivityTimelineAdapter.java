@@ -12,6 +12,7 @@ import com.shootr.mobile.ui.adapters.holders.MentionViewHolder;
 import com.shootr.mobile.ui.adapters.holders.NiceShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OpenedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PinnedShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.PollFinishedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PollPublishedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PollSharedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PollVotedViewHolder;
@@ -53,6 +54,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_POLL_PUBLISHED = 12;
     public static final int TYPE_POLL_VOTED = 13;
     public static final int TYPE_POLL_SHARED = 14;
+    public static final int TYPE_POLL_FINISHED = 15;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -119,6 +121,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_POLL_VOTED;
                 case ActivityType.SHARE_POLL:
                     return TYPE_POLL_SHARED;
+                case ActivityType.FINISHED_POLL:
+                    return TYPE_POLL_FINISHED;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -163,6 +167,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreatePollVotedViewHolder(parent);
             case TYPE_POLL_SHARED:
                 return onCreatePollSharedViewHolder(parent);
+            case TYPE_POLL_FINISHED:
+                return onCreatePollFinishedViewHolder(parent);
             default:
                 throw new IllegalStateException("View type %d not handled");
         }
@@ -280,6 +286,12 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private PollSharedViewHolder onCreatePollSharedViewHolder(ViewGroup parent) {
         View view = createActivityView(parent);
         return new PollSharedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
+            pollQuestionSpannableBuilder, onPollQuestionClickListener);
+    }
+
+    private RecyclerView.ViewHolder onCreatePollFinishedViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
+        return new PollFinishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
             pollQuestionSpannableBuilder, onPollQuestionClickListener);
     }
 

@@ -161,6 +161,7 @@ public class GCMIntentService extends IntentService {
         break;
       case ActivityType.POLL_PUBLISHED:
       case ActivityType.VOTED_IN_POLL:
+      case ActivityType.FINISHED_POLL:
         setupGoToPollVote(push);
         break;
       default:

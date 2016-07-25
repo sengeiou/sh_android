@@ -27,11 +27,11 @@ public class PollQuestionSpannableBuilder {
     return spannableBuilder;
   }
 
-  public CharSequence formatSharedPollQuestionSpans(final String idPoll, String question,
+  public CharSequence formatPollQuestionSpans(final String idPoll, String question,
       CharSequence comment, final OnPollQuestionClickListener clickListener) {
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
-
-    Pattern pattern = Pattern.compile(question);
+    question = question.trim();
+    Pattern pattern = Pattern.compile(Pattern.quote(question));
     Matcher matcher = pattern.matcher(spannableBuilder.toString());
 
     if (matcher.find()) {
