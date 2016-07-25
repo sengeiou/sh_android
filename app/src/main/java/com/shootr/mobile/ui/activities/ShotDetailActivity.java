@@ -194,7 +194,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShot();
-                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
+                analyticsTool.analyticsSendAction(getBaseContext(),
+                    analyticsActionExternalShare,
                     analyticsLabelExternalShare);
             }
         }).show();

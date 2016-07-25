@@ -210,7 +210,8 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),  true);
-                    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionCreateStream,
+                    analyticsTool.analyticsSendAction(getBaseContext(),
+                        analyticsActionCreateStream,
                         analyticsLabelCreateStream);
                 }
             })
@@ -218,7 +219,8 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(), false);
-                    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionCreateStream,
+                    analyticsTool.analyticsSendAction(getBaseContext(),
+                        analyticsActionCreateStream,
                         analyticsLabelCreateStream);
                 }
             })

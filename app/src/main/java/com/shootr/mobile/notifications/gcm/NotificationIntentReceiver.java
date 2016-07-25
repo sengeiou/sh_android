@@ -55,36 +55,36 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         break;
       case ACTION_OPEN_SHOT_NOTIFICATION:
         openActivities(context);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_SHOT_NOTIFICATION);
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_ACTIVITY_NOTIFICATION);
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
         break;
       case ACTION_OPEN_PROFILE:
         openProfile(context, intent);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_PROFILE);
         break;
       case ACTION_OPEN_STREAM:
         openStream(context, intent);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_STREAM);
         break;
       case ACTION_OPEN_SHOT_DETAIL:
         openShotDetail(context, intent);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_SHOT_DETAIL);
         break;
       case ACTION_OPEN_POLL_VOTE:
         openPollVote(context, intent);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_POLL_VOTE);
         break;
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
-        sendGoogleAnalythicsPushOpen(context);
+        sendGoogleAnalythicsPushOpen(context, ACTION_NEED_UPDATE);
         break;
       default:
         openUpdateNeeded(context);
@@ -145,7 +145,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     badgeCount.set(numberOfActivities - 1);
   }
 
-  private void sendGoogleAnalythicsPushOpen(Context context) {
-    analyticsTool.analyticsSendAction(context, analyticsActionPushOpen, analyticsLabelPushOpen);
+  private void sendGoogleAnalythicsPushOpen(Context context, String action) {
+    analyticsTool.analyticsSendAction(context, action, analyticsActionPushOpen, analyticsLabelPushOpen);
   }
 }

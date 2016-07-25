@@ -208,7 +208,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamVia();
-                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
+                analyticsTool.analyticsSendAction(getBaseContext(),
+                    analyticsActionExternalShare,
                     analyticsLabelExternalShare);
             }
         }).show();

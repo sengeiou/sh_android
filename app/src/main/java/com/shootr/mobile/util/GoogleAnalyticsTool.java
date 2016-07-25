@@ -37,7 +37,17 @@ public class GoogleAnalyticsTool implements AnalyticsTool {
         GoogleAnalytics.getInstance(context).reportActivityStop(activity);
     }
 
-    @Override public void analyticsSendAction(Context context, String actionId, String labelId) {
+    @Override public void analyticsSendAction(Context context, String action, String actionId,
+        String labelId) {
+        tracker = getTracker(context, APP_TRACKER);
+        tracker.send(new HitBuilders.EventBuilder().setCategory(ACTION)
+            .setAction(actionId + action)
+            .setLabel(labelId)
+            .build());
+    }
+
+    @Override public void analyticsSendAction(Context context, String actionId,
+        String labelId) {
         tracker = getTracker(context, APP_TRACKER);
         tracker.send(new HitBuilders.EventBuilder().setCategory(ACTION)
             .setAction(actionId)
