@@ -255,7 +255,7 @@
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Criou (stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">Nenhum participante</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Apagar</string>

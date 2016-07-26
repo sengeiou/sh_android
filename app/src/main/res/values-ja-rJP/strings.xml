@@ -252,7 +252,7 @@
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">(stream)を作成しました</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">参加者はいません</string>
   <string name="photo_edit_gallery">ギャラリー</string>
   <string name="photo_edit_remove">削除する</string>

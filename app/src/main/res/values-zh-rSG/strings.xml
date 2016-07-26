@@ -253,7 +253,7 @@
 </string>
   <string name="ok">好的</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">没有参与者</string>
   <string name="photo_edit_gallery">相册</string>
   <string name="photo_edit_remove">清除</string>

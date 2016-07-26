@@ -262,7 +262,7 @@
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Opened (stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">No participants</string>
   <string name="photo_edit_gallery">Gallery</string>
   <string name="photo_edit_remove">Remove</string>

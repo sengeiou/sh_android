@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginRight="8dp"
+    android:layout_marginLeft="8dp">
 
   <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/option_picture_without_text"
       android:layout_width="64dp"
@@ -31,8 +33,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textColor="@color/black"
-      android:maxLength="50"
-      android:lines="4"
+      android:maxLines="4"
       android:textSize="12sp"
       android:layout_marginBottom="8dp"
       android:gravity="center_horizontal"

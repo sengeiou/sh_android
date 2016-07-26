@@ -254,7 +254,7 @@
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Ha creado (stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">No hay participantes</string>
   <string name="photo_edit_gallery">Galería</string>
   <string name="photo_edit_remove">Quitar</string>
