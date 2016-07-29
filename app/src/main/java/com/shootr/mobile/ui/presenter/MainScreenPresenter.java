@@ -6,7 +6,7 @@ import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.SendDeviceInfoInteractor;
+import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;

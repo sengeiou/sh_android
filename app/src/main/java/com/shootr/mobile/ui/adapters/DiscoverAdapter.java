@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.DiscoveredType;
+import com.shootr.mobile.domain.model.discover.DiscoveredType;
 import com.shootr.mobile.ui.adapters.holders.DiscoveredStreamViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoverFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredStreamClickListener;

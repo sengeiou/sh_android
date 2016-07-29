@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain;
+package com.shootr.mobile.domain.model.discover;
 
 public interface DiscoveredType {
   String STREAM = "STREAM";

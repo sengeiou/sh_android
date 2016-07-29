@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Discovered;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.GetDiscoveredInteractor;
+import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;

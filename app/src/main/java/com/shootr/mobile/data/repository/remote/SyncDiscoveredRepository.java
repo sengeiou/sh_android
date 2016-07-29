@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.DiscoveredEntity;
 import com.shootr.mobile.data.mapper.DiscoveredMappper;
 import com.shootr.mobile.data.repository.datasource.discovered.ExternalDiscoveredDatasource;
-import com.shootr.mobile.domain.Discovered;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.repository.discover.ExternalDiscoveredRepository;
 import com.shootr.mobile.domain.repository.discover.InternalDiscoveredRepository;
 import java.util.List;

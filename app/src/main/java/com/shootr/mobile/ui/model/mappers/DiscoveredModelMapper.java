@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Discovered;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.ui.model.DiscoveredModel;
 import java.util.ArrayList;
 import java.util.List;

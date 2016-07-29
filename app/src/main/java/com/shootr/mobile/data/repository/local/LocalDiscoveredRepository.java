@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.repository.remote.cache.DiscoveredCache;
-import com.shootr.mobile.domain.Discovered;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.repository.discover.InternalDiscoveredRepository;
 import java.util.List;
 import javax.inject.Inject;

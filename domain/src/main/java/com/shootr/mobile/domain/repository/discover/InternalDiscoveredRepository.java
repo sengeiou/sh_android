@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.repository.discover;
 
-import com.shootr.mobile.domain.Discovered;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import java.util.List;
 
 public interface InternalDiscoveredRepository {

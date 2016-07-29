@@ -1,7 +1,9 @@
-package com.shootr.mobile.domain.interactor;
+package com.shootr.mobile.domain.interactor.discover;
 
-import com.shootr.mobile.domain.Discovered;
-import com.shootr.mobile.domain.DiscoveredType;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.discover.Discovered;
+import com.shootr.mobile.domain.model.discover.DiscoveredType;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
