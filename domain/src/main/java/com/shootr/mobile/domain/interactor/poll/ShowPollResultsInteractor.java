@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;

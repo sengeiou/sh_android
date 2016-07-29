@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;

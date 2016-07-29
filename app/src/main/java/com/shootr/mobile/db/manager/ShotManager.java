@@ -10,7 +10,7 @@ import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.DatabaseContract.ShotTable;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
-import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

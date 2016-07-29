@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.service.user;
 
-import com.shootr.mobile.domain.ForgotPasswordResult;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 
 import java.io.IOException;

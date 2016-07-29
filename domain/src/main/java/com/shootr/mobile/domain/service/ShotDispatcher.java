@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.service;
 
-import com.shootr.mobile.domain.QueuedShot;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.bus.ShotQueued;

@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.asserts;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 

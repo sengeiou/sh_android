@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
@@ -134,6 +134,7 @@ public class ProfilePresenter implements Presenter {
     setupProfilePhoto(user);
     setRelationshipButtonStatus(user);
     setupVerifiedUserIcon();
+    setupShowUserSettingsMenu();
     profileView.setUserInfo(userModel);
     renderStreamsNumber();
     profileView.setupAnalytics(isCurrentUser);
@@ -153,6 +154,12 @@ public class ProfilePresenter implements Presenter {
       profileView.showVerifiedUser();
     } else {
       profileView.hideVerifiedUser();
+    }
+  }
+
+  private void setupShowUserSettingsMenu() {
+    if (userModel.getIdUser().equals(sessionRepository.getCurrentUserId())) {
+      profileView.showUserSettings();
     }
   }
 
@@ -570,4 +577,5 @@ public class ProfilePresenter implements Presenter {
   public boolean isCurrentUser() {
     return isCurrentUser;
   }
+
 }

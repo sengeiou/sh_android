@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain;
 
+import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class NewerBelowComparatorTest {
     private static final Long DATE_NEWER = 3000L;
 
     @Test public void shouldNotBeEqualTwoShotsWithDifferentDates() throws Exception {
-        Shot shot1 = new Shot();
+        com.shootr.mobile.domain.model.shot.Shot shot1 = new Shot();
         shot1.setPublishDate(new Date(DATE_OLDER));
         Shot shot2 = new Shot();
         shot2.setPublishDate(new Date(DATE_NEWER));

@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SendDeviceInfoInteractor;

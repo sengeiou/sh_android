@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;

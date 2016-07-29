@@ -1,9 +1,9 @@
 package com.shootr.mobile.domain.service;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import javax.inject.Inject;
 
 public class SessionHandler {

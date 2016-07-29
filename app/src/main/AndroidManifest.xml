@@ -264,6 +264,11 @@
         android:name=".ui.activities.PollResultsActivity"
         android:theme="@style/ShootrTheme">
     </activity>
+    <activity
+        android:name=".ui.activities.SettingsActivity"
+        android:configChanges="orientation|screenSize"
+        android:label="@string/profile_settings"
+        android:theme="@style/ShootrTheme"/>
   </application>
 </manifest>
 

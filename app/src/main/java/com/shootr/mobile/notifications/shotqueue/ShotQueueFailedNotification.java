@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.activities.DraftsActivity;

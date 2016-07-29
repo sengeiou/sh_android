@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;

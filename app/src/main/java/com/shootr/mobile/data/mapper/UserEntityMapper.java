@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.UserEntity;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

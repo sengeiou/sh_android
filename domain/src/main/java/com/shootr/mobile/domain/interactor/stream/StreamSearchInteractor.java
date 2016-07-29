@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;

@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotDetail;
-import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.util.List;
 
 public interface ShotRepository {

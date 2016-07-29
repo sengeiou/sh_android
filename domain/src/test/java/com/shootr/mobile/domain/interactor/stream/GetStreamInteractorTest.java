@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;

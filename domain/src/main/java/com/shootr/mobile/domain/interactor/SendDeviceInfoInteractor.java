@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.interactor;
 
-import com.shootr.mobile.domain.Device;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.repository.DeviceRepository;
 import com.shootr.mobile.domain.repository.Local;

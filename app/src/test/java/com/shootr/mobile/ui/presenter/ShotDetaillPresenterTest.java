@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;

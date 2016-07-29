@@ -1,11 +1,11 @@
 package com.shootr.mobile.domain.service.shot;
 
-import com.shootr.mobile.domain.Activity;
-import com.shootr.mobile.domain.ActivityTimeline;
-import com.shootr.mobile.domain.ActivityTimelineParameters;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.StreamTimelineParameters;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;

@@ -7,7 +7,7 @@ import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
-import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamReadOnlyException;

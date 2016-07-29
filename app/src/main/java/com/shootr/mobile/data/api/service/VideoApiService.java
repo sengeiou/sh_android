@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.entity.VideoEmbedEntity;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import java.io.IOException;
 import retrofit.http.Body;
 import retrofit.http.POST;

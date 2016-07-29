@@ -92,6 +92,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
+
     private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
 
     private LinearLayoutManager linearLayoutManager;

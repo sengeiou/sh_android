@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;

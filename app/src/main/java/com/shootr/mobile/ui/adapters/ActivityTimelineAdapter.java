@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.ActivityType;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.holders.FollowActivityViewHolder;
 import com.shootr.mobile.ui.adapters.holders.GenericActivityViewHolder;
 import com.shootr.mobile.ui.adapters.holders.MentionViewHolder;

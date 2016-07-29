@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;

@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.bus.FavoriteAdded;
 import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;

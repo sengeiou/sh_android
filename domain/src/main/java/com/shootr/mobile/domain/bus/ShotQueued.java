@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.bus;
 
-import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 
 public interface ShotQueued {
 

@@ -2,7 +2,7 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 
 import java.util.ArrayList;
 import java.util.List;

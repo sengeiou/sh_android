@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.utils.Preconditions;
 
 public class ActivityEntity extends Synchronized {

@@ -4,19 +4,19 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import javax.inject.Inject;
 
 public class SharePollInteractor implements Interactor {
 
-  private final ServerPollRepository remotePollRepository;
+  private final ExternalPollRepository remotePollRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private String idPoll;
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  @Inject public SharePollInteractor(ServerPollRepository remotePollRepository,
+  @Inject public SharePollInteractor(ExternalPollRepository remotePollRepository,
       InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
     this.remotePollRepository = remotePollRepository;
     this.interactorHandler = interactorHandler;

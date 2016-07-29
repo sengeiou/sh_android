@@ -1,9 +1,9 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;

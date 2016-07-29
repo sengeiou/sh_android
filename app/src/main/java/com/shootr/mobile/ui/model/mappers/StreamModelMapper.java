@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
 

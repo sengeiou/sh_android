@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.Activity;
-import com.shootr.mobile.domain.ActivityTimelineParameters;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import java.util.List;
 
 public interface ActivityRepository {

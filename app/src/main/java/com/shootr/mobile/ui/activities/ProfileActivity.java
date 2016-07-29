@@ -151,6 +151,7 @@ public class ProfileActivity extends BaseActivity
   private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder settingsMenuItem = new MenuItemValueHolder();
   private UserListAdapter suggestedPeopleAdapter;
 
   String idUser;
@@ -298,6 +299,7 @@ public class ProfileActivity extends BaseActivity
     changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
     blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
     reportUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_report_user));
+    settingsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_settings));
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -321,6 +323,9 @@ public class ProfileActivity extends BaseActivity
         return true;
       case R.id.menu_profile_report_user:
         profilePresenter.reportUserClicked();
+        return true;
+      case R.id.menu_profile_settings:
+        startActivity(new Intent(this, SettingsActivity.class));
         return true;
       default:
         return super.onOptionsItemSelected(item);
@@ -1040,4 +1045,9 @@ public class ProfileActivity extends BaseActivity
   @Override public void notifyDeletedShot(ShotModel shotModel) {
     profilePresenter.refreshLatestShots();
   }
+
+  @Override public void showUserSettings() {
+    settingsMenuItem.setVisible(true);
+  }
+
 }

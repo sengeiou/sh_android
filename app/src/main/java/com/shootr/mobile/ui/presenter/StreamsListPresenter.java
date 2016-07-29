@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;

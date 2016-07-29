@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;

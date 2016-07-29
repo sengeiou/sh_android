@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.utils;
 
-import com.shootr.mobile.domain.Device;
+import com.shootr.mobile.domain.model.Device;
 
 public interface DeviceFactory {
 

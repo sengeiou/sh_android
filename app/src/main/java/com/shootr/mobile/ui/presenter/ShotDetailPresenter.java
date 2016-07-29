@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotDetail;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;

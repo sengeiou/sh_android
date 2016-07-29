@@ -1,12 +1,11 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Activity;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.infraestructure.Mapper;
 import com.shootr.mobile.ui.model.ActivityModel;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
-public class ActivityModelMapper {
+public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
 
     private final ShotModelMapper shotModelMapper;
 
@@ -14,7 +13,7 @@ public class ActivityModelMapper {
         this.shotModelMapper = shotModelMapper;
     }
 
-    public ActivityModel transform(Activity activity) {
+    @Override public ActivityModel map(Activity activity) {
         ActivityModel activityModel = new ActivityModel();
 
         activityModel.setPublishDate(activity.getPublishDate());
@@ -43,11 +42,7 @@ public class ActivityModelMapper {
         return activityModel;
     }
 
-    public List<ActivityModel> transform(List<Activity> activities) {
-        List<ActivityModel> activityModels = new ArrayList<>();
-        for (Activity activity : activities) {
-            activityModels.add(transform(activity));
-        }
-        return activityModels;
+    @Override public Activity reverseMap(ActivityModel value) {
+        return null;
     }
 }

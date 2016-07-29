@@ -1,9 +1,9 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
-import com.shootr.mobile.domain.Listing;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.stream.Listing;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
@@ -185,7 +186,7 @@ public class GetUserListingStreamsInteractorTest {
 
   private Map<String, Integer> holderWatchers() {
     Map<String, Integer> map = new HashMap<>();
-    for (com.shootr.mobile.domain.Stream stream : favoriteStreams()) {
+    for (Stream stream : favoriteStreams()) {
       map.put(stream.getId(), 0);
     }
     return map;
@@ -193,7 +194,7 @@ public class GetUserListingStreamsInteractorTest {
 
   private List<StreamSearchResult> favoriteStreamResults() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
-    for (com.shootr.mobile.domain.Stream stream : favoriteStreams()) {
+    for (Stream stream : favoriteStreams()) {
       StreamSearchResult streamSearchResult = new StreamSearchResult();
       streamSearchResult.setStream(stream);
       streamSearchResults.add(streamSearchResult);
@@ -201,10 +202,10 @@ public class GetUserListingStreamsInteractorTest {
     return streamSearchResults;
   }
 
-  private List<com.shootr.mobile.domain.Stream> favoriteStreams() {
-    List<com.shootr.mobile.domain.Stream> streams = new ArrayList<>();
+  private List<Stream> favoriteStreams() {
+    List<Stream> streams = new ArrayList<>();
     for (Favorite favorite : favorites()) {
-      com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+      Stream stream = new Stream();
       stream.setId(favorite.getIdStream());
       streams.add(stream);
     }
@@ -214,7 +215,7 @@ public class GetUserListingStreamsInteractorTest {
   private List<StreamSearchResult> listingStreams() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
     StreamSearchResult streamSearchResult = new StreamSearchResult();
-    com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    Stream stream = new Stream();
     stream.setAuthorId(ID_USER);
     stream.setId(ID_STREAM);
     stream.setRemoved(false);

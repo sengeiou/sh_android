@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Nicer;
+import com.shootr.mobile.domain.model.shot.Nicer;
 import com.shootr.mobile.ui.model.NicerModel;
 import java.util.ArrayList;
 import java.util.List;

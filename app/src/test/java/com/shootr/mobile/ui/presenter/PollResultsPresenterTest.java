@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Poll;
+import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;

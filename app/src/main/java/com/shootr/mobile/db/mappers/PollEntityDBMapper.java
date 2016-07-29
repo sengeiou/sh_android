@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.db.DatabaseContract;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import javax.inject.Inject;
 
 public class PollEntityDBMapper extends GenericDBMapper {

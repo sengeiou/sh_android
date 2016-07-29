@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollOption;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollOption;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
@@ -12,7 +12,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
-import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class VotePollOptionInteractorTest {
   private static final String ANOTHER_ID_POLL_OPTION = "another_id_poll_option";
   private VotePollOptionInteractor votePollOptionInteractor;
   @Mock InternalPollRepository localPollRepository;
-  @Mock ServerPollRepository remotePollRepository;
+  @Mock ExternalPollRepository remotePollRepository;
   @Mock Interactor.Callback<Poll> callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Captor ArgumentCaptor<Poll> pollArgumentCaptor;

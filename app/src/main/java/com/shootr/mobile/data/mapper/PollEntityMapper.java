@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.PollEntity;
-import com.shootr.mobile.domain.Poll;
+import com.shootr.mobile.domain.model.poll.Poll;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

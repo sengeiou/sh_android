@@ -8,7 +8,7 @@ import com.shootr.mobile.data.repository.remote.RemotePollRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
-import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import dagger.Module;
 import dagger.Provides;
 
@@ -24,7 +24,7 @@ import dagger.Provides;
     return pollRepository;
   }
 
-  @Provides ServerPollRepository provideRemotePollRepository(RemotePollRepository pollRepository) {
+  @Provides ExternalPollRepository provideRemotePollRepository(RemotePollRepository pollRepository) {
     return pollRepository;
   }
 

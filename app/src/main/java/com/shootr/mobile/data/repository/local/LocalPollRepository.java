@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
-import com.shootr.mobile.domain.Poll;
+import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;

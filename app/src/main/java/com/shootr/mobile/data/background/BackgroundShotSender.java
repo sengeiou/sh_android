@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.background;
 
 import android.app.Application;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.service.ShotSender;
 import java.io.File;
 import javax.inject.Inject;

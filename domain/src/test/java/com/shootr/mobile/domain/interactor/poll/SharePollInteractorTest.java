@@ -6,7 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 public class SharePollInteractorTest {
 
   public static final String ID_POLL = "id_poll";
-  @Mock ServerPollRepository remotePollRepository;
+  @Mock ExternalPollRepository remotePollRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;
 

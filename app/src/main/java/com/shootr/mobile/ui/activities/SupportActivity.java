@@ -10,7 +10,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SupportPresenter;

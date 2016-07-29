@@ -4,7 +4,7 @@ import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.FavoriteDataSource;
-import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.repository.Local;
 import javax.inject.Inject;
 

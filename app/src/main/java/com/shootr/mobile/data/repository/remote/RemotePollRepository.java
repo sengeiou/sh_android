@@ -3,18 +3,18 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.poll.ServerPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class RemotePollRepository implements ServerPollRepository {
+public class RemotePollRepository implements ExternalPollRepository {
 
   private final PollDataSource remotePollDataSource;
   private final PollDataSource localPollDataSource;

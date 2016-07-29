@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.service.user;
 
-import com.shootr.mobile.domain.LoginResult;
+import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
 
 public interface LoginGateway {

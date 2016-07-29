@@ -436,4 +436,10 @@
         </item>
   </plurals>
   <string name="finished_poll">Final results for %s</string>
+  <string name="profile_settings">Push notifications</string>
+  <string name="profile_push_notifications">Push notifications</string>
+  <string name="started_shooting_push_settings">Started shooting</string>
+  <string name="all_push_settings">All</string>
+  <string name="favorite_streams_push_settings">Favorite streams</string>
+  <string name="off_push_settings">Off</string>
 </resources>

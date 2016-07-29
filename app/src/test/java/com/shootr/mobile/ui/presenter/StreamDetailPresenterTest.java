@@ -1,9 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamInfo;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamInfo;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;

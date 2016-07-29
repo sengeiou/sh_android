@@ -58,6 +58,8 @@ public interface ProfileView {
 
     void goToAllShots(String idUser);
 
+    void showUserSettings();
+
     void showLatestShots();
 
     void hideLatestShots();

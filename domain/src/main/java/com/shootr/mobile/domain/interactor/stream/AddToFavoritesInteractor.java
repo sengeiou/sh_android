@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.FavoriteAdded;
 import com.shootr.mobile.domain.exception.ShootrException;
