@@ -98,6 +98,18 @@ public class GlideImageLoader implements ImageLoader {
     glide.load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
   }
 
+  @Override public void loadDiscoverImage(String url, ImageView view, final Callback callback) {
+    glide.load(url)
+        .dontAnimate()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(new ImageViewTarget<GlideDrawable>(view) {
+          @Override protected void setResource(GlideDrawable resource) {
+            view.setImageDrawable(resource);
+            callback.onLoaded();
+          }
+        });
+  }
+
   @Override public void load(File file, ImageView view) {
     glide.load(file)
         .diskCacheStrategy(DiskCacheStrategy.ALL)

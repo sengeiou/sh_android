@@ -6,6 +6,7 @@ import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
+import com.shootr.mobile.ui.activities.DiscoverFragment;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -13,6 +14,7 @@ import com.shootr.mobile.ui.activities.FindContributorsActivity;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
+import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -43,7 +45,6 @@ import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
-import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
@@ -68,7 +69,6 @@ import javax.inject.Singleton;
     ShotDetailActivity.class,
     PhotoViewActivity.class,
     StreamTimelineActivity.class,
-    PeopleFragment.class,
     WatchersView.class,
     NewStreamActivity.class,
     StreamMediaActivity.class,
@@ -97,7 +97,9 @@ import javax.inject.Singleton;
     FindContributorsActivity.class,
     PollVoteActivity.class, PollResultsActivity.class,
     ActivityTimelineContainerFragment.class,
-    SettingsActivity.class
+    SettingsActivity.class,
+    DiscoverFragment.class,
+    FriendsActivity.class
   },
   complete = false) public class UiModule {
 

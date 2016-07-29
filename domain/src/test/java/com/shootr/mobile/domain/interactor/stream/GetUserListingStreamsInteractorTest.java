@@ -1,9 +1,5 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Favorite;
-import com.shootr.mobile.domain.model.stream.Listing;
-import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -11,11 +7,16 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,10 +45,10 @@ public class GetUserListingStreamsInteractorTest {
   @Mock StreamSearchRepository remoteStreamSearchRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock StreamRepository remoteStreamRepository;
-  @Mock FavoriteRepository remoteFavoriteRepository;
+  @Mock ExternalFavoriteRepository remoteFavoriteRepository;
+  @Mock InternalFavoriteRepository localFavoriteRepository;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock SessionRepository sessionRepository;
-  @Mock FavoriteRepository localFavoriteRepository;
   @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
   private GetUserListingStreamsInteractor interactor;
 

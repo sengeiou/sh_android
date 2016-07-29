@@ -1,16 +1,12 @@
-package com.shootr.mobile.ui.fragments;
+package com.shootr.mobile.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,12 +15,10 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.activities.FindFriendsActivity;
-import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.FriendsAdapter;
-import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PeoplePresenter;
 import com.shootr.mobile.ui.presenter.SuggestedPeoplePresenter;
@@ -38,8 +32,8 @@ import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class PeopleFragment extends BaseFragment
-    implements PeopleView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class FriendsActivity extends BaseToolbarDecoratedActivity implements PeopleView,
+    SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
 
   public static final int REQUEST_CAN_CHANGE_DATA = 1;
   @Inject ImageLoader imageLoader;
@@ -60,18 +54,10 @@ public class PeopleFragment extends BaseFragment
   private FriendsAdapter peopleAdapter;
   private UserListAdapter suggestedPeopleAdapter;
 
-  public static PeopleFragment newInstance() {
-    return new PeopleFragment();
-  }
-
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setHasOptionsMenu(true);
-  }
-
-  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    analyticsTool.analyticsStart(getContext(), analyticsScreenFriends);
+    ButterKnife.bind(this);
+    analyticsTool.analyticsStart(this, analyticsScreenFriends);
     presenter.setView(this);
     presenter.initialize();
     suggestedPeoplePresenter.initialize(this);
@@ -79,21 +65,16 @@ public class PeopleFragment extends BaseFragment
     userlistListView.setAdapter(getPeopleAdapter());
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.activity_userlist, container, false);
+  @Override protected int getLayoutResource() {
+    return R.layout.activity_friends;
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    ButterKnife.bind(this, view);
+  @Override protected void initializeViews(Bundle savedInstanceState) {
+
   }
 
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    analyticsTool.analyticsStop(getContext(), getActivity());
-    ButterKnife.unbind(this);
-    presenter.setView(new NullPeopleView());
-    suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
+  @Override protected void initializePresenter() {
+
   }
 
   @Override public void onResume() {
@@ -106,6 +87,11 @@ public class PeopleFragment extends BaseFragment
     super.onPause();
     presenter.pause();
     suggestedPeoplePresenter.pause();
+
+    analyticsTool.analyticsStop(this, this);
+    ButterKnife.unbind(this);
+    presenter.setView(new NullPeopleView());
+    suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
   }
 
   @OnItemClick(R.id.userlist_list) public void onUserClick(int position) {
@@ -119,28 +105,32 @@ public class PeopleFragment extends BaseFragment
   }
 
   private void openUserProfile(String idUser) {
-    startActivityForResult(ProfileActivity.getIntent(getActivity(), idUser),
+    startActivityForResult(ProfileActivity.getIntent(this, idUser),
         REQUEST_CAN_CHANGE_DATA);
-    getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
   }
 
   public void onInviteFriendClick() {
     Intent intent = new Intent();
     intent.setAction(Intent.ACTION_SEND);
-    intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
+    intent.putExtra(Intent.EXTRA_TEXT, this.getString(R.string.invite_friends_message));
     intent.setType("text/plain");
     startActivity(
-        Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
+        Intent.createChooser(intent, this.getString(R.string.invite_friends_title)));
   }
 
-  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.people, menu);
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.people, menu);
+    return true;
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_search:
         findFriends();
+        return true;
+      case android.R.id.home:
+        finish();
         return true;
       default:
         return super.onOptionsItemSelected(item);
@@ -149,9 +139,9 @@ public class PeopleFragment extends BaseFragment
 
   private void findFriends() {
     // TODO not going through the presenter? You naughty boy...
-    startActivityForResult(new Intent(getActivity(), FindFriendsActivity.class),
+    startActivityForResult(new Intent(this, FindFriendsActivity.class),
         REQUEST_CAN_CHANGE_DATA);
-    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+    this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
   private void setEmptyMessageForPeople() {
@@ -161,7 +151,7 @@ public class PeopleFragment extends BaseFragment
   private FriendsAdapter getPeopleAdapter() {
     if (peopleAdapter == null) {
       suggestedPeopleAdapter = getSuggestedPeopleAdapter();
-      peopleAdapter = new FriendsAdapter(getActivity(), imageLoader, suggestedPeopleAdapter,
+      peopleAdapter = new FriendsAdapter(this, imageLoader, suggestedPeopleAdapter,
           new OnUserClickListener() {
             @Override public void onUserClick(String idUser) {
               openUserProfile(idUser);
@@ -219,13 +209,12 @@ public class PeopleFragment extends BaseFragment
 
   @Override public void follow(int position) {
     suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
-    analyticsTool.analyticsSendAction(getContext(), analyticsActionFollow,
-        analyticsLabelFollow);
+    analyticsTool.analyticsSendAction(this, analyticsActionFollow, analyticsLabelFollow);
   }
 
   @Override public void unFollow(final int position) {
     final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
-    new AlertDialog.Builder(getActivity()).setMessage(
+    new AlertDialog.Builder(this).setMessage(
         String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
         .setPositiveButton(getString(R.string.unfollow_dialog_yes),
             new DialogInterface.OnClickListener() {
@@ -240,7 +229,7 @@ public class PeopleFragment extends BaseFragment
 
   private UserListAdapter getSuggestedPeopleAdapter() {
     if (suggestedPeopleAdapter == null) {
-      suggestedPeopleAdapter = new UserListAdapter(getActivity(), imageLoader);
+      suggestedPeopleAdapter = new UserListAdapter(this, imageLoader);
       suggestedPeopleAdapter.setCallback(this);
     }
     return suggestedPeopleAdapter;
@@ -250,5 +239,9 @@ public class PeopleFragment extends BaseFragment
     if (userlistListView != null) {
       userlistListView.setSelection(0);
     }
+  }
+
+  @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+
   }
 }

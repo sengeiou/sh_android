@@ -5,9 +5,8 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.OnCompletedObserver;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
@@ -16,16 +15,16 @@ public class RemoveFromFavoritesInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final FavoriteRepository localFavoriteRepository;
-  private final FavoriteRepository remoteFavoriteRepository;
+  private final InternalFavoriteRepository localFavoriteRepository;
+  private final ExternalFavoriteRepository remoteFavoriteRepository;
 
   private CompletedCallback callback;
 
   private String idStream;
 
   @Inject public RemoveFromFavoritesInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository) {
+      PostExecutionThread postExecutionThread, InternalFavoriteRepository localFavoriteRepository,
+      ExternalFavoriteRepository remoteFavoriteRepository) {
     this.localFavoriteRepository = localFavoriteRepository;
     this.interactorHandler = interactorHandler;
     this.remoteFavoriteRepository = remoteFavoriteRepository;

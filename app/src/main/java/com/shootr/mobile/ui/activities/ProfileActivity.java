@@ -154,8 +154,8 @@ public class ProfileActivity extends BaseActivity
   private MenuItemValueHolder settingsMenuItem = new MenuItemValueHolder();
   private UserListAdapter suggestedPeopleAdapter;
 
-  String idUser;
-  String username;
+  private String idUser;
+  private String username;
 
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
@@ -1050,4 +1050,8 @@ public class ProfileActivity extends BaseActivity
     settingsMenuItem.setVisible(true);
   }
 
+  @OnClick(R.id.mutuals_container) public void onMutualsClick() {
+    Intent intent = new Intent(this, FriendsActivity.class);
+    startActivity(intent);
+  }
 }

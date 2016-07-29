@@ -1,16 +1,11 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.favorite;
 
 import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
-import java.util.List;
 
 public interface FavoriteRepository {
 
     void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException;
 
-    List<Favorite> getFavorites(String userId);
-
-    Favorite getFavoriteByStream(String eventId);
-
-    void removeFavoriteByStream(String eventId);
+    void removeFavoriteByStream(String idStream);
 }

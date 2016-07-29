@@ -1,15 +1,15 @@
-package com.shootr.mobile.data.repository.datasource.event;
+package com.shootr.mobile.data.repository.datasource.favorite;
 
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.db.manager.FavoriteManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DatabaseFavoriteDataSource implements FavoriteDataSource {
+public class DatabaseFavoriteDatasource implements InternalFavoriteDatasource {
 
     private final FavoriteManager favoriteManager;
 
-    @Inject public DatabaseFavoriteDataSource(FavoriteManager favoriteManager) {
+    @Inject public DatabaseFavoriteDatasource(FavoriteManager favoriteManager) {
         this.favoriteManager = favoriteManager;
     }
 
@@ -21,7 +21,7 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
         return favoriteManager.getFavoriteByIdStream(idStream);
     }
 
-    @Override public List<FavoriteEntity> getFavorites(String userId) {
+    @Override public List<FavoriteEntity> getFavorites() {
         return favoriteManager.getFavorites();
     }
 

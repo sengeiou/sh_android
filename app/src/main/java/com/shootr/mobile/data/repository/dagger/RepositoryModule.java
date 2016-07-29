@@ -8,12 +8,22 @@ import javax.inject.Singleton;
 
 @Module(
     includes = {
-        UserRepositoryModule.class, StreamRepositoryModule.class, ShotRepositoryModule.class,
-        WatchersRepositoryModule.class, FavoriteRepositoryModule.class,
-        ActivityRepositoryModule.class, DatabaseUtilsModule.class, NiceShotRepositoryModule.class,
-        DeviceRepositoryModule.class, FollowRepositoryModule.class, MuteRepositoryModule.class,
-        NicerRepositoryModule.class, ContributorRepositoryModule.class, PollRepositoryModule.class,
-        UserSettingsRepositoryModule.class
+        UserRepositoryModule.class,
+        StreamRepositoryModule.class,
+        ShotRepositoryModule.class,
+        WatchersRepositoryModule.class,
+        FavoriteRepositoryModule.class,
+        ActivityRepositoryModule.class,
+        DatabaseUtilsModule.class,
+        NiceShotRepositoryModule.class,
+        DeviceRepositoryModule.class,
+        FollowRepositoryModule.class,
+        MuteRepositoryModule.class,
+        NicerRepositoryModule.class,
+        ContributorRepositoryModule.class,
+        PollRepositoryModule.class,
+        UserSettingsRepositoryModule.class,
+        DiscoveredRepositoryModule.class
     },
     complete = false,
     library = true) public class RepositoryModule {

@@ -4,7 +4,8 @@ import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -18,8 +19,8 @@ import static org.mockito.Mockito.when;
 public class RemoveFromFavoritesInteractorTest {
 
   private static final String ID_STREAM_FAVORITE = "stream";
-  @Mock FavoriteRepository localFavoriteRepository;
-  @Mock FavoriteRepository remoteFavoriteRepository;
+  @Mock InternalFavoriteRepository localFavoriteRepository;
+  @Mock ExternalFavoriteRepository remoteFavoriteRepository;
   @Mock Interactor.CompletedCallback callback;
   private RemoveFromFavoritesInteractor interactor;
 

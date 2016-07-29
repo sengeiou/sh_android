@@ -13,30 +13,30 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
-  injects = {
-    SyncActivityRepository.class, LocalActivityRepository.class, ServiceActivityDataSource.class,
-    DatabaseActivityDataSource.class,
-  },
-  complete = false,
-  library = true) public class ActivityRepositoryModule {
+    injects = {
+        SyncActivityRepository.class, LocalActivityRepository.class,
+        ServiceActivityDataSource.class, DatabaseActivityDataSource.class,
+    },
+    complete = false,
+    library = true) public class ActivityRepositoryModule {
 
-    @Provides @Singleton @Remote ActivityRepository provideRemoteActivityRepository(
+  @Provides @Singleton @Remote ActivityRepository provideRemoteActivityRepository(
       SyncActivityRepository syncActivityRepository) {
-        return syncActivityRepository;
-    }
+    return syncActivityRepository;
+  }
 
-    @Provides @Singleton @Local ActivityRepository provideLocalActivityRepository(
+  @Provides @Singleton @Local ActivityRepository provideLocalActivityRepository(
       LocalActivityRepository localActivityRepository) {
-        return localActivityRepository;
-    }
+    return localActivityRepository;
+  }
 
-    @Provides @Singleton @Remote ActivityDataSource provideRemoteActivityDataSource(
+  @Provides @Singleton @Remote ActivityDataSource provideRemoteActivityDataSource(
       ServiceActivityDataSource serviceActivityDataSource) {
-        return serviceActivityDataSource;
-    }
+    return serviceActivityDataSource;
+  }
 
-    @Provides @Singleton @Local ActivityDataSource provideLocalActivityDataSource(
+  @Provides @Singleton @Local ActivityDataSource provideLocalActivityDataSource(
       DatabaseActivityDataSource databaseActivityDataSource) {
-        return databaseActivityDataSource;
-    }
+    return databaseActivityDataSource;
+  }
 }

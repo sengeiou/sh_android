@@ -9,10 +9,8 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.OnCompletedObserver;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.Collections;
 import java.util.List;
@@ -24,9 +22,8 @@ public class AddToFavoritesInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final FavoriteRepository localFavoriteRepository;
-  private final FavoriteRepository remoteFavoriteRepository;
-  private final SessionRepository sessionRepository;
+  private final InternalFavoriteRepository localFavoriteRepository;
+  private final ExternalFavoriteRepository remoteFavoriteRepository;
   private final BusPublisher busPublisher;
 
   private Interactor.CompletedCallback callback;
@@ -34,15 +31,13 @@ public class AddToFavoritesInteractor implements Interactor {
 
   private String idStream;
 
-  @Inject public AddToFavoritesInteractor(@Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository, InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      BusPublisher busPublisher) {
+  @Inject public AddToFavoritesInteractor(InternalFavoriteRepository localFavoriteRepository,
+      ExternalFavoriteRepository remoteFavoriteRepository, InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, BusPublisher busPublisher) {
     this.localFavoriteRepository = localFavoriteRepository;
     this.interactorHandler = interactorHandler;
     this.remoteFavoriteRepository = remoteFavoriteRepository;
     this.postExecutionThread = postExecutionThread;
-    this.sessionRepository = sessionRepository;
     this.busPublisher = busPublisher;
   }
 
@@ -115,7 +110,7 @@ public class AddToFavoritesInteractor implements Interactor {
 
   private Favorite getLastLocalFavorite() {
     List<Favorite> favorites =
-        localFavoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
+        localFavoriteRepository.getFavorites();
     Collections.sort(favorites, new Favorite.AscendingOrderComparator());
     if (!favorites.isEmpty()) {
       return favorites.get(favorites.size() - 1);

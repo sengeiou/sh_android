@@ -19,7 +19,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
-import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
@@ -86,10 +85,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             currentFragment = favoritesFragment;
             switchTab(favoritesFragment);
             break;
-          case R.id.bottombar_friends:
-            PeopleFragment peopleFragment = PeopleFragment.newInstance();
-            currentFragment = peopleFragment;
-            switchTab(peopleFragment);
+          case R.id.bottombar_discover:
+            Fragment discoverFragment = DiscoverFragment.newInstance();
+            currentFragment = discoverFragment;
+            switchTab(discoverFragment);
             break;
           case R.id.bottombar_activity:
             ActivityTimelineContainerFragment activityTimelineFragment =
@@ -110,7 +109,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
           case R.id.bottombar_favorites:
             scrollToTop(1);
             break;
-          case R.id.bottombar_friends:
+          case R.id.bottombar_discover:
             scrollToTop(2);
             break;
           case R.id.bottombar_activity:
@@ -138,7 +137,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     } else if (currentItem == 1) {
       ((FavoritesFragment) currentFragment).scrollListToTop();
     } else if (currentItem == 2) {
-      ((PeopleFragment) currentFragment).scrollListToTop();
+      ((DiscoverFragment) currentFragment).scrollListToTop();
     }
   }
 

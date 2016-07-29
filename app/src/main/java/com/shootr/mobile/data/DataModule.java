@@ -30,7 +30,6 @@ import com.shootr.mobile.notifications.gcm.GCMIntentService;
 import com.shootr.mobile.service.ApiModule;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
-import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import com.shootr.mobile.ui.presenter.PeoplePresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
@@ -90,7 +89,6 @@ import static android.content.Context.MODE_PRIVATE;
         BaseSignedInActivity.class,
 
         FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class,
-        PeopleFragment.class,
 
         ShotManager.class,
 
