@@ -172,7 +172,9 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override public void scrollListToTop() {
+      if (favoritesList != null) {
         favoritesList.scrollToPosition(0);
+      }
     }
 
     @Override public void showEmpty() {
