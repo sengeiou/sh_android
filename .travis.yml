@@ -2,7 +2,8 @@ language: android
 
 android:
   components:
-    - tools
+    - tools # to get the new `repository-11.xml`
+    - tools # to install Android SDK tools 25.1.x (x = 6 right now)
     - build-tools-23.0.3
     - android-24
     - extra-android-support
