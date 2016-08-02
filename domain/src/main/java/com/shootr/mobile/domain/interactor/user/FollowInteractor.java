@@ -1,21 +1,18 @@
 package com.shootr.mobile.domain.interactor.user;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.OnCompletedObserver;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.Subscriber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -51,55 +48,14 @@ public class FollowInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        subscribeOnCompletedObserverToObservable(remoteFollowObservable());
-        subscribeOnCompletedObserverToObservable(localFollowObservable());
-        subscribeOnCompletedObserverToObservable(ensureUserExistInLocalObservable());
-    }
-
-    private Observable<Void> localFollowObservable() {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override public void call(Subscriber<? super Void> subscriber) {
-                try {
-                    localFollowRepository.follow(idUser);
-                } catch (FollowingBlockedUserException e) {
-                    /* no-op */
-                }
-                subscriber.onCompleted();
-            }
-        });
-    }
-
-    private Observable<Void> remoteFollowObservable() {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override public void call(Subscriber<? super Void> subscriber) {
-                try {
-                    remoteFollowRepository.follow(idUser);
-                    notifyCompleted();
-                } catch (FollowingBlockedUserException error) {
-                    notifyError(new CannotFollowBlockedUserException(error));
-                }
-                subscriber.onCompleted();
-            }
-        });
-    }
-
-    private Observable<Void> ensureUserExistInLocalObservable() {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override public void call(Subscriber<? super Void> subscriber) {
-                ensureUserExistInLocal();
-                subscriber.onCompleted();
-            }
-        });
-    }
-
-    private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
-        observable.subscribe(new OnCompletedObserver<Void>() {
-            @Override public void onError(Throwable error) {
-                if (error instanceof FollowingBlockedUserException) {
-                    notifyError(new CannotFollowBlockedUserException(error));
-                }
-            }
-        });
+        localFollowRepository.follow(idUser);
+        try {
+            remoteFollowRepository.follow(idUser);
+            ensureUserExistInLocal();
+            notifyCompleted();
+        } catch (FollowingBlockedUserException error) {
+            notifyError(new CannotFollowBlockedUserException(error));
+        }
     }
 
     protected void ensureUserExistInLocal() {
