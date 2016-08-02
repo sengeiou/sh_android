@@ -60,18 +60,13 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     initializeViews();
   }
 
-  @Override public void onResume() {
-    super.onResume();
-    discoverPresenter.resume();
-  }
-
-  @Override public void onPause() {
-    super.onPause();
-    discoverPresenter.pause();
-  }
-
   private void initializeViews() {
     setupGridlayout();
+    setupAdapter();
+    discoverList.setAdapter(adapter);
+  }
+
+  private void setupAdapter() {
     adapter = new DiscoverAdapter(imageLoader, new OnDiscoveredStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
         discoverPresenter.streamClicked(stream);
@@ -85,7 +80,6 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
         discoverPresenter.removeFromFavorites(discoveredModel);
       }
     });
-    discoverList.setAdapter(adapter);
   }
 
   private void setupGridlayout() {
@@ -135,5 +129,15 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    discoverPresenter.resume();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    discoverPresenter.pause();
   }
 }

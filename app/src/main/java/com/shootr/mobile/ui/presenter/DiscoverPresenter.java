@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor;
 import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 public class DiscoverPresenter implements Presenter {
 
   private final GetDiscoveredInteractor getDiscoveredInteractor;
+  private final GetLocalDiscoveredInteractor getLocalDiscoveredInteractor;
   private final AddToFavoritesInteractor addToFavoritesInteractor;
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
   private final DiscoveredModelMapper discoveredModelMapper;
@@ -26,10 +28,11 @@ public class DiscoverPresenter implements Presenter {
   private boolean hasBeenPaused;
 
   @Inject public DiscoverPresenter(GetDiscoveredInteractor getDiscoveredInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
+      GetLocalDiscoveredInteractor getLocalDiscoveredInteractor, AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       DiscoveredModelMapper discoveredModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getDiscoveredInteractor = getDiscoveredInteractor;
+    this.getLocalDiscoveredInteractor = getLocalDiscoveredInteractor;
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.discoveredModelMapper = discoveredModelMapper;
@@ -53,40 +56,49 @@ public class DiscoverPresenter implements Presenter {
     });
   }
 
+  public void loadLocalDiscover() {
+    getLocalDiscoveredInteractor.getDiscovered(new Interactor.Callback<List<Discovered>>() {
+      @Override public void onLoaded(List<Discovered> discovereds) {
+        discoverView.renderDiscover(discoveredModelMapper.transform(discovereds));
+      }
+    });
+  }
+
   public void streamClicked(StreamModel stream) {
     discoverView.navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(),
         stream.getAuthorId());
   }
 
-  public void addStreamToFavorites(DiscoveredModel discoveredModel) {
+  public void addStreamToFavorites(final DiscoveredModel discoveredModel) {
     addToFavoritesInteractor.addToFavorites(discoveredModel.getStreamModel().getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            loadDiscover();
+            loadLocalDiscover();
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
             discoverView.showError(errorMessageFactory.getMessageForError(error));
+            loadLocalDiscover();
           }
         });
   }
 
-  public void removeFromFavorites(DiscoveredModel discoveredModel) {
+  public void removeFromFavorites(final DiscoveredModel discoveredModel) {
     removeFromFavoritesInteractor.removeFromFavorites(discoveredModel.getStreamModel().getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            loadDiscover();
+            loadLocalDiscover();
           }
         });
   }
 
   @Override public void resume() {
     if (hasBeenPaused) {
-      loadDiscover();
+      loadLocalDiscover();
     }
   }
 
   @Override public void pause() {
-    hasBeenPaused = true;
+    this.hasBeenPaused = true;
   }
 }

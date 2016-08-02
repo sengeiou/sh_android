@@ -47,4 +47,32 @@ public class DiscoveredModel {
   public void setHasBeenFaved(Boolean hasBeenFaved) {
     this.hasBeenFaved = hasBeenFaved;
   }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    DiscoveredModel that = (DiscoveredModel) o;
+
+    if (idDiscover != null ? !idDiscover.equals(that.idDiscover) : that.idDiscover != null) {
+      return false;
+    }
+    if (relevance != null ? !relevance.equals(that.relevance) : that.relevance != null)
+      return false;
+    if (type != null ? !type.equals(that.type) : that.type != null) return false;
+    if (streamModel != null ? !streamModel.equals(that.streamModel) : that.streamModel != null) {
+      return false;
+    }
+    return hasBeenFaved != null ? hasBeenFaved.equals(that.hasBeenFaved)
+        : that.hasBeenFaved == null;
+  }
+
+  @Override public int hashCode() {
+    int result = idDiscover != null ? idDiscover.hashCode() : 0;
+    result = 31 * result + (relevance != null ? relevance.hashCode() : 0);
+    result = 31 * result + (type != null ? type.hashCode() : 0);
+    result = 31 * result + (streamModel != null ? streamModel.hashCode() : 0);
+    result = 31 * result + (hasBeenFaved != null ? hasBeenFaved.hashCode() : 0);
+    return result;
+  }
 }

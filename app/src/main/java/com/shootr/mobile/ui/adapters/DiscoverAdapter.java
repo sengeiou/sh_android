@@ -42,27 +42,32 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
     if (viewType == DISCOVERED_STREAM) {
-      View view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_discovered_stream, parent, false);
-      return new DiscoveredStreamViewHolder(view, imageLoader, onDiscoveredStreamClickListener,
-          onFavoriteClickListener);
+      return createStreamViewHolder(parent, R.layout.item_discovered_stream);
     } else if (viewType == DISCOVERED_STREAM_SMALL) {
-      View view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_small_discovered_stream, parent, false);
-      return new DiscoveredStreamViewHolder(view, imageLoader, onDiscoveredStreamClickListener,
-          onFavoriteClickListener);
+      return createStreamViewHolder(parent, R.layout.item_small_discovered_stream);
     } else {
       return null;
     }
   }
 
+  private RecyclerView.ViewHolder createStreamViewHolder(ViewGroup parent,
+      int itemDiscoveredStream) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(itemDiscoveredStream, parent, false);
+    return new DiscoveredStreamViewHolder(view, imageLoader, onDiscoveredStreamClickListener,
+        onFavoriteClickListener);
+  }
+
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-    if (holder.getItemViewType() == DISCOVERED_STREAM
-        || holder.getItemViewType() == DISCOVERED_STREAM_SMALL) {
+    if (isStreamTypes(holder)) {
       ((DiscoveredStreamViewHolder) holder).render(items.get(position));
     }
+  }
+
+  private boolean isStreamTypes(RecyclerView.ViewHolder holder) {
+    return holder.getItemViewType() == DISCOVERED_STREAM
+        || holder.getItemViewType() == DISCOVERED_STREAM_SMALL;
   }
 
   public void setItems(List<DiscoveredModel> discoveredModels) {
@@ -71,5 +76,10 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override public int getItemCount() {
     return items != null ? items.size() : 0;
+  }
+
+  private void changeFavoriteItemState(DiscoveredModel discoverModel, Boolean isFaved) {
+    items.get(items.indexOf(discoverModel)).setHasBeenFaved(isFaved);
+    notifyDataSetChanged();
   }
 }
