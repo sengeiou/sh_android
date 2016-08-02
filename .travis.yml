@@ -1,5 +1,8 @@
 language: android
 
+jdk:
+    - oraclejdk8
+
 android:
   components:
     - tools
@@ -21,4 +24,4 @@ script:
   - ./gradlew checkstyle test coveralls
 
 notifications:
-  slack: observableshootr:ZjkgvI2rMYFMCEIjVEcahnG4
+  slack: shootr:CEmsX5epzAEF8V8ukmnYjfSG
