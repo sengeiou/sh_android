@@ -111,4 +111,8 @@ public interface ProfileView {
     void resetTimelineAdapter();
 
     void showHideShotConfirmation(final String idShot);
+
+    void showFriendsButton();
+
+    void hideFriendsButton();
 }

@@ -112,6 +112,7 @@ public class ProfileActivity extends BaseActivity
   @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
   @Bind(R.id.profile_user_verified) ImageView userVerified;
+  @Bind(R.id.mutuals_container) View mutualsContainer;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
@@ -268,6 +269,14 @@ public class ProfileActivity extends BaseActivity
             })
         .setNegativeButton(cancelHideShotAlertDialogMessage, null)
         .show();
+  }
+
+  @Override public void showFriendsButton() {
+    mutualsContainer.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideFriendsButton() {
+    mutualsContainer.setVisibility(View.GONE);
   }
 
   @Override protected void initializePresenter() {

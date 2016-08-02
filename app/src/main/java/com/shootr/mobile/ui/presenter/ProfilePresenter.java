@@ -139,6 +139,12 @@ public class ProfilePresenter implements Presenter {
     renderStreamsNumber();
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();
+    if (isCurrentUser) {
+      profileView.showFriendsButton();
+    } else {
+      profileView.hideFriendsButton();
+    }
+
   }
 
   private void renderStreamsNumber() {
