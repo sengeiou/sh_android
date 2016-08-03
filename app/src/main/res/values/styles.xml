@@ -352,12 +352,6 @@
         <item name="android:src">@drawable/ic_checkable</item>
     </style>
 
-    <style name="NiceButton">
-        <item name="android:background">@drawable/bg_nice_action</item>
-        <item name="android:scaleType">center</item>
-        <item name="android:src">@drawable/ic_thumb_up_16_checkable_nopadding</item>
-    </style>
-
     <style name="HideButton">
         <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/ic_action_close_gray60_24_nopadding</item>
@@ -407,5 +401,14 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">normal</item>
+    </style>
+    <style name="IncludeShotDetail">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="ViewOnlyTimelineBar">
+        <item name="android:background">@color/white_bar</item>
+    </style>
+    <style name="StreamDetailBackground">
+        <item name="android:background">#f0f0f0</item>
     </style>
 </resources>

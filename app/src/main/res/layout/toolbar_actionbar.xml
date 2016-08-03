@@ -40,7 +40,6 @@
               android:paddingLeft="@dimen/toolbar_title_padding"
               android:singleLine="true"
               android:visibility="gone"
-              tools:drawableRight="@drawable/spinner_triangle_white"
               tools:text="Title"
               tools:visibility="visible" />
 
