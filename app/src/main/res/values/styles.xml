@@ -397,6 +397,9 @@
     <style name="TimelineIndicator">
         <item name="android:background">#039BE5</item>
     </style>
+    <style name="NewShotBar">
+        <item name="android:background">@color/white</item>
+    </style>
     <style name="ExpandedAppBar" parent="ActionBar.TitleText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
