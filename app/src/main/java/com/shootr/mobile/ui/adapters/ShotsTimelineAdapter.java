@@ -30,6 +30,7 @@ import java.util.List;
 
 public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+  private static final int ANIMATED_ITEMS_COUNT = 10;
   private final int VIEW_TYPE_ITEM = 0;
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
@@ -104,7 +105,7 @@ public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.View
   }
 
   private void runEnterAnimation(View view, int position) {
-    if (position >= getItemCount()) {
+    if (position >= ANIMATED_ITEMS_COUNT) {
       return;
     }
 
