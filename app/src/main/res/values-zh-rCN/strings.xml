@@ -8,7 +8,7 @@
   <string name="activity_edit_profile_username_hint">用户名</string>
   <string name="activity_edit_profile_website_hint">网址</string>
   <string name="activity_edit_stream_title">编辑stream</string>
-  <string name="activity_find_contributors_hint">Search</string>
+  <string name="activity_find_contributors_hint">查找</string>
   <string name="activity_find_friends_cant_load_message">不能载入数据。请检查你的连接</string>
   <string name="activity_find_friends_empty_message">无结果</string>
   <string name="activity_find_friends_hint">查找朋友</string>
@@ -50,6 +50,7 @@
   <string name="alert_shootr_update">此内容仅能透过最新的Shootr浏览。</string>
   <string name="alert_update_shootr">此内容仅能透过最新的Shootr浏览</string>
   <string name="all_participants_button">所有参与者</string>
+  <string name="all_push_settings">全部</string>
   <string name="ban_user_dialog_message">用户在你的streams上发布的shots只对他/她的关注者可见。</string>
   <string name="block_cannot_shoot_streams">禁止用户</string>
   <string name="block_ignore_user">屏蔽用户</string>
@@ -78,6 +79,7 @@
   <string name="delete_shot_confirmation_message">删除shot？</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消变更？</string>
+  <string name="discover">发现</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
   <string name="done_pin_topic" formatted="false">钉选</string>
@@ -166,7 +168,9 @@
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">没有喜爱</string>
+  <string name="favorite_streams_push_settings">喜爱的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="finished_poll">%s 投票结果</string>
   <string name="follower_list_empty">没有关注者</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">没有关注任何人</string>
@@ -189,7 +193,7 @@
     <item quantity="other">%d喜爱</item>
   </plurals>
   <string name="listing_title_favorites">喜爱</string>
-  <string name="listing_title_holding">建立</string>
+  <string name="listing_title_holding">管理员</string>
   <string name="loading_activity_message">等待中…</string>
   <string name="main_activity_title">动态</string>
   <string name="mentioned_shot_activity_with_comment">"提到了你: "</string>
@@ -249,8 +253,8 @@
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">发送shot</string>
   <string name="now">现在</string>
-  <string name="no_intent_handler">沒有应用程序可用来处理此行为。
-</string>
+  <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
+  <string name="off_push_settings">关闭</string>
   <string name="ok">好的</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
   <string name="order_poll_option">%1$s. %2$s</string>
@@ -267,10 +271,15 @@
   <string name="pin_topic" formatted="false">钉选信息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">当前投票结果</string>
-  <string name="poll_results">投票结果</string>
+  <string name="poll_results">最终结果</string>
+  <string name="poll_results_dialog">一旦看到结果，将无法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">查看</string>
   <string name="poll_vote">投票</string>
+  <plurals name="poll_votes_count">
+    <item quantity="other">%d 投票</item>
+    <item quantity="zero">%d 投票</item>
+  </plurals>
   <string name="poll_vote_timeout_retry">重试</string>
   <string name="profile_all_shots">所有发送</string>
   <string name="profile_edit_done_button">完成</string>
@@ -282,6 +291,8 @@
   <string name="profile_logout">登出</string>
   <string name="profile_marks_followers">关注者</string>
   <string name="profile_marks_following">正在关注</string>
+  <string name="profile_push_notifications">推送通知</string>
+  <string name="profile_settings">推送通知</string>
   <string name="profile_support">辅助</string>
   <string name="profile_updated">个人主页已更新</string>
   <string name="publish_poll">%1$s %2$s 新的投票</string>
@@ -314,12 +325,15 @@
   <string name="restore_stream_label">还原stream</string>
   <string name="restore_stream_snackbar_action">复原</string>
   <string name="seconds">秒</string>
+  <string name="shared_poll">分享了投票 %s</string>
   <string name="shared_shot_activity">分享了%s的shot</string>
   <string name="shared_shot_activity_with_comment">"分享了: "</string>
   <string name="shared_stream_notification">被分享的shared</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_subject">投票 %s</string>
   <string name="share_shot_chooser_title">分享</string>
   <string name="share_shot_message">%1$s %2$s</string>
-  <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
+  <string name="share_shot_subject">"%1$s在%2$s上的消息 "</string>
   <string name="share_stream_activity_text_pattern">分享(stream)</string>
   <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/st/%2$s?%3$s</string>
   <string name="share_stream_subject">"在Shootr上查看%s: "</string>
@@ -332,6 +346,7 @@
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">已在(stream)发布信息</string>
+  <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_data_info_favorites">喜爱</string>
   <string name="stream_data_info_participants">参与者</string>
   <string name="stream_data_info_participants_with_shots">发送shot的参与者</string>

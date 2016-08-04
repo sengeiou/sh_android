@@ -11,13 +11,13 @@
   <string name="activity_find_contributors_hint">Buscar</string>
   <string name="activity_find_friends_cant_load_message">No es posible cargar datos. Comprueba tu conexión.</string>
   <string name="activity_find_friends_empty_message">No hay resultados</string>
-  <string name="activity_find_friends_hint">Encontrar amigos</string>
+  <string name="activity_find_friends_hint">Buscar amigos</string>
   <!-- Find Friends -->
-  <string name="activity_find_friends_title">Encontrar amigos</string>
+  <string name="activity_find_friends_title">Buscar amigos</string>
   <string name="activity_find_participants_empty_message">No hay resultados</string>
-  <string name="activity_find_participants_hint">Encontrar participantes</string>
-  <string name="activity_find_streams_hint">Encontrar streams</string>
-  <string name="activity_find_streams_title">Encontrar streams</string>
+  <string name="activity_find_participants_hint">Buscar participantes</string>
+  <string name="activity_find_streams_hint">Buscar streams</string>
+  <string name="activity_find_streams_title">Buscar streams</string>
   <string name="activity_followers_title">Seguidores</string>
   <string name="activity_following_title">Siguiendo</string>
   <string name="activity_login_email_button">Entrar</string>
@@ -50,6 +50,7 @@
   <string name="alert_shootr_update">Este contenido solo puede verse con la última versión de Shootr.</string>
   <string name="alert_update_shootr">Este contenido solo puede verse con la última versión de Shootr</string>
   <string name="all_participants_button">Todos los participantes</string>
+  <string name="all_push_settings">Todas</string>
   <string name="ban_user_dialog_message">Los shots que publique en tus streams solo se mostrarán a sus seguidores.</string>
   <string name="block_cannot_shoot_streams">Vetar usuario</string>
   <string name="block_ignore_user">Ignorar usuario</string>
@@ -78,6 +79,7 @@
   <string name="delete_shot_confirmation_message">¿Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">¿Descartar cambios?</string>
+  <string name="discover">Descubrir</string>
   <string name="done">Hecho</string>
   <string name="done_label">Hecho</string>
   <string name="done_pin_topic" formatted="false">OK</string>
@@ -166,7 +168,9 @@
   <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">No hay favoritos</string>
+  <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="finished_poll">Resultado de la encuesta %s</string>
   <string name="follower_list_empty">No hay seguidores</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">No sigues a nadie</string>
@@ -203,8 +207,8 @@
   <string name="menu_profile_chage_password">Cambiar contraseña</string>
   <string name="menu_remove_favorite">Quitar de Favoritos</string>
   <string name="menu_save_photo">Guardar imagen</string>
-  <string name="menu_search_friends">Encontrar amigos</string>
-  <string name="menu_search_participants">Encontrar participantes</string>
+  <string name="menu_search_friends">Buscar amigos</string>
+  <string name="menu_search_participants">Buscar participantes</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_shot_via">Compartir vía…</string>
@@ -252,6 +256,7 @@
   <string name="notification_shot_sent">Shot enviado</string>
   <string name="now">ahora</string>
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
+  <string name="off_push_settings">Ninguna</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Ha creado (stream)</string>
   <string name="order_poll_option">%1$s. %2$s</string>
@@ -268,10 +273,16 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
-  <string name="poll_results">Resultados</string>
+  <string name="poll_results">Resultado final</string>
+  <string name="poll_results_dialog">Una vez vistos los resultados no podrás votar en esta encuesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>
+  <plurals name="poll_votes_count">
+    <item quantity="one">%d voto</item>
+    <item quantity="other">%d votos</item>
+    <item quantity="zero">%d votos</item>
+  </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="profile_all_shots">Todos los shots</string>
   <string name="profile_edit_done_button">Hecho</string>
@@ -283,6 +294,8 @@
   <string name="profile_logout">Cerrar sesión</string>
   <string name="profile_marks_followers">seguidores</string>
   <string name="profile_marks_following">siguiendo</string>
+  <string name="profile_push_notifications">Notificaciones</string>
+  <string name="profile_settings">Notificaciones</string>
   <string name="profile_support">Soporte</string>
   <string name="profile_updated">Perfil actualizado</string>
   <string name="publish_poll">%1$s Nueva encuesta en %2$s</string>
@@ -315,14 +328,17 @@
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="seconds">s</string>
+  <string name="shared_poll">Ha compartido la encuesta %s</string>
   <string name="shared_shot_activity">Ha compartido un shot de %s</string>
   <string name="shared_shot_activity_with_comment">"Ha compartido: "</string>
   <string name="shared_stream_notification">Stream compartido</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_subject">Encuesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
-  <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
   <string name="share_via">Compartir vía…</string>
   <string name="share_via_shootr">Compartir vía Shootr</string>
@@ -333,6 +349,7 @@
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
+  <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_data_info_favorites">Favoritos</string>
   <string name="stream_data_info_participants">Participantes</string>
   <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
