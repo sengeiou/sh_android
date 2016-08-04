@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -14,6 +15,7 @@ import com.shootr.mobile.domain.model.PushSettingType;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SettingsPresenter;
 import com.shootr.mobile.ui.views.SettingsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -21,7 +23,9 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
 
   @Inject SettingsPresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
+  @Inject AnalyticsTool analyticsTool;
   @Bind(R.id.started_shooting_push_option) TextView selectedPushSetting;
+  @BindString(R.string.analytics_screen_push_settings) String analytics_screen_push_settings;
 
   private CharSequence[] items = new CharSequence[3];
 
@@ -42,6 +46,7 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
 
   @Override protected void initializePresenter() {
     presenter.initialize(this);
+    analyticsTool.analyticsStart(this, analytics_screen_push_settings);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
