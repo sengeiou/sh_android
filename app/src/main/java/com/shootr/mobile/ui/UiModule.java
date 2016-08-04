@@ -7,6 +7,7 @@ import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
+import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -44,6 +45,8 @@ import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
+import com.shootr.mobile.ui.fragments.FindFriendsFragment;
+import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.widgets.WatchersView;
@@ -99,7 +102,10 @@ import javax.inject.Singleton;
     ActivityTimelineContainerFragment.class,
     SettingsActivity.class,
     DiscoverFragment.class,
-    FriendsActivity.class
+    FriendsActivity.class,
+    DiscoverSearchActivity.class,
+    FindFriendsFragment.class,
+    FindStreamsFragment.class
   },
   complete = false) public class UiModule {
 

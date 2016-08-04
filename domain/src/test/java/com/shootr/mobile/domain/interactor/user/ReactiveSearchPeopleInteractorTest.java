@@ -1,13 +1,14 @@
 package com.shootr.mobile.domain.interactor.user;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,8 @@ public class ReactiveSearchPeopleInteractorTest {
   @Mock UserRepository localUserRepository;
   @Mock SessionRepository sessionRepository;
   @Mock Interactor.Callback<List<User>> callback;
+  @Mock LocaleProvider localeProvider;
+  @Mock UserRepository remoteUserRepository;
 
   @Before
   public void setUp() throws Exception {
@@ -36,25 +39,7 @@ public class ReactiveSearchPeopleInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     reactiveSearchPeopleInteractor =
         new ReactiveSearchPeopleInteractor(interactorHandler, postExecutionThread,
-            localUserRepository, sessionRepository);
-  }
-
-  //TODO: tests!
-
-  @Test
-  public void shouldGetCurrentUserIdFromSession() throws Exception {
-    reactiveSearchPeopleInteractor.obtainPeople(QUERY, callback);
-
-    verify(sessionRepository).getCurrentUserId();
-  }
-
-  @Test
-  public void shouldGetLocalPeopleFromLocal() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-
-    reactiveSearchPeopleInteractor.obtainPeople(QUERY, callback);
-
-    verify(localUserRepository).getLocalPeople(ID_USER);
+            localUserRepository, remoteUserRepository, sessionRepository, localeProvider);
   }
 
   @Test

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
@@ -8,6 +7,7 @@ import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetLocalPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.ReactiveSearchPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -104,16 +104,6 @@ public class FindFriendsPresenterTest {
         presenter.queryTextChanged(QUERY);
 
         verify(reactiveSearchPeopleInteractor).obtainPeople(anyString(), any(Interactor.Callback.class));
-    }
-
-    @Test public void shouldNotObtainLocalPeopleWhenQueryTextChangedAndHasSearchedInRemote() throws Exception {
-        setupGetLocalPeopleInteractorWithUsers();
-        presenter.initialize(findFriendsView, FIRST_INIT);
-        presenter.searchFriends(QUERY);
-
-        presenter.queryTextChanged(QUERY);
-
-        verify(reactiveSearchPeopleInteractor, never()).obtainPeople(anyString(), any(Interactor.Callback.class));
     }
 
     @Test public void shouldHideEmptyWhenQueryTextChangedAndLocalPeopleIsEmpty() throws Exception {

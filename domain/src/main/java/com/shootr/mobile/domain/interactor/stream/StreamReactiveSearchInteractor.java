@@ -1,43 +1,44 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamSearchInteractor implements Interactor {
-
-  public static final int MIN_SEARCH_LENGTH = 3;
+public class StreamReactiveSearchInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
-  private final StreamSearchRepository streamSearchRepository;
+  private final StreamSearchRepository remoteStreamSearchRepository;
+  private final StreamSearchRepository localStreamSearchRepository;
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
 
   private String query;
-  private Callback callback;
-  private ErrorCallback errorCallback;
+  private Callback<StreamSearchResultList> callback;
+  private Interactor.ErrorCallback errorCallback;
 
-  @Inject public StreamSearchInteractor(InteractorHandler interactorHandler,
-      @Remote StreamSearchRepository streamSearchRepository,
+  @Inject public StreamReactiveSearchInteractor(InteractorHandler interactorHandler,
+      @Local StreamSearchRepository localStreamSearchRepository,
+      @Remote StreamSearchRepository remoteStreamSearchRepository,
       PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
     this.interactorHandler = interactorHandler;
-    this.streamSearchRepository = streamSearchRepository;
+    this.remoteStreamSearchRepository = remoteStreamSearchRepository;
+    this.localStreamSearchRepository = localStreamSearchRepository;
     this.postExecutionThread = postExecutionThread;
     this.localeProvider = localeProvider;
   }
 
-  public void searchStreams(String query, Callback callback, ErrorCallback errorCallback) {
+  public void searchStreams(String query, Callback<StreamSearchResultList> callback,
+      Interactor.ErrorCallback errorCallback) {
     this.query = query;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -46,12 +47,22 @@ public class StreamSearchInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     removeInvalidCharactersFromQuery();
-    if (validateSearchQuery()) {
-      try {
-        performSearch();
-      } catch (ServerCommunicationException networkError) {
-        notifyError(networkError);
-      }
+    loadLocalStreams();
+    try {
+      performSearch(remoteStreamSearchRepository);
+    } catch (ServerCommunicationException networkError) {
+      notifyError(networkError);
+    }
+  }
+
+  private void loadLocalStreams() {
+    List<StreamSearchResult> streams =
+        localStreamSearchRepository.getStreams(query, localeProvider.getLocale(),
+            StreamMode.TYPES_STREAM);
+    if (streams.size() != 0) {
+      StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
+
+      notifySearchResultsSuccessful(streamSearchResultList);
     }
   }
 
@@ -59,15 +70,7 @@ public class StreamSearchInteractor implements Interactor {
     query = query.replace("%", "").trim();
   }
 
-  private boolean validateSearchQuery() {
-    if (query == null || query.length() < MIN_SEARCH_LENGTH) {
-      notifyError(new ShootrValidationException(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
-      return false;
-    }
-    return true;
-  }
-
-  private void performSearch() {
+  private void performSearch(StreamSearchRepository streamSearchRepository) {
     List<StreamSearchResult> streams =
         streamSearchRepository.getStreams(query, localeProvider.getLocale(),
             StreamMode.TYPES_STREAM);
@@ -91,10 +94,5 @@ public class StreamSearchInteractor implements Interactor {
         errorCallback.onError(error);
       }
     });
-  }
-
-  public interface Callback {
-
-    void onLoaded(StreamSearchResultList results);
   }
 }

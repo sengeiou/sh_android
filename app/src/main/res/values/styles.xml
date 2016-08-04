@@ -78,6 +78,19 @@
         <item name="tabSelectedTextColor">@color/white</item>
     </style>
 
+    <style name="ShootrSearchTabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="android:background">@color/white</item>
+        <item name="tabIndicatorColor">@color/material_black</item>
+        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/TabSearchTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/material_black</item>
+    </style>
+
+    <style name="TabSearchTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/gray_70</item>
+    </style>
+
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/white_disabled</item>
     </style>
