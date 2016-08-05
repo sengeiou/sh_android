@@ -17,7 +17,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableEmojiconTextView;
+import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -37,7 +37,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @Bind(R.id.shot_avatar) ImageView avatar;
   @Bind(R.id.shot_user_name) TextView name;
   @Bind(R.id.shot_timestamp) TextView timestamp;
-  @Bind(R.id.shot_text) ClickableEmojiconTextView text;
+  @Bind(R.id.shot_text) ClickableTextView text;
   @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
   @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
   @Bind(R.id.shot_video_frame) View videoFrame;

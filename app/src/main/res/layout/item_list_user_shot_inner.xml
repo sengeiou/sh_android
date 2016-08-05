@@ -66,7 +66,7 @@
       </RelativeLayout>
 
 
-      <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView
+      <com.shootr.mobile.ui.widgets.ClickableTextView
           android:id="@+id/shot_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
           tools:visibility="visible"
           />
 
-      <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView
+      <com.shootr.mobile.ui.widgets.ClickableTextView
           android:id="@+id/shot_text_stream_title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

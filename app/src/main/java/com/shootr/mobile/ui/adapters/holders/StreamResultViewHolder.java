@@ -10,7 +10,6 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.rockerhieu.emojicon.EmojiconTextView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
@@ -37,12 +36,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_picture_without_text) ImageView pictureWithoutText;
-    @Bind(R.id.stream_title) EmojiconTextView title;
+    @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
-    @Nullable @Bind(R.id.stream_subtitle_description) EmojiconTextView subtitleDescription;
+    @Nullable @Bind(R.id.stream_subtitle_description) TextView subtitleDescription;
     @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;

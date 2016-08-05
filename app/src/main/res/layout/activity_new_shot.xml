@@ -60,7 +60,7 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-                <com.rockerhieu.emojicon.EmojiconEditText android:id="@+id/new_shot_text"
+                <EditText android:id="@+id/new_shot_text"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="@color/transparent"

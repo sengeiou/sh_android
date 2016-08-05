@@ -28,7 +28,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <com.rockerhieu.emojicon.EmojiconTextView android:id="@+id/user_name"
+    <TextView android:id="@+id/user_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
