@@ -13,6 +13,37 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.15.0] - 2016-08-05
+
+### Added
+
+- Discover
+- Discover search
+- Streams reactive search
+- Push settings
+- Generic mapper
+- Emojis
+- New Google Analytics screens
+- Contributors can pin
+- More poll pushes
+
+### Changed
+
+- Profile UI
+- Users reactive search
+- Shots bar
+- Android M migration
+- Repositories and Datasources refactor
+- New Domain structure
+- New MVP model structure
+
+### Fixed
+
+- Removed unused resources
+- Overdraw removed
+- Muted on local
+- Timeline animation
+
 ## [1.14.0] - 2016-07-07
 
 ### Added
