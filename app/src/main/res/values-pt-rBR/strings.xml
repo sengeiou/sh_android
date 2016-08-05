@@ -51,6 +51,7 @@
   <string name="alert_update_shootr">Este conteúdo só pode ser visto com a última versão de Shootr</string>
   <string name="all_participants_button">Todos os participantes</string>
   <string name="all_push_settings">Todas</string>
+  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">Os shots que publique nos seus streams só serão exibidos aos seus seguidores.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
   <string name="block_ignore_user">Ignorar usuário</string>
@@ -170,7 +171,7 @@
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
-  <string name="finished_poll">Resultado do questionario %s</string>
+  <string name="finished_poll">Resultado do questionário %s</string>
   <string name="follower_list_empty">Não há seguidores</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">Não segue ninguém</string>
@@ -275,7 +276,7 @@
   <string name="poll_ignore">Ignorar</string>
   <string name="poll_live_results">Resultados ao vivo</string>
   <string name="poll_results">Resultado final</string>
-  <string name="poll_results_dialog">Uma vez que você viu os resultados não pode votar nesse questionario.</string>
+  <string name="poll_results_dialog">Uma vez que você viu os resultados não pode votar nesse questionário.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>

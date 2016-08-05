@@ -13,6 +13,17 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.15.1] - 2016-08-05
+
+### Changed
+
+- Brasilian strings
+
+### Removed
+
+- Removed Emojis
+- Removed Stream Timeline Animations
+
 ## [1.15.0] - 2016-08-05
 
 ### Added
