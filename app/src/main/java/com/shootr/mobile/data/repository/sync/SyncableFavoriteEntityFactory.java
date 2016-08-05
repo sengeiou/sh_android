@@ -3,17 +3,16 @@ package com.shootr.mobile.data.repository.sync;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.FavoriteDataSource;
-import com.shootr.mobile.domain.Favorite;
-import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import javax.inject.Inject;
 
 public class SyncableFavoriteEntityFactory extends SyncableEntityFactory<Favorite, FavoriteEntity> {
 
-    private final FavoriteDataSource localFavoriteDataSource;
+    private final InternalFavoriteDatasource localFavoriteDataSource;
     private final FavoriteEntityMapper favoriteEntityMapper;
 
-    @Inject public SyncableFavoriteEntityFactory(@Local FavoriteDataSource localFavoriteDataSource,
+    @Inject public SyncableFavoriteEntityFactory(InternalFavoriteDatasource localFavoriteDataSource,
       FavoriteEntityMapper favoriteEntityMapper) {
         this.localFavoriteDataSource = localFavoriteDataSource;
         this.favoriteEntityMapper = favoriteEntityMapper;

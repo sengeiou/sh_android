@@ -44,13 +44,17 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     public static final int REQUEST_NEW_STREAM = 3;
 
-    @Bind(R.id.streams_list) RecyclerView streamsList;
-    @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.streams_empty) View emptyView;
-    @Bind(R.id.streams_loading) View loadingView;
-    @BindString(R.string.added_to_favorites) String addedToFavorites;
-    @BindString(R.string.shared_stream_notification) String sharedStream;
-    @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
+  @Bind(R.id.streams_list) RecyclerView streamsList;
+  @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @Bind(R.id.streams_empty) View emptyView;
+  @Bind(R.id.streams_loading) View loadingView;
+  @BindString(R.string.added_to_favorites) String addedToFavorites;
+  @BindString(R.string.shared_stream_notification) String sharedStream;
+  @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+  @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
   @Inject StreamsListPresenter presenter;
   @Inject ImageLoader imageLoader;
@@ -170,22 +174,26 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         }
     }
 
-    private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
-        return new CustomContextMenu.Builder(getActivity()).addAction(R.string.add_to_favorites_menu_title,
-          new Runnable() {
-              @Override public void run() {
-                  presenter.addToFavorites(stream);
-              }
-          }).addAction(R.string.share_via_shootr, new Runnable() {
-            @Override public void run() {
-                presenter.shareStream(stream);
-            }
-        }).addAction(R.string.share_via, new Runnable() {
-            @Override public void run() {
-                shareStream(stream);
-            }
-        });
-    }
+  private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
+    return new CustomContextMenu.Builder(getActivity()).addAction(
+        R.string.add_to_favorites_menu_title, new Runnable() {
+          @Override public void run() {
+            presenter.addToFavorites(stream);
+            analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
+                analyticsLabelFavoriteStream);
+          }
+        }).addAction(R.string.share_via_shootr, new Runnable() {
+      @Override public void run() {
+        presenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionExternalShare,
+            analyticsLabelExternalShare);
+      }
+    });
+  }
 
   private void shareStream(StreamResultModel stream) {
     Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream.getStreamModel());

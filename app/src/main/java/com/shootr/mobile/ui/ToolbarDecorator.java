@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.ImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,7 +36,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
         View inflatedView = LayoutInflater.from(context).inflate(R.layout.action_bar_decor, originalRoot, true);
         toolbar = ((Toolbar) inflatedView.findViewById(R.id.toolbar_actionbar));
-        titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        titleText = (EmojiconTextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
         avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
@@ -66,12 +67,12 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         }
     }
 
-    public void setSubtitle(Integer following) {
-        if (following == 0) {
+    public void setSubtitle(String  subtitle) {
+        if (subtitle == null) {
             hideSubtitle();
         } else {
             subtitleText.setVisibility(View.VISIBLE);
-            subtitleText.setText(context.getString(R.string.stream_subtitle, following));
+            subtitleText.setText(subtitle);
         }
     }
 

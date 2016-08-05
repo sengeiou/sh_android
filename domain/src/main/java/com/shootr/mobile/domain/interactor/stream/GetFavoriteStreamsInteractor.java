@@ -1,21 +1,21 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +26,8 @@ public class GetFavoriteStreamsInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final FavoriteRepository localFavoriteRepository;
-  private final FavoriteRepository remoteFavoriteRepository;
+  private final InternalFavoriteRepository localFavoriteRepository;
+  private final ExternalFavoriteRepository remoteFavoriteRepository;
   private final StreamRepository localStreamRepository;
   private final WatchersRepository watchersRepository;
   private final SessionRepository sessionRepository;
@@ -37,8 +37,8 @@ public class GetFavoriteStreamsInteractor implements Interactor {
   private boolean loadLocalOnly = false;
 
   @Inject public GetFavoriteStreamsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository,
+      PostExecutionThread postExecutionThread, InternalFavoriteRepository localFavoriteRepository,
+      ExternalFavoriteRepository remoteFavoriteRepository,
       @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;
@@ -69,20 +69,21 @@ public class GetFavoriteStreamsInteractor implements Interactor {
   }
 
   private void loadLocalFavorites() {
-    loadFavoritesFrom(localFavoriteRepository);
+    List<Favorite> favorites = localFavoriteRepository.getFavorites();
+    mapFavorites(favorites);
   }
 
   private void loadRemoteFavorites() {
     try {
-      loadFavoritesFrom(remoteFavoriteRepository);
+      List<Favorite> favorites =
+          remoteFavoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
+      mapFavorites(favorites);
     } catch (ServerCommunicationException networkError) {
             /* no-op */
     }
   }
 
-  private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
-    List<Favorite> favorites =
-        favoriteRepository.getFavorites(sessionRepository.getCurrentUserId());
+  private void mapFavorites(List<Favorite> favorites) {
     List<Stream> favoriteStreams = streamsFromFavorites(favorites);
     favoriteStreams = sortStreamsByName(favoriteStreams);
     List<StreamSearchResult> favoriteStreamsWithWatchers = addWatchersToStreams(favoriteStreams);

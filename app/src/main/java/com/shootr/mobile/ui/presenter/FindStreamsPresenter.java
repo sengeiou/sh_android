@@ -1,13 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.StreamReactiveSearchInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamSearchInteractor;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.FindStreamsView;
@@ -17,133 +19,161 @@ import javax.inject.Inject;
 
 public class FindStreamsPresenter implements Presenter {
 
-    private final StreamSearchInteractor streamSearchInteractor;
-    private final AddToFavoritesInteractor addToFavoritesInteractor;
-    private final ShareStreamInteractor shareStreamInteractor;
-    private final StreamResultModelMapper streamResultModelMapper;
-    private final ErrorMessageFactory errorMessageFactory;
+  private final StreamSearchInteractor streamSearchInteractor;
+  private final AddToFavoritesInteractor addToFavoritesInteractor;
+  private final ShareStreamInteractor shareStreamInteractor;
+  private final GetLocalStreamsInteractor getLocalStreamsInteractor;
+  private final StreamReactiveSearchInteractor streamReactiveSearchInteractor;
+  private final StreamResultModelMapper streamResultModelMapper;
+  private final ErrorMessageFactory errorMessageFactory;
 
-    private FindStreamsView findStreamsView;
-    private String lastQueryText;
-    private boolean hasBeenPaused = false;
+  private FindStreamsView findStreamsView;
+  private String lastQueryText;
+  private boolean hasBeenPaused = false;
 
-    @Inject public FindStreamsPresenter(StreamSearchInteractor streamSearchInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor, ShareStreamInteractor shareStreamInteractor,
+  @Inject public FindStreamsPresenter(StreamSearchInteractor streamSearchInteractor,
+      AddToFavoritesInteractor addToFavoritesInteractor,
+      ShareStreamInteractor shareStreamInteractor,
+      GetLocalStreamsInteractor getLocalStreamsInteractor,
+      StreamReactiveSearchInteractor streamReactiveSearchInteractor,
       StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.streamSearchInteractor = streamSearchInteractor;
-        this.addToFavoritesInteractor = addToFavoritesInteractor;
-        this.shareStreamInteractor = shareStreamInteractor;
-        this.streamResultModelMapper = streamResultModelMapper;
-        this.errorMessageFactory = errorMessageFactory;
-    }
+    this.streamSearchInteractor = streamSearchInteractor;
+    this.addToFavoritesInteractor = addToFavoritesInteractor;
+    this.shareStreamInteractor = shareStreamInteractor;
+    this.getLocalStreamsInteractor = getLocalStreamsInteractor;
+    this.streamReactiveSearchInteractor = streamReactiveSearchInteractor;
+    this.streamResultModelMapper = streamResultModelMapper;
+    this.errorMessageFactory = errorMessageFactory;
+  }
 
-    public void setView(FindStreamsView findStreamsView) {
-        this.findStreamsView = findStreamsView;
-    }
+  public void setView(FindStreamsView findStreamsView) {
+    this.findStreamsView = findStreamsView;
+  }
 
-    public void initialize(FindStreamsView findStreamsView) {
-        this.setView(findStreamsView);
-    }
+  public void initialize(final FindStreamsView findStreamsView) {
+    this.setView(findStreamsView);
+    loadStreams();
+  }
 
-    public void search(String queryText) {
-        this.lastQueryText = queryText;
-        findStreamsView.hideContent();
-        findStreamsView.hideKeyboard();
-        findStreamsView.showLoading();
-        streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
-            @Override public void onLoaded(StreamSearchResultList results) {
-                onSearchResults(results);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                findStreamsView.hideLoading();
-                showViewError(error);
-            }
-        });
-    }
+  private void loadStreams() {
+    getLocalStreamsInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
+      @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
+        onSearchResults(streamSearchResultList);
+      }
+    });
+  }
 
-    public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(),
-          stream.getStreamModel().getTitle(),
-          stream.getStreamModel().getAuthorId());
-    }
-
-    private void selectStream(final String idStream, String streamTitle, String authorId) {
-        findStreamsView.navigateToStreamTimeline(idStream, streamTitle, authorId);
-    }
-
-    private void onSearchResults(StreamSearchResultList streamSearchResultList) {
-        List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
-        if (!streamSearchResults.isEmpty()) {
-            List<StreamResultModel> streamModels = streamResultModelMapper.transform(streamSearchResults);
-            renderViewStreamsList(streamModels);
-        } else {
-            this.showViewEmpty();
-        }
+  public void search(String queryText) {
+    this.lastQueryText = queryText;
+    findStreamsView.hideContent();
+    findStreamsView.hideKeyboard();
+    findStreamsView.showLoading();
+    streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
+      @Override public void onLoaded(StreamSearchResultList results) {
+        onSearchResults(results);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
         findStreamsView.hideLoading();
-    }
+        showViewError(error);
+      }
+    });
+  }
 
-    private void showViewEmpty() {
-        findStreamsView.showEmpty();
-        findStreamsView.hideContent();
-    }
+  public void selectStream(StreamResultModel stream) {
+    selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(),
+        stream.getStreamModel().getAuthorId());
+  }
 
-    private void renderViewStreamsList(List<StreamResultModel> streamModels) {
-        findStreamsView.showContent();
-        findStreamsView.hideEmpty();
-        findStreamsView.renderStreams(streamModels);
-    }
+  private void selectStream(final String idStream, String streamTitle, String authorId) {
+    findStreamsView.navigateToStreamTimeline(idStream, streamTitle, authorId);
+  }
 
-    private void showViewError(ShootrException error) {
-        String errorMessage;
-        if (error instanceof ShootrValidationException) {
-            String errorCode = ((ShootrValidationException) error).getErrorCode();
-            errorMessage = errorMessageFactory.getMessageForCode(errorCode);
-        } else {
-            errorMessage = errorMessageFactory.getMessageForError(error);
-        }
-        findStreamsView.showError(errorMessage);
+  private void onSearchResults(StreamSearchResultList streamSearchResultList) {
+    List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
+    if (!streamSearchResults.isEmpty()) {
+      List<StreamResultModel> streamModels = streamResultModelMapper.transform(streamSearchResults);
+      renderViewStreamsList(streamModels);
+    } else {
+      this.showViewEmpty();
     }
+    findStreamsView.hideLoading();
+  }
 
-    public void restoreStreams(List<StreamResultModel> restoredResults) {
-        if (restoredResults != null && !restoredResults.isEmpty()) {
-            findStreamsView.renderStreams(restoredResults);
-        }
+  private void showViewEmpty() {
+    findStreamsView.showEmpty();
+    findStreamsView.hideContent();
+  }
+
+  private void renderViewStreamsList(List<StreamResultModel> streamModels) {
+    findStreamsView.showContent();
+    findStreamsView.hideEmpty();
+    findStreamsView.renderStreams(streamModels);
+  }
+
+  private void showViewError(ShootrException error) {
+    String errorMessage;
+    if (error instanceof ShootrValidationException) {
+      String errorCode = ((ShootrValidationException) error).getErrorCode();
+      errorMessage = errorMessageFactory.getMessageForCode(errorCode);
+    } else {
+      errorMessage = errorMessageFactory.getMessageForError(error);
     }
+    findStreamsView.showError(errorMessage);
+  }
 
-    @Override public void resume() {
-        if (hasBeenPaused && lastQueryText != null) {
-            search(lastQueryText);
-        }
+  public void restoreStreams(List<StreamResultModel> restoredResults) {
+    if (restoredResults != null && !restoredResults.isEmpty()) {
+      findStreamsView.renderStreams(restoredResults);
     }
+  }
 
-    @Override public void pause() {
-        hasBeenPaused = true;
+  @Override public void resume() {
+    if (hasBeenPaused && lastQueryText != null) {
+      search(lastQueryText);
     }
+  }
 
-    public void addToFavorites(StreamResultModel stream) {
-        addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(),
-          new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  findStreamsView.showAddedToFavorites();
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showViewError(error);
-              }
-          });
-    }
+  @Override public void pause() {
+    hasBeenPaused = true;
+  }
 
-    public void shareStream(StreamResultModel stream) {
-        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                findStreamsView.showStreamShared();
-            }
+  public void addToFavorites(StreamResultModel stream) {
+    addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            findStreamsView.showAddedToFavorites();
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showViewError(error);
-            }
+          @Override public void onError(ShootrException error) {
+            showViewError(error);
+          }
         });
-    }
+  }
+
+  public void shareStream(StreamResultModel stream) {
+    shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            findStreamsView.showStreamShared();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            showViewError(error);
+          }
+        });
+  }
+
+  public void reactiveSearch(String query) {
+    streamReactiveSearchInteractor.searchStreams(query,
+        new Interactor.Callback<StreamSearchResultList>() {
+          @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
+            onSearchResults(streamSearchResultList);
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+
+          }
+        });
+  }
 }

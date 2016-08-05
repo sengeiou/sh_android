@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollOption;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollOption;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -10,9 +10,9 @@ import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.PollRepository;
-import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.poll.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import com.shootr.mobile.domain.service.PollHasBeenDeletedException;
 import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
@@ -23,15 +23,15 @@ public class GetPollByIdPollInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final PollRepository localPollRepository;
-  private final PollRepository remotePollRepository;
+  private final InternalPollRepository localPollRepository;
+  private final ExternalPollRepository remotePollRepository;
   private Callback<Poll> callback;
   private ErrorCallback errorCallback;
   private String idPoll;
 
   @Inject public GetPollByIdPollInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local PollRepository localPollRepository,
-      @Remote PollRepository remotePollRepository) {
+      PostExecutionThread postExecutionThread, InternalPollRepository localPollRepository,
+      ExternalPollRepository remotePollRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localPollRepository = localPollRepository;

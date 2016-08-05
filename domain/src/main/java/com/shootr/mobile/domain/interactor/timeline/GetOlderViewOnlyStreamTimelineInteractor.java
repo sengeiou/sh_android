@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamTimelineParameters;
-import com.shootr.mobile.domain.Timeline;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -17,7 +17,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

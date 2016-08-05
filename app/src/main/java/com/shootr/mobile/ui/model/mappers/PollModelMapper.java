@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.ui.model.PollModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ public class PollModelMapper {
     PollModel pollModel = new PollModel();
     pollModel.setIdPoll(poll.getIdPoll());
     pollModel.setIdStream(poll.getIdStream());
+    pollModel.setIdUser(poll.getIdUser());
     pollModel.setQuestion(poll.getQuestion());
     pollModel.setStatus(poll.getStatus());
     pollModel.setPublished(poll.getPublished());

@@ -11,13 +11,13 @@
   <string name="activity_find_contributors_hint">Buscar</string>
   <string name="activity_find_friends_cant_load_message">No és possible carregar dades. Comprova la teva connexió.</string>
   <string name="activity_find_friends_empty_message">No hi ha resultats</string>
-  <string name="activity_find_friends_hint">Trobar amics</string>
+  <string name="activity_find_friends_hint">Buscar amics</string>
   <!-- Find Friends -->
-  <string name="activity_find_friends_title">Trobar amics</string>
+  <string name="activity_find_friends_title">Buscar amics</string>
   <string name="activity_find_participants_empty_message">No hi ha resultats</string>
-  <string name="activity_find_participants_hint">Trobar participants</string>
-  <string name="activity_find_streams_hint">Trobar streams</string>
-  <string name="activity_find_streams_title">Trobar streams</string>
+  <string name="activity_find_participants_hint">Buscar participants</string>
+  <string name="activity_find_streams_hint">Buscar streams</string>
+  <string name="activity_find_streams_title">Buscar streams</string>
   <string name="activity_followers_title">Seguidors</string>
   <string name="activity_following_title">Seguint</string>
   <string name="activity_login_email_button">Entrar</string>
@@ -50,6 +50,7 @@
   <string name="alert_shootr_update">Aquest contingut només pot veure\'s amb la darrera versió de Shootr.</string>
   <string name="alert_update_shootr">Aquest contingut només pot veure\'s amb la darrera versió de Shootr</string>
   <string name="all_participants_button">Tots els participants</string>
+  <string name="all_push_settings">Totes</string>
   <string name="ban_user_dialog_message">Els shots que publiqui als teus streams només es mostraràn als seus seguidors.</string>
   <string name="block_cannot_shoot_streams">Vetar usuari</string>
   <string name="block_ignore_user">Ignorar usuari</string>
@@ -60,7 +61,7 @@
   <string name="block_user_dialog_message">Si fas Ignorar deixaràs de veure els shots d\'aquest usuari.</string>
   <string name="block_user_error">Per ignorar has de deixar de seguir.</string>
   <string name="cancel">Cancel·lar</string>
-  <string name="cancel_hide_shot" formatted="false">Cancel·lar</string>
+  <string formatted="false" name="cancel_hide_shot">Cancel·lar</string>
   <string name="can_shoot_streams">Desfer vet</string>
   <string name="change_password_button_text">FET</string>
   <string name="change_password_logout_message">La contrasenya ha canviat. Reinicia sessió.</string>
@@ -68,8 +69,8 @@
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- Errors -->
   <string name="communication_error">Hi ha un problema de connexió a Internet. Comprova la teva connexió i prova un altre cop.</string>
-  <string name="confirmation_hide_shot_message" formatted="false">Treure del perfil</string>
-  <string name="confirm_hide_shot" formatted="false">Treure</string>
+  <string formatted="false" name="confirmation_hide_shot_message">Treure del perfil</string>
+  <string formatted="false" name="confirm_hide_shot">Treure</string>
   <string name="connection_lost">S\'ha perdut la connexió</string>
   <string name="contributors_empty">No n\'hi ha</string>
   <string name="copied_to_clipboard">Text copiat al portapapers.</string>
@@ -78,19 +79,20 @@
   <string name="delete_shot_confirmation_message">Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar canvis?</string>
+  <string name="discover">Descobrir</string>
   <string name="done">Fet</string>
   <string name="done_label">Fet</string>
-  <string name="done_pin_topic" formatted="false">OK</string>
+  <string formatted="false" name="done_pin_topic">OK</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Accés denegat. Cal que permetis Shootr desar imatges.</string>
   <string name="download_photo_permission_explaination">Cal que permetis Shootr desar imatges.</string>
   <string name="drafts_action_discard">Descartar</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No hi ha esborranys</string>
-  <string name="drawer_activity_me" formatted="false">Jo</string>
+  <string formatted="false" name="drawer_activity_me">Jo</string>
   <string name="drawer_activity_title">Activitat</string>
   <string name="drawer_favorites_title">Favorits</string>
-  <string name="drawer_following_activity_title" formatted="false">Seguint</string>
+  <string formatted="false" name="drawer_following_activity_title">Seguint</string>
   <string name="drawer_friends_title">Amics</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="edit_stream">Editar</string>
@@ -166,7 +168,9 @@
   <string name="error_user_cannot_vote">No es pot votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">No hi ha favorits</string>
+  <string name="favorite_streams_push_settings">Streams favorits</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="finished_poll">Resultat de l\'enquesta %s</string>
   <string name="follower_list_empty">No hi ha seguidors</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">No segueixes ningú</string>
@@ -184,7 +188,7 @@
   <string name="invite_friends_button">Convidar amics</string>
   <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Convidar amics</string>
-  <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
+  <string formatted="false" name="language_support_alert">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <plurals name="listing_favorites">
     <item quantity="one">%d favorit</item>
     <item quantity="other">%d favorits</item>
@@ -204,8 +208,8 @@
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
   <string name="menu_remove_favorite">Treure de Favorits</string>
   <string name="menu_save_photo">Desar imatge</string>
-  <string name="menu_search_friends">Trobar amics</string>
-  <string name="menu_search_participants">Trobar participants</string>
+  <string name="menu_search_friends">Buscar amics</string>
+  <string name="menu_search_participants">Buscar participants</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_shot_via">Compartir via…</string>
@@ -253,9 +257,10 @@
   <string name="notification_shot_sent">Shot enviat</string>
   <string name="now">ara</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
+  <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">Ha creat (stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">No hi ha participants</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Treure</string>
@@ -269,10 +274,16 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
   <string name="poll_live_results">Resultats en viu</string>
-  <string name="poll_results">Resultats</string>
+  <string name="poll_results">Resultat final</string>
+  <string name="poll_results_dialog">Un cop vistos els resultats no podràs votar en aquesta enquesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">Veure</string>
   <string name="poll_vote">Vota</string>
+  <plurals name="poll_votes_count">
+    <item quantity="one">%d vot</item>
+    <item quantity="other">%d vots</item>
+    <item quantity="zero">%d vots</item>
+  </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="profile_all_shots">Tots els shots</string>
   <string name="profile_edit_done_button">Fet</string>
@@ -284,6 +295,8 @@
   <string name="profile_logout">Tancar sessió</string>
   <string name="profile_marks_followers">seguidors</string>
   <string name="profile_marks_following">seguint</string>
+  <string name="profile_push_notifications">Notificacions</string>
+  <string name="profile_settings">Notificacions</string>
   <string name="profile_support">Suport</string>
   <string name="profile_updated">Perfil actualitzat</string>
   <string name="publish_poll">%1$s Nova enquesta a %2$s</string>
@@ -316,14 +329,17 @@
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="seconds">s</string>
+  <string name="shared_poll">Ha compartit l\'enquesta %s</string>
   <string name="shared_shot_activity">Ha compartit un shot de %s</string>
   <string name="shared_shot_activity_with_comment">"Ha compartit: "</string>
   <string name="shared_stream_notification">Stream compartit</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_subject">Enquesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
   <string name="share_stream_activity_text_pattern">Ha compartit (stream)</string>
-  <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Fes una ullada a %s a Shootr</string>
   <string name="share_via">Compartir via…</string>
   <string name="share_via_shootr">Compartir via Shootr</string>
@@ -334,10 +350,11 @@
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrit a (stream)</string>
+  <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_data_info_favorites">Favorits</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
-  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+  <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_media">Arxius</string>
@@ -379,9 +396,9 @@
   <string name="title_activity_stream_data_info">Nombres</string>
   <string name="title_activity_stream_media">Arxius</string>
   <string name="title_activity_support">Suport</string>
-  <string name="title_menu_photo" formatted="false">Foto</string>
-  <string name="title_pin_message_notification" formatted="false">Notificar el missatge?</string>
-  <string name="topic" formatted="false">Missatge</string>
+  <string formatted="false" name="title_menu_photo">Foto</string>
+  <string formatted="false" name="title_pin_message_notification">Notificar el missatge?</string>
+  <string formatted="false" name="topic">Missatge</string>
   <plurals name="total_watchers_pattern">
     <item quantity="one">%d participant</item>
     <item quantity="other">%d participants</item>
@@ -403,7 +420,7 @@
   <string name="voted_poll">Ha votat a (question) a %s</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
-  <string name="watch_profile_photo" formatted="false">Veure</string>
+  <string formatted="false" name="watch_profile_photo">Veure</string>
   <string name="welcome_friends_text">Sortir per desconnectar</string>
   <string name="welcome_get_started_button">Començar</string>
   <string name="welcome_shootr_title">Entra en un stream per connectar-te</string>

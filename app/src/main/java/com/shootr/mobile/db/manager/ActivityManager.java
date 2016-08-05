@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.ActivityEntityDBMapper;
-import com.shootr.mobile.domain.ActivityTimelineParameters;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

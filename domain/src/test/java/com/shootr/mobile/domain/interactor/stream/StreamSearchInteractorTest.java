@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;

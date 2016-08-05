@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
@@ -16,7 +16,7 @@ import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
-import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;

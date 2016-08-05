@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -25,6 +26,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FindFriendsPresenter;
 import com.shootr.mobile.ui.views.FindFriendsView;
 import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import java.io.Serializable;
@@ -39,10 +41,13 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindFriendsPresenter findFriendsPresenter;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     private View progressViewContent;
     private View progressView;
@@ -221,6 +226,8 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void follow(int position) {
         findFriendsPresenter.followUser(adapter.getItem(position));
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     @Override public void unFollow(int position) {
@@ -263,7 +270,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
 
     @OnItemClick(R.id.find_friends_search_results_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
     }
 
     @Override protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {

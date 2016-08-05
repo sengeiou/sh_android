@@ -78,6 +78,19 @@
         <item name="tabSelectedTextColor">@color/white</item>
     </style>
 
+    <style name="ShootrSearchTabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="android:background">@color/white</item>
+        <item name="tabIndicatorColor">@color/material_black</item>
+        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/TabSearchTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/material_black</item>
+    </style>
+
+    <style name="TabSearchTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/gray_70</item>
+    </style>
+
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/white_disabled</item>
     </style>
@@ -352,12 +365,6 @@
         <item name="android:src">@drawable/ic_checkable</item>
     </style>
 
-    <style name="NiceButton">
-        <item name="android:background">@drawable/bg_nice_action</item>
-        <item name="android:scaleType">center</item>
-        <item name="android:src">@drawable/ic_thumb_up_16_checkable_nopadding</item>
-    </style>
-
     <style name="HideButton">
         <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/ic_action_close_gray60_24_nopadding</item>
@@ -399,5 +406,25 @@
 
     <style name="ShootrAnimation" parent="ShootrTheme">
 
+    </style>
+    <style name="TimelineIndicator">
+        <item name="android:background">#039BE5</item>
+    </style>
+    <style name="NewShotBar">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="ExpandedAppBar" parent="ActionBar.TitleText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="IncludeShotDetail">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="ViewOnlyTimelineBar">
+        <item name="android:background">@color/white_bar</item>
+    </style>
+    <style name="StreamDetailBackground">
+        <item name="android:background">#f0f0f0</item>
     </style>
 </resources>

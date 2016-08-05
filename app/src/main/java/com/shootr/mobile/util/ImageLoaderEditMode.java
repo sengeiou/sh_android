@@ -35,6 +35,10 @@ public class ImageLoaderEditMode implements ImageLoader {
         view.setImageResource(R.drawable.sample_avatar);
     }
 
+    @Override public void loadDiscoverImage(String url, ImageView view, Callback callback) {
+        view.setImageResource(R.drawable.sample_avatar);
+    }
+
     @Override public void load(File file, ImageView view) {
         view.setImageResource(R.drawable.sample_avatar);
     }

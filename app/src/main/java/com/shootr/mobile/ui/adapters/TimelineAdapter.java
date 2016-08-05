@@ -89,7 +89,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         View view = null;
         switch (getItemViewType(position)) {
             case 0: // Shot
-                view = inflater.inflate(R.layout.item_list_shot, container, false);
+                view = inflater.inflate(R.layout.item_list_user_shot, container, false);
                 view.setTag(new ShotViewHolder(view,
                   avatarClickListener,
                   videoClickListener,

@@ -48,7 +48,7 @@
           android:paddingTop="2dp"
           android:layout_toRightOf="@+id/ativity_user_name" />
 
-        <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/activity_text"
+        <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView android:id="@+id/activity_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignLeft="@+id/ativity_user_name"

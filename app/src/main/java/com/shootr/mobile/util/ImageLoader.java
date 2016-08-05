@@ -32,6 +32,9 @@ public interface ImageLoader {
     void load(String url, ImageView view);
 
     @UiThread
+    void loadDiscoverImage(String url, ImageView view, Callback callback);
+
+    @UiThread
     void load(File file, ImageView view);
 
     @UiThread

@@ -1,20 +1,20 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
-import com.shootr.mobile.domain.Listing;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.stream.Listing;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,7 +27,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private final StreamSearchRepository remoteStreamSearchRepository;
   private final StreamRepository localStreamRepository;
   private final StreamRepository remoteStreamRepository;
-  private final FavoriteRepository remoteFavoriteRepository;
+  private final ExternalFavoriteRepository remoteFavoriteRepository;
 
   private String idUser;
   private Callback<Listing> callback;
@@ -40,7 +40,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
       @Remote StreamSearchRepository remoteStreamSearchRepository,
       @Local StreamRepository localStreamRepository,
       @Remote StreamRepository remoteStreamRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository) {
+      ExternalFavoriteRepository remoteFavoriteRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamSearchRepository = localStreamSearchRepository;

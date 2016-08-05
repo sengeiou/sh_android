@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;

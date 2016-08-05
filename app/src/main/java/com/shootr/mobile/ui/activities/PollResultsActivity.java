@@ -20,10 +20,13 @@ import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
 import com.shootr.mobile.util.BackStackHandler;
+import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.PercentageUtils;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.SwipeDialog;
 import javax.inject.Inject;
 
@@ -39,6 +42,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Inject FeedbackMessage feedbackMessage;
   @Inject PollResultsPresenter presenter;
   @Inject BackStackHandler backStackHandler;
+  @Inject ShareManager shareManager;
 
   private PollResultsAdapter adapter;
 
@@ -98,12 +102,13 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
       backStackHandler.handleBackStack(this);
       finish();
       return true;
+    } else if (item.getItemId() == R.id.menu_share) {
+      openSharePollMenu();
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
       return true;
-    } else {
-      return super.onOptionsItemSelected(item);
     }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override public void renderPollResults(PollModel pollModel) {
@@ -117,6 +122,18 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public void ignorePoll() {
     finish();
+  }
+
+  @Override public void share(PollModel pollModel) {
+    Intent shareIntent = shareManager.sharePollIntent(this, pollModel);
+    Intents.maybeStartActivity(this, shareIntent);
+  }
+
+  @Override public void showPollVotes(Long votes) {
+    Integer pollVotes = votes.intValue();
+    String pollVotesText =
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    getToolbarDecorator().setSubtitle(pollVotesText);
   }
 
   @Override protected void onResume() {
@@ -145,5 +162,17 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override public void hideLoading() {
     results.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
+  }
+
+  private void openSharePollMenu() {
+    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        presenter.shareViaShootr();
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        presenter.share();
+      }
+    }).show();
   }
 }

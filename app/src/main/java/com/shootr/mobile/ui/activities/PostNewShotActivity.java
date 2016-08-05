@@ -10,17 +10,18 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
+import com.rockerhieu.emojicon.EmojiconEditText;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -32,6 +33,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.ui.widgets.NestedListView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -61,15 +63,19 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.new_shot_avatar) ImageView avatar;
     @Bind(R.id.new_shot_title) TextView name;
     @Bind(R.id.new_shot_subtitle) TextView username;
-    @Bind(R.id.new_shot_text) EditText editTextView;
+    @Bind(R.id.new_shot_text) EmojiconEditText editTextView;
     @Bind(R.id.new_shot_char_counter) TextView charCounter;
     @Bind(R.id.new_shot_send_button) ImageButton sendButton;
     @Bind(R.id.new_shot_send_progress) ProgressBar progress;
     @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
     @Bind(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
     @Bind(R.id.new_shot_image) ImageView image;
-
     @Bind(R.id.new_shot_mentions) NestedListView mentionsListView;
+
+    @BindString(R.string.analytics_action_shot) String analyticsActionSendShot;
+    @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
+    @BindString(R.string.analytics_action_response) String analyticsActionResponse;
+    @BindString(R.string.analytics_label_response) String analyticsLabelResponse;
 
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
@@ -78,6 +84,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject @TemporaryFilesDir File tmpFiles;
     @Inject WritePermissionManager writePermissionManager;
     @Inject CrashReportTool crashReportTool;
+    @Inject AnalyticsTool analyticsTool;
 
     private Subscription commentSubscription;
     private MentionsAdapter adapter;
@@ -85,6 +92,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private int charCounterColorError;
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
+    private boolean isReply = false;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getToolbar().setVisibility(View.GONE);
@@ -109,7 +117,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         if (extras != null) {
             String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
             String replyParentId = extras.getString(EXTRA_REPLY_PARENT_ID);
-            boolean isReply = replyToUsername != null;
+            isReply = replyToUsername != null;
             if (isReply) {
                 presenter.initializeAsReply(this, replyParentId, replyToUsername);
                 return;
@@ -273,6 +281,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @OnClick(R.id.new_shot_send_button) public void onSendShot() {
         presenter.sendShot(editTextView.getText().toString());
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionSendShot,
+            analyticsLabelSendShot);
+        if (isReply) {
+            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionResponse,
+                analyticsLabelResponse);
+        }
     }
 
     @OnClick(R.id.new_shot_photo_button) public void onAddImageFromCamera() {

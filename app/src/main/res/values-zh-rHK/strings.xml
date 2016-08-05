@@ -50,6 +50,7 @@
   <string name="alert_shootr_update">此內容僅能透過最新的Shootr瀏覽。</string>
   <string name="alert_update_shootr">此內容僅能透過最新的Shootr瀏覽</string>
   <string name="all_participants_button">所有參與者</string>
+  <string name="all_push_settings">全部</string>
   <string name="ban_user_dialog_message">用戶在你的streams上發布的shots只對他/她的關注者可見。</string>
   <string name="block_cannot_shoot_streams">禁止用戶</string>
   <string name="block_ignore_user">忽略用戶</string>
@@ -78,6 +79,7 @@
   <string name="delete_shot_confirmation_message">刪除shot?</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消變更？</string>
+  <string name="discover">發現</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
   <string name="done_pin_topic" formatted="false">釘選</string>
@@ -166,7 +168,9 @@
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">沒有最愛</string>
+  <string name="favorite_streams_push_settings">喜愛的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="finished_poll">%s 投票結果</string>
   <string name="follower_list_empty">没有关注者</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">沒有跟關注任何人</string>
@@ -178,7 +182,7 @@
   <string name="intro_free_title">免費</string>
   <string name="intro_friends_text">成為第一個登記您的@name。</string>
   <string name="intro_shootr">Shootr</string>
-  <string name="intro_start_shooting_button">開始Shooting </string>
+  <string name="intro_start_shooting_button">"開始Shooting "</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">一個開放對話的通訊軟件。所有開放的對話叫 Streams。</string>
   <string name="invite_friends_button">邀請朋友</string>
@@ -189,7 +193,7 @@
     <item quantity="other">%d個最愛</item>
   </plurals>
   <string name="listing_title_favorites">最愛</string>
-  <string name="listing_title_holding">創立了</string>
+  <string name="listing_title_holding">管理員</string>
   <string name="loading_activity_message">等待中…</string>
   <string name="main_activity_title">動態消息</string>
   <string name="mentioned_shot_activity_with_comment">"提及到您: "</string>
@@ -248,11 +252,11 @@
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot已發送</string>
   <string name="now">現在</string>
-  <string name="no_intent_handler">沒有應用程式可用來處理此行動。
-</string>
+  <string name="no_intent_handler">沒有應用程式可用來處理此行動。\n</string>
+  <string name="off_push_settings">關閉</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">沒有參與者</string>
   <string name="photo_edit_gallery">相簿</string>
   <string name="photo_edit_remove">清除</string>
@@ -266,10 +270,15 @@
   <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">當前投票結果</string>
-  <string name="poll_results">投票結果</string>
+  <string name="poll_results">最終結果</string>
+  <string name="poll_results_dialog">一旦看到結果，將無法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">查看</string>
   <string name="poll_vote">投票</string>
+  <plurals name="poll_votes_count">
+    <item quantity="other">%d 投票</item>
+    <item quantity="zero">%d 投票</item>
+  </plurals>
   <string name="poll_vote_timeout_retry">重試</string>
   <string name="profile_all_shots">所有shots</string>
   <string name="profile_edit_done_button">完成</string>
@@ -281,6 +290,8 @@
   <string name="profile_logout">登出</string>
   <string name="profile_marks_followers">跟隨者</string>
   <string name="profile_marks_following">關注中</string>
+  <string name="profile_push_notifications">推送通知</string>
+  <string name="profile_settings">推送通知</string>
   <string name="profile_support">支援</string>
   <string name="profile_updated">個人檔案已更新</string>
   <string name="publish_poll">%1$s %2$s 新的投票</string>
@@ -312,14 +323,17 @@
   <string name="restore_stream_label">還原stream</string>
   <string name="restore_stream_snackbar_action">復原</string>
   <string name="seconds">秒</string>
+  <string name="shared_poll">分享了投票 %s</string>
   <string name="shared_shot_activity">分享了%s的 Shot</string>
   <string name="shared_shot_activity_with_comment">"分享了: "</string>
   <string name="shared_stream_notification">分享了 Stream</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_subject">投票 %s</string>
   <string name="share_shot_chooser_title">分享</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s在%2$s發怖了訊息</string>
   <string name="share_stream_activity_text_pattern">分享了(stream)</string>
-  <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
   <string name="share_via">透過以下方式分享：</string>
   <string name="share_via_shootr">通過Shootr分享</string>
@@ -330,6 +344,7 @@
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
+  <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_data_info_favorites">喜爱</string>
   <string name="stream_data_info_participants">参与者</string>
   <string name="stream_data_info_participants_with_shots">發送shot的參與者</string>

@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
@@ -35,6 +35,7 @@ public class StreamPollIndicatorPresenterTest {
   private static final String VOTED = PollStatus.VOTED;
   private static final String CLOSED = PollStatus.CLOSED;
   private static final String IGNORED = PollStatus.IGNORED;
+  private static final String HASSEENRESULTS = "HASSEENRESULTS";
 
   @Mock StreamPollView streamPollView;
   @Mock GetPollByIdStreamInteractor getPollByIdStreamInteractor;
@@ -61,6 +62,15 @@ public class StreamPollIndicatorPresenterTest {
   @Test public void shouldShowPollIndicatorWithViewActionWhenStreamHaveAPublishedPollVoted()
       throws Exception {
     setupGetVotedPollByIdStreamInteractor();
+
+    presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
+
+    verify(streamPollView).showPollIndicatorWithViewAction(any(PollModel.class));
+  }
+
+  @Test public void shouldShowPollIndicatorWithViewActionWhenStreamHaveASeenResultsPoll()
+      throws Exception {
+    setupGetSeenResultsPollByIdStreamInteractor();
 
     presenter.initialize(streamPollView, STREAM_ID, HOLDER_USER_ID);
 
@@ -169,6 +179,18 @@ public class StreamPollIndicatorPresenterTest {
         .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
+  private void setupGetSeenResultsPollByIdStreamInteractor() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Poll> callback =
+            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+        callback.onLoaded(seenResultsPoll());
+        return null;
+      }
+    }).when(getPollByIdStreamInteractor)
+        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+  }
+
   private void setupGetClosedPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -262,6 +284,17 @@ public class StreamPollIndicatorPresenterTest {
     poll.setStatus(STATUS);
     poll.setPublished(PUBLISHED);
     poll.setVoteStatus(VOTED);
+    return poll;
+  }
+
+  private Poll seenResultsPoll() {
+    Poll poll = new Poll();
+    poll.setIdStream(STREAM_ID);
+    poll.setIdPoll(POLL_ID);
+    poll.setQuestion(QUESTION);
+    poll.setStatus(STATUS);
+    poll.setPublished(PUBLISHED);
+    poll.setVoteStatus(HASSEENRESULTS);
     return poll;
   }
 

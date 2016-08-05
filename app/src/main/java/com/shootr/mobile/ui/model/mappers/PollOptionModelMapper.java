@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.PollOption;
+import com.shootr.mobile.domain.model.poll.PollOption;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import java.util.ArrayList;
 import java.util.List;

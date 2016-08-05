@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
     android:orientation="vertical"
     >
 
@@ -65,7 +64,7 @@
 
       </RelativeLayout>
 
-      <com.shootr.mobile.ui.widgets.ClickableTextView
+      <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView
           android:id="@+id/shot_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -165,6 +164,7 @@
       android:layout_marginBottom="8dp"
       android:gravity="center"
       android:paddingLeft="64dp"
+      android:baselineAligned="false"
       >
 
     <LinearLayout

@@ -4,7 +4,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class PollQuestionSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
+public abstract class PollQuestionSpan extends ClickableSpan implements ClickableEmojiconTextView.PressableSpan {
 
   private String pollQuestion;
   private String idStream;

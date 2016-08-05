@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.asserts;
 
-import com.shootr.mobile.domain.QueuedShot;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 

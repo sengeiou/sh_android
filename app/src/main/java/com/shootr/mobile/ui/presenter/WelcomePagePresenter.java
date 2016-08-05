@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;

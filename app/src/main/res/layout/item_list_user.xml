@@ -28,26 +28,26 @@
       android:gravity="center_vertical"
       android:orientation="vertical">
 
-        <TextView android:id="@+id/user_name"
+        <com.rockerhieu.emojicon.EmojiconTextView android:id="@+id/user_name"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:singleLine="true"
-          android:textColor="@color/gray_10"
-          android:textSize="17sp"
-          tools:text="Rafa"
-          android:paddingRight="8dp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/gray_10"
+        android:textSize="17sp"
+        tools:text="Rafa"
+        android:paddingRight="8dp" />
 
         <TextView android:id="@+id/user_username"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:ellipsize="end"
-          android:singleLine="true"
-          android:textColor="@color/gray_60"
-          android:textSize="14sp"
-          android:visibility="gone"
-          tools:text="rafa"
-          tools:visibility="visible" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/gray_60"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:text="rafa"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

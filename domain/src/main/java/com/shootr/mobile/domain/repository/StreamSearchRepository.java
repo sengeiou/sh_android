@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import java.util.List;
 
 public interface StreamSearchRepository {

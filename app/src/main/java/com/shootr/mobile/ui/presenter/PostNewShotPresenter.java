@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteractor;

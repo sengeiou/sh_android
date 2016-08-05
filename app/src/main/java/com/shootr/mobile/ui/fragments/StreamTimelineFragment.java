@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,7 +38,7 @@ import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
@@ -72,6 +73,7 @@ import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
+import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -97,6 +99,7 @@ public class StreamTimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
+  public static final String TAG = "timeline";
 
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
@@ -133,7 +136,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
   @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
-  @Bind(R.id.timeline_message) TextView streamMessage;
+  @Bind(R.id.timeline_message) ClickableTextView streamMessage;
   @Bind(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
   @Bind(R.id.poll_question) TextView pollQuestion;
   @Bind(R.id.poll_action) TextView pollAction;
@@ -144,6 +147,16 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.poll_vote) String pollVoteString;
   @BindString(R.string.poll_view) String pollViewString;
   @BindString(R.string.poll_results) String pollResultsString;
+  @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
+  @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
+  @BindString(R.string.analytics_action_nice) String analyticsActionNice;
+  @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
+  @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
+  @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+  @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -210,9 +223,9 @@ public class StreamTimelineFragment extends BaseFragment
     streamTimelinePresenter.setIsFirstLoad(true);
     streamTimelinePresenter.setIsFirstShotPosition(true);
     if (streamAuthorIdUser != null) {
-      initializePresentersWithPinShotPresenter(idStream, streamAuthorIdUser, streamMode);
+      initializePresentersWithStreamAuthorId(idStream, streamAuthorIdUser, streamMode);
     } else {
-      initializePresenters(idStream, streamAuthorIdUser, streamMode);
+      initializePresenters(idStream, null, streamMode);
     }
   }
 
@@ -255,6 +268,8 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
+            analyticsLabelFavoriteStream);
         return true;
       case R.id.menu_stream_remove_favorite:
         streamTimelineOptionsPresenter.removeFromFavorites();
@@ -288,7 +303,7 @@ public class StreamTimelineFragment extends BaseFragment
     streamPollIndicatorPresenter.pause();
   }
 
-  private void initializePresentersWithPinShotPresenter(String idStream, String streamAuthorIdUser,
+  private void initializePresentersWithStreamAuthorId(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser, streamMode);
     pinShotPresenter.initialize(this);
@@ -302,6 +317,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void initializePresenters(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamMode);
+    pinShotPresenter.initialize(this);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
@@ -379,6 +395,8 @@ public class StreamTimelineFragment extends BaseFragment
         new OnNiceShotListener() {
           @Override public void markNice(String idShot) {
             streamTimelinePresenter.markNiceShot(idShot);
+            analyticsTool.analyticsSendAction(getContext(), analyticsActionNice,
+                analyticsLabelNice);
           }
 
           @Override public void unmarkNice(String idShot) {
@@ -396,7 +414,7 @@ public class StreamTimelineFragment extends BaseFragment
             .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
         startActivity(newShotIntent);
       }
-    }, null, false, new ShotClickListener() {
+    }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
         Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);
@@ -478,7 +496,7 @@ public class StreamTimelineFragment extends BaseFragment
   //endregion
 
   private void openProfile(String idUser) {
-    Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+    Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
     startActivity(profileIntent);
   }
 
@@ -495,7 +513,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openProfileFromUsername(String username) {
-    Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+    Intent intentForUser = ProfileActivity.getIntentWithUsername(getActivity(), username);
     startActivity(intentForUser);
   }
 
@@ -551,6 +569,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupImageDialog(ShotModel shot) {
+    analyticsTool.analyticsSendAction(getContext(), analyticsActionPhoto, analyticsLabelPhoto);
     LayoutInflater inflater = getActivity().getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_shot_image, null);
     TextView user = (TextView) dialogView.findViewById(R.id.shot_user_name);
@@ -558,14 +577,16 @@ public class StreamTimelineFragment extends BaseFragment
     CircleImageView avatar = (CircleImageView) dialogView.findViewById(R.id.shot_avatar);
 
     user.setText(shot.getUsername());
-    imageLoader.load(shot.getImage().getImageUrl(), image);
-    imageLoader.load(shot.getPhoto(), avatar);
+    loadImages(shot, image, avatar);
 
     shotImageDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
-
     shotImageDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
-
     shotImageDialog.show();
+  }
+
+  private void loadImages(ShotModel shot, ImageView image, CircleImageView avatar) {
+    imageLoader.load(shot.getImage().getImageUrl(), image);
+    imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
   }
 
   private void setupTopicCustomDialog() {
@@ -612,8 +633,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null) {
-      toolbarDecorator.setSubtitle(watchNumberCount);
+    if (watchNumberCount != null && watchNumberCount != 0) {
+      toolbarDecorator.setSubtitle(
+          getContext().getString(R.string.stream_subtitle, watchNumberCount));
     }
   }
 
@@ -738,6 +760,8 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       streamMessage.setVisibility(View.VISIBLE);
       streamMessage.setText(topic);
+      streamMessage.addLinks();
+      streamMessage.setLinkTextColor(Color.WHITE);
     }
   }
 
@@ -1011,10 +1035,15 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
+            analyticsTool.analyticsSendAction(getContext(),
+                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+                analyticsLabelShareShot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1063,10 +1092,15 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1096,10 +1130,15 @@ public class StreamTimelineFragment extends BaseFragment
         R.string.menu_share_shot_via_shootr, new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shotModel);
+            analyticsTool.analyticsSendAction(getContext(),
+                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+                analyticsLabelShareShot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1116,31 +1155,37 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showPollIndicatorWithViewAction(final PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollViewString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollViewString.toUpperCase());
+    }
   }
 
   @Override public void showPollIndicatorWithVoteAction(PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollVoteString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollVoteString.toUpperCase());
+    }
   }
 
   @Override public void showPollIndicatorWithResultsAction(PollModel pollModel) {
     setupPollIndicator(pollModel);
-    pollAction.setText(pollResultsString.toUpperCase());
+    if (canSetPollAction()) {
+      pollAction.setText(pollResultsString.toUpperCase());
+    }
+  }
+
+  private boolean canSetPollAction() {
+    return pollAction != null;
   }
 
   private void setupPollIndicator(PollModel pollModel) {
+    timelineNewShotsIndicator.setVisibility(View.GONE);
     pollIndicatorStatus = POLL_STATUS_SHOWING;
     if (timelinePollIndicator != null) {
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
     }
-  }
-
-  private void goToVoteActivity(String idStream) {
-    Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
-    startActivity(intent);
   }
 
   @Override public void hidePollIndicator() {
@@ -1170,6 +1215,12 @@ public class StreamTimelineFragment extends BaseFragment
 
   @OnClick(R.id.poll_action) public void onActionPressed() {
     streamPollIndicatorPresenter.onActionPressed();
+  }
+
+  @OnClick(R.id.timeline_new_shots_indicator_container) public void onShotBarPressed() {
+    if (timelineNewShotsIndicator.getVisibility() != View.GONE) {
+      newShotBarPresenter.editTopicPressed();
+    }
   }
   //endregion
 }

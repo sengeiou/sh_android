@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.Activity;
-import com.shootr.mobile.domain.ActivityTimeline;
-import com.shootr.mobile.domain.ActivityTimelineParameters;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;

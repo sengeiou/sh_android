@@ -4,7 +4,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class UsernameSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
+public abstract class UsernameSpan extends ClickableSpan implements ClickableEmojiconTextView.PressableSpan {
 
     private String username;
 

@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Poll;
-import com.shootr.mobile.domain.PollStatus;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
@@ -78,7 +78,8 @@ public class StreamPollIndicatorPresenter implements Presenter {
   }
 
   private void handleVoteStatus(PollModel pollModel) {
-    if (pollModel.getVoteStatus().equals(PollStatus.VOTED)) {
+    if (pollModel.getVoteStatus().equals(PollStatus.VOTED) ||
+        pollModel.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
       action = VIEW;
       streamPollView.showPollIndicatorWithViewAction(pollModel);
     } else {

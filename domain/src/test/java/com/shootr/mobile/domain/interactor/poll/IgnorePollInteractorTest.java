@@ -1,12 +1,13 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.Poll;
+import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.PollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,8 +25,8 @@ public class IgnorePollInteractorTest {
   public static final String IGNORED = "IGNORED";
   public static final String VOTE = "VOTE";
   private IgnorePollInteractor ignorePollInteractor;
-  @Mock PollRepository localPollRepository;
-  @Mock PollRepository remotePollRepository;
+  @Mock InternalPollRepository localPollRepository;
+  @Mock ExternalPollRepository remotePollRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Captor ArgumentCaptor<Poll> pollArgumentCaptor;

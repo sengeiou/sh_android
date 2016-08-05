@@ -16,32 +16,33 @@ import java.io.File;
 import javax.inject.Singleton;
 
 @Module(
-  includes = {
-    UiModule.class, DataModule.class, BusModule.class, NotificationModule.class, BackgroundModule.class,
-  },
-  injects = {
-    ShootrApplication.class,
-  }) public final class ShootrModule {
+    includes = {
+        UiModule.class, DataModule.class, BusModule.class, NotificationModule.class,
+        BackgroundModule.class,
+    },
+    injects = {
+        ShootrApplication.class,
+    }) public final class ShootrModule {
 
-    private final ShootrApplication app;
+  private final ShootrApplication app;
 
-    public ShootrModule(ShootrApplication app) {
-        this.app = app;
-    }
+  public ShootrModule(ShootrApplication app) {
+    this.app = app;
+  }
 
-    @Provides @Singleton Application provideApplication() {
-        return app;
-    }
+  @Provides @Singleton Application provideApplication() {
+    return app;
+  }
 
-    @Provides @ApplicationContext Context provideApplicationContext(Application application) {
-        return application.getApplicationContext();
-    }
+  @Provides @ApplicationContext Context provideApplicationContext(Application application) {
+    return application.getApplicationContext();
+  }
 
-    @Provides Resources provideResources(Application application) {
-        return application.getResources();
-    }
+  @Provides Resources provideResources(Application application) {
+    return application.getResources();
+  }
 
-    @Provides @TemporaryFilesDir File provideTemporaryFilesDir(Application application) {
-        return application.getExternalCacheDir();
-    }
+  @Provides @TemporaryFilesDir File provideTemporaryFilesDir(Application application) {
+    return application.getExternalCacheDir();
+  }
 }

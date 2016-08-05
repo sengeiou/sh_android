@@ -1,8 +1,8 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.ShotQueueEntity;
-import com.shootr.mobile.domain.QueuedShot;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

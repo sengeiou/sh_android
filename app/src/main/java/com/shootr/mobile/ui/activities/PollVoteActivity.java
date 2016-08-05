@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -18,8 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.PollOptionAdapter;
-import com.shootr.mobile.ui.adapters.holders.PollOptionHolder;
+import com.shootr.mobile.ui.adapters.PollVoteAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionLongClickListener;
 import com.shootr.mobile.ui.model.PollModel;
@@ -38,19 +37,19 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   private static final String EXTRA_STREAM = "idStream";
   public static final String EXTRA_ID_POLL = "idPoll";
   public static final String EXTRA_ID_USER_OWNER = "userIdOwner";
+  private static final int COLUMNS_NUMBER = 4;
 
-  @Bind(R.id.poll_option_list) GridView gridView;
+  @Bind(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
   @Bind(R.id.poll_question) TextView pollQuestion;
   @Bind(R.id.pollvote_progress) ProgressBar progressBar;
   @Bind(R.id.poll_results) TextView viewResults;
 
   @Inject InitialsLoader initialsLoader;
-  @Inject PollOptionHolder pollOptionHolder;
   @Inject PollVotePresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject BackStackHandler backStackHandler;
 
-  private PollOptionAdapter pollOptionAdapter;
+  private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
   public static Intent newIntent(Context context, String idStream) {
@@ -86,7 +85,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
     setupActionbar();
-    pollOptionAdapter = new PollOptionAdapter(this, new OnPollOptionClickListener() {
+    pollVoteAdapter = new PollVoteAdapter(new OnPollOptionClickListener() {
       @Override public void onClickPressed(PollOptionModel pollOptionModel) {
         presenter.voteOption(pollOptionModel.getIdPollOption());
       }
@@ -94,9 +93,11 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
       @Override public void onLongPress(PollOptionModel pollOptionModel) {
         setupPollOptionDialog(pollOptionModel);
       }
-    }, imageLoader, initialsLoader, pollOptionHolder);
-    gridView.setAdapter(pollOptionAdapter);
-    ViewCompat.setNestedScrollingEnabled(gridView, true);
+    }, imageLoader, initialsLoader);
+    GridLayoutManager layoutManager =
+        new GridLayoutManager(this, COLUMNS_NUMBER);
+    pollOptionsRecycler.setLayoutManager(layoutManager);
+    pollOptionsRecycler.setAdapter(pollVoteAdapter);
   }
 
   private void setupPollOptionDialog(PollOptionModel pollOptionModel) {
@@ -113,8 +114,15 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Override public void renderPoll(PollModel pollModel) {
     pollQuestion.setText(pollModel.getQuestion());
-    pollOptionAdapter.setPollOptionModels(pollModel.getPollOptionModels());
-    pollOptionAdapter.notifyDataSetChanged();
+    pollVoteAdapter.setPollOptionModels(pollModel.getPollOptionModels());
+    pollVoteAdapter.notifyDataSetChanged();
+  }
+
+  @Override public void showPollVotes(Long votes) {
+    Integer pollVotes = votes.intValue();
+    String pollVotesText =
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    getToolbarDecorator().setSubtitle(pollVotesText);
   }
 
   @Override public void ignorePoll() {
@@ -145,6 +153,18 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     viewResults.setVisibility(View.VISIBLE);
   }
 
+  @Override public void showResultsWithoutVotingDialog() {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder //
+        .setMessage(getString(R.string.poll_results_dialog)) //
+        .setPositiveButton(getString(R.string.poll_results),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialogInterface, int action) {
+                presenter.showPollResultsWithoutVoting();
+              }
+            }).setNegativeButton(getString(R.string.cancel), null).show();
+  }
+
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_poll_vote, menu);
     ignorePollMenu.bindRealMenuItem(menu.findItem(R.id.menu_ignore_poll));
@@ -156,10 +176,13 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
       backStackHandler.handleBackStack(this);
       finish();
       return true;
+    } else if (item.getItemId() == R.id.menu_show_results) {
+      presenter.onShowPollResults();
+      return true;
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
       return true;
-    }  else {
+    } else {
       return super.onOptionsItemSelected(item);
     }
   }
@@ -184,11 +207,11 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Override public void showLoading() {
     progressBar.setVisibility(View.VISIBLE);
-    gridView.setVisibility(View.GONE);
+    pollOptionsRecycler.setVisibility(View.GONE);
   }
 
   @Override public void hideLoading() {
-    gridView.setVisibility(View.VISIBLE);
+    pollOptionsRecycler.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
   }
 

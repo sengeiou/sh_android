@@ -2,22 +2,21 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.FavoriteDataSource;
+import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.sync.SyncableFavoriteEntityFactory;
-import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
-import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class LocalFavoriteRepository implements FavoriteRepository {
+public class LocalFavoriteRepository implements InternalFavoriteRepository {
 
-    private final FavoriteDataSource localFavoriteDataSource;
+    private final InternalFavoriteDatasource localFavoriteDataSource;
     private final FavoriteEntityMapper favoriteEntityMapper;
     private final SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
 
-    @Inject public LocalFavoriteRepository(@Local FavoriteDataSource localFavoriteDataSource,
+    @Inject public LocalFavoriteRepository(InternalFavoriteDatasource localFavoriteDataSource,
       FavoriteEntityMapper favoriteEntityMapper, SyncableFavoriteEntityFactory syncableFavoriteEntityFactory) {
         this.localFavoriteDataSource = localFavoriteDataSource;
         this.favoriteEntityMapper = favoriteEntityMapper;
@@ -29,17 +28,17 @@ public class LocalFavoriteRepository implements FavoriteRepository {
         localFavoriteDataSource.putFavorite(currentOrNewEntity);
     }
 
-    @Override public List<Favorite> getFavorites(String userId) {
-        List<FavoriteEntity> favoriteEntities = localFavoriteDataSource.getFavorites(userId);
+    @Override public List<Favorite> getFavorites() {
+        List<FavoriteEntity> favoriteEntities = localFavoriteDataSource.getFavorites();
         return favoriteEntityMapper.transformEntities(favoriteEntities);
     }
 
-    @Override public Favorite getFavoriteByStream(String eventId) {
-        FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdStream(eventId);
+    @Override public Favorite getFavoriteByStream(String idStream) {
+        FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdStream(idStream);
         return favoriteEntityMapper.transform(favoriteByIdEvent);
     }
 
-    @Override public void removeFavoriteByStream(String eventId) {
-        localFavoriteDataSource.removeFavoriteByIdStream(eventId);
+    @Override public void removeFavoriteByStream(String idStream) {
+        localFavoriteDataSource.removeFavoriteByIdStream(idStream);
     }
 }

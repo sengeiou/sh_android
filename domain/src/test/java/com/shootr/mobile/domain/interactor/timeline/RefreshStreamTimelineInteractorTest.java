@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;

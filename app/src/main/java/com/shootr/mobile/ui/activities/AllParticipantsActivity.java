@@ -46,6 +46,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
@@ -189,6 +191,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
 
     @Override public void follow(int position) {
         allParticipantsPresenter.followUser(adapter.getItem(position));
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     @Override public void unFollow(int position) {
@@ -207,6 +211,6 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
 
     @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
     }
 }

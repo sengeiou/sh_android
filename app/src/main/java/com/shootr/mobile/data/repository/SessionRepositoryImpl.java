@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;

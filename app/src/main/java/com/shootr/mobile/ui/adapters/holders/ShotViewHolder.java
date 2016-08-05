@@ -1,17 +1,11 @@
 package com.shootr.mobile.ui.adapters.holders;
 
-import android.support.annotation.Nullable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -21,15 +15,13 @@ import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.ClickableEmojiconTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotViewHolder {
-
-    private static final int LONG_COMMENT_THRESHOLD = 20;
 
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
@@ -44,7 +36,8 @@ public class ShotViewHolder {
     @Bind(R.id.shot_avatar) ImageView avatar;
     @Bind(R.id.shot_user_name) TextView name;
     @Bind(R.id.shot_timestamp) TextView timestamp;
-    @Bind(R.id.shot_text) ClickableTextView text;
+    @Bind(R.id.shot_text) ClickableEmojiconTextView text;
+    @Bind(R.id.shot_text_stream_title) ClickableEmojiconTextView streamTitle;
     @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
     @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
     @Bind(R.id.shot_video_frame) View videoFrame;
@@ -52,13 +45,10 @@ public class ShotViewHolder {
     @Bind(R.id.shot_video_duration) TextView videoDuration;
     @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
     @Bind(R.id.shot_nice_count) TextView niceCount;
-    @Bind(R.id.nices_container) View niceContainer;
     @Bind(R.id.shot_hide_button_container) View hideContainer;
     @Bind(R.id.shot_reply_count) TextView replyCount;
     @Bind(R.id.shot_reply_button) ImageView darkReplyButton;
     @Bind(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
-
-    @BindDimen(R.dimen.nice_button_margin_top_normal) int niceMarginNormal;
 
     @BindColor(R.color.short_title_color) int titleColor;
 
@@ -71,6 +61,7 @@ public class ShotViewHolder {
       OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
       ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
+        ButterKnife.bind(this, view);
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
@@ -79,7 +70,6 @@ public class ShotViewHolder {
         this.timeUtils = timeUtils;
         this.imageLoader = imageLoader;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-        ButterKnife.bind(this, view);
         this.view = view;
         this.onHideClickListener = onHideClickListener;
         this.isCurrentUser = isCurrentUser;
@@ -145,41 +135,21 @@ public class ShotViewHolder {
         if (shouldShowTitle && item.getStreamTitle() != null) {
             title = item.getStreamTitle();
         }
-
-        SpannableStringBuilder commentWithTitle = buildCommentTextWithTitle(comment, title);
-        if (commentWithTitle != null) {
-            addShotComment(this, commentWithTitle);
+        if (comment == null && title == null) {
+            text.setVisibility(View.GONE);
+            streamTitle.setVisibility(View.GONE);
+        }
+        if (comment != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(comment);
             text.setVisibility(View.VISIBLE);
+            addShotComment(this, spannableStringBuilder);
         } else {
             text.setVisibility(View.GONE);
         }
-    }
-
-    private @Nullable SpannableStringBuilder buildCommentTextWithTitle(@Nullable String comment,
-      @Nullable String title) {
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        if (comment == null && title == null) {
-            return null;
-        }
-        if (comment != null) {
-            builder.append(comment);
-        }
-
-        if (comment != null && title != null) {
-            builder.append(" ");
-        }
         if (title != null) {
-            builder.append(formatAditionalInfo(title));
+            streamTitle.setVisibility(View.VISIBLE);
+            streamTitle.setText(title);
         }
-        return builder;
-    }
-
-    private SpannableString formatAditionalInfo(String title) {
-        ForegroundColorSpan span = new ForegroundColorSpan(titleColor);
-
-        SpannableString titleSpan = new SpannableString(title);
-        titleSpan.setSpan(span, 0, titleSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return titleSpan;
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment) {
@@ -222,7 +192,7 @@ public class ShotViewHolder {
         Long imageWidth = shot.getImage().getImageWidth();
         Long imageHeight = shot.getImage().getImageHeight();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            handleImage(shot, imageUrl,
+            handleImage(imageUrl,
                 imageWidth, imageHeight);
         } else {
             imagePortrait.setVisibility(View.GONE);
@@ -230,10 +200,9 @@ public class ShotViewHolder {
         }
     }
 
-    private void handleImage(final ShotModel shot,
-        String imageUrl, Long imageWidth, Long imageHeight) {
+    private void handleImage(String imageUrl, Long imageWidth, Long imageHeight) {
         if (isImageValid(imageWidth, imageHeight)) {
-            setImageLayout(shot, imageUrl,
+            setImageLayout(imageUrl,
                 imageWidth, imageHeight);
         } else {
             imagePortrait.setVisibility(View.GONE);
@@ -242,8 +211,7 @@ public class ShotViewHolder {
         }
     }
 
-    private void setImageLayout(final ShotModel shot, String imageUrl, Long imageWidth,
-        Long imageHeight) {
+    private void setImageLayout(String imageUrl, Long imageWidth, Long imageHeight) {
         if (imageWidth > imageHeight) {
             imagePortrait.setVisibility(View.GONE);
             imageLandscape.setVisibility(View.VISIBLE);
@@ -280,20 +248,8 @@ public class ShotViewHolder {
     }
 
     private void bindNiceInfo(final ShotModel shot) {
-        boolean moveNiceButtonUp = !hasLongComment(shot) && !hasImage(shot);
-        int marginTop = moveNiceButtonUp ? niceMarginNormal : niceMarginNormal;
-
         hideContainer.setVisibility(View.GONE);
         niceButton.setVisibility(View.VISIBLE);
-        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) niceButton.getLayoutParams();
-        lp.setMargins(0, marginTop, 0, 0);
-
-        ViewGroup.MarginLayoutParams lpNiceCountContainer =
-          (ViewGroup.MarginLayoutParams) niceContainer.getLayoutParams();
-        lpNiceCountContainer.setMargins(lpNiceCountContainer.leftMargin,
-          marginTop,
-          lpNiceCountContainer.rightMargin,
-          lpNiceCountContainer.bottomMargin);
 
         Integer nicesCount = shot.getNiceCount();
         if (nicesCount > 0) {
@@ -319,11 +275,4 @@ public class ShotViewHolder {
         this.niceCount.setText(String.valueOf(niceCount));
     }
 
-    private boolean hasLongComment(ShotModel shot) {
-        return shot.getComment() != null && shot.getComment().length() > LONG_COMMENT_THRESHOLD;
-    }
-
-    private boolean hasImage(ShotModel shot) {
-        return shot.getImage() != null;
-    }
 }

@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
-import com.shootr.mobile.domain.interactor.user.FindContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.FindContributorsInteractor;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.domain.utils.TimeUtils;
@@ -35,7 +35,7 @@ public class FindContributorsPresenterTest {
   private static final String QUERY = "query";
   private static final String STREAM_ID = "streamId";
   @Mock FindContributorsInteractor findContributorsInteractor;
-  @Mock ContributorInteractor contributorInteractor;
+  @Mock ManageContributorsInteractor manageContributorsInteractor;
   @Mock UserModelMapper userModelMapper;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock FindContributorsView findContributorsView;
@@ -48,7 +48,8 @@ public class FindContributorsPresenterTest {
     MockitoAnnotations.initMocks(this);
     UserModelMapper userModelMapper =
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-    presenter = new FindContributorsPresenter(findContributorsInteractor, contributorInteractor,
+    presenter = new FindContributorsPresenter(findContributorsInteractor,
+        manageContributorsInteractor,
         userModelMapper, errorMessageFactory);
   }
 
@@ -156,7 +157,7 @@ public class FindContributorsPresenterTest {
         errorCallback.onError(any(ShootrException.class));
         return null;
       }
-    }).when(contributorInteractor)
+    }).when(manageContributorsInteractor)
         .manageContributor(anyString(), anyString(), anyBoolean(),
             any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
   }
@@ -169,7 +170,7 @@ public class FindContributorsPresenterTest {
         callback.onCompleted();
         return null;
       }
-    }).when(contributorInteractor)
+    }).when(manageContributorsInteractor)
         .manageContributor(anyString(), anyString(), anyBoolean(),
             any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
   }

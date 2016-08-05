@@ -6,6 +6,7 @@ public class PollEntity {
 
   private String idPoll;
   private String idStream;
+  private String idUser;
   private String question;
   private Long hasVoted;
   private String status;
@@ -75,5 +76,13 @@ public class PollEntity {
 
   public void setVoteStatus(String voteStatus) {
     this.voteStatus = voteStatus;
+  }
+
+  public String getIdUser() {
+    return idUser;
+  }
+
+  public void setIdUser(String idUser) {
+    this.idUser = idUser;
   }
 }

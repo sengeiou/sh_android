@@ -5,13 +5,10 @@ import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.OnCompletedObserver;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.Subscriber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -43,39 +40,13 @@ public class MuteInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    subscribeOnCompletedObserverToObservable(remoteMuteObservable());
-    subscribeOnCompletedObserverToObservable(localMuteObservable());
-  }
-
-  private Observable<Void> localMuteObservable() {
-    return Observable.create(new Observable.OnSubscribe<Void>() {
-      @Override public void call(Subscriber<? super Void> subscriber) {
-        localMuteRepository.mute(idStream);
-        subscriber.onCompleted();
-      }
-    });
-  }
-
-  private Observable<Void> remoteMuteObservable() {
-    return Observable.create(new Observable.OnSubscribe<Void>() {
-      @Override public void call(Subscriber<? super Void> subscriber) {
-        remoteMuteRepository.mute(idStream);
-        notifyCompleted();
-        subscriber.onCompleted();
-      }
-    });
-  }
-
-  private void subscribeOnCompletedObserverToObservable(Observable<Void> observable) {
-    observable.subscribe(new OnCompletedObserver<Void>() {
-      @Override public void onError(Throwable error) {
-                /* swallow silently */
-      }
-    });
+    localMuteRepository.mute(idStream);
+    notifyAdditionToBus();
+    remoteMuteRepository.mute(idStream);
+    notifyCompleted();
   }
 
   private void notifyCompleted() {
-    notifyAdditionToBus();
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
         callback.onCompleted();

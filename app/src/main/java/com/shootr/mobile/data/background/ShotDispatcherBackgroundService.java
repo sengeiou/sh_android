@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import com.shootr.mobile.ShootrApplication;
-import com.shootr.mobile.data.entity.UserEntity;
-import com.shootr.mobile.data.mapper.UserEntityMapper;
-import com.shootr.mobile.db.manager.UserManager;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.ShotDispatcher;
 import java.io.File;
 import java.util.ArrayList;
@@ -23,8 +23,7 @@ public class ShotDispatcherBackgroundService extends Service {
 
     @Inject ShotDispatcher shotDispatcher;
     @Inject SessionRepository sessionRepository;
-    @Inject UserEntityMapper userEntityMapper;
-    @Inject UserManager userManager; //todo ugly
+    @Inject @Local UserRepository localUserRepository;
 
     private int threadCounter;
     private final List<Thread> threadList = new ArrayList<>();
@@ -70,8 +69,8 @@ public class ShotDispatcherBackgroundService extends Service {
     }
 
     public void restoreSession() {
-        UserEntity currentUser = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
-        sessionRepository.setCurrentUser(userEntityMapper.transform(currentUser, currentUser.getIdUser()));
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+        sessionRepository.setCurrentUser(currentUser);
     }
     //endregion
 

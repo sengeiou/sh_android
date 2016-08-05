@@ -84,4 +84,16 @@ public class ServicePollDataSource implements PollDataSource {
       }
     }
   }
+
+  @Override public void sharePoll(String idPoll) throws PollDeletedException {
+    try {
+      pollApiService.sharePoll(idPoll);
+    } catch (IOException error) {
+      throw new ServerCommunicationException(error);
+    } catch (ApiException e) {
+      if (ErrorInfo.ResourceNotFoundException == e.getErrorInfo()) {
+        throw new PollDeletedException(e);
+      }
+    }
+  }
 }

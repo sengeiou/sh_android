@@ -1,10 +1,10 @@
 package com.shootr.mobile.domain.service.user;
 
-import com.shootr.mobile.domain.ForgotPasswordResult;
-import com.shootr.mobile.domain.LoginResult;
-import com.shootr.mobile.domain.Nicer;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
+import com.shootr.mobile.domain.model.user.LoginResult;
+import com.shootr.mobile.domain.model.shot.Nicer;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.InvalidEmailConfirmationException;
@@ -20,7 +20,7 @@ import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
-import com.shootr.mobile.domain.repository.UserRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

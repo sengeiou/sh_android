@@ -50,6 +50,7 @@
   <string name="alert_shootr_update">このコンテンツはShootrの最新バージョンでのみ表示できます。</string>
   <string name="alert_update_shootr">このコンテンツはShootrの最新バージョンでのみ表示できます</string>
   <string name="all_participants_button">全ての参加者</string>
+  <string name="all_push_settings">全て</string>
   <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
   <string name="block_cannot_shoot_streams">投稿を禁止</string>
   <string name="block_ignore_user">無視する</string>
@@ -78,6 +79,7 @@
   <string name="delete_shot_confirmation_message">ショットを削除しますか？</string>
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
+  <string name="discover">発見</string>
   <string name="done">完了</string>
   <string name="done_label">完了</string>
   <string name="done_pin_topic" formatted="false">OK</string>
@@ -166,7 +168,9 @@
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
+  <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="finished_poll">アンケート %s の結果</string>
   <string name="follower_list_empty">フォロワーはいません</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">フォロー中の人はいません</string>
@@ -250,9 +254,10 @@
   <string name="notification_shot_sent">ショットが送信されました</string>
   <string name="now">今</string>
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
+  <string name="off_push_settings">オフ</string>
   <string name="ok">OK</string>
   <string name="opened_activity_text_pattern">(stream)を作成しました</string>
-  <string name="order_poll_option">%1$s.%2$s</string>
+  <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">参加者はいません</string>
   <string name="photo_edit_gallery">ギャラリー</string>
   <string name="photo_edit_remove">削除する</string>
@@ -266,10 +271,15 @@
   <string name="pin_topic" formatted="false">メッセージをピン留め</string>
   <string name="poll_ignore">無視する</string>
   <string name="poll_live_results">現在の結果</string>
-  <string name="poll_results">結果</string>
+  <string name="poll_results">最終結果</string>
+  <string name="poll_results_dialog">結果を見ると、その後このアンケートに投票することはできません。</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">表示</string>
   <string name="poll_vote">投票</string>
+  <plurals name="poll_votes_count">
+    <item quantity="other">%d件の投票</item>
+    <item quantity="zero">%d件の投票</item>
+  </plurals>
   <string name="poll_vote_timeout_retry">もう一度試す</string>
   <string name="profile_all_shots">全てのショット</string>
   <string name="profile_edit_done_button">完了</string>
@@ -281,6 +291,8 @@
   <string name="profile_logout">ログアウト</string>
   <string name="profile_marks_followers">フォロワー</string>
   <string name="profile_marks_following">フォロー中</string>
+  <string name="profile_push_notifications">プッシュ通知</string>
+  <string name="profile_settings">プッシュ通知</string>
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
   <string name="publish_poll">%1$s：%2$sに新しいアンケート</string>
@@ -304,8 +316,7 @@
   <string name="report_context_menu_delete">削除</string>
   <string name="report_context_menu_report">通報する</string>
   <string name="report_context_menu_unblock">無視を解除</string>
-  <string name="report_user_default_message">何故このユーザーを通報しますか？問題の内容をお知らせください。
-※大変申し訳ございませんが、現在Shootrでは日本語でのサポートに対応しておりません。お手数ですが、英語でのお問い合わせをお願い致します。</string>
+  <string name="report_user_default_message">何故このユーザーを通報しますか？問題の内容をお知らせください。\n※大変申し訳ございませんが、現在Shootrでは日本語でのサポートに対応しておりません。お手数ですが、英語でのお問い合わせをお願い致します。</string>
   <string name="report_user_subject">このアカウントを通報 - 問題 %1$s - %2$s</string>
   <string name="reset_password_confirmation_message_email_pattern">%sにメールが送信されました</string>
   <string name="reset_password_enter_username_email">Shootrのユーザー名又はメールアドレスを入力してください。</string>
@@ -313,14 +324,17 @@
   <string name="restore_stream_label">ストリームを復元</string>
   <string name="restore_stream_snackbar_action">復元する</string>
   <string name="seconds">秒</string>
+  <string name="shared_poll">アンケート %s を共有しました</string>
   <string name="shared_shot_activity">%sのショットを共有しました</string>
   <string name="shared_shot_activity_with_comment">"共有しました: "</string>
   <string name="shared_stream_notification">ストリームが共有されました</string>
+  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_subject">アンケート %s</string>
   <string name="share_shot_chooser_title">共有する</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$sが%2$sにショット</string>
   <string name="share_stream_activity_text_pattern">(stream)を共有しました</string>
-  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/st/%2$s?%3$s</string>
+  <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Shootrで%sをチェックしてみよう</string>
   <string name="share_via">共有する</string>
   <string name="share_via_shootr">Shootrで共有</string>
@@ -331,6 +345,7 @@
   <string name="showing_shots_by_holder">管理者のショット。</string>
   <string name="sign_out_message">ログアウトしています…</string>
   <string name="started_shooting_activity_text_pattern">(stream)に投稿しました</string>
+  <string name="started_shooting_push_settings">新規ショットの通知</string>
   <string name="stream_data_info_favorites">お気に入り</string>
   <string name="stream_data_info_participants">参加者数</string>
   <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>

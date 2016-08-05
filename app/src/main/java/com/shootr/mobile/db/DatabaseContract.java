@@ -360,6 +360,7 @@ public class DatabaseContract {
 
     public static final String ID_POLL = "idPoll";
     public static final String ID_STREAM = "idStream";
+    public static final String ID_USER = "idUser";
     public static final String QUESTION = "question";
     public static final String HAS_VOTED = "hasVoted";
     public static final String STATUS = "status";
@@ -367,7 +368,7 @@ public class DatabaseContract {
     public static final String VOTE_STATUS = "voteStatus";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_STREAM, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, PUBLISHED
+        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, PUBLISHED
     };
   }
 

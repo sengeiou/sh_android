@@ -4,7 +4,7 @@ import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import java.util.Date;
 import javax.inject.Inject;

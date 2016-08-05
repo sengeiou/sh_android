@@ -10,9 +10,9 @@
       android:icon="@drawable/ic_bottombar_favorites_stream"
       android:title="@string/drawer_favorites_title" />
   <item
-      android:id="@+id/bottombar_friends"
-      android:icon="@drawable/ic_bottombar_friends"
-      android:title="@string/drawer_friends_title" />
+      android:id="@+id/bottombar_discover"
+      android:icon="@drawable/ic_action_discover"
+      android:title="@string/discover" />
 
   <item
       android:id="@+id/bottombar_activity"

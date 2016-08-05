@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.service;
 
-import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import java.util.List;
 
 public interface ShotQueueRepository {

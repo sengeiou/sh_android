@@ -15,6 +15,7 @@ import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.ChangePasswordApiService;
 import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
+import com.shootr.mobile.data.api.service.DiscoveredApiService;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
 import com.shootr.mobile.data.api.service.PollApiService;
@@ -22,6 +23,7 @@ import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.api.service.UserApiService;
+import com.shootr.mobile.data.api.service.UserSettingsApiService;
 import com.shootr.mobile.data.api.service.VideoApiService;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
@@ -83,6 +85,10 @@ import timber.log.Timber;
 
   @Provides UserApiService provideUserApiService(RestAdapter restAdapter) {
     return restAdapter.create(UserApiService.class);
+  }
+
+  @Provides UserSettingsApiService provideUserSettingsApiService(RestAdapter restAdapter) {
+    return restAdapter.create(UserSettingsApiService.class);
   }
 
   @Provides ShotApiService provideShotApiService(RestAdapter restAdapter) {
@@ -151,5 +157,9 @@ import timber.log.Timber;
 
   @Provides PollApiService providePollApiService(RestAdapter restAdapter) {
     return restAdapter.create(PollApiService.class);
+  }
+
+  @Provides DiscoveredApiService provideDiscoveredApiService(RestAdapter restAdapter) {
+    return restAdapter.create(DiscoveredApiService.class);
   }
 }

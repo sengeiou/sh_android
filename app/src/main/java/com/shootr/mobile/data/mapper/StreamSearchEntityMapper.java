@@ -1,8 +1,8 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.StreamSearchEntity;
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

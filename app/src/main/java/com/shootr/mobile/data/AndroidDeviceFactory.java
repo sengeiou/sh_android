@@ -8,7 +8,7 @@ import android.telephony.TelephonyManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.mobile.constant.Constants;
 import com.shootr.mobile.data.dagger.ApplicationContext;
-import com.shootr.mobile.domain.Device;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.exception.GCMNotAvailableException;
 import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.LocaleProvider;

@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.service.shot;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 
 import java.io.IOException;
 

@@ -3,7 +3,7 @@ package com.shootr.mobile.data.bus;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.notifications.gcm.GCMIntentService;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.squareup.otto.Bus;
@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 
     FindFriendsActivity.class,
 
-    ProfileContainerActivity.class,
+    ProfileActivity.class,
 
     GCMIntentService.class,
   },

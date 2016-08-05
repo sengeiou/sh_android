@@ -4,7 +4,7 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.DeviceApiService;
 import com.shootr.mobile.data.entity.DeviceEntity;
 import com.shootr.mobile.data.mapper.DeviceEntityMapper;
-import com.shootr.mobile.domain.Device;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.DeviceRepository;
 import java.io.IOException;

@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
-import com.shootr.mobile.domain.interactor.user.FindContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.FindContributorsInteractor;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.FindContributorsView;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class FindContributorsPresenter implements Presenter {
 
     private final FindContributorsInteractor findContributorsInteractor;
-    private final ContributorInteractor contributorInteractor;
+    private final ManageContributorsInteractor manageContributorsInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -27,10 +27,10 @@ public class FindContributorsPresenter implements Presenter {
     private String idStream;
 
     @Inject public FindContributorsPresenter(FindContributorsInteractor findContributorsInteractor,
-      ContributorInteractor contributorInteractor, UserModelMapper userModelMapper,
+      ManageContributorsInteractor manageContributorsInteractor, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.findContributorsInteractor = findContributorsInteractor;
-        this.contributorInteractor = contributorInteractor;
+        this.manageContributorsInteractor = manageContributorsInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -77,7 +77,7 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     public void addContributor(final UserModel userModel) {
-        contributorInteractor.manageContributor(idStream,
+        manageContributorsInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           true,
           new Interactor.CompletedCallback() {
@@ -93,7 +93,7 @@ public class FindContributorsPresenter implements Presenter {
     }
 
     public void removeContributor(final UserModel userModel) {
-        contributorInteractor.manageContributor(idStream,
+        manageContributorsInteractor.manageContributor(idStream,
           userModel.getIdUser(),
           false,
           new Interactor.CompletedCallback() {

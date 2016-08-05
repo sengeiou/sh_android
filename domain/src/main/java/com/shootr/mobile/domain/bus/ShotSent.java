@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.bus;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 
 public interface ShotSent {
 

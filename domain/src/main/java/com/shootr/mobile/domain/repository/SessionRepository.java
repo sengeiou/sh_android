@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 
 public interface SessionRepository {
 

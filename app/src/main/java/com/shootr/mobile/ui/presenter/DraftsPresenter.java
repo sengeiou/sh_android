@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.bus.ShotQueued;
 import com.shootr.mobile.domain.interactor.shot.DeleteDraftInteractor;

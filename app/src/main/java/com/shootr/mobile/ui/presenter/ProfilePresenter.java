@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
@@ -134,23 +134,25 @@ public class ProfilePresenter implements Presenter {
     setupProfilePhoto(user);
     setRelationshipButtonStatus(user);
     setupVerifiedUserIcon();
+    setupShowUserSettingsMenu();
     profileView.setUserInfo(userModel);
-    profileView.showListing();
     renderStreamsNumber();
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();
+    if (isCurrentUser) {
+      profileView.showFriendsButton();
+    } else {
+      profileView.hideFriendsButton();
+    }
+
   }
 
   private void renderStreamsNumber() {
     Integer streamsCount =
         userModel.getFavoritedStreamsCount().intValue() + userModel.getCreatedStreamsCount()
             .intValue();
-    if (streamsCount > 0) {
-      profileView.showStreamsCount();
-      profileView.setStreamsCount(streamsCount);
-    } else {
-      profileView.hideStreamsCount();
-    }
+    profileView.showStreamsCount();
+    profileView.setStreamsCount(streamsCount);
   }
 
   private void setupVerifiedUserIcon() {
@@ -158,6 +160,12 @@ public class ProfilePresenter implements Presenter {
       profileView.showVerifiedUser();
     } else {
       profileView.hideVerifiedUser();
+    }
+  }
+
+  private void setupShowUserSettingsMenu() {
+    if (userModel.getIdUser().equals(sessionRepository.getCurrentUserId())) {
+      profileView.showUserSettings();
     }
   }
 
@@ -575,4 +583,5 @@ public class ProfilePresenter implements Presenter {
   public boolean isCurrentUser() {
     return isCurrentUser;
   }
+
 }

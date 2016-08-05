@@ -37,6 +37,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -84,7 +85,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
     @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
-    @Bind(R.id.cat_title) TextView streamTitle;
+    @Bind(R.id.cat_title) EmojiconTextView streamTitle;
     @Bind(R.id.subtitle) TextView streamSubtitle;
     @Bind(R.id.blurLayout) FrameLayout blurLayout;
 
@@ -93,6 +94,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @BindString(R.string.shared_stream_notification) String streamNotification;
     @BindString(R.string.analytics_screen_stream_detail) String analyticsScreenStreamDetail;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_action_mute) String analyticsActionMute;
+    @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
+    @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
@@ -166,6 +173,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           new OnFollowUnfollowListener() {
               @Override public void onFollow(UserModel user) {
                   streamDetailPresenter.follow(user.getIdUser());
+                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+                      analyticsLabelFollow);
               }
 
               @Override public void onUnfollow(final UserModel user) {
@@ -199,6 +208,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamVia();
+                analyticsTool.analyticsSendAction(getBaseContext(),
+                    analyticsActionExternalShare,
+                    analyticsLabelExternalShare);
             }
         }).show();
     }
@@ -482,7 +494,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void navigateToUser(String userId) {
-        Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
+        Intent userProfileIntent = ProfileActivity.getIntent(this, userId);
         startActivity(userProfileIntent);
     }
 
@@ -581,6 +593,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
+        if (isChecked) {
+            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionMute,
+                analyticsLabelMute);
+        }
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {

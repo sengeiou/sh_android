@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -24,7 +24,7 @@ public class GetFavoriteStatusInteractorTest {
   public static final String STREAM_ID = "stream_id";
 
   @Mock Interactor.Callback<Boolean> callback;
-  @Mock FavoriteRepository localFavoriteRepository;
+  @Mock InternalFavoriteRepository localFavoriteRepository;
 
   private GetFavoriteStatusInteractor getFavoriteStatusInteractor;
 

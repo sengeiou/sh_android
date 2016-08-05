@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
@@ -51,6 +51,8 @@ public class UserFollowsFragment extends BaseFragment
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
     @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
@@ -142,11 +144,13 @@ public class UserFollowsFragment extends BaseFragment
 
     @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
         UserModel user = getAdapter().getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
     private void followUser(UserModel user) {
         userFollowsPresenter.follow(user);
+        analyticsTool.analyticsSendAction(getContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     public void unfollowUser(final UserModel user) {

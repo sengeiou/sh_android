@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -51,6 +52,7 @@ public class LocalMuteRepository implements MuteRepository {
     private MuteStreamEntity createMute(String idStream) {
         MuteStreamEntity muteStreamEntity = new MuteStreamEntity();
         muteStreamEntity.setIdStream(idStream);
+        muteStreamEntity.setBirth(new Date());
         return muteStreamEntity;
     }
 }

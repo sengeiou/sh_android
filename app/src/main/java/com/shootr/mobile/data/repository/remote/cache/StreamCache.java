@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

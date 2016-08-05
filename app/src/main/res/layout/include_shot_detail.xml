@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    style="@style/IncludeShotDetail"
     android:orientation="vertical"
     android:paddingTop="16dp"
     >
@@ -64,7 +64,7 @@
       tools:text="Event Title"
       tools:visibility="visible" />
 
-    <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/shot_detail_text"
+    <com.shootr.mobile.ui.widgets.ClickableEmojiconTextView android:id="@+id/shot_detail_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingLeft="16dp"

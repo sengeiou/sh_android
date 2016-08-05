@@ -1,13 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Stream;
-import com.shootr.mobile.domain.StreamSearchResult;
-import com.shootr.mobile.domain.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.StreamReactiveSearchInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamSearchInteractor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
@@ -43,6 +45,8 @@ public class FindStreamsPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock FindStreamsView findStreamsView;
+    @Mock GetLocalStreamsInteractor getLocalStreamsInteractor;
+    @Mock StreamReactiveSearchInteractor streamReactiveSearchInteractor;
 
     private FindStreamsPresenter findStreamsPresenter;
 
@@ -52,8 +56,8 @@ public class FindStreamsPresenterTest {
         StreamResultModelMapper streamResultModelMapper = new StreamResultModelMapper(streamModelMapper);
         findStreamsPresenter = new FindStreamsPresenter(streamSearchInteractor,
           addToFavoritesInteractor,
-          shareStreamInteractor,
-          streamResultModelMapper,
+          shareStreamInteractor, getLocalStreamsInteractor, streamReactiveSearchInteractor,
+            streamResultModelMapper,
           errorMessageFactory);
         findStreamsPresenter.setView(findStreamsView);
     }

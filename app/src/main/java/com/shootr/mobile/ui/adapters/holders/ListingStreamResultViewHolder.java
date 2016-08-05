@@ -19,7 +19,6 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
   public static final int FAVORITE_NOT_ADDED_IMAGE = R.drawable.ic_favorite_not_added_28_gray50;
 
   private final OnFavoriteClickListener onFavoriteClickListener;
-  private final InitialsLoader initialsLoader;
 
   @Bind(R.id.favorite_stream_indicator) ImageView favoriteIndicator;
   private Boolean isFavorite;
@@ -29,7 +28,6 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
       InitialsLoader initialsLoader) {
     super(itemView, onStreamClickListener, imageLoader, initialsLoader);
     this.onFavoriteClickListener = onFavoriteClickListener;
-    this.initialsLoader = initialsLoader;
   }
 
   @Override public void render(StreamResultModel streamResultModel, boolean showSeparator) {
@@ -82,9 +80,5 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         updateIndicatorStatus();
       }
     });
-  }
-
-  public void setShowFavoritesText(boolean showFavoritesText) {
-    super.setShowsFavoritesText(showFavoritesText);
   }
 }

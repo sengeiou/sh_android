@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import java.util.ArrayList;
