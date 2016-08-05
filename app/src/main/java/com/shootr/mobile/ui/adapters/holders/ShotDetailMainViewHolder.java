@@ -16,7 +16,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableEmojiconTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.ImageLoader;
@@ -33,7 +32,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_detail_avatar) ImageView avatar;
     @Bind(R.id.shot_detail_user_name) TextView username;
     @Bind(R.id.shot_detail_timestamp) TextView timestamp;
-    @Bind(R.id.shot_detail_text) ClickableEmojiconTextView shotText;
+    @Bind(R.id.shot_detail_text) ClickableTextView shotText;
     @Bind(R.id.shot_detail_image) ImageView shotImage;
     @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
     @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;

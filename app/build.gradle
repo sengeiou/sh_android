@@ -245,7 +245,6 @@ dependencies {
   compile 'com.android.support:support-v4:24.1.1'
   compile 'com.android.support:cardview-v7:24.1.1'
   compile 'com.makeramen:roundedimageview:2.2.1'
-  compile 'com.rockerhieu.emojicon:library:1.3.3'
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
 }

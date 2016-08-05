@@ -13,7 +13,7 @@ import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableEmojiconTextView;
+import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.DraftItemView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -145,7 +145,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
         @Bind(R.id.shot_avatar) ImageView avatar;
         @Bind(R.id.shot_user_name) TextView name;
-        @Bind(R.id.shot_text) ClickableEmojiconTextView text;
+        @Bind(R.id.shot_text) ClickableTextView text;
         @Bind(R.id.shot_image) ImageView image;
         @Bind(R.id.shot_draft_buttons) View draftButtons;
         DraftItemView draftItemView;
