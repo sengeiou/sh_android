@@ -17,7 +17,9 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
+import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
@@ -83,7 +85,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void initializeStreamListAdapter() {
-        adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+        adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);
             }
@@ -91,6 +93,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
             @Override public boolean onStreamLongClick(StreamResultModel stream) {
                 openContextualMenu(stream);
                 return true;
+            }
+        });
+        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+            @Override public void onUnwatchClick() {
+                findStreamsPresenter.unwatchStream();
             }
         });
         streamsList.setAdapter(adapter);

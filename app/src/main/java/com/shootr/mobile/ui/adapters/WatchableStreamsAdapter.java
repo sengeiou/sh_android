@@ -7,9 +7,9 @@ import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 
-public class FavoriteStreamsAdapter extends StreamsListAdapter {
+public class WatchableStreamsAdapter extends StreamsListAdapter {
 
-  public FavoriteStreamsAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
+  public WatchableStreamsAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
       OnStreamClickListener onStreamClickListener) {
     super(imageLoader, initialsLoader, onStreamClickListener);
   }

@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.stream.GetLocalStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamReactiveSearchInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamSearchInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
@@ -47,6 +48,7 @@ public class FindStreamsPresenterTest {
     @Mock FindStreamsView findStreamsView;
     @Mock GetLocalStreamsInteractor getLocalStreamsInteractor;
     @Mock StreamReactiveSearchInteractor streamReactiveSearchInteractor;
+    @Mock UnwatchStreamInteractor unwatchStreamInteractor;
 
     private FindStreamsPresenter findStreamsPresenter;
 
@@ -57,7 +59,7 @@ public class FindStreamsPresenterTest {
         findStreamsPresenter = new FindStreamsPresenter(streamSearchInteractor,
           addToFavoritesInteractor,
           shareStreamInteractor, getLocalStreamsInteractor, streamReactiveSearchInteractor,
-            streamResultModelMapper,
+            unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         findStreamsPresenter.setView(findStreamsView);
     }

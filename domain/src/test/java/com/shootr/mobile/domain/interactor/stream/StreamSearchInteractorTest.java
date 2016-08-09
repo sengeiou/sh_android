@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ public class StreamSearchInteractorTest {
   @Mock LocaleProvider localeProvider;
   @Mock StreamSearchInteractor.Callback callback;
   @Mock Interactor.ErrorCallback errorCallback;
+  @Mock WatchingStreamService watchingStreamService;
 
   private StreamSearchInteractor interactor;
 
@@ -39,7 +41,8 @@ public class StreamSearchInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
     interactor =
-        new StreamSearchInteractor(interactorHandler, streamSearchRepository, postExecutionThread,
+        new StreamSearchInteractor(interactorHandler, streamSearchRepository, watchingStreamService,
+            postExecutionThread,
             localeProvider);
   }
 

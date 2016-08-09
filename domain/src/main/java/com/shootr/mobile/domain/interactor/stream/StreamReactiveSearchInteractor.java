@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ public class StreamReactiveSearchInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final StreamSearchRepository remoteStreamSearchRepository;
   private final StreamSearchRepository localStreamSearchRepository;
+  private final WatchingStreamService watchingStreamService;
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
 
@@ -29,10 +31,12 @@ public class StreamReactiveSearchInteractor implements Interactor {
   @Inject public StreamReactiveSearchInteractor(InteractorHandler interactorHandler,
       @Local StreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository,
-      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
+      WatchingStreamService watchingStreamService, PostExecutionThread postExecutionThread,
+      LocaleProvider localeProvider) {
     this.interactorHandler = interactorHandler;
     this.remoteStreamSearchRepository = remoteStreamSearchRepository;
     this.localStreamSearchRepository = localStreamSearchRepository;
+    this.watchingStreamService = watchingStreamService;
     this.postExecutionThread = postExecutionThread;
     this.localeProvider = localeProvider;
   }
@@ -74,6 +78,7 @@ public class StreamReactiveSearchInteractor implements Interactor {
     List<StreamSearchResult> streams =
         streamSearchRepository.getStreams(query, localeProvider.getLocale(),
             StreamMode.TYPES_STREAM);
+    watchingStreamService.markWatchingStream(streams);
 
     StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 
