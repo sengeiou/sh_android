@@ -293,6 +293,26 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     }).show();
   }
 
+  @Override public void showAuthorContextMenuWithPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenu(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void hideLoading() {
     loadingView.setVisibility(View.GONE);
   }

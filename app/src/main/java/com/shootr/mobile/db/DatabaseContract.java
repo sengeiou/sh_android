@@ -391,4 +391,24 @@ public class DatabaseContract {
         ID_POLL, ID_POLL_OPTION, IMAGE_URL, TEXT, VOTES, ORDER
     };
   }
+
+  public static final class HighlightedShotTable extends ShotTable {
+
+    private HighlightedShotTable() {
+
+    }
+
+    public static final String TABLE = "HighlightedShot";
+
+    public static final String ID_HIGHLIGHTED_SHOT = "idHighlightedShot";
+    public static final String ACTIVE = "active";
+    public static final String VISIBLE = "visible";
+
+    public static final String[] PROJECTION = {
+        ID_HIGHLIGHTED_SHOT, ACTIVE, VISIBLE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT,
+        IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT, ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT,
+        ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN,
+        REPLY_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+    };
+  }
 }

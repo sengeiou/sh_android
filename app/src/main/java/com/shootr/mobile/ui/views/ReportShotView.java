@@ -8,15 +8,9 @@ public interface ReportShotView {
 
     void showEmailNotConfirmedError();
 
-    void showContextMenu(ShotModel shotModel);
-
-    void showAuthorContextMenuWithPin(ShotModel shotModel);
-
     void notifyDeletedShot(ShotModel shotModel);
 
     void showError(String errorMessage);
-
-    void showContextMenuWithUnblock(ShotModel shotModel);
 
     void showBlockFollowingUserAlert();
 
@@ -32,11 +26,27 @@ public interface ReportShotView {
 
     void showUserUnbanned();
 
-    void showAuthorContextMenuWithoutPin(ShotModel shotModel);
-
     void goToReport(String sessionToken, ShotModel shotModel);
 
     void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);
 
     void showHolderContextMenu(ShotModel shot);
+
+    void showContextMenu(ShotModel shotModel);
+
+    void showAuthorContextMenuWithPin(ShotModel shotModel);
+
+    void showContextMenuWithUnblock(ShotModel shotModel);
+
+    void showAuthorContextMenuWithoutPin(ShotModel shotModel);
+
+    void showAuthorContextMenuWithPinAndHighlight(ShotModel shot);
+
+    void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot);
+
+    void showContributorContextMenuWithPinAndHighlight(ShotModel shot);
+
+    void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot);
+
+    void showContributorContextMenu(ShotModel shot);
 }

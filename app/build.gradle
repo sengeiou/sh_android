@@ -40,7 +40,7 @@ def versionRevision = 2
 
 def isSnapshot = true
 def isPreProduction = false
-def databaseVersion = 34
+def databaseVersion = 35
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -247,6 +247,7 @@ dependencies {
   compile 'com.makeramen:roundedimageview:2.2.1'
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
+  compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
 }
 
 /**

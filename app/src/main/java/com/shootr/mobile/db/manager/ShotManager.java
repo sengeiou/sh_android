@@ -235,4 +235,31 @@ public class ShotManager extends AbstractManager {
             database.close();
         }
     }
+
+    public List<ShotEntity> getShotsByIdShotsList(List<String> idShots) {
+        List<ShotEntity> shots = new ArrayList<>();
+        if (idShots.size() < 1) {
+            return shots;
+        }
+        String whereClause =
+            ShotTable.ID_SHOT + " IN (" + createListPlaceholders(idShots.size()) + ")";
+
+        int whereArgumentsSize = idShots.size();
+        String[] whereArguments = new String[whereArgumentsSize];
+
+        for (int i = 0; i < idShots.size(); i++) {
+            whereArguments[i] = idShots.get(i);
+        }
+
+        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION,
+            whereClause, whereArguments, null, null, null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            do {
+                shots.add(shotEntityMapper.fromCursor(c));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return shots;
+    }
 }

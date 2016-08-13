@@ -1029,6 +1029,26 @@ public class ProfileActivity extends BaseActivity
         }).show();
   }
 
+  @Override public void showAuthorContextMenuWithPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenu(ShotModel shot) {
+    /* no-op */
+  }
+
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
     final Context context = this;
     return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,

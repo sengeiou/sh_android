@@ -1,16 +1,19 @@
 package com.shootr.mobile.data.repository.remote;
 
+import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;
@@ -22,14 +25,16 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
   private final ShotDataSource remoteShotDataSource;
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
+  private final HighlightedShotEntityMapper highlightedShotEntityMapper;
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource,
       @Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper,
-      SyncTrigger syncTrigger) {
+      HighlightedShotEntityMapper highlightedShotEntityMapper, SyncTrigger syncTrigger) {
     this.remoteShotDataSource = remoteShotDataSource;
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
+    this.highlightedShotEntityMapper = highlightedShotEntityMapper;
     this.syncTrigger = syncTrigger;
   }
 
@@ -148,6 +153,24 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
 
   @Override public void unhideShot(String idShot) {
     remoteShotDataSource.unhideShot(idShot);
+  }
+
+  @Override public void highlightShot(String idShot) {
+    HighlightedShotEntity highlightedShotEntity = remoteShotDataSource.highlightShot(idShot);
+    localShotDataSource.putHighlightShot(highlightedShotEntity);
+  }
+
+  @Override public HighlightedShot getHighlightedShots(String idStream) {
+    return highlightedShotEntityMapper.mapToDomain(
+        remoteShotDataSource.getHighlightedShot(idStream));
+  }
+
+  @Override public void dismissHighlightedShot(String idHighlightedShot) {
+    remoteShotDataSource.dismissHighlight(idHighlightedShot);
+  }
+
+  @Override public void hideHighlightedShot(String idHighlightedShot) {
+    throw new IllegalArgumentException("not implemented in remote");
   }
 
   @Override public void dispatchSync() {

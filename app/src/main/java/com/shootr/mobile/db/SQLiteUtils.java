@@ -528,4 +528,64 @@ public class SQLiteUtils {
         + " INT NOT NULL,"
         + DatabaseContract.PollOptionTable.VOTES
         + " NUMBER NULL)";
+
+    public static final String CREATE_TABLE_HIGHTLIGHTED_SHOT = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.HighlightedShotTable.TABLE
+        + " ("
+        + DatabaseContract.HighlightedShotTable.ID_HIGHLIGHTED_SHOT
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.HighlightedShotTable.ACTIVE
+        + " LONG NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.VISIBLE
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.ID_SHOT
+        + " TEXT NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.ID_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.USERNAME
+        + " TEXT NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.USER_PHOTO
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.COMMENT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.HighlightedShotTable.IMAGE
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.HighlightedShotTable.IMAGE_WIDTH
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.HighlightedShotTable.IMAGE_HEIGHT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.HighlightedShotTable.ID_STREAM
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.STREAM_TITLE
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.NICE_COUNT
+        + " NUMBER NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.TYPE
+        + " TEXT NOT NULL,"
+        + DatabaseContract.HighlightedShotTable.ID_SHOT_PARENT
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.ID_USER_PARENT
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.USERNAME_PARENT
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.VIDEO_URL
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.VIDEO_TITLE
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.VIDEO_DURATION
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.PROFILE_HIDDEN
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.REPLY_COUNT
+        + " NUMBER NULL,"
+        + DatabaseContract.SyncColumns.BIRTH
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.MODIFIED
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.DELETED
+        + " DATETIME NULL,"
+        + DatabaseContract.SyncColumns.REVISION
+        + " INT NOT NULL,"
+        + DatabaseContract.SyncColumns.SYNCHRONIZED
+        + " CHAR(1) NULL)";
 }

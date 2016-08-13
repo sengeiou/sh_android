@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
@@ -46,6 +47,7 @@ public class SyncShotRepositoryTest {
   @Mock ShotDataSource localShotDataSource;
   @Mock ShotEntityMapper shotEntityMapper;
   @Mock SyncTrigger syncTrigger;
+  @Mock HighlightedShotEntityMapper highlightedShotEntityMapper;
 
   private SyncShotRepository syncShotRepository;
 
@@ -53,7 +55,7 @@ public class SyncShotRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncShotRepository =
         new SyncShotRepository(remoteShotDataSource, localShotDataSource, shotEntityMapper,
-            syncTrigger);
+            highlightedShotEntityMapper, syncTrigger);
   }
 
   @Test public void shouldGetRemoteShotWhenGetShotAndLocalShotIsNull() throws Exception {
