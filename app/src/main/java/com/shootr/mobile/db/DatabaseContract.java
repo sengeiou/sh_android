@@ -411,4 +411,20 @@ public class DatabaseContract {
         REPLY_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
+
+  public static final class RecentStreamTable {
+
+    private RecentStreamTable() {
+
+    }
+
+    public static final String TABLE = "RecentStreamTable";
+
+    public static final String ID_STREAM = "idStream";
+    public static final String JOIN_STREAM_DATE = "joinStreamDate";
+
+    public static final String[] PROJECTION = {
+        ID_STREAM, JOIN_STREAM_DATE
+    };
+  }
 }

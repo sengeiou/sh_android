@@ -37,6 +37,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_POLL);
         db.execSQL(SQLiteUtils.CREATE_TABLE_POLL_OPTION);
         db.execSQL(SQLiteUtils.CREATE_TABLE_HIGHTLIGHTED_SHOT);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_RECENT_STREAM);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -58,6 +59,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PollTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PollOptionTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.HighlightedShotTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.RecentStreamTable.TABLE);
         onCreate(db);
     }
 

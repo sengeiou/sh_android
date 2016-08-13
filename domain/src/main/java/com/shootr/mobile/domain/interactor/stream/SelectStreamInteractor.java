@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.RecentStreamRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
@@ -30,6 +31,7 @@ public class SelectStreamInteractor implements Interactor {
   private final WatchersRepository localWatchersRepository;
   private final SessionRepository sessionRepository;
   private final TimeUtils timeUtils;
+  private final RecentStreamRepository recentStreamRepository;
 
   private String idSelectedStream;
   private Callback<StreamSearchResult> callback;
@@ -40,7 +42,7 @@ public class SelectStreamInteractor implements Interactor {
       @Remote StreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository,
       @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository,
-      TimeUtils timeUtils) {
+      TimeUtils timeUtils, RecentStreamRepository recentStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
@@ -50,6 +52,7 @@ public class SelectStreamInteractor implements Interactor {
     this.localWatchersRepository = localWatchersRepository;
     this.sessionRepository = sessionRepository;
     this.timeUtils = timeUtils;
+    this.recentStreamRepository = recentStreamRepository;
   }
   //endregion
 
@@ -64,6 +67,7 @@ public class SelectStreamInteractor implements Interactor {
   @Override public void execute() throws Exception {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     Stream selectedStream = getSelectedStream();
+    recentStreamRepository.putRecentStream(selectedStream, getCurrentTime());
     if (isSelectingCurrentWatchingStream(currentUser)) {
       notifyLoaded(selectedStream);
     } else {

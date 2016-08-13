@@ -34,6 +34,7 @@ public class WatchingStreamService {
     for (StreamSearchResult stream : streams) {
       if (stream.getStream().getId().equals(watchingId)) {
         stream.setIsWatching(true);
+        break;
       }
     }
   }

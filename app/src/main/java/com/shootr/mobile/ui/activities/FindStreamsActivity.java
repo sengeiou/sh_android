@@ -206,8 +206,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        if (searchView != null) {
+            InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        }
     }
 
     @Override public void showLoading() {

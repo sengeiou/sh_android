@@ -588,4 +588,12 @@ public class SQLiteUtils {
         + " INT NOT NULL,"
         + DatabaseContract.SyncColumns.SYNCHRONIZED
         + " CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_RECENT_STREAM = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.RecentStreamTable.TABLE
+        + " ("
+        + DatabaseContract.RecentStreamTable.ID_STREAM
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.RecentStreamTable.JOIN_STREAM_DATE
+        + " INTEGER NULL)";
 }
