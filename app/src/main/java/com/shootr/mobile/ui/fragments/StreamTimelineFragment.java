@@ -463,7 +463,7 @@ public class StreamTimelineFragment extends BaseFragment
         highlightedShotPresenter
             .onDismissHighlightShot(highlightedShotModel.getIdHighlightedShot(), streamAuthorIdUser);
       }
-    });
+    }, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 
@@ -1410,6 +1410,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void updateHighlightShotInfo(HighlightedShotModel highlightedShotModel) {
     adapter.setHighlightedShot(highlightedShotModel);
+  }
+
+  @Override public void setHighlightShotBackground(Boolean isAdmin) {
+    adapter.setHighlightShotBackground(isAdmin);
   }
 
   private void setHighlightShot(HighlightedShotModel highlightedShotModel) {

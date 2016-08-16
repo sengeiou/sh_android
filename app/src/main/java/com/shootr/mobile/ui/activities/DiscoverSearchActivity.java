@@ -28,7 +28,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
   @Bind(R.id.pager) ViewPager viewPager;
   @Bind(R.id.tab_layout) TabLayout tabLayout;
   @BindString(R.string.drawer_streams_title) String streamsTitle;
-  @BindString(R.string.drawer_friends_title) String friendsTitle;
+  @BindString(R.string.drawer_users_title) String usersTitle;
 
   private SearchView searchView;
   private String currentSearchQuery;
@@ -74,7 +74,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
     if (position == 1) {
       searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
     } else {
-      searchView.setQueryHint(getResources().getString(R.string.activity_find_friends_hint));
+      searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
     }
   }
 
@@ -154,7 +154,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
         return false;
       }
     });
-    searchView.setQueryHint(getResources().getString(R.string.activity_find_friends_hint));
+    searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
     searchView.setIconifiedByDefault(false);
     searchView.setIconified(false);
     if (savedInstanceState != null) {
@@ -201,7 +201,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
     @Override public CharSequence getPageTitle(int position) {
       switch (position) {
         case 0:
-          return friendsTitle;
+          return usersTitle;
         case 1:
           return streamsTitle;
         default:

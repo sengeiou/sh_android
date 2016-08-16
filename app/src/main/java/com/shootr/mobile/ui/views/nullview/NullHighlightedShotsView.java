@@ -25,4 +25,8 @@ public class NullHighlightedShotsView implements HighlightedShotsView {
   @Override public void updateHighlightShotInfo(HighlightedShotModel highlightedShotModel) {
     /* no-op */
   }
+
+  @Override public void setHighlightShotBackground(Boolean isAdmin) {
+    /* no-op */
+  }
 }

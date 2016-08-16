@@ -47,6 +47,7 @@ public class ShotsTimelineAdapter
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
+  private Boolean isAdmin;
 
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
@@ -54,7 +55,7 @@ public class ShotsTimelineAdapter
       OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener,
       OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnHideHighlightShot onHideHighlightClickListener) {
+      OnHideHighlightShot onHideHighlightClickListener, Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -70,6 +71,7 @@ public class ShotsTimelineAdapter
     this.onLongClickListener = onLongClickListener;
     this.onTouchListener = onTouchListener;
     this.onImageClickListener = onImageClickListener;
+    this.isAdmin = isAdmin;
   }
 
   @Override
@@ -102,7 +104,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel, shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, isAdmin);
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -209,5 +211,10 @@ public class ShotsTimelineAdapter
     } else {
       return shots.get(0);
     }
+  }
+
+  public void setHighlightShotBackground(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+    notifyDataSetChanged();
   }
 }

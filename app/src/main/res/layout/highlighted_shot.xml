@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:mode="same_level"
+    app:mode="normal"
     app:dragEdge="left"
     >
 
   <!-- Your secondary layout here -->
   <FrameLayout
+      android:id="@+id/dismiss_container"
       android:layout_width="100dp"
       android:layout_height="match_parent"
       android:background="@color/gray_50"
@@ -34,7 +35,8 @@
   <!-- Your main layout here -->
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,8 +52,6 @@
           android:layout_width="match_parent"
           android:layout_height="4dp" />
     </LinearLayout>
-
-
   </RelativeLayout>
 
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

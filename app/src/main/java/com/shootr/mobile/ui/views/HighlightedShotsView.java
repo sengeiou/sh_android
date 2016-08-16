@@ -12,4 +12,6 @@ public interface HighlightedShotsView {
   void showDismissDialog(String idHighlightShot);
 
   void updateHighlightShotInfo(HighlightedShotModel highlightedShotModel);
+
+  void setHighlightShotBackground(Boolean isAdmin);
 }

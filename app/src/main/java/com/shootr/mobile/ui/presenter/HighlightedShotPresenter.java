@@ -33,6 +33,7 @@ public class HighlightedShotPresenter implements Presenter {
   private HighlightedShotModel highlightedShotModel;
   private HighlightedShotModel currentHighlightShot;
   private ArrayList<String> contributorsIds = new ArrayList<>();
+  private String streamAuthorId;
 
   @Inject
   public HighlightedShotPresenter(GetHighlightedShotInteractor getHighlightedShotsInteractor,
@@ -165,6 +166,7 @@ public class HighlightedShotPresenter implements Presenter {
         for (Contributor contributor : contributors) {
           contributorsIds.add(contributor.getIdUser());
         }
+        view.setHighlightShotBackground(currentUserIsAdmin(streamAuthorId));
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -187,5 +189,11 @@ public class HighlightedShotPresenter implements Presenter {
 
   @Override public void pause() {
     stopPollingShots();
+  }
+
+  public Boolean currentUserIsAdmin(String userId) {
+    this.streamAuthorId = userId;
+    return currentUserIsStreamHolder(userId) ||
+        currentUserIsStreamContributor();
   }
 }

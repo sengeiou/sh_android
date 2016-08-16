@@ -56,4 +56,5 @@
     <color name="intro_streams_background">#F06292</color>
     <color name="legal_disclaimer_text_color">#81D4FA</color>
     <color name="favorite_tab">#FF9800</color>
+    <color name="dissmiss">#F44336</color>
 </resources>

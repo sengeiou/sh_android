@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.shootr.mobile.R;
@@ -26,6 +27,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   @Bind(R.id.hide_highlighted) TextView hideHighlighted;
   @Bind(R.id.shot_container) View shotContainer;
+  @Bind(R.id.dismiss_container) FrameLayout dismissContainer;
 
   private HighlightedShotModel highlightedShotModel;
 
@@ -44,10 +46,19 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   public void renderHighLight(HighlightedShotModel highlightedShotModel, final ShotModel shotModel,
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener) {
+      OnImageClickListener onImageClickListener, Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
         onTouchListener, onImageClickListener);
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick);
+
+    if (isAdmin) {
+      dismissContainer.setBackgroundColor(
+          dismissContainer.getResources().getColor(R.color.dissmiss));
+    } else {
+      dismissContainer.setBackgroundColor(
+          dismissContainer.getResources().getColor(R.color.gray_50));
+    }
+
   }
 
   private void setupListeners(final HighlightedShotModel highlightedShotModel,
