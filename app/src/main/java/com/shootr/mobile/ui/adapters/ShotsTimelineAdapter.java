@@ -143,7 +143,6 @@ public class ShotsTimelineAdapter
     if (hasHeader()) {
       removeCurrentHeader();
       setHeader(null);
-      notifyDataSetChanged();
     }
   }
 
