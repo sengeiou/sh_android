@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -79,6 +77,7 @@ import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -179,7 +178,7 @@ public class StreamTimelineFragment extends BaseFragment
   private int charCounterColorNormal;
   private EditText newTopicText;
   private TextView topicCharCounter;
-  private LinearLayoutManager linearLayoutManager;
+  private PreCachingLayoutManager preCachingLayoutManager;
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   //endregion
@@ -195,8 +194,8 @@ public class StreamTimelineFragment extends BaseFragment
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
     ButterKnife.bind(this, fragmentView);
-    linearLayoutManager = new LinearLayoutManager(getContext());
-    shotsTimeline.setLayoutManager(linearLayoutManager);
+    preCachingLayoutManager = new PreCachingLayoutManager(getContext());
+    shotsTimeline.setLayoutManager(preCachingLayoutManager);
     shotsTimeline.setHasFixedSize(false);
     newShotBarContainer.setVisibility(View.GONE);
     return fragmentView;
@@ -491,7 +490,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
 
         if (shotsTimeline != null) {
-          if (linearLayoutManager.findFirstVisibleItemPosition() == 0) {
+          if (preCachingLayoutManager.findFirstVisibleItemPosition() == 0) {
             streamTimelinePresenter.setIsFirstShotPosition(true);
             hideNewShotsIndicator();
           } else {
@@ -505,7 +504,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void checkIfEndOfListVisible() {
     int lastItemPosition = shotsTimeline.getAdapter().getItemCount() - 1;
-    int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
+    int lastVisiblePosition = preCachingLayoutManager.findLastVisibleItemPosition();
     if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       streamTimelinePresenter.showingLastShot(adapter.getLastShot());
     }
@@ -519,14 +518,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void openImage(View sharedImage, String imageUrl) {
     Intent intent = PhotoViewActivity.getIntentForActivity(getContext(), imageUrl, imageUrl);
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-      ActivityOptions activityOptions =
-          ActivityOptions.makeSceneTransitionAnimation(getActivity(), sharedImage,
-              sharedImage.getTransitionName());
-      startActivity(intent, activityOptions.toBundle());
-    } else {
-      startActivity(intent);
-    }
+    startActivity(intent);
   }
 
   private void openProfileFromUsername(String username) {
@@ -833,14 +825,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addAbove(List<ShotModel> shotModels) {
-    int index = linearLayoutManager.findFirstVisibleItemPosition() + shotModels.size();
+    int index = preCachingLayoutManager.findFirstVisibleItemPosition() + shotModels.size();
     View v = shotsTimeline.getChildAt(0);
     int top = (v == null) ? 0 : v.getTop();
 
     adapter.addShotsAbove(shotModels);
     adapter.notifyDataSetChanged();
 
-    linearLayoutManager.scrollToPositionWithOffset(index, top);
+    preCachingLayoutManager.scrollToPositionWithOffset(index, top);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {

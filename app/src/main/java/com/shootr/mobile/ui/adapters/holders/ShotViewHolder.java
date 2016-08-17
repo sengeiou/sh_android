@@ -39,7 +39,6 @@ public class ShotViewHolder {
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_text_stream_title) ClickableTextView streamTitle;
     @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
-    @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -195,7 +194,6 @@ public class ShotViewHolder {
             handleImage(imageUrl,
                 imageWidth, imageHeight);
         } else {
-            imagePortrait.setVisibility(View.GONE);
             imageLandscape.setVisibility(View.GONE);
         }
     }
@@ -205,22 +203,14 @@ public class ShotViewHolder {
             setImageLayout(imageUrl,
                 imageWidth, imageHeight);
         } else {
-            imagePortrait.setVisibility(View.GONE);
             imageLandscape.setVisibility(View.VISIBLE);
             setupImage(imageLandscape, imageUrl);
         }
     }
 
     private void setImageLayout(String imageUrl, Long imageWidth, Long imageHeight) {
-        if (imageWidth > imageHeight) {
-            imagePortrait.setVisibility(View.GONE);
-            imageLandscape.setVisibility(View.VISIBLE);
-            setupImage(imageLandscape, imageUrl);
-        } else {
-            imageLandscape.setVisibility(View.GONE);
-            imagePortrait.setVisibility(View.VISIBLE);
-            setupImage(imagePortrait, imageUrl);
-        }
+        imageLandscape.setVisibility(View.VISIBLE);
+        setupImage(imageLandscape, imageUrl);
     }
 
     private void setupImage(ImageView imageView, String imageUrl) {

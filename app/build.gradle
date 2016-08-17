@@ -247,7 +247,7 @@ dependencies {
   compile 'com.makeramen:roundedimageview:2.2.1'
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
-  compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
+  compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }
 
 /**

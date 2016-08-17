@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
@@ -28,6 +29,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @Bind(R.id.hide_highlighted) TextView hideHighlighted;
   @Bind(R.id.shot_container) View shotContainer;
   @Bind(R.id.dismiss_container) FrameLayout dismissContainer;
+  @Bind(R.id.swipe) SwipeLayout swipeLayout;
 
   private HighlightedShotModel highlightedShotModel;
 
@@ -49,6 +51,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       OnImageClickListener onImageClickListener, Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
         onTouchListener, onImageClickListener);
+    setupSwipeLayout();
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick);
 
     if (isAdmin) {
@@ -59,6 +62,11 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
           dismissContainer.getResources().getColor(R.color.gray_50));
     }
 
+  }
+
+  private void setupSwipeLayout() {
+    swipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
+    swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
   }
 
   private void setupListeners(final HighlightedShotModel highlightedShotModel,
