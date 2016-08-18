@@ -825,14 +825,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addAbove(List<ShotModel> shotModels) {
-    int index = preCachingLayoutManager.findFirstVisibleItemPosition() + shotModels.size();
-    View v = shotsTimeline.getChildAt(0);
-    int top = (v == null) ? 0 : v.getTop();
-
     adapter.addShotsAbove(shotModels);
-    adapter.notifyDataSetChanged();
-
-    preCachingLayoutManager.scrollToPositionWithOffset(index, top);
+    adapter.notifyItemRangeInserted(0, shotModels.size());
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
