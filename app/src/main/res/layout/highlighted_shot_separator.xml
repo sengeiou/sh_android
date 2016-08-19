@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/event_watching_fake_divider"
+    android:layout_width="match_parent"
+    android:layout_height="16dp"
+    android:background="@color/gray_90">
+
+  <View android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@drawable/shadow_top_down" />
+
+  <View android:layout_width="match_parent"
+      android:layout_height="1px"
+      android:layout_gravity="bottom"
+      android:background="@color/gray_80" />
+</FrameLayout>

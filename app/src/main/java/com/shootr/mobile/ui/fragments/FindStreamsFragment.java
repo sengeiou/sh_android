@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,14 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
+import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.base.BaseSearchFragment;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
@@ -60,7 +63,7 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   }
 
   private void initializeStreamListAdapter() {
-    adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+    adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
       @Override public void onStreamClick(StreamResultModel stream) {
         findStreamsPresenter.selectStream(stream);
       }
@@ -68,6 +71,11 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
       @Override public boolean onStreamLongClick(StreamResultModel stream) {
         openContextualMenu(stream);
         return true;
+      }
+    });
+    adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+      @Override public void onUnwatchClick() {
+        findStreamsPresenter.unwatchStream();
       }
     });
     streamsList.setAdapter(adapter);
@@ -107,7 +115,8 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   }
 
   @Override public void hideKeyboard() {
-    ((DiscoverSearchActivity) getActivity()).hideKeyboard();
+    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
   }
 
   @Override public void showLoading() {
@@ -164,5 +173,15 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   private void setupViews() {
     streamsList.setLayoutManager(new LinearLayoutManager(getContext()));
     initializeStreamListAdapter();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    findStreamsPresenter.resume();
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    findStreamsPresenter.pause();
   }
 }

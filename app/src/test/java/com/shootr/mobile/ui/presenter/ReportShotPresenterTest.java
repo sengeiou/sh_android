@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -56,6 +57,7 @@ public class ReportShotPresenterTest {
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
+    @Mock GetContributorsInteractor getContributorsInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -70,7 +72,7 @@ public class ReportShotPresenterTest {
           unblockUserInteractor,
           getFollowingInteractor,
           banUserInteractor,
-          unbanUserInteractor);
+          unbanUserInteractor, getContributorsInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -117,7 +119,7 @@ public class ReportShotPresenterTest {
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
 
-        presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ANOTHER_ID_USER);
+        presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ID_USER);
 
         verify(reportShotView).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
@@ -178,7 +180,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
-        verify(reportShotView).showAuthorContextMenuWithPin(shotModel);
+        verify(reportShotView).showAuthorContextMenuWithPinAndHighlight(shotModel);
     }
 
     @Test public void shouldShowAuthorContextMenuWithoutPinWhenUserIsStreamHolderAndIsShotAuthorAndIsNotShotVisible()
@@ -189,7 +191,7 @@ public class ReportShotPresenterTest {
 
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
-        verify(reportShotView).showAuthorContextMenuWithoutPin(shotModel);
+        verify(reportShotView).showAuthorContextMenuWithoutPinAndHighlight(shotModel);
     }
 
     @Test public void shouldShowAuthorContextMenuWithPinIfcurrentUserIsShotAuthorAndIsShotVisible() throws Exception {

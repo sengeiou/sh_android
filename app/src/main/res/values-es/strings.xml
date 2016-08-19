@@ -80,6 +80,7 @@
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">¿Descartar cambios?</string>
   <string name="discover">Descubrir</string>
+  <string name="dismiss_highlight_shot">Quitar</string>
   <string name="done">Hecho</string>
   <string name="done_label">Hecho</string>
   <string name="done_pin_topic" formatted="false">OK</string>
@@ -95,6 +96,7 @@
   <string name="drawer_following_activity_title" formatted="false">Siguiendo</string>
   <string name="drawer_friends_title">Amigos</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_users_title">Usuarios</string>
   <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>
   <string name="email_already_registered">Email ya registrado</string>
@@ -167,6 +169,7 @@
   <string name="error_title">Ooops!</string>
   <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
+  <string name="facebook_alert_dialog">Se requieren el email y la lista de amigos.</string>
   <string name="favorites_emtpy">No hay favoritos</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -174,6 +177,7 @@
   <string name="follower_list_empty">No hay seguidores</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">No sigues a nadie</string>
+  <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No hay streams</string>
   <string name="intro_create_text">¿Diriges una comunidad? Crea su stream y… Shoot!</string>
@@ -200,6 +204,7 @@
   <string name="mentioned_shot_activity_with_comment">"Te ha mencionado: "</string>
   <string name="menu_all_shots">Mostrar todos los shots</string>
   <string name="menu_copy_text">Copiar texto</string>
+  <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar los shots del administrador</string>
   <!-- Menu names -->
   <string name="menu_info">Amigos</string>
@@ -327,6 +332,7 @@
   <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
+  <string name="search_users_hint">Buscar usuarios</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Ha compartido la encuesta %s</string>
   <string name="shared_shot_activity">Ha compartido un shot de %s</string>

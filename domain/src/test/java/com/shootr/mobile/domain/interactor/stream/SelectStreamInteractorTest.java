@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.RecentStreamRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
@@ -45,6 +46,7 @@ public class SelectStreamInteractorTest {
   @Mock UserRepository localUserRepository;
   @Mock UserRepository remoteUserRepository;
   @Mock SessionRepository sessionRepository;
+  @Mock RecentStreamRepository recentStreamRepository;
   @Mock Interactor.Callback<StreamSearchResult> dummyCallback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock TimeUtils timeUtils;
@@ -61,7 +63,7 @@ public class SelectStreamInteractorTest {
     interactor =
         new SelectStreamInteractor(interactorHandler, postExecutionThread, localStreamRepository,
             remoteStreamRepository, localUserRepository, remoteUserRepository,
-            localWatchersRepository, sessionRepository, timeUtils);
+            localWatchersRepository, sessionRepository, timeUtils, recentStreamRepository);
   }
 
   @Test public void shouldSetNewStreamIdInSessionRepository() throws Exception {

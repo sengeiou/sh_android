@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ public class StreamSearchInteractor implements Interactor {
   public static final int MIN_SEARCH_LENGTH = 3;
   private final InteractorHandler interactorHandler;
   private final StreamSearchRepository streamSearchRepository;
+  private final WatchingStreamService watchingStreamService;
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
 
@@ -30,9 +32,11 @@ public class StreamSearchInteractor implements Interactor {
 
   @Inject public StreamSearchInteractor(InteractorHandler interactorHandler,
       @Remote StreamSearchRepository streamSearchRepository,
-      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
+      WatchingStreamService watchingStreamService, PostExecutionThread postExecutionThread,
+      LocaleProvider localeProvider) {
     this.interactorHandler = interactorHandler;
     this.streamSearchRepository = streamSearchRepository;
+    this.watchingStreamService = watchingStreamService;
     this.postExecutionThread = postExecutionThread;
     this.localeProvider = localeProvider;
   }
@@ -71,6 +75,7 @@ public class StreamSearchInteractor implements Interactor {
     List<StreamSearchResult> streams =
         streamSearchRepository.getStreams(query, localeProvider.getLocale(),
             StreamMode.TYPES_STREAM);
+    watchingStreamService.markWatchingStream(streams);
 
     StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 

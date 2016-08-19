@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +41,7 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
@@ -53,8 +52,10 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.presenter.HighlightedShotPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
@@ -62,6 +63,7 @@ import com.shootr.mobile.ui.presenter.StreamPollIndicatorPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
+import com.shootr.mobile.ui.views.HighlightedShotsView;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
@@ -69,11 +71,13 @@ import com.shootr.mobile.ui.views.StreamPollView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.ui.views.WatchNumberView;
+import com.shootr.mobile.ui.views.nullview.NullHighlightedShotsView;
 import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -94,7 +98,7 @@ import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, PinShotView, StreamPollView {
+    ReportShotView, PinShotView, StreamPollView, HighlightedShotsView {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -106,6 +110,8 @@ public class StreamTimelineFragment extends BaseFragment
   private static final String POLL_STATUS_SHOWING = "showing";
   private static final String POLL_STATUS_INVISIBLE = "invisible";
   private static final String POLL_STATUS_GONE = "gone";
+  private static final int FOLLOWINGS = 0;
+  private static final int PARTICIPANTS = 1;
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -115,6 +121,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject ReportShotPresenter reportShotPresenter;
   @Inject PinShotPresenter pinShotPresenter;
   @Inject StreamPollIndicatorPresenter streamPollIndicatorPresenter;
+  @Inject HighlightedShotPresenter highlightedShotPresenter;
 
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
@@ -161,7 +168,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
   private NewShotBarView newShotBarViewDelegate;
-  private Integer watchNumberCount;
+  private Integer[] watchNumberCount;
   private View footerProgress;
   private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
@@ -173,7 +180,7 @@ public class StreamTimelineFragment extends BaseFragment
   private int charCounterColorNormal;
   private EditText newTopicText;
   private TextView topicCharCounter;
-  private LinearLayoutManager linearLayoutManager;
+  private PreCachingLayoutManager preCachingLayoutManager;
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   //endregion
@@ -189,8 +196,9 @@ public class StreamTimelineFragment extends BaseFragment
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
     ButterKnife.bind(this, fragmentView);
-    linearLayoutManager = new LinearLayoutManager(getContext());
-    shotsTimeline.setLayoutManager(linearLayoutManager);
+    preCachingLayoutManager = new PreCachingLayoutManager(getContext());
+    shotsTimeline.setLayoutManager(preCachingLayoutManager);
+    shotsTimeline.setHasFixedSize(false);
     newShotBarContainer.setVisibility(View.GONE);
     return fragmentView;
   }
@@ -203,6 +211,7 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarPresenter.setView(new NullNewShotBarView());
     watchNumberPresenter.setView(new NullWatchNumberView());
     streamTimelineOptionsPresenter.setView(new NullStreamTimelineOptionsView());
+    highlightedShotPresenter.setView(new NullHighlightedShotsView());
   }
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -292,6 +301,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.resume();
     streamTimelineOptionsPresenter.resume();
     streamPollIndicatorPresenter.resume();
+    highlightedShotPresenter.resume();
   }
 
   @Override public void onPause() {
@@ -301,6 +311,7 @@ public class StreamTimelineFragment extends BaseFragment
     watchNumberPresenter.pause();
     streamTimelineOptionsPresenter.pause();
     streamPollIndicatorPresenter.pause();
+    highlightedShotPresenter.pause();
   }
 
   private void initializePresentersWithStreamAuthorId(String idStream, String streamAuthorIdUser,
@@ -310,8 +321,9 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
-    reportShotPresenter.initialize(this);
+    reportShotPresenter.initializeWithIdStream(this, idStream);
     streamPollIndicatorPresenter.initialize(this, idStream, streamAuthorIdUser);
+    highlightedShotPresenter.initialize(this, idStream);
   }
 
   private void initializePresenters(String idStream, String streamAuthorIdUser,
@@ -321,8 +333,9 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
-    reportShotPresenter.initialize(this);
+    reportShotPresenter.initializeWithIdStream(this, idStream);
     streamPollIndicatorPresenter.initialize(this, idStream, streamAuthorIdUser);
+    highlightedShotPresenter.initialize(this, idStream);
   }
 
   //endregion
@@ -379,8 +392,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupListAdapter() {
-    adapter = new ShotsTimelineAdapter(getActivity(), //
-        imageLoader, //
+    adapter = new ShotsTimelineAdapter(imageLoader, //
         timeUtils, //
         new OnAvatarClickListener() {
           @Override public void onAvatarClick(String userId, View avatarView) {
@@ -446,7 +458,13 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void onImageClick(View sharedImage, ShotModel shot) {
         openImage(sharedImage, shot.getImage().getImageUrl());
       }
-    });
+    }, new OnHideHighlightShot() {
+      @Override public void onHideClick(HighlightedShotModel highlightedShotModel) {
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+        highlightedShotPresenter
+            .onDismissHighlightShot(highlightedShotModel.getIdHighlightedShot(), streamAuthorIdUser);
+      }
+    }, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 
@@ -474,7 +492,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
 
         if (shotsTimeline != null) {
-          if (linearLayoutManager.findFirstVisibleItemPosition() == 0) {
+          if (preCachingLayoutManager.findFirstVisibleItemPosition() == 0) {
             streamTimelinePresenter.setIsFirstShotPosition(true);
             hideNewShotsIndicator();
           } else {
@@ -488,7 +506,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void checkIfEndOfListVisible() {
     int lastItemPosition = shotsTimeline.getAdapter().getItemCount() - 1;
-    int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
+    int lastVisiblePosition = preCachingLayoutManager.findLastVisibleItemPosition();
     if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       streamTimelinePresenter.showingLastShot(adapter.getLastShot());
     }
@@ -502,14 +520,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void openImage(View sharedImage, String imageUrl) {
     Intent intent = PhotoViewActivity.getIntentForActivity(getContext(), imageUrl, imageUrl);
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-      ActivityOptions activityOptions =
-          ActivityOptions.makeSceneTransitionAnimation(getActivity(), sharedImage,
-              sharedImage.getTransitionName());
-      startActivity(intent, activityOptions.toBundle());
-    } else {
-      startActivity(intent);
-    }
+    startActivity(intent);
   }
 
   private void openProfileFromUsername(String username) {
@@ -633,9 +644,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null && watchNumberCount != 0) {
+    if (watchNumberCount != null) {
       toolbarDecorator.setSubtitle(
-          getContext().getString(R.string.stream_subtitle, watchNumberCount));
+          getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
+              watchNumberCount[FOLLOWINGS], watchNumberCount[PARTICIPANTS]));
+    }
+  }
+
+  private void updateParticipants() {
+    if (watchNumberCount != null) {
+      toolbarDecorator.setSubtitle(
+          getContext().getResources().getQuantityString(R.plurals.total_watchers_pattern,
+              watchNumberCount[1],
+              watchNumberCount[1]));
     }
   }
 
@@ -707,20 +728,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hideHoldingShots() {
-    showHoldingShotsMenuItem.setVisible(false);
+    /* no -op */
   }
 
   @Override public void showAllStreamShots() {
-    showAllShotsMenuItem.setVisible(true);
-    feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
+    /* no-op */
   }
 
   @Override public void showHoldingShots() {
-    showHoldingShotsMenuItem.setVisible(true);
+   /* no-op */
   }
 
   @Override public void hideAllStreamShots() {
-    showAllShotsMenuItem.setVisible(false);
+    /* no-op */
   }
 
   @Override public void setTitle(String title) {
@@ -816,19 +836,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addAbove(List<ShotModel> shotModels) {
-    int index = linearLayoutManager.findFirstVisibleItemPosition() + shotModels.size();
-    View v = shotsTimeline.getChildAt(0);
-    int top = (v == null) ? 0 : v.getTop();
-
     adapter.addShotsAbove(shotModels);
-    adapter.notifyDataSetChanged();
-
-    linearLayoutManager.scrollToPositionWithOffset(index, top);
+    adapter.notifyItemRangeInserted(0, shotModels.size());
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
     adapter.setShots(shots);
     adapter.notifyDataSetChanged();
+    highlightedShotPresenter.refreshHighlight();
   }
 
   @Override public void hideStreamViewOnlyIndicator() {
@@ -923,15 +938,6 @@ public class StreamTimelineFragment extends BaseFragment
         /* no-op */
   }
 
-  @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
-    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_delete,
-        new Runnable() {
-          @Override public void run() {
-            openDeleteConfirmation(shotModel);
-          }
-        }).show();
-  }
-
   public void notifyPinnedShot(ShotModel shotModel) {
     adapter.onPinnedShot(shotModel);
   }
@@ -984,9 +990,158 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarViewDelegate.hideDraftsButton();
   }
 
-  @Override public void showWatchingPeopleCount(Integer count) {
-    watchNumberCount = count;
+  @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {
+    watchNumberCount = peopleWatchingCount;
     updateWatchNumberIcon();
+  }
+
+  @Override public void showParticipantsCount(Integer[] peopleWatchingCount) {
+    watchNumberCount = peopleWatchingCount;
+    updateParticipants();
+  }
+
+  @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
+    getBaseContextMenuOptions(shotModel).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shotModel.getIdShot());
+      }
+    }).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
+  }
+
+  @Override public void showAuthorContextMenuWithPinAndHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shotModel.getIdShot());
+      }
+    }).addAction(R.string.menu_pin_shot, new Runnable() {
+      @Override public void run() {
+        pinShotPresenter.pinToProfile(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shotModel);
+      }
+    }).show();
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndHighlight(final ShotModel shotModel) {
+    getBaseContextMenuOptions(shotModel).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shotModel.getIdShot());
+      }
+    }).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
+  }
+
+  @Override public void showContributorContextMenuWithPinAndHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shotModel.getIdShot());
+      }
+    }).addAction(R.string.menu_pin_shot, new Runnable() {
+      @Override public void run() {
+        pinShotPresenter.pinToProfile(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).show();
+  }
+
+  @Override public void showContributorContextMenuWithoutPinAndHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shotModel.getIdShot());
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
+  }
+
+  @Override public void showContributorContextMenu(final ShotModel shot) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shot.getIdShot());
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr,
+        new Runnable() {
+          @Override public void run() {
+            streamTimelinePresenter.shareShot(shot);
+            analyticsTool.analyticsSendAction(getContext(),
+                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+                analyticsLabelShareShot);
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shot);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shot);
+      }
+    }).show();
   }
 
   @Override public void hideWatchingPeopleCount() {
@@ -1031,7 +1186,11 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showHolderContextMenu(final ShotModel shot) {
-    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.highlightShot(shot.getIdShot());
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
@@ -1222,5 +1381,46 @@ public class StreamTimelineFragment extends BaseFragment
       newShotBarPresenter.editTopicPressed();
     }
   }
+
+  @Override public void showHighlightedShot(HighlightedShotModel highlightedShot) {
+    setHighlightShot(highlightedShot);
+  }
+
+  @Override public void hideHighlightedShots() {
+    adapter.removeHighlightShot();
+  }
+
+  @Override
+  public void refreshHighlightedShots(HighlightedShotModel highlightedShot) {
+    setHighlightShot(highlightedShot);
+    shotsTimeline.setAdapter(adapter);
+  }
+
+  @Override public void showDismissDialog(final String idHighlightShot) {
+    new AlertDialog.Builder(getActivity())
+        .setMessage(getString(R.string.highlight_shot_dialog))
+        .setPositiveButton(getString(R.string.ok),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                highlightedShotPresenter.removeHighlightShot(idHighlightShot);
+              }
+            })
+        .setNegativeButton(getString(R.string.cancel), null)
+        .create()
+        .show();
+  }
+
+  @Override public void updateHighlightShotInfo(HighlightedShotModel highlightedShotModel) {
+    adapter.setHighlightedShot(highlightedShotModel);
+  }
+
+  @Override public void setHighlightShotBackground(Boolean isAdmin) {
+    adapter.setHighlightShotBackground(isAdmin);
+  }
+
+  private void setHighlightShot(HighlightedShotModel highlightedShotModel) {
+    adapter.setHighlightedShot(highlightedShotModel);
+  }
+
   //endregion
 }

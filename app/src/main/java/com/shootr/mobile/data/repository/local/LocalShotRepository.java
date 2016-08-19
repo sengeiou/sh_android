@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -15,11 +17,13 @@ public class LocalShotRepository implements ShotRepository {
 
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
+  private final HighlightedShotEntityMapper highlightedShotEntityMapper;
 
   @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource,
-      ShotEntityMapper shotEntityMapper) {
+      ShotEntityMapper shotEntityMapper, HighlightedShotEntityMapper highlightedShotEntityMapper) {
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
+    this.highlightedShotEntityMapper = highlightedShotEntityMapper;
   }
 
   @Override public Shot putShot(Shot shot) {
@@ -106,5 +110,21 @@ public class LocalShotRepository implements ShotRepository {
 
   @Override public void unhideShot(String idShot) {
     throw new IllegalArgumentException("No local implementation");
+  }
+
+  @Override public void highlightShot(String idShot) {
+    throw new IllegalArgumentException("No local implementation");
+  }
+
+  @Override public HighlightedShot getHighlightedShots(String idStream) {
+    return highlightedShotEntityMapper.mapToDomain(localShotDataSource.getHighlightedShot(idStream));
+  }
+
+  @Override public void dismissHighlightedShot(String idHighlightedShot) {
+    localShotDataSource.dismissHighlight(idHighlightedShot);
+  }
+
+  @Override public void hideHighlightedShot(String idHighlightedShot) {
+    localShotDataSource.hideHighlightedShot(idHighlightedShot);
   }
 }

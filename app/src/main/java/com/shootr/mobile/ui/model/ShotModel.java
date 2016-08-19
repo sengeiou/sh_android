@@ -189,4 +189,42 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     @Override public int compareTo(ShotModel shotModel) {
         return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1 : 0;
     }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShotModel)) return false;
+
+        ShotModel shotModel = (ShotModel) o;
+
+        if (idShot != null ? !idShot.equals(shotModel.idShot) : shotModel.idShot != null)
+            return false;
+        if (nicers != null ? !nicers.equals(shotModel.nicers) : shotModel.nicers != null)
+            return false;
+        if (streamTitle != null ? !streamTitle.equals(shotModel.streamTitle)
+            : shotModel.streamTitle != null) {
+            return false;
+        }
+        if (niceCount != null ? !niceCount.equals(shotModel.niceCount)
+            : shotModel.niceCount != null) {
+            return false;
+        }
+        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shotModel.isMarkedAsNice)
+            : shotModel.isMarkedAsNice != null) {
+            return false;
+        }
+        if (hide != null ? !hide.equals(shotModel.hide) : shotModel.hide != null) return false;
+        return replyCount != null ? replyCount.equals(shotModel.replyCount)
+            : shotModel.replyCount == null;
+    }
+
+    @Override public int hashCode() {
+        int result = idShot != null ? idShot.hashCode() : 0;
+        result = 31 * result + (nicers != null ? nicers.hashCode() : 0);
+        result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
+        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
+        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
+        result = 31 * result + (hide != null ? hide.hashCode() : 0);
+        result = 31 * result + (replyCount != null ? replyCount.hashCode() : 0);
+        return result;
+    }
 }

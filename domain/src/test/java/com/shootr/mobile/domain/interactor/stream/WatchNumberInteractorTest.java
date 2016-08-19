@@ -1,10 +1,12 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Arrays;
 import java.util.List;
@@ -15,17 +17,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class WatchNumberInteractorTest {
 
+  private static final String ID_STREAM = "idStream";
+  String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   public static final long ID_USER_ME = 666L;
   public static final long ID_USER_1 = 1L;
   public static final long ID_USER_2 = 2L;
   public static final String STREAM_ID = "id";
   @Mock UserRepository remoteUserRepository;
   @Mock UserRepository localUserRepository;
+  @Mock StreamRepository remoteStreamRepository;
+  @Mock StreamRepository localStreamRepository;
   @Spy SpyCallback spyCallback = new SpyCallback();
   private WatchNumberInteractor interactor;
 
@@ -35,7 +39,7 @@ public class WatchNumberInteractorTest {
     TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
     interactor =
         new WatchNumberInteractor(testInteractorHandler, postExecutionThread, remoteUserRepository,
-            localUserRepository);
+            localUserRepository, remoteStreamRepository, localStreamRepository);
   }
 
   @Test public void shouldFilterOutPeopleNotWatchingTheStream() throws Exception {
@@ -47,15 +51,6 @@ public class WatchNumberInteractorTest {
 
     assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
     assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
-  }
-
-  @Test public void shouldFallbackToLocalUserRepositoryWhenRemoteRepositoryFails()
-      throws Exception {
-    when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
-
-    interactor.loadWatchNumber(STREAM_ID, spyCallback);
-
-    verify(localUserRepository).getPeople();
   }
 
   private User me() {
@@ -77,11 +72,17 @@ public class WatchNumberInteractorTest {
     return user;
   }
 
+  private Stream stream() {
+    Stream stream = new Stream();
+    stream.setWatchers(Arrays.asList(me(), newUserWatching(ID_USER_1)));
+    return stream;
+  }
+
   private class SpyCallback implements WatchNumberInteractor.Callback {
 
-    public Integer count;
+    public Integer[] count;
 
-    @Override public void onLoaded(Integer count) {
+    @Override public void onLoaded(Integer[] count) {
       this.count = count;
     }
   }

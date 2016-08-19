@@ -14,7 +14,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
-import com.shootr.mobile.ui.adapters.FavoriteStreamsAdapter;
+import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
@@ -47,7 +47,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
 
-    private FavoriteStreamsAdapter adapter;
+    private WatchableStreamsAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -86,7 +86,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavoriteStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+        adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
             }

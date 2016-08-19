@@ -1,17 +1,22 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
+import android.support.annotation.NonNull;
+import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ShotApiService;
+import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
+import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
-import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,11 +26,16 @@ public class ServiceShotDatasource implements ShotDataSource {
   public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
   private final ShotApiService shotApiService;
   private final ShotApiEntityMapper shotApiEntityMapper;
+  private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final DatabaseShotDataSource databaseShotDataSource;
 
   @Inject public ServiceShotDatasource(ShotApiService shotApiService,
-      ShotApiEntityMapper shotApiEntityMapper) {
+      ShotApiEntityMapper shotApiEntityMapper,
+      HighlightedShotEntityMapper highlightedShotEntityMapper, DatabaseShotDataSource databaseShotDataSource) {
     this.shotApiService = shotApiService;
     this.shotApiEntityMapper = shotApiEntityMapper;
+    this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.databaseShotDataSource = databaseShotDataSource;
   }
 
   @Override public ShotEntity putShot(ShotEntity shotEntity) {
@@ -57,14 +67,13 @@ public class ServiceShotDatasource implements ShotDataSource {
       if (parameters.isRealTime()) {
         List<ShotApiEntity> shots =
             shotApiService.getStreamTimeline(parameters.getStreamId(), parameters.getStreamTypes(),
-                parameters.getShotTypes(), parameters.getLimit(),
-                parameters.getSinceDate(), parameters.getMaxDate());
+                parameters.getShotTypes(), parameters.getLimit(), parameters.getSinceDate(),
+                parameters.getMaxDate());
         return shotApiEntityMapper.transform(shots);
       } else {
         List<ShotApiEntity> shots =
             shotApiService.getStreamTimlinefirstCall(parameters.getStreamId(),
-                parameters.getStreamTypes(), parameters.getShotTypes(),
-                parameters.getSinceDate());
+                parameters.getStreamTypes(), parameters.getShotTypes(), parameters.getSinceDate());
         return shotApiEntityMapper.transform(shots);
       }
     } catch (ApiException | IOException e) {
@@ -227,6 +236,77 @@ public class ServiceShotDatasource implements ShotDataSource {
     } catch (ApiException | IOException e) {
       throw new ServerCommunicationException(e);
     }
+  }
+
+  @Override public HighlightedShotEntity getHighlightedShot(String idStream) {
+    try {
+      List<HighlightedShotApiEntity> highlightedShot = shotApiService.getHighlightedShot(idStream);
+      HighlightedShotEntity localHighlightedShot =
+          databaseShotDataSource.getHighlightedShot(idStream);
+
+      if (!highlightedShot.isEmpty()) {
+        HighlightedShotEntity highlightedShotEntity =
+            setHighlightShotVisibility(highlightedShot, localHighlightedShot);
+        databaseShotDataSource.putHighlightShot(highlightedShotEntity);
+        return highlightedShotEntity;
+      } else {
+        return null;
+      }
+    } catch (ApiException | IOException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @NonNull private HighlightedShotEntity setHighlightShotVisibility(
+      List<HighlightedShotApiEntity> highlightedShot, HighlightedShotEntity localHighlightedShot) {
+    HighlightedShotEntity highlightedShotEntity =
+        highlightedShotEntityMapper.transform(highlightedShot.get(0));
+
+    if (isInLocal(localHighlightedShot, highlightedShotEntity)) {
+      highlightedShotEntity.setVisible(localHighlightedShot.isVisible());
+    } else {
+      highlightedShotEntity.setVisible(true);
+    }
+    return highlightedShotEntity;
+  }
+
+  private boolean isInLocal(HighlightedShotEntity localHighlightedShot,
+      HighlightedShotEntity highlightedShotEntity) {
+    return localHighlightedShot != null && localHighlightedShot.getIdHighlightedShot()
+        .equals(highlightedShotEntity.getIdHighlightedShot());
+  }
+
+  @Override public HighlightedShotEntity highlightShot(String idShot) {
+    CreateAHighlightedShotEntity createAHighlightedShotEntity = new CreateAHighlightedShotEntity();
+    createAHighlightedShotEntity.setIdShot(idShot);
+    try {
+      HighlightedShotApiEntity createdhighlightedShotApiEntity =
+          shotApiService.postHighlightedShotEntity(createAHighlightedShotEntity);
+      HighlightedShotEntity highlightedShotEntity =
+          highlightedShotEntityMapper.transform(createdhighlightedShotApiEntity);
+      highlightedShotEntity.setVisible(true);
+      databaseShotDataSource.putHighlightShot(highlightedShotEntity);
+      return highlightedShotEntityMapper.transform(createdhighlightedShotApiEntity);
+    } catch (ApiException | IOException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void putHighlightShot(HighlightedShotEntity highlightedShotApiEntity) {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
+  @Override public void dismissHighlight(String idHighlightedShot) {
+    try {
+      shotApiService.dismissHighlightedShot(idHighlightedShot);
+      databaseShotDataSource.dismissHighlight(idHighlightedShot);
+    } catch (ApiException | IOException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void hideHighlightedShot(String idHighlightedShot) {
+    throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

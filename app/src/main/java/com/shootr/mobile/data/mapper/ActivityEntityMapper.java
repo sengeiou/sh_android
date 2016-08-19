@@ -7,11 +7,10 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-@Singleton public class ActivityEntityMapper {
+public class ActivityEntityMapper {
 
     @Inject public ActivityEntityMapper() {
     }

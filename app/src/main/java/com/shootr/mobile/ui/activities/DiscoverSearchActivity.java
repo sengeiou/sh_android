@@ -28,7 +28,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
   @Bind(R.id.pager) ViewPager viewPager;
   @Bind(R.id.tab_layout) TabLayout tabLayout;
   @BindString(R.string.drawer_streams_title) String streamsTitle;
-  @BindString(R.string.drawer_friends_title) String friendsTitle;
+  @BindString(R.string.drawer_users_title) String usersTitle;
 
   private SearchView searchView;
   private String currentSearchQuery;
@@ -71,10 +71,10 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
   }
 
   private void changeSearchViewHint(int position) {
-    if (position == 0) {
+    if (position == 1) {
       searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
     } else {
-      searchView.setQueryHint(getResources().getString(R.string.activity_find_friends_hint));
+      searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
     }
   }
 
@@ -154,7 +154,7 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
         return false;
       }
     });
-    searchView.setQueryHint(getString(R.string.activity_find_streams_hint));
+    searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
     searchView.setIconifiedByDefault(false);
     searchView.setIconified(false);
     if (savedInstanceState != null) {
@@ -182,13 +182,13 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
     @Override public Fragment getItem(int position) {
       switch (position) {
         case 0:
-          FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
-          fragments[0] = findStreamsFragment;
-          return findStreamsFragment;
-        case 1:
           FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
-          fragments[1] = findFriendsFragment;
+          fragments[0] = findFriendsFragment;
           return findFriendsFragment;
+        case 1:
+          FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
+          fragments[1] = findStreamsFragment;
+          return findStreamsFragment;
         default:
           return null;
       }
@@ -201,9 +201,9 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
     @Override public CharSequence getPageTitle(int position) {
       switch (position) {
         case 0:
-          return streamsTitle;
+          return usersTitle;
         case 1:
-          return friendsTitle;
+          return streamsTitle;
         default:
           throw new IllegalStateException(
               String.format("Item title for position %d doesn't exists", position));

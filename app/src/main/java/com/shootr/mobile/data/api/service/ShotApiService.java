@@ -1,7 +1,9 @@
 package com.shootr.mobile.data.api.service;
 
+import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import java.io.IOException;
 import java.util.List;
@@ -84,5 +86,16 @@ public interface ShotApiService {
       throws ApiException, IOException;
 
   @DELETE("/shot/{idShot}/hide") Response unhideShot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
+
+  @GET("/highlightedShot?includeEmbed=true")
+  List<HighlightedShotApiEntity> getHighlightedShot(@Query("idStream") String idStream)
+      throws ApiException, IOException;
+
+  @DELETE("/highlightedShot/{idHighlightedShot}") Response dismissHighlightedShot(
+      @Path("idHighlightedShot") String idHighlightedShot) throws ApiException, IOException;
+
+  @POST("/highlightedShot") HighlightedShotApiEntity postHighlightedShotEntity(
+      @Body CreateAHighlightedShotEntity createAHighlightedShotEntity)
       throws ApiException, IOException;
 }

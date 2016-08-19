@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
@@ -10,12 +9,16 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -32,16 +35,20 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
+    private final GetContributorsInteractor getContributorsInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
+    private String idStream;
+    private ArrayList<String> contributorsIds = new ArrayList<>();
 
     @Inject
     public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor, ErrorMessageFactory errorMessageFactory,
-      SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
-      UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor) {
+        SessionRepository sessionRepository, UserModelMapper userModelMapper,
+        GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
+        UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
+        BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
+        GetContributorsInteractor getContributorsInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -52,6 +59,7 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
+        this.getContributorsInteractor = getContributorsInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -64,6 +72,26 @@ public class ReportShotPresenter implements Presenter {
 
     public void initialize(ReportShotView reportShotView) {
         setView(reportShotView);
+    }
+
+    public void initializeWithIdStream(ReportShotView reportShotView, String streamId) {
+        setView(reportShotView);
+        this.idStream = streamId;
+        getContributorsIds();
+    }
+
+    private void getContributorsIds() {
+        getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
+            @Override public void onLoaded(List<Contributor> contributors) {
+                for (Contributor contributor : contributors) {
+                    contributorsIds.add(contributor.getIdUser());
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                /* no-op */
+            }
+        });
     }
 
     public void report(ShotModel shotModel) {
@@ -88,18 +116,46 @@ public class ReportShotPresenter implements Presenter {
     }
 
     public void onShotLongPressedWithStreamAuthor(ShotModel shot, String streamAuthorIdUser) {
-        if (currentUserIsStreamHolder(streamAuthorIdUser)) {
-            handlePinContextMenu(shot);
+        if (currentUserIsStreamHolder(streamAuthorIdUser) || currentUserIsStreamContributor()) {
+            handlePinContextMenu(shot, streamAuthorIdUser);
         } else {
             onShotLongPressed(shot);
         }
     }
 
-    public void handlePinContextMenu(ShotModel shot) {
-        if (currentUserIsShotAuthor(shot)) {
+    public void handlePinContextMenu(ShotModel shot, String streamAuthorId) {
+        if (currentUserIsShotAuthor(shot) && currentUserIsStreamHolder(streamAuthorId)) {
+            showAuthorContextMenuWithHighlight(shot);
+        } else if (currentUserIsStreamContributor()) {
+            showContributorContextMenu(shot);
+        } else if (currentUserIsShotAuthor(shot)) {
             showAuthorContextMenu(shot);
         } else {
             reportShotView.showHolderContextMenu(shot);
+        }
+    }
+
+     private void showContributorContextMenu(ShotModel shot) {
+         if (currentUserIsShotAuthor(shot)) {
+             handleContributorPinShotVisibility(shot);
+         } else {
+             reportShotView.showContributorContextMenu(shot);
+         }
+     }
+
+    private void handleContributorPinShotVisibility(ShotModel shot) {
+        if (isShotVisible(shot)) {
+            reportShotView.showContributorContextMenuWithPinAndHighlight(shot);
+        } else {
+            reportShotView.showContributorContextMenuWithoutPinAndHighlight(shot);
+        }
+    }
+
+    private void showAuthorContextMenuWithHighlight(ShotModel shot) {
+        if (isShotVisible(shot)) {
+            reportShotView.showAuthorContextMenuWithPinAndHighlight(shot);
+        } else {
+            reportShotView.showAuthorContextMenuWithoutPinAndHighlight(shot);
         }
     }
 
@@ -113,6 +169,10 @@ public class ReportShotPresenter implements Presenter {
 
     public boolean isShotVisible(ShotModel shot) {
         return shot.getHide() != null && shot.getHide() != 0L;
+    }
+
+    private boolean currentUserIsStreamContributor() {
+        return contributorsIds.contains(sessionRepository.getCurrentUserId());
     }
 
     public boolean currentUserIsShotAuthor(ShotModel shotModel) {

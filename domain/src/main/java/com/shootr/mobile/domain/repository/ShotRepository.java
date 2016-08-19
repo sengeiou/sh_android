@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -41,4 +42,12 @@ public interface ShotRepository {
   void hideShot(String idShot, Long timestamp, String[] streamTypes, String[] shotTypes);
 
   void unhideShot(String idShot);
+
+  void highlightShot(String idShot);
+
+  HighlightedShot getHighlightedShots(String idStream);
+
+  void dismissHighlightedShot(String idHighlightedShot);
+
+  void hideHighlightedShot(String idHighlightedShot);
 }

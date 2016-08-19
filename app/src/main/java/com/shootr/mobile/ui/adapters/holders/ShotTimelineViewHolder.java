@@ -39,7 +39,6 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @Bind(R.id.shot_timestamp) TextView timestamp;
   @Bind(R.id.shot_text) ClickableTextView text;
   @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
-  @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
   @Bind(R.id.shot_video_frame) View videoFrame;
   @Bind(R.id.shot_video_title) TextView videoTitle;
   @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -183,7 +182,6 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       handleImage(shot, onLongClickListener, onTouchListener, onImageClickListener, imageUrl,
           imageWidth, imageHeight);
     } else {
-      imagePortrait.setVisibility(View.GONE);
       imageLandscape.setVisibility(View.GONE);
     }
   }
@@ -192,10 +190,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
       String imageUrl, Long imageWidth, Long imageHeight) {
     if (isImageValid(imageWidth, imageHeight)) {
-      setImageLayout(shot, onLongClickListener, onTouchListener, onImageClickListener, imageUrl,
-          imageWidth, imageHeight);
+      setImageLayout(shot, onLongClickListener, onTouchListener, onImageClickListener, imageUrl);
     } else {
-      imagePortrait.setVisibility(View.GONE);
       imageLandscape.setVisibility(View.VISIBLE);
       setupImage(imageLandscape, shot, onLongClickListener, onTouchListener, onImageClickListener,
           imageUrl);
@@ -204,19 +200,10 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void setImageLayout(final ShotModel shot,
       final OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener, String imageUrl, Long imageWidth,
-      Long imageHeight) {
-    if (imageWidth > imageHeight) {
-      imagePortrait.setVisibility(View.GONE);
+      OnImageClickListener onImageClickListener, String imageUrl) {
       imageLandscape.setVisibility(View.VISIBLE);
       setupImage(imageLandscape, shot, onLongClickListener, onTouchListener, onImageClickListener,
           imageUrl);
-    } else {
-      imageLandscape.setVisibility(View.GONE);
-      imagePortrait.setVisibility(View.VISIBLE);
-      setupImage(imagePortrait, shot, onLongClickListener, onTouchListener, onImageClickListener,
-          imageUrl);
-    }
   }
 
   private void setupImage(ImageView imageView, final ShotModel shot,

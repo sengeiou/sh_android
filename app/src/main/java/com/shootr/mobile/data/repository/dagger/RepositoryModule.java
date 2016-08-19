@@ -23,7 +23,8 @@ import javax.inject.Singleton;
         ContributorRepositoryModule.class,
         PollRepositoryModule.class,
         UserSettingsRepositoryModule.class,
-        DiscoveredRepositoryModule.class
+        DiscoveredRepositoryModule.class,
+        RecentStreamRepositoryModule.class
     },
     complete = false,
     library = true) public class RepositoryModule {

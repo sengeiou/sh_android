@@ -31,7 +31,6 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_timestamp) public TextView timestamp;
     @Bind(R.id.shot_text) public ClickableTextView text;
     @Bind(R.id.shot_image_landscape) public ImageView imageLandscape;
-    @Bind(R.id.shot_image_portrait) ImageView imagePortrait;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -119,7 +118,6 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
             handleImage(shot, onImageClickListener, imageUrl,
                 imageWidth, imageHeight);
         } else {
-            imagePortrait.setVisibility(View.GONE);
             imageLandscape.setVisibility(View.GONE);
         }
     }
@@ -130,7 +128,6 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
             setImageLayout(shot, onImageClickListener, imageUrl,
                 imageWidth, imageHeight);
         } else {
-            imagePortrait.setVisibility(View.GONE);
             imageLandscape.setVisibility(View.VISIBLE);
             setupImage(imageLandscape, shot, onImageClickListener,
                 imageUrl);
@@ -140,17 +137,8 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     private void setImageLayout(final ShotModel shot,
         ShotClickListener onImageClickListener, String imageUrl, Long imageWidth,
         Long imageHeight) {
-        if (imageWidth > imageHeight) {
-            imagePortrait.setVisibility(View.GONE);
-            imageLandscape.setVisibility(View.VISIBLE);
-            setupImage(imageLandscape, shot, onImageClickListener,
-                imageUrl);
-        } else {
-            imageLandscape.setVisibility(View.GONE);
-            imagePortrait.setVisibility(View.VISIBLE);
-            setupImage(imagePortrait, shot, onImageClickListener,
-                imageUrl);
-        }
+        imageLandscape.setVisibility(View.VISIBLE);
+        setupImage(imageLandscape, shot, onImageClickListener, imageUrl);
     }
 
     private void setupImage(ImageView imageView, final ShotModel shot,

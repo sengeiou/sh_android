@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton public class ShotEntityMapper {
+public class ShotEntityMapper {
 
     private final NiceShotRepository niceShotRepository;
     private final MetadataMapper metadataMapper;

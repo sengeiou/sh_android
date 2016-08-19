@@ -85,30 +85,16 @@
           android:focusableInTouchMode="false"
           >
 
-        <com.makeramen.roundedimageview.RoundedImageView
+        <com.shootr.mobile.ui.widgets.ProportionalImageView
             android:id="@+id/shot_image_landscape"
             android:layout_width="match_parent"
-            android:layout_height="156dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:scaleType="centerCrop"
             android:visibility="gone"
             android:transitionName="shared_image"
             app:riv_corner_radius="10dp"
             tools:src="@drawable/sample_avatar"
             tools:visibility="visible"
-            />
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/shot_image_portrait"
-            android:layout_width="168dp"
-            android:layout_height="296dp"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone"
-            android:scaleType="centerCrop"
-            android:transitionName="shared_image"
-            app:riv_corner_radius="10dp"
-            tools:src="@drawable/sample_avatar"
-            tools:visibility="gone"
             />
 
         <FrameLayout
