@@ -13,6 +13,21 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.16.0] - 2016-08-19
+
+### Added
+
+- Highlighted shot
+- Recent Streams
+- Watch/Unwatch en búsqueda de streams
+
+
+### Changed
+
+- Tabs del discover search antes era amigos ahora es users
+- Subitulo del streamTimeline ahora muestra el número de participantes y/o seguidos
+- Ahora las fotos del timeline se ven completas y se redimensionan con el aspect ratio original
+
 ## [1.15.1] - 2016-08-05
 
 ### Changed
