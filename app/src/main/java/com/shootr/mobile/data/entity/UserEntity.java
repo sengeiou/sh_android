@@ -25,6 +25,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String watchSynchronizedStatus;
     private Long createdStreamsCount;
     private Long favoritedStreamsCount;
+    private Boolean socialLogin;
 
     public UserEntity() {
     }
@@ -220,5 +221,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setVerifiedUser(Integer verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Boolean getSocialLogin() {
+        return socialLogin;
+    }
+
+    public void setSocialLogin(Boolean socialLogin) {
+        this.socialLogin = socialLogin;
     }
 }

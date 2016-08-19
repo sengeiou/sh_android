@@ -114,7 +114,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setupImage(ShotModel shotModel) {
-        String imageUrl = shotModel.getImage();
+        String imageUrl = shotModel.getImage().getImageUrl();
         if (imageUrl != null) {
             setImage(shotModel, imageUrl);
         } else {

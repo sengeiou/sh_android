@@ -25,6 +25,9 @@ public class ShotEntity extends Synchronized {
     private Long profileHidden;
     private Long replyCount;
 
+    private Long imageWidth;
+    private Long imageHeight;
+
     public String getIdShot() {
         return idShot;
     }
@@ -167,5 +170,21 @@ public class ShotEntity extends Synchronized {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public Long getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(Long imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public Long getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(Long imageHeight) {
+        this.imageHeight = imageHeight;
     }
 }

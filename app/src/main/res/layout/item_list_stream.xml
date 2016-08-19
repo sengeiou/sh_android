@@ -1,123 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:clickable="true"
-  android:foreground="?selectableItemBackground">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?selectableItemBackground"
+    android:orientation="horizontal"
+    >
 
-    <View android:id="@+id/separator"
-      android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:layout_marginLeft="84dp"
-      android:layout_gravity="top"
-      android:background="@color/separator" />
+  <ImageView
+      android:id="@+id/stream_picture_without_text"
+      android:layout_width="@dimen/stream_result_picture_width"
+      android:layout_height="@dimen/stream_result_picture_height"
+      android:layout_marginBottom="12dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="12dp"
+      android:scaleType="centerCrop"
+      android:src="@color/default_photo_background"
+      android:visibility="gone"
+      tools:background="#660000cc"
+      />
 
-    <LinearLayout android:layout_width="match_parent"
-      android:orientation="horizontal"
-      android:layout_height="wrap_content">
+  <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/stream_picture"
+      android:layout_width="@dimen/stream_result_picture_width"
+      android:layout_height="@dimen/stream_result_picture_height"
+      android:layout_marginBottom="12dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="12dp"
+      android:scaleType="centerCrop"
+      android:src="@color/default_photo_background"
+      android:visibility="gone"
+      tools:background="#660000cc"
+      />
 
-        <ImageView android:id="@+id/stream_picture_without_text"
-          android:layout_width="@dimen/stream_result_picture_width"
-          android:layout_height="@dimen/stream_result_picture_height"
-          android:src="@color/default_photo_background"
-          android:layout_marginRight="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginTop="16dp"
-          android:layout_marginBottom="16dp"
-          android:visibility="gone"
-          tools:background="#660000cc"
-          android:scaleType="centerCrop" />
+  <LinearLayout
+      android:id="@+id/stream_title_container"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_weight="1"
+      android:orientation="vertical"
+      >
 
-        <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/stream_picture"
-          android:layout_width="@dimen/stream_result_picture_width"
-          android:layout_height="@dimen/stream_result_picture_height"
-          android:src="@color/default_photo_background"
-          android:layout_marginRight="16dp"
-          android:visibility="gone"
-          android:layout_marginLeft="16dp"
-          android:layout_marginTop="16dp"
-          android:layout_marginBottom="16dp"
-          tools:background="#660000cc"
-          android:scaleType="centerCrop" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
 
-        <LinearLayout android:id="@+id/stream_title_container"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_weight="1"
-          android:orientation="vertical">
-
-            <LinearLayout android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
-
-                <TextView android:id="@+id/stream_title"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:drawablePadding="8dp"
-                  android:ellipsize="end"
-                  android:fontFamily="sans-serif-medium"
-                  android:maxLines="1"
-                  android:singleLine="true"
-                  android:textColor="@color/black"
-                  android:textSize="17sp"
-                  tools:text="Titulo Dos líneas" />
-
-                <ImageView android:id="@+id/stream_muted"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:src="@drawable/ic_muted_stream"
-                  android:paddingLeft="4dp"
-                  android:visibility="gone"
-                  android:layout_gravity="center"
-                  tools:visibility="visible" />
-
-            </LinearLayout>
-
-            <TextView android:id="@+id/stream_subtitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textColor="@color/black"
-              android:singleLine="true"
-              android:textSize="15sp"
-              tools:text="Romanesco" />
-        </LinearLayout>
-
-        <FrameLayout android:id="@+id/stream_actions_container"
+      <TextView
+          android:id="@+id/stream_title"
           android:layout_width="wrap_content"
-          android:paddingRight="16dp"
-          android:paddingTop="16dp"
-          android:paddingBottom="16dp"
-          android:layout_height="match_parent">
+          android:layout_height="wrap_content"
+          android:drawablePadding="8dp"
+          android:ellipsize="end"
+          android:fontFamily="sans-serif-medium"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/black"
+          android:textSize="17sp"
+          tools:text="Titulo Dos líneas"
+          />
 
-            <TextView android:id="@+id/stream_watchers"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="right"
-              android:layout_marginLeft="6dp"
-              tools:text="2"
-              style="@style/WatchersIndicator" />
+      <ImageView
+          android:id="@+id/stream_muted"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:paddingLeft="4dp"
+          android:src="@drawable/ic_muted_stream"
+          android:visibility="gone"
+          tools:visibility="visible"
+          />
 
-            <ImageView android:id="@+id/stream_remove"
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:background="?selectableItemBackgroundBorderless"
-              android:src="@drawable/ic_action_close_gray60_24_nopadding"
-              android:layout_gravity="right|bottom"
-              android:layout_marginRight="-4dp"
-              android:visibility="gone"
-              tools:visibility="visible" />
-
-            <ImageView android:id="@+id/favorite_stream_indicator"
-              android:layout_width="26dp"
-              android:layout_height="26dp"
-              android:background="?selectableItemBackgroundBorderless"
-              android:src="@drawable/ic_favorite_not_added_28_gray50"
-              android:scaleType="centerCrop"
-              android:layout_gravity="right|bottom"
-              android:visibility="gone"
-              tools:visibility="visible" />
-        </FrameLayout>
     </LinearLayout>
-</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+      <TextView
+          android:id="@+id/stream_subtitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:textColor="@color/black"
+          android:textSize="15sp"
+          tools:text="Romanesco"
+          />
+
+      <TextView
+          android:id="@+id/stream_subtitle_description"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:textSize="15sp"
+          android:paddingLeft="4dp"
+          style="@style/InlineDescriptionAppearance"
+          android:visibility="gone"
+          tools:visibility="visible"
+          tools:text="Romanesco"
+          />
+
+    </LinearLayout>
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/stream_actions_container"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:paddingBottom="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="16dp"
+      >
+
+    <TextView
+        android:id="@+id/stream_watchers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="6dp"
+        tools:text="2"
+        style="@style/WatchersIndicator"
+        />
+
+    <ImageView
+        android:id="@+id/stream_remove"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="-4dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_action_close_gray60_24_nopadding"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/favorite_stream_indicator"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_gravity="right|bottom"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_favorite_not_added_28_gray50"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+  </FrameLayout>
+</LinearLayout>

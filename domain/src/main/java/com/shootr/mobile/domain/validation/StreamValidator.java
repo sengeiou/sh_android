@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.validation;
 
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;

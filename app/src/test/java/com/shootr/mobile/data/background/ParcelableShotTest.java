@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.Date;
 import org.junit.Test;
 

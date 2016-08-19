@@ -1,17 +1,19 @@
 buildscript {
 
-    repositories {
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://jitpack.io' } // sdk manager
-    }
+  repositories {
+    jcenter()
+    maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
+  }
 
-    dependencies {
-        classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
-        classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
-        classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
+  dependencies {
+    classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
+    classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
+    classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
+    classpath 'io.fabric.tools:gradle:1.+'
+    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+  }
 }
 
 apply plugin: 'android-sdk-manager'
@@ -19,227 +21,232 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'hugo'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
-    jcenter()
-    maven { url 'https://maven.fabric.io/public' }
-    maven { url 'http://dl.bintray.com/sloy/maven' }
-    //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
-    mavenCentral()
+  jcenter()
+  maven { url 'https://maven.fabric.io/public' }
+  maven { url 'http://dl.bintray.com/sloy/maven' }
+  //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
+  mavenCentral()
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 13
+def versionMinor = 15
 def versionRevision = 1
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 29
+def databaseVersion = 34
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 coveralls {
-    jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
+  jacocoReportPath = "${buildDir}/reports/coverage/debug/report.xml"
 }
 
 tasks.coveralls {
-    dependsOn 'test'
-    onlyIf { System.env.'CI' }
+  dependsOn 'test'
+  onlyIf { System.env.'CI' }
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+  compileSdkVersion 24
+  buildToolsVersion "24.0.1"
 
-    dexOptions {
-        javaMaxHeapSize "4g"
-        preDexLibraries = preDexEnabled
+  dexOptions {
+    javaMaxHeapSize "4g"
+    preDexLibraries = preDexEnabled
+  }
+
+  defaultConfig {
+    applicationId "com.shootr.mobile"
+    targetSdkVersion 24
+
+    versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
+    versionName versionMajor + "." + versionMinor + "." + versionRevision
+    versionName isPreProduction ? versionName + "-pre" : versionName
+    versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
+    archivesBaseName = "Shootr-" + versionName
+
+    multiDexEnabled true
+
+    buildConfigField "int", "DATABASE_VERSION", databaseVersion.toString()
+    buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+    buildConfigField "String", "GIT_BRANCH", "\"${gitBranch}\""
+    buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  splits {
+    density {
+      enable true
+      exclude "ldpi", "tvdpi", "xxxhdpi"
+      compatibleScreens 'small', 'normal', 'large', 'xlarge'
+    }
+  }
+  signingConfigs {
+    release {
+      storeFile file('../certs/release.keystore')
+      def (releaseKeystorePassword, releaseKeyAlias, releaseKeyPassword) = signingConfig()
+      storePassword releaseKeystorePassword
+      keyAlias releaseKeyAlias
+      keyPassword releaseKeyPassword
     }
 
-    defaultConfig {
-        applicationId "com.shootr.mobile"
-        targetSdkVersion 23
-
-        versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
-        versionName versionMajor + "." + versionMinor + "." + versionRevision
-        versionName isPreProduction ? versionName + "-pre" : versionName
-        versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
-        archivesBaseName = "Shootr-" + versionName
-
-        multiDexEnabled true
-
-        buildConfigField "int", "DATABASE_VERSION", databaseVersion.toString()
-        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-        buildConfigField "String", "GIT_BRANCH", "\"${gitBranch}\""
-        buildConfigField "boolean", "USE_PRE_PRODUCTION", isPreProduction.toString()
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    debug {
+      storeFile file('../certs/debug.keystore')
     }
+  }
 
-    splits {
-        density {
-            enable true
-            exclude "ldpi", "tvdpi", "xxxhdpi"
-            compatibleScreens 'small', 'normal', 'large', 'xlarge'
-        }
+  buildTypes {
+    debug {
+      minifyEnabled false
+      applicationIdSuffix ".debug"
+      signingConfig signingConfigs.debug
+      testCoverageEnabled true
     }
-    signingConfigs {
-        release {
-            storeFile file('../certs/release.keystore')
-            def (releaseKeystorePassword, releaseKeyAlias, releaseKeyPassword) = signingConfig()
-            storePassword releaseKeystorePassword
-            keyAlias releaseKeyAlias
-            keyPassword releaseKeyPassword
-        }
+    release {
+      minifyEnabled false //TODO configurarlo y activarlo
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
+    }
+  }
 
-        debug {
-            storeFile file('../certs/debug.keystore')
-        }
+  // https://developer.android.com/tools/building/multidex.html#dev-build
+  productFlavors {
+    dev {
+      minSdkVersion 21
     }
+    prod {
+      minSdkVersion 15
+    }
+  }
 
-    buildTypes {
-        debug {
-            minifyEnabled false
-            applicationIdSuffix ".debug"
-            signingConfig signingConfigs.debug
-            testCoverageEnabled true
-        }
-        release {
-            minifyEnabled false //TODO configurarlo y activarlo
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
 
-    // https://developer.android.com/tools/building/multidex.html#dev-build
-    productFlavors {
-        dev {
-            minSdkVersion 21
-        }
-        prod {
-            minSdkVersion 15
-        }
-    }
+  packagingOptions {
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/ASL2.0'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+    exclude 'META-INF/notice.txt'
+    exclude 'META-INF/license.txt'
+    exclude 'LICENSE.txt'
+    exclude 'lib/mips/libRSSupport.so'
+  }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'LICENSE.txt'
-        exclude 'lib/mips/libRSSupport.so'
-    }
-
-    lintOptions {
-        abortOnError false
-    }
+  lintOptions {
+    abortOnError false
+  }
 }
 
 dependencies {
-    compile project(':domain')
+  compile project(':domain')
+  provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+  debugCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
+  debugCompile 'com.github.pedrovgs:lynx:1.4'
+  testCompile 'junit:junit:4.12'
+  testCompile "org.mockito:mockito-core:1.9.5"
+  testCompile 'org.assertj:assertj-core:1.7.0'
+  androidTestCompile('com.squareup.assertj:assertj-android:1.0.0') {
+    exclude group: 'com.android.support'
+  }
 
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:support-annotations:23.4.0'
-    compile 'com.android.support:customtabs:23.4.0'
-    compile 'com.android.support:multidex:1.0.1'
+  compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    transitive = true;
+  }
+  // If you want to use the GPU Filters
 
-    compile 'com.google.android.gms:play-services-gcm:9.0.0'
-    compile 'com.google.android.gms:play-services-analytics:9.0.0'
+  androidTestCompile 'com.android.support.test:runner:0.4'
+  androidTestCompile 'com.android.support.test:rules:0.4'
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+  androidTestCompile 'com.android.support:support-annotations:24.1.1'
+  androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
+    exclude group: 'com.android.support', module: 'appcompat'
+    exclude group: 'com.android.support', module: 'support-v4'
+    exclude module: 'recyclerview-v7'
+  }
+  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+  testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
-    compile 'com.sloydev:jsonadapters-core:0.1.0'
-    compile 'com.sloydev:jsonadapters-gson:0.1.1'
-
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
-
-    compile 'com.squareup:otto:1.3.4'
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
-
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:2.4.1'
-
-    compile 'de.hdodenhof:circleimageview:1.2.0'
-
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    debugCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
-
-    compile 'org.threeten:threetenbp:1.3.1'
-
-    compile 'com.cocosw:bottomsheet:1.+@aar'
-
-    compile 'com.github.chrisbanes.photoview:library:1.2.4'
-
-    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
-
-    compile 'com.facebook.stetho:stetho:1.1.0'
-    compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
-
-    compile 'cat.ereza:customactivityoncrash:1.4.0'
-
-    compile 'com.github.paolorotolo:appintro:3.2.0'
-
-    compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
-
-    compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile 'com.github.bumptech.glide:okhttp-integration:1.3.1@aar'
-
-    debugCompile 'com.github.pedrovgs:lynx:1.4'
-    compile 'com.sloydev:okresponsefaker:1.0.0'
-    compile 'com.sloydev:okresponsefaker-json:1.0.0'
-
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
-    testCompile 'org.assertj:assertj-core:1.7.0'
-    androidTestCompile('com.squareup.assertj:assertj-android:1.0.0') {
-        exclude group: 'com.android.support'
-    }
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
-
-    compile 'com.fewlaps.quitnowcache:quitnow-cache:1.5.0'
-
-    compile 'io.reactivex:rxjava:1.0.10'
-
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
-
-    compile 'jp.wasabeef:glide-transformations:1.3.1'
-    // If you want to use the GPU Filters
-    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
-
-    compile 'com.android.support:palette-v7:23.4.0'
-
-    androidTestCompile 'com.android.support.test:runner:0.4'
-    androidTestCompile 'com.android.support.test:rules:0.4'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
-    androidTestCompile 'com.android.support:support-annotations:23.4.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
-        exclude group: 'com.android.support', module: 'appcompat'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude module: 'recyclerview-v7'
-    }
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    compile 'com.artjimlop:altex-image-downloader:0.0.4'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+  androidTestCompile 'com.android.support.test:runner:0.4'
+  androidTestCompile 'com.android.support.test:rules:0.4'
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+  androidTestCompile 'com.android.support:support-annotations:24.1.1'
+  androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
+    exclude group: 'com.android.support', module: 'appcompat'
+    exclude group: 'com.android.support', module: 'support-v4'
+    exclude module: 'recyclerview-v7'
+  }
+  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+  testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+  compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+  compile 'com.artjimlop:altex-image-downloader:0.0.4'
+  compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+  compile 'com.artjimlop:altex-image-downloader:0.0.4'
+  compile 'com.labo.kaji:swipeawaydialog:0.1.0'
+  compile 'com.roughike:bottom-bar:1.3.9'
+  compile 'com.ncapdevi:frag-nav:1.0.3'
+  compile 'com.android.support:appcompat-v7:24.1.1'
+  compile 'com.android.support:design:24.1.1'
+  compile 'com.android.support:recyclerview-v7:24.1.1'
+  compile 'com.android.support:customtabs:24.1.1'
+  compile 'com.android.support:multidex:1.0.1'
+  compile 'com.google.android.gms:play-services-gcm:9.2.1'
+  compile 'com.google.android.gms:play-services-analytics:9.2.1'
+  compile 'com.sloydev:jsonadapters-core:0.1.0'
+  compile 'com.sloydev:jsonadapters-gson:0.1.1'
+  compile 'com.squareup.dagger:dagger:1.2.2'
+  compile 'com.squareup:otto:1.3.4'
+  compile 'com.squareup.okhttp:okhttp:2.2.0'
+  compile 'com.jakewharton:butterknife:7.0.1'
+  compile 'com.jakewharton.timber:timber:2.4.1'
+  compile 'de.hdodenhof:circleimageview:1.2.0'
+  compile 'com.squareup.retrofit:retrofit:1.9.0'
+  compile 'org.threeten:threetenbp:1.3.1'
+  compile 'com.cocosw:bottomsheet:1.+@aar'
+  compile 'com.github.chrisbanes.photoview:library:1.2.4'
+  compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+  compile 'com.facebook.stetho:stetho:1.1.0'
+  compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
+  compile 'cat.ereza:customactivityoncrash:1.4.0'
+  compile 'com.github.paolorotolo:appintro:3.2.0'
+  compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
+  compile 'com.github.bumptech.glide:glide:3.6.1'
+  compile 'com.github.bumptech.glide:okhttp-integration:1.3.1@aar'
+  compile 'com.sloydev:okresponsefaker:1.0.0'
+  compile 'com.sloydev:okresponsefaker-json:1.0.0'
+  compile 'com.fewlaps.quitnowcache:quitnow-cache:1.5.0'
+  compile 'io.reactivex:rxjava:1.0.10'
+  compile 'io.reactivex:rxandroid:1.0.1'
+  compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
+  compile 'jp.wasabeef:glide-transformations:1.3.1'
+  compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+  compile 'com.android.support:palette-v7:24.1.1'
+  compile 'com.android.support:support-v4:24.1.1'
+  compile 'com.android.support:cardview-v7:24.1.1'
+  compile 'com.makeramen:roundedimageview:2.2.1'
+  compile 'com.yayandroid:ParallaxRecyclerView:1.1'
+  compile 'com.sackcentury:shinebutton:0.1.4'
 }
 
 /**
@@ -247,7 +254,7 @@ dependencies {
  * @return keystorePassword , keyAlias, keyPassword
  */
 def signingConfig() {
-    signingConfigFromFile() ?: signinConfigFromEnvironment()
+  signingConfigFromFile() ?: signinConfigFromEnvironment()
 }
 
 /**
@@ -255,8 +262,8 @@ def signingConfig() {
  * @return keystorePassword , keyAlias, keyPassword
  */
 def signinConfigFromEnvironment() {
-    println '-> signinConfigFromEnvironment'
-    [System.getenv('STORE_PASSWORD'), System.getenv('KEY_ALIAS'), System.getenv('KEY_PASSWORD')]
+  println '-> signinConfigFromEnvironment'
+  [System.getenv('STORE_PASSWORD'), System.getenv('KEY_ALIAS'), System.getenv('KEY_PASSWORD')]
 }
 
 /**
@@ -264,30 +271,30 @@ def signinConfigFromEnvironment() {
  * @return keystorePassword , keyAlias, keyPassword
  */
 def signingConfigFromFile() {
-    println '-> signingConfigFromFile'
-    def Properties props = new Properties()
-    def propFile = file('signing.properties')
+  println '-> signingConfigFromFile'
+  def Properties props = new Properties()
+  def propFile = file('signing.properties')
 
-    if (propFile.canRead()) {
-        props.load(new FileInputStream(propFile))
+  if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
 
-        if (props != null &&
-          props.containsKey('STORE_PASSWORD') &&
-          props.containsKey('KEY_ALIAS') &&
-          props.containsKey('KEY_PASSWORD')) {
+    if (props != null &&
+        props.containsKey('STORE_PASSWORD') &&
+        props.containsKey('KEY_ALIAS') &&
+        props.containsKey('KEY_PASSWORD')) {
 
-            def keystorePassword = props['STORE_PASSWORD']
-            def keyAlias = props['KEY_ALIAS']
-            def keyPassword = props['KEY_PASSWORD']
+      def keystorePassword = props['STORE_PASSWORD']
+      def keyAlias = props['KEY_ALIAS']
+      def keyPassword = props['KEY_PASSWORD']
 
-            return [keystorePassword, keyAlias, keyPassword]
-        } else {
-            println 'signing.properties found but some entries are missing'
-        }
+      return [keystorePassword, keyAlias, keyPassword]
     } else {
-        println 'signing.properties not found'
+      println 'signing.properties found but some entries are missing'
     }
-    return null
+  } else {
+    println 'signing.properties not found'
+  }
+  return null
 }
 
 //TODO Wrap this thing into an indepentent plugin
@@ -299,36 +306,36 @@ import com.amazonaws.services.s3.model.PutObjectRequest
 
 def publishAllTask = project.tasks.create("publishAllApksToS3")
 android.applicationVariants.all { variant ->
-    def task = project.tasks.create("publish${variant.name.capitalize()}ApkToS3") << {
+  def task = project.tasks.create("publish${variant.name.capitalize()}ApkToS3") << {
 
-        def keyId = System.getenv('AWS_S3_KEY_ID')
-        def keySecret = System.getenv('AWS_S3_KEY_SECRET')
+    def keyId = System.getenv('AWS_S3_KEY_ID')
+    def keySecret = System.getenv('AWS_S3_KEY_SECRET')
 
-        if (!keyId || !keySecret) {
-            throw new GradleException("Please set AWS_S3_KEY_ID and AWS_S3_KEY_SECRET properties.")
-        }
-        def bucket = "shootr-android-distribution"
-        def File apkFile = variant.outputs[0].outputFile
-        println 'apkFile: ' + apkFile
-
-        def contentType = "application/vnd.android.package-archive"
-
-        AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials(keyId, keySecret));
-
-        def request = new PutObjectRequest(bucket, apkFile.getName(), apkFile)
-
-        def metadata = new ObjectMetadata()
-        metadata.setContentType(contentType)
-        request.setMetadata(metadata)
-
-        s3client.putObject(request)
-
-        // Optional
-        def requestLatest = new PutObjectRequest(bucket, "Shootr-latest.apk", apkFile)
-        requestLatest.setMetadata(metadata)
-        s3client.putObject(requestLatest)
+    if (!keyId || !keySecret) {
+      throw new GradleException("Please set AWS_S3_KEY_ID and AWS_S3_KEY_SECRET properties.")
     }
+    def bucket = "shootr-android-distribution"
+    def File apkFile = variant.outputs[0].outputFile
+    println 'apkFile: ' + apkFile
 
-    task.dependsOn variant.assemble
-    publishAllTask.dependsOn task
+    def contentType = "application/vnd.android.package-archive"
+
+    AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials(keyId, keySecret));
+
+    def request = new PutObjectRequest(bucket, apkFile.getName(), apkFile)
+
+    def metadata = new ObjectMetadata()
+    metadata.setContentType(contentType)
+    request.setMetadata(metadata)
+
+    s3client.putObject(request)
+
+    // Optional
+    def requestLatest = new PutObjectRequest(bucket, "Shootr-latest.apk", apkFile)
+    requestLatest.setMetadata(metadata)
+    s3client.putObject(requestLatest)
+  }
+
+  task.dependsOn variant.assemble
+  publishAllTask.dependsOn task
 }

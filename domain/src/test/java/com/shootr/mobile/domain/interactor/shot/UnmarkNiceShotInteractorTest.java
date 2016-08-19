@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotType;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;

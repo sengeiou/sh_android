@@ -4,137 +4,156 @@ import com.shootr.mobile.data.entity.StreamEntity;
 
 public class ActivityApiEntity {
 
-    private String idActivity;
+  private String idActivity;
 
-    private String idUser;
-    private String username;
+  private String idUser;
+  private String username;
 
-    private String idStream;
-    private String streamTitle;
+  private String idStream;
+  private String streamTitle;
 
-    private String comment;
-    private String type;
+  private String comment;
+  private String type;
 
-    private String idShot;
+  private String idShot;
 
-    private Long birth;
+  private Long birth;
 
-    private Long modified;
-    private Integer revision;
+  private Long modified;
+  private Integer revision;
 
-    private EmbedUserApiEntity user;
-    private EmbedUserApiEntity targetUser;
-    private StreamEntity stream;
+  private EmbedUserApiEntity user;
+  private EmbedUserApiEntity targetUser;
+  private StreamEntity stream;
 
-    public String getIdActivity() {
-        return idActivity;
-    }
+  private String idPoll;
+  private String pollQuestion;
 
-    public void setIdActivity(String idActivity) {
-        this.idActivity = idActivity;
-    }
+  public String getIdActivity() {
+    return idActivity;
+  }
 
-    public String getIdUser() {
-        return idUser;
-    }
+  public void setIdActivity(String idActivity) {
+    this.idActivity = idActivity;
+  }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
+  public String getIdUser() {
+    return idUser;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setIdUser(String idUser) {
+    this.idUser = idUser;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getIdStream() {
-        return idStream;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setIdStream(String idStream) {
-        this.idStream = idStream;
-    }
+  public String getIdStream() {
+    return idStream;
+  }
 
-    public String getStreamTitle() {
-        return streamTitle;
-    }
+  public void setIdStream(String idStream) {
+    this.idStream = idStream;
+  }
 
-    public void setStreamTitle(String streamTitle) {
-        this.streamTitle = streamTitle;
-    }
+  public String getStreamTitle() {
+    return streamTitle;
+  }
 
-    public String getComment() {
-        return comment;
-    }
+  public void setStreamTitle(String streamTitle) {
+    this.streamTitle = streamTitle;
+  }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+  public String getComment() {
+    return comment;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public Long getBirth() {
-        return birth;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public void setBirth(Long birth) {
-        this.birth = birth;
-    }
+  public Long getBirth() {
+    return birth;
+  }
 
-    public Long getModified() {
-        return modified;
-    }
+  public void setBirth(Long birth) {
+    this.birth = birth;
+  }
 
-    public void setModified(Long modified) {
-        this.modified = modified;
-    }
+  public Long getModified() {
+    return modified;
+  }
 
-    public Integer getRevision() {
-        return revision;
-    }
+  public void setModified(Long modified) {
+    this.modified = modified;
+  }
 
-    public void setRevision(Integer revision) {
-        this.revision = revision;
-    }
+  public Integer getRevision() {
+    return revision;
+  }
 
-    public EmbedUserApiEntity getUser() {
-        return user;
-    }
+  public void setRevision(Integer revision) {
+    this.revision = revision;
+  }
 
-    public void setUser(EmbedUserApiEntity user) {
-        this.user = user;
-    }
+  public EmbedUserApiEntity getUser() {
+    return user;
+  }
 
-    public StreamEntity getStream() {
-        return stream;
-    }
+  public void setUser(EmbedUserApiEntity user) {
+    this.user = user;
+  }
 
-    public void setStream(StreamEntity stream) {
-        this.stream = stream;
-    }
+  public StreamEntity getStream() {
+    return stream;
+  }
 
-    public String getIdShot() {
-        return idShot;
-    }
+  public void setStream(StreamEntity stream) {
+    this.stream = stream;
+  }
 
-    public void setIdShot(String idShot) {
-        this.idShot = idShot;
-    }
+  public String getIdShot() {
+    return idShot;
+  }
 
-    public EmbedUserApiEntity getTargetUser() {
-        return targetUser;
-    }
+  public void setIdShot(String idShot) {
+    this.idShot = idShot;
+  }
 
-    public void setTargetUser(EmbedUserApiEntity targetUser) {
-        this.targetUser = targetUser;
-    }
+  public String getIdPoll() {
+    return idPoll;
+  }
+
+  public void setIdPoll(String idPoll) {
+    this.idPoll = idPoll;
+  }
+
+  public String getPollQuestion() {
+    return pollQuestion;
+  }
+
+  public void setPollQuestion(String pollQuestion) {
+    this.pollQuestion = pollQuestion;
+  }
+
+  public EmbedUserApiEntity getTargetUser() {
+    return targetUser;
+  }
+
+  public void setTargetUser(EmbedUserApiEntity targetUser) {
+    this.targetUser = targetUser;
+  }
 }

@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderViewOnlyStreamTimelineInteractor;

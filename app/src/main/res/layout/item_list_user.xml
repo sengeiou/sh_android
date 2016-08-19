@@ -5,8 +5,8 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal"
-  android:paddingBottom="8dp"
-  android:paddingTop="8dp">
+  android:paddingBottom="12dp"
+  android:paddingTop="12dp">
 
     <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/user_avatar"
       android:layout_width="48dp"
@@ -30,24 +30,24 @@
 
         <TextView android:id="@+id/user_name"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:singleLine="true"
-          android:textColor="@color/gray_10"
-          android:textSize="17sp"
-          tools:text="Rafa"
-          android:paddingRight="8dp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/gray_10"
+        android:textSize="17sp"
+        tools:text="Rafa"
+        android:paddingRight="8dp" />
 
         <TextView android:id="@+id/user_username"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:ellipsize="end"
-          android:singleLine="true"
-          android:textColor="@color/gray_60"
-          android:textSize="14sp"
-          android:visibility="gone"
-          tools:text="rafa"
-          tools:visibility="visible" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/gray_60"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:text="rafa"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

@@ -3,7 +3,7 @@ package com.shootr.mobile.util;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
-import com.shootr.mobile.ui.widgets.UsernameSpan;
+import com.shootr.mobile.ui.widgets.NicerSpan;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,12 +26,12 @@ public class NicerTextSpannableBuilder implements TextSpannableBuilder {
             int end = matcher.end();
             String username = spannableBuilder.subSequence(start, end - 1).toString();
 
-            UsernameSpan usernameClickSpan = new UsernameSpan(username) {
+            NicerSpan nicerSpan = new NicerSpan(username) {
                 @Override public void onUsernameClick(String username) {
                     clickListener.onUsernameClick(username);
                 }
             };
-            spannableBuilder.setSpan(usernameClickSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableBuilder.setSpan(nicerSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableBuilder.subSequence(0, comment.length() - 2);
     }

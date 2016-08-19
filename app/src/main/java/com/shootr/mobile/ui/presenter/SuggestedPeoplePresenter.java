@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.SuggestedPeople;
+import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;

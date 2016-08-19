@@ -39,9 +39,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_muted) ImageView mute;
     @Bind(R.id.stream_watchers) TextView watchers;
-    @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
+    @Nullable @Bind(R.id.stream_subtitle_description) TextView subtitleDescription;
     @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;
@@ -87,7 +87,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
         setMutedVisibility(streamResultModel);
-        renderSubttile(streamResultModel.getStreamModel());
+        renderSubtitle(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || showsFavoritesText) {
             watchers.setVisibility(View.VISIBLE);
@@ -96,7 +96,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             watchers.setVisibility(View.GONE);
         }
         setupStreamPicture(streamResultModel);
-        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
     public void render(StreamResultModel streamResultModel, boolean showSeparator,
@@ -104,10 +103,10 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
         setMutedVisibility(streamResultModel);
-        renderSubttile(streamResultModel.getStreamModel());
+        renderSubtitle(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(streamResultModel))) {
-            renderHolderSubttile(streamResultModel);
+            renderHolderSubtitle(streamResultModel);
             if (watchersCount > 0) {
                 watchers.setVisibility(View.VISIBLE);
                 watchers.setText(String.valueOf(watchersCount));
@@ -117,9 +116,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             watchers.setVisibility(View.GONE);
         }
-
         setupStreamPicture(streamResultModel);
-        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
     private void setupStreamPicture(StreamResultModel streamResultModel) {
@@ -192,17 +189,34 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    protected void renderSubttile(StreamModel stream) {
-        if (subtitle != null) {
-            if (isWatchingStateEnabled) {
-                subtitle.setText(getConnectedSubtitle(stream));
+    protected void renderSubtitle(StreamModel stream) {
+        if (isWatchingStateEnabled) {
+            setupConnectedSubtitle(stream);
+        } else {
+            setupAuthorAndDescriptionSubtitle(stream);
+        }
+    }
+
+    private void setupConnectedSubtitle(StreamModel stream) {
+        if (subtitle != null && subtitleDescription != null) {
+            subtitle.setText(getConnectedSubtitle(stream));
+            subtitleDescription.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
+        if (subtitle != null && subtitleDescription != null) {
+            subtitle.setText(stream.getAuthorUsername());
+            if (stream.getDescription() != null) {
+                subtitleDescription.setVisibility(View.VISIBLE);
+                subtitleDescription.setText(stream.getDescription());
             } else {
-                subtitle.setText(getAuthorSubtitleWithDescription(stream));
+                subtitleDescription.setVisibility(View.GONE);
             }
         }
     }
 
-    private void renderHolderSubttile(StreamResultModel stream) {
+    private void renderHolderSubtitle(StreamResultModel stream) {
         if (subtitle != null) {
             if (isWatchingStateEnabled) {
                 subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
@@ -218,26 +232,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private CharSequence getConnectedSubtitle(StreamModel stream) {
-        //TODO can be null
         if (streamIsMuted(stream.getIdStream())) {
             return new Truss().pushSpan(new TextAppearanceSpan(itemView.getContext(),
               R.style.InlineConnectedAppearance)).append(connectedAndMuted).popSpan().build();
         } else {
             return new Truss().pushSpan(new TextAppearanceSpan(itemView.getContext(),
               R.style.InlineConnectedAppearance)).append(connected).popSpan().build();
-        }
-    }
-
-    private CharSequence getAuthorSubtitleWithDescription(StreamModel stream) {
-        if (stream.getDescription() == null) {
-            return stream.getAuthorUsername();
-        } else {
-            return new Truss().append(stream.getAuthorUsername())
-              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
-              .append(" ")
-              .append(stream.getDescription())
-              .popSpan()
-              .build();
         }
     }
 

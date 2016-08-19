@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.Nicer;
+import com.shootr.mobile.domain.model.shot.Nicer;
 import java.util.List;
 
 public interface NicerRepository {

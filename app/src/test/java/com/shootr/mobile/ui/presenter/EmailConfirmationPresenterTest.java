@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.ChangeEmailInteractor;
@@ -31,6 +31,7 @@ public class EmailConfirmationPresenterTest {
     public static final String EMAIL = "email@email.com";
     public static final String INVALID_EMAIL = "invalid_email";
     public static final String ANOTHER_EMAIL = "another_email@gmail.com";
+    public static final String EMPTY_EMAIL = "";
 
     @Mock EmailConfirmationView emailConfirmationView;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -58,7 +59,7 @@ public class EmailConfirmationPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
         setupConfirmEmailCallbackCompleted();
 
-        presenter.requestEmailConfirmataionIfNotConfirmed();
+        presenter.initialize(emailConfirmationView, EMAIL);
 
         verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
@@ -145,7 +146,7 @@ public class EmailConfirmationPresenterTest {
     }
 
     @Test public void shouldShowErrorWhenEmailChangedAndNoConnection() {
-        setupoChangeEmailInteractorErrorCallback();
+        setupChangeEmailInteractorErrorCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
         presenter.done(ANOTHER_EMAIL);
@@ -153,7 +154,16 @@ public class EmailConfirmationPresenterTest {
         verify(emailConfirmationView).showError(anyString());
     }
 
-    private void setupoChangeEmailInteractorErrorCallback() {
+    @Test public void shouldNotShowAlertWhenEmailIsEmptyAndSocialLogin() throws Exception {
+        setupConfirmEmailCallbackCompleted();
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmedAndSocialLogin());
+
+        presenter.initialize(emailConfirmationView, EMPTY_EMAIL);
+
+        verify(emailConfirmationView, never()).showConfirmationEmailSentAlert(eq(EMAIL), any(Runnable.class));
+    }
+
+    private void setupChangeEmailInteractorErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
@@ -202,6 +212,13 @@ public class EmailConfirmationPresenterTest {
     private User userWithoutEmailConfirmed() {
         User user = new User();
         user.setEmailConfirmed(false);
+        return user;
+    }
+
+    private User userWithoutEmailConfirmedAndSocialLogin() {
+        User user = new User();
+        user.setEmailConfirmed(false);
+        user.setSocialLogin(true);
         return user;
     }
 

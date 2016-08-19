@@ -9,4 +9,7 @@ public interface InitialsLoader {
   Integer getColorForLetters(String letters);
 
   TextDrawable getTextDrawable(String initials, int backgroundColor);
+
+  TextDrawable getCustomTextDrawable(String initials, int backgroundColor, int width, int height,
+      int fontSize);
 }

@@ -2,8 +2,8 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.data.entity.Synchronized;
-import com.shootr.mobile.domain.Activity;
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -48,6 +48,8 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
         }
 
         activity.setIdAuthorStream(activityEntity.getIdStreamAuthor());
+        activity.setIdPoll(activityEntity.getIdPoll());
+        activity.setPollQuestion(activityEntity.getPollQuestion());
 
         return activity;
     }
@@ -89,6 +91,9 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
         activityEntity.setIdTargetUser(activity.getIdTargetUser());
 
         activityEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
+        activityEntity.setIdPoll(activity.getIdPoll());
+        activityEntity.setPollQuestion(activity.getPollQuestion());
+
         return activityEntity;
     }
 }

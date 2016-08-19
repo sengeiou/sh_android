@@ -27,8 +27,8 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -46,7 +46,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @BindString(R.string.analytics_screen_user_streams) String analyticsScreenuserStreams;
 
     @Inject ListingListPresenter presenter;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject InitialsLoader initialsLoader;
@@ -135,7 +135,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(this, stream.getStreamModel());
+        Intent shareIntent = shareManager.shareStreamIntent(this, stream.getStreamModel());
         Intents.maybeStartActivity(this, shareIntent);
     }
 

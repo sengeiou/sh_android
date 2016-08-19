@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -18,6 +19,7 @@ import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.NicersPresenter;
 import com.shootr.mobile.ui.views.NicersView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import java.util.List;
 import javax.inject.Inject;
@@ -31,6 +33,10 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
 
     @Inject FeedbackMessage feedbackMessage;
     @Inject NicersPresenter presenter;
+    @Inject AnalyticsTool analyticsTool;
+
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
     private UserListAdapter adapter;
 
@@ -116,6 +122,8 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
 
     @Override public void follow(int position) {
         presenter.followUser(adapter.getItem(position));
+        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+            analyticsLabelFollow);
     }
 
     @Override public void unFollow(int position) {
@@ -134,6 +142,6 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
 
     @OnItemClick(R.id.nicerslist_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+        startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
     }
 }

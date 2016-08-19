@@ -26,8 +26,6 @@ public interface ProfileView {
 
     void setFollowing(Boolean following);
 
-    void showListing();
-
     void setUserInfo(UserModel userModel);
 
     void showAllShotsButton();
@@ -59,6 +57,8 @@ public interface ProfileView {
     void showUnfollowConfirmation(String username);
 
     void goToAllShots(String idUser);
+
+    void showUserSettings();
 
     void showLatestShots();
 
@@ -111,4 +111,8 @@ public interface ProfileView {
     void resetTimelineAdapter();
 
     void showHideShotConfirmation(final String idShot);
+
+    void showFriendsButton();
+
+    void hideFriendsButton();
 }

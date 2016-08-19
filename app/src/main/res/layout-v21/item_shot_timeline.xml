@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:paddingBottom="4dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/shot_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/shot_avatar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        >
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:id="@+id/shot_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/gray_10"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Ignasi"
+            />
+
+        <TextView
+            android:id="@+id/shot_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/shot_user_name"
+            android:layout_alignBottom="@+id/shot_user_name"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/gray_60"
+            android:textSize="12sp"
+            tools:text="22m"
+            />
+
+      </RelativeLayout>
+
+      <com.shootr.mobile.ui.widgets.ClickableTextView
+          android:id="@+id/shot_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingRight="12dp"
+          android:textColor="@color/material_black"
+          android:textColorLink="@color/links"
+          android:textSize="14sp"
+          tools:text="Who's the referee?"
+          tools:visibility ="visible"
+          />
+      <FrameLayout
+          android:id="@+id/shot_media_content"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:focusable="false"
+          android:layout_marginRight="24dp"
+          android:layout_marginTop="4dp"
+          android:focusableInTouchMode="false"
+          >
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shot_image_landscape"
+            android:layout_width="match_parent"
+            android:layout_height="156dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:transitionName="shared_image"
+            app:riv_corner_radius="10dp"
+            tools:src="@drawable/sample_avatar"
+            tools:visibility="visible"
+            />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shot_image_portrait"
+            android:layout_width="168dp"
+            android:layout_height="296dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            android:transitionName="shared_image"
+            app:riv_corner_radius="10dp"
+            tools:src="@drawable/sample_avatar"
+            tools:visibility="gone"
+            />
+
+        <FrameLayout
+            android:id="@+id/shot_video_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/round_corner"
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_gravity="left|bottom"
+            >
+
+          <TextView
+              android:id="@+id/shot_video_title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="8dp"
+              android:textColor="@color/white"
+              tools:text="Titulo del video"
+              />
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:scaleType="center"
+              android:src="@drawable/ic_video_play_circle_48_white"
+              />
+
+          <TextView
+              android:id="@+id/shot_video_duration"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="right|bottom"
+              android:layout_margin="8dp"
+              android:textColor="@color/white"
+              tools:text="0:00"
+              />
+        </FrameLayout>
+      </FrameLayout>
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="24dp"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:paddingLeft="64dp"
+      android:baselineAligned="false"
+      >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingRight="24dp"
+        >
+      <ImageView
+          android:id="@+id/shot_reply_button_no_replies"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:src="@drawable/ic_reply_gray_300"
+          android:visibility="gone"
+          tools:visibility="gone"
+          />
+      <ImageView
+          android:id="@+id/shot_reply_button"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:src="@drawable/ic_reply_gray_600"
+          android:visibility="gone"
+          tools:visibility="visible"
+          />
+
+      <TextView
+          android:id="@+id/shot_reply_count"
+          android:layout_width="24dp"
+          android:layout_height="match_parent"
+          android:gravity="bottom"
+          android:src="@drawable/ic_reply_gray_600"
+          android:textColor="@color/gray_80"
+          android:textSize="12sp"
+          android:visibility="invisible"
+          tools:text="8"
+          android:paddingLeft="8dp"
+          tools:visibility="visible"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+      <com.shootr.mobile.ui.widgets.NiceButtonView
+          android:id="@+id/shot_nice_button"
+          android:layout_width="24dp"
+          android:layout_height="match_parent"
+          android:visibility="visible"
+          style="@style/HearthButton"
+          />
+
+      <LinearLayout
+          android:id="@+id/nices_container"
+          android:layout_width="24dp"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          android:visibility="visible"
+          tools:visibility="visible"
+          >
+        <TextView
+            android:id="@+id/shot_nice_count"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="bottom"
+            android:paddingLeft="8dp"
+            android:textColor="@color/gray_80"
+            android:textSize="12sp"
+            tools:text="8"
+            />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/shot_hide_button_container"
+          android:layout_width="48dp"
+          android:layout_height="@dimen/nice_button_size"
+          android:layout_marginTop="@dimen/nice_button_margin_top_normal"
+          android:gravity="center|bottom|right"
+          android:visibility="gone"
+          >
+
+        <ImageView
+            android:id="@+id/shot_hide_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="-4dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_action_close_gray60_24_nopadding"
+            />
+      </LinearLayout>
+
+    </LinearLayout>
+  </LinearLayout>
+
+</LinearLayout>

@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
@@ -691,14 +691,6 @@ public class ProfilePresenterTest {
         verify(profileView).showLogoutButton();
     }
 
-    @Test public void shouldShowListing() throws Exception {
-        setupUnverifiedUserById();
-
-        profilePresenter.initializeWithIdUser(profileView, ID_USER);
-
-        verify(profileView).showListing();
-    }
-
     @Test public void shouldShowAvatarPhotoIfNotCurrentUserAndHasPhoto() throws Exception {
         setupUserById();
 
@@ -839,6 +831,12 @@ public class ProfilePresenterTest {
         profilePresenter.showUnpinShotAlert(ID_SHOT);
 
         verify(profileView).showHideShotConfirmation(ID_SHOT);
+    }
+
+    @Test public void shouldNotShowChangePasswordOptionIfUserHasSocialLogin() throws Exception {
+        setupUserById();
+
+        verify(profileView, never()).showChangePasswordButton();
     }
 
     private void setupUserInBannedIdsCallback() {

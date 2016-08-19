@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.datasource.shot;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.ShotManager;
-import com.shootr.mobile.domain.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.util.List;
 import javax.inject.Inject;
 

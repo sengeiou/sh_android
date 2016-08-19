@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -39,10 +40,10 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.scroll) ScrollView scroll;
-    @Bind(R.id.profile_edit_name) TextView name;
+    @Bind(R.id.profile_edit_name) EditText name;
     @Bind(R.id.profile_edit_username) TextView username;
     @Bind(R.id.profile_edit_website) TextView website;
-    @Bind(R.id.profile_edit_bio) TextView bio;
+    @Bind(R.id.profile_edit_bio) EditText bio;
     @Bind(R.id.profile_edit_email) TextView email;
     @BindString(R.string.profile_updated) String profileUpdated;
     @BindString(R.string.communication_error) String communicationError;

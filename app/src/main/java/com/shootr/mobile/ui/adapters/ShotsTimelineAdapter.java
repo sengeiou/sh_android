@@ -9,7 +9,8 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.LoadingViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShotTimelineViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -26,8 +27,6 @@ import java.util.List;
 public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private final int VIEW_TYPE_ITEM = 0;
-  private final int VIEW_TYPE_LOADING = 1;
-
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
   private final OnVideoClickListener videoClickListener;
@@ -36,18 +35,21 @@ public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.View
   private final OnReplyShotListener onReplyShotListener;
   private final AndroidTimeUtils timeUtils;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-  private final OnHideClickListener onHideClickListener;
   private final ShotClickListener shotClickListener;
   private final OnShotLongClick onShotLongClick;
+  private final OnImageLongClickListener onLongClickListener;
+  private final View.OnTouchListener onTouchListener;
+  private final OnImageClickListener onImageClickListener;
+  private final Context context;
 
   private List<ShotModel> shots;
-  private boolean isCurrentUser;
 
   public ShotsTimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener,
-      Boolean isCurrentUser, ShotClickListener shotClickListener, OnShotLongClick onShotLongClick) {
+      OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
+      OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
+      OnImageClickListener onImageClickListener) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -55,21 +57,23 @@ public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.View
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.onReplyShotListener = onReplyShotListener;
+    this.context = context;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
-    this.onHideClickListener = onHideClickListener;
-    this.isCurrentUser = isCurrentUser;
     this.shotClickListener = shotClickListener;
     this.onShotLongClick = onShotLongClick;
+    this.onLongClickListener = onLongClickListener;
+    this.onTouchListener = onTouchListener;
+    this.onImageClickListener = onImageClickListener;
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     if (viewType == VIEW_TYPE_ITEM) {
-      View v =
-          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_shot, parent, false);
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_shot_timeline, parent, false);
       return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
-          onNiceShotListener, onReplyShotListener, onHideClickListener, onUsernameClickListener,
-          timeUtils, imageLoader, shotTextSpannableBuilder, isCurrentUser);
+          onNiceShotListener, onReplyShotListener, onUsernameClickListener,
+          timeUtils, imageLoader, shotTextSpannableBuilder);
     } else {
       View v =
           LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_shot, parent, false);
@@ -78,13 +82,14 @@ public class ShotsTimelineAdapter extends RecyclerView.Adapter<RecyclerView.View
   }
 
   @Override public int getItemViewType(int position) {
+    int VIEW_TYPE_LOADING = 1;
     return shots.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
   }
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder instanceof ShotTimelineViewHolder) {
-      ((ShotTimelineViewHolder) holder).render(shots.get(position), false, shotClickListener,
-          onShotLongClick);
+      ((ShotTimelineViewHolder) holder).render(shots.get(position), shotClickListener,
+          onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener);
     } else if (holder instanceof LoadingViewHolder) {
       ((LoadingViewHolder) holder).render();
     }

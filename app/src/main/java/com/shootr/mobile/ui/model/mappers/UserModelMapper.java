@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ public class UserModelMapper {
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        userModel.setSocialLogin(user.isSocialLogin());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {

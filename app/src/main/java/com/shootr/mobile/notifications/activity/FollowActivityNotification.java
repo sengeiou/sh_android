@@ -7,7 +7,7 @@ import android.support.v4.app.NotificationCompat;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
-import com.shootr.mobile.ui.activities.ProfileContainerActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.util.ImageLoader;
 
 public class FollowActivityNotification extends SingleActivityNotification {
@@ -30,7 +30,7 @@ public class FollowActivityNotification extends SingleActivityNotification {
 
     protected PendingIntent getOpenProfileNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PROFILE);
-        intent.putExtra(ProfileContainerActivity.EXTRA_USER, idUser);
+        intent.putExtra(ProfileActivity.EXTRA_USER, idUser);
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

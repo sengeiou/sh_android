@@ -53,9 +53,9 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
-import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
@@ -93,10 +93,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @BindString(R.string.shared_stream_notification) String streamNotification;
     @BindString(R.string.analytics_screen_stream_detail) String analyticsScreenStreamDetail;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_action_mute) String analyticsActionMute;
+    @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
+    @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
-    @Inject IntentFactory intentFactory;
+    @Inject ShareManager shareManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject WritePermissionManager writePermissionManager;
@@ -166,6 +172,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           new OnFollowUnfollowListener() {
               @Override public void onFollow(UserModel user) {
                   streamDetailPresenter.follow(user.getIdUser());
+                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
+                      analyticsLabelFollow);
               }
 
               @Override public void onUnfollow(final UserModel user) {
@@ -199,6 +207,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamVia();
+                analyticsTool.analyticsSendAction(getBaseContext(),
+                    analyticsActionExternalShare,
+                    analyticsLabelExternalShare);
             }
         }).show();
     }
@@ -482,7 +493,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void navigateToUser(String userId) {
-        Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
+        Intent userProfileIntent = ProfileActivity.getIntent(this, userId);
         startActivity(userProfileIntent);
     }
 
@@ -571,7 +582,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void shareStreamVia(StreamModel stream) {
-        Intent shareIntent = intentFactory.shareStreamIntent(this, stream);
+        Intent shareIntent = shareManager.shareStreamIntent(this, stream);
         Intents.maybeStartActivity(this, shareIntent);
     }
 
@@ -581,6 +592,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
+        if (isChecked) {
+            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionMute,
+                analyticsLabelMute);
+        }
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {

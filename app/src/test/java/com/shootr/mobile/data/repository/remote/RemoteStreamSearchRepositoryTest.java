@@ -5,7 +5,7 @@ import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.event.DatabaseMemoryStreamSearchDataSource;
 import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.event.StreamListDataSource;
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.WatchersRepository;
 import java.util.Collections;
 import java.util.HashMap;

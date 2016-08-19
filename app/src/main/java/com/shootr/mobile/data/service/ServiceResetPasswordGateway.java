@@ -5,7 +5,7 @@ import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.entity.ForgotPasswordEntity;
 import com.shootr.mobile.data.entity.ForgotPasswordResultEntity;
 import com.shootr.mobile.data.mapper.ForgotPasswordResultEntityMapper;
-import com.shootr.mobile.domain.ForgotPasswordResult;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.service.user.ResetPasswordGateway;

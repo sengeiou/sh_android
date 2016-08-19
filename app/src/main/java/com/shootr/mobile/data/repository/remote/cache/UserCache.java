@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.repository.remote.cache;
 
 import com.fewlaps.quitnowcache.QNCache;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

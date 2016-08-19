@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item
+      android:id="@+id/bottombar_streams"
+      android:icon="@drawable/ic_bottombar_streams"
+      android:title="@string/drawer_streams_title" />
+  <item
+      android:id="@+id/bottombar_favorites"
+      android:icon="@drawable/ic_bottombar_favorites_stream"
+      android:title="@string/drawer_favorites_title" />
+  <item
+    android:id="@+id/bottombar_discover"
+    android:icon="@drawable/ic_action_discover"
+    android:title="@string/discover" />
+
+  <item
+      android:id="@+id/bottombar_activity"
+      android:icon="@drawable/ic_bottombar_activity"
+      android:title="@string/drawer_activity_title" />
+</menu>

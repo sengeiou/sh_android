@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UpdateUserProfileInteractor;
@@ -52,7 +52,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowUpdatedSuccessfulAlertWhenDoneAndAllIsValidated() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("");
@@ -69,7 +69,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldNotShowUpdatedSuccessfulAlertWhenUserNameAndWebIsEmpty() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("");
@@ -85,7 +85,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldNotShowUpdatedSuccessfulAlertWhenWebIsNotValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn(WRONG_WEBSITE);
@@ -101,7 +101,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowUpdatedSuccessfulAlertWhenWebIsValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
@@ -117,7 +117,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowUpdatedSuccessfulAlertWhenWebIsValidated() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
@@ -133,7 +133,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowUpdatedSuccessfulAlertWhenNameIsEmpty() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(BIO);
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
@@ -149,7 +149,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldNotShowUpdatedSuccesfulAlertWhenBioIsNotValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
@@ -173,7 +173,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowUserNameValidationErrorWhenUserNameIsNotValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn("www.aaa.com");
@@ -189,7 +189,7 @@ public class ProfileEditPresenterTest {
     @Test public void shouldShowWebsiteValidationErrorWhenWebsiteIsNotValid() throws Exception {
         setupUpdateUserProfileInteractor();
         setUpGetUserByIdInteractor();
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
+        when(sessionRepository.getCurrentUser()).thenReturn(facebookUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         when(profileEditView.getBio()).thenReturn(longBio(300));
         when(profileEditView.getWebsite()).thenReturn(WRONG_WEBSITE);
@@ -215,19 +215,21 @@ public class ProfileEditPresenterTest {
     private void setUpGetUserByIdInteractor() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((GetUserByIdInteractor.Callback) invocation.getArguments()[1]).onLoaded(user());
+                ((GetUserByIdInteractor.Callback) invocation.getArguments()[1]).onLoaded(
+                    facebookUser());
                 return null;
             }
         }).when(getUserByIdInteractor)
           .loadUserById(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private User user() {
+    private User facebookUser() {
         User user = new User();
         user.setIdUser(ID_USER);
         user.setUsername(USERNAME);
         user.setEmailConfirmed(false);
         user.setBio(" ");
+        user.setSocialLogin(true);
         return user;
     }
 }

@@ -66,12 +66,12 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         }
     }
 
-    public void setSubtitle(Integer following) {
-        if (following == 0) {
+    public void setSubtitle(String  subtitle) {
+        if (subtitle == null) {
             hideSubtitle();
         } else {
             subtitleText.setVisibility(View.VISIBLE);
-            subtitleText.setText(context.getString(R.string.stream_subtitle, following));
+            subtitleText.setText(subtitle);
         }
     }
 

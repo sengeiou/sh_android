@@ -81,7 +81,7 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
             remoteMuteDataSource.unmute(idStream);
             localMuteDataSource.unmute(idStream);
         } catch (ServerCommunicationException error) {
-            /* no-op*/
+            /* no-op */
         }
     }
 
@@ -126,7 +126,7 @@ public class SyncMuteRepository implements MuteRepository, SyncableRepository {
             entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             localMuteDataSource.mute(entity);
         } catch (ServerCommunicationException error) {
-            /* no-op*/
+            /* no-op */
         }
     }
 }

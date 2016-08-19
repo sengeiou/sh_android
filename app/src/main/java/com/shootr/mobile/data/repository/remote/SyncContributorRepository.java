@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.ContributorEntity;
 import com.shootr.mobile.data.mapper.ContributorEntityMapper;
 import com.shootr.mobile.data.repository.datasource.contributor.ContributorDataSource;
-import com.shootr.mobile.domain.Contributor;
+import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;

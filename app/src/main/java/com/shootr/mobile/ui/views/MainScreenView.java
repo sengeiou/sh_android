@@ -7,6 +7,4 @@ public interface MainScreenView {
     void setUserData(UserModel userModel);
 
     void showActivityBadge(int count);
-
-    void showHasMultipleActivities(Integer badgeCount);
 }

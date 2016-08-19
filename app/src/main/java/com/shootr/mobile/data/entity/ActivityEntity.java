@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-import com.shootr.mobile.domain.Shot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.utils.Preconditions;
 
 public class ActivityEntity extends Synchronized {
@@ -17,6 +17,8 @@ public class ActivityEntity extends Synchronized {
     private String idShot;
     private Shot shotForMapping;
     private String idStreamAuthor;
+    private String idPoll;
+    private String pollQuestion;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -96,7 +98,7 @@ public class ActivityEntity extends Synchronized {
 
     public void setShotForMapping(Shot shotForMapping) {
         Preconditions.checkState(idShot != null,
-          "Can't set ShotForMapping to an activity without idShot. Activity id: " + idActivity);
+            "Can't set ShotForMapping to an activity without idShot. Activity id: " + idActivity);
         this.shotForMapping = shotForMapping;
     }
 
@@ -114,5 +116,21 @@ public class ActivityEntity extends Synchronized {
 
     public void setIdStreamAuthor(String idStreamAuthor) {
         this.idStreamAuthor = idStreamAuthor;
+    }
+
+    public String getIdPoll() {
+        return idPoll;
+    }
+
+    public void setIdPoll(String idPoll) {
+        this.idPoll = idPoll;
+    }
+
+    public String getPollQuestion() {
+        return pollQuestion;
+    }
+
+    public void setPollQuestion(String pollQuestion) {
+        this.pollQuestion = pollQuestion;
     }
 }

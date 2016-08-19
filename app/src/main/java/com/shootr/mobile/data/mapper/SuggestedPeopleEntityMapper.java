@@ -1,8 +1,8 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
-import com.shootr.mobile.domain.SuggestedPeople;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.SuggestedPeople;
+import com.shootr.mobile.domain.model.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

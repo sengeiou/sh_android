@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:paddingBottom="8dp"
+      android:paddingLeft="8dp"
+      android:paddingRight="12dp"
+      android:paddingTop="8dp"
+      >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/shot_avatar"
+        android:layout_width="@dimen/shot_avatar_size"
+        android:layout_height="@dimen/shot_avatar_size"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+
+    <TextView
+        android:id="@+id/shot_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/gray_10"
+        android:layout_toRightOf="@+id/shot_avatar"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Ignasi"
+        />
+  </RelativeLayout>
+
+  <ImageView
+      android:id="@+id/shot_image"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scaleType="fitXY"
+      android:adjustViewBounds="true"
+      tools:src="@drawable/sample_avatar"
+      />
+</LinearLayout>

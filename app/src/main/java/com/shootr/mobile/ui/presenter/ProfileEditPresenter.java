@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -24,318 +24,328 @@ import timber.log.Timber;
 
 public class ProfileEditPresenter implements Presenter {
 
-    private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
-    private ProfileEditView profileEditView;
+  private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
+  private ProfileEditView profileEditView;
 
-    private final SessionRepository sessionRepository;
-    private final UserModelMapper userModelMapper;
-    private final ErrorMessageFactory errorMessageFactory;
-    private final GetUserByIdInteractor getUserByIdInteractor;
-    private final UpdateUserProfileInteractor updateUserProfileInteractor;
+  private final SessionRepository sessionRepository;
+  private final UserModelMapper userModelMapper;
+  private final ErrorMessageFactory errorMessageFactory;
+  private final GetUserByIdInteractor getUserByIdInteractor;
+  private final UpdateUserProfileInteractor updateUserProfileInteractor;
 
-    private UserModel currentUserModel;
-    private boolean hasBeenPaused = false;
-    private boolean discardConfirmEmailAlert = false;
+  private UserModel currentUserModel;
+  private boolean hasBeenPaused = false;
+  private boolean discardConfirmEmailAlert = false;
 
-    private final List<FieldValidationError> fieldValidationErrors;
+  private final List<FieldValidationError> fieldValidationErrors;
 
-    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper,
+  @Inject
+  public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory, GetUserByIdInteractor getUserByIdInteractor,
       UpdateUserProfileInteractor updateUserProfileInteractor) {
-        this.sessionRepository = sessionRepository;
-        this.userModelMapper = userModelMapper;
-        this.errorMessageFactory = errorMessageFactory;
-        this.getUserByIdInteractor = getUserByIdInteractor;
-        this.updateUserProfileInteractor = updateUserProfileInteractor;
-        this.fieldValidationErrors = new ArrayList<>();
-    }
+    this.sessionRepository = sessionRepository;
+    this.userModelMapper = userModelMapper;
+    this.errorMessageFactory = errorMessageFactory;
+    this.getUserByIdInteractor = getUserByIdInteractor;
+    this.updateUserProfileInteractor = updateUserProfileInteractor;
+    this.fieldValidationErrors = new ArrayList<>();
+  }
 
-    public void initialize(ProfileEditView profileEditView) {
-        this.profileEditView = profileEditView;
-        this.fillCurrentUserData();
-        this.profileEditView.hideKeyboard();
-    }
+  public void initialize(ProfileEditView profileEditView) {
+    this.profileEditView = profileEditView;
+    this.fillCurrentUserData();
+    this.profileEditView.hideKeyboard();
+  }
 
-    private void fillCurrentUserData() {
-        getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), new Interactor.Callback<User>() {
-            @Override public void onLoaded(User user) {
-                loadProfileData();
-            }
+  private void fillCurrentUserData() {
+    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(),
+        new Interactor.Callback<User>() {
+          @Override public void onLoaded(User user) {
+            loadProfileData();
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                profileEditView.showError(errorMessageFactory.getMessageForError(error));
-            }
+          @Override public void onError(ShootrException error) {
+            profileEditView.showError(errorMessageFactory.getMessageForError(error));
+          }
         });
-    }
+  }
 
-    private void loadProfileData() {
-        getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), new Interactor.Callback<User>() {
-            @Override public void onLoaded(User user) {
-                currentUserModel = userModelMapper.transform(user);
-                profileEditView.renderUserInfo(currentUserModel);
-                if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
-                    profileEditView.showEmailNotConfirmedError();
-                }
+  private void loadProfileData() {
+    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(),
+        new Interactor.Callback<User>() {
+          @Override public void onLoaded(User user) {
+            currentUserModel = userModelMapper.transform(user);
+            profileEditView.renderUserInfo(currentUserModel);
+            if (currentUserModel.isSocialLogin()) {
+              if (currentUserModel.getEmail() == null) {
+                profileEditView.hideEmailNotConfirmedError();
+              }
+            } else if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
+              profileEditView.showEmailNotConfirmedError();
             }
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                profileEditView.alertComunicationError();
-            }
+          @Override public void onError(ShootrException error) {
+            profileEditView.alertComunicationError();
+          }
         });
-    }
+  }
 
-    public void discard() {
-        if (hasChangedData()) {
-            profileEditView.showDiscardConfirmation();
-        } else {
-            profileEditView.closeScreen();
+  public void discard() {
+    if (hasChangedData()) {
+      profileEditView.showDiscardConfirmation();
+    } else {
+      profileEditView.closeScreen();
+    }
+  }
+
+  public void confirmDiscard() {
+    profileEditView.closeScreen();
+  }
+
+  public void done() {
+    UserModel updatedUserModel = this.getUpdatedUserData();
+    this.saveUpdatedProfile(updatedUserModel);
+  }
+
+  private UserModel getUpdatedUserData() {
+    UserModel updatedUserModel = currentUserModel.clone();
+    updatedUserModel.setUsername(cleanUsername());
+    updatedUserModel.setName(cleanName());
+    updatedUserModel.setBio(cleanBio());
+    updatedUserModel.setWebsite(cleanWebsite());
+    return updatedUserModel;
+  }
+
+  private boolean hasChangedData() {
+    UserModel updatedUserData = getUpdatedUserData();
+    boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
+    boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null
+        : !currentUserModel.getName().equals(updatedUserData.getName());
+    boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null
+        : !currentUserModel.getBio().equals(updatedUserData.getBio());
+    boolean changedWebsite =
+        currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null
+            : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
+    return changedName || changedUsername || changedWebsite || changedBio;
+  }
+
+  private String cleanUsername() {
+    String username = profileEditView.getUsername();
+    return trimAndNullWhenEmpty(username);
+  }
+
+  private String cleanName() {
+    String name = profileEditView.getName();
+    return trimAndNullWhenEmpty(name);
+  }
+
+  private String cleanBio() {
+    String bio = profileEditView.getBio();
+    bio = removeWhiteLines(bio);
+    return trimAndNullWhenEmpty(bio);
+  }
+
+  private String cleanWebsite() {
+    String website = profileEditView.getWebsite();
+    website = removeProtocolFromUrl(website);
+    return trimAndNullWhenEmpty(website);
+  }
+
+  private String removeWhiteLines(String multilineText) {
+    String textWithoutWhiteLines = multilineText;
+    while (textWithoutWhiteLines.contains("\n\n")) {
+      textWithoutWhiteLines = textWithoutWhiteLines.replace("\n\n", "\n");
+    }
+    return textWithoutWhiteLines;
+  }
+
+  private String trimAndNullWhenEmpty(String text) {
+    String trimmedText = text;
+    if (trimmedText != null) {
+      trimmedText = trimmedText.trim();
+      if (trimmedText.isEmpty()) {
+        trimmedText = null;
+      }
+    }
+    return trimmedText;
+  }
+
+  private String removeProtocolFromUrl(String url) {
+    return url.replaceAll(PROTOCOL_PATTERN, "");
+  }
+
+  private void saveUpdatedProfile(UserModel updatedUserModel) {
+    localValidation(updatedUserModel);
+
+    if (hasLocalErrors()) {
+      postValidationErrors();
+    } else {
+      User user = updateUserWithValues(updatedUserModel);
+      updateUserProfileInteractor.updateProfile(user, new Interactor.CompletedCallback() {
+        @Override public void onCompleted() {
+          profileEditView.showUpdatedSuccessfulAlert();
+          profileEditView.closeScreen();
         }
-    }
-
-    public void confirmDiscard() {
-        profileEditView.closeScreen();
-    }
-
-    public void done() {
-        UserModel updatedUserModel = this.getUpdatedUserData();
-        this.saveUpdatedProfile(updatedUserModel);
-    }
-
-    private UserModel getUpdatedUserData() {
-        UserModel updatedUserModel = currentUserModel.clone();
-        updatedUserModel.setUsername(cleanUsername());
-        updatedUserModel.setName(cleanName());
-        updatedUserModel.setBio(cleanBio());
-        updatedUserModel.setWebsite(cleanWebsite());
-        return updatedUserModel;
-    }
-
-    private boolean hasChangedData() {
-        UserModel updatedUserData = getUpdatedUserData();
-        boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
-        boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null
-          : !currentUserModel.getName().equals(updatedUserData.getName());
-        boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null
-          : !currentUserModel.getBio().equals(updatedUserData.getBio());
-        boolean changedWebsite = currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null
-          : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
-        return changedName || changedUsername || changedWebsite || changedBio;
-    }
-
-    private String cleanUsername() {
-        String username = profileEditView.getUsername();
-        return trimAndNullWhenEmpty(username);
-    }
-
-    private String cleanName() {
-        String name = profileEditView.getName();
-        return trimAndNullWhenEmpty(name);
-    }
-
-    private String cleanBio() {
-        String bio = profileEditView.getBio();
-        bio = removeWhiteLines(bio);
-        return trimAndNullWhenEmpty(bio);
-    }
-
-    private String cleanWebsite() {
-        String website = profileEditView.getWebsite();
-        website = removeProtocolFromUrl(website);
-        return trimAndNullWhenEmpty(website);
-    }
-
-    private String removeWhiteLines(String multilineText) {
-        String textWithoutWhiteLines = multilineText;
-        while (textWithoutWhiteLines.contains("\n\n")) {
-            textWithoutWhiteLines = textWithoutWhiteLines.replace("\n\n", "\n");
+      }, new Interactor.ErrorCallback() {
+        @Override public void onError(ShootrException error) {
+          updateProfileError(error);
         }
-        return textWithoutWhiteLines;
+      });
     }
+  }
 
-    private String trimAndNullWhenEmpty(String text) {
-        String trimmedText = text;
-        if (trimmedText != null) {
-            trimmedText = trimmedText.trim();
-            if (trimmedText.isEmpty()) {
-                trimmedText = null;
-            }
-        }
-        return trimmedText;
+  private void updateProfileError(ShootrException error) {
+    if (error instanceof DomainValidationException) {
+      DomainValidationException validationException = (DomainValidationException) error;
+      List<com.shootr.mobile.domain.validation.FieldValidationError> errors =
+          validationException.getErrors();
+      showValidationErrors(errors);
+    } else if (error instanceof ServerCommunicationException) {
+      this.profileEditView.alertComunicationError();
+    } else {
+      Timber.e(error, "Unknown error creating account.");
+      profileEditView.showError(errorMessageFactory.getUnknownErrorMessage());
     }
+  }
 
-    private String removeProtocolFromUrl(String url) {
-        return url.replaceAll(PROTOCOL_PATTERN, "");
+  private void showValidationErrors(
+      List<com.shootr.mobile.domain.validation.FieldValidationError> errors) {
+    for (com.shootr.mobile.domain.validation.FieldValidationError validationError : errors) {
+      String errorCode = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
+      switch (validationError.getField()) {
+        case FieldValidationError.FIELD_USERNAME:
+          this.showUsernameValidationError(errorCode);
+          break;
+        case FieldValidationError.FIELD_NAME:
+          this.showNameValidationError(errorCode);
+          break;
+        case FieldValidationError.FIELD_BIO:
+          this.showBioValidationError(errorCode);
+          break;
+        case FieldValidationError.FIELD_WEBSITE:
+          this.showWebsiteValidationError(errorCode);
+          break;
+        default:
+          break;
+      }
     }
+  }
 
-    private void saveUpdatedProfile(UserModel updatedUserModel) {
-        localValidation(updatedUserModel);
+  private User updateUserWithValues(UserModel updatedUserModel) {
+    User user = new User();
+    user.setUsername(updatedUserModel.getUsername());
+    user.setName(updatedUserModel.getName());
+    user.setBio(updatedUserModel.getBio());
+    user.setWebsite(updatedUserModel.getWebsite());
+    user.setEmail(updatedUserModel.getEmail());
+    user.setEmailConfirmed(updatedUserModel.isEmailConfirmed());
+    return user;
+  }
 
-        if (hasLocalErrors()) {
-            postValidationErrors();
-        } else {
-            User user = updateUserWithValues(updatedUserModel);
-            updateUserProfileInteractor.updateProfile(user, new Interactor.CompletedCallback() {
-                @Override public void onCompleted() {
-                    profileEditView.showUpdatedSuccessfulAlert();
-                    profileEditView.closeScreen();
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    updateProfileError(error);
-                }
-            });
-        }
+  private void showValidationError(FieldValidationError validationError) {
+    String errorCode = validationError.getErrorCode();
+    switch (validationError.getField()) {
+      case FieldValidationError.FIELD_USERNAME:
+        this.showUsernameValidationError(errorCode);
+        break;
+      case FieldValidationError.FIELD_NAME:
+        this.showNameValidationError(errorCode);
+        break;
+      case FieldValidationError.FIELD_BIO:
+        this.showBioValidationError(errorCode);
+        break;
+      case FieldValidationError.FIELD_WEBSITE:
+        this.showWebsiteValidationError(errorCode);
+        break;
+      default:
+        break;
     }
+  }
 
-    private void updateProfileError(ShootrException error) {
-        if (error instanceof DomainValidationException) {
-            DomainValidationException validationException = (DomainValidationException) error;
-            List<com.shootr.mobile.domain.validation.FieldValidationError> errors = validationException.getErrors();
-            showValidationErrors(errors);
-        } else if (error instanceof ServerCommunicationException) {
-            this.profileEditView.alertComunicationError();
-        } else {
-            Timber.e(error, "Unknown error creating account.");
-            profileEditView.showError(errorMessageFactory.getUnknownErrorMessage());
-        }
-    }
+  private void showUsernameValidationError(String errorCode) {
+    String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+    profileEditView.showUsernameValidationError(messageForCode);
+  }
 
-    private void showValidationErrors(List<com.shootr.mobile.domain.validation.FieldValidationError> errors) {
-        for (com.shootr.mobile.domain.validation.FieldValidationError validationError : errors) {
-            String errorCode = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
-            switch (validationError.getField()) {
-                case FieldValidationError.FIELD_USERNAME:
-                    this.showUsernameValidationError(errorCode);
-                    break;
-                case FieldValidationError.FIELD_NAME:
-                    this.showNameValidationError(errorCode);
-                    break;
-                case FieldValidationError.FIELD_BIO:
-                    this.showBioValidationError(errorCode);
-                    break;
-                case FieldValidationError.FIELD_WEBSITE:
-                    this.showWebsiteValidationError(errorCode);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+  private void showNameValidationError(String errorCode) {
+    String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+    profileEditView.showNameValidationError(messageForCode);
+  }
 
-    private User updateUserWithValues(UserModel updatedUserModel) {
-        User user = new User();
-        user.setUsername(updatedUserModel.getUsername());
-        user.setName(updatedUserModel.getName());
-        user.setBio(updatedUserModel.getBio());
-        user.setWebsite(updatedUserModel.getWebsite());
-        user.setEmail(updatedUserModel.getEmail());
-        user.setEmailConfirmed(updatedUserModel.isEmailConfirmed());
-        return user;
-    }
+  private void showWebsiteValidationError(String errorCode) {
+    String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+    profileEditView.showWebsiteValidationError(messageForCode);
+  }
 
-    private void showValidationError(FieldValidationError validationError) {
-        String errorCode = validationError.getErrorCode();
-        switch (validationError.getField()) {
-            case FieldValidationError.FIELD_USERNAME:
-                this.showUsernameValidationError(errorCode);
-                break;
-            case FieldValidationError.FIELD_NAME:
-                this.showNameValidationError(errorCode);
-                break;
-            case FieldValidationError.FIELD_BIO:
-                this.showBioValidationError(errorCode);
-                break;
-            case FieldValidationError.FIELD_WEBSITE:
-                this.showWebsiteValidationError(errorCode);
-                break;
-            default:
-                break;
-        }
-    }
+  private void showBioValidationError(String errorCode) {
+    String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+    profileEditView.showBioValidationError(messageForCode);
+  }
 
-    private void showUsernameValidationError(String errorCode) {
-        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
-        profileEditView.showUsernameValidationError(messageForCode);
-    }
+  private void showLoading() {
+    profileEditView.showLoadingIndicator();
+  }
 
-    private void showNameValidationError(String errorCode) {
-        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
-        profileEditView.showNameValidationError(messageForCode);
-    }
+  private void hideLoading() {
+    profileEditView.hideLoadingIndicator();
+  }
 
-    private void showWebsiteValidationError(String errorCode) {
-        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
-        profileEditView.showWebsiteValidationError(messageForCode);
+  @Override public void resume() {
+    if (hasBeenPaused) {
+      fillCurrentUserData();
     }
+  }
 
-    private void showBioValidationError(String errorCode) {
-        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
-        profileEditView.showBioValidationError(messageForCode);
-    }
+  @Override public void pause() {
+    hasBeenPaused = true;
+  }
 
-    private void showLoading() {
-        profileEditView.showLoadingIndicator();
+  public void editEmail() {
+    if (!currentUserModel.isEmailConfirmed()) {
+      profileEditView.hideEmailNotConfirmedError();
     }
+    discardConfirmEmailAlert = true;
+    profileEditView.navigateToEditEmail();
+  }
 
-    private void hideLoading() {
-        profileEditView.hideLoadingIndicator();
-    }
+  private void localValidation(UserModel user) {
+    validateUsername(user);
+    validateName(user);
+    validateWebsite(user);
+    validateBio(user);
+  }
 
-    @Override public void resume() {
-        if (hasBeenPaused) {
-            fillCurrentUserData();
-        }
-    }
+  private void validateWebsite(UserModel user) {
+    addErrorsIfAny(new WebsiteValidator(user).validate());
+  }
 
-    @Override public void pause() {
-        hasBeenPaused = true;
-    }
+  private void validateUsername(UserModel user) {
+    addErrorsIfAny(new UsernameValidator(user).validate());
+  }
 
-    public void editEmail() {
-        if (!currentUserModel.isEmailConfirmed()) {
-            profileEditView.hideEmailNotConfirmedError();
-        }
-        discardConfirmEmailAlert = true;
-        profileEditView.navigateToEditEmail();
-    }
+  private void validateName(UserModel user) {
+    addErrorsIfAny(new NameValidator(user).validate());
+  }
 
-    private void localValidation(UserModel user) {
-        validateUsername(user);
-        validateName(user);
-        validateWebsite(user);
-        validateBio(user);
-    }
+  private void validateBio(UserModel user) {
+    addErrorsIfAny(new BioValidator(user).validate());
+  }
 
-    private void validateWebsite(UserModel user) {
-        addErrorsIfAny(new WebsiteValidator(user).validate());
+  private void addErrorsIfAny(List<FieldValidationError> validationResult) {
+    if (validationResult != null && !validationResult.isEmpty()) {
+      fieldValidationErrors.addAll(validationResult);
     }
+  }
 
-    private void validateUsername(UserModel user) {
-        addErrorsIfAny(new UsernameValidator(user).validate());
-    }
+  private boolean hasLocalErrors() {
+    return !fieldValidationErrors.isEmpty();
+  }
 
-    private void validateName(UserModel user) {
-        addErrorsIfAny(new NameValidator(user).validate());
+  private void postValidationErrors() {
+    for (FieldValidationError fieldValidationError : fieldValidationErrors) {
+      showValidationError(fieldValidationError);
     }
-
-    private void validateBio(UserModel user) {
-        addErrorsIfAny(new BioValidator(user).validate());
-    }
-
-    private void addErrorsIfAny(List<FieldValidationError> validationResult) {
-        if (validationResult != null && !validationResult.isEmpty()) {
-            fieldValidationErrors.addAll(validationResult);
-        }
-    }
-
-    private boolean hasLocalErrors() {
-        return !fieldValidationErrors.isEmpty();
-    }
-
-    private void postValidationErrors() {
-        for (FieldValidationError fieldValidationError : fieldValidationErrors) {
-            showValidationError(fieldValidationError);
-        }
-        fieldValidationErrors.clear();
-    }
+    fieldValidationErrors.clear();
+  }
 }

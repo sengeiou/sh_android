@@ -4,56 +4,53 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarBadge;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
-import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
-import com.shootr.mobile.ui.widgets.BadgeDrawable;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.MenuItemValueHolder;
-import java.util.Locale;
 import javax.inject.Inject;
-
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
-  @Bind(R.id.pager) ViewPager viewPager;
-  @Bind(R.id.tab_layout) TabLayout tabLayout;
-  @BindString(R.string.multiple_activities_action) String multipleActivitiesAction;
+  private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
+  private static final int ACTIVITY_FRAGMENT = 3;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @Inject MainScreenPresenter mainScreenPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject DeeplinkingNavigator deeplinkingNavigator;
 
   private ToolbarDecorator toolbarDecorator;
-  private BadgeDrawable activityBadgeIcon;
-  private MenuItemValueHolder activityMenu = new MenuItemValueHolder();
+  private BottomBar bottomBar;
+  private BottomBarBadge unreadActivities;
+  private Fragment currentFragment;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
     intent.putExtra(EXTRA_UPDATE_NEEDED, true);
+    return intent;
+  }
+
+  public static Intent getMultipleActivitiesIntent(Context context) {
+    Intent intent = new Intent(context, MainTabbedActivity.class);
+    intent.putExtra(EXTRA_MULTIPLE_ACTIVITIES, true);
     return intent;
   }
 
@@ -63,26 +60,98 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-
-    SectionsPagerAdapter sectionsPagerAdapter =
-        new SectionsPagerAdapter(getSupportFragmentManager());
-    viewPager.setAdapter(sectionsPagerAdapter);
-    viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
-    viewPager.setPageMarginDrawable(R.drawable.page_margin);
-    viewPager.setOffscreenPageLimit(2);
-
-    tabLayout.setupWithViewPager(viewPager);
-    setupTabLayoutListener();
-    viewPager.setCurrentItem(1);
-
+    setupBottomBar(savedInstanceState);
     loadIntentData();
     handleUpdateVersion();
+    handleMultipleActivitiesIntent();
+  }
+
+  private void setupBottomBar(Bundle savedInstanceState) {
+    bottomBar = BottomBar.attach(findViewById(R.id.container), savedInstanceState);
+
+    bottomBar.noNavBarGoodness();
+    bottomBar.noTopOffset();
+    bottomBar.setItems(R.menu.bottombar_menu);
+    bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+      @Override public void onMenuTabSelected(@IdRes int menuItemId) {
+        switch (menuItemId) {
+          case R.id.bottombar_streams:
+            StreamsListFragment streamsListFragment = StreamsListFragment.newInstance();
+            currentFragment = streamsListFragment;
+            switchTab(streamsListFragment);
+            break;
+          case R.id.bottombar_favorites:
+            Fragment favoritesFragment = FavoritesFragment.newInstance();
+            currentFragment = favoritesFragment;
+            switchTab(favoritesFragment);
+            break;
+          case R.id.bottombar_discover:
+            Fragment discoverFragment = DiscoverFragment.newInstance();
+            currentFragment = discoverFragment;
+            switchTab(discoverFragment);
+            break;
+          case R.id.bottombar_activity:
+            ActivityTimelineContainerFragment activityTimelineFragment =
+                ActivityTimelineContainerFragment.newInstance();
+            currentFragment = activityTimelineFragment;
+            switchTab(activityTimelineFragment);
+            break;
+          default:
+            break;
+        }
+      }
+
+      @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
+        switch (menuItemId) {
+          case R.id.bottombar_streams:
+            scrollToTop(0);
+            break;
+          case R.id.bottombar_favorites:
+            scrollToTop(1);
+            break;
+          case R.id.bottombar_discover:
+            scrollToTop(2);
+            break;
+          case R.id.bottombar_activity:
+            scrollToTop(3);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+    loadIntentData();
+    handleUpdateVersion();
+  }
+
+  protected void switchTab(Fragment fragment) {
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.container, fragment, fragment.getClass().getName())
+        .commit();
+  }
+
+  private void scrollToTop(int currentItem) {
+    if (currentItem == 0) {
+      ((StreamsListFragment) currentFragment).scrollListToTop();
+    } else if (currentItem == 1) {
+      ((FavoritesFragment) currentFragment).scrollListToTop();
+    } else if (currentItem == 2) {
+      ((DiscoverFragment) currentFragment).scrollListToTop();
+    }
   }
 
   private void handleUpdateVersion() {
     boolean needUpdate = getIntent().getBooleanExtra(EXTRA_UPDATE_NEEDED, false);
     if (needUpdate) {
       showUpdateDialog();
+    }
+  }
+
+  private void handleMultipleActivitiesIntent() {
+    boolean openActivitiesFragment = getIntent().getBooleanExtra(EXTRA_MULTIPLE_ACTIVITIES, false);
+    if (openActivitiesFragment) {
+      bottomBar.selectTabAtPosition(ACTIVITY_FRAGMENT, false);
     }
   }
 
@@ -112,35 +181,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
   }
 
-  private void setupTabLayoutListener() {
-    tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-      @Override public void onTabSelected(TabLayout.Tab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-      }
-
-      @Override public void onTabUnselected(TabLayout.Tab tab) {
-                /* no-op */
-      }
-
-      @Override public void onTabReselected(TabLayout.Tab tab) {
-        Fragment currentPage = getSupportFragmentManager().findFragmentByTag(
-            "android:switcher:" + R.id.pager + ":" + viewPager.getCurrentItem());
-        scrollToTop(currentPage, viewPager.getCurrentItem());
-      }
-    });
-  }
-
-  private void scrollToTop(Fragment currentPage, int currentItem) {
-    if (currentPage != null && currentItem == 0) {
-      ((FavoritesFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 1) {
-      ((StreamsListFragment) currentPage).scrollListToTop();
-    } else if (currentPage != null && currentItem == 2) {
-      ((PeopleFragment) currentPage).scrollListToTop();
-    }
-  }
-
   @Override protected void initializePresenter() {
     mainScreenPresenter.initialize(this);
   }
@@ -161,56 +201,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     mainScreenPresenter.pause();
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.main, menu);
-    activityMenu.bindRealMenuItem(menu.findItem(R.id.menu_activity));
-
-    LayerDrawable activityIcon =
-        (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
-    checkNotNull(activityIcon);
-    setupActivityBadgeIcon(activityIcon);
-    activityMenu.setIcon(activityIcon);
-    activityMenu.getIcon();
-
-    return true;
-  }
-
-  public void setupActivityBadgeIcon(LayerDrawable icon) {
-    // Reuse drawable if possible
-    if (activityBadgeIcon == null) {
-      Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
-      if (reuse != null && reuse instanceof BadgeDrawable) {
-        activityBadgeIcon = (BadgeDrawable) reuse;
-      } else {
-        activityBadgeIcon = new BadgeDrawable(this);
-      }
-    }
-    icon.mutate();
-    icon.setDrawableByLayerId(R.id.ic_badge, activityBadgeIcon);
-  }
-
-  private void updateWatchNumberIcon(int count) {
-    if (activityBadgeIcon == null) {
-      LayerDrawable activityIcon =
-          (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
-      setupActivityBadgeIcon(activityIcon);
-    }
-    activityBadgeIcon.setCount(count);
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.menu_activity) {
-      navigateToActivity();
-      return true;
-    } else {
-      return super.onOptionsItemSelected(item);
-    }
-  }
-
-  private void navigateToActivity() {
-    startActivity(new Intent(this, ActivityTimelinesContainerActivity.class));
-  }
-
   @Override public void setUserData(final UserModel userModel) {
     toolbarDecorator.setTitle(userModel.getUsername());
     toolbarDecorator.setAvatarImage(userModel.getPhoto());
@@ -218,66 +208,26 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void showActivityBadge(int count) {
-    updateWatchNumberIcon(count);
+    if (unreadActivities == null) {
+      unreadActivities = bottomBar.makeBadgeForTabAt(ACTIVITY_FRAGMENT, Color.TRANSPARENT, count);
+    } else {
+      unreadActivities.setCount(count);
+    }
   }
 
-  @Override public void showHasMultipleActivities(Integer badgeCount) {
-    String multipleActivities = getString(R.string.multiple_activity_notification, badgeCount);
-    feedbackMessage.showMultipleActivities(getView(), multipleActivities, multipleActivitiesAction,
-        new View.OnClickListener() {
-          @Override public void onClick(View view) {
-            navigateToActivity();
-          }
-        });
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    bottomBar.onSaveInstanceState(outState);
   }
 
   private void setToolbarClickListener(final UserModel userModel) {
     toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         Intent intent =
-            ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
+            ProfileActivity.getIntent(view.getContext(), userModel.getIdUser());
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
       }
     });
-  }
-
-  public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-    public SectionsPagerAdapter(FragmentManager fm) {
-      super(fm);
-    }
-
-    @Override public Fragment getItem(int position) {
-      switch (position) {
-        case 0:
-          return FavoritesFragment.newInstance();
-        case 1:
-          return StreamsListFragment.newInstance();
-        case 2:
-          return PeopleFragment.newInstance();
-        default:
-          throw new IllegalStateException(
-              String.format("Item for position %d doesn't exists", position));
-      }
-    }
-
-    @Override public int getCount() {
-      return 3;
-    }
-
-    @Override public CharSequence getPageTitle(int position) {
-      Locale l = Locale.getDefault();
-      switch (position) {
-        case 0:
-          return getString(R.string.drawer_favorites_title).toUpperCase(l);
-        case 1:
-          return getString(R.string.drawer_streams_title).toUpperCase(l);
-        case 2:
-          return getString(R.string.drawer_friends_title).toUpperCase(l);
-        default:
-          throw new IllegalStateException(
-              String.format("Item title for position %d doesn't exists", position));
-      }
-    }
   }
 }

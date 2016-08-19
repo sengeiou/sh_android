@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.UserEntity;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -40,6 +40,7 @@ public class UserEntityMapper {
         user.setFollowing(isFollowing);
 
         user.setJoinStreamDate(userEntity.getJoinStreamDate());
+        user.setSocialLogin(userEntity.getSocialLogin());
 
         user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
@@ -74,7 +75,7 @@ public class UserEntityMapper {
         userEntity.setJoinStreamDate(user.getJoinStreamDate());
 
         metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
-
+        userEntity.setSocialLogin(user.isSocialLogin());
         userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
 

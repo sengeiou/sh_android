@@ -17,6 +17,7 @@
     <com.shootr.mobile.ui.widgets.ScrollListView android:id="@+id/all_shots_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:divider="@null"
       tools:listitem="@layout/item_list_shot" />
 
     <TextView android:id="@+id/timeline_empty"

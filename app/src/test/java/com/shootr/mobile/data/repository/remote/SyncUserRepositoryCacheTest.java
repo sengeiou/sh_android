@@ -9,7 +9,7 @@ import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.data.repository.remote.cache.UserCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import java.util.Collections;

@@ -19,6 +19,8 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USER_PHOTO)));
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
+        shot.setImageWidth(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE_WIDTH)));
+        shot.setImageHeight(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE_HEIGHT)));
         shot.setStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.STREAM_TITLE)));
         shot.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_STREAM)));
         shot.setType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
@@ -43,6 +45,8 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.USER_PHOTO, shot.getUserPhoto());
         cv.put(DatabaseContract.ShotTable.COMMENT, shot.getComment());
         cv.put(DatabaseContract.ShotTable.IMAGE, shot.getImage());
+        cv.put(DatabaseContract.ShotTable.IMAGE_WIDTH, shot.getImageWidth());
+        cv.put(DatabaseContract.ShotTable.IMAGE_HEIGHT, shot.getImageHeight());
         cv.put(DatabaseContract.ShotTable.STREAM_TITLE, shot.getStreamTitle());
         cv.put(DatabaseContract.ShotTable.ID_STREAM, shot.getIdStream());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());

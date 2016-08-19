@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.Contributor;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ContributorInteractor;
-import com.shootr.mobile.domain.interactor.user.GetContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -38,14 +38,15 @@ public class ContributorsPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ContributorsView contributorsView;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
-    @Mock ContributorInteractor contributorInteractor;
+    @Mock ManageContributorsInteractor manageContributorsInteractor;
 
     private ContributorsPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-        presenter = new ContributorsPresenter(getContributorsInteractor, contributorInteractor,
+        presenter = new ContributorsPresenter(getContributorsInteractor,
+            manageContributorsInteractor,
           errorMessageFactory,
           userModelMapper);
     }

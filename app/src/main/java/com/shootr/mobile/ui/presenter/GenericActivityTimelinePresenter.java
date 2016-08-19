@@ -3,9 +3,9 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
-import com.shootr.mobile.domain.ActivityTimeline;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -79,7 +79,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
         activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline,
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
-                  List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
+                  List<ActivityModel> activityModels =
+                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
                   timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                   isEmpty = activityModels.isEmpty();
                   if (isEmpty) {
@@ -117,7 +118,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
         activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline,
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
-                  List<ActivityModel> newActivity = activityModelMapper.transform(timeline.getActivities());
+                  List<ActivityModel> newActivity =
+                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
                   boolean hasNewActivity = !newActivity.isEmpty();
                   if (isEmpty && hasNewActivity) {
                       isEmpty = false;
@@ -151,7 +153,8 @@ public class GenericActivityTimelinePresenter implements Presenter {
               @Override public void onLoaded(ActivityTimeline timeline) {
                   isLoadingOlderActivities = false;
                   timelineView.hideLoadingOldActivities();
-                  List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
+                  List<ActivityModel> activityModels =
+                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
                   if (!activityModels.isEmpty()) {
                       timelineView.addOldActivities(activityModels);
                   } else {

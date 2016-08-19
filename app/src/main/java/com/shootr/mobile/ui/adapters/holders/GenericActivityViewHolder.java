@@ -57,7 +57,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     protected void renderAvatar(final ActivityModel activity) {
         imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
-
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);

@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository;
 import com.shootr.mobile.data.entity.ShotQueueEntity;
 import com.shootr.mobile.data.mapper.ShotQueueEntityMapper;
 import com.shootr.mobile.db.manager.ShotQueueManager;
-import com.shootr.mobile.domain.QueuedShot;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
 import java.util.List;
 import javax.inject.Inject;

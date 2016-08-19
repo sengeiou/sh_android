@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.views;
 
-import com.shootr.mobile.domain.Stream;
+import com.shootr.mobile.domain.model.stream.Stream;
 
 public interface SupportView {
 

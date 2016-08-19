@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.ui.ExternalIntentActivity;
+import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 
@@ -31,18 +32,24 @@ public final class DebugIntentFactory implements IntentFactory {
         return createCaptureIntent(baseIntent);
     }
 
-    @Override public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
-        Intent baseIntent = realIntentFactory.shareShotIntent(launchActivity, shotModel);
+    @Override public Intent shareShotIntent(Activity activity, ShotModel shotModel, String locale) {
+        Intent baseIntent = realIntentFactory.shareShotIntent(activity, shotModel, locale);
         return createCaptureIntent(baseIntent);
     }
 
-    @Override public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
-        Intent baseIntent = realIntentFactory.shareStreamIntent(launchActivity, streamModel);
+    @Override public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel,
+        String locale) {
+        Intent baseIntent = realIntentFactory.shareStreamIntent(launchActivity, streamModel, locale);
         return createCaptureIntent(baseIntent);
     }
 
     @Override public Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId) {
         Intent baseIntent = realIntentFactory.reportEmailIntent(launchActivity, currentUserId, reportedUserId);
+        return createCaptureIntent(baseIntent);
+    }
+
+    @Override public Intent sharePollIntent(Activity activity, PollModel pollModel, String locale) {
+        Intent baseIntent = realIntentFactory.sharePollIntent(activity, pollModel, locale);
         return createCaptureIntent(baseIntent);
     }
 

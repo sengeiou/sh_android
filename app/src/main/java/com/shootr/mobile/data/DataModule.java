@@ -30,7 +30,6 @@ import com.shootr.mobile.notifications.gcm.GCMIntentService;
 import com.shootr.mobile.service.ApiModule;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
-import com.shootr.mobile.ui.fragments.PeopleFragment;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import com.shootr.mobile.ui.presenter.PeoplePresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
@@ -62,6 +61,8 @@ import com.shootr.mobile.util.LogTreeFactory;
 import com.shootr.mobile.util.LogTreeFactoryImpl;
 import com.shootr.mobile.util.PercentageUtils;
 import com.shootr.mobile.util.ResourcesLocaleProvider;
+import com.shootr.mobile.util.ShareManager;
+import com.shootr.mobile.util.ShareManagerUtil;
 import com.shootr.mobile.util.SnackbarFeedbackMessage;
 import com.shootr.mobile.util.StreamPercentageUtils;
 import com.shootr.mobile.util.TimeFormatter;
@@ -88,7 +89,6 @@ import static android.content.Context.MODE_PRIVATE;
         BaseSignedInActivity.class,
 
         FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class,
-        PeopleFragment.class,
 
         ShotManager.class,
 
@@ -241,6 +241,11 @@ import static android.content.Context.MODE_PRIVATE;
   @Provides @Singleton PercentageUtils providePercentageUtils(
       StreamPercentageUtils streamPercentageUtils) {
     return streamPercentageUtils;
+  }
+
+  @Provides @Singleton ShareManager provideShareManagerUtil(
+      ShareManagerUtil shareManagerUtil) {
+    return shareManagerUtil;
   }
 
   @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(

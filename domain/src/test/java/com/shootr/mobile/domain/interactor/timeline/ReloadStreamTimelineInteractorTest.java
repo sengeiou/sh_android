@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.StreamTimelineParameters;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;

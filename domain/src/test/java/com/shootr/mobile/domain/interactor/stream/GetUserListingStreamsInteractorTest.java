@@ -1,9 +1,5 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.Favorite;
-import com.shootr.mobile.domain.Listing;
-import com.shootr.mobile.domain.StreamMode;
-import com.shootr.mobile.domain.StreamSearchResult;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -11,10 +7,16 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.FavoriteRepository;
+import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.stream.Listing;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,10 +45,10 @@ public class GetUserListingStreamsInteractorTest {
   @Mock StreamSearchRepository remoteStreamSearchRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock StreamRepository remoteStreamRepository;
-  @Mock FavoriteRepository remoteFavoriteRepository;
+  @Mock ExternalFavoriteRepository remoteFavoriteRepository;
+  @Mock InternalFavoriteRepository localFavoriteRepository;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock SessionRepository sessionRepository;
-  @Mock FavoriteRepository localFavoriteRepository;
   @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
   private GetUserListingStreamsInteractor interactor;
 
@@ -56,7 +58,7 @@ public class GetUserListingStreamsInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor = new GetUserListingStreamsInteractor(interactorHandler, postExecutionThread,
         localStreamSearchRepository, remoteStreamSearchRepository, localStreamRepository,
-        remoteStreamRepository, localFavoriteRepository);
+        remoteStreamRepository, remoteFavoriteRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
   }
 
@@ -148,6 +150,7 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldLoadFavoritesFromRemote() throws Exception {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
+
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
     verify(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
@@ -173,6 +176,7 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowServerComunicationException()
       throws Exception {
+    when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
     doThrow(ServerCommunicationException.class).
         when(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
 
@@ -183,7 +187,7 @@ public class GetUserListingStreamsInteractorTest {
 
   private Map<String, Integer> holderWatchers() {
     Map<String, Integer> map = new HashMap<>();
-    for (com.shootr.mobile.domain.Stream stream : favoriteStreams()) {
+    for (Stream stream : favoriteStreams()) {
       map.put(stream.getId(), 0);
     }
     return map;
@@ -191,7 +195,7 @@ public class GetUserListingStreamsInteractorTest {
 
   private List<StreamSearchResult> favoriteStreamResults() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
-    for (com.shootr.mobile.domain.Stream stream : favoriteStreams()) {
+    for (Stream stream : favoriteStreams()) {
       StreamSearchResult streamSearchResult = new StreamSearchResult();
       streamSearchResult.setStream(stream);
       streamSearchResults.add(streamSearchResult);
@@ -199,10 +203,10 @@ public class GetUserListingStreamsInteractorTest {
     return streamSearchResults;
   }
 
-  private List<com.shootr.mobile.domain.Stream> favoriteStreams() {
-    List<com.shootr.mobile.domain.Stream> streams = new ArrayList<>();
+  private List<Stream> favoriteStreams() {
+    List<Stream> streams = new ArrayList<>();
     for (Favorite favorite : favorites()) {
-      com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+      Stream stream = new Stream();
       stream.setId(favorite.getIdStream());
       streams.add(stream);
     }
@@ -212,7 +216,7 @@ public class GetUserListingStreamsInteractorTest {
   private List<StreamSearchResult> listingStreams() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
     StreamSearchResult streamSearchResult = new StreamSearchResult();
-    com.shootr.mobile.domain.Stream stream = new com.shootr.mobile.domain.Stream();
+    Stream stream = new Stream();
     stream.setAuthorId(ID_USER);
     stream.setId(ID_STREAM);
     stream.setRemoved(false);

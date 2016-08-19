@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.asserts;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.Timeline;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import java.util.List;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.internal.Iterables;

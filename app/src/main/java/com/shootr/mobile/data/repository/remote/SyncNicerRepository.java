@@ -4,7 +4,7 @@ import com.shootr.mobile.data.entity.NicerEntity;
 import com.shootr.mobile.data.mapper.NicerEntityMapper;
 import com.shootr.mobile.data.repository.datasource.nicer.NicerDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
-import com.shootr.mobile.domain.Nicer;
+import com.shootr.mobile.domain.model.shot.Nicer;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;

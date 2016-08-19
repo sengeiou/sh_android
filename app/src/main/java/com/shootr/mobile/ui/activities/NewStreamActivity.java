@@ -19,21 +19,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamReadWriteModeAdapter;
 import com.shootr.mobile.ui.presenter.NewStreamPresenter;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.ui.widgets.FloatLabelLayout;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 public class NewStreamActivity extends BaseToolbarDecoratedActivity implements NewStreamView {
 
@@ -41,10 +39,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     public static final String KEY_STREAM_ID = "stream_id";
 
     private static final String EXTRA_EDITED_TITLE = "title";
-    private static final String EXTRA_EDITED_MODE = "mode";
 
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
 
     @Bind(R.id.new_stream_title) EditText titleView;
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
@@ -54,6 +52,8 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
     @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
     @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
+    @BindString(R.string.analytics_action_create_stream) String analyticsActionCreateStream;
+    @BindString(R.string.analytics_label_create_stream) String analyticsLabelCreateStream;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private StreamReadWriteModeAdapter spinnerAadapter;
@@ -210,12 +210,18 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),  true);
+                    analyticsTool.analyticsSendAction(getBaseContext(),
+                        analyticsActionCreateStream,
+                        analyticsLabelCreateStream);
                 }
             })
           .setNegativeButton(getString(R.string.stream_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(), false);
+                    analyticsTool.analyticsSendAction(getBaseContext(),
+                        analyticsActionCreateStream,
+                        analyticsLabelCreateStream);
                 }
             })
           .create()

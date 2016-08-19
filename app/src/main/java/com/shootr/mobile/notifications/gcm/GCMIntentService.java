@@ -6,10 +6,10 @@ import android.os.Bundle;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
-import com.shootr.mobile.domain.ActivityType;
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotType;
-import com.shootr.mobile.domain.StreamMode;
+import com.shootr.mobile.domain.model.activity.ActivityType;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.repository.Remote;
@@ -159,9 +159,20 @@ public class GCMIntentService extends IntentService {
       case ActivityType.STARTED_SHOOTING:
         setupGoToShotDetailNotification(push);
         break;
+      case ActivityType.POLL_PUBLISHED:
+      case ActivityType.VOTED_IN_POLL:
+      case ActivityType.FINISHED_POLL:
+        setupGoToPollVote(push);
+        break;
       default:
         Timber.w("Received unknown activity type: %s", activityType);
     }
+  }
+
+  private void setupGoToPollVote(PushNotification push) {
+    String idPoll = push.getParameters().getIdPoll();
+    activityNotificationManager.sendOpenPollVoteNotification(push.getNotificationValues(),
+        checkNotNull(idPoll), !isStreamPushTypeKnown(push));
   }
 
   private void setupGoToProfileNotification(PushNotification push) {

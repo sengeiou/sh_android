@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.Shot;
-import com.shootr.mobile.domain.ShotType;
-import com.shootr.mobile.domain.User;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
