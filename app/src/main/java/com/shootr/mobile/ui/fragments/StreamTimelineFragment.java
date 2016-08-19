@@ -110,6 +110,8 @@ public class StreamTimelineFragment extends BaseFragment
   private static final String POLL_STATUS_SHOWING = "showing";
   private static final String POLL_STATUS_INVISIBLE = "invisible";
   private static final String POLL_STATUS_GONE = "gone";
+  private static final int FOLLOWINGS = 0;
+  private static final int PARTICIPANTS = 1;
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -166,7 +168,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
   private NewShotBarView newShotBarViewDelegate;
-  private Integer watchNumberCount;
+  private Integer[] watchNumberCount;
   private View footerProgress;
   private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
@@ -642,9 +644,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null && watchNumberCount != 0) {
+    if (watchNumberCount != null) {
       toolbarDecorator.setSubtitle(
-          getContext().getString(R.string.stream_subtitle, watchNumberCount));
+          getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
+              watchNumberCount[FOLLOWINGS], watchNumberCount[PARTICIPANTS]));
+    }
+  }
+
+  private void updateParticipants() {
+    if (watchNumberCount != null) {
+      toolbarDecorator.setSubtitle(
+          getContext().getResources().getQuantityString(R.plurals.total_watchers_pattern,
+              watchNumberCount[1],
+              watchNumberCount[1]));
     }
   }
 
@@ -716,20 +728,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hideHoldingShots() {
-    showHoldingShotsMenuItem.setVisible(false);
+    /* no -op */
   }
 
   @Override public void showAllStreamShots() {
-    showAllShotsMenuItem.setVisible(true);
-    feedbackMessage.show(getView(), R.string.showing_shots_by_holder);
+    /* no-op */
   }
 
   @Override public void showHoldingShots() {
-    showHoldingShotsMenuItem.setVisible(true);
+   /* no-op */
   }
 
   @Override public void hideAllStreamShots() {
-    showAllShotsMenuItem.setVisible(false);
+    /* no-op */
   }
 
   @Override public void setTitle(String title) {
@@ -979,9 +990,14 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarViewDelegate.hideDraftsButton();
   }
 
-  @Override public void showWatchingPeopleCount(Integer count) {
-    watchNumberCount = count;
+  @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {
+    watchNumberCount = peopleWatchingCount;
     updateWatchNumberIcon();
+  }
+
+  @Override public void showParticipantsCount(Integer[] peopleWatchingCount) {
+    watchNumberCount = peopleWatchingCount;
+    updateParticipants();
   }
 
   @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {

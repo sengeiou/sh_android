@@ -23,9 +23,10 @@ import static org.mockito.Mockito.verify;
 
 public class WatchNumberPresenterTest {
 
-    private static final Integer COUNT_1_PERSON = 1;
-    private static final Integer COUNT_2_PEOPLE = 2;
-    private static final Integer COUNT_NOBODY = 0;
+    private static final Integer[] COUNT_1_PERSON = new Integer[]{0, 1};
+    private static final Integer[] COUNT_2_PEOPLE = new Integer[]{0, 2};
+    private static final Integer[] COUNT_NOBODY = new Integer[]{0, 0};
+    private static final Integer[] NO_STREAM = new Integer[]{0, 0};
     private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
     public static final String STREAM_ID_STUB = "stream_id";
 
@@ -49,7 +50,7 @@ public class WatchNumberPresenterTest {
     @Test public void shouldLoadWatchNumberWhenInitialized() throws Exception {
         presenter.initialize(watchNumberView, STREAM_ID_STUB);
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
     @Test public void shouldShowCountInViewWhenOnePersonWatching() throws Exception {
@@ -57,7 +58,7 @@ public class WatchNumberPresenterTest {
 
         presenter.retrieveData();
 
-        verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_1_PERSON));
+        verify(watchNumberView).showParticipantsCount(eq(COUNT_1_PERSON));
     }
 
     @Test public void shouldShowCountTwoInViewWhenTwoPeopleWatching() throws Exception {
@@ -65,19 +66,19 @@ public class WatchNumberPresenterTest {
 
         presenter.retrieveData();
 
-        verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_2_PEOPLE));
+        verify(watchNumberView).showParticipantsCount(eq(COUNT_2_PEOPLE));
     }
 
-    @Test public void shouldShowCountZeroInViewWhenNobodyWatching() throws Exception {
+    @Test public void shouldHideWatchingPeopleCountWhenNobodyWatching() throws Exception {
         setupWatchNumberInteractorCallbacks(COUNT_NOBODY);
 
         presenter.retrieveData();
 
-        verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_NOBODY));
+        verify(watchNumberView).hideWatchingPeopleCount();
     }
 
     @Test public void shouldHideCountViewWhenNoStream() throws Exception {
-        setupWatchNumberInteractorCallbacks(WatchNumberInteractor.NO_STREAM);
+        setupWatchNumberInteractorCallbacks(NO_STREAM);
 
         presenter.retrieveData();
 
@@ -87,25 +88,25 @@ public class WatchNumberPresenterTest {
     @Test public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
         watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
     @Test public void shouldLoadWatchNumberWhenStreamChanged() throws Exception {
         streamChangedReceiver.onStreamChanged(streamChangedStream());
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
     @Test public void shouldLoadWatchNumberWhenPresenterResumedAfterPause() throws Exception {
         presenter.pause();
         presenter.resume();
 
-        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        verify(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 
     @Test public void shouldHideWatchNumberWhenExitStreamReceivedAlthougInteractorHasntCallback() throws Exception {
         doNothing().when(watchNumberInteractor)
-          .loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+          .loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
 
         streamChangedReceiver.onStreamChanged(exitStream());
 
@@ -138,12 +139,12 @@ public class WatchNumberPresenterTest {
         return new StreamChanged.Event(null);
     }
 
-    private void setupWatchNumberInteractorCallbacks(final Integer count) {
+    private void setupWatchNumberInteractorCallbacks(final Integer[] count) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((WatchNumberInteractor.Callback) invocation.getArguments()[1]).onLoaded(count);
                 return null;
             }
-        }).when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        }).when(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 }
