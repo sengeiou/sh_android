@@ -11,13 +11,13 @@
   <string name="activity_find_contributors_hint">Search</string>
   <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
   <string name="activity_find_friends_empty_message">No Results</string>
-  <string name="activity_find_friends_hint">Search friends</string>
+  <string name="activity_find_friends_hint">Search for friends</string>
   <!-- Find Friends -->
-  <string name="activity_find_friends_title">Search friends</string>
+  <string name="activity_find_friends_title">Search for friends</string>
   <string name="activity_find_participants_empty_message">No results</string>
-  <string name="activity_find_participants_hint">Search participants</string>
-  <string name="activity_find_streams_hint">Search streams</string>
-  <string name="activity_find_streams_title">Search streams</string>
+  <string name="activity_find_participants_hint">Search for participants</string>
+  <string name="activity_find_streams_hint">Search for streams</string>
+  <string name="activity_find_streams_title">Search for streams</string>
   <string name="activity_followers_title">Followers</string>
   <string name="activity_following_title">Following</string>
   <string name="activity_login_email_button">Enter</string>
@@ -61,7 +61,7 @@
   <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
   <string name="block_user_error">To ignore this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
-  <string formatted="false" name="cancel_hide_shot">Cancel</string>
+  <string name="cancel_hide_shot" formatted="false">Cancel</string>
   <string name="can_shoot_streams">Remove ban</string>
   <string name="change_password_button_text">DONE</string>
   <string name="change_password_logout_message">Password changed. Must sign in again…</string>
@@ -69,8 +69,8 @@
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- Errors -->
   <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-  <string formatted="false" name="confirmation_hide_shot_message">Unpin shot</string>
-  <string formatted="false" name="confirm_hide_shot">Unpin</string>
+  <string name="confirmation_hide_shot_message" formatted="false">Unpin shot</string>
+  <string name="confirm_hide_shot" formatted="false">Unpin</string>
   <string name="connection_lost">The network connection was lost</string>
   <string name="contributors_empty">No contributors</string>
   <string name="copied_to_clipboard">Text copied to clipboard.</string>
@@ -80,21 +80,23 @@
   <string name="discard">Discard</string>
   <string name="discard_profile_confirmation">Discard changes?</string>
   <string name="discover">Discover</string>
+  <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
-  <string formatted="false" name="done_pin_topic">Pin</string>
+  <string name="done_pin_topic" formatted="false">Pin</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
   <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
   <string name="drafts_action_discard">Discard</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No Drafts</string>
-  <string formatted="false" name="drawer_activity_me">Me</string>
+  <string name="drawer_activity_me" formatted="false">Me</string>
   <string name="drawer_activity_title">Activity</string>
   <string name="drawer_favorites_title">Favorites</string>
-  <string formatted="false" name="drawer_following_activity_title">Following</string>
+  <string name="drawer_following_activity_title" formatted="false">Following</string>
   <string name="drawer_friends_title">Friends</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
   <string name="edit_stream_listing_context_menu">Edit</string>
   <string name="email_already_registered">Email already registered</string>
@@ -167,6 +169,7 @@
   <string name="error_title">Ooops!</string>
   <string name="error_user_cannot_vote">Cannot vote</string>
   <string name="facebookID">389647124570169</string>
+  <string name="facebook_alert_dialog">Email and Friends are required.</string>
   <string name="favorites_emtpy">No Favorites</string>
   <string name="favorite_streams_push_settings">Favorite streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -174,6 +177,7 @@
   <string name="follower_list_empty">No followers</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">Not following anyone</string>
+  <string name="highlight_shot_dialog">Remove highlighted shot?</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No streams</string>
   <string name="intro_create_text">Running a community? Make it a stream and… Shoot!</string>
@@ -188,7 +192,7 @@
   <string name="invite_friends_button">Invite friends</string>
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Invite friends</string>
-  <string formatted="false" name="language_support_alert">We currently support English only.</string>
+  <string name="language_support_alert" formatted="false">We currently support English only.</string>
   <plurals name="listing_favorites">
     <item quantity="one">
             %d favorite
@@ -204,6 +208,7 @@
   <string name="mentioned_shot_activity_with_comment">"Mentioned you: "</string>
   <string name="menu_all_shots">Show all shots</string>
   <string name="menu_copy_text">Copy text</string>
+  <string name="menu_highlight_shot">Highlight</string>
   <string name="menu_holding_shots">Show holder\'s shots</string>
   <!-- Menu names -->
   <string name="menu_info">Friends</string>
@@ -211,8 +216,8 @@
   <string name="menu_profile_chage_password">Change password</string>
   <string name="menu_remove_favorite">Remove from Favorites</string>
   <string name="menu_save_photo">Save image</string>
-  <string name="menu_search_friends">Search friends</string>
-  <string name="menu_search_participants">Search participants</string>
+  <string name="menu_search_friends">Search for friends</string>
+  <string name="menu_search_participants">Search for participants</string>
   <string name="menu_search_streams">Search</string>
   <string name="menu_search_timeline">Search timeline</string>
   <string name="menu_share_shot_via">Share via…</string>
@@ -236,7 +241,7 @@
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
   <string name="new_stream_title_label">Title</string>
-  <string formatted="false" name="new_topic">New message…</string>
+  <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
   <string name="niced_by">"Niced by "</string>
   <string name="niced_shot_activity">Niced your shot</string>
@@ -316,8 +321,8 @@
   <string name="remove_stream_confirmation">Remove stream?</string>
   <string name="remove_stream_label">Remove stream</string>
   <string name="remove_stream_listing_context_menu">Remove</string>
-  <string formatted="false" name="replied_activity">Replied</string>
-  <string formatted="false" name="replied_activity_with_comment">Replied:</string>
+  <string name="replied_activity" formatted="false">Responded</string>
+  <string name="replied_activity_with_comment" formatted="false">"Responded: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">
       %d respond
@@ -339,6 +344,7 @@
   <string name="reset_password_send_email">Send a Password Reset Email</string>
   <string name="restore_stream_label">Restore stream</string>
   <string name="restore_stream_snackbar_action">Restore</string>
+  <string name="search_users_hint">Search for users</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Shared poll %s</string>
   <string name="shared_shot_activity">Shared %s\'s shot</string>
@@ -361,11 +367,11 @@
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
   <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
-  <string name="started_shooting_push_settings">Started Shooting Notice</string>
+  <string name="started_shooting_push_settings">Started shooting notice</string>
   <string name="stream_data_info_favorites">Favorites</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
-  <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
+  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Edit stream</string>
   <string name="stream_detail_media">Media</string>
@@ -407,9 +413,9 @@
   <string name="title_activity_stream_data_info">Stats</string>
   <string name="title_activity_stream_media">Media</string>
   <string name="title_activity_support">Support</string>
-  <string formatted="false" name="title_menu_photo">Photo</string>
-  <string formatted="false" name="title_pin_message_notification">Notify message?</string>
-  <string formatted="false" name="topic">Message</string>
+  <string name="title_menu_photo" formatted="false">Photo</string>
+  <string name="title_pin_message_notification" formatted="false">Notify message?</string>
+  <string name="topic" formatted="false">Message</string>
   <plurals name="total_watchers_pattern">
     <item quantity="one">
             %d participant
@@ -434,7 +440,7 @@
   <string name="voted_poll">Voted in (question) in %s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
-  <string formatted="false" name="watch_profile_photo">View</string>
+  <string name="watch_profile_photo" formatted="false">View</string>
   <string name="welcome_friends_text">Leave to disconnect</string>
   <string name="welcome_get_started_button">Got it</string>
   <string name="welcome_shootr_title">Enter a stream to connect</string>
@@ -442,9 +448,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="menu_highlight_shot">Highlight</string>
-  <string name="highlight_shot_dialog">The highlighted shot will be removed for everyone</string>
-  <string name="dismiss_highlight_shot">Dismiss</string>
-  <string name="search_users_hint">Search for users</string>
-  <string name="drawer_users_title">Users</string>
 </resources>

@@ -41,7 +41,7 @@
   <string name="added_contributor">已新增</string>
   <string name="added_to_favorites">已被加入最愛</string>
   <string name="add_contributor">新增</string>
-  <string name="add_contributor_button">新增回應者</string>
+  <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
   <string name="add_to_favorites_menu_title">加入最愛</string>
   <string name="alert_report_confirmed_email_message">點選帳戶〉編輯個人檔案，並確認您的電郵。</string>
@@ -72,7 +72,7 @@
   <string name="confirmation_hide_shot_message" formatted="false">解除釘選</string>
   <string name="confirm_hide_shot" formatted="false">解除釘選</string>
   <string name="connection_lost">網絡連接中斷</string>
-  <string name="contributors_empty">沒有回應者</string>
+  <string name="contributors_empty">沒有合作者</string>
   <string name="copied_to_clipboard">文字已複製到剪貼板。</string>
   <string name="current_password_hint">目前的密碼</string>
   <string name="days">日</string>
@@ -80,6 +80,7 @@
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消變更？</string>
   <string name="discover">發現</string>
+  <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
   <string name="done_pin_topic" formatted="false">釘選</string>
@@ -95,6 +96,7 @@
   <string name="drawer_following_activity_title" formatted="false">關注中</string>
   <string name="drawer_friends_title">朋友</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_users_title">用戶</string>
   <string name="edit_stream">編輯Stream</string>
   <string name="edit_stream_listing_context_menu">編輯</string>
   <string name="email_already_registered">電郵已確認</string>
@@ -111,7 +113,7 @@
   <string name="entered_just_now">剛登入</string>
   <string name="entered_long_time_ago">多天前登入</string>
   <string name="entered_minutes_ago">%d分鐘前登入</string>
-  <string name="error_adding_contributor">無法新增超過100以上的回應者</string>
+  <string name="error_adding_contributor">無法新增超過100以上的合作者</string>
   <string name="error_deleted_shot">這個shot已被刪除</string>
   <string name="error_facebook_login">不能用Facebook登錄。請稍後再試</string>
   <string name="error_following_user_blocked">不能關注您忽略的用戶。</string>
@@ -167,6 +169,7 @@
   <string name="error_title">Ooops!</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
+  <string name="facebook_alert_dialog">需要電子郵件和好友列表。</string>
   <string name="favorites_emtpy">沒有最愛</string>
   <string name="favorite_streams_push_settings">喜愛的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -174,6 +177,7 @@
   <string name="follower_list_empty">没有关注者</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">沒有跟關注任何人</string>
+  <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
   <string name="include_listing_empty">沒有 Streams</string>
   <string name="intro_create_text">是否在經營團體？讓它成為stream吧！</string>
@@ -199,6 +203,7 @@
   <string name="mentioned_shot_activity_with_comment">"提及到您: "</string>
   <string name="menu_all_shots">顯示所有shots</string>
   <string name="menu_copy_text">複製文字</string>
+  <string name="menu_highlight_shot">置頂</string>
   <string name="menu_holding_shots">顯示創立者的shots</string>
   <!-- Menu names -->
   <string name="menu_info">朋友</string>
@@ -322,6 +327,7 @@
   <string name="reset_password_send_email">發送密碼重設電郵</string>
   <string name="restore_stream_label">還原stream</string>
   <string name="restore_stream_snackbar_action">復原</string>
+  <string name="search_users_hint">查找用戶</string>
   <string name="seconds">秒</string>
   <string name="shared_poll">分享了投票 %s</string>
   <string name="shared_shot_activity">分享了%s的 Shot</string>
@@ -381,7 +387,7 @@
   <string name="title_activity_all_participants">所有參與者</string>
   <string name="title_activity_all_shots">所有shots</string>
   <string name="title_activity_change_password">更改密碼</string>
-  <string name="title_activity_contributors">回應者</string>
+  <string name="title_activity_contributors">合作者</string>
   <string name="title_activity_email_confirmation">電郵</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">登入</string>

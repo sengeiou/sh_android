@@ -80,6 +80,7 @@
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
   <string name="discover">発見</string>
+  <string name="dismiss_highlight_shot">消去</string>
   <string name="done">完了</string>
   <string name="done_label">完了</string>
   <string name="done_pin_topic" formatted="false">OK</string>
@@ -95,6 +96,7 @@
   <string name="drawer_following_activity_title" formatted="false">フォロー中</string>
   <string name="drawer_friends_title">友達</string>
   <string name="drawer_streams_title">ストリーム</string>
+  <string name="drawer_users_title">ユーザー</string>
   <string name="edit_stream">編集</string>
   <string name="edit_stream_listing_context_menu">編集</string>
   <string name="email_already_registered">このメールアドレスは既に使用されています</string>
@@ -167,6 +169,7 @@
   <string name="error_title">おっと！</string>
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
+  <string name="facebook_alert_dialog">メールアドレスと友人は必須項目です。</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -174,6 +177,7 @@
   <string name="follower_list_empty">フォロワーはいません</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">フォロー中の人はいません</string>
+  <string name="highlight_shot_dialog">メッセージのハイライトを取り消しますか？</string>
   <string name="hours">時間</string>
   <string name="include_listing_empty">ストリームはありません</string>
   <string name="intro_create_text">所有するコミュニティーのストリームを作成してみてください。</string>
@@ -200,6 +204,7 @@
   <string name="mentioned_shot_activity_with_comment">"あなたについて書きました: "</string>
   <string name="menu_all_shots">全てのショットを見る</string>
   <string name="menu_copy_text">テキストをコピー</string>
+  <string name="menu_highlight_shot">ハイライト</string>
   <string name="menu_holding_shots">作成者のショットを表示する</string>
   <!-- Menu names -->
   <string name="menu_info">友達</string>
@@ -323,6 +328,7 @@
   <string name="reset_password_send_email">パスワードの変更用のメールを送信</string>
   <string name="restore_stream_label">ストリームを復元</string>
   <string name="restore_stream_snackbar_action">復元する</string>
+  <string name="search_users_hint">ユーザーを探す</string>
   <string name="seconds">秒</string>
   <string name="shared_poll">アンケート %s を共有しました</string>
   <string name="shared_shot_activity">%sのショットを共有しました</string>

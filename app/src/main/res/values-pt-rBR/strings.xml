@@ -16,7 +16,7 @@
   <string name="activity_find_friends_title">Buscar amigos</string>
   <string name="activity_find_participants_empty_message">Nenhum resultado</string>
   <string name="activity_find_participants_hint">Buscar participantes</string>
-  <string name="activity_find_streams_hint">Encontrar streams</string>
+  <string name="activity_find_streams_hint">Buscar streams</string>
   <string name="activity_find_streams_title">Buscar streams</string>
   <string name="activity_followers_title">Seguidores</string>
   <string name="activity_following_title">Seguindo</string>
@@ -81,6 +81,7 @@
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar modificações?</string>
   <string name="discover">Descobrir</string>
+  <string name="dismiss_highlight_shot">Desmarcar</string>
   <string name="done">Feito</string>
   <string name="done_label">Feito</string>
   <string name="done_pin_topic" formatted="false">Linkar</string>
@@ -96,6 +97,7 @@
   <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
   <string name="drawer_friends_title">Amigos</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_users_title">Usuários</string>
   <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>
   <string name="email_already_registered">Email já registrado</string>
@@ -168,6 +170,7 @@
   <string name="error_title">Ooops!</string>
   <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
+  <string name="facebook_alert_dialog">O email e a lista de amigos são necessários.</string>
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -175,6 +178,7 @@
   <string name="follower_list_empty">Não há seguidores</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">Não segue ninguém</string>
+  <string name="highlight_shot_dialog">O shot não será mais destacado</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">Nenhum stream</string>
   <string name="intro_create_text">Dirige uma comunidade? Crie seu stream agora.</string>
@@ -201,6 +205,7 @@
   <string name="mentioned_shot_activity_with_comment">"Te mencionou: "</string>
   <string name="menu_all_shots">Mostrar todos os shots</string>
   <string name="menu_copy_text">Copiar texto</string>
+  <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Exibir os shots do administrador</string>
   <!-- Menu names -->
   <string name="menu_info">Amigos</string>
@@ -329,13 +334,14 @@
   <string name="reset_password_send_email">Enviar email para modificação de senha</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
+  <string name="search_users_hint">Buscar usuários</string>
   <string name="seconds">s</string>
-  <string name="shared_poll">Questionario compartilhado %s</string>
+  <string name="shared_poll">Questionário compartilhado %s</string>
   <string name="shared_shot_activity">Compartilhou um shot de %s</string>
   <string name="shared_shot_activity_with_comment">"Compartilhado: "</string>
   <string name="shared_stream_notification">Stream compartilhado</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
-  <string name="share_poll_subject">Questionario %s</string>
+  <string name="share_poll_subject">Questionário %s</string>
   <string name="share_shot_chooser_title">Compartilhar</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s em %2$s · Shootr</string>

@@ -145,6 +145,7 @@ public class WatchNumberPresenterTest {
                 ((WatchNumberInteractor.Callback) invocation.getArguments()[1]).onLoaded(count);
                 return null;
             }
-        }).when(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
+        }).when(watchNumberInteractor)
+            .loadWatchersNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class));
     }
 }
