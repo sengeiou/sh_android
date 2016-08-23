@@ -17,6 +17,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   private static final int DISCOVERED_STREAM = 0;
   private static final int DISCOVERED_STREAM_SMALL = 1;
+  private static final int DISCOVERED_SHOT = 2;
   private static final int UNKNOWN = -1;
 
   private final ImageLoader imageLoader;
