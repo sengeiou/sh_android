@@ -20,7 +20,7 @@ import javax.inject.Inject;
  */
 public class WatchNumberInteractor implements Interactor {
 
-  public static final int NO_STREAM = -1;
+  public static final int NO_WATCHERS = 0;
   public static final int FRIENDS = 0;
   public static final int WATCHERS = 1;
 
@@ -62,7 +62,8 @@ public class WatchNumberInteractor implements Interactor {
   private Integer[] setWatchers(Stream stream, List<User> watchers) {
     Integer[] watchersCount = new Integer[2];
     watchersCount[FRIENDS] = watchers.size();
-    watchersCount[WATCHERS] = stream.getWatchers().size();
+    watchersCount[WATCHERS] =
+        (stream.getWatchers() != null) ? stream.getWatchers().size() : NO_WATCHERS;
     return watchersCount;
   }
 
