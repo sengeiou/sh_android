@@ -79,11 +79,11 @@ public class DatabaseContract {
     public static final String STREAM_TITLE = "streamTitle";
     public static final String NICE_COUNT = "niceCount";
     public static final String TYPE = "type";
-
+    public static final String VIEWS = "views";
+    public static final String LINK_CLICKS = "linkClicks";
     public static final String ID_SHOT_PARENT = "idShotParent";
     public static final String ID_USER_PARENT = "idUserParent";
     public static final String USERNAME_PARENT = "userNameParent";
-
     public static final String VIDEO_URL = "videoUrl";
     public static final String VIDEO_TITLE = "videoTitle";
     public static final String VIDEO_DURATION = "videoDuration";
@@ -93,8 +93,8 @@ public class DatabaseContract {
     public static final String[] PROJECTION = {
         ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
         ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
-        VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, BIRTH, MODIFIED,
-        DELETED, REVISION, SYNCHRONIZED
+        VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, VIEWS, LINK_CLICKS,
+        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -408,7 +408,7 @@ public class DatabaseContract {
         ID_HIGHLIGHTED_SHOT, ACTIVE, VISIBLE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT,
         IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT, ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT,
         ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN,
-        REPLY_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        REPLY_COUNT, VIEWS, LINK_CLICKS, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -425,6 +425,23 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         ID_STREAM, JOIN_STREAM_DATE
+    };
+  }
+
+  public static final class ShotEventTable {
+
+    private ShotEventTable () {
+
+    }
+
+    public static final String TABLE = "ShotEvent";
+
+    public static final String ID_SHOT = "idShot";
+    public static final String TYPE = "type";
+    public static final String TIMESTAMP = "timestamp";
+
+    public static final String[] PROJECTION = {
+        ID_SHOT, TYPE, TIMESTAMP
     };
   }
 }

@@ -98,4 +98,5 @@ public interface ShotApiService {
   @POST("/highlightedShot") HighlightedShotApiEntity postHighlightedShotEntity(
       @Body CreateAHighlightedShotEntity createAHighlightedShotEntity)
       throws ApiException, IOException;
+
 }

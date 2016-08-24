@@ -31,6 +31,8 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setVideoUrl(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_URL)));
         shot.setVideoTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_TITLE)));
         shot.setVideoDuration(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_DURATION)));
+        shot.setViews(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.VIEWS)));
+        shot.setLinkClicks(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.LINK_CLICKS)));
         shot.setProfileHidden(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.PROFILE_HIDDEN)));
         shot.setReplyCount(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.REPLY_COUNT)));
         setSynchronizedfromCursor(c, shot);
@@ -59,6 +61,8 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot.getVideoDuration());
         cv.put(DatabaseContract.ShotTable.PROFILE_HIDDEN, shot.getProfileHidden());
         cv.put(DatabaseContract.ShotTable.REPLY_COUNT, shot.getReplyCount());
+        cv.put(DatabaseContract.ShotTable.VIEWS, shot.getViews());
+        cv.put(DatabaseContract.ShotTable.LINK_CLICKS, shot.getLinkClicks());
         setSynchronizedtoContentValues(shot, cv);
         return cv;
     }

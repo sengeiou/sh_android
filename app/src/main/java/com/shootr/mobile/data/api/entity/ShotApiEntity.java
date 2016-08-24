@@ -24,6 +24,9 @@ public class ShotApiEntity {
     private String videoTitle;
     private Long videoDuration;
 
+    private Long linkClicks;
+    private Long views;
+
     private EmbedUserApiEntity user;
     private List<ShotApiEntity> replies;
     private ShotApiEntity parent;
@@ -225,5 +228,21 @@ public class ShotApiEntity {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public Long getLinkClicks() {
+        return linkClicks;
+    }
+
+    public void setLinkClicks(Long linkClicks) {
+        this.linkClicks = linkClicks;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 }
