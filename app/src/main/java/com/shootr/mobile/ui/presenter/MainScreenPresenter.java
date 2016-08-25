@@ -3,11 +3,12 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
+import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
@@ -19,6 +20,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
     private final GetCurrentUserInteractor getCurrentUserInteractor;
     private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
+    private final SendShotEventStatsIneteractor sendShotEventStatsIneteractor;
     private final UserModelMapper userModelMapper;
     private final IntPreference badgeCount;
     private final Bus bus;
@@ -27,10 +29,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     private boolean hasBeenPaused = false;
 
     @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
-      SendDeviceInfoInteractor sendDeviceInfoInteractor, UserModelMapper userModelMapper,
-      @ActivityBadgeCount IntPreference badgeCount, @Main Bus bus) {
+        SendDeviceInfoInteractor sendDeviceInfoInteractor,
+        SendShotEventStatsIneteractor sendShotEventStatsIneteractor, UserModelMapper userModelMapper,
+        @ActivityBadgeCount IntPreference badgeCount, @Main Bus bus) {
         this.getCurrentUserInteractor = getCurrentUserInteractor;
         this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
+        this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
         this.userModelMapper = userModelMapper;
         this.badgeCount = badgeCount;
         this.bus = bus;
@@ -44,11 +48,16 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         setView(mainScreenView);
         this.loadCurrentUser();
         this.sendDeviceInfo();
+        this.sendShotEventStats();
         this.updateActivityBadge();
     }
 
     private void sendDeviceInfo() {
         sendDeviceInfoInteractor.sendDeviceInfo();
+    }
+
+    private void sendShotEventStats() {
+        sendShotEventStatsIneteractor.sendShotsStats();
     }
 
     private void loadCurrentUser() {
@@ -72,6 +81,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         bus.register(this);
         if (hasBeenPaused) {
             loadCurrentUser();
+            sendShotEventStats();
         }
     }
 

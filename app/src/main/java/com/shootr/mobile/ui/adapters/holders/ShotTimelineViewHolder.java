@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -73,7 +74,22 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener) {
     bindUsername(shot);
-    bindComment(shot);
+    bindComment(shot, null);
+    bindElapsedTime(shot);
+    bindUserPhoto(shot);
+    bindImageInfo(shot, onLongClickListener, onTouchListener, onImageClickListener);
+    bindVideoInfo(shot);
+    bindNiceInfo(shot);
+    bindReplyCount(shot);
+    setupListeners(shot, shotClickListener, onShotLongClick);
+  }
+
+  public void render(final ShotModel shot, final ShotClickListener shotClickListener,
+      final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
+      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
+      OnUrlClickListener onUrlClickListener) {
+    bindUsername(shot);
+    bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
     bindImageInfo(shot, onLongClickListener, onTouchListener, onImageClickListener);
@@ -127,21 +143,22 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  protected void bindComment(ShotModel item) {
+  protected void bindComment(ShotModel item, OnUrlClickListener onUrlClickListener) {
     String comment = item.getComment();
     if (comment != null) {
-      addShotComment(this, comment);
+      addShotComment(this, comment, onUrlClickListener);
       text.setVisibility(View.VISIBLE);
     } else {
       text.setVisibility(View.GONE);
     }
   }
 
-  private void addShotComment(ShotTimelineViewHolder vh, CharSequence comment) {
+  private void addShotComment(ShotTimelineViewHolder vh, CharSequence comment,
+      OnUrlClickListener onUrlClickListener) {
     CharSequence spannedComment =
         shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
     vh.text.setText(spannedComment);
-    vh.text.addLinks();
+    vh.text.addLinks(onUrlClickListener);
   }
 
   private void bindUsername(ShotModel shot) {

@@ -608,7 +608,7 @@ public class SQLiteUtils {
         + DatabaseContract.ShotEventTable.TABLE
         + " ("
         + DatabaseContract.ShotEventTable.ID_SHOT
-        + " TEXT NOT NULL PRIMARY KEY,"
+        + " TEXT NOT NULL,"
         + DatabaseContract.ShotEventTable.TYPE
         + " TEXT NULL,"
         + DatabaseContract.ShotEventTable.TIMESTAMP

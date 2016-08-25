@@ -21,6 +21,7 @@ import com.shootr.mobile.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -44,6 +45,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.WritePermissionManager;
@@ -77,6 +79,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
+    @Inject NumberFormatUtil numberFormatUtil;
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
@@ -217,11 +220,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 onShotAvatarClick(userId);
             }
         }, //
-          new ShotClickListener() {
-              @Override public void onClick(ShotModel shot) {
-                  onShotClick(shot);
-              }
-          }, new ShotClickListener() {
+            new ShotClickListener() {
+                @Override public void onClick(ShotModel shot) {
+                    onShotClick(shot);
+                }
+            }, new ShotClickListener() {
             @Override public void onClick(ShotModel shot) {
                 onShotClick(shot);
             }
@@ -234,22 +237,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 onShotImageClick(shot);
             }
         }, //
-          new OnVideoClickListener() {
-              @Override public void onVideoClick(String url) {
-                  onShotVideoClick(url);
-              }
-          }, //
-          new OnUsernameClickListener() {
-              @Override public void onUsernameClick(String username) {
-                  onShotUsernameClick(username);
-              }
-          }, //
-          new ShotClickListener() {
+            new OnVideoClickListener() {
+                @Override public void onVideoClick(String url) {
+                    onShotVideoClick(url);
+                }
+            }, //
+            new OnUsernameClickListener() {
+                @Override public void onUsernameClick(String username) {
+                    onShotUsernameClick(username);
+                }
+            }, //
+            numberFormatUtil, new ShotClickListener() {
 
-              @Override public void onClick(ShotModel shot) {
-                  pinShotPresenter.pinToProfile(shot);
-              }
-          }, new OnParentShownListener() {
+                @Override public void onClick(ShotModel shot) {
+                    pinShotPresenter.pinToProfile(shot);
+                }
+            }, new OnParentShownListener() {
             @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
                 replies = repliesNumber;
                 linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
@@ -258,22 +261,26 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 }
             }
         }, //
-          new OnNiceShotListener() {
-              @Override public void markNice(String idShot) {
-                  detailPresenter.markNiceShot(idShot);
-                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
-                      analyticsLabelNice);
-              }
+            new OnNiceShotListener() {
+                @Override public void markNice(String idShot) {
+                    detailPresenter.markNiceShot(idShot);
+                    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
+                        analyticsLabelNice);
+                }
 
-              @Override public void unmarkNice(String idShot) {
-                  detailPresenter.unmarkNiceShot(idShot);
-              }
-          }, //
-          new ShotClickListener() {
-              @Override public void onClick(ShotModel shotModel) {
-                  detailPresenter.openShotNicers(shotModel);
-              }
-          }, timeFormatter, getResources(), timeUtils);
+                @Override public void unmarkNice(String idShot) {
+                    detailPresenter.unmarkNiceShot(idShot);
+                }
+            }, //
+            new ShotClickListener() {
+                @Override public void onClick(ShotModel shotModel) {
+                    detailPresenter.openShotNicers(shotModel);
+                }
+            }, new OnUrlClickListener() {
+            @Override public void onClick() {
+                detailPresenter.storeClickCount();
+            }
+        }, timeFormatter, getResources(), timeUtils);
         setupDetailList();
     }
 

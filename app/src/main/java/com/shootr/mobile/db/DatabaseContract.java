@@ -430,7 +430,7 @@ public class DatabaseContract {
 
   public static final class ShotEventTable {
 
-    private ShotEventTable () {
+    private ShotEventTable() {
 
     }
 

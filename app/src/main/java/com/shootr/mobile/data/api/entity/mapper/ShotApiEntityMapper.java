@@ -56,6 +56,10 @@ public class ShotApiEntityMapper {
         shotEntity.setProfileHidden(shotApiEntity.getProfileHidden());
         shotEntity.setReplyCount(shotApiEntity.getReplyCount());
 
+        shotEntity.setViews(shotApiEntity.getViews() != null ? shotApiEntity.getViews() : 0);
+        shotEntity.setLinkClicks(
+            shotApiEntity.getLinkClicks() != null ? shotApiEntity.getLinkClicks() : 0);
+
         return shotEntity;
     }
 

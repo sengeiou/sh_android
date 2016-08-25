@@ -18,6 +18,7 @@ import com.shootr.mobile.db.manager.AbstractManager;
 import com.shootr.mobile.db.manager.ContributorManager;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
+import com.shootr.mobile.db.manager.ShotEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -50,7 +51,7 @@ import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.DeeplinkingTool;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.FollowsFormatUtil;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.GlideImageLoader;
 import com.shootr.mobile.util.GoogleAnalyticsTool;
@@ -119,6 +120,8 @@ import static android.content.Context.MODE_PRIVATE;
         WritePermissionManager.class,
 
         ContributorManager.class,
+
+        ShotEventManager.class
     },
     includes = {
         ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
@@ -249,7 +252,7 @@ import static android.content.Context.MODE_PRIVATE;
   }
 
   @Provides @Singleton FormatNumberUtils provideFormatNumbersUtils(
-      FollowsFormatUtil followsFormatUtil) {
+      NumberFormatUtil followsFormatUtil) {
     return followsFormatUtil;
   }
 

@@ -8,7 +8,7 @@ import javax.inject.Inject;
 public class DatabaseShotEventDataSource implements ShotEventDataSource {
 
     private final ShotEventManager shotEventManager;
-    public static final String METHOD_NOT_VALID_FOR_DATABASE= "Method not valid for database";
+    public static final String METHOD_NOT_VALID_FOR_DATABASE = "Method not valid for database";
 
     @Inject public DatabaseShotEventDataSource(ShotEventManager shotEventManager) {
         this.shotEventManager = shotEventManager;

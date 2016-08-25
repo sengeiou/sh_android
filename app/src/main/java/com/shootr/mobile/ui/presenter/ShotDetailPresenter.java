@@ -1,15 +1,17 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.ui.model.NicerModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
@@ -28,6 +30,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShareShotInteractor shareShotInteractor;
+    private final ViewShotDetailEventInteractor viewShotEventInteractor;
+    private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
     private final ShotModelMapper shotModelMapper;
     private final NicerModelMapper nicerModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -41,13 +45,16 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private boolean isNiceBlocked;
 
     @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, NicerModelMapper nicerModelMapper,
-      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
+        MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+        ShareShotInteractor shareShotInteractor, ViewShotDetailEventInteractor viewShotEventInteractor,
+        ClickShotLinkEventInteractor clickShotLinkEventInteractor, ShotModelMapper shotModelMapper,
+        NicerModelMapper nicerModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shareShotInteractor = shareShotInteractor;
+        this.viewShotEventInteractor = viewShotEventInteractor;
+        this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
         this.shotModelMapper = shotModelMapper;
         this.nicerModelMapper = nicerModelMapper;
         this.bus = bus;
@@ -66,11 +73,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.setShotDetailView(shotDetailView);
         this.setShotModel(shotModel);
         this.loadShotDetail(shotModel);
+        if (shotModel != null) {
+            this.storeViewCount(shotModel.getIdShot());
+        }
     }
 
     public void initialize(final ShotDetailView shotDetailView, String idShot) {
         this.setShotDetailView(shotDetailView);
         loadShotDetailFromIdShot(shotDetailView, idShot);
+        this.storeViewCount(idShot);
     }
 
     public void loadShotDetailFromIdShot(final ShotDetailView shotDetailView, String idShot) {
@@ -264,5 +275,21 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void openShotNicers(ShotModel shotModel) {
         shotDetailView.goToNicers(shotModel.getIdShot());
+    }
+
+    private void storeViewCount(String idShot) {
+        viewShotEventInteractor.countViewEvent(idShot, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        });
+    }
+
+    public void storeClickCount() {
+        clickShotLinkEventInteractor.countClickLinkEvent(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        });
     }
 }

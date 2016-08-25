@@ -24,7 +24,8 @@ import javax.inject.Singleton;
         PollRepositoryModule.class,
         UserSettingsRepositoryModule.class,
         DiscoveredRepositoryModule.class,
-        RecentStreamRepositoryModule.class
+        RecentStreamRepositoryModule.class,
+        ShotEventRepositoryModule.class
     },
     complete = false,
     library = true) public class RepositoryModule {

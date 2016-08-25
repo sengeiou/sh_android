@@ -1,14 +1,14 @@
 package com.shootr.mobile.domain.repository;
 
+import com.shootr.mobile.domain.model.shot.ShotEvent;
+
 public interface ShotEventRepository {
 
-    void clickLink(String idShot);
+    void clickLink(ShotEvent shotEvent);
 
-    void viewHighlightedShot(String idShot);
+    void viewHighlightedShot(ShotEvent shotEvent);
 
-    void shotDetailViewed(String idShot);
+    void shotDetailViewed(ShotEvent shotEvent);
 
     void sendShotEvents();
-
-    void deleteShotEvents();
 }

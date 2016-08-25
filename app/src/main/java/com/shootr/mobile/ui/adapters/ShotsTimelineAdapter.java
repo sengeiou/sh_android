@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -44,6 +45,7 @@ public class ShotsTimelineAdapter
   private final View.OnTouchListener onTouchListener;
   private final OnImageClickListener onImageClickListener;
   private final OnHideHighlightShot onHideHighlightClickListener;
+  private final OnUrlClickListener onUrlClickListener;
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
@@ -55,7 +57,8 @@ public class ShotsTimelineAdapter
       OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener,
       OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnHideHighlightShot onHideHighlightClickListener, Boolean isAdmin) {
+      OnUrlClickListener onUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
+      Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -63,6 +66,7 @@ public class ShotsTimelineAdapter
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.onReplyShotListener = onReplyShotListener;
+    this.onUrlClickListener = onUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -104,7 +108,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel, shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, isAdmin);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {

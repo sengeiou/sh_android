@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.mobile.data.entity.ShotEventEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.ShotEventEntityDBMapper;
+import com.shootr.mobile.domain.model.shot.ShotEventType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,9 +15,7 @@ import javax.inject.Inject;
 public class ShotEventManager extends AbstractManager {
 
   private static final String SHOT_EVENT_TABLE = DatabaseContract.ShotEventTable.TABLE;
-  public final static String SHOT_VIEW = "SHOT_VIEW";
-  public final static String SHOT_DETAIL_VIEW = "SHOT_DETAIL_VIEW";
-  public final static String SHOT_LINK_CLICK = "SHOT_LINK_CLICK";
+
   private final ShotEventEntityDBMapper shotEventEntityDBMapper;
 
   @Inject public ShotEventManager(SQLiteOpenHelper dbHelper,
@@ -27,7 +26,7 @@ public class ShotEventManager extends AbstractManager {
 
   public void clickLink(ShotEventEntity shotEventEntity) {
     if (shotEventEntity != null) {
-      shotEventEntity.setType(SHOT_LINK_CLICK);
+      shotEventEntity.setType(ShotEventType.SHOT_LINK_CLICK);
       ContentValues contentValues = shotEventEntityDBMapper.toContentValues(shotEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);
@@ -36,7 +35,7 @@ public class ShotEventManager extends AbstractManager {
 
   public void viewHighlightedShot(ShotEventEntity shotEventEntity) {
     if (shotEventEntity != null) {
-      shotEventEntity.setType(SHOT_VIEW);
+      shotEventEntity.setType(ShotEventType.SHOT_VIEW);
       ContentValues contentValues = shotEventEntityDBMapper.toContentValues(shotEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);
@@ -45,7 +44,7 @@ public class ShotEventManager extends AbstractManager {
 
   public void shotDetailViewed(ShotEventEntity shotEventEntity) {
     if (shotEventEntity != null) {
-      shotEventEntity.setType(SHOT_DETAIL_VIEW);
+      shotEventEntity.setType(ShotEventType.SHOT_DETAIL_VIEW);
       ContentValues contentValues = shotEventEntityDBMapper.toContentValues(shotEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);

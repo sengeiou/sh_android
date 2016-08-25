@@ -15,6 +15,7 @@ import javax.inject.Inject;
 public class ServiceShotEventDatasource implements ShotEventDataSource {
 
   public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
+
   private final ShotEventApiService shotEventApiService;
   private final DatabaseShotEventDataSource databaseShotEventDataSource;
 
@@ -33,6 +34,7 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
       List<ShotEventEntity> shotEventEntities = databaseShotEventDataSource.getEvents();
       if (shotEventEntities != null && shotEventEntities.size() > 0) {
         shotEventApiService.sendShotEvents(shotEventEntities);
+        databaseShotEventDataSource.deleteShotEvents();
       }
     } catch (IOException e) {
       throw new ServerCommunicationException(e);

@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.ShotEventEntity;
-import java.util.List;
 
 public interface ShotEventDataSource {
 
