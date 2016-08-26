@@ -3,29 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-  <LinearLayout android:id="@+id/layout_push_settings"
-      xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    >
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/layout_push_settings"
       android:layout_width="match_parent"
       android:layout_height="56dp"
-      android:paddingTop="8dp"
+      android:background="?selectableItemBackground"
       android:orientation="vertical"
-      android:background="?selectableItemBackground">
-    <TextView android:id="@+id/started_shooting_push"
+      android:paddingTop="8dp"
+      >
+    <TextView
+        android:id="@+id/started_shooting_push"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="8dp"
-        android:textAppearance="@style/TextAppearance.Switch"
         android:text="@string/started_shooting_push_settings"
+        android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        tools:text="@string/started_shooting_push_settings"/>
+        tools:text="@string/started_shooting_push_settings"
+        />
 
-    <TextView android:id="@+id/started_shooting_push_option"
+    <TextView
+        android:id="@+id/started_shooting_push_option"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:gravity="center_vertical"
@@ -33,8 +37,45 @@
         android:text="@string/all_push_settings"
         android:textColor="@color/gray_50"
         android:textSize="14sp"
-        tools:text="por defecto"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:text="por defecto"
+        tools:visibility="visible"
+        />
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/layout_nice_push_settings"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+      >
+    <TextView
+        android:id="@+id/nice_shot_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
+        android:text="@string/nices_push_settings"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        tools:text="@string/nices_push_settings"
+        />
+    <TextView
+        android:id="@+id/nice_shot_push_option"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/push_settings_everyone"
+        android:textColor="@color/gray_50"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="@string/nices_push_settings_off"
+        tools:visibility="visible"
+        />
   </LinearLayout>
 </LinearLayout>

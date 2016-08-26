@@ -37,16 +37,29 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
     return response;
   }
 
+  public UserSettingsEntity mapNiceShot(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.NICE_SHOT);
+    response.setValue(userSettings.getNiceShotPushSettings());
+    return response;
+  }
+
   public UserSettings reverseMapList(List<UserSettingsEntity> userSettings) {
     UserSettings domainValue =
         UserSettings.builder().user(sessionRepository.getCurrentUserId()).build();
     if (userSettings != null) {
       for (UserSettingsEntity userSetting : userSettings) {
-        if (userSetting.getPushType().equals(PushSettingType.STARTED_SHOOTING)) {
-          domainValue.setStartedShootingPushSettings(userSetting.getValue());
-        }
+        handleType(domainValue, userSetting);
       }
     }
     return domainValue;
+  }
+
+  private void handleType(UserSettings domainValue, UserSettingsEntity userSetting) {
+    if (userSetting.getPushType().equals(PushSettingType.STARTED_SHOOTING)) {
+      domainValue.setStartedShootingPushSettings(userSetting.getValue());
+    } else if (userSetting.getPushType().equals(PushSettingType.NICE_SHOT)) {
+      domainValue.setNiceShotPushSettings(userSetting.getValue());
+    }
   }
 }

@@ -5,4 +5,6 @@ public interface SettingsView {
   void showError(String messageForError);
 
   void setStartedShootingSettings(Integer startedShootingPushSettings);
+
+  void setNiceShotSettings(Integer startedShootingPushSettings);
 }

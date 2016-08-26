@@ -9,7 +9,7 @@ import com.shootr.mobile.domain.model.user.UserSettings;
 import com.shootr.mobile.domain.repository.user.UserSettingsRepository;
 import javax.inject.Inject;
 
-public class ChangeUserSettingsInteractor implements Interactor {
+public class ChangeStartedShootingSettingsInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -18,7 +18,7 @@ public class ChangeUserSettingsInteractor implements Interactor {
   private ErrorCallback errorCallback;
   private UserSettings userSettings;
 
-  @Inject public ChangeUserSettingsInteractor(InteractorHandler interactorHandler,
+  @Inject public ChangeStartedShootingSettingsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       UserSettingsRepository externalUserSettingsRepository) {
     this.interactorHandler = interactorHandler;
@@ -26,7 +26,8 @@ public class ChangeUserSettingsInteractor implements Interactor {
     this.externalUserSettingsRepository = externalUserSettingsRepository;
   }
 
-  public void changeSettings(UserSettings userSettings, CompletedCallback callback, ErrorCallback errorCallback) {
+  public void changeStartedShotSettings(UserSettings userSettings, CompletedCallback callback,
+      ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     this.userSettings = userSettings;
@@ -35,7 +36,7 @@ public class ChangeUserSettingsInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      externalUserSettingsRepository.modifySettings(userSettings);
+      externalUserSettingsRepository.modifyStartedShootingSettings(userSettings);
       notifyResult();
     } catch (ServerCommunicationException error) {
       notifyError(error);

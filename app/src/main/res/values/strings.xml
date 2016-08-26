@@ -51,6 +51,8 @@
   <string name="alert_update_shootr">This content can only be viewed with the latest version of Shootr</string>
   <string name="all_participants_button">All participants</string>
   <string name="all_push_settings">All</string>
+  <string name="push_settings_people_follow">From People I Follow</string>
+  <string name="push_settings_everyone">From Everyone</string>
   <string name="ban_user_dialog_message">Their shots on your streams will only be visible to their followers.</string>
   <string name="block_cannot_shoot_streams">Ban user</string>
   <string name="block_ignore_user">Ignore user</string>
@@ -464,4 +466,6 @@
             %s link clicks
         </item>
   </plurals>
+  <string name="nices_push_settings">Nice Shot</string>
+  <string name="nices_push_settings_off">Off</string>
 </resources>

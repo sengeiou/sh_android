@@ -3,7 +3,8 @@ package com.shootr.mobile.ui.presenter;
 import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ChangeUserSettingsInteractor;
+import com.shootr.mobile.domain.interactor.user.ChangeNiceShotSettingsInteractor;
+import com.shootr.mobile.domain.interactor.user.ChangeStartedShootingSettingsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetSettingsByIdUserInteractor;
 import com.shootr.mobile.domain.model.PushSettingType;
 import com.shootr.mobile.domain.model.user.UserSettings;
@@ -16,17 +17,20 @@ import javax.inject.Inject;
 public class SettingsPresenter implements Presenter {
 
   private final GetSettingsByIdUserInteractor getSettingsByIdUserInteractor;
-  private final ChangeUserSettingsInteractor changeUserSettingsInteractor;
+  private final ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor;
+  private final ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor;
   private final UserSettingsModelMapper userSettingsModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private SettingsView settingsView;
   private UserSettingsModel userSettingsModel;
 
   @Inject public SettingsPresenter(GetSettingsByIdUserInteractor getSettingsByIdUserInteractor,
-      ChangeUserSettingsInteractor changeUserSettingsInteractor,
+      ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor,
+      ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor,
       UserSettingsModelMapper userSettingsModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getSettingsByIdUserInteractor = getSettingsByIdUserInteractor;
-    this.changeUserSettingsInteractor = changeUserSettingsInteractor;
+    this.changeStartedShootingSettingsInteractor = changeStartedShootingSettingsInteractor;
+    this.changeNiceShotSettingsInteractor = changeNiceShotSettingsInteractor;
     this.userSettingsModelMapper = userSettingsModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -45,8 +49,11 @@ public class SettingsPresenter implements Presenter {
       @Override public void onLoaded(UserSettings userSettings) {
         userSettingsModel = userSettingsModelMapper.map(userSettings);
         String startedShootingPushSettings = userSettingsModel.getStartedShootingPushSettings();
-        Integer option = mapStartedShootingOption(startedShootingPushSettings);
-        settingsView.setStartedShootingSettings(option);
+        Integer optionStartShooting = mapStartedShootingOption(startedShootingPushSettings);
+        settingsView.setStartedShootingSettings(optionStartShooting);
+        String niceShotPushSettings = userSettingsModel.getNiceShotPushSettings();
+        Integer optionNiceShot = mapNiceShotOption(niceShotPushSettings);
+        settingsView.setNiceShotSettings(optionNiceShot);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -73,6 +80,24 @@ public class SettingsPresenter implements Presenter {
     return option;
   }
 
+  @NonNull private Integer mapNiceShotOption(String niceShotPushSettings) {
+    Integer option = 2;
+    switch (niceShotPushSettings) {
+      case PushSettingType.NICE_SHOT_ALL:
+        option = 2;
+        break;
+      case PushSettingType.NICE_SHOT_OFF:
+        option = 0;
+        break;
+      case PushSettingType.NICE_SHOT_FOLLOWING:
+        option = 1;
+        break;
+      default:
+        break;
+    }
+    return option;
+  }
+
   @Override public void resume() {
 
   }
@@ -83,8 +108,8 @@ public class SettingsPresenter implements Presenter {
   public void startedShootingSettingChanged(String selectedOption) {
     final UserSettingsModel changedSettings = userSettingsModel;
     changedSettings.setStartedShootingPushSettings(selectedOption);
-    changeUserSettingsInteractor.changeSettings(userSettingsModelMapper.reverseMap(changedSettings),
-        new Interactor.CompletedCallback() {
+    changeStartedShootingSettingsInteractor.changeStartedShotSettings(
+        userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             userSettingsModel = changedSettings;
           }
@@ -93,6 +118,23 @@ public class SettingsPresenter implements Presenter {
             Integer option =
                 mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
             settingsView.setStartedShootingSettings(option);
+          }
+        });
+  }
+
+  public void niceShotSettingChanged(String selectedOption) {
+    final UserSettingsModel changedSettings = userSettingsModel;
+    changedSettings.setNiceShotPushSettings(selectedOption);
+    changeNiceShotSettingsInteractor.changeNiceShotSettings(
+        userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            userSettingsModel = changedSettings;
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            Integer option =
+                mapNiceShotOption(userSettingsModel.getNiceShotPushSettings());
+            settingsView.setNiceShotSettings(option);
           }
         });
   }

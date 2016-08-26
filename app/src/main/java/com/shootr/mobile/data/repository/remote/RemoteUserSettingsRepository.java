@@ -22,9 +22,13 @@ public class RemoteUserSettingsRepository implements UserSettingsRepository {
     return mapper.reverseMapList(datasource.getUserSettings());
   }
 
-  @Override public void modifySettings(UserSettings userSettings) {
+  @Override public void modifyStartedShootingSettings(UserSettings userSettings) {
     UserSettingsEntity userSettingsEntities = mapper.mapStartedShooting(userSettings);
     datasource.modifyPushSettings(userSettingsEntities);
   }
 
+  @Override public void modifyNiceShotSettings(UserSettings userSettings) {
+    UserSettingsEntity userSettingsEntities = mapper.mapNiceShot(userSettings);
+    datasource.modifyPushSettings(userSettingsEntities);
+  }
 }
