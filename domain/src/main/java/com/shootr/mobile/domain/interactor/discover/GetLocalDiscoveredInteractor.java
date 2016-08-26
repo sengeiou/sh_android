@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.discover.Discovered;
+import com.shootr.mobile.domain.model.discover.DiscoveredType;
 import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.repository.discover.InternalDiscoveredRepository;
 import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
@@ -48,7 +49,11 @@ public class GetLocalDiscoveredInteractor implements Interactor {
       favoriteStreamIds.add(favorite.getIdStream());
     }
     for (Discovered discovered : discovereds) {
-      discovered.setFaved(favoriteStreamIds.contains(discovered.getStream().getId()));
+      if (discovered.getType().equals(DiscoveredType.STREAM)) {
+        discovered.setFaved(favoriteStreamIds.contains(discovered.getStream().getId()));
+      } else {
+        discovered.setFaved(favoriteStreamIds.contains(discovered.getShot().getStreamInfo().getIdStream()));
+      }
     }
   }
 

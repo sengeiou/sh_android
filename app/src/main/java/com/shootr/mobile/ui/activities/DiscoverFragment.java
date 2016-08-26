@@ -15,13 +15,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.DiscoverAdapter;
-import com.shootr.mobile.ui.adapters.listeners.OnDiscoverFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredStreamClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.DiscoveredModel;
-import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.DiscoverPresenter;
 import com.shootr.mobile.ui.views.DiscoverView;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.yayandroid.parallaxrecyclerview.ParallaxRecyclerView;
@@ -35,6 +38,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @Inject DiscoverPresenter discoverPresenter;
   @Inject ImageLoader imageLoader;
   @Inject FeedbackMessage feedbackMessage;
+  @Inject AndroidTimeUtils timeUtils;
 
   @Bind(R.id.discover_recycler) ParallaxRecyclerView discoverList;
   @Bind(R.id.discover_empty) View empty;
@@ -93,18 +97,26 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   private void setupAdapter() {
     adapter = new DiscoverAdapter(imageLoader, new OnDiscoveredStreamClickListener() {
-      @Override public void onStreamClick(StreamModel stream) {
-        discoverPresenter.streamClicked(stream);
+      @Override public void onStreamClick(String streamId) {
+        discoverPresenter.streamClicked(streamId);
       }
-    }, new OnDiscoverFavoriteClickListener() {
-      @Override public void onFavoriteClick(DiscoveredModel discoveredModel) {
-        discoverPresenter.addStreamToFavorites(discoveredModel);
+    }, new OnDiscoveredFavoriteClickListener() {
+      @Override public void onFavoriteClick(String idStream) {
+        discoverPresenter.addStreamToFavorites(idStream);
       }
 
-      @Override public void onRemoveFavoriteClick(DiscoveredModel discoveredModel) {
-        discoverPresenter.removeFromFavorites(discoveredModel);
+      @Override public void onRemoveFavoriteClick(String idStream) {
+        discoverPresenter.removeFromFavorites(idStream);
       }
-    });
+    }, new OnDiscoveredShotClickListener() {
+      @Override public void onShotClick(ShotModel shotModel) {
+        discoverPresenter.shotClicked(shotModel);
+      }
+    }, new OnAvatarClickListener() {
+      @Override public void onAvatarClick(String userId, View avatarView) {
+        discoverPresenter.onAvatarClicked(userId);
+      }
+    }, timeUtils);
   }
 
   private void setupGridlayout() {
@@ -128,8 +140,16 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     adapter.notifyDataSetChanged();
   }
 
-  @Override public void navigateToStreamTimeline(String idStream, String title, String authorId) {
-    startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title, authorId));
+  @Override public void navigateToStreamTimeline(String idStream) {
+    startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream));
+  }
+
+  @Override public void navigateToShotDetail(ShotModel shotModel) {
+    startActivity(ShotDetailActivity.getIntentForActivity(getActivity(), shotModel));
+  }
+
+  @Override public void navigateToUserProfile(String userId) {
+    startActivity(ProfileActivity.getIntent(getActivity(), userId));
   }
 
   @Override public void scrollListToTop() {

@@ -1,12 +1,14 @@
-package com.shootr.mobile.data.entity;
+package com.shootr.mobile.data.api.entity;
 
-public class DiscoveredEntity {
+import com.shootr.mobile.data.entity.StreamEntity;
+
+public class DiscoveredApiEntity {
 
   private String idDiscover;
   private Long relevance;
   private String type;
   private StreamEntity stream;
-  private ShotEntity shot;
+  private ShotApiEntity shot;
 
   public String getIdDiscover() {
     return idDiscover;
@@ -40,11 +42,11 @@ public class DiscoveredEntity {
     this.stream = stream;
   }
 
-  public ShotEntity getShot() {
+  public ShotApiEntity getShot() {
     return shot;
   }
 
-  public void setShot(ShotEntity shot) {
+  public void setShot(ShotApiEntity shot) {
     this.shot = shot;
   }
 }

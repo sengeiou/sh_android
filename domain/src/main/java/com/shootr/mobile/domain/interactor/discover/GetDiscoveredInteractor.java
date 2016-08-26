@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.interactor.discover;
 
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.model.discover.DiscoveredType;
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.discover.ExternalDiscoveredRepository;
@@ -71,7 +71,12 @@ public class GetDiscoveredInteractor implements Interactor {
       favoriteStreamIds.add(favorite.getIdStream());
     }
     for (Discovered discovered : discovereds) {
-      discovered.setFaved(favoriteStreamIds.contains(discovered.getStream().getId()));
+      if (null != discovered.getStream()) {
+        discovered.setFaved(favoriteStreamIds.contains(discovered.getStream().getId()));
+      } else if (discovered.getShot() != null) {
+        discovered.setFaved(
+            favoriteStreamIds.contains(discovered.getShot().getStreamInfo().getIdStream()));
+      }
     }
   }
 

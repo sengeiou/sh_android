@@ -3,14 +3,18 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
 import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor;
+import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.model.discover.Discovered;
+import com.shootr.mobile.domain.model.discover.DiscoveredType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.DiscoveredModelMapper;
+import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.DiscoverView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -38,6 +42,8 @@ public class DiscoverPresenterTest {
   @Mock GetLocalDiscoveredInteractor getLocalDiscoveredInteractor;
   @Mock AddToFavoritesInteractor addToFavoritesInteractor;
   @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  @Mock MarkNiceShotInteractor markNiceShotInteractor;
+  @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock SessionRepository sessionRepository;
 
@@ -46,10 +52,12 @@ public class DiscoverPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    discoveredModelMapper = new DiscoveredModelMapper(new StreamModelMapper(sessionRepository));
+    discoveredModelMapper = new DiscoveredModelMapper(new StreamModelMapper(sessionRepository),
+        new ShotModelMapper());
     presenter = new DiscoverPresenter(getDiscoveredInteractor, getLocalDiscoveredInteractor,
         addToFavoritesInteractor,
-        removeFromFavoritesInteractor, discoveredModelMapper, errorMessageFactory);
+        removeFromFavoritesInteractor, markNiceShotInteractor, unmarkNiceShotInteractor,
+        discoveredModelMapper, errorMessageFactory);
     when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
   }
 
@@ -83,7 +91,7 @@ public class DiscoverPresenterTest {
     discovered.setFaved(false);
     discovered.setIdDiscover("idDiscover");
     discovered.setRelevance(1L);
-    discovered.setType("type");
+    discovered.setType(DiscoveredType.STREAM);
     return discovered;
   }
 
@@ -109,7 +117,7 @@ public class DiscoverPresenterTest {
     discovered.setHasBeenFaved(false);
     discovered.setIdDiscover("idDiscover");
     discovered.setRelevance(1L);
-    discovered.setType("type");
+    discovered.setType(DiscoveredType.STREAM);
     return discovered;
   }
 

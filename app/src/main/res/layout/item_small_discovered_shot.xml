@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:padding="0.15dp"
+    >
+
+  <com.yayandroid.parallaxrecyclerview.ParallaxImageView
+      android:id="@+id/shot_image"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      tools:src="@drawable/sample_avatar"
+      />
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#50263238"
+      />
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+
+    <ImageView
+        android:src="@drawable/bs_ic_clear"
+        android:id="@+id/imageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_alignTop="@+id/stream_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/stream_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Buenos días"
+        android:layout_alignTop="@+id/nice_discovered_indicator"
+        android:layout_toLeftOf="@+id/nice_discovered_indicator"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:id="@+id/shot_container"
+        android:background="@drawable/discover_gradient"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        >
+
+    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        app:border_color="@color/white"
+        app:border_width="1dp"/>
+
+    <LinearLayout
+        android:id="@+id/info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignBottom="@+id/shot_avatar"
+        android:layout_toRightOf="@+id/shot_avatar"
+        android:layout_toEndOf="@+id/shot_avatar"
+        >
+      <TextView
+          android:id="@+id/shot_username"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:ellipsize="end"
+          android:paddingRight="8dp"
+          android:paddingTop="8dp"
+          android:textColor="#bbffffff"
+          android:textSize="12sp"
+          android:textStyle="bold"
+          tools:text="Buenos días"
+          />
+
+      <TextView android:id="@+id/shot_timestamp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="12sp"
+          android:textColor="#bbffffff"
+          tools:text="Tuesday 3 June 10:15" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/shot_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:paddingTop="8dp"
+        tools:text="En este stream se hace lo que yo diga"
+        android:layout_below="@+id/info_container"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+    </RelativeLayout>
+    <com.sackcentury.shinebuttonlib.ShineButton
+        android:id="@+id/nice_discovered_indicator"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:allow_random_color="false"
+        app:big_shine_color="@color/primary_dark"
+        app:btn_color="#d9d9d9"
+        app:btn_fill_color="@color/primary"
+        app:click_animation_duration="200"
+        app:enable_flashing="false"
+        app:shine_animation_duration="1500"
+        app:shine_count="8"
+        app:shine_turn_angle="10"
+        app:siShape="@drawable/ic_favorite_not_added_28_gray50"
+        app:small_shine_color="@color/accent"
+        app:small_shine_offset_angle="20"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+  </RelativeLayout>
+</FrameLayout>

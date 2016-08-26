@@ -1,14 +1,16 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor;
-import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
+import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor;
+import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.ui.model.DiscoveredModel;
-import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.DiscoveredModelMapper;
 import com.shootr.mobile.ui.views.DiscoverView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -21,6 +23,8 @@ public class DiscoverPresenter implements Presenter {
   private final GetLocalDiscoveredInteractor getLocalDiscoveredInteractor;
   private final AddToFavoritesInteractor addToFavoritesInteractor;
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  private final MarkNiceShotInteractor markNiceShotInteractor;
+  private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   private final DiscoveredModelMapper discoveredModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
@@ -28,13 +32,18 @@ public class DiscoverPresenter implements Presenter {
   private boolean hasBeenPaused;
 
   @Inject public DiscoverPresenter(GetDiscoveredInteractor getDiscoveredInteractor,
-      GetLocalDiscoveredInteractor getLocalDiscoveredInteractor, AddToFavoritesInteractor addToFavoritesInteractor,
+      GetLocalDiscoveredInteractor getLocalDiscoveredInteractor,
+      AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       DiscoveredModelMapper discoveredModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getDiscoveredInteractor = getDiscoveredInteractor;
     this.getLocalDiscoveredInteractor = getLocalDiscoveredInteractor;
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+    this.markNiceShotInteractor = markNiceShotInteractor;
+    this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
     this.discoveredModelMapper = discoveredModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -64,13 +73,20 @@ public class DiscoverPresenter implements Presenter {
     });
   }
 
-  public void streamClicked(StreamModel stream) {
-    discoverView.navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(),
-        stream.getAuthorId());
+  public void streamClicked(String streamId) {
+    discoverView.navigateToStreamTimeline(streamId);
   }
 
-  public void addStreamToFavorites(final DiscoveredModel discoveredModel) {
-    addToFavoritesInteractor.addToFavorites(discoveredModel.getStreamModel().getIdStream(),
+  public void shotClicked(ShotModel shotModel) {
+    discoverView.navigateToShotDetail(shotModel);
+  }
+
+  public void onAvatarClicked(String userId) {
+    discoverView.navigateToUserProfile(userId);
+  }
+
+  public void addStreamToFavorites(final String idStream) {
+    addToFavoritesInteractor.addToFavorites(idStream,
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             loadLocalDiscover();
@@ -83,10 +99,38 @@ public class DiscoverPresenter implements Presenter {
         });
   }
 
-  public void removeFromFavorites(final DiscoveredModel discoveredModel) {
-    removeFromFavoritesInteractor.removeFromFavorites(discoveredModel.getStreamModel().getIdStream(),
+  public void removeFromFavorites(String idStream) {
+    removeFromFavoritesInteractor.removeFromFavorites(
+        idStream, new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            loadLocalDiscover();
+          }
+        });
+  }
+
+  public void markNiceShot(DiscoveredModel discoveredModel) {
+    markNiceShotInteractor.markNiceShot(discoveredModel.getShotModel().getIdShot(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
+            loadLocalDiscover();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            discoverView.showError(errorMessageFactory.getMessageForError(error));
+            loadLocalDiscover();
+          }
+        });
+  }
+
+  public void unmarkNiceShot(DiscoveredModel discoveredModel) {
+    unmarkNiceShotInteractor.unmarkNiceShot(discoveredModel.getShotModel().getIdShot(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            loadLocalDiscover();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            discoverView.showError(errorMessageFactory.getMessageForError(error));
             loadLocalDiscover();
           }
         });

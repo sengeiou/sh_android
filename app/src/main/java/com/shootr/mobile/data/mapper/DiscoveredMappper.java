@@ -9,9 +9,13 @@ import javax.inject.Inject;
 public class DiscoveredMappper {
 
   private final StreamEntityMapper streamEntityMapper;
+  private final ShotEntityMapper shotEntityMapper;
 
-  @Inject public DiscoveredMappper(StreamEntityMapper streamEntityMapper) {
+  @Inject public DiscoveredMappper(StreamEntityMapper streamEntityMapper,
+      ShotEntityMapper shotEntityMapperr) {
     this.streamEntityMapper = streamEntityMapper;
+
+    this.shotEntityMapper = shotEntityMapperr;
   }
 
   public Discovered map(DiscoveredEntity value) {
@@ -20,6 +24,7 @@ public class DiscoveredMappper {
     discovered.setRelevance(value.getRelevance());
     discovered.setStream(streamEntityMapper.transform(value.getStream()));
     discovered.setType(value.getType());
+    discovered.setShot(shotEntityMapper.transform(value.getShot()));
     return discovered;
   }
 
