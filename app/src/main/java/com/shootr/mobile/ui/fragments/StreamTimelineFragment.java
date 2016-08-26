@@ -1416,7 +1416,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void updateHighlightShotInfo(HighlightedShotModel highlightedShotModel) {
-    adapter.setHighlightedShot(highlightedShotModel);
+    //adapter.setHighlightedShot(highlightedShotModel);
+    adapter.updateHighligthShotInfo(highlightedShotModel);
   }
 
   @Override public void setHighlightShotBackground(Boolean isAdmin) {

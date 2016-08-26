@@ -31,6 +31,8 @@ import java.util.List;
 public class ShotsTimelineAdapter
     extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
 
+  private static final int HEADER_POSITION = 0;
+
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
   private final OnVideoClickListener videoClickListener;
@@ -136,12 +138,12 @@ public class ShotsTimelineAdapter
   }
 
   private void removeCurrentHeader() {
-    shots.remove(0);
-    notifyItemRemoved(0);
+    shots.remove(HEADER_POSITION);
+    notifyItemRemoved(HEADER_POSITION);
   }
 
   private void putNewHeader(HighlightedShotModel highlightedShot) {
-    shots.add(0, highlightedShot.getShotModel());
+    shots.add(HEADER_POSITION, highlightedShot.getShotModel());
     this.setHeader(highlightedShot.getShotModel());
   }
 
@@ -177,7 +179,7 @@ public class ShotsTimelineAdapter
 
   private void insertExistingHeader(List<ShotModel> shots) {
     if (hasHeader()) {
-      shots.add(0, getHeader());
+      shots.add(HEADER_POSITION, getHeader());
     }
   }
 
@@ -220,5 +222,15 @@ public class ShotsTimelineAdapter
   public void setHighlightShotBackground(Boolean isAdmin) {
     this.isAdmin = isAdmin;
     notifyDataSetChanged();
+  }
+
+  public void updateHighligthShotInfo(HighlightedShotModel highlightedShotModel) {
+    if (!getHeader().equals(highlightedShotModel.getShotModel())) {
+      shots.remove(HEADER_POSITION);
+      shots.add(HEADER_POSITION, highlightedShotModel.getShotModel());
+      this.highlightedShotModel = highlightedShotModel;
+      setHeader(highlightedShotModel.getShotModel());
+      notifyDataSetChanged();
+    }
   }
 }
