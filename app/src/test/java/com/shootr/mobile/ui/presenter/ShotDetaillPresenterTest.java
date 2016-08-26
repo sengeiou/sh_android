@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
+import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -45,6 +47,8 @@ public class ShotDetaillPresenterTest {
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
+    @Mock ViewShotDetailEventInteractor viewShotEventInteractor;
+    @Mock ClickShotLinkEventInteractor clickShotLinkEventInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ShotDetailView shotDetailView;
@@ -57,8 +61,8 @@ public class ShotDetaillPresenterTest {
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
           unmarkNiceShotInteractor,
-          shareShotInteractor,
-          shotModelMapper, nicerModelMapper, bus,
+          shareShotInteractor, viewShotEventInteractor, clickShotLinkEventInteractor,
+            shotModelMapper, nicerModelMapper, bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
     }

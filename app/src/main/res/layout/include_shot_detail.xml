@@ -52,6 +52,38 @@
               android:textSize="16sp"
               tools:text="Tuesday 3 June 10:15" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/shot_view_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_material"
+                    android:visibility="gone"
+                    tools:text="450K visualizaciones" />
+
+                <TextView
+                    android:id="@+id/counts_dot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"
+                    android:paddingLeft="4dp"
+                    android:textColor="@color/gray_material"
+                    android:visibility="gone"
+                    android:text="·" />
+
+                <TextView
+                    android:id="@+id/shot_link_clicks_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_material"
+                    android:visibility="gone"
+                    tools:text="380K link clicks"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>

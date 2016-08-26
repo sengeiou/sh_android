@@ -64,6 +64,8 @@ public class HighlightedShotEntityMapper {
 
     highlightedShot.setProfileHidden(shotApiEntity.getProfileHidden());
     highlightedShot.setReplyCount(shotApiEntity.getReplyCount());
+    highlightedShot.setViews((shotApiEntity.getViews()));
+    highlightedShot.setLinkClicks(shotApiEntity.getLinkClicks());
 
     return highlightedShot;
   }
@@ -118,6 +120,8 @@ public class HighlightedShotEntityMapper {
     shot.setProfileHidden(value.getProfileHidden());
     shot.setMetadata(metadataMapper.metadataFromEntity(value));
     shot.setReplyCount(value.getReplyCount());
+    shot.setViews(value.getViews());
+    shot.setLinkClicks(value.getLinkClicks());
 
     highlightedShot.setShot(shot);
 

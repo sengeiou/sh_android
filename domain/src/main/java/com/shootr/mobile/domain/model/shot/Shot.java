@@ -31,6 +31,9 @@ public class Shot {
     private EntityMetadata metadata;
     private Long replyCount;
 
+    private Long linkClicks;
+    private Long views;
+
     public String getIdShot() {
         return idShot;
     }
@@ -380,5 +383,21 @@ public class Shot {
         @Override public int compare(Shot s1, Shot s2) {
             return s1.getPublishDate().compareTo(s2.getPublishDate());
         }
+    }
+
+    public Long getLinkClicks() {
+        return linkClicks;
+    }
+
+    public void setLinkClicks(Long linkClicks) {
+        this.linkClicks = linkClicks;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 }

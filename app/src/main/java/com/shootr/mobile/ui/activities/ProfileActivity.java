@@ -62,7 +62,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FileChooserUtils;
-import com.shootr.mobile.util.FollowsFormatUtil;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -140,7 +140,7 @@ public class ProfileActivity extends BaseActivity
   @Inject AndroidTimeUtils timeUtils;
   @Inject AnalyticsTool analyticsTool;
   @Inject WritePermissionManager writePermissionManager;
-  @Inject FollowsFormatUtil followsFormatUtil;
+  @Inject NumberFormatUtil followsFormatUtil;
   @Inject BackStackHandler backStackHandler;
 
   //endregion

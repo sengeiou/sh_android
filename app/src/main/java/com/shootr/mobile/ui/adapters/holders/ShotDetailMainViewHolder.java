@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -20,6 +21,7 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NicerTextSpannableBuilder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
 import java.util.Date;
@@ -43,6 +45,9 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_nice_count) TextView niceCount;
     @Bind(R.id.shot_nicers) ClickableTextView nicers;
     @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
+    @Bind(R.id.shot_view_count) TextView viewsCount;
+    @Bind(R.id.shot_link_clicks_count) TextView linkClicksCount;
+    @Bind(R.id.counts_dot) TextView countsDot;
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
@@ -51,20 +56,24 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     private final OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final TimeFormatter timeFormatter;
+    private final NumberFormatUtil numberFormatUtil;
     private final Resources resources;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
     private final ShotClickListener nicesClickListener;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final NicerTextSpannableBuilder nicerTextSpannableBuilder;
+    private final OnUrlClickListener onUrlClickListener;
 
     public ShotDetailMainViewHolder(View itemView, ImageLoader imageLoader,
-      AvatarClickListener avatarClickListener, ShotClickListener streamClickListener,
-      ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
-      OnUsernameClickListener onUsernameClickListener, TimeFormatter timeFormatter, Resources resources,
-      OnNiceShotListener onNiceShotListener, ShotClickListener onClickListenerPinToProfile,
-      ShotClickListener nicesClickListener, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      NicerTextSpannableBuilder nicerTextSpannableBuilder) {
+        AvatarClickListener avatarClickListener, ShotClickListener streamClickListener,
+        ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
+        OnUsernameClickListener onUsernameClickListener, TimeFormatter timeFormatter,
+        NumberFormatUtil followsFormatUtil, Resources resources,
+        OnNiceShotListener onNiceShotListener, ShotClickListener onClickListenerPinToProfile,
+        ShotClickListener nicesClickListener, ShotTextSpannableBuilder shotTextSpannableBuilder,
+        NicerTextSpannableBuilder nicerTextSpannableBuilder,
+        OnUrlClickListener onUrlClickListener) {
         super(itemView);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -73,12 +82,14 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeFormatter = timeFormatter;
+        this.numberFormatUtil = followsFormatUtil;
         this.resources = resources;
         this.onNiceShotListener = onNiceShotListener;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.nicesClickListener = nicesClickListener;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.nicerTextSpannableBuilder = nicerTextSpannableBuilder;
+        this.onUrlClickListener = onUrlClickListener;
         ButterKnife.bind(this, itemView);
         context = itemView.getContext();
     }
@@ -86,6 +97,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     public void bindView(final ShotModel shotModel) {
         username.setText(getUsernameTitle(shotModel));
         timestamp.setText(getTimestampForDate(shotModel.getBirth()));
+        setupCounts(shotModel);
         setupComment(shotModel);
         showStreamTitle(shotModel);
         setupAvatar(shotModel);
@@ -96,7 +108,33 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setupPinToProfileContainer(shotModel);
     }
 
-    public void setupReply(ShotModel shotModel) {
+    private void setupCounts(ShotModel shotModel) {
+        setupViewCount(shotModel);
+        setupLinkClicksCount(shotModel);
+    }
+
+    private void setupViewCount(ShotModel shotModel) {
+        Long views = shotModel.getViews();
+        if (views != 0) {
+            viewsCount.setVisibility(View.VISIBLE);
+            viewsCount.setText(context.getResources()
+                .getQuantityString(R.plurals.view_count_pattern, views.intValue(),
+                    numberFormatUtil.formatNumbers(views)));
+        }
+    }
+
+    private void setupLinkClicksCount(ShotModel shotModel) {
+        Long clicks = shotModel.getLinkClickCount();
+        if (clicks != 0) {
+            linkClicksCount.setVisibility(View.VISIBLE);
+            countsDot.setVisibility(View.VISIBLE);
+            linkClicksCount.setText(context.getResources()
+                .getQuantityString(R.plurals.link_click_count_pattern, clicks.intValue(),
+                    numberFormatUtil.formatNumbers(clicks)));
+        }
+    }
+
+    private void setupReply(ShotModel shotModel) {
         if (shotModel.isReply()) {
             setReply();
         } else {
@@ -104,7 +142,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setupVideo(ShotModel shotModel) {
+    private void setupVideo(ShotModel shotModel) {
         if (shotModel.hasVideo()) {
             setVideo(shotModel);
         } else {
@@ -113,7 +151,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setupImage(ShotModel shotModel) {
+    private void setupImage(ShotModel shotModel) {
         String imageUrl = shotModel.getImage().getImageUrl();
         if (imageUrl != null) {
             setImage(shotModel, imageUrl);
@@ -122,7 +160,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setupComment(ShotModel shotModel) {
+    private void setupComment(ShotModel shotModel) {
         String comment = shotModel.getComment();
         if (comment != null) {
             setComment(comment);
@@ -131,7 +169,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setupAvatar(final ShotModel shotModel) {
+    private void setupAvatar(final ShotModel shotModel) {
         imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -140,7 +178,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setupNiceButton(final ShotModel shotModel) {
+    private void setupNiceButton(final ShotModel shotModel) {
         Integer nicesCount = shotModel.getNiceCount();
         if (nicesCount > 0) {
             setNiceCount(shotModel, nicesCount);
@@ -151,7 +189,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setNiceButton(shotModel);
     }
 
-    public void setNiceButton(final ShotModel shotModel) {
+    private void setNiceButton(final ShotModel shotModel) {
         niceButton.setChecked(shotModel.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -164,7 +202,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setNiceCount(final ShotModel shotModel, Integer niceCount) {
+    private void setNiceCount(final ShotModel shotModel, Integer niceCount) {
         if (niceCount > NICES_TRESHOLD) {
             this.nicers.setVisibility(View.GONE);
             this.niceCount.setVisibility(View.VISIBLE);
@@ -194,14 +232,14 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setComment(String comment) {
+    private void setComment(String comment) {
         CharSequence spannedComment =
           shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         shotText.setText(spannedComment);
-        shotText.addLinks();
+        shotText.addLinks(onUrlClickListener);
     }
 
-    public void setImage(final ShotModel shotModel, String imageUrl) {
+    private void setImage(final ShotModel shotModel, String imageUrl) {
         shotImage.setVisibility(View.VISIBLE);
         imageLoader.loadTimelineImage(imageUrl, shotImage);
         shotImage.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +249,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setVideo(final ShotModel shotModel) {
+    private void setVideo(final ShotModel shotModel) {
         this.videoFrame.setVisibility(View.VISIBLE);
         this.shotImage.setVisibility(View.VISIBLE);
         this.videoTitle.setText(shotModel.getVideoTitle());
@@ -223,7 +261,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setReply() {
+    private void setReply() {
         parentToggleButton.setVisibility(View.VISIBLE);
     }
 

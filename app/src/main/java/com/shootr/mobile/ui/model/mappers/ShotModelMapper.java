@@ -45,6 +45,8 @@ public class ShotModelMapper {
         shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
         shotModel.setHide(shot.getProfileHidden());
         shotModel.setReplyCount(shot.getReplyCount());
+        shotModel.setLinkClickCount(shot.getLinkClicks() == null ? 0 : shot.getLinkClicks());
+        shotModel.setViews(shot.getViews() == null ? 0 : shot.getViews());
         return shotModel;
     }
 

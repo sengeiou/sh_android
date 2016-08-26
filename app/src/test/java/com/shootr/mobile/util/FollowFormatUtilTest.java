@@ -9,11 +9,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FollowFormatUtilTest {
 
     private static final String DOT = ".";
-    private FollowsFormatUtil followsFormatUtil;
+    private NumberFormatUtil followsFormatUtil;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        followsFormatUtil = new FollowsFormatUtil();
+        followsFormatUtil = new NumberFormatUtil();
     }
 
     @Test public void shouldReturnStringWithoutFormatWhenNumberIsLowerThanTenThousand() throws Exception {

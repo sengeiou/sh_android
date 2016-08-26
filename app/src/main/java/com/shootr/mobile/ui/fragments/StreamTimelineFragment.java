@@ -47,6 +47,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -458,11 +459,15 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void onImageClick(View sharedImage, ShotModel shot) {
         openImage(sharedImage, shot.getImage().getImageUrl());
       }
+    }, new OnUrlClickListener() {
+      @Override public void onClick() {
+        highlightedShotPresenter.storeClickCount();
+      }
     }, new OnHideHighlightShot() {
       @Override public void onHideClick(HighlightedShotModel highlightedShotModel) {
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-        highlightedShotPresenter
-            .onDismissHighlightShot(highlightedShotModel.getIdHighlightedShot(), streamAuthorIdUser);
+        highlightedShotPresenter.onDismissHighlightShot(highlightedShotModel.getIdHighlightedShot(),
+            streamAuthorIdUser);
       }
     }, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
