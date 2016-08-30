@@ -248,6 +248,7 @@ dependencies {
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
   compile "com.daimajia.swipelayout:library:1.2.0@aar"
+  compile 'com.adamstyrc.cookiecutter:cookie-cutter:1.0.2'
 }
 
 /**

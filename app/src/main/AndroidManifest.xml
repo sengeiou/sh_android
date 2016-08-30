@@ -274,8 +274,11 @@
         android:name=".ui.activities.FriendsActivity"
         android:label="@string/drawer_friends_title">
     </activity>
-    <activity android:name=".ui.activities.DiscoverSearchActivity"
+    <activity
+        android:name=".ui.activities.DiscoverSearchActivity"
         android:theme="@style/ShootrTheme.Closable">
+    </activity>
+    <activity android:name=".ui.activities.CropPictureActivity">
     </activity>
   </application>
 
