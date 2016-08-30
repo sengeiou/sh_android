@@ -4,13 +4,15 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class ProportionalImageView extends ImageView {
 
   public static float radius = 18.0f;
+
+  private int initialWidth;
+  private int initialHeight;
 
   public ProportionalImageView(Context context) {
     super(context);
@@ -22,6 +24,14 @@ public class ProportionalImageView extends ImageView {
 
   public ProportionalImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+  }
+
+  public void setInitialWidth(int initialWidth) {
+    this.initialWidth = initialWidth;
+  }
+
+  public void setInitialHeight(int initialHeight) {
+    this.initialHeight = initialHeight;
   }
 
   @Override
@@ -37,16 +47,14 @@ public class ProportionalImageView extends ImageView {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    Drawable d = getDrawable();
-    if (d != null) {
+    int maxSize = MeasureSpec.getSize(widthMeasureSpec);
 
-      int maxSize = MeasureSpec.getSize(widthMeasureSpec);
-
-      if (d.getIntrinsicHeight() > d.getIntrinsicWidth()) {
-        int width = d.getIntrinsicWidth() * maxSize / d.getIntrinsicHeight();
+    if (initialWidth != 0 && initialHeight != 0) {
+      if (initialHeight > initialWidth) {
+        int width = initialWidth * maxSize / initialHeight;
         setMeasuredDimension(width, maxSize);
       } else {
-        int height = d.getIntrinsicHeight() * maxSize / d.getIntrinsicWidth();
+        int height = initialHeight * maxSize / initialWidth;
         setMeasuredDimension(maxSize, height);
       }
     } else {

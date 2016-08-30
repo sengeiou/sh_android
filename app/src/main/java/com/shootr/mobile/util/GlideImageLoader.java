@@ -81,7 +81,7 @@ public class GlideImageLoader implements ImageLoader {
   @Override public void loadTimelineImage(final String url, ImageView view) {
     boolean isValidPicture = url != null && !url.isEmpty();
     if (isValidPicture) {
-      glide.load(url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
+      glide.load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(view);
     }
   }
 

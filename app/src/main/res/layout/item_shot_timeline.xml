@@ -94,13 +94,24 @@
               android:visibility="gone"
               app:riv_corner_radius="10dp"
               tools:src="@drawable/sample_avatar"
-              tools:visibility="visible"
+              tools:visibility="gone"
               />
+
+          <com.makeramen.roundedimageview.RoundedImageView
+              android:id="@+id/default_image"
+              android:layout_width="match_parent"
+              android:layout_height="165dp"
+              android:focusable="false"
+              android:focusableInTouchMode="false"
+              android:scaleType="centerCrop"
+              android:visibility="gone"
+              app:riv_corner_radius="5dp"
+              tools:visibility="visible" />
 
           <FrameLayout
               android:id="@+id/shot_video_frame"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="165dp"
               android:layout_marginBottom="8dp"
               android:background="@drawable/round_corner"
               android:foreground="?selectableItemBackground"
