@@ -15,6 +15,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -323,7 +325,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 crashReportTool.logException("No se pudo crear el archivo temporal para la foto de perfil");
             }
         }
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        Uri temporaryPhotoUri = FileProvider.getUriForFile(StreamDetailActivity.this,
+            BuildConfig.APPLICATION_ID + ".provider",
+            pictureTemporaryFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 

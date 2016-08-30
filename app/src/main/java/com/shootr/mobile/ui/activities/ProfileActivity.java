@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
@@ -393,7 +395,9 @@ public class ProfileActivity extends BaseActivity
 
   private void takePhotoFromCamera() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    Uri temporaryPhotoUri = Uri.fromFile(getCameraPhotoFile());
+    Uri temporaryPhotoUri = FileProvider.getUriForFile(ProfileActivity.this,
+        BuildConfig.APPLICATION_ID + ".provider",
+        getCameraPhotoFile());
     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
   }
