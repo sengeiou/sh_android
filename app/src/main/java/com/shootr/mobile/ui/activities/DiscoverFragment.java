@@ -153,7 +153,9 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   }
 
   @Override public void scrollListToTop() {
-    discoverList.smoothScrollToPosition(0);
+    if (discoverList != null) {
+      discoverList.smoothScrollToPosition(0);
+    }
   }
 
   @Override public void showEmpty() {

@@ -50,6 +50,7 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.DeeplinkingTool;
+import com.shootr.mobile.util.DefaultTabUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.FormatNumberUtils;
@@ -66,6 +67,7 @@ import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.ShareManagerUtil;
 import com.shootr.mobile.util.SnackbarFeedbackMessage;
 import com.shootr.mobile.util.StreamPercentageUtils;
+import com.shootr.mobile.util.StringHashUtils;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.Version;
 import com.shootr.mobile.util.WritePermissionManager;
@@ -262,5 +264,10 @@ import static android.content.Context.MODE_PRIVATE;
 
   @Provides DeeplinkingNavigator providesDeeplinkingNavigator(DeeplinkingTool deeplinkingTool) {
     return deeplinkingTool;
+  }
+
+  @Provides @Singleton StringHashUtils provideStringHashUtils(
+      DefaultTabUtils defaultTabUtils) {
+    return defaultTabUtils;
   }
 }
