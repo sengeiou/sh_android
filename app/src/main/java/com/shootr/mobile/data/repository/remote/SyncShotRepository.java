@@ -10,6 +10,7 @@ import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
@@ -54,7 +55,11 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
   @Override public Shot getShot(String shotId, String[] streamTypes, String[] shotTypes) {
     ShotEntity shot = localShotDataSource.getShot(shotId, streamTypes, shotTypes);
     if (shot == null) {
-      shot = remoteShotDataSource.getShot(shotId, streamTypes, shotTypes);
+      try {
+        shot = remoteShotDataSource.getShot(shotId, streamTypes, shotTypes);
+      } catch (ShotNotFoundException exception) {
+        throw exception;
+      }
     }
     return shotEntityMapper.transform(shot);
   }

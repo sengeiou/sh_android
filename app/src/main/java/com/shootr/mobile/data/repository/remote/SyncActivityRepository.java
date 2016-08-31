@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.repository.remote;
 
+import android.support.annotation.Nullable;
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.data.mapper.ActivityEntityMapper;
 import com.shootr.mobile.data.repository.datasource.activity.ActivityDataSource;
+import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.model.shot.Shot;
@@ -52,17 +54,23 @@ public class SyncActivityRepository implements ActivityRepository {
       ActivityTimelineParameters parameters) {
     List<ActivityEntity> activities = new ArrayList<>();
     for (ActivityEntity entity : activityEntities) {
-      bindActivityShot(entity, parameters);
-      activities.add(entity);
+      if (bindActivityShot(entity, parameters)) {
+        activities.add(entity);
+      }
     }
     return activities;
   }
 
-  private void bindActivityShot(ActivityEntity entity, ActivityTimelineParameters parameters) {
+  private boolean bindActivityShot(ActivityEntity entity, ActivityTimelineParameters parameters) {
     if (entity.getIdShot() != null) {
       Shot shot = ensureShotExistInLocal(entity, parameters);
-      entity.setShotForMapping(shot);
+      if (shot != null) {
+        entity.setShotForMapping(shot);
+        return true;
+      }
+      return false;
     }
+    return true;
   }
 
   private Shot ensureShotExistInLocal(ActivityEntity activity,
@@ -73,12 +81,22 @@ public class SyncActivityRepository implements ActivityRepository {
     if (localShot != null) {
       return localShot;
     } else {
+      return getRemoteShot(activity, parameters, idShot);
+    }
+  }
+
+  @Nullable
+  private Shot getRemoteShot(ActivityEntity activity, ActivityTimelineParameters parameters,
+      String idShot) {
+    try {
       Shot remoteShot = remoteShotRepository.getShot(idShot, parameters.getStreamTypes(),
           parameters.getShotTypes());
       localShotRepository.putShot(remoteShot);
       return checkNotNull(remoteShot,
           "Shot for activity not found remotely. Shot id: %s; Activity id: %s", idShot,
           activity.getIdActivity());
+    } catch (ShotNotFoundException exception) {
+      return null;
     }
   }
 }
