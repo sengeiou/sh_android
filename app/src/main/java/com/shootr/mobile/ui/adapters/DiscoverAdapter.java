@@ -113,9 +113,4 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   @Override public int getItemCount() {
     return items != null ? items.size() : 0;
   }
-
-  private void changeFavoriteItemState(DiscoveredModel discoverModel, Boolean isFaved) {
-    items.get(items.indexOf(discoverModel)).setHasBeenFaved(isFaved);
-    notifyDataSetChanged();
-  }
 }

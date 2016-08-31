@@ -20,14 +20,12 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     private List<UserModel> users;
     private ImageLoader imageLoader;
-    private Boolean isHolderAdding;
     private AddRemoveContributorAdapterCallback callback;
     private Boolean isAdding;
 
     public ContributorsListAdapter(Context context, ImageLoader imageLoader, Boolean isHolderAdding, Boolean isAdding) {
         super(context);
         this.imageLoader = imageLoader;
-        this.isHolderAdding = isHolderAdding;
         this.isAdding = isAdding;
         this.users = new ArrayList<>(0);
     }

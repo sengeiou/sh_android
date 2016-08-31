@@ -32,9 +32,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @Bind(R.id.dismiss_container) FrameLayout dismissContainer;
   @Bind(R.id.swipe) SwipeLayout swipeLayout;
 
-  private HighlightedShotModel highlightedShotModel;
-
-  public HighLightedShotViewHolder(View view, HighlightedShotModel highlightedShotModel,
+  public HighLightedShotViewHolder(View view,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnReplyShotListener onReplyShotListener,
       OnHideHighlightShot onHideHighlightClickListener,
@@ -43,7 +41,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     super(view, avatarClickListener, videoClickListener, onNiceShotListener, onReplyShotListener,
         onUsernameClickListener, timeUtils, imageLoader, shotTextSpannableBuilder);
     this.onHideHighlightClickListener = onHideHighlightClickListener;
-    this.highlightedShotModel = highlightedShotModel;
   }
 
   public void renderHighLight(HighlightedShotModel highlightedShotModel, final ShotModel shotModel,

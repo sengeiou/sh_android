@@ -84,7 +84,7 @@ public class ShotsTimelineAdapter
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
     View v =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.highlighted_shot, parent, false);
-    return new HighLightedShotViewHolder(v, highlightedShotModel, avatarClickListener, videoClickListener,
+    return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
         onNiceShotListener, onReplyShotListener, onHideHighlightClickListener,
         onUsernameClickListener, timeUtils, imageLoader,
         shotTextSpannableBuilder);

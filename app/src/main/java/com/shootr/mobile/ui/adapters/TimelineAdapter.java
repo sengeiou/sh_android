@@ -73,10 +73,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         return shots.size();
     }
 
-    public boolean isLast(int position) {
-        return position == getCount() - 1;
-    }
-
     @Override public ShotModel getItem(int position) {
         return shots.get(position);
     }
@@ -130,12 +126,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.shots = shots;
     }
 
-    public void addShotsAbove(List<ShotModel> shotModels) {
-        List<ShotModel> newShotList = new ArrayList<>(shotModels);
-        newShotList.addAll(this.shots);
-        this.shots = newShotList;
-    }
-
     public ShotModel getLastShot() {
         Integer shotsNumber = shots.size();
         if (shotsNumber > 0) {
@@ -171,17 +161,5 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     public void setIsCurrentUser(boolean isCurrentUser) {
         this.isCurrentUser = isCurrentUser;
-    }
-
-    public void onPinnedShot(ShotModel shotModel) {
-        List<ShotModel> shotModels = new ArrayList<>();
-        for (ShotModel shot : shots) {
-            if (shotModel.getIdShot().equals(shot.getIdShot())) {
-                shotModels.add(shotModel);
-            } else {
-                shotModels.add(shot);
-            }
-        }
-        this.shots = shotModels;
     }
 }

@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -50,8 +49,6 @@ public class ShotViewHolder {
     @Bind(R.id.shot_reply_count) TextView replyCount;
     @Bind(R.id.shot_reply_button) ImageView darkReplyButton;
     @Bind(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
-
-    @BindColor(R.color.short_title_color) int titleColor;
 
     public int position;
     private View view;
