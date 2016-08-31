@@ -36,10 +36,14 @@ public class ProportionalImageView extends ImageView {
 
   @Override
   protected void onDraw(Canvas canvas) {
-    Path clipPath = new Path();
-    RectF rect = new RectF(0, 0, this.getWidth(), this.getHeight());
-    clipPath.addRoundRect(rect, radius, radius, Path.Direction.CW);
-    canvas.clipPath(clipPath);
+    try {
+      Path clipPath = new Path();
+      RectF rect = new RectF(0, 0, this.getWidth(), this.getHeight());
+      clipPath.addRoundRect(rect, radius, radius, Path.Direction.CW);
+      canvas.clipPath(clipPath);
+    } catch (UnsupportedOperationException error) {
+      /* no-op */
+    }
     super.onDraw(canvas);
   }
 
