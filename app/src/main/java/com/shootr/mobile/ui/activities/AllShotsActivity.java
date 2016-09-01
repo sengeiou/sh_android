@@ -297,7 +297,15 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     /* no-op */
   }
 
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 
@@ -305,11 +313,23 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot) {
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenu(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 
@@ -391,6 +411,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
 
   @Override public void showHolderContextMenu(ShotModel shot) {
     showAuthorContextMenuWithPin(shot);
+  }
+
+  @Override public void showHolderContextMenuWithDismissHighlight(ShotModel shot) {
+    /* no-op */
   }
 
   @Override public void goToReport(String sessionToken, ShotModel shotModel) {

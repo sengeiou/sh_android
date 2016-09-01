@@ -943,6 +943,10 @@ public class ProfileActivity extends BaseActivity
     showAuthorContextMenuWithPin(shot);
   }
 
+  @Override public void showHolderContextMenuWithDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void goToReport(String sessionToken, ShotModel shotModel) {
     Intent browserIntent = new Intent(Intent.ACTION_VIEW,
         Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
@@ -1040,7 +1044,15 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 
@@ -1048,11 +1060,23 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot) {
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenu(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 

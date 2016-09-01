@@ -1,6 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -43,6 +46,8 @@ public class ReportShotPresenterTest {
     private static final String SESSION_TOKEN = "session_token";
     private static final String EN_LOCALE = "en";
     private static final String ID_STREAM = "idStream";
+    private static final String ID_SHOT = "idShot";
+    private static final String ANOTHER_ID_SHOT = "anotherIdShot";
     public static final Long HIDE = 0L;
     @Mock ReportShotView reportShotView;
     @Mock DateRangeTextProvider dateRangeTextProvider;
@@ -58,6 +63,7 @@ public class ReportShotPresenterTest {
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
     @Mock GetContributorsInteractor getContributorsInteractor;
+    @Mock GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -72,7 +78,7 @@ public class ReportShotPresenterTest {
           unblockUserInteractor,
           getFollowingInteractor,
           banUserInteractor,
-          unbanUserInteractor, getContributorsInteractor);
+          unbanUserInteractor, getContributorsInteractor, getHighlightedShotInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -110,6 +116,7 @@ public class ReportShotPresenterTest {
 
     @Test public void shouldShowDeleteShotIfUserIsStreamHolder() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+        setupGetHighlightShotCallbacks();
 
         presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ID_USER);
 
@@ -118,6 +125,7 @@ public class ReportShotPresenterTest {
 
     @Test public void shouldShowDeleteShotIfUserIsShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+        setupGetHighlightShotCallbacks();
 
         presenter.onShotLongPressedWithStreamAuthor(anotherUserShot(), ID_USER);
 
@@ -166,6 +174,7 @@ public class ReportShotPresenterTest {
 
     @Test public void shouldShowHolderContextMenuWhenIsNotStreamAuthorAndIsNotShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
+        setupGetHighlightShotCallbacks();
         ShotModel shotModel = shotModelWithStreamId();
 
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ANOTHER_ID_USER);
@@ -177,6 +186,7 @@ public class ReportShotPresenterTest {
       throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         ShotModel shotModel = shotModelWithStreamId();
+        setupGetHighlightShotCallbacks();
 
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
@@ -188,6 +198,7 @@ public class ReportShotPresenterTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
         ShotModel shotModel = shotModelWithStreamId();
         shotModel.setHide(HIDE);
+        setupGetHighlightShotCallbacks();
 
         presenter.onShotLongPressedWithStreamAuthor(shotModel, ID_USER);
 
@@ -268,6 +279,21 @@ public class ReportShotPresenterTest {
           .obtainPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
+    private void setupGetHighlightShotCallbacks() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<HighlightedShot> callback =
+                    (Interactor.Callback<HighlightedShot>) invocation.getArguments()[1];
+                HighlightedShot highlightedShot = new HighlightedShot();
+                highlightedShot.setShot(shotWithIdShot());
+                callback.onLoaded(highlightedShot);
+                return null;
+            }
+        }).when(getHighlightedShotInteractor).loadHighlightedShot(anyString(), any(
+            Interactor.Callback.class));
+
+    }
+
     private UserModel user() {
         UserModel userModel = new UserModel();
         userModel.setIdUser(ID_USER);
@@ -341,6 +367,7 @@ public class ReportShotPresenterTest {
         ShotModel shotModel = new ShotModel();
         shotModel.setIdUser(ID_USER);
         shotModel.setHide(1L);
+        shotModel.setIdShot(ID_SHOT);
         return shotModel;
     }
 
@@ -356,7 +383,14 @@ public class ReportShotPresenterTest {
         shotModel.setIdUser(ID_USER);
         shotModel.setHide(1L);
         shotModel.setStreamId(ID_STREAM);
+        shotModel.setIdShot(ID_SHOT);
         return shotModel;
+    }
+
+    private Shot shotWithIdShot() {
+        Shot shot = new Shot();
+        shot.setIdShot(ANOTHER_ID_SHOT);
+        return shot;
     }
 
     private ArrayList blockedUsers() {

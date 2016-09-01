@@ -176,6 +176,10 @@ public class HighlightedShotPresenter implements Presenter {
     }
   }
 
+  public void onMenuDismissHighlightShot() {
+    view.showDismissDialog(currentHighlightShot.getIdHighlightedShot());
+  }
+
   public void removeHighlightShot(String idHighlightShot) {
     dismissHighlightShot(idHighlightShot, true);
   }

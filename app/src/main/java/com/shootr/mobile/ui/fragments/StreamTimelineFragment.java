@@ -1051,6 +1051,40 @@ public class StreamTimelineFragment extends BaseFragment
     }).show();
   }
 
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
+      }
+    }).addAction(R.string.menu_pin_shot, new Runnable() {
+      @Override public void run() {
+        pinShotPresenter.pinToProfile(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shotModel);
+      }
+    }).show();
+  }
+
+
   @Override public void showAuthorContextMenuWithoutPinAndHighlight(final ShotModel shotModel) {
     getBaseContextMenuOptions(shotModel).addAction(R.string.menu_highlight_shot, new Runnable() {
       @Override public void run() {
@@ -1063,6 +1097,20 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }).show();
   }
+
+  @Override public void showAuthorContextMenuWithoutPinAndDismissHighlight(final ShotModel shotModel) {
+    getBaseContextMenuOptions(shotModel).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
+      }
+    }).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
+  }
+
 
   @Override public void showContributorContextMenuWithPinAndHighlight(final ShotModel shotModel) {
     new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
@@ -1092,6 +1140,36 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }).show();
   }
+
+  @Override public void showContributorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
+      }
+    }).addAction(R.string.menu_pin_shot, new Runnable() {
+      @Override public void run() {
+        pinShotPresenter.pinToProfile(shotModel);
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).show();
+  }
+
 
   @Override public void showContributorContextMenuWithoutPinAndHighlight(final ShotModel shotModel) {
     new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
@@ -1123,10 +1201,67 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
   }
 
+  @Override public void showContributorContextMenuWithoutPinAndDismissHighlight(final ShotModel shotModel) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+      @Override public void run() {
+        streamTimelinePresenter.shareShot(shotModel);
+        analyticsTool.analyticsSendAction(getContext(),
+            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+            analyticsLabelShareShot);
+      }
+    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shotModel);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shotModel);
+      }
+    }).addAction(R.string.report_context_menu_delete,
+        new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        }).show();
+  }
+
+
   @Override public void showContributorContextMenu(final ShotModel shot) {
     new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shot.getIdShot());
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr,
+        new Runnable() {
+          @Override public void run() {
+            streamTimelinePresenter.shareShot(shot);
+            analyticsTool.analyticsSendAction(getContext(),
+                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+                analyticsLabelShareShot);
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shot);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shot);
+      }
+    }).show();
+  }
+
+  @Override public void showContributorContextMenuWithDismissHighlight(final ShotModel shot) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
       }
     }).addAction(R.string.menu_share_shot_via_shootr,
         new Runnable() {
@@ -1194,6 +1329,36 @@ public class StreamTimelineFragment extends BaseFragment
     new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_highlight_shot, new Runnable() {
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shot.getIdShot());
+      }
+    }).addAction(R.string.menu_share_shot_via_shootr,
+        new Runnable() {
+          @Override public void run() {
+            streamTimelinePresenter.shareShot(shot);
+            analyticsTool.analyticsSendAction(getContext(),
+                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
+                analyticsLabelShareShot);
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
+      @Override public void run() {
+        shareShotIntent(shot);
+        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
+            analyticsActionExternalShare, analyticsLabelExternalShare);
+      }
+    }).addAction(R.string.menu_copy_text, new Runnable() {
+      @Override public void run() {
+        copyShotCommentToClipboard(shot);
+      }
+    }).addAction(R.string.report_context_menu_delete, new Runnable() {
+      @Override public void run() {
+        openDeleteConfirmation(shot);
+      }
+    }).show();
+  }
+
+  @Override public void showHolderContextMenuWithDismissHighlight(final ShotModel shot) {
+    new CustomContextMenu.Builder(getActivity()).addAction(R.string.remove_highlight, new Runnable() {
+      @Override public void run() {
+        highlightedShotPresenter.onMenuDismissHighlightShot();
       }
     }).addAction(R.string.menu_share_shot_via_shootr,
         new Runnable() {

@@ -469,4 +469,5 @@
   <string name="nices_push_settings">Nice Shot</string>
   <string name="nices_push_settings_off">Off</string>
   <string name="discover_timestamp">%s ago</string>
+  <string name="remove_highlight">Dismiss highlight</string>
 </resources>

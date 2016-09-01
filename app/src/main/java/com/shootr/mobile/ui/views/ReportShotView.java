@@ -32,6 +32,8 @@ public interface ReportShotView {
 
     void showHolderContextMenu(ShotModel shot);
 
+    void showHolderContextMenuWithDismissHighlight(ShotModel shot);
+
     void showContextMenu(ShotModel shotModel);
 
     void showAuthorContextMenuWithPin(ShotModel shotModel);
@@ -42,11 +44,21 @@ public interface ReportShotView {
 
     void showAuthorContextMenuWithPinAndHighlight(ShotModel shot);
 
+    void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot);
+
     void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot);
+
+    void showAuthorContextMenuWithoutPinAndDismissHighlight(ShotModel shot);
 
     void showContributorContextMenuWithPinAndHighlight(ShotModel shot);
 
+    void showContributorContextMenuWithPinAndDismissHighlight(ShotModel shot);
+
     void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot);
 
+    void showContributorContextMenuWithoutPinAndDismissHighlight(ShotModel shot);
+
     void showContributorContextMenu(ShotModel shot);
+
+    void showContributorContextMenuWithDismissHighlight(ShotModel shot);
 }
