@@ -22,6 +22,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DiscoveredShotViewHolder extends ParallaxViewHolder {
 
+  private static final float ALPHA = 0.7f;
+
   @Bind(R.id.container) FrameLayout container;
   @Bind(R.id.shot_container) RelativeLayout shotContainer;
   @Bind(R.id.shot_image) ParallaxImageView shotImage;
@@ -80,8 +82,17 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
     setupAvatarPicture(shotModel);
     setupTimestamp(shotModel);
     shotUsername.setText(shotModel.getUsername());
-    shotComment.setText(shotModel.getComment());
+    setupShotComment(shotModel);
     streamTitle.setText(shotModel.getStreamTitle());
+  }
+
+  private void setupShotComment(ShotModel shotModel) {
+    if (shotModel.getComment() == null || shotModel.getComment().isEmpty()) {
+      shotComment.setVisibility(View.GONE);
+    } else {
+      shotComment.setVisibility(View.VISIBLE);
+      shotComment.setText(shotModel.getComment());
+    }
   }
 
   private void setupTimestamp(ShotModel shotModel) {
@@ -93,13 +104,20 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
   }
 
   private void setupAvatarPicture(final ShotModel shotModel) {
-    imageLoader.load(shotModel.getPhoto(), avatar);
+    imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
+    setupAvatarAlpha(shotModel);
     avatar.setVisibility(View.VISIBLE);
     avatar.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onAvatarClickListener.onAvatarClick(shotModel.getIdUser(), view);
       }
     });
+  }
+
+  private void setupAvatarAlpha(ShotModel shotModel) {
+    if (shotModel.getPhoto() == null || shotModel.getPhoto().isEmpty()) {
+      avatar.setAlpha(ALPHA);
+    }
   }
 
   private void setupFavoriteButton(final DiscoveredModel discoveredModel) {
