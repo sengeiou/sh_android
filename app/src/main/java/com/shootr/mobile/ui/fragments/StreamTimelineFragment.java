@@ -1508,9 +1508,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupPollIndicator(PollModel pollModel) {
-    timelineNewShotsIndicator.setVisibility(View.GONE);
-    pollIndicatorStatus = POLL_STATUS_SHOWING;
-    if (timelinePollIndicator != null) {
+    if (timelinePollIndicator != null && timelineNewShotsIndicator != null) {
+      timelineNewShotsIndicator.setVisibility(View.GONE);
+      pollIndicatorStatus = POLL_STATUS_SHOWING;
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
