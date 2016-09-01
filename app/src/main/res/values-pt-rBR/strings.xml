@@ -51,7 +51,6 @@
   <string name="alert_update_shootr">Este conteúdo só pode ser visto com a última versão de Shootr</string>
   <string name="all_participants_button">Todos os participantes</string>
   <string name="all_push_settings">Todas</string>
-  <string name="app_easter_egg">Arturo Jiménez ¯\\_(ツ)_/¯ Rafa Vázquez</string>
   <string name="ban_user_dialog_message">Os shots que publique nos seus streams só serão exibidos aos seus seguidores.</string>
   <string name="block_cannot_shoot_streams">Banir usuário</string>
   <string name="block_ignore_user">Ignorar usuário</string>
@@ -81,6 +80,7 @@
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar modificações?</string>
   <string name="discover">Descobrir</string>
+  <string name="discover_timestamp">faz %s</string>
   <string name="dismiss_highlight_shot">Desmarcar</string>
   <string name="done">Feito</string>
   <string name="done_label">Feito</string>
@@ -194,6 +194,11 @@
   <string name="invite_friends_message">Olá! Te recomendo Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Convidar amigos</string>
   <string name="language_support_alert" formatted="false">No momento só oferecemos suporte em inglês. Obrigado pela compreensão.</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="one">%s clique no link</item>
+    <item quantity="other">%s cliques no link</item>
+    <item quantity="zero">%s cliques no link</item>
+  </plurals>
   <plurals name="listing_favorites">
     <item quantity="one">%d favorito</item>
     <item quantity="other">%d favoritos</item>
@@ -244,6 +249,8 @@
   <string name="niced_shot_activity">Te deu um nice</string>
   <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
   <string name="nicers">Nicers</string>
+  <string name="nices_push_settings">Nice shot</string>
+  <string name="nices_push_settings_off">Nenhuma</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -306,12 +313,15 @@
   <string name="profile_support">Suporte</string>
   <string name="profile_updated">Perfil atualizado</string>
   <string name="publish_poll">%1$s Novo inquérito em %2$s</string>
+  <string name="push_settings_everyone">De todos</string>
+  <string name="push_settings_people_follow">Das pessoas que sigo</string>
   <string name="read_write_mode_public_description">Qualquer um pode escrever</string>
   <string name="read_write_mode_public_title">Público</string>
-  <string name="read_write_mode_view_only_description">Podem escrever o criador e os colaboradores.</string>
+  <string name="read_write_mode_view_only_description">Podem escrever o administrador e os colaboradores.</string>
   <string name="read_write_mode_view_only_title">Só leitura</string>
   <string name="registration_create_button_text">Criar conta</string>
   <string name="remove">Apagar</string>
+  <string name="remove_highlight">Eliminar destaque</string>
   <string name="remove_stream_confirmation">Apagar stream?</string>
   <string name="remove_stream_label">Apagar stream</string>
   <string name="remove_stream_listing_context_menu">Apagar</string>
@@ -423,6 +433,11 @@
   <string name="user_not_found_message">Usuário não encontrado</string>
   <string name="user_unbanned">Banimento removido.</string>
   <string name="user_unblocked">Ignorar desfeito.</string>
+  <plurals name="view_count_pattern">
+    <item quantity="one">%s visualização</item>
+    <item quantity="other">%s visualizações</item>
+    <item quantity="zero">%s visualizações</item>
+  </plurals>
   <string name="voted_poll">Votou em (question) em %s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>

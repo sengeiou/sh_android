@@ -80,6 +80,7 @@
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">¿Descartar cambios?</string>
   <string name="discover">Descubrir</string>
+  <string name="discover_timestamp">hace %s</string>
   <string name="dismiss_highlight_shot">Quitar</string>
   <string name="done">Hecho</string>
   <string name="done_label">Hecho</string>
@@ -193,6 +194,11 @@
   <string name="invite_friends_message">Hola! Te recomiendo Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Invitar a amigos</string>
   <string name="language_support_alert" formatted="false">En estos momentos la atención al usuario es en inglés.</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="one">%s clic en el enlace</item>
+    <item quantity="other">%s clics en el enlace</item>
+    <item quantity="zero">%s clics en el enlace</item>
+  </plurals>
   <plurals name="listing_favorites">
     <item quantity="one">%d favorito</item>
     <item quantity="other">%d favoritos</item>
@@ -243,6 +249,8 @@
   <string name="niced_shot_activity">Te ha hecho un nice</string>
   <string name="niced_shot_activity_with_comment">"Ha hecho un nice en: "</string>
   <string name="nicers">Nicers</string>
+  <string name="nices_push_settings">Nice Shot</string>
+  <string name="nices_push_settings_off">Ninguna</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -304,17 +312,20 @@
   <string name="profile_support">Soporte</string>
   <string name="profile_updated">Perfil actualizado</string>
   <string name="publish_poll">%1$s Nueva encuesta en %2$s</string>
+  <string name="push_settings_everyone">De todos</string>
+  <string name="push_settings_people_follow">De la gente que sigo</string>
   <string name="read_write_mode_public_description">Cualquiera puede escribir</string>
   <string name="read_write_mode_public_title">Público</string>
-  <string name="read_write_mode_view_only_description">Pueden escribir el creador y los colaboradores</string>
+  <string name="read_write_mode_view_only_description">Pueden escribir el administrador y los colaboradores</string>
   <string name="read_write_mode_view_only_title">Solo lectura</string>
   <string name="registration_create_button_text">Crear cuenta</string>
   <string name="remove">Borrar</string>
+  <string name="remove_highlight">Quitar destacado</string>
   <string name="remove_stream_confirmation">¿Borrar stream?</string>
   <string name="remove_stream_label">Borrar stream</string>
   <string name="remove_stream_listing_context_menu">Borrar</string>
   <string name="replied_activity" formatted="false">Ha respondido</string>
-  <string name="replied_activity_with_comment" formatted="false">"Ha respondido: "</string>
+  <string name="replied_activity_with_comment" formatted="false">Ha respondido:</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d respuesta</item>
     <item quantity="other">%d respuestas</item>
@@ -421,6 +432,11 @@
   <string name="user_not_found_message">Usuario no encontrado.</string>
   <string name="user_unbanned">Veto suprimido.</string>
   <string name="user_unblocked">Ignorar suprimido.</string>
+  <plurals name="view_count_pattern">
+    <item quantity="one">%s visualización</item>
+    <item quantity="other">%s visualizaciones</item>
+    <item quantity="zero">%s visualizaciones</item>
+  </plurals>
   <string name="voted_poll">Ha votado en (question) en %s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>

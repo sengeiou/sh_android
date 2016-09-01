@@ -80,6 +80,7 @@
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar canvis?</string>
   <string name="discover">Descobrir</string>
+  <string name="discover_timestamp">fa %s</string>
   <string name="dismiss_highlight_shot">Treure</string>
   <string name="done">Fet</string>
   <string name="done_label">Fet</string>
@@ -193,6 +194,11 @@
   <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Convidar amics</string>
   <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="one">%s clic a l\'enllaç</item>
+    <item quantity="other">%s clics a l\'enllaç</item>
+    <item quantity="zero">%s clics a l\'enllaç</item>
+  </plurals>
   <plurals name="listing_favorites">
     <item quantity="one">%d favorit</item>
     <item quantity="other">%d favorits</item>
@@ -244,6 +250,8 @@
   <string name="niced_shot_activity">T\'ha fet un nice</string>
   <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
   <string name="nicers">Nicers</string>
+  <string name="nices_push_settings">Nice Shot</string>
+  <string name="nices_push_settings_off">Cap</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -305,12 +313,15 @@
   <string name="profile_support">Suport</string>
   <string name="profile_updated">Perfil actualitzat</string>
   <string name="publish_poll">%1$s Nova enquesta a %2$s</string>
+  <string name="push_settings_everyone">De tothom</string>
+  <string name="push_settings_people_follow">De la gent que segueixo</string>
   <string name="read_write_mode_public_description">Tothom pot escriure</string>
   <string name="read_write_mode_public_title">Públic</string>
-  <string name="read_write_mode_view_only_description">Poden escriure el creador i els col·laboradors</string>
+  <string name="read_write_mode_view_only_description">Poden escriure l\'administrador i els col·laboradors</string>
   <string name="read_write_mode_view_only_title">Només lectura</string>
   <string name="registration_create_button_text">Crear compte</string>
   <string name="remove">Esborrar</string>
+  <string name="remove_highlight">Treure destacat</string>
   <string name="remove_stream_confirmation">Esborrar l\'stream?</string>
   <string name="remove_stream_label">Esborrar stream</string>
   <string name="remove_stream_listing_context_menu">Esborrar</string>
@@ -423,6 +434,11 @@
   <string name="user_not_found_message">Usuari no trobat.</string>
   <string name="user_unbanned">Vet desfet</string>
   <string name="user_unblocked">Ignorar suprimit.</string>
+  <plurals name="view_count_pattern">
+    <item quantity="one">%s visualització</item>
+    <item quantity="other">%s visualitzacions</item>
+    <item quantity="zero">%s visualitzacions</item>
+  </plurals>
   <string name="voted_poll">Ha votat a (question) a %s</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
