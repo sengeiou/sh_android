@@ -13,6 +13,28 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.17.0] - 2016-09-02
+
+### Added
+
+- Highlighted shot stats
+- Discover shot
+- Nice shots notifications
+- CropActivity for stream and profile pictures
+- Test AB
+- Load favorite onLogin
+- Dismiss Highlight shot with longClick (only holder and contributors)
+
+### Changed
+
+- Padding in streamTimeline toolbar
+
+### Fixed
+
+- analytics actions
+- Timeline jumps on nice shot
+- Deleted activities
+
 ## [1.16.0] - 2016-08-19
 
 ### Added
@@ -20,7 +42,6 @@ Etiquetas para el changelog:
 - Highlighted shot
 - Recent Streams
 - Watch/Unwatch en búsqueda de streams
-
 
 ### Changed
 
