@@ -24,10 +24,12 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   @Inject SettingsPresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
-  @Bind(R.id.started_shooting_push_option) TextView selectedPushSetting;
+  @Bind(R.id.started_shooting_push_option) TextView selectedPushStartedShootingSetting;
+  @Bind(R.id.nice_shot_push_option) TextView selectedPushNiceShotSetting;
   @BindString(R.string.analytics_screen_push_settings) String analytics_screen_push_settings;
 
-  private CharSequence[] items = new CharSequence[3];
+  private CharSequence[] itemsStartedShooting = new CharSequence[3];
+  private CharSequence[] itemsNiceShot = new CharSequence[3];
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
     /* no-op */
@@ -39,9 +41,13 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    items[0] = getResources().getString(R.string.off_push_settings);
-    items[1] = getResources().getString(R.string.favorite_streams_push_settings);
-    items[2] = getResources().getString(R.string.all_push_settings);
+    itemsStartedShooting[0] = getResources().getString(R.string.off_push_settings);
+    itemsStartedShooting[1] = getResources().getString(R.string.favorite_streams_push_settings);
+    itemsStartedShooting[2] = getResources().getString(R.string.all_push_settings);
+
+    itemsNiceShot[0] = getResources().getString(R.string.nices_push_settings_off);
+    itemsNiceShot[1] = getResources().getString(R.string.push_settings_people_follow);
+    itemsNiceShot[2] = getResources().getString(R.string.push_settings_everyone);
   }
 
   @Override protected void initializePresenter() {
@@ -57,23 +63,46 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     return super.onOptionsItemSelected(item);
   }
 
-  private void setSelectedSettings(String selectedOption, int which) {
-    selectedPushSetting.setVisibility(View.VISIBLE);
-    selectedPushSetting.setText(items[which]);
+  private void setSelectedSettingsStartedShooting(String selectedOption, int which) {
+    selectedPushStartedShootingSetting.setVisibility(View.VISIBLE);
+    selectedPushStartedShootingSetting.setText(itemsStartedShooting[which]);
     presenter.startedShootingSettingChanged(selectedOption);
+  }
+
+  private void setSelectedSettingsNiceShot(String selectedOption, int which) {
+    selectedPushNiceShotSetting.setVisibility(View.VISIBLE);
+    selectedPushNiceShotSetting.setText(itemsNiceShot[which]);
+    presenter.niceShotSettingChanged(selectedOption);
   }
 
   @OnClick(R.id.layout_push_settings) public void onSettingsClick() {
     showStartedShootingDialog();
   }
 
+  @OnClick(R.id.layout_nice_push_settings) public void onNiceSettingsClick() {
+    showNiceShotDialog();
+  }
+
   public void showStartedShootingDialog() {
     new AlertDialog.Builder(this).setTitle(
         getResources().getString(R.string.profile_push_notifications))
         .setNegativeButton(getResources().getString(R.string.cancel), null)
-        .setItems(items, new DialogInterface.OnClickListener() {
+        .setItems(itemsStartedShooting, new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
-            setSelectedSettings(PushSettingType.TYPES_STARTED_SHOOTING[which], which);
+            setSelectedSettingsStartedShooting(PushSettingType.TYPES_STARTED_SHOOTING[which], which);
+          }
+        })
+        .create()
+        .show();
+  }
+
+  public void showNiceShotDialog() {
+    new AlertDialog.Builder(this).setTitle(
+        getResources().getString(R.string.profile_push_notifications))
+        .setNegativeButton(getResources().getString(R.string.cancel), null)
+        .setItems(itemsNiceShot, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            setSelectedSettingsNiceShot(PushSettingType.TYPES_NICE_SHOT[which], which);
           }
         })
         .create()
@@ -85,7 +114,12 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   }
 
   @Override public void setStartedShootingSettings(Integer startedShootingPushSettings) {
-    selectedPushSetting.setVisibility(View.VISIBLE);
-    selectedPushSetting.setText(items[startedShootingPushSettings]);
+    selectedPushStartedShootingSetting.setVisibility(View.VISIBLE);
+    selectedPushStartedShootingSetting.setText(itemsStartedShooting[startedShootingPushSettings]);
+  }
+
+  @Override public void setNiceShotSettings(Integer niceShotPushSettings) {
+    selectedPushNiceShotSetting.setVisibility(View.VISIBLE);
+    selectedPushNiceShotSetting.setText(itemsNiceShot[niceShotPushSettings]);
   }
 }

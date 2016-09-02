@@ -25,6 +25,9 @@ public class ShotEntity extends Synchronized {
     private Long profileHidden;
     private Long replyCount;
 
+    private Long linkClicks;
+    private Long views;
+
     private Long imageWidth;
     private Long imageHeight;
 
@@ -186,5 +189,21 @@ public class ShotEntity extends Synchronized {
 
     public void setImageHeight(Long imageHeight) {
         this.imageHeight = imageHeight;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
+    }
+
+    public Long getLinkClicks() {
+        return linkClicks;
+    }
+
+    public void setLinkClicks(Long linkClicks) {
+        this.linkClicks = linkClicks;
     }
 }

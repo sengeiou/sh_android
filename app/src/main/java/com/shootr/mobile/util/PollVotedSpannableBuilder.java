@@ -16,7 +16,7 @@ public class PollVotedSpannableBuilder {
     String streamPlaceholder = REGEX;
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
 
-    PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll, question) {
+    PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
       @Override public void onPollQuestionClick(String pollQuestion) {
         clickListener.onPollQuestionClick(idPoll);
       }

@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.util.DeeplinkingNavigator;
+import com.shootr.mobile.util.DefaultTabUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Inject MainScreenPresenter mainScreenPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject DeeplinkingNavigator deeplinkingNavigator;
+  @Inject DefaultTabUtils defaultTabUtils;
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBar bottomBar;
@@ -68,10 +70,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   private void setupBottomBar(Bundle savedInstanceState) {
     bottomBar = BottomBar.attach(findViewById(R.id.container), savedInstanceState);
-
     bottomBar.noNavBarGoodness();
     bottomBar.noTopOffset();
-    bottomBar.setItems(R.menu.bottombar_menu);
+    setupBottomMenu();
     bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
       @Override public void onMenuTabSelected(@IdRes int menuItemId) {
         switch (menuItemId) {
@@ -102,26 +103,20 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       }
 
       @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
-        switch (menuItemId) {
-          case R.id.bottombar_streams:
-            scrollToTop(0);
-            break;
-          case R.id.bottombar_favorites:
-            scrollToTop(1);
-            break;
-          case R.id.bottombar_discover:
-            scrollToTop(2);
-            break;
-          case R.id.bottombar_activity:
-            scrollToTop(3);
-            break;
-          default:
-            break;
-        }
+        scrollToTop(menuItemId);
       }
     });
     loadIntentData();
     handleUpdateVersion();
+  }
+
+  private void setupBottomMenu() {
+    if (defaultTabUtils.getDefaultTabPosition(getSessionHandler().getCurrentUserId())
+        == DefaultTabUtils.DEFAULT_POSITION) {
+      bottomBar.setItems(R.menu.bottombar_menu);
+    } else {
+      bottomBar.setItems(R.menu.bottombar_menu_discover);
+    }
   }
 
   protected void switchTab(Fragment fragment) {
@@ -131,13 +126,19 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         .commit();
   }
 
-  private void scrollToTop(int currentItem) {
-    if (currentItem == 0) {
-      ((StreamsListFragment) currentFragment).scrollListToTop();
-    } else if (currentItem == 1) {
-      ((FavoritesFragment) currentFragment).scrollListToTop();
-    } else if (currentItem == 2) {
-      ((DiscoverFragment) currentFragment).scrollListToTop();
+  private void scrollToTop(@IdRes int menuItemId) {
+    switch (menuItemId) {
+      case R.id.bottombar_streams:
+        ((StreamsListFragment) currentFragment).scrollListToTop();
+        break;
+      case R.id.bottombar_favorites:
+        ((FavoritesFragment) currentFragment).scrollListToTop();
+        break;
+      case R.id.bottombar_discover:
+        ((DiscoverFragment) currentFragment).scrollListToTop();
+        break;
+      default:
+        break;
     }
   }
 

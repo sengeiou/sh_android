@@ -6,6 +6,7 @@ public class DiscoveredEntity {
   private Long relevance;
   private String type;
   private StreamEntity stream;
+  private ShotEntity shot;
 
   public String getIdDiscover() {
     return idDiscover;
@@ -37,5 +38,13 @@ public class DiscoveredEntity {
 
   public void setStream(StreamEntity stream) {
     this.stream = stream;
+  }
+
+  public ShotEntity getShot() {
+    return shot;
+  }
+
+  public void setShot(ShotEntity shot) {
+    this.shot = shot;
   }
 }

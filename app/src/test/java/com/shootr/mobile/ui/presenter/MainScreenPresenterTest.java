@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
@@ -36,6 +37,7 @@ public class MainScreenPresenterTest {
     @Mock TimeUtils timeUtils;
     @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
+    @Mock SendShotEventStatsIneteractor sendShoEventStatsIneteractor;
     @Mock IntPreference badgeCount;
     @Mock Bus bus;
     @Mock MainScreenView view;
@@ -46,7 +48,8 @@ public class MainScreenPresenterTest {
         UserModelMapper userModelMapper =
           new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         mainScreenPresenter =
-          new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor, userModelMapper, badgeCount, bus);
+          new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
+              sendShoEventStatsIneteractor, userModelMapper, badgeCount, bus);
         mainScreenPresenter.setView(view);
     }
 

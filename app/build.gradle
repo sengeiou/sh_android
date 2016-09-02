@@ -35,12 +35,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 16
+def versionMinor = 17
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 35
+def databaseVersion = 36
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -248,6 +248,7 @@ dependencies {
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
   compile "com.daimajia.swipelayout:library:1.2.0@aar"
+  compile 'com.adamstyrc.cookiecutter:cookie-cutter:1.0.2'
 }
 
 /**

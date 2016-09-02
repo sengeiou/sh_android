@@ -80,6 +80,7 @@
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消变更？</string>
   <string name="discover">发现</string>
+  <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
@@ -193,6 +194,10 @@
   <string name="invite_friends_message">嘿，让我们一起使用Shootr吧: http://shootr.com/</string>
   <string name="invite_friends_title">邀请朋友</string>
   <string name="language_support_alert" formatted="false">我们目前只支持英语。</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="other">%s次链接点击</item>
+    <item quantity="zero">%s次链接点击</item>
+  </plurals>
   <plurals name="listing_favorites">
     <item quantity="other">%d喜爱</item>
   </plurals>
@@ -241,6 +246,8 @@
   <string name="niced_shot_activity">赞了你的shot</string>
   <string name="niced_shot_activity_with_comment">"赞了: "</string>
   <string name="nicers">Nicers</string>
+  <string name="nices_push_settings">赞过的Shot</string>
+  <string name="nices_push_settings_off">关闭</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d赞</item>
     <item quantity="zero"/>
@@ -301,12 +308,15 @@
   <string name="profile_support">辅助</string>
   <string name="profile_updated">个人主页已更新</string>
   <string name="publish_poll">%1$s %2$s 新的投票</string>
+  <string name="push_settings_everyone">任何用户</string>
+  <string name="push_settings_people_follow">我关注的用户</string>
   <string name="read_write_mode_public_description">每个人皆可shoot</string>
   <string name="read_write_mode_public_title">公开</string>
-  <string name="read_write_mode_view_only_description">建立者与贡献者可以shoot</string>
+  <string name="read_write_mode_view_only_description">管理员与贡献者可以shoot</string>
   <string name="read_write_mode_view_only_title">私人编辑</string>
   <string name="registration_create_button_text">建立账户</string>
   <string name="remove">清除</string>
+  <string name="remove_highlight">删除置顶</string>
   <string name="remove_stream_confirmation">清除stream？</string>
   <string name="remove_stream_label">清除stream</string>
   <string name="remove_stream_listing_context_menu">清除</string>
@@ -417,6 +427,10 @@
   <string name="user_not_found_message">用户无法被找到。</string>
   <string name="user_unbanned">已清除禁止</string>
   <string name="user_unblocked">屏蔽已被清除。</string>
+  <plurals name="view_count_pattern">
+    <item quantity="other">%s次查看</item>
+    <item quantity="zero">%s次查看</item>
+  </plurals>
   <string name="voted_poll">投了 (question) 在 %s</string>
   <string name="watching_stream_connected">已连接</string>
   <string name="watching_stream_connected_muted">已连接（已静音）</string>

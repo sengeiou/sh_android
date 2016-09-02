@@ -155,4 +155,8 @@ public abstract class BaseActivity extends ActionBarActivity {
     public View getView() {
         return activityView;
     }
+
+    public SessionHandler getSessionHandler() {
+        return sessionHandler;
+    }
 }

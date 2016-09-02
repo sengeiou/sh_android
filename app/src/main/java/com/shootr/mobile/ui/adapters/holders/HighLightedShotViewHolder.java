@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -31,9 +32,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @Bind(R.id.dismiss_container) FrameLayout dismissContainer;
   @Bind(R.id.swipe) SwipeLayout swipeLayout;
 
-  private HighlightedShotModel highlightedShotModel;
-
-  public HighLightedShotViewHolder(View view, HighlightedShotModel highlightedShotModel,
+  public HighLightedShotViewHolder(View view,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnReplyShotListener onReplyShotListener,
       OnHideHighlightShot onHideHighlightClickListener,
@@ -42,15 +41,14 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     super(view, avatarClickListener, videoClickListener, onNiceShotListener, onReplyShotListener,
         onUsernameClickListener, timeUtils, imageLoader, shotTextSpannableBuilder);
     this.onHideHighlightClickListener = onHideHighlightClickListener;
-    this.highlightedShotModel = highlightedShotModel;
   }
 
   public void renderHighLight(HighlightedShotModel highlightedShotModel, final ShotModel shotModel,
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener, Boolean isAdmin) {
+      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener, Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener);
+        onTouchListener, onImageClickListener, onUrlClickListener);
     setupSwipeLayout();
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick);
 

@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -30,6 +31,8 @@ import java.util.List;
 public class ShotsTimelineAdapter
     extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
 
+  private static final int HEADER_POSITION = 0;
+
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
   private final OnVideoClickListener videoClickListener;
@@ -44,6 +47,7 @@ public class ShotsTimelineAdapter
   private final View.OnTouchListener onTouchListener;
   private final OnImageClickListener onImageClickListener;
   private final OnHideHighlightShot onHideHighlightClickListener;
+  private final OnUrlClickListener onUrlClickListener;
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
@@ -55,7 +59,8 @@ public class ShotsTimelineAdapter
       OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener,
       OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnHideHighlightShot onHideHighlightClickListener, Boolean isAdmin) {
+      OnUrlClickListener onUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
+      Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -63,6 +68,7 @@ public class ShotsTimelineAdapter
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.onReplyShotListener = onReplyShotListener;
+    this.onUrlClickListener = onUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -78,7 +84,7 @@ public class ShotsTimelineAdapter
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
     View v =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.highlighted_shot, parent, false);
-    return new HighLightedShotViewHolder(v, highlightedShotModel, avatarClickListener, videoClickListener,
+    return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
         onNiceShotListener, onReplyShotListener, onHideHighlightClickListener,
         onUsernameClickListener, timeUtils, imageLoader,
         shotTextSpannableBuilder);
@@ -104,7 +110,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel, shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, isAdmin);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -132,12 +138,12 @@ public class ShotsTimelineAdapter
   }
 
   private void removeCurrentHeader() {
-    shots.remove(0);
-    notifyItemRemoved(0);
+    shots.remove(HEADER_POSITION);
+    notifyItemRemoved(HEADER_POSITION);
   }
 
   private void putNewHeader(HighlightedShotModel highlightedShot) {
-    shots.add(0, highlightedShot.getShotModel());
+    shots.add(HEADER_POSITION, highlightedShot.getShotModel());
     this.setHeader(highlightedShot.getShotModel());
   }
 
@@ -173,7 +179,7 @@ public class ShotsTimelineAdapter
 
   private void insertExistingHeader(List<ShotModel> shots) {
     if (hasHeader()) {
-      shots.add(0, getHeader());
+      shots.add(HEADER_POSITION, getHeader());
     }
   }
 
@@ -216,5 +222,15 @@ public class ShotsTimelineAdapter
   public void setHighlightShotBackground(Boolean isAdmin) {
     this.isAdmin = isAdmin;
     notifyDataSetChanged();
+  }
+
+  public void updateHighligthShotInfo(HighlightedShotModel highlightedShotModel) {
+    if (!getHeader().equals(highlightedShotModel.getShotModel())) {
+      shots.remove(HEADER_POSITION);
+      shots.add(HEADER_POSITION, highlightedShotModel.getShotModel());
+      this.highlightedShotModel = highlightedShotModel;
+      setHeader(highlightedShotModel.getShotModel());
+      notifyDataSetChanged();
+    }
   }
 }

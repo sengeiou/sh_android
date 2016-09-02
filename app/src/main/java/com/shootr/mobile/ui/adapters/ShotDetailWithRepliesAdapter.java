@@ -16,6 +16,7 @@ import com.shootr.mobile.ui.adapters.holders.ShotDetailReplyHolder;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NicerTextSpannableBuilder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
 import java.util.ArrayList;
@@ -45,12 +47,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final OnVideoClickListener videoClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final TimeFormatter timeFormatter;
+    private final NumberFormatUtil numberFormatUtil;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener onClickListenerPinToProfile;
     private final ShotClickListener nicesClickListener;
+    private final OnUrlClickListener onUrlClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -61,13 +65,15 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private NicerTextSpannableBuilder nicerTextSpannableBuilder;
     private ShotDetailMainViewHolder mainHolder;
 
-    public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
-      ShotClickListener parentShotClickListener, ShotClickListener replyShotClickListener,
-      ShotClickListener streamClickListener, ShotClickListener imageClickListener,
-      OnVideoClickListener videoClickListener, OnUsernameClickListener onUsernameClickListener,
-      ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
-      OnNiceShotListener onNiceShotListener, ShotClickListener nicesClickListener, TimeFormatter timeFormatter,
-      Resources resources, AndroidTimeUtils timeUtils) {
+    public ShotDetailWithRepliesAdapter(ImageLoader imageLoader,
+        AvatarClickListener avatarClickListener, ShotClickListener parentShotClickListener,
+        ShotClickListener replyShotClickListener, ShotClickListener streamClickListener,
+        ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
+        OnUsernameClickListener onUsernameClickListener, NumberFormatUtil numberFormatUtil,
+        ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
+        OnNiceShotListener onNiceShotListener, ShotClickListener nicesClickListener,
+        OnUrlClickListener onUrlClickListener, TimeFormatter timeFormatter, Resources resources,
+        AndroidTimeUtils timeUtils) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -76,9 +82,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
+        this.numberFormatUtil = numberFormatUtil;
         this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
         this.nicesClickListener = nicesClickListener;
+        this.onUrlClickListener = onUrlClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -237,13 +245,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           imageClickListener,
           videoClickListener,
           onUsernameClickListener,
-          timeFormatter,
-          resources,
+          timeFormatter, numberFormatUtil, resources,
           onNiceShotListener,
           onClickListenerPinToProfile,
           nicesClickListener,
           shotTextSpannableBuilder,
-          nicerTextSpannableBuilder);
+          nicerTextSpannableBuilder, onUrlClickListener);
     }
 
     @NonNull

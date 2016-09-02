@@ -6,5 +6,7 @@ public interface UserSettingsRepository {
 
   UserSettings getUserSettings();
 
-  void modifySettings(UserSettings userSettings);
+  void modifyStartedShootingSettings(UserSettings userSettings);
+
+  void modifyNiceShotSettings(UserSettings userSettings);
 }

@@ -6,11 +6,9 @@ import android.view.View;
 
 public abstract class PollQuestionSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
 
-  private String pollQuestion;
   private String idStream;
 
-  public PollQuestionSpan(String idStream, String pollQuestion) {
-    this.pollQuestion = pollQuestion;
+  public PollQuestionSpan(String idStream) {
     this.idStream = idStream;
   }
 

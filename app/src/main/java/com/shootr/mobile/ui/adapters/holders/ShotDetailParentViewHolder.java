@@ -17,6 +17,7 @@ import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
@@ -30,7 +31,8 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_user_name) public TextView name;
     @Bind(R.id.shot_timestamp) public TextView timestamp;
     @Bind(R.id.shot_text) public ClickableTextView text;
-    @Bind(R.id.shot_image_landscape) public ImageView imageLandscape;
+    @Bind(R.id.shot_image_landscape) public ProportionalImageView proportionalImageView;
+    @Bind(R.id.default_image) ImageView defaultImage;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -112,47 +114,42 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     private void bindImageInfo(final ShotModel shot,
         ShotClickListener onImageClickListener) {
         String imageUrl = shot.getImage().getImageUrl();
-        Long imageWidth = shot.getImage().getImageWidth();
-        Long imageHeight = shot.getImage().getImageHeight();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            handleImage(shot, onImageClickListener, imageUrl,
-                imageWidth, imageHeight);
+            if (isValidImageSizes(shot)) {
+                setupProportionalImageView(shot, onImageClickListener, imageUrl);
+            } else {
+                proportionalImageView.setVisibility(View.GONE);
+                setupImage(defaultImage, shot, onImageClickListener,
+                    imageUrl);
+            }
         } else {
-            imageLandscape.setVisibility(View.GONE);
+            defaultImage.setVisibility(View.GONE);
+            proportionalImageView.setVisibility(View.GONE);
         }
     }
 
-    private void handleImage(final ShotModel shot, ShotClickListener onImageClickListener,
-        String imageUrl, Long imageWidth, Long imageHeight) {
-        if (isImageValid(imageWidth, imageHeight)) {
-            setImageLayout(shot, onImageClickListener, imageUrl,
-                imageWidth, imageHeight);
-        } else {
-            imageLandscape.setVisibility(View.VISIBLE);
-            setupImage(imageLandscape, shot, onImageClickListener,
-                imageUrl);
-        }
+    private void setupProportionalImageView(ShotModel shot, ShotClickListener onImageClickListener,
+        String imageUrl) {
+        defaultImage.setVisibility(View.GONE);
+        proportionalImageView.setInitialHeight(shot.getImage().getImageHeight().intValue());
+        proportionalImageView.setInitialWidth(shot.getImage().getImageWidth().intValue());
+        setupImage(proportionalImageView, shot, onImageClickListener, imageUrl);
     }
 
-    private void setImageLayout(final ShotModel shot,
-        ShotClickListener onImageClickListener, String imageUrl, Long imageWidth,
-        Long imageHeight) {
-        imageLandscape.setVisibility(View.VISIBLE);
-        setupImage(imageLandscape, shot, onImageClickListener, imageUrl);
+    private boolean isValidImageSizes(ShotModel shot) {
+        return shot.getImage().getImageHeight() != null && shot.getImage().getImageHeight() != 0
+            && shot.getImage().getImageWidth() != null && shot.getImage().getImageWidth() != 0;
     }
 
     private void setupImage(ImageView imageView, final ShotModel shot,
         final ShotClickListener onImageClickListener, String imageUrl) {
+        imageView.setVisibility(View.VISIBLE);
         imageLoader.loadTimelineImage(imageUrl, imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 onImageClickListener.onClick(shot);
             }
         });
-    }
-
-    private boolean isImageValid(Long imageWidth, Long imageHeight) {
-        return imageWidth != null && imageWidth != 0 && imageHeight != null && imageHeight != 0;
     }
 
     private void setupVideoListener(final ShotModel shotModel) {

@@ -80,6 +80,7 @@
   <string name="discard">Discard</string>
   <string name="discard_profile_confirmation">Discard changes?</string>
   <string name="discover">Discover</string>
+  <string name="discover_timestamp">%s ago</string>
   <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
@@ -177,7 +178,7 @@
   <string name="follower_list_empty">No followers</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">Not following anyone</string>
-  <string name="highlight_shot_dialog">Remove highlighted shot?</string>
+  <string name="highlight_shot_dialog">Dismiss highlighted shot?</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No streams</string>
   <string name="intro_create_text">Running a community? Make it a stream and… Shoot!</string>
@@ -193,13 +194,14 @@
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
   <string name="invite_friends_title">Invite friends</string>
   <string name="language_support_alert" formatted="false">We currently support English only.</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="one">%s link click</item>
+    <item quantity="other">%s link clicks</item>
+    <item quantity="zero">%s link clicks</item>
+  </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">
-            %d favorite
-        </item>
-    <item quantity="other">
-            %d favorites
-        </item>
+    <item quantity="one">\n            %d favorite\n        </item>
+    <item quantity="other">\n            %d favorites\n        </item>
   </plurals>
   <string name="listing_title_favorites">Favorites</string>
   <string name="listing_title_holding">Admin</string>
@@ -241,19 +243,17 @@
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
   <string name="new_stream_title_label">Title</string>
-  <string name="new_topic" formatted="false">New message…</string>
+  <string formatted="false" name="new_topic">New message…</string>
   <string name="next">Next</string>
   <string name="niced_by">"Niced by "</string>
   <string name="niced_shot_activity">Niced your shot</string>
   <string name="niced_shot_activity_with_comment">"Niced: "</string>
   <string name="nicers">Nicers</string>
+  <string name="nices_push_settings">Nice shot</string>
+  <string name="nices_push_settings_off">Off</string>
   <plurals name="nice_count_pattern">
-    <item quantity="one">
-            %d nice
-        </item>
-    <item quantity="other">
-            %d nices
-        </item>
+    <item quantity="one">\n            %d nice\n        </item>
+    <item quantity="other">\n            %d nices\n        </item>
   </plurals>
   <string name="no">No</string>
   <string name="notification_image">Image</string>
@@ -312,24 +312,23 @@
   <string name="profile_support">Support</string>
   <string name="profile_updated">Profile updated</string>
   <string name="publish_poll">%1$s New poll in %2$s</string>
+  <string name="push_settings_everyone">From Everyone</string>
+  <string name="push_settings_people_follow">From People I Follow</string>
   <string name="read_write_mode_public_description">Anyone can shoot</string>
   <string name="read_write_mode_public_title">Public</string>
-  <string name="read_write_mode_view_only_description">Owner and contributors can shoot</string>
+  <string name="read_write_mode_view_only_description">Administrator and contributors can shoot</string>
   <string name="read_write_mode_view_only_title">View-only</string>
   <string name="registration_create_button_text">Create account</string>
   <string name="remove">Remove</string>
+  <string name="remove_highlight">Dismiss highlight</string>
   <string name="remove_stream_confirmation">Remove stream?</string>
   <string name="remove_stream_label">Remove stream</string>
   <string name="remove_stream_listing_context_menu">Remove</string>
   <string name="replied_activity" formatted="false">Responded</string>
   <string name="replied_activity_with_comment" formatted="false">"Responded: "</string>
   <plurals name="replies_header_count_pattern">
-    <item quantity="one">
-      %d respond
-        </item>
-    <item quantity="other">
-      %d responses
-        </item>
+    <item quantity="one">            %d respond\n        </item>
+    <item quantity="other">            %d responses\n        </item>
   </plurals>
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
@@ -367,7 +366,7 @@
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
   <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
-  <string name="started_shooting_push_settings">Started shooting notice</string>
+  <string name="started_shooting_push_settings">Started shooting alert</string>
   <string name="stream_data_info_favorites">Favorites</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
@@ -417,12 +416,8 @@
   <string name="title_pin_message_notification" formatted="false">Notify message?</string>
   <string name="topic" formatted="false">Message</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">
-            %d participant
-        </item>
-    <item quantity="other">
-            %d participants
-        </item>
+    <item quantity="one">\n            %d participant\n        </item>
+    <item quantity="other">\n            %d participants\n        </item>
   </plurals>
   <string name="unfollow_dialog_message">Unfollow %s?</string>
   <string name="unfollow_dialog_no">No</string>
@@ -437,6 +432,11 @@
   <string name="user_not_found_message">User not found.</string>
   <string name="user_unbanned">Ban removed.</string>
   <string name="user_unblocked">Ignore removed.</string>
+  <plurals name="view_count_pattern">
+    <item quantity="one">%s view</item>
+    <item quantity="other">%s views</item>
+    <item quantity="zero">%s views</item>
+  </plurals>
   <string name="voted_poll">Voted in (question) in %s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>

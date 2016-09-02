@@ -68,7 +68,7 @@ public class PhotoViewActivity extends BaseActivity {
         writePermissionManager.init(this);
 
         attacher = new PhotoViewAttacher(imageView);
-        attacher.setZoomable(false);
+        attacher.setZoomable(true);
         attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override public void onViewTap(View view, float v, float v2) {
                 onPhotoClick();

@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -17,6 +16,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
+import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
@@ -38,7 +38,8 @@ public class ShotViewHolder {
     @Bind(R.id.shot_timestamp) TextView timestamp;
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_text_stream_title) ClickableTextView streamTitle;
-    @Bind(R.id.shot_image_landscape) ImageView imageLandscape;
+    @Bind(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
+    @Bind(R.id.default_image) ImageView defaultImage;
     @Bind(R.id.shot_video_frame) View videoFrame;
     @Bind(R.id.shot_video_title) TextView videoTitle;
     @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -48,8 +49,6 @@ public class ShotViewHolder {
     @Bind(R.id.shot_reply_count) TextView replyCount;
     @Bind(R.id.shot_reply_button) ImageView darkReplyButton;
     @Bind(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
-
-    @BindColor(R.color.short_title_color) int titleColor;
 
     public int position;
     private View view;
@@ -188,37 +187,35 @@ public class ShotViewHolder {
 
     private void bindImageInfo(final ShotModel shot) {
         String imageUrl = shot.getImage().getImageUrl();
-        Long imageWidth = shot.getImage().getImageWidth();
-        Long imageHeight = shot.getImage().getImageHeight();
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            handleImage(imageUrl,
-                imageWidth, imageHeight);
+            if (isValidImageSizes(shot)) {
+                setupProportionalImage(shot, imageUrl);
+            } else {
+                proportionalImageView.setVisibility(View.GONE);
+                setupImage(defaultImage, imageUrl);
+            }
         } else {
-            imageLandscape.setVisibility(View.GONE);
+            defaultImage.setVisibility(View.GONE);
+            proportionalImageView.setVisibility(View.GONE);
         }
     }
 
-    private void handleImage(String imageUrl, Long imageWidth, Long imageHeight) {
-        if (isImageValid(imageWidth, imageHeight)) {
-            setImageLayout(imageUrl,
-                imageWidth, imageHeight);
-        } else {
-            imageLandscape.setVisibility(View.VISIBLE);
-            setupImage(imageLandscape, imageUrl);
-        }
+    private void setupProportionalImage(ShotModel shot,
+        String imageUrl) {
+        defaultImage.setVisibility(View.GONE);
+        proportionalImageView.setInitialHeight(shot.getImage().getImageHeight().intValue());
+        proportionalImageView.setInitialWidth(shot.getImage().getImageWidth().intValue());
+        setupImage(proportionalImageView, imageUrl);
     }
 
-    private void setImageLayout(String imageUrl, Long imageWidth, Long imageHeight) {
-        imageLandscape.setVisibility(View.VISIBLE);
-        setupImage(imageLandscape, imageUrl);
+    private boolean isValidImageSizes(ShotModel shot) {
+        return shot.getImage().getImageHeight() != null && shot.getImage().getImageHeight() != 0
+            && shot.getImage().getImageWidth() != null && shot.getImage().getImageWidth() != 0;
     }
 
     private void setupImage(ImageView imageView, String imageUrl) {
+        imageView.setVisibility(View.VISIBLE);
         imageLoader.loadTimelineImage(imageUrl, imageView);
-    }
-
-    private boolean isImageValid(Long imageWidth, Long imageHeight) {
-        return imageWidth != null && imageWidth != 0 && imageHeight != null && imageHeight != 0;
     }
 
     private void bindVideoInfo(final ShotModel shot) {

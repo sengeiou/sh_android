@@ -6,6 +6,7 @@ public class UserSettings {
 
   private String idUser;
   private String startedShootingPushSettings;
+  private String niceShotPushSettings;
 
   public String getIdUser() {
     return idUser;
@@ -23,6 +24,14 @@ public class UserSettings {
     this.startedShootingPushSettings = startedShootingPushSettings;
   }
 
+  public String getNiceShotPushSettings() {
+    return niceShotPushSettings;
+  }
+
+  public void setNiceShotPushSettings(String niceShotPushSettings) {
+    this.niceShotPushSettings = niceShotPushSettings;
+  }
+
   public static Builder builder() {
     return new Builder();
   }
@@ -37,6 +46,7 @@ public class UserSettings {
 
     private void setDefaults() {
       settings.startedShootingPushSettings = PushSettingType.STARTED_SHOOTING_ALL;
+      settings.niceShotPushSettings = PushSettingType.NICE_SHOT_ALL;
     }
 
     public Builder user(String idUser) {

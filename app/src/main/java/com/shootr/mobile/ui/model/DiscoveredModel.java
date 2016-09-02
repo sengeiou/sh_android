@@ -6,6 +6,7 @@ public class DiscoveredModel {
   private Long relevance;
   private String type;
   private StreamModel streamModel;
+  private ShotModel shotModel;
   private Boolean hasBeenFaved;
 
   public String getIdDiscover() {
@@ -46,6 +47,14 @@ public class DiscoveredModel {
 
   public void setHasBeenFaved(Boolean hasBeenFaved) {
     this.hasBeenFaved = hasBeenFaved;
+  }
+
+  public ShotModel getShotModel() {
+    return shotModel;
+  }
+
+  public void setShotModel(ShotModel shotModel) {
+    this.shotModel = shotModel;
   }
 
   @Override public boolean equals(Object o) {

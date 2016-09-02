@@ -14,9 +14,7 @@ public class PollQuestionSpannableBuilder {
 
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
 
-    String pollQuestion = spannableBuilder.subSequence(0, question.length()).toString();
-
-    PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll, pollQuestion) {
+    PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
       @Override public void onPollQuestionClick(String pollQuestion) {
         clickListener.onPollQuestionClick(idPoll);
       }
@@ -35,9 +33,7 @@ public class PollQuestionSpannableBuilder {
     Matcher matcher = pattern.matcher(spannableBuilder.toString());
 
     if (matcher.find()) {
-      String pollQuestion =
-          spannableBuilder.subSequence(matcher.start(), spannableBuilder.length()).toString();
-      PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll, pollQuestion) {
+      PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
         @Override public void onPollQuestionClick(String pollQuestion) {
           clickListener.onPollQuestionClick(idPoll);
         }

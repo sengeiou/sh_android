@@ -25,6 +25,8 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private Boolean isMarkedAsNice;
     private Long hide;
     private Long replyCount;
+    private Long views;
+    private Long linkClickCount;
 
     public String getIdShot() {
         return idShot;
@@ -184,6 +186,22 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
+    }
+
+    public Long getLinkClickCount() {
+        return linkClickCount;
+    }
+
+    public void setLinkClickCount(Long linkClickCount) {
+        this.linkClickCount = linkClickCount;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

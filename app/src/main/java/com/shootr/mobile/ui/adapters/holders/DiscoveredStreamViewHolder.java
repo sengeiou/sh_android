@@ -7,7 +7,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.listeners.OnDiscoverFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredStreamClickListener;
 import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -25,11 +25,11 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
 
   private final ImageLoader imageLoader;
   private final OnDiscoveredStreamClickListener onDiscoveredStreamClickListener;
-  private final OnDiscoverFavoriteClickListener onFavoriteClickListener;
+  private final OnDiscoveredFavoriteClickListener onFavoriteClickListener;
 
   public DiscoveredStreamViewHolder(View itemView, ImageLoader imageLoader,
       OnDiscoveredStreamClickListener onDiscoveredStreamClickListener,
-      OnDiscoverFavoriteClickListener onFavoriteClickListener) {
+      OnDiscoveredFavoriteClickListener onFavoriteClickListener) {
     super(itemView);
     this.onFavoriteClickListener = onFavoriteClickListener;
     ButterKnife.bind(this, itemView);
@@ -42,7 +42,7 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     setupInfo(streamModel);
     container.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        onDiscoveredStreamClickListener.onStreamClick(streamModel);
+        onDiscoveredStreamClickListener.onStreamClick(streamModel.getIdStream());
       }
     });
     setupFavoriteButton(discoveredModel);
@@ -65,9 +65,9 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     favoriteButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (((ShineButton) view).isChecked()) {
-          onFavoriteClickListener.onFavoriteClick(discoveredModel);
+          onFavoriteClickListener.onFavoriteClick(discoveredModel.getStreamModel().getIdStream());
         } else {
-          onFavoriteClickListener.onRemoveFavoriteClick(discoveredModel);
+          onFavoriteClickListener.onRemoveFavoriteClick(discoveredModel.getStreamModel().getIdStream());
         }
       }
     });

@@ -27,13 +27,6 @@ public class MaxLinesInputFilter implements InputFilter {
     }
 
     /**
-     * @return the maximum lines enforced by this input filter
-     */
-    public int getMax() {
-        return mMax;
-    }
-
-    /**
      * Counts the number occurrences of the given char.
      *
      * @param string the string

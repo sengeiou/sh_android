@@ -56,6 +56,8 @@ public class ShotEntityMapper {
         shot.setProfileHidden(shotEntity.getProfileHidden());
         shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
         shot.setReplyCount(shotEntity.getReplyCount());
+        shot.setViews(shotEntity.getViews());
+        shot.setLinkClicks(shotEntity.getLinkClicks());
         return shot;
     }
 
@@ -104,6 +106,8 @@ public class ShotEntityMapper {
         shotEntity.setNiceCount(shot.getNiceCount());
         shotEntity.setProfileHidden(shot.getProfileHidden());
         shotEntity.setReplyCount(shot.getReplyCount());
+        shotEntity.setViews(shot.getViews());
+        shotEntity.setLinkClicks((shot.getLinkClicks()));
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;

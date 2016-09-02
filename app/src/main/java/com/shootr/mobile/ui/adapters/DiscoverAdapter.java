@@ -6,10 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.discover.DiscoveredType;
+import com.shootr.mobile.ui.adapters.holders.DiscoveredShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.DiscoveredStreamViewHolder;
-import com.shootr.mobile.ui.adapters.listeners.OnDiscoverFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredShotClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredStreamClickListener;
 import com.shootr.mobile.ui.model.DiscoveredModel;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 
@@ -17,25 +21,38 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   private static final int DISCOVERED_STREAM = 0;
   private static final int DISCOVERED_STREAM_SMALL = 1;
+  private static final int DISCOVERED_SHOT = 2;
+  private static final int DISCOVERED_SHOT_SMALL = 3;
+
   private static final int UNKNOWN = -1;
 
   private final ImageLoader imageLoader;
   private final OnDiscoveredStreamClickListener onDiscoveredStreamClickListener;
-  private final OnDiscoverFavoriteClickListener onFavoriteClickListener;
+  private final OnDiscoveredFavoriteClickListener onFavoriteClickListener;
+  private final OnDiscoveredShotClickListener onDiscoveredShotClickListener;
+  private final OnAvatarClickListener onAvatarClickListener;
+  private final AndroidTimeUtils timeUtils;
 
   private List<DiscoveredModel> items;
 
   public DiscoverAdapter(ImageLoader imageLoader,
       OnDiscoveredStreamClickListener onDiscoveredStreamClickListener,
-      OnDiscoverFavoriteClickListener onFavoriteClickListener) {
+      OnDiscoveredFavoriteClickListener onFavoriteClickListener,
+      OnDiscoveredShotClickListener onDiscoveredShotClickListener,
+      OnAvatarClickListener onAvatarClickListener, AndroidTimeUtils timeUtils) {
     this.imageLoader = imageLoader;
     this.onDiscoveredStreamClickListener = onDiscoveredStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
+    this.onDiscoveredShotClickListener = onDiscoveredShotClickListener;
+    this.onAvatarClickListener = onAvatarClickListener;
+    this.timeUtils = timeUtils;
   }
 
   @Override public int getItemViewType(int position) {
     if (items.get(position).getType().equals(DiscoveredType.STREAM)) {
       return (position % 3 == 0 ? DISCOVERED_STREAM : DISCOVERED_STREAM_SMALL);
+    } else if (items.get(position).getType().equals(DiscoveredType.SHOT)) {
+      return (position % 3 == 0 ? DISCOVERED_SHOT : DISCOVERED_SHOT_SMALL);
     } else {
       return UNKNOWN;
     }
@@ -46,9 +63,21 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       return createStreamViewHolder(parent, R.layout.item_discovered_stream);
     } else if (viewType == DISCOVERED_STREAM_SMALL) {
       return createStreamViewHolder(parent, R.layout.item_small_discovered_stream);
+    } else if (viewType == DISCOVERED_SHOT) {
+      return createShotViewHolder(parent, R.layout.item_discovered_shot);
+    } else if (viewType == DISCOVERED_SHOT_SMALL) {
+      return createShotViewHolder(parent, R.layout.item_small_discovered_shot);
     } else {
       return null;
     }
+  }
+
+  private RecyclerView.ViewHolder createShotViewHolder(ViewGroup parent, int itemDiscoveredStream) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(itemDiscoveredStream, parent, false);
+    return new DiscoveredShotViewHolder(view, imageLoader,
+        onDiscoveredShotClickListener, onAvatarClickListener,
+        onFavoriteClickListener, onDiscoveredStreamClickListener, timeUtils);
   }
 
   private RecyclerView.ViewHolder createStreamViewHolder(ViewGroup parent,
@@ -62,7 +91,14 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (isStreamTypes(holder)) {
       ((DiscoveredStreamViewHolder) holder).render(items.get(position));
+    } else if (isShotTypes(holder)) {
+      ((DiscoveredShotViewHolder) holder).render(items.get(position));
     }
+  }
+
+  private boolean isShotTypes(RecyclerView.ViewHolder holder) {
+    return holder.getItemViewType() == DISCOVERED_SHOT
+        || holder.getItemViewType() == DISCOVERED_SHOT_SMALL;
   }
 
   private boolean isStreamTypes(RecyclerView.ViewHolder holder) {
@@ -76,10 +112,5 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override public int getItemCount() {
     return items != null ? items.size() : 0;
-  }
-
-  private void changeFavoriteItemState(DiscoveredModel discoverModel, Boolean isFaved) {
-    items.get(items.indexOf(discoverModel)).setHasBeenFaved(isFaved);
-    notifyDataSetChanged();
   }
 }

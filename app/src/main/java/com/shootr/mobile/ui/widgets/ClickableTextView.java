@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import com.shootr.mobile.domain.utils.Patterns;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +63,7 @@ public class ClickableTextView extends TextView {
    * Call this method after setting the text with links.
    * Matches any link in the text and sets UrlSpans on them.
    */
+
   public void addLinks() {
     if (urlPattern == null) {
       urlPattern = Patterns.WEB_URL;
@@ -74,6 +76,24 @@ public class ClickableTextView extends TextView {
       int end = matcher.end();
       String url = makeUrl(matcher.group());
       stringBuilder.setSpan(new TouchableUrlSpan(url), start, end,
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    formatSpans(stringBuilder);
+    setText(stringBuilder, BufferType.SPANNABLE);
+  }
+
+  public void addLinks(OnUrlClickListener onUrlClickListener) {
+    if (urlPattern == null) {
+      urlPattern = Patterns.WEB_URL;
+    }
+    CharSequence text = getText();
+    Matcher matcher = urlPattern.matcher(text);
+    SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
+    while (matcher.find()) {
+      int start = matcher.start();
+      int end = matcher.end();
+      String url = makeUrl(matcher.group());
+      stringBuilder.setSpan(new TouchableUrlSpan(url, onUrlClickListener), start, end,
           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
     formatSpans(stringBuilder);
@@ -225,10 +245,16 @@ public class ClickableTextView extends TextView {
 
   private class TouchableUrlSpan extends URLSpan implements PressableSpan {
 
+    private OnUrlClickListener onUrlClickListener;
     private boolean isPressed = false;
 
     public TouchableUrlSpan(String url) {
       super(url);
+    }
+
+    public TouchableUrlSpan(String url, OnUrlClickListener onUrlClickListener) {
+      super(url);
+      this.onUrlClickListener = onUrlClickListener;
     }
 
     public TouchableUrlSpan(Parcel src) {
@@ -238,6 +264,9 @@ public class ClickableTextView extends TextView {
     @Override public void setPressed(boolean isPressed) {
       this.isPressed = isPressed;
       invalidate();
+      if (onUrlClickListener != null && isPressed) {
+        onUrlClickListener.onClick();
+      }
     }
 
     @Override public void updateDrawState(TextPaint ds) {

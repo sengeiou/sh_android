@@ -108,6 +108,10 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.REPLY_COUNT
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.VIEWS
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.LINK_CLICKS
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -118,7 +122,6 @@ public class SQLiteUtils {
       + " INT NOT NULL,"
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
-
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ShotQueueTable.TABLE
       + " ("
@@ -578,6 +581,10 @@ public class SQLiteUtils {
         + " NUMBER NULL,"
         + DatabaseContract.HighlightedShotTable.REPLY_COUNT
         + " NUMBER NULL,"
+        + DatabaseContract.ShotTable.VIEWS
+        + " NUMBER NULL,"
+        + DatabaseContract.ShotTable.LINK_CLICKS
+        + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
         + DatabaseContract.SyncColumns.MODIFIED
@@ -595,5 +602,15 @@ public class SQLiteUtils {
         + DatabaseContract.RecentStreamTable.ID_STREAM
         + " TEXT NOT NULL PRIMARY KEY,"
         + DatabaseContract.RecentStreamTable.JOIN_STREAM_DATE
+        + " INTEGER NULL)";
+
+    public static final String CREATE_TABLE_SHOT_EVENT = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.ShotEventTable.TABLE
+        + " ("
+        + DatabaseContract.ShotEventTable.ID_SHOT
+        + " TEXT NOT NULL,"
+        + DatabaseContract.ShotEventTable.TYPE
+        + " TEXT NULL,"
+        + DatabaseContract.ShotEventTable.TIMESTAMP
         + " INTEGER NULL)";
 }

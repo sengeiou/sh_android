@@ -15,6 +15,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -50,7 +52,6 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.FileChooserUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
@@ -62,12 +63,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
     private static final int REQUEST_EDIT_STREAM = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 0;
     private static final int REQUEST_TAKE_PHOTO = 5;
+    private static final int REQUEST_CROP_PHOTO = 88;
 
     private static final String EXTRA_STREAM_ID = "streamId";
     private static final int NO_CONTRIBUTORS = 0;
@@ -114,6 +117,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
+    private String idStream;
 
     public static Intent getIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamDetailActivity.class);
@@ -215,7 +219,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override protected void initializePresenter() {
-        String idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
+        idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
         streamDetailPresenter.initialize(this, idStream);
     }
 
@@ -259,21 +263,30 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
-            obtainPhoto(data);
+            cropGalleryPicture(data);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            cropCameraPicture();
+        } else if (requestCode == REQUEST_CROP_PHOTO && resultCode == Activity.RESULT_OK) {
             File photoFile = getCameraPhotoFile();
             streamDetailPresenter.photoSelected(photoFile);
         }
     }
 
-    private void obtainPhoto(Intent data) {
+    private void cropCameraPicture() {
+        Intent intent = new Intent(this, CropPictureActivity.class);
+        intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, true);
+        intent.putExtra(CropPictureActivity.EXTRA_URI, "");
+        intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
+        startActivityForResult(intent, REQUEST_CROP_PHOTO);
+    }
+
+    private void cropGalleryPicture(Intent data) {
         Uri selectedImageUri = data.getData();
-        try {
-            File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-            streamDetailPresenter.photoSelected(photoFile);
-        } catch (NullPointerException error) {
-            feedbackMessage.show(getView(), R.string.error_message_invalid_image);
-        }
+        Intent intent = new Intent(this, CropPictureActivity.class);
+        intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, false);
+        intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
+        intent.putExtra(CropPictureActivity.EXTRA_URI, selectedImageUri.toString());
+        startActivityForResult(intent, REQUEST_CROP_PHOTO);
     }
 
     @Override protected void onResume() {
@@ -312,12 +325,25 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 crashReportTool.logException("No se pudo crear el archivo temporal para la foto de perfil");
             }
         }
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        Uri temporaryPhotoUri = FileProvider.getUriForFile(StreamDetailActivity.this,
+            BuildConfig.APPLICATION_ID + ".provider",
+            pictureTemporaryFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
     private File getCameraPhotoFile() {
-        return new File(getExternalFilesDir("tmp"), "streamUpload.jpg");
+        File photoFile = new File(getExternalFilesDir("tmp"), "cropUpload.jpg");
+        if (!photoFile.exists()) {
+            try {
+                photoFile.getParentFile().mkdirs();
+                photoFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                throw new IllegalStateException(e);
+            }
+        }
+        return photoFile;
     }
     //endregion
 

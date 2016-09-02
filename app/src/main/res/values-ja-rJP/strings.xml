@@ -80,7 +80,8 @@
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
   <string name="discover">発見</string>
-  <string name="dismiss_highlight_shot">消去</string>
+  <string name="discover_timestamp">%s前</string>
+  <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完了</string>
   <string name="done_label">完了</string>
   <string name="done_pin_topic" formatted="false">OK</string>
@@ -193,12 +194,16 @@
   <string name="invite_friends_message">あなたもShootrを始めてみませんか？: http://shootr.com/</string>
   <string name="invite_friends_title">友達を招待</string>
   <string name="language_support_alert" formatted="false">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
+  <plurals name="link_click_count_pattern">
+    <item quantity="other">%sクリック</item>
+    <item quantity="zero">%sクリック</item>
+  </plurals>
   <plurals name="listing_favorites">
     <item quantity="other">お気に入り登録: %d人</item>
     <item quantity="zero"/>
   </plurals>
   <string name="listing_title_favorites">お気に入り</string>
-  <string name="listing_title_holding">作成したストリーム</string>
+  <string name="listing_title_holding">管理者</string>
   <string name="loading_activity_message">ロード中…</string>
   <string name="main_activity_title">アクティビティ</string>
   <string name="mentioned_shot_activity_with_comment">"あなたについて書きました: "</string>
@@ -242,6 +247,8 @@
   <string name="niced_shot_activity">あなたにナイス！をしました</string>
   <string name="niced_shot_activity_with_comment">"あなたにナイス！をしました: "</string>
   <string name="nicers">ナイスをした人</string>
+  <string name="nices_push_settings">ナイスショット</string>
+  <string name="nices_push_settings_off">オフ</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d件のナイス！ </item>
   </plurals>
@@ -301,12 +308,15 @@
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
   <string name="publish_poll">%1$s：%2$sに新しいアンケート</string>
+  <string name="push_settings_everyone">全員から（既定）</string>
+  <string name="push_settings_people_follow">フォロー中の人からのみ</string>
   <string name="read_write_mode_public_description">誰でも表示、投稿できます</string>
   <string name="read_write_mode_public_title">公開</string>
-  <string name="read_write_mode_view_only_description">作成者と投稿者のみ投稿できます</string>
+  <string name="read_write_mode_view_only_description">管理者と投稿者のみ投稿できます</string>
   <string name="read_write_mode_view_only_title">表示専用</string>
   <string name="registration_create_button_text">アカウントの作成</string>
   <string name="remove">削除する</string>
+  <string name="remove_highlight">ハイライトの取消</string>
   <string name="remove_stream_confirmation">ストリームを削除しますか？</string>
   <string name="remove_stream_label">ストリームを削除</string>
   <string name="remove_stream_listing_context_menu">削除</string>
@@ -416,6 +426,10 @@
   <string name="user_not_found_message">ユーザーが見つかりませんでした。</string>
   <string name="user_unbanned">解除しました</string>
   <string name="user_unblocked">解除しました</string>
+  <plurals name="view_count_pattern">
+    <item quantity="other">%s回表示</item>
+    <item quantity="zero">%s回表示</item>
+  </plurals>
   <string name="voted_poll">%s の (question) に投票しました</string>
   <string name="watching_stream_connected">オンライン</string>
   <string name="watching_stream_connected_muted">オンライン (通知なし)</string>

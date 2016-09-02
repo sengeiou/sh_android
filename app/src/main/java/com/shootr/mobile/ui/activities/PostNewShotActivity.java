@@ -411,7 +411,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void takePhotoFromCamera() {
-        photoPickerController.pickPhotoFromCamera();
+        photoPickerController.pickPhotoFromCamera(this);
     }
 
     @Override public void choosePhotoFromGallery() {

@@ -41,4 +41,8 @@ public class SessionHandler {
             }
         }
     }
+
+    public String getCurrentUserId() {
+        return sessionRepository.getCurrentUserId();
+    }
 }

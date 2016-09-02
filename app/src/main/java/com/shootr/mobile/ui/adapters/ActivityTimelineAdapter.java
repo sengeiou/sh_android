@@ -187,10 +187,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         return new OpenedViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener,
-          onUsernameClickListener,
-          streamTitleClickListener);
+            avatarClickListener,
+            streamTitleClickListener);
     }
 
     private StreamFavoritedViewHolder onCreateStreamFavoritedViewHolder(ViewGroup parent) {
@@ -205,10 +203,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         return new SharedStreamViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener,
-          onUsernameClickListener,
-          streamTitleClickListener);
+            avatarClickListener,
+            streamTitleClickListener);
     }
 
     private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {

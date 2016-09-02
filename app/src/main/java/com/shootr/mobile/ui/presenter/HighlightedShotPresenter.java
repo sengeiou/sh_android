@@ -2,9 +2,11 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.DismissHighlightShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetHighlightedShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.HighlightShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ViewHighlightedShotEventInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.user.Contributor;
@@ -24,6 +26,8 @@ public class HighlightedShotPresenter implements Presenter {
   private final HighlightShotInteractor highlightShotInteractor;
   private final DismissHighlightShotInteractor dismissHighlightShotInteractor;
   private final GetContributorsInteractor getContributorsInteractor;
+  private final ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor;
+  private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
   private final SessionRepository sessionRepository;
   private final HighlightedShotModelMapper mapper;
   private final Poller poller;
@@ -39,12 +43,16 @@ public class HighlightedShotPresenter implements Presenter {
   public HighlightedShotPresenter(GetHighlightedShotInteractor getHighlightedShotsInteractor,
       HighlightShotInteractor highlightShotInteractor,
       DismissHighlightShotInteractor dismissHighlightShotInteractor,
-      GetContributorsInteractor getContributorsInteractor, SessionRepository sessionRepository,
+      GetContributorsInteractor getContributorsInteractor,
+      ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor,
+      ClickShotLinkEventInteractor clickShotLinkEventInteractor, SessionRepository sessionRepository,
       HighlightedShotModelMapper mapper, Poller poller) {
     this.getHighlightedShotsInteractor = getHighlightedShotsInteractor;
     this.highlightShotInteractor = highlightShotInteractor;
     this.dismissHighlightShotInteractor = dismissHighlightShotInteractor;
     this.getContributorsInteractor = getContributorsInteractor;
+    this.viewHighlightedShotEventInteractor = viewHighlightedShotEventInteractor;
+    this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
     this.sessionRepository = sessionRepository;
     this.mapper = mapper;
     this.poller = poller;
@@ -105,8 +113,10 @@ public class HighlightedShotPresenter implements Presenter {
       view.updateHighlightShotInfo(highlightedShotModel);
     } else if (isNewHighlightShot(highlightedShotModel)) {
       changeCurrentHighlightShot(highlightedShotModel);
+      storeViewCount();
     } else {
       showNewHighlightShot(highlightedShotModel);
+      storeViewCount();
     }
   }
 
@@ -119,6 +129,24 @@ public class HighlightedShotPresenter implements Presenter {
       HighlightedShotModel newHighlightedShotModel) {
     currentHighlightShot = newHighlightedShotModel;
     view.refreshHighlightedShots(highlightedShotModel);
+  }
+
+  private void storeViewCount() {
+    viewHighlightedShotEventInteractor.countViewEvent(
+        currentHighlightShot.getShotModel().getIdShot(), new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+        /* no-op */
+          }
+        });
+  }
+
+  public void storeClickCount() {
+    clickShotLinkEventInteractor.countClickLinkEvent(
+        currentHighlightShot.getShotModel().getIdShot(), new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+        /* no-op */
+          }
+        });
   }
 
   private boolean isCurrentHighlightShot(HighlightedShotModel newHighlightedShotModel) {
@@ -146,6 +174,10 @@ public class HighlightedShotPresenter implements Presenter {
     } else {
       dismissHighlightShot(idHighlightShot, false);
     }
+  }
+
+  public void onMenuDismissHighlightShot() {
+    view.showDismissDialog(currentHighlightShot.getIdHighlightedShot());
   }
 
   public void removeHighlightShot(String idHighlightShot) {

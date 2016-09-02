@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.util.FileChooserUtils;
 import java.io.File;
@@ -91,7 +93,7 @@ public class PhotoPickerController {
                           pickPhotoFromGallery();
                           break;
                       case R.id.menu_photo_take:
-                          pickPhotoFromCamera();
+                          pickPhotoFromCamera(activity);
                           break;
                       default:
                           break;
@@ -114,7 +116,7 @@ public class PhotoPickerController {
                           pickPhotoFromGallery();
                           break;
                       case R.id.menu_photo_take:
-                          pickPhotoFromCamera();
+                          pickPhotoFromCamera(activity);
                           break;
                       default:
                           break;
@@ -124,7 +126,7 @@ public class PhotoPickerController {
         builder.show();
     }
 
-    public void pickPhotoFromCamera() {
+    public void pickPhotoFromCamera(Activity activity) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File pictureTemporaryFile = getCameraPhotoFile();
         if (!pictureTemporaryFile.exists()) {
@@ -136,7 +138,10 @@ public class PhotoPickerController {
                 handler.onError(e);
             }
         }
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        Uri temporaryPhotoUri = FileProvider.getUriForFile(activity,
+            BuildConfig.APPLICATION_ID + ".provider",
+            pictureTemporaryFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
         handler.startPickerActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 

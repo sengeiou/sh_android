@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/root_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_black"
+    tools:context="com.shootr.mobile.ui.activities.CropPictureActivity"
+    >
+
+  <com.adamstyrc.cookiecutter.CookieCutterImageView
+      android:id="@+id/ivCrop"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:src="@drawable/logo_white_104"/>
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:background="@color/material_black"
+      android:paddingLeft="@dimen/activity_horizontal_margin"
+      android:paddingRight="@dimen/activity_horizontal_margin"
+      >
+    <TextView
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        style="@style/BorderlessButton"
+        />
+
+    <TextView
+        android:id="@+id/button_crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:text="@string/messenger_send_button_text"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        style="@style/BorderlessButton"
+        />
+
+    <ProgressBar android:id="@+id/crop_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:indeterminate="true"
+        tools:visibility="visible"
+        android:visibility="gone" />
+  </FrameLayout>
+
+</RelativeLayout>

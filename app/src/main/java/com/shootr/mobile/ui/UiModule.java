@@ -6,6 +6,7 @@ import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
+import com.shootr.mobile.ui.activities.CropPictureActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
 import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.DraftsActivity;
@@ -105,7 +106,8 @@ import javax.inject.Singleton;
     FriendsActivity.class,
     DiscoverSearchActivity.class,
     FindFriendsFragment.class,
-    FindStreamsFragment.class
+    FindStreamsFragment.class,
+    CropPictureActivity.class
   },
   complete = false) public class UiModule {
 

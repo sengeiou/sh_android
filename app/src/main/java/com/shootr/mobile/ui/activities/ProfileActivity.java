@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
@@ -61,16 +63,14 @@ import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
-import com.shootr.mobile.util.FileChooserUtils;
-import com.shootr.mobile.util.FollowsFormatUtil;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -87,6 +87,7 @@ public class ProfileActivity extends BaseActivity
   private static final int REQUEST_CHOOSE_PHOTO = 1;
   private static final int REQUEST_NEW_STREAM = 3;
   private static final int REQUEST_TAKE_PHOTO = 2;
+  private static final int REQUEST_CROP_PHOTO = 88;
 
   //region injected
   @Bind(R.id.profile_name) TextView nameTextView;
@@ -140,7 +141,7 @@ public class ProfileActivity extends BaseActivity
   @Inject AndroidTimeUtils timeUtils;
   @Inject AnalyticsTool analyticsTool;
   @Inject WritePermissionManager writePermissionManager;
-  @Inject FollowsFormatUtil followsFormatUtil;
+  @Inject NumberFormatUtil followsFormatUtil;
   @Inject BackStackHandler backStackHandler;
 
   //endregion
@@ -356,31 +357,47 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    Timber.d("onActivityResult" + String.valueOf(requestCode));
     if (resultCode == Activity.RESULT_OK) {
-      File changedPhotoFile;
       if (requestCode == REQUEST_CHOOSE_PHOTO) {
-        Uri selectedImageUri = data.getData();
-        try {
-          changedPhotoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-          profilePresenter.uploadPhoto(changedPhotoFile);
-        } catch (NullPointerException error) {
-          feedbackMessage.show(getView(), R.string.error_message_invalid_image);
-        }
+        cropGalleryPicture(data);
       } else if (requestCode == REQUEST_TAKE_PHOTO) {
-        changedPhotoFile = getCameraPhotoFile();
-        profilePresenter.uploadPhoto(changedPhotoFile);
+        cropCameraPicture();
       } else if (requestCode == REQUEST_NEW_STREAM) {
         String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
         profilePresenter.streamCreated(streamId);
+      } else if (requestCode == REQUEST_CROP_PHOTO) {
+        Timber.d("REQUEST_CROP_PHOTO");
+        File photoFile = getCameraPhotoFile();
+        profilePresenter.uploadPhoto(photoFile);
       }
     }
   }
   //endregion
 
   //region Photo methods
+  private void cropCameraPicture() {
+    Intent intent = new Intent(this, CropPictureActivity.class);
+    intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, true);
+    intent.putExtra(CropPictureActivity.EXTRA_URI, "");
+    intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "profileUpload.jpg");
+    startActivityForResult(intent, REQUEST_CROP_PHOTO);
+  }
+
+  private void cropGalleryPicture(Intent data) {
+    Uri selectedImageUri = data.getData();
+    Intent intent = new Intent(this, CropPictureActivity.class);
+    intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, false);
+    intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "profileUpload.jpg");
+    intent.putExtra(CropPictureActivity.EXTRA_URI, selectedImageUri.toString());
+    startActivityForResult(intent, REQUEST_CROP_PHOTO);
+  }
+
   private void takePhotoFromCamera() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    Uri temporaryPhotoUri = Uri.fromFile(getCameraPhotoFile());
+    Uri temporaryPhotoUri = FileProvider.getUriForFile(ProfileActivity.this,
+        BuildConfig.APPLICATION_ID + ".provider",
+        getCameraPhotoFile());
     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
   }
@@ -395,17 +412,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   private File getCameraPhotoFile() {
-    File photoFile = new File(externalFilesDir, "profileUpload.jpg");
-    if (!photoFile.exists()) {
-      try {
-        photoFile.getParentFile().mkdirs();
-        photoFile.createNewFile();
-      } catch (IOException e) {
-        Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
-        throw new IllegalStateException(e);
-      }
-    }
-    return photoFile;
+    return new File(getExternalFilesDir("tmp"), "profileUpload.jpg");
   }
   //endregion
 
@@ -936,6 +943,10 @@ public class ProfileActivity extends BaseActivity
     showAuthorContextMenuWithPin(shot);
   }
 
+  @Override public void showHolderContextMenuWithDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void goToReport(String sessionToken, ShotModel shotModel) {
     Intent browserIntent = new Intent(Intent.ACTION_VIEW,
         Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
@@ -1033,7 +1044,15 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showAuthorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 
@@ -1041,11 +1060,23 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenuWithoutPinAndHighlight(ShotModel shot) {
     /* no-op */
   }
 
+  @Override public void showContributorContextMenuWithoutPinAndDismissHighlight(ShotModel shot) {
+    /* no-op */
+  }
+
   @Override public void showContributorContextMenu(ShotModel shot) {
+    /* no-op */
+  }
+
+  @Override public void showContributorContextMenuWithDismissHighlight(ShotModel shot) {
     /* no-op */
   }
 

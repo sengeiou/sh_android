@@ -5,7 +5,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import javax.inject.Inject;
 
-public class FollowsFormatUtil implements FormatNumberUtils {
+public class NumberFormatUtil implements FormatNumberUtils {
 
     private static final NavigableMap<Long, String> SUFFIXES_MAP = new TreeMap<>();
     public static final String FORMAT = "%.1f%c";
@@ -18,7 +18,7 @@ public class FollowsFormatUtil implements FormatNumberUtils {
         SUFFIXES_MAP.put(1000000L, "M");
     }
 
-    @Inject public FollowsFormatUtil() {
+    @Inject public NumberFormatUtil() {
     }
 
     @Override public String formatNumbers(Long number) {

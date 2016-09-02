@@ -55,32 +55,32 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         break;
       case ACTION_OPEN_SHOT_NOTIFICATION:
         openActivities(context);
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_SHOT_NOTIFICATION);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_ACTIVITY_NOTIFICATION);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
         break;
       case ACTION_OPEN_PROFILE:
         openProfile(context, intent);
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_PROFILE);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_OPEN_STREAM:
         openStream(context, intent);
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_STREAM);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_OPEN_SHOT_DETAIL:
         openShotDetail(context, intent);
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_SHOT_DETAIL);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_OPEN_POLL_VOTE:
         openPollVote(context, intent);
-        sendGoogleAnalythicsPushOpen(context, ACTION_OPEN_POLL_VOTE);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
         break;
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
