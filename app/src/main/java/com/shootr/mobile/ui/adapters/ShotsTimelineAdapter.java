@@ -34,6 +34,9 @@ public class ShotsTimelineAdapter
 
   private static final int HEADER_POSITION = 0;
 
+  private static final int ITEM_POSITION_WITH_HEADER = 1;
+  private static final int ITEM_POSITION_WITHOUT_HEADER = 0;
+
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
   private final OnVideoClickListener videoClickListener;
@@ -194,6 +197,20 @@ public class ShotsTimelineAdapter
     newShotList.addAll(this.shots);
     this.shots = newShotList;
     insertExistingHeader(shots);
+  }
+
+  public void addShots(List<ShotModel> shotModels) {
+    List<ShotModel> newShotList = new ArrayList<>(shotModels);
+    if (hasHeader()) {
+      insertNewShots(newShotList, ITEM_POSITION_WITH_HEADER, newShotList.size());
+    } else {
+      insertNewShots(newShotList, ITEM_POSITION_WITHOUT_HEADER, newShotList.size());
+    }
+  }
+
+  private void insertNewShots(List<ShotModel> newShotList, int position, int size) {
+    shots.addAll(position, newShotList);
+    notifyItemRangeInserted(position, size);
   }
 
   public void onPinnedShot(ShotModel shotModel) {

@@ -12,8 +12,6 @@ public interface StreamTimelineView extends LoadDataView {
 
     void showShots();
 
-    void addNewShots(List<ShotModel> newShots);
-
     void addOldShots(List<ShotModel> oldShots);
 
     void showLoadingOldShots();
@@ -59,4 +57,6 @@ public interface StreamTimelineView extends LoadDataView {
     void hideStreamViewOnlyIndicator();
 
     void showStreamViewOnlyIndicator();
+
+    void addShots(List<ShotModel> shotModels);
 }

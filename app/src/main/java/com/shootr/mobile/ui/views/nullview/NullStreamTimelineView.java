@@ -18,10 +18,6 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void addNewShots(List<ShotModel> newShots) {
-        /* no-op */
-    }
-
     @Override public void addOldShots(List<ShotModel> oldShots) {
         /* no-op */
     }
@@ -112,6 +108,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
 
     @Override public void showStreamViewOnlyIndicator() {
         /* no-op */
+    }
+
+    @Override public void addShots(List<ShotModel> shotModels) {
+        /* no-op*/
     }
 
     @Override public void showEmpty() {

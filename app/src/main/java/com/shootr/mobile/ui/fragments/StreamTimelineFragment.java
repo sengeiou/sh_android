@@ -704,10 +704,6 @@ public class StreamTimelineFragment extends BaseFragment
     shotsTimeline.setVisibility(View.VISIBLE);
   }
 
-  @Override public void addNewShots(List<ShotModel> newShots) {
-    adapter.addShotsAbove(newShots);
-  }
-
   @Override public void addOldShots(List<ShotModel> oldShots) {
     adapter.addShotsBelow(oldShots);
   }
@@ -848,6 +844,11 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void addAbove(List<ShotModel> shotModels) {
     adapter.addShotsAbove(shotModels);
     adapter.notifyItemRangeInserted(0, shotModels.size());
+  }
+
+  @Override public void addShots(List<ShotModel> shotModels) {
+    adapter.addShots(shotModels);
+    shotsTimeline.smoothScrollToPosition(0);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
