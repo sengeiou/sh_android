@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -48,6 +49,7 @@ public class ShotsTimelineAdapter
   private final OnImageClickListener onImageClickListener;
   private final OnHideHighlightShot onHideHighlightClickListener;
   private final OnUrlClickListener onUrlClickListener;
+  private final OnReshootClickListener onReshootClickListener;
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
@@ -60,7 +62,7 @@ public class ShotsTimelineAdapter
       OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
       OnUrlClickListener onUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
-      Boolean isAdmin) {
+      OnReshootClickListener onReshootClickListener, Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -70,6 +72,7 @@ public class ShotsTimelineAdapter
     this.onReplyShotListener = onReplyShotListener;
     this.onUrlClickListener = onUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
+    this.onReshootClickListener = onReshootClickListener;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     this.shotClickListener = shotClickListener;
@@ -97,7 +100,7 @@ public class ShotsTimelineAdapter
 
   @NonNull RecyclerView.ViewHolder getShotViewHolder(ViewGroup parent) {
     View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_shot_timeline, parent, false);
+        .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
     return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
         onNiceShotListener, onReplyShotListener, onUsernameClickListener, timeUtils, imageLoader,
         shotTextSpannableBuilder);
@@ -119,7 +122,7 @@ public class ShotsTimelineAdapter
 
   private void renderShotViewHolder(ShotTimelineViewHolder holder, int position) {
     holder.render(shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onReshootClickListener);
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {

@@ -1,17 +1,21 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -50,6 +54,9 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @Bind(R.id.shot_reply_count) TextView replyCount;
   @Bind(R.id.shot_reply_button) ImageView darkReplyButton;
   @Bind(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
+  @Bind(R.id.shot_container) View shotContainer;
+  @Bind(R.id.swipe) SwipeLayout swipeLayout;
+  @Nullable @Bind(R.id.reshoot_container) FrameLayout reshootContainer;
 
   public int position;
   private View view;
@@ -74,7 +81,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
-      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener) {
+      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
+      OnReshootClickListener onReshootClickListener) {
     bindUsername(shot);
     bindComment(shot, null);
     bindElapsedTime(shot);
@@ -83,7 +91,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick);
+    setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener);
+    setupSwipeLayout();
   }
 
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
@@ -98,22 +107,38 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick);
+    setupListeners(shot, shotClickListener, onShotLongClick, null);
+    setupSwipeLayout();
+  }
+
+  private void setupSwipeLayout() {
+    swipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
+    swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
   }
 
   private void setupListeners(final ShotModel shot, final ShotClickListener shotClickListener,
-      final OnShotLongClick onShotLongClick) {
-    view.setOnClickListener(new View.OnClickListener() {
+      final OnShotLongClick onShotLongClick, @Nullable final OnReshootClickListener reshootClickListener) {
+    shotContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         shotClickListener.onClick(shot);
       }
     });
-    view.setOnLongClickListener(new View.OnLongClickListener() {
+    shotContainer.setOnLongClickListener(new View.OnLongClickListener() {
       @Override public boolean onLongClick(View v) {
         onShotLongClick.onShotLongClick(shot);
         return false;
       }
     });
+    if (reshootContainer != null) {
+      reshootContainer.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (reshootClickListener != null) {
+            reshootClickListener.onReshootClick(shot);
+            swipeLayout.close(true);
+          }
+        }
+      });
+    }
   }
 
   private void bindReplyCount(final ShotModel shot) {
