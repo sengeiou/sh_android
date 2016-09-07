@@ -26,10 +26,12 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   @Inject AnalyticsTool analyticsTool;
   @Bind(R.id.started_shooting_push_option) TextView selectedPushStartedShootingSetting;
   @Bind(R.id.nice_shot_push_option) TextView selectedPushNiceShotSetting;
+  @Bind(R.id.reshot_push_option) TextView selectedPushReShotSetting;
   @BindString(R.string.analytics_screen_push_settings) String analytics_screen_push_settings;
 
   private CharSequence[] itemsStartedShooting = new CharSequence[3];
   private CharSequence[] itemsNiceShot = new CharSequence[3];
+  private CharSequence[] itemsReShot = new CharSequence[3];
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
     /* no-op */
@@ -48,6 +50,10 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     itemsNiceShot[0] = getResources().getString(R.string.nices_push_settings_off);
     itemsNiceShot[1] = getResources().getString(R.string.push_settings_people_follow);
     itemsNiceShot[2] = getResources().getString(R.string.push_settings_everyone);
+
+    itemsReShot[0] = getResources().getString(R.string.nices_push_settings_off);
+    itemsReShot[1] = getResources().getString(R.string.push_settings_people_follow);
+    itemsReShot[2] = getResources().getString(R.string.push_settings_everyone);
   }
 
   @Override protected void initializePresenter() {
@@ -69,6 +75,12 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     presenter.startedShootingSettingChanged(selectedOption);
   }
 
+  private void setSelectedSettingsReshot(String selectedOption, int which) {
+    selectedPushReShotSetting.setVisibility(View.VISIBLE);
+    selectedPushReShotSetting.setText(itemsReShot[which]);
+    presenter.reShotSettingChanged(selectedOption);
+  }
+
   private void setSelectedSettingsNiceShot(String selectedOption, int which) {
     selectedPushNiceShotSetting.setVisibility(View.VISIBLE);
     selectedPushNiceShotSetting.setText(itemsNiceShot[which]);
@@ -83,9 +95,13 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     showNiceShotDialog();
   }
 
+  @OnClick(R.id.layout_reshot_push_settings) public void onReshotSettingsClick() {
+    showReShotDialog();
+  }
+
   public void showStartedShootingDialog() {
     new AlertDialog.Builder(this).setTitle(
-        getResources().getString(R.string.profile_push_notifications))
+        getResources().getString(R.string.started_shooting_push_settings))
         .setNegativeButton(getResources().getString(R.string.cancel), null)
         .setItems(itemsStartedShooting, new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
@@ -98,11 +114,24 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
 
   public void showNiceShotDialog() {
     new AlertDialog.Builder(this).setTitle(
-        getResources().getString(R.string.profile_push_notifications))
+        getResources().getString(R.string.nices_push_settings))
         .setNegativeButton(getResources().getString(R.string.cancel), null)
         .setItems(itemsNiceShot, new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
             setSelectedSettingsNiceShot(PushSettingType.TYPES_NICE_SHOT[which], which);
+          }
+        })
+        .create()
+        .show();
+  }
+
+  public void showReShotDialog() {
+    new AlertDialog.Builder(this).setTitle(
+        getResources().getString(R.string.reshot_push_settings))
+        .setNegativeButton(getResources().getString(R.string.cancel), null)
+        .setItems(itemsReShot, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            setSelectedSettingsReshot(PushSettingType.TYPES_RESHOT[which], which);
           }
         })
         .create()
@@ -121,5 +150,10 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   @Override public void setNiceShotSettings(Integer niceShotPushSettings) {
     selectedPushNiceShotSetting.setVisibility(View.VISIBLE);
     selectedPushNiceShotSetting.setText(itemsNiceShot[niceShotPushSettings]);
+  }
+
+  @Override public void setReShotSettings(Integer reShotPushSettings) {
+    selectedPushReShotSetting.setVisibility(View.VISIBLE);
+    selectedPushReShotSetting.setText(itemsReShot[reShotPushSettings]);
   }
 }

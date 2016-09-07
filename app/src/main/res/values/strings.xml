@@ -367,6 +367,7 @@
   <string name="sign_out_message">Signing out…</string>
   <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
   <string name="started_shooting_push_settings">Started shooting alert</string>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="stream_data_info_favorites">Favorites</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
