@@ -346,8 +346,8 @@
   <string name="search_users_hint">Search for users</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Shared poll %s</string>
-  <string name="shared_shot_activity">Shared %s\'s shot</string>
-  <string name="shared_shot_activity_with_comment">"Shared: "</string>
+  <string name="shared_shot_activity">Reshot from %s</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
