@@ -683,7 +683,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
-    shotsTimeline.smoothScrollToPosition(0);
+    shotsTimeline.scrollToPosition(0);
     if (streamMessage.getText().toString().isEmpty()) {
       timelineNewShotsIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
