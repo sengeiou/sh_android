@@ -47,6 +47,7 @@ public class ShotModelMapper {
         shotModel.setReplyCount(shot.getReplyCount());
         shotModel.setLinkClickCount(shot.getLinkClicks() == null ? 0 : shot.getLinkClicks());
         shotModel.setViews(shot.getViews() == null ? 0 : shot.getViews());
+        shotModel.setReshootCount(shot.getReshootCount() == null ? 0 : shot.getReshootCount());
         return shotModel;
     }
 

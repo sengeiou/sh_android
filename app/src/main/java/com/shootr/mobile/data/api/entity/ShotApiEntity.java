@@ -37,6 +37,7 @@ public class ShotApiEntity {
     private Integer revision;
     private Long profileHidden;
     private Long replyCount;
+    private Long reshootCount;
 
     public String getIdShot() {
         return idShot;
@@ -244,5 +245,13 @@ public class ShotApiEntity {
 
     public void setViews(Long views) {
         this.views = views;
+    }
+
+    public Long getReshootCount() {
+        return reshootCount;
+    }
+
+    public void setReshootCount(Long reshootCount) {
+        this.reshootCount = reshootCount;
     }
 }

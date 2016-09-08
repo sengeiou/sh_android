@@ -30,6 +30,7 @@ public class ShotEntity extends Synchronized {
 
     private Long imageWidth;
     private Long imageHeight;
+    private Long reshootCounter;
 
     public String getIdShot() {
         return idShot;
@@ -205,5 +206,13 @@ public class ShotEntity extends Synchronized {
 
     public void setLinkClicks(Long linkClicks) {
         this.linkClicks = linkClicks;
+    }
+
+    public Long getReshootCounter() {
+        return reshootCounter;
+    }
+
+    public void setReshootCounter(Long reshootCounter) {
+        this.reshootCounter = reshootCounter;
     }
 }

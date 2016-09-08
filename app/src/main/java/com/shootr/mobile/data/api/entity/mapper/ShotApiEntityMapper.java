@@ -59,6 +59,8 @@ public class ShotApiEntityMapper {
         shotEntity.setViews(shotApiEntity.getViews() != null ? shotApiEntity.getViews() : 0);
         shotEntity.setLinkClicks(
             shotApiEntity.getLinkClicks() != null ? shotApiEntity.getLinkClicks() : 0);
+        shotEntity.setReshootCounter(
+            shotApiEntity.getReshootCount() != null ? shotApiEntity.getReshootCount() : 0);
 
         return shotEntity;
     }

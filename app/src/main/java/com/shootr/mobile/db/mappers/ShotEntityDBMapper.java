@@ -35,6 +35,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setLinkClicks(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.LINK_CLICKS)));
         shot.setProfileHidden(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.PROFILE_HIDDEN)));
         shot.setReplyCount(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.REPLY_COUNT)));
+        shot.setReshootCounter(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.RESHOOT_COUNT)));
         setSynchronizedfromCursor(c, shot);
         return shot;
     }
@@ -63,6 +64,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.REPLY_COUNT, shot.getReplyCount());
         cv.put(DatabaseContract.ShotTable.VIEWS, shot.getViews());
         cv.put(DatabaseContract.ShotTable.LINK_CLICKS, shot.getLinkClicks());
+        cv.put(DatabaseContract.ShotTable.RESHOOT_COUNT, shot.getReshootCounter());
         setSynchronizedtoContentValues(shot, cv);
         return cv;
     }

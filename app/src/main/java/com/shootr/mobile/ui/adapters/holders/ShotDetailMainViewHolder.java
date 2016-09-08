@@ -48,6 +48,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.shot_view_count) TextView viewsCount;
     @Bind(R.id.shot_link_clicks_count) TextView linkClicksCount;
     @Bind(R.id.counts_dot) TextView countsDot;
+    @Bind(R.id.reshoot_count) TextView reshotCount;
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
@@ -111,12 +112,14 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     private void setupCounts(ShotModel shotModel) {
         setupViewCount(shotModel);
         setupLinkClicksCount(shotModel);
+        setupReshotCount(shotModel);
     }
 
     private void setupViewCount(ShotModel shotModel) {
         Long views = shotModel.getViews();
         if (views != 0) {
             viewsCount.setVisibility(View.VISIBLE);
+            countsDot.setVisibility(View.VISIBLE);
             viewsCount.setText(context.getResources()
                 .getQuantityString(R.plurals.view_count_pattern, views.intValue(),
                     numberFormatUtil.formatNumbers(views)));
@@ -127,10 +130,19 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         Long clicks = shotModel.getLinkClickCount();
         if (clicks != 0) {
             linkClicksCount.setVisibility(View.VISIBLE);
-            countsDot.setVisibility(View.VISIBLE);
             linkClicksCount.setText(context.getResources()
                 .getQuantityString(R.plurals.link_click_count_pattern, clicks.intValue(),
                     numberFormatUtil.formatNumbers(clicks)));
+        }
+    }
+
+    private void setupReshotCount(ShotModel shotModel) {
+        Long reshoots = shotModel.getReshootCount();
+        if (reshoots != 0) {
+            reshotCount.setVisibility(View.VISIBLE);
+            reshotCount.setText(context.getResources()
+                .getQuantityString(R.plurals.reshot_count_pattern, reshoots.intValue(),
+                    numberFormatUtil.formatNumbers(reshoots)));
         }
     }
 

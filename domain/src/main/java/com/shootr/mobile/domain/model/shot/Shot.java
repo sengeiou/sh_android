@@ -33,6 +33,7 @@ public class Shot {
 
     private Long linkClicks;
     private Long views;
+    private Long reshootCount;
 
     public String getIdShot() {
         return idShot;
@@ -399,5 +400,13 @@ public class Shot {
 
     public void setViews(Long views) {
         this.views = views;
+    }
+
+    public Long getReshootCount() {
+        return reshootCount;
+    }
+
+    public void setReshootCount(Long reshootCount) {
+        this.reshootCount = reshootCount;
     }
 }

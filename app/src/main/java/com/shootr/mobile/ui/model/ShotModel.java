@@ -27,6 +27,7 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private Long replyCount;
     private Long views;
     private Long linkClickCount;
+    private Long reshootCount;
 
     public String getIdShot() {
         return idShot;
@@ -202,6 +203,14 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setLinkClickCount(Long linkClickCount) {
         this.linkClickCount = linkClickCount;
+    }
+
+    public Long getReshootCount() {
+        return reshootCount;
+    }
+
+    public void setReshootCount(Long reshootCount) {
+        this.reshootCount = reshootCount;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

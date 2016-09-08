@@ -112,6 +112,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.LINK_CLICKS
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.RESHOOT_COUNT
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -581,9 +583,11 @@ public class SQLiteUtils {
         + " NUMBER NULL,"
         + DatabaseContract.HighlightedShotTable.REPLY_COUNT
         + " NUMBER NULL,"
-        + DatabaseContract.ShotTable.VIEWS
+        + DatabaseContract.HighlightedShotTable.VIEWS
         + " NUMBER NULL,"
-        + DatabaseContract.ShotTable.LINK_CLICKS
+        + DatabaseContract.HighlightedShotTable.LINK_CLICKS
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.RESHOOT_COUNT
         + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
