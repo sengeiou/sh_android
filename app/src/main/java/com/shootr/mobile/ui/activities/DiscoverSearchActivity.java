@@ -12,7 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -25,8 +25,8 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
 
   public static final String EXTRA_QUERY = "query";
 
-  @Bind(R.id.pager) ViewPager viewPager;
-  @Bind(R.id.tab_layout) TabLayout tabLayout;
+  @BindView(R.id.pager) ViewPager viewPager;
+  @BindView(R.id.tab_layout) TabLayout tabLayout;
   @BindString(R.string.drawer_streams_title) String streamsTitle;
   @BindString(R.string.drawer_users_title) String usersTitle;
 

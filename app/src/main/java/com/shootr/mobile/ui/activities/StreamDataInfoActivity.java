@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -21,13 +21,13 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     public static final String ARGUMENT_UNIQUE_SHOTS = "uniqueShotsNumber";
     public static final String ARGUMENT_STREAM_NAME = "streamName";
 
-    @Bind(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
-    @Bind(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
-    @Bind(R.id.stream_data_info_favorites_number) TextView favoritesNumberTextView;
-    @Bind(R.id.stream_data_info_favorites_number_pct) TextView favoritesNumberPtcTextView;
-    @Bind(R.id.stream_data_info_participants_with_shots_number) TextView participantsWithShotsNumberTextView;
-    @Bind(R.id.stream_data_info_stream_name) TextView streamNameTextView;
-    @Bind(R.id.stream_data_info_participants_with_shots_number_pct) TextView participantsWithShotsPtcNumberTextView;
+    @BindView(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
+    @BindView(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
+    @BindView(R.id.stream_data_info_favorites_number) TextView favoritesNumberTextView;
+    @BindView(R.id.stream_data_info_favorites_number_pct) TextView favoritesNumberPtcTextView;
+    @BindView(R.id.stream_data_info_participants_with_shots_number) TextView participantsWithShotsNumberTextView;
+    @BindView(R.id.stream_data_info_stream_name) TextView streamNameTextView;
+    @BindView(R.id.stream_data_info_participants_with_shots_number_pct) TextView participantsWithShotsPtcNumberTextView;
 
     @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 

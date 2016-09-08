@@ -8,8 +8,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -28,8 +28,8 @@ import javax.inject.Inject;
 
 public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
-    @Bind(R.id.reset_password_request_view) View resetPasswordRequestLayout;
-    @Bind(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
+    @BindView(R.id.reset_password_request_view) View resetPasswordRequestLayout;
+    @BindView(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
     @BindString(R.string.analytics_screen_forgot_password) String analyticsScreenForgotPassword;
 
     @Inject ImageLoader imageLoader;
@@ -113,10 +113,10 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     public class InnerResetPasswordRequestView implements ResetPasswordRequestView {
 
-        @Bind(R.id.reset_password_username_email) EditText usernameOrEmailInput;
-        @Bind(R.id.reset_password_next) View nextButton;
-        @Bind(R.id.reset_password_progress) View progressView;
-        @Bind(R.id.reset_password_error_message) TextView resetPasswordError;
+        @BindView(R.id.reset_password_username_email) EditText usernameOrEmailInput;
+        @BindView(R.id.reset_password_next) View nextButton;
+        @BindView(R.id.reset_password_progress) View progressView;
+        @BindView(R.id.reset_password_error_message) TextView resetPasswordError;
 
         @Override public void enableNextButton() {
             nextButton.setEnabled(true);
@@ -159,12 +159,12 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     public class InnerResetPasswordConfirmationView implements ResetPasswordConfirmationView {
 
-        @Bind(R.id.reset_password_avatar) ImageView avatar;
-        @Bind(R.id.reset_password_username) TextView usernameText;
-        @Bind(R.id.reset_password_email_confirmation_message) TextView confirmationMessage;
-        @Bind(R.id.reset_password_confirm) View confirmButton;
-        @Bind(R.id.reset_password_done) View doneButton;
-        @Bind(R.id.reset_password_progress) View progressView;
+        @BindView(R.id.reset_password_avatar) ImageView avatar;
+        @BindView(R.id.reset_password_username) TextView usernameText;
+        @BindView(R.id.reset_password_email_confirmation_message) TextView confirmationMessage;
+        @BindView(R.id.reset_password_confirm) View confirmButton;
+        @BindView(R.id.reset_password_done) View doneButton;
+        @BindView(R.id.reset_password_progress) View progressView;
 
         @Override public void showAvatar(String avatarUrl) {
             imageLoader.loadProfilePhoto(avatarUrl, avatar);

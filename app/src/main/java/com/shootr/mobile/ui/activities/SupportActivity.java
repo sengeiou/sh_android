@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,9 +29,9 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject SupportPresenter supportPresenter;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(R.id.support_version_number) TextView versionNumber;
-    @Bind(R.id.support_blog_text) TextView blog;
-    @Bind(R.id.support_help_text) TextView help;
+    @BindView(R.id.support_version_number) TextView versionNumber;
+    @BindView(R.id.support_blog_text) TextView blog;
+    @BindView(R.id.support_help_text) TextView help;
 
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;

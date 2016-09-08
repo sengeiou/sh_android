@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,10 +38,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     private static final String EXTRA_IS_CURRENT_USER = "is_current_user";
     public static final int REQUEST_NEW_STREAM = 3;
 
-    @Bind(R.id.listing_list) RecyclerView listingList;
-    @Bind(R.id.listing_loading) View loadingView;
-    @Bind(R.id.listing_empty_title) View emptyView;
-    @Bind(R.id.listing_add_stream) FloatingActionButton addStream;
+    @BindView(R.id.listing_list) RecyclerView listingList;
+    @BindView(R.id.listing_loading) View loadingView;
+    @BindView(R.id.listing_empty_title) View emptyView;
+    @BindView(R.id.listing_add_stream) FloatingActionButton addStream;
     @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_user_streams) String analyticsScreenuserStreams;
 

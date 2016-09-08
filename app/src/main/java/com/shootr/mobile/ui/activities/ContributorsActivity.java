@@ -11,7 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -39,10 +39,10 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     private ContributorsListAdapter adapter;
     private Snackbar limitContributorsSnackbar;
 
-    @Bind(R.id.contributors_list) ListView contributorsListView;
-    @Bind(R.id.contributors_progress) ProgressBar progressBar;
-    @Bind(R.id.contributors_empty) TextView emptyTextView;
-    @Bind(R.id.add_contributor_text) TextView addContributorText;
+    @BindView(R.id.contributors_list) ListView contributorsListView;
+    @BindView(R.id.contributors_progress) ProgressBar progressBar;
+    @BindView(R.id.contributors_empty) TextView emptyTextView;
+    @BindView(R.id.add_contributor_text) TextView addContributorText;
 
     @BindString(R.string.error_adding_contributor) String limitContributorsText;
 

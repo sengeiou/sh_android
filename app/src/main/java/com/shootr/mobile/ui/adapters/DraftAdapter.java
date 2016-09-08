@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -158,11 +158,11 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
   class DraftViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.shot_avatar) ImageView avatar;
-    @Bind(R.id.shot_user_name) TextView name;
-    @Bind(R.id.shot_text) ClickableTextView text;
-    @Bind(R.id.shot_image) ImageView image;
-    @Bind(R.id.shot_draft_buttons) View draftButtons;
+    @BindView(R.id.shot_avatar) ImageView avatar;
+    @BindView(R.id.shot_user_name) TextView name;
+    @BindView(R.id.shot_text) ClickableTextView text;
+    @BindView(R.id.shot_image) ImageView image;
+    @BindView(R.id.shot_draft_buttons) View draftButtons;
     DraftItemView draftItemView;
 
     public DraftViewHolder(View itemView) {

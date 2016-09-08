@@ -24,7 +24,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,30 +90,30 @@ public class ProfileActivity extends BaseActivity
   private static final int REQUEST_CROP_PHOTO = 88;
 
   //region injected
-  @Bind(R.id.profile_name) TextView nameTextView;
-  @Bind(R.id.profile_bio) TextView bioTextView;
-  @Bind(R.id.profile_website) TextView websiteTextView;
-  @Bind(R.id.profile_avatar) ImageView avatarImageView;
-  @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
-  @Bind(R.id.profile_streams_number) TextView streamsCountView;
+  @BindView(R.id.profile_name) TextView nameTextView;
+  @BindView(R.id.profile_bio) TextView bioTextView;
+  @BindView(R.id.profile_website) TextView websiteTextView;
+  @BindView(R.id.profile_avatar) ImageView avatarImageView;
+  @BindView(R.id.toolbar) Toolbar toolbar;
+  @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
+  @BindView(R.id.profile_streams_number) TextView streamsCountView;
 
-  @Bind(R.id.profile_marks_followers) TextView followersTextView;
-  @Bind(R.id.profile_marks_following) TextView followingTextView;
+  @BindView(R.id.profile_marks_followers) TextView followersTextView;
+  @BindView(R.id.profile_marks_following) TextView followingTextView;
 
-  @Bind(R.id.profile_follow_button) FollowButton followButton;
+  @BindView(R.id.profile_follow_button) FollowButton followButton;
 
-  @Bind(R.id.profile_shots_empty) View shotsListEmpty;
-  @Bind(R.id.profile_shots_list) ShotListView shotsList;
+  @BindView(R.id.profile_shots_empty) View shotsListEmpty;
+  @BindView(R.id.profile_shots_list) ShotListView shotsList;
 
-  @Bind(R.id.profile_all_shots_container) View allShotContainer;
+  @BindView(R.id.profile_all_shots_container) View allShotContainer;
 
-  @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
+  @BindView(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
-  @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
+  @BindView(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
-  @Bind(R.id.profile_user_verified) ImageView userVerified;
-  @Bind(R.id.mutuals_container) View mutualsContainer;
+  @BindView(R.id.profile_user_verified) ImageView userVerified;
+  @BindView(R.id.mutuals_container) View mutualsContainer;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;

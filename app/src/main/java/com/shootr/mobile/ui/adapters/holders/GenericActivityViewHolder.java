@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -20,11 +20,11 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     private final AndroidTimeUtils androidTimeUtils;
     private final OnAvatarClickListener onAvatarClickListener;
 
-    @Bind(R.id.activity_avatar) ImageView avatar;
-    @Bind(R.id.ativity_user_name) TextView name;
-    @Bind(R.id.activity_timestamp) TextView elapsedTime;
-    @Bind(R.id.activity_text) ClickableTextView text;
-    @Bind(R.id.shot_image) ImageView image;
+    @BindView(R.id.activity_avatar) ImageView avatar;
+    @BindView(R.id.ativity_user_name) TextView name;
+    @BindView(R.id.activity_timestamp) TextView elapsedTime;
+    @BindView(R.id.activity_text) ClickableTextView text;
+    @BindView(R.id.shot_image) ImageView image;
 
     public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener) {

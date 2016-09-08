@@ -13,7 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -42,9 +42,9 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     View progressViewContent;
     View progressView;
 
-    @Bind(R.id.userlist_list) ListView userlistListView;
-    @Bind(R.id.userlist_progress) ProgressBar progressBar;
-    @Bind(R.id.userlist_empty) TextView emptyTextView;
+    @BindView(R.id.userlist_list) ListView userlistListView;
+    @BindView(R.id.userlist_progress) ProgressBar progressBar;
+    @BindView(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;

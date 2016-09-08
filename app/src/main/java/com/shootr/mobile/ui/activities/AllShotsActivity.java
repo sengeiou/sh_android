@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -56,9 +56,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
 
-  @Bind(R.id.all_shots_list) ListView listView;
-  @Bind(R.id.timeline_empty) View emptyView;
-  @Bind(R.id.all_shots_loading) View loadingView;
+  @BindView(R.id.all_shots_list) ListView listView;
+  @BindView(R.id.timeline_empty) View emptyView;
+  @BindView(R.id.all_shots_loading) View loadingView;
   @BindString(R.string.shot_shared_message) String shotShared;
   @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
   @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;

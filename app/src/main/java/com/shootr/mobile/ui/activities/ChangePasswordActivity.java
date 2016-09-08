@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.EditText;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,9 +25,9 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
 
     private ProgressDialog progress;
 
-    @Bind(R.id.current_password) EditText currentPasswordInput;
-    @Bind(R.id.new_password) EditText newPasswordInput;
-    @Bind(R.id.new_password_again) EditText newPasswordAgainInput;
+    @BindView(R.id.current_password) EditText currentPasswordInput;
+    @BindView(R.id.new_password) EditText newPasswordInput;
+    @BindView(R.id.new_password_again) EditText newPasswordAgainInput;
     @BindString(R.string.analytics_screen_change_password) String analyticsScreenChangePassword;
 
     @Inject ChangePasswordPresenter changePasswordPresenter;

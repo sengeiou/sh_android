@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -18,8 +18,8 @@ public class WelcomePageActivity extends BaseActivity implements WelcomePageView
     @Inject WelcomePagePresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
 
-    @Bind(R.id.button_get_started) View getStartedButton;
-    @Bind(R.id.get_started_progress) View loading;
+    @BindView(R.id.button_get_started) View getStartedButton;
+    @BindView(R.id.get_started_progress) View loading;
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_welcome_page;

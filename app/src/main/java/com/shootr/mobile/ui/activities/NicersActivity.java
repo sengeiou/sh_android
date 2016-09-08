@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -28,8 +28,8 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
   implements NicersView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_ID_SHOT = "idShot";
-    @Bind(R.id.nicerslist_list) ListView nicerslistListView;
-    @Bind(R.id.nicerslist_progress) ProgressBar progressBar;
+    @BindView(R.id.nicerslist_list) ListView nicerslistListView;
+    @BindView(R.id.nicerslist_progress) ProgressBar progressBar;
 
     @Inject FeedbackMessage feedbackMessage;
     @Inject NicersPresenter presenter;

@@ -6,7 +6,7 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -34,15 +34,15 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private boolean showsFavoritesText = false;
     private boolean isWatchingStateEnabled = false;
 
-    @Bind(R.id.stream_picture) ImageView picture;
-    @Bind(R.id.stream_picture_without_text) ImageView pictureWithoutText;
-    @Bind(R.id.stream_title) TextView title;
-    @Bind(R.id.stream_muted) ImageView mute;
-    @Bind(R.id.stream_watchers) TextView watchers;
-    @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
-    @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
-    @Nullable @Bind(R.id.stream_subtitle_description) TextView subtitleDescription;
-    @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
+    @BindView(R.id.stream_picture) ImageView picture;
+    @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
+    @BindView(R.id.stream_title) TextView title;
+    @BindView(R.id.stream_muted) ImageView mute;
+    @BindView(R.id.stream_watchers) TextView watchers;
+    @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
+    @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
+    @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
+    @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;
     @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;

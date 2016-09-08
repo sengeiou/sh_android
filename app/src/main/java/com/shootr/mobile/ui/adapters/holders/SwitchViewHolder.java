@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 
 public class SwitchViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.action_name) TextView name;
-    @Bind(R.id.action_mute_switch) SwitchCompat muteSwitch;
-    @Bind(R.id.action_mute_switch_container) FrameLayout muteContainer;
+    @BindView(R.id.action_name) TextView name;
+    @BindView(R.id.action_mute_switch) SwitchCompat muteSwitch;
+    @BindView(R.id.action_mute_switch_container) FrameLayout muteContainer;
 
     public SwitchViewHolder(final View itemView) {
         super(itemView);

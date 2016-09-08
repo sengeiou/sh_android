@@ -15,7 +15,7 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -57,9 +57,9 @@ public class LoginSelectionActivity extends BaseActivity {
 
     private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
 
-    @Bind(R.id.login_progress) View loading;
-    @Bind(R.id.login_buttons) View buttonsContainer;
-    @Bind(R.id.login_selection_legal_disclaimer) TextView disclaimer;
+    @BindView(R.id.login_progress) View loading;
+    @BindView(R.id.login_buttons) View buttonsContainer;
+    @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
 
     @BindString(R.string.error_facebook_login) String facebookError;
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;

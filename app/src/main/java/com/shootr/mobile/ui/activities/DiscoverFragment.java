@@ -11,8 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.DiscoverAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -40,11 +41,12 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @Inject FeedbackMessage feedbackMessage;
   @Inject AndroidTimeUtils timeUtils;
 
-  @Bind(R.id.discover_recycler) ParallaxRecyclerView discoverList;
-  @Bind(R.id.discover_empty) View empty;
-  @Bind(R.id.discover_loading) View loading;
+  @BindView(R.id.discover_recycler) ParallaxRecyclerView discoverList;
+  @BindView(R.id.discover_empty) View empty;
+  @BindView(R.id.discover_loading) View loading;
 
   private DiscoverAdapter adapter;
+  private Unbinder unbinder;
 
   public static Fragment newInstance() {
     return new DiscoverFragment();
@@ -54,13 +56,13 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
       Bundle savedInstanceState) {
     setHasOptionsMenu(true);
     View fragmentView = inflater.inflate(R.layout.fragment_discover, container, false);
-    ButterKnife.bind(this, fragmentView);
+    unbinder = ButterKnife.bind(this, fragmentView);
     return fragmentView;
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+    unbinder.unbind();
   }
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {

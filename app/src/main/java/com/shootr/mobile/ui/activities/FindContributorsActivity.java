@@ -14,7 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
@@ -40,9 +40,9 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
     @Inject FeedbackMessage feedbackMessage;
     @Inject FindContributorsPresenter findContributorsPresenter;
 
-    @Bind(R.id.find_contributors_search_results_list) ListView resultsListView;
-    @Bind(R.id.find_contributors_search_results_empty) TextView emptyOrErrorView;
-    @Bind(R.id.contributorslist_progress) ProgressBar progressBar;
+    @BindView(R.id.find_contributors_search_results_list) ListView resultsListView;
+    @BindView(R.id.find_contributors_search_results_empty) TextView emptyOrErrorView;
+    @BindView(R.id.contributorslist_progress) ProgressBar progressBar;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, FindContributorsActivity.class);

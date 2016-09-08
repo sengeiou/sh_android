@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.adamstyrc.cookiecutter.CookieCutterImageView;
@@ -31,9 +31,9 @@ public class CropPictureActivity extends BaseNoToolbarActivity {
   @Inject CrashReportTool crashReportTool;
   @Inject FeedbackMessage feedbackMessage;
 
-  @Bind(R.id.ivCrop) CookieCutterImageView ivCrop;
-  @Bind(R.id.crop_loading) ProgressBar cropLoading;
-  @Bind(R.id.button_crop) View cropButton;
+  @BindView(R.id.ivCrop) CookieCutterImageView ivCrop;
+  @BindView(R.id.crop_loading) ProgressBar cropLoading;
+  @BindView(R.id.button_crop) View cropButton;
   private String filename;
   private View parentLayout;
 

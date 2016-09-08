@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -41,9 +41,9 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     private String currentSearchQuery;
     private StreamsListAdapter adapter;
 
-    @Bind(R.id.find_streams_list) RecyclerView streamsList;
-    @Bind(R.id.find_streams_empty) View emptyView;
-    @Bind(R.id.find_streams_loading) View loadingView;
+    @BindView(R.id.find_streams_list) RecyclerView streamsList;
+    @BindView(R.id.find_streams_empty) View emptyView;
+    @BindView(R.id.find_streams_loading) View loadingView;
     @BindString(R.string.added_to_favorites) String addedToFavorites;
     @BindString(R.string.shared_stream_notification) String sharedStream;
 

@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.DraftAdapter;
@@ -25,8 +25,8 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
     @Inject DraftsPresenter presenter;
     @Inject ImageLoader imageLoader;
 
-    @Bind(R.id.drafts_list) RecyclerView listView;
-    @Bind(R.id.drafts_empty) View emptyView;
+    @BindView(R.id.drafts_list) RecyclerView listView;
+    @BindView(R.id.drafts_empty) View emptyView;
 
     private DraftAdapter timelineAdapter;
     private boolean showShootAll = false;

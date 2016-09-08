@@ -12,10 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
@@ -46,9 +47,9 @@ public class UserFollowsFragment extends BaseFragment
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
 
-    @Bind(R.id.userlist_list) ListView userList;
-    @Bind(R.id.userlist_progress) ProgressBar progressBar;
-    @Bind(R.id.userlist_empty) TextView emptyTextView;
+    @BindView(R.id.userlist_list) ListView userList;
+    @BindView(R.id.userlist_progress) ProgressBar progressBar;
+    @BindView(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
     @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
@@ -63,6 +64,7 @@ public class UserFollowsFragment extends BaseFragment
 
     private UserListAdapter userListAdapter;
     private View progressView;
+    private Unbinder unbinder;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -100,7 +102,7 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -180,7 +182,7 @@ public class UserFollowsFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         userFollowsPresenter.setView(new NullUserFollowsView());
     }
 

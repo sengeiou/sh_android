@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -21,8 +21,8 @@ import javax.inject.Inject;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
 
-    @Bind(R.id.email_confirmation_email) TextView email;
-    @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
+    @BindView(R.id.email_confirmation_email) TextView email;
+    @BindView(R.id.email_confirmation_confirm_button) View confirmButton;
 
     @Inject EmailConfirmationPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;

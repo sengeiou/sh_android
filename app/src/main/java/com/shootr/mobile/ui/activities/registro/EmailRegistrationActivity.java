@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,11 +24,11 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    @Bind(R.id.registration_email) EditText emailInput;
-    @Bind(R.id.registration_username) EditText usernameInput;
-    @Bind(R.id.registration_password) EditText passwordInput;
-    @Bind(R.id.registration_create_button) View createButton;
-    @Bind(R.id.registration_create_progress) View progress;
+    @BindView(R.id.registration_email) EditText emailInput;
+    @BindView(R.id.registration_username) EditText usernameInput;
+    @BindView(R.id.registration_password) EditText passwordInput;
+    @BindView(R.id.registration_create_button) View createButton;
+    @BindView(R.id.registration_create_progress) View progress;
 
     @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
     @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;

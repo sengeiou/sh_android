@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
@@ -24,10 +24,10 @@ public class WatcherViewHolder extends RecyclerView.ViewHolder implements View.O
     private final OnFollowUnfollowListener onFollowUnfollowListener;
     private final Set<String> keepFollowButtonIds;
 
-    @Bind(R.id.watcher_user_avatar) ImageView avatar;
-    @Bind(R.id.watcher_user_name) TextView name;
-    @Bind(R.id.watcher_user_watching) TextView watchingText;
-    @Bind(R.id.user_follow_button) FollowButton followButton;
+    @BindView(R.id.watcher_user_avatar) ImageView avatar;
+    @BindView(R.id.watcher_user_name) TextView name;
+    @BindView(R.id.watcher_user_watching) TextView watchingText;
+    @BindView(R.id.user_follow_button) FollowButton followButton;
 
     private String userId;
 

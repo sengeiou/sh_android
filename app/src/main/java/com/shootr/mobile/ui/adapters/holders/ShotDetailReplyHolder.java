@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
@@ -23,17 +23,17 @@ import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.shot_reply_container) RelativeLayout container;
-    @Bind(R.id.shot_avatar) public ImageView avatar;
-    @Bind(R.id.shot_user_name) public TextView name;
-    @Bind(R.id.shot_timestamp) public TextView timestamp;
-    @Bind(R.id.shot_text) public ClickableTextView text;
-    @Bind(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
-    @Bind(R.id.default_image) ImageView defaultImage;
-    @Bind(R.id.shot_video_frame) View videoFrame;
-    @Bind(R.id.shot_video_title) TextView videoTitle;
-    @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+    @BindView(R.id.shot_reply_container) RelativeLayout container;
+    @BindView(R.id.shot_avatar) public ImageView avatar;
+    @BindView(R.id.shot_user_name) public TextView name;
+    @BindView(R.id.shot_timestamp) public TextView timestamp;
+    @BindView(R.id.shot_text) public ClickableTextView text;
+    @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
+    @BindView(R.id.default_image) ImageView defaultImage;
+    @BindView(R.id.shot_video_frame) View videoFrame;
+    @BindView(R.id.shot_video_title) TextView videoTitle;
+    @BindView(R.id.shot_video_duration) TextView videoDuration;
+    @BindView(R.id.shot_nice_button) NiceButtonView niceButton;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;

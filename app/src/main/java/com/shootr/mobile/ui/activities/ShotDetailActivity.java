@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,9 +63,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private static final int OFFSET = 500;
     private static final int OFFSET_WITH_REPLIES = 400;
 
-    @Bind(R.id.shot_detail_list) RecyclerView detailList;
-    @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
-    @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
+    @BindView(R.id.shot_detail_list) RecyclerView detailList;
+    @BindView(R.id.shot_bar_text) TextView replyPlaceholder;
+    @BindView(R.id.shot_bar_drafts) View replyDraftsButton;
     @BindString(R.string.shot_shared_message) String shotShared;
     @BindString(R.string.analytics_screen_shot_detail) String analyticsScreenShotDetail;
     @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
