@@ -221,8 +221,8 @@ import static butterknife.ButterKnife.findById;
         debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
         debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
         debugActions.add(new LoginDebugAction("fukdalaw", "654321"));
-        debugActions.add(new LoginDebugAction("VSaldanya", "poned_una_contraseña"));
-        debugActions.add(new LoginDebugAction("AlterEgoVic", "poned_una_contraseña"));
+        debugActions.add(new LoginDebugAction("VSaldanya", "123456"));
+        debugActions.add(new LoginDebugAction("AlterEgoVic", "123456"));
         debugActions.add(new LoginDebugAction("JorgeShoot", "poned_una_contraseña"));
         return debugActions;
     }
