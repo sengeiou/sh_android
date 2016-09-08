@@ -102,10 +102,6 @@ public class WatchersView extends LinearLayout {
         bindWatcherData(viewHolder, userWatching);
     }
 
-    public void setOnProfileClickListener(OnProfileClickListener profileClickListener) {
-        this.profileClickListener = profileClickListener;
-    }
-
     //endregion
 
     //region Private methods

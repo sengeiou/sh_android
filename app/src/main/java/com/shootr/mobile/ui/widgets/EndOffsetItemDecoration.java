@@ -25,17 +25,6 @@ public class EndOffsetItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * Constructor that takes in a {@link Drawable} to be drawn at the end of
-     * the RecyclerView.
-     *
-     * @param offsetDrawable The {@code Drawable} to be added to the end of the
-     * RecyclerView
-     */
-    public EndOffsetItemDecoration(Drawable offsetDrawable) {
-        mOffsetDrawable = offsetDrawable;
-    }
-
-    /**
      * Determines the size and location of the offset to be added to the end
      * of the RecyclerView.
      *

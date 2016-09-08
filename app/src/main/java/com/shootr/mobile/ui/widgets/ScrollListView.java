@@ -95,10 +95,6 @@ public class ScrollListView extends ListView implements NestedScrollingChild {
     this.onScrollListener = onScrollListener;
   }
 
-  public void setOnDetectScrollListener(OnDetectScrollListener onDetectScrollListener) {
-    this.onDetectScrollListener = onDetectScrollListener;
-  }
-
   public interface OnDetectScrollListener {
 
     void onUpScrolling();
