@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -21,10 +21,10 @@ import javax.inject.Inject;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
 
-    @Bind(R.id.email_login_username_email) public EditText emailUsername;
-    @Bind(R.id.email_login_password) public EditText password;
-    @Bind(R.id.email_login_button) TextView loginButton;
-    @Bind(R.id.login_loading) View loadingView;
+    @BindView(R.id.email_login_username_email) public EditText emailUsername;
+    @BindView(R.id.email_login_password) public EditText password;
+    @BindView(R.id.email_login_button) TextView loginButton;
+    @BindView(R.id.login_loading) View loadingView;
 
     @Inject EmailLoginPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;

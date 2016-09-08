@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,9 +24,9 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   @Inject SettingsPresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
-  @Bind(R.id.started_shooting_push_option) TextView selectedPushStartedShootingSetting;
-  @Bind(R.id.nice_shot_push_option) TextView selectedPushNiceShotSetting;
-  @Bind(R.id.reshot_push_option) TextView selectedPushReShotSetting;
+  @BindView(R.id.started_shooting_push_option) TextView selectedPushStartedShootingSetting;
+  @BindView(R.id.nice_shot_push_option) TextView selectedPushNiceShotSetting;
+  @BindView(R.id.reshot_push_option) TextView selectedPushReShotSetting;
   @BindString(R.string.analytics_screen_push_settings) String analytics_screen_push_settings;
 
   private CharSequence[] itemsStartedShooting = new CharSequence[3];

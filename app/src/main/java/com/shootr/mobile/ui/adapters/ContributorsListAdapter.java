@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.UserModel;
@@ -126,10 +126,10 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     public static class ViewHolder {
 
-        @Bind(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
-        @Bind(R.id.user_name) TextView title;
-        @Bind(R.id.user_username) TextView subtitle;
-        @Bind(R.id.contributor_button) ContributorButton contributorButton;
+        @BindView(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
+        @BindView(R.id.user_name) TextView title;
+        @BindView(R.id.user_username) TextView subtitle;
+        @BindView(R.id.contributor_button) ContributorButton contributorButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

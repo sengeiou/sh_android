@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.shootr.mobile.R;
@@ -17,9 +17,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PollVoteViewHolder extends RecyclerView.ViewHolder {
 
-  @Bind(R.id.option_picture_without_text) CircleImageView picture;
-  @Bind(R.id.option_picture) ImageView pictureWithText;
-  @Bind(R.id.option_text) TextView option;
+  @BindView(R.id.option_picture_without_text) CircleImageView picture;
+  @BindView(R.id.option_picture) ImageView pictureWithText;
+  @BindView(R.id.option_text) TextView option;
 
   private final OnPollOptionClickListener pollOptionClickListener;
   private final OnPollOptionLongClickListener pollOptionLongClickListener;

@@ -9,9 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
@@ -41,13 +42,14 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
   @Inject AnalyticsTool analyticsTool;
   @Inject InitialsLoader initialsLoader;
 
-    @Bind(R.id.favorites_list) RecyclerView favoritesList;
-    @Bind(R.id.favorites_empty) View empty;
-    @Bind(R.id.favorites_loading) View loading;
+    @BindView(R.id.favorites_list) RecyclerView favoritesList;
+    @BindView(R.id.favorites_empty) View empty;
+    @BindView(R.id.favorites_loading) View loading;
     @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
 
     private WatchableStreamsAdapter adapter;
+    private Unbinder unbinder;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -56,14 +58,14 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_favorites, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         favoritesListPresenter.setView(new NullFavoritesListView());
     }
 

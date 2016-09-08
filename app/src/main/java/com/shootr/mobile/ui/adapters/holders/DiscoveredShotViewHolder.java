@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
@@ -24,15 +24,15 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
 
   private static final float ALPHA = 0.7f;
 
-  @Bind(R.id.container) FrameLayout container;
-  @Bind(R.id.shot_container) RelativeLayout shotContainer;
-  @Bind(R.id.shot_image) ParallaxImageView shotImage;
-  @Bind(R.id.shot_avatar) CircleImageView avatar;
-  @Bind(R.id.shot_username) TextView shotUsername;
-  @Bind(R.id.shot_comment) TextView shotComment;
-  @Bind(R.id.nice_discovered_indicator) ShineButton favoriteButton;
-  @Bind(R.id.shot_timestamp) TextView timestamp;
-  @Bind(R.id.stream_title) TextView streamTitle;
+  @BindView(R.id.container) FrameLayout container;
+  @BindView(R.id.shot_container) RelativeLayout shotContainer;
+  @BindView(R.id.shot_image) ParallaxImageView shotImage;
+  @BindView(R.id.shot_avatar) CircleImageView avatar;
+  @BindView(R.id.shot_username) TextView shotUsername;
+  @BindView(R.id.shot_comment) TextView shotComment;
+  @BindView(R.id.nice_discovered_indicator) ShineButton favoriteButton;
+  @BindView(R.id.shot_timestamp) TextView timestamp;
+  @BindView(R.id.stream_title) TextView streamTitle;
 
   private final ImageLoader imageLoader;
   private final OnDiscoveredShotClickListener onDiscoveredShotClickListener;

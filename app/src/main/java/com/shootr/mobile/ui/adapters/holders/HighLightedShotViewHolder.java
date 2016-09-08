@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -27,10 +27,10 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   private final OnHideHighlightShot onHideHighlightClickListener;
 
-  @Bind(R.id.hide_highlighted) TextView hideHighlighted;
-  @Bind(R.id.shot_container) View shotContainer;
-  @Bind(R.id.dismiss_container) FrameLayout dismissContainer;
-  @Bind(R.id.swipe) SwipeLayout swipeLayout;
+  @BindView(R.id.hide_highlighted) TextView hideHighlighted;
+  @BindView(R.id.shot_container) View shotContainer;
+  @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
+  @BindView(R.id.swipe) SwipeLayout swipeLayout;
 
   public HighLightedShotViewHolder(View view,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,

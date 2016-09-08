@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import android.widget.ImageView;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
@@ -20,7 +20,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
   private final OnFavoriteClickListener onFavoriteClickListener;
 
-  @Bind(R.id.favorite_stream_indicator) ImageView favoriteIndicator;
+  @BindView(R.id.favorite_stream_indicator) ImageView favoriteIndicator;
   private Boolean isFavorite;
 
   public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,

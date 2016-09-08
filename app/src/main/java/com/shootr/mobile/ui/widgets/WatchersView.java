@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
@@ -146,9 +146,9 @@ public class WatchersView extends LinearLayout {
 
     class WatcherViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-        @Bind(R.id.watcher_user_avatar) ImageView avatar;
-        @Bind(R.id.watcher_user_name) TextView name;
-        @Bind(R.id.watcher_user_watching) TextView watchingText;
+        @BindView(R.id.watcher_user_avatar) ImageView avatar;
+        @BindView(R.id.watcher_user_name) TextView name;
+        @BindView(R.id.watcher_user_watching) TextView watchingText;
         String userId;
 
         public WatcherViewHolder(View itemView) {

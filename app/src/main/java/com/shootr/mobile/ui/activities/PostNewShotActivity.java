@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -60,17 +60,17 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     public static final String EXTRA_PHOTO = "photo";
     public static final String SPACE = " ";
 
-    @Bind(R.id.new_shot_avatar) ImageView avatar;
-    @Bind(R.id.new_shot_title) TextView name;
-    @Bind(R.id.new_shot_subtitle) TextView username;
-    @Bind(R.id.new_shot_text) EditText editTextView;
-    @Bind(R.id.new_shot_char_counter) TextView charCounter;
-    @Bind(R.id.new_shot_send_button) ImageButton sendButton;
-    @Bind(R.id.new_shot_send_progress) ProgressBar progress;
-    @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
-    @Bind(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
-    @Bind(R.id.new_shot_image) ImageView image;
-    @Bind(R.id.new_shot_mentions) NestedListView mentionsListView;
+    @BindView(R.id.new_shot_avatar) ImageView avatar;
+    @BindView(R.id.new_shot_title) TextView name;
+    @BindView(R.id.new_shot_subtitle) TextView username;
+    @BindView(R.id.new_shot_text) EditText editTextView;
+    @BindView(R.id.new_shot_char_counter) TextView charCounter;
+    @BindView(R.id.new_shot_send_button) ImageButton sendButton;
+    @BindView(R.id.new_shot_send_progress) ProgressBar progress;
+    @BindView(R.id.new_shot_image_container) ViewGroup imageContainer;
+    @BindView(R.id.new_shot_mentions_container) ViewGroup mentionsContainer;
+    @BindView(R.id.new_shot_image) ImageView image;
+    @BindView(R.id.new_shot_mentions) NestedListView mentionsListView;
 
     @BindString(R.string.analytics_action_shot) String analyticsActionSendShot;
     @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;

@@ -9,14 +9,14 @@ import android.widget.FrameLayout;
 
 import com.shootr.mobile.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FollowButton extends FrameLayout {
 
-    @Bind(R.id.follow) View followButton;
-    @Bind(R.id.following) View followingButton;
-    @Bind(R.id.edit) View editButton;
+    @BindView(R.id.follow) View followButton;
+    @BindView(R.id.following) View followingButton;
+    @BindView(R.id.edit) View editButton;
 
     private boolean isFollowing;
     private boolean isEditProfile;

@@ -14,8 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.artjimlop.altex.AltexImageDownloader;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseActivity;
@@ -34,8 +35,8 @@ public class PhotoViewActivity extends BaseActivity {
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
-    @Bind(R.id.photo) ImageView imageView;
-    @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
+    @BindView(R.id.photo) ImageView imageView;
+    @BindView(R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
@@ -45,6 +46,7 @@ public class PhotoViewActivity extends BaseActivity {
     private boolean isUiShown = true;
     private String previewUrl;
     private String imageUrl;
+    private Unbinder unbinder;
 
     public static Intent getIntentForActivity(Context context, String imageUrl) {
         return getIntentForActivity(context, imageUrl, null);
@@ -62,7 +64,7 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         setupActionBar();
 
         writePermissionManager.init(this);
@@ -172,7 +174,7 @@ public class PhotoViewActivity extends BaseActivity {
     @Override protected void onDestroy() {
         super.onDestroy();
         attacher.cleanup();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override public void onBackPressed() {

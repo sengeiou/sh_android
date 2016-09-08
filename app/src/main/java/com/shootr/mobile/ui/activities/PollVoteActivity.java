@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -39,10 +39,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   public static final String EXTRA_ID_USER_OWNER = "userIdOwner";
   private static final int COLUMNS_NUMBER = 4;
 
-  @Bind(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
-  @Bind(R.id.poll_question) TextView pollQuestion;
-  @Bind(R.id.pollvote_progress) ProgressBar progressBar;
-  @Bind(R.id.poll_results) TextView viewResults;
+  @BindView(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
+  @BindView(R.id.poll_question) TextView pollQuestion;
+  @BindView(R.id.pollvote_progress) ProgressBar progressBar;
+  @BindView(R.id.poll_results) TextView viewResults;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollVotePresenter presenter;

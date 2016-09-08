@@ -8,16 +8,16 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 
 public class ActionViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.action_icon) ImageView icon;
-    @Bind(R.id.action_name) TextView name;
-    @Bind(R.id.action_number) TextView optionalNumber;
-    @Bind(R.id.menu_container) FrameLayout container;
+    @BindView(R.id.action_icon) ImageView icon;
+    @BindView(R.id.action_name) TextView name;
+    @BindView(R.id.action_number) TextView optionalNumber;
+    @BindView(R.id.menu_container) FrameLayout container;
 
     public ActionViewHolder(View itemView) {
         super(itemView);

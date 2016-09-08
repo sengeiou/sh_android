@@ -23,10 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -135,20 +136,20 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
 
-  @Bind(R.id.timeline_shot_list) RecyclerView shotsTimeline;
-  @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @Bind(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
-  @Bind(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
-  @Bind(R.id.timeline_empty) View emptyView;
-  @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  @Bind(R.id.shot_bar_drafts) View draftsButton;
-  @Bind(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
-  @Bind(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
-  @Bind(R.id.timeline_new_shot_bar) View newShotBarContainer;
-  @Bind(R.id.timeline_message) ClickableTextView streamMessage;
-  @Bind(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
-  @Bind(R.id.poll_question) TextView pollQuestion;
-  @Bind(R.id.poll_action) TextView pollAction;
+  @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
+  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
+  @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
+  @BindView(R.id.timeline_empty) View emptyView;
+  @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
+  @BindView(R.id.shot_bar_drafts) View draftsButton;
+  @BindView(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
+  @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
+  @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
+  @BindView(R.id.timeline_message) ClickableTextView streamMessage;
+  @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
+  @BindView(R.id.poll_question) TextView pollQuestion;
+  @BindView(R.id.poll_action) TextView pollAction;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -185,6 +186,7 @@ public class StreamTimelineFragment extends BaseFragment
   private PreCachingLayoutManager preCachingLayoutManager;
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
+  private Unbinder unbinder;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -197,7 +199,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
-    ButterKnife.bind(this, fragmentView);
+    unbinder = ButterKnife.bind(this, fragmentView);
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
     shotsTimeline.setLayoutManager(preCachingLayoutManager);
     shotsTimeline.setHasFixedSize(false);
@@ -208,7 +210,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     analyticsTool.analyticsStop(getContext(), getActivity());
-    ButterKnife.unbind(this);
+    unbinder.unbind();
     streamTimelinePresenter.setView(new NullStreamTimelineView());
     newShotBarPresenter.setView(new NullNewShotBarView());
     watchNumberPresenter.setView(new NullWatchNumberView());
