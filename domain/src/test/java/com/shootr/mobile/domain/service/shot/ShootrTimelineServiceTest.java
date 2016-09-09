@@ -73,7 +73,8 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activities);
-        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE,
+            false);
 
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
@@ -83,7 +84,8 @@ public class ShootrTimelineServiceTest {
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(activities);
 
-        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE,
+            false);
 
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
@@ -91,7 +93,7 @@ public class ShootrTimelineServiceTest {
     @Test public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
 
-        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE, false);
 
         verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyStreamParameters());
     }
@@ -144,7 +146,7 @@ public class ShootrTimelineServiceTest {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(
           activitiesList());
 
-        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        shootrTimelineService.refreshTimelinesForActivity(LANGUAGE, false);
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);
@@ -156,7 +158,8 @@ public class ShootrTimelineServiceTest {
         when(localActivityRepository.getActivityTimeline(anyActivityParameters(), anyString())).thenReturn(
           emptyActivityList());
 
-        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE);
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity(LANGUAGE,
+            false);
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor =
           ArgumentCaptor.forClass(ActivityTimelineParameters.class);

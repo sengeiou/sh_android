@@ -288,6 +288,35 @@ public class DatabaseContract {
     };
   }
 
+  public static final class MeActivityTable implements SyncColumns {
+
+    private MeActivityTable() {
+
+    }
+
+    public static final String TABLE = "MeActivity";
+
+    public static final String ID_ACTIVITY = "idActivity";
+    public static final String ID_USER = "idUser";
+    public static final String ID_TARGET_USER = "idTargetUser";
+    public static final String USERNAME = "userName";
+    public static final String ID_STREAM = "idStream";
+    public static final String USER_PHOTO = "userPhoto";
+    public static final String STREAM_TITLE = "streamTitle";
+    public static final String COMMENT = "comment";
+    public static final String TYPE = "type";
+    public static final String ID_SHOT = "idShot";
+    public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
+    public static final String ID_POLL = "idPoll";
+    public static final String POLL_QUESTION = "pollQuestion";
+
+    public static final String[] PROJECTION = {
+        ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, TYPE, BIRTH, MODIFIED, DELETED,
+        REVISION, SYNCHRONIZED
+    };
+  }
+
   public static final class SuggestedPeopleTable extends UserTable {
 
     private SuggestedPeopleTable() {

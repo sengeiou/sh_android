@@ -1,15 +1,13 @@
-package com.shootr.mobile.domain.interactor.timeline;
+package com.shootr.mobile.domain.interactor.timeline.activity;
 
-import com.shootr.mobile.domain.model.activity.Activity;
-import com.shootr.mobile.domain.model.activity.ActivityTimeline;
-import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,18 +18,15 @@ public class GetActivityTimelineInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ActivityRepository localActivityRepository;
-  private final SessionRepository sessionRepository;
   private Callback callback;
   private String locale;
   private Boolean isUserActivityTimeline;
 
   @Inject public GetActivityTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ActivityRepository localActivityRepository,
-      SessionRepository sessionRepository) {
+      PostExecutionThread postExecutionThread, @Local ActivityRepository localActivityRepository) {
     this.localActivityRepository = localActivityRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.sessionRepository = sessionRepository;
   }
   //endregion
 
@@ -52,7 +47,8 @@ public class GetActivityTimelineInteractor implements Interactor {
     activityTimelineParameters.excludeHiddenTypes();
     List<Activity> activities = loadLocalActivities(activityTimelineParameters);
     activities = sortActivitiesByPublishDate(activities);
-    notifyTimelineFromActivities(activities);
+    ActivityTimeline timeline = buildTimeline(activities);
+    notifyLoaded(timeline);
   }
 
   private List<Activity> loadLocalActivities(ActivityTimelineParameters timelineParameters) {
@@ -60,49 +56,12 @@ public class GetActivityTimelineInteractor implements Interactor {
   }
 
   private ActivityTimelineParameters buildParameters() {
-    return ActivityTimelineParameters.builder().build();
+    return ActivityTimelineParameters.builder().isMeTimeline(isUserActivityTimeline).build();
   }
 
   private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
     Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
     return remoteActivities;
-  }
-
-  //region Result
-  private void notifyTimelineFromActivities(List<Activity> activities) {
-    List<Activity> userActivities = retainUsersActivity(activities);
-    if (isUserActivityTimeline) {
-      ActivityTimeline timeline = buildTimeline(userActivities);
-      notifyLoaded(timeline);
-    } else {
-      activities.removeAll(userActivities);
-      ActivityTimeline timeline = buildTimeline(activities);
-      notifyLoaded(timeline);
-    }
-  }
-
-  private List<Activity> retainUsersActivity(List<Activity> activities) {
-    String currentUserId = sessionRepository.getCurrentUserId();
-    List<Activity> userActivities = new ArrayList<>();
-    for (Activity activity : activities) {
-      if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
-        userActivities.add(activity);
-      }
-    }
-    return userActivities;
-  }
-
-  private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
-    return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId,
-        activity);
-  }
-
-  private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
-    return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
-  }
-
-  private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
-    return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
   }
 
   private ActivityTimeline buildTimeline(List<Activity> activities) {

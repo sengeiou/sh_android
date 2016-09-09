@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +61,7 @@ public class RefreshHoldingStreamTimelineInteractorTest {
     refreshHoldingStreamTimelineInteractor.refreshHoldingStreamTimeline(STREAM_ID, USER_ID,
         LAST_REFRESH_DATE, GONE_BACKGROUND, callback, errorCallback);
 
-    verify(shootrTimelineService).refreshTimelinesForActivity(anyString());
+    verify(shootrTimelineService, atLeastOnce()).refreshTimelinesForActivity(anyString(), anyBoolean());
   }
 
   @Test public void shouldNotifyErrorIfServiceThrowsExceptionWhenRefreshHoldingStream()
@@ -77,7 +78,7 @@ public class RefreshHoldingStreamTimelineInteractorTest {
 
   @Test public void shouldNotifyErrorIfServiceThrowsExceptionWhenRefreshTimelinesForActivity()
       throws Exception {
-    when(shootrTimelineService.refreshTimelinesForActivity(anyString())).thenThrow(
+    when(shootrTimelineService.refreshTimelinesForActivity(anyString(), anyBoolean())).thenThrow(
         new ShootrException() {
         });
 

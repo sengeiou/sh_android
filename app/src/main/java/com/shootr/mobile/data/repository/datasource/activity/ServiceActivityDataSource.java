@@ -38,7 +38,8 @@ public class ServiceActivityDataSource implements ActivityDataSource {
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),
-              locale);
+              locale,
+              parameters.getActivityFilter());
             storeEmbedStreams(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (ApiException | IOException e) {
@@ -55,7 +56,7 @@ public class ServiceActivityDataSource implements ActivityDataSource {
         }
     }
 
-    @Override public void putActivities(List<ActivityEntity> activityEntities) {
+    @Override public void putActivities(ActivityTimelineParameters parameters, List<ActivityEntity> activityEntities) {
         throw new IllegalArgumentException("method not implemented");
     }
 

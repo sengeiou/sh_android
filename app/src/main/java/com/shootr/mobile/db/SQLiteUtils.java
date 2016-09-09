@@ -411,6 +411,46 @@ public class SQLiteUtils {
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
 
+    public static final String CREATE_ME_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.MeActivityTable.TABLE
+        + " ("
+        + DatabaseContract.MeActivityTable.ID_ACTIVITY
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.MeActivityTable.ID_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.MeActivityTable.ID_TARGET_USER
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.USERNAME
+        + " TEXT NOT NULL,"
+        + DatabaseContract.MeActivityTable.ID_STREAM
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.USER_PHOTO
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.STREAM_TITLE
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.MeActivityTable.COMMENT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.MeActivityTable.TYPE
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.ID_SHOT
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.ID_STREAM_AUTHOR
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.ID_POLL
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.POLL_QUESTION
+        + " TEXT NULL,"
+        + DatabaseContract.SyncColumns.BIRTH
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.MODIFIED
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.DELETED
+        + " DATETIME NULL,"
+        + DatabaseContract.SyncColumns.REVISION
+        + " INT NOT NULL,"
+        + DatabaseContract.SyncColumns.SYNCHRONIZED
+        + " CHAR(1) NULL)";
+
     public static final String CREATE_SUGGESTED_PEOPLE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.SuggestedPeopleTable.TABLE
       + " ("
