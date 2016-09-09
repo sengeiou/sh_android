@@ -72,6 +72,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean showingHoldingShots;
   private boolean isFirstShotPosition;
   private boolean isFirstLoad;
+  private boolean isTimelineInitialized;
   private Integer newShotsNumber;
   private String streamTitle;
   private String streamDescription;
@@ -305,12 +306,27 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private void showShotsInView(Timeline timeline) {
     List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
     if (isFirstLoad) {
-      shotModels.addAll(shots);
-      setShotsWithoutReposition(shots);
+      showFirstLoad(shots);
+      setTimelineInitialized(shots);
+    } else if (isTimelineInitialized) {
+      showFirstLoad(shots);
+      isTimelineInitialized = false;
+      isFirstLoad = false;
     } else {
       handleNewShots(timeline, shots, isFirstShotPosition);
     }
     loadNewShots();
+  }
+
+  private void setTimelineInitialized(List<ShotModel> shots) {
+    if (!shots.isEmpty()) {
+      isTimelineInitialized = true;
+    }
+  }
+
+  private void showFirstLoad(List<ShotModel> shots) {
+    shotModels.addAll(shots);
+    setShotsWithoutReposition(shots);
   }
 
   private void handleNewShots(Timeline timeline, List<ShotModel> shots, Boolean isFirstShotPosition) {
