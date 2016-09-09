@@ -13,7 +13,7 @@ No se inyecta directamente, pero existe un InteractorModule que se inyecta en Da
 
 ## Eh tío, yo me acuerdo de haber tenido que inyectar DataSources y Repositories no sé donde... ¿Cómo es que nunca he inyectado un interactor en un Module?
 
-## Los Repositories y DataSources están diseñados por contrato, es decir, responden a una Interface. Esto hace que sea necesario hacer explícita la inyeción en los módulos. El caso particular del que hablo se inyecta en ActivityRepositoryModule. Los Interactors no están diseñados por contrato, luego no hay que hacerlo.
+Los Repositories y DataSources están diseñados por contrato, es decir, responden a una Interface. Esto hace que sea necesario hacer explícita la inyeción en los módulos. El caso particular del que hablo se inyecta en ActivityRepositoryModule. Los Interactors no están diseñados por contrato, luego no hay que hacerlo.
 
 ## ¿Pero si quiero puedo hacerlo?
 No, Dagger va a petar.
