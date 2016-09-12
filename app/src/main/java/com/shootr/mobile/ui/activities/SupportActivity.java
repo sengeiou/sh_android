@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SupportPresenter;
+import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.views.SupportView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
@@ -87,6 +89,11 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         supportPresenter.helpClicked();
     }
 
+    @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
+        Intent intent = new Intent(this, EasterEggActivity.class);
+        startActivity(intent);
+        return true;
+    }
     //endregion
 
     @Override public void showError() {

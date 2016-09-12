@@ -57,4 +57,6 @@
     <color name="legal_disclaimer_text_color">#81D4FA</color>
     <color name="favorite_tab">#FF9800</color>
     <color name="dissmiss">#F44336</color>
+
+    <color name="translucent_background">#CC3E4447</color>
 </resources>

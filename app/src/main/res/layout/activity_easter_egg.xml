@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+  <android.support.v7.widget.CardView
+      android:layout_width="300dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:clickable="true"
+      app:cardCornerRadius="10dp"
+      app:cardElevation="8dp"
+      app:cardPreventCornerOverlap="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="192dp"
+          android:layout_marginBottom="21dp"
+          android:background="@drawable/bg_detail_card_image">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:visibility="visible"
+            android:src="@drawable/intro_logo" />
+      </FrameLayout>
+
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/primary"
+          android:textStyle="bold"
+          android:textSize="15sp"
+          android:text="In memoriam" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="@color/accent"
+          android:textSize="14sp"
+          android:text="All the developers involved in this project" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingTop="8dp"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:layout_gravity="center"
+          android:text="Inma Alarcón †"
+          android:textColor="@color/gray_60"
+          android:textSize="15sp"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:layout_gravity="center"
+          android:text="Rafa Vázquez †"
+          android:textColor="@color/gray_60"
+          android:textSize="15sp"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:layout_gravity="center"
+          android:text="Arturo Jiménez †"
+          android:textColor="@color/gray_60"
+          android:textSize="15sp"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:layout_gravity="center"
+          android:text="Jorge Martínez"
+          android:textColor="@color/gray_60"
+          android:textSize="15sp"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:paddingBottom="16dp"
+          android:layout_gravity="center"
+          android:text="Víctor Saldanya"
+          android:textColor="@color/gray_60"
+          android:textSize="15sp"/>
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
+</FrameLayout>
+
