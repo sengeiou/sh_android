@@ -230,7 +230,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           imageClickListener,
           videoClickListener,
           onNiceShotListener,
-          replyShotClickListener);
+          replyShotClickListener, numberFormatUtil);
     }
 
     @NonNull
@@ -266,8 +266,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           imageClickListener,
           videoClickListener,
           onNiceShotListener,
-          parentShotClickListener,
-          resources);
+          parentShotClickListener, numberFormatUtil, resources);
     }
     //endregion
 

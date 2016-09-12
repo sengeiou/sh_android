@@ -454,4 +454,8 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="one">%s respond</item>
+    <item quantity="other">%s responses</item>
+  </plurals>
 </resources>

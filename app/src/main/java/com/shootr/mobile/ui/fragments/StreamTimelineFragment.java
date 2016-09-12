@@ -46,7 +46,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -90,6 +89,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -135,6 +135,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject AnalyticsTool analyticsTool;
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
+  @Inject NumberFormatUtil numberFormatUtil;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -423,14 +424,7 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void onUsernameClick(String username) {
             openProfileFromUsername(username);
           }
-        }, new OnReplyShotListener() {
-      @Override public void reply(ShotModel shotModel) {
-        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-            .from(getActivity()) //
-            .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
-        startActivity(newShotIntent);
-      }
-    }, new ShotClickListener() {
+        }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
         Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);
@@ -476,7 +470,7 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void onReshootClick(ShotModel shot) {
         streamTimelinePresenter.shareShot(shot);
       }
-    }, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
+    }, numberFormatUtil, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 

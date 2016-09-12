@@ -11,7 +11,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -21,6 +20,7 @@ import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
@@ -34,12 +34,12 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   public HighLightedShotViewHolder(View view,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener, OnReplyShotListener onReplyShotListener,
+      OnNiceShotListener onNiceShotListener,
       OnHideHighlightShot onHideHighlightClickListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
-      ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder) {
-    super(view, avatarClickListener, videoClickListener, onNiceShotListener, onReplyShotListener,
-        onUsernameClickListener, timeUtils, imageLoader, shotTextSpannableBuilder);
+      ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder, NumberFormatUtil numberFormatUtil) {
+    super(view, avatarClickListener, videoClickListener, onNiceShotListener,
+        onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil, shotTextSpannableBuilder);
     this.onHideHighlightClickListener = onHideHighlightClickListener;
   }
 

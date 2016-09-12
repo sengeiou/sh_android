@@ -31,7 +31,6 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
@@ -39,7 +38,6 @@ import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -137,11 +135,10 @@ public class ProfileActivity extends BaseActivity
   @Inject ProfilePresenter profilePresenter;
   @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
   @Inject ReportShotPresenter reportShotPresenter;
-  @Inject @TemporaryFilesDir File externalFilesDir;
   @Inject AndroidTimeUtils timeUtils;
   @Inject AnalyticsTool analyticsTool;
   @Inject WritePermissionManager writePermissionManager;
-  @Inject NumberFormatUtil followsFormatUtil;
+  @Inject NumberFormatUtil numberFormatUtil;
   @Inject BackStackHandler backStackHandler;
 
   //endregion
@@ -229,14 +226,8 @@ public class ProfileActivity extends BaseActivity
 
     latestsShotsAdapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, new OnReplyShotListener() {
-          @Override public void reply(ShotModel shotModel) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(context) //
-                .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
-            startActivity(newShotIntent);
-          }
-        }, onHideClickListener, profilePresenter.isCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
+            profilePresenter.isCurrentUser()) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }
@@ -571,8 +562,8 @@ public class ProfileActivity extends BaseActivity
     renderWebsite(userModel);
     renderBio(userModel);
     imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
-    followersTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowers()));
-    followingTextView.setText(followsFormatUtil.formatNumbers(userModel.getNumFollowings()));
+    followersTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowers()));
+    followingTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowings()));
   }
 
   @Override public void navigateToListing(String idUser, boolean isCurrentUser) {

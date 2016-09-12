@@ -21,7 +21,6 @@ import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -36,6 +35,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +55,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @Inject ShareManager shareManager;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
+  @Inject NumberFormatUtil numberFormatUtil;
 
   @BindView(R.id.all_shots_list) ListView listView;
   @BindView(R.id.timeline_empty) View emptyView;
@@ -196,14 +197,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
 
     adapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, new OnReplyShotListener() {
-          @Override public void reply(ShotModel shotModel) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getBaseContext()) //
-                .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
-            startActivity(newShotIntent);
-          }
-        }, onHideClickListener, presenter.getIsCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
+            presenter.getIsCurrentUser()) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }

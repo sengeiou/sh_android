@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
@@ -37,6 +38,9 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_video_title) TextView videoTitle;
     @BindView(R.id.shot_video_duration) TextView videoDuration;
     @BindView(R.id.shot_nice_button) CheckableImageView niceButton;
+    @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
+    @BindView(R.id.shot_reply_count) TextView replyCount;
+
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
@@ -46,13 +50,14 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener parentShotClickListener;
+    private final NumberFormatUtil numberFormatUtil;
     private final Resources resources;
 
     public ShotDetailParentViewHolder(View itemView, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
-      AvatarClickListener avatarClickListener, ShotClickListener imageClickListener,
-      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      ShotClickListener parentShotClickListener, Resources resources) {
+        OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
+        AvatarClickListener avatarClickListener, ShotClickListener imageClickListener,
+        OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+        ShotClickListener parentShotClickListener, NumberFormatUtil numberFormatUtil, Resources resources) {
         super(itemView);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -63,6 +68,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
         this.parentShotClickListener = parentShotClickListener;
+        this.numberFormatUtil = numberFormatUtil;
         this.resources = resources;
         ButterKnife.bind(this, itemView);
     }
@@ -78,10 +84,12 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         setupComment(shotModel);
         setupBirthData(shotModel);
         setupUserAvatar(shotModel);
+        setupShotMediaContentVisibility(shotModel);
         bindImageInfo(shotModel, imageClickListener);
         setupVideoListener(shotModel);
         setupNiceListener(shotModel);
         setupParentListener(shotModel);
+        bindReplyCount(shotModel);
     }
 
     private void setupComment(ShotModel shotModel) {
@@ -93,6 +101,26 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
             this.text.addLinks();
         } else {
             this.text.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupShotMediaContentVisibility(ShotModel shotModel) {
+        if (shotModel.hasVideo() || shotModel.getImage().getImageUrl() != null) {
+            shotMediaContent.setVisibility(View.VISIBLE);
+        } else {
+            shotMediaContent.setVisibility(View.GONE);
+        }
+    }
+
+    private void bindReplyCount(final ShotModel shot) {
+        Long replies = shot.getReplyCount();
+        if (replies > 0L) {
+            replyCount.setVisibility(View.VISIBLE);
+            replyCount.setText(replyCount.getResources()
+                .getQuantityString(R.plurals.shot_replies_count_pattern, replies.intValue(),
+                    numberFormatUtil.formatNumbers(replies)));
+        } else {
+            replyCount.setVisibility(View.GONE);
         }
     }
 

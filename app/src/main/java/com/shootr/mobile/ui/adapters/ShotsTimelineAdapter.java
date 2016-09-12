@@ -13,7 +13,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -25,6 +24,7 @@ import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,6 @@ public class ShotsTimelineAdapter
   private final OnVideoClickListener videoClickListener;
   private final OnNiceShotListener onNiceShotListener;
   private final OnUsernameClickListener onUsernameClickListener;
-  private final OnReplyShotListener onReplyShotListener;
   private final AndroidTimeUtils timeUtils;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final ShotClickListener shotClickListener;
@@ -53,6 +52,7 @@ public class ShotsTimelineAdapter
   private final OnHideHighlightShot onHideHighlightClickListener;
   private final OnUrlClickListener onUrlClickListener;
   private final OnReshootClickListener onReshootClickListener;
+  private final NumberFormatUtil numberFormatUtil;
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
@@ -61,21 +61,22 @@ public class ShotsTimelineAdapter
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-      OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener,
-      OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
-      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnUrlClickListener onUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
-      OnReshootClickListener onReshootClickListener, Boolean isAdmin) {
+      ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
+      OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
+      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
+      OnHideHighlightShot onHideHighlightClickListener,
+      OnReshootClickListener onReshootClickListener, NumberFormatUtil numberFormatUtil,
+      Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
     this.onNiceShotListener = onNiceShotListener;
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
-    this.onReplyShotListener = onReplyShotListener;
     this.onUrlClickListener = onUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
     this.onReshootClickListener = onReshootClickListener;
+    this.numberFormatUtil = numberFormatUtil;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     this.shotClickListener = shotClickListener;
@@ -91,9 +92,9 @@ public class ShotsTimelineAdapter
     View v =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.highlighted_shot, parent, false);
     return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onReplyShotListener, onHideHighlightClickListener,
+        onNiceShotListener, onHideHighlightClickListener,
         onUsernameClickListener, timeUtils, imageLoader,
-        shotTextSpannableBuilder);
+        shotTextSpannableBuilder, numberFormatUtil);
   }
 
   @Override
@@ -105,8 +106,8 @@ public class ShotsTimelineAdapter
     View v = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
     return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onReplyShotListener, onUsernameClickListener, timeUtils, imageLoader,
-        shotTextSpannableBuilder);
+        onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader,
+        numberFormatUtil, shotTextSpannableBuilder);
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -10,7 +11,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotViewHolder {
@@ -26,12 +27,12 @@ public class ShotViewHolder {
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
-    private final OnReplyShotListener onReplyShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ImageLoader imageLoader;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnHideClickListener onHideClickListener;
+    private final NumberFormatUtil numberFormatUtil;
 
     @BindView(R.id.shot_avatar) ImageView avatar;
     @BindView(R.id.shot_user_name) TextView name;
@@ -47,23 +48,23 @@ public class ShotViewHolder {
     @BindView(R.id.shot_nice_count) TextView niceCount;
     @BindView(R.id.shot_hide_button_container) View hideContainer;
     @BindView(R.id.shot_reply_count) TextView replyCount;
-    @BindView(R.id.shot_reply_button) ImageView darkReplyButton;
-    @BindView(R.id.shot_reply_button_no_replies) ImageView lightReplyButton;
+    @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
 
     public int position;
     private View view;
     private Boolean isCurrentUser;
 
     public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
-      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener,
-      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
-      ShotTextSpannableBuilder shotTextSpannableBuilder, Boolean isCurrentUser) {
+        OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+        OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
+        AndroidTimeUtils timeUtils, ImageLoader imageLoader,
+        ShotTextSpannableBuilder shotTextSpannableBuilder, NumberFormatUtil numberFormatUtil,
+        Boolean isCurrentUser) {
+        this.numberFormatUtil = numberFormatUtil;
         ButterKnife.bind(this, view);
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
-        this.onReplyShotListener = onReplyShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.imageLoader = imageLoader;
@@ -78,6 +79,7 @@ public class ShotViewHolder {
         bindComment(shot, shouldShowTitle);
         bindElapsedTime(shot);
         bindUserPhoto(shot);
+        setupShotMediaContentVisibility(shot);
         bindImageInfo(shot);
         bindVideoInfo(shot);
         if (isCurrentUser) {
@@ -92,28 +94,11 @@ public class ShotViewHolder {
         Long replies = shot.getReplyCount();
         if (replies > 0L) {
             replyCount.setVisibility(View.VISIBLE);
-            replyCount.setText(String.valueOf(replies));
-            darkReplyButton.setVisibility(View.VISIBLE);
-            lightReplyButton.setVisibility(View.GONE);
-            darkReplyButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    onReplyShotListener.reply(shot);
-                }
-            });
-            replyCount.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    onReplyShotListener.reply(shot);
-                }
-            });
+            replyCount.setText(replyCount.getResources()
+                .getQuantityString(R.plurals.shot_replies_count_pattern, replies.intValue(),
+                    numberFormatUtil.formatNumbers(replies)));
         } else {
             replyCount.setVisibility(View.GONE);
-            darkReplyButton.setVisibility(View.GONE);
-            lightReplyButton.setVisibility(View.VISIBLE);
-            lightReplyButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    onReplyShotListener.reply(shot);
-                }
-            });
         }
     }
 
@@ -260,6 +245,14 @@ public class ShotViewHolder {
     public void setNiceCount(Integer niceCount) {
         this.niceCount.setVisibility(View.VISIBLE);
         this.niceCount.setText(String.valueOf(niceCount));
+    }
+
+    private void setupShotMediaContentVisibility(ShotModel shotModel) {
+        if (shotModel.hasVideo() || shotModel.getImage().getImageUrl() != null) {
+            shotMediaContent.setVisibility(View.VISIBLE);
+        } else {
+            shotMediaContent.setVisibility(View.GONE);
+        }
     }
 
 }
