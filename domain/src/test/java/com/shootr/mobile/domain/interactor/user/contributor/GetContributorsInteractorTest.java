@@ -25,6 +25,7 @@ public class GetContributorsInteractorTest {
   private static final boolean USER_EMBED = true;
   private static final boolean NO_USER_EMBED = false;
   @Mock ContributorRepository contributorRepository;
+  @Mock ContributorRepository localContributorRepository;
   @Mock PostExecutionThread postExecutionThread;
   @Mock Interactor.Callback<List<Contributor>> callback;
   @Mock Interactor.ErrorCallback errorCallback;
@@ -36,7 +37,7 @@ public class GetContributorsInteractorTest {
     InteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-    interactor = new GetContributorsInteractor(interactorHandler, contributorRepository,
+    interactor = new GetContributorsInteractor(interactorHandler, contributorRepository, localContributorRepository,
         postExecutionThread);
   }
 

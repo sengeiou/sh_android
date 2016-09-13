@@ -1,12 +1,13 @@
 package com.shootr.mobile.domain.interactor.user.contributor;
 
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.ContributorRepository;
+import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,8 @@ import javax.inject.Inject;
 public class GetContributorsInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
-  private final ContributorRepository contributorRepository;
+  private final ContributorRepository remoteContributorRepository;
+  private final ContributorRepository localContributorRepository;
   private final PostExecutionThread postExecutionThread;
 
   private Callback<List<Contributor>> callback;
@@ -24,10 +26,12 @@ public class GetContributorsInteractor implements Interactor {
   private Boolean withUsersEmbed;
 
   @Inject public GetContributorsInteractor(InteractorHandler interactorHandler,
-      @Remote ContributorRepository contributorRepository,
+      @Remote ContributorRepository remoteContributorRepository,
+      @Local ContributorRepository localContributorRepository,
       PostExecutionThread postExecutionThread) {
     this.interactorHandler = interactorHandler;
-    this.contributorRepository = contributorRepository;
+    this.remoteContributorRepository = remoteContributorRepository;
+    this.localContributorRepository = localContributorRepository;
     this.postExecutionThread = postExecutionThread;
   }
 
@@ -50,9 +54,13 @@ public class GetContributorsInteractor implements Interactor {
 
   private List<Contributor> obtainRemoteContributors() {
     if (withUsersEmbed) {
-      return orderContributors(contributorRepository.getContributorsWithUsers(idStream));
+      return orderContributors(remoteContributorRepository.getContributorsWithUsers(idStream));
     } else {
-      return contributorRepository.getContributors(idStream);
+      List<Contributor> contributors = localContributorRepository.getContributors(idStream);
+      if (contributors.isEmpty()) {
+        contributors = remoteContributorRepository.getContributors(idStream);
+      }
+      return contributors;
     }
   }
 

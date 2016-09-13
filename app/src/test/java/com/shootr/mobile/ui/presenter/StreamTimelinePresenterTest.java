@@ -1,10 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.Contributor;
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
@@ -17,6 +12,11 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -108,7 +108,8 @@ public class StreamTimelinePresenterTest {
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStreamInteractor,
-        updateWatchNumberInteractor, reloadStreamTimelineInteractor, createStreamInteractor,
+        updateWatchNumberInteractor,
+        reloadStreamTimelineInteractor, createStreamInteractor,
         getContributorsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
@@ -1101,30 +1102,6 @@ public class StreamTimelinePresenterTest {
     presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
 
     verify(streamTimelineView, atLeastOnce()).hideStreamViewOnlyIndicator();
-  }
-
-  @Test public void shouldShowViewOnlyIndicatorWhenAndIAmNotAuthorAndIAmNotContributor()
-      throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(OTHER_USER_ID);
-    setupSelectViewOnlyStreamInteractorCallbacksStream();
-    setupContributorsCallback();
-    setupLoadTimelineInteractorCallbacks(timelineWithShots());
-
-    presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
-
-    verify(streamTimelineView, atLeastOnce()).showStreamViewOnlyIndicator();
-  }
-
-  @Test public void shouldShowViewOnlyIndicatorWhenInitializeAndViewOnlyStream()
-      throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(OTHER_USER_ID);
-    setupSelectViewOnlyStreamInteractorCallbacksStream();
-    setupContributorsCallback();
-    setupLoadTimelineInteractorCallbacks(timelineWithShots());
-
-    presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, VIEW_ONLY);
-
-    verify(streamTimelineView, atLeastOnce()).showStreamViewOnlyIndicator();
   }
 
   //region Matchers
