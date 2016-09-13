@@ -37,7 +37,7 @@ public class GetContributorsInteractorTest {
     InteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-    interactor = new GetContributorsInteractor(interactorHandler, contributorRepository, localContributorRepository,
+    interactor = new GetContributorsInteractor(interactorHandler, contributorRepository,
         postExecutionThread);
   }
 
