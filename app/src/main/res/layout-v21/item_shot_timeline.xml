@@ -94,7 +94,7 @@
           android:layout_marginTop="4dp"
           android:focusableInTouchMode="false"
           android:visibility="gone"
-          tools:visibility="gone"
+          tools:visibility="visible"
           >
 
         <com.shootr.mobile.ui.widgets.ProportionalImageView

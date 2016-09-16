@@ -113,13 +113,13 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setupViewCount(shotModel);
         setupLinkClicksCount(shotModel);
         setupReshotCount(shotModel);
+        setupCountDot(shotModel);
     }
 
     private void setupViewCount(ShotModel shotModel) {
         Long views = shotModel.getViews();
         if (views != 0) {
             viewsCount.setVisibility(View.VISIBLE);
-            countsDot.setVisibility(View.VISIBLE);
             viewsCount.setText(context.getResources()
                 .getQuantityString(R.plurals.view_count_pattern, views.intValue(),
                     numberFormatUtil.formatNumbers(views)));
@@ -143,6 +143,12 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
             reshotCount.setText(context.getResources()
                 .getQuantityString(R.plurals.reshot_count_pattern, reshoots.intValue(),
                     numberFormatUtil.formatNumbers(reshoots)));
+        }
+    }
+
+    private void setupCountDot(ShotModel shotModel) {
+        if (shotModel.getReshootCount() > 0 && shotModel.getViews() > 0) {
+            countsDot.setVisibility(View.VISIBLE);
         }
     }
 
