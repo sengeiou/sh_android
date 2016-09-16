@@ -182,6 +182,7 @@ public class FindFriendsFragment extends BaseSearchFragment
   }
 
   @Override public void searchChanged(String query) {
+    hideEmpty();
     findFriendsPresenter.queryTextChanged(query);
   }
 
