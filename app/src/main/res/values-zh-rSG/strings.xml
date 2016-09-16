@@ -250,7 +250,7 @@
   <string name="nices_push_settings_off">关闭</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d赞</item>
-    <item quantity="zero"/>
+    <item quantity="zero">%d赞</item>
   </plurals>
   <string name="no">不</string>
   <string name="notification_image">图片</string>
@@ -321,10 +321,10 @@
   <string name="remove_stream_label">清除stream</string>
   <string name="remove_stream_listing_context_menu">清除</string>
   <string name="replied_activity" formatted="false">已回覆</string>
-  <string name="replied_activity_with_comment" formatted="false">"已回覆: "</string>
+  <string name="replied_activity_with_comment" formatted="false">已回覆:</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="other">%d回复</item>
-    <item quantity="zero"/>
+    <item quantity="zero">%d回复</item>
   </plurals>
   <string name="reply_name_pattern">%1$s 回复 %2$s</string>
   <string name="reply_placeholder_pattern">回复%s…</string>
@@ -337,6 +337,11 @@
   <string name="reset_password_confirmation_message_email_pattern">邮件发送至%s</string>
   <string name="reset_password_enter_username_email">在Shootr输入你的用户名或邮箱。</string>
   <string name="reset_password_send_email">发送密码重新设置邮箱</string>
+  <plurals name="reshot_count_pattern">
+    <item quantity="other">%sreshots</item>
+    <item quantity="zero">%sreshots</item>
+  </plurals>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">还原stream</string>
   <string name="restore_stream_snackbar_action">复原</string>
   <string name="search_users_hint">查找用户</string>
@@ -357,6 +362,10 @@
   <string name="share_via_shootr">分享到Shootr</string>
   <string name="shoot_all_button">shoot所有</string>
   <string name="shot_pinned">已连接</string>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="other">%s回复</item>
+    <item quantity="zero">%s回复</item>
+  </plurals>
   <string name="shot_shared_message">shot被分享</string>
   <string name="shot_timeline_empty_title">没有shots</string>
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
@@ -412,7 +421,8 @@
   <string name="title_pin_message_notification" formatted="false">通知信息？</string>
   <string name="topic" formatted="false">信息</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="other">%d参与者</item>
+    <item quantity="other">%d个参与者</item>
+    <item quantity="zero">%d个参与者</item>
   </plurals>
   <string name="unfollow_dialog_message">取消关注 %s？</string>
   <string name="unfollow_dialog_no">不</string>

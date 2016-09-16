@@ -330,6 +330,7 @@
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d resposta</item>
     <item quantity="other">%d respostas</item>
+    <item quantity="zero">%d respostas</item>
   </plurals>
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Responder a %s…</string>
@@ -342,13 +343,19 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entre com seu nome de usuário ou email em Shootr.</string>
   <string name="reset_password_send_email">Enviar email para modificação de senha</string>
+  <plurals name="reshot_count_pattern">
+    <item quantity="one">%s reshot</item>
+    <item quantity="other">%s reshots</item>
+    <item quantity="zero">%s reshots</item>
+  </plurals>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="search_users_hint">Buscar usuários</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Questionário compartilhado %s</string>
-  <string name="shared_shot_activity">Compartilhou um shot de %s</string>
-  <string name="shared_shot_activity_with_comment">"Compartilhado: "</string>
+  <string name="shared_shot_activity">Reshot de %s</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">Stream compartilhado</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Questionário %s</string>
@@ -362,6 +369,11 @@
   <string name="share_via_shootr">Compartilhar via Shootr</string>
   <string name="shoot_all_button">Enviar tudo</string>
   <string name="shot_pinned">Linkado</string>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="one">%s resposta</item>
+    <item quantity="other">%s respostas</item>
+    <item quantity="zero">%s respostas</item>
+  </plurals>
   <string name="shot_shared_message">Shot compartilhado</string>
   <string name="shot_timeline_empty_title">Nenhum shot</string>
   <string name="showing_shots_by_holder">Shots do administrador.</string>
@@ -383,7 +395,7 @@
   <string name="stream_media_empty_title">Não há fotos nem vídeos</string>
   <string name="stream_media_no_more_media">Não há mais arquivos</string>
   <string name="stream_notification_confirmation_message">Notificar aos seus seguidores sobre este stream?</string>
-  <string name="stream_notification_confirmation_no">Nop</string>
+  <string name="stream_notification_confirmation_no">Não</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">seguindo a %d</string>
   <string name="stream_privacy">Privacidade</string>
