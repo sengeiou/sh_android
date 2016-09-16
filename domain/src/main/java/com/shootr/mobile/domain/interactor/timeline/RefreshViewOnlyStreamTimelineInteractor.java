@@ -1,15 +1,15 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.model.user.Contributor;
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -79,7 +79,6 @@ public class RefreshViewOnlyStreamTimelineInteractor implements Interactor {
       Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, isRealTime);
       filterViewOnlyTimeline(timeline);
       notifyLoaded(timeline);
-      shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
       incrementCalls();
     } catch (ShootrException error) {
       notifyError(error);

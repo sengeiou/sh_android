@@ -88,11 +88,15 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   private List<User> getRemotePeopleOrFallbackToLocal() {
-    try {
-      return remoteUserRepository.getPeople();
-    } catch (ServerCommunicationException networkError) {
-      return localUserRepository.getPeople();
+    List<User> people = localUserRepository.getPeople();
+    if (people.isEmpty()) {
+      try {
+        people = remoteUserRepository.getPeople();
+      } catch (ServerCommunicationException networkError) {
+        /* no-op */
+      }
     }
+    return people;
   }
 
   private Stream getRemoteStreamOrFallbackToLocal() {

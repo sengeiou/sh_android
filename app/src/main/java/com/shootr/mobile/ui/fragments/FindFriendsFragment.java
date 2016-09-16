@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -37,9 +37,9 @@ public class FindFriendsFragment extends BaseSearchFragment
   @Inject FindFriendsPresenter findFriendsPresenter;
   @Inject AnalyticsTool analyticsTool;
 
-  @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
-  @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
-  @Bind(R.id.userlist_progress) ProgressBar progressBar;
+  @BindView(R.id.find_friends_search_results_list) ListView resultsListView;
+  @BindView(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
+  @BindView(R.id.userlist_progress) ProgressBar progressBar;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
@@ -182,6 +182,7 @@ public class FindFriendsFragment extends BaseSearchFragment
   }
 
   @Override public void searchChanged(String query) {
+    hideEmpty();
     findFriendsPresenter.queryTextChanged(query);
   }
 

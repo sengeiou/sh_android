@@ -66,6 +66,7 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setReplyCount(shotApiEntity.getReplyCount());
     highlightedShot.setViews((shotApiEntity.getViews()));
     highlightedShot.setLinkClicks(shotApiEntity.getLinkClicks());
+    highlightedShot.setReshootCounter(shotApiEntity.getReshootCount());
 
     return highlightedShot;
   }
@@ -122,6 +123,7 @@ public class HighlightedShotEntityMapper {
     shot.setReplyCount(value.getReplyCount());
     shot.setViews(value.getViews());
     shot.setLinkClicks(value.getLinkClicks());
+    shot.setReshootCount(value.getReshootCounter());
 
     highlightedShot.setShot(shot);
 

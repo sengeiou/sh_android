@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -34,8 +34,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   private static final String EXTRA_ID_POLL = "pollId";
   private static final String EXTRA_RESULTS = "results";
 
-  @Bind(R.id.results_recycler) RecyclerView results;
-  @Bind(R.id.pollresults_progress) ProgressBar progressBar;
+  @BindView(R.id.results_recycler) RecyclerView results;
+  @BindView(R.id.pollresults_progress) ProgressBar progressBar;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;

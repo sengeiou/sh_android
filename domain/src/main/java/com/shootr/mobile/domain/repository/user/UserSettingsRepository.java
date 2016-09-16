@@ -9,4 +9,7 @@ public interface UserSettingsRepository {
   void modifyStartedShootingSettings(UserSettings userSettings);
 
   void modifyNiceShotSettings(UserSettings userSettings);
+
+  void modifyReShotSettings(UserSettings userSettings);
+
 }

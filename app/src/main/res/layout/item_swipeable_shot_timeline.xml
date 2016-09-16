@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+  <com.daimajia.swipe.SwipeLayout xmlns:swipe="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/swipe"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      swipe:leftEdgeSwipeOffset="0dp"
+      >
+
+    <FrameLayout
+        android:id="@+id/reshoot_container"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="#388E3C"
+        android:gravity="center"
+        >
+      <ImageView
+          android:layout_width="28dp"
+          android:layout_height="28dp"
+          android:layout_gravity="center"
+          android:src="@drawable/ic_reshoot_white_36dp"
+          />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+        <include
+            layout="@layout/item_shot_timeline"
+            android:id="@+id/shot_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+  </com.daimajia.swipe.SwipeLayout>
+</LinearLayout>

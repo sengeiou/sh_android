@@ -78,4 +78,41 @@
         tools:visibility="visible"
         />
   </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/layout_reshot_push_settings"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+  >
+    <TextView
+        android:id="@+id/reshot_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
+        android:text="@string/reshot_push_settings"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        tools:text="@string/reshot_push_settings"
+    />
+
+    <TextView
+        android:id="@+id/reshot_push_option"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/all_push_settings"
+        android:textColor="@color/gray_50"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="por defecto"
+        tools:visibility="visible"
+    />
+  </LinearLayout>
 </LinearLayout>

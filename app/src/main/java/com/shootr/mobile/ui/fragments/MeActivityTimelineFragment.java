@@ -10,8 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
@@ -44,13 +45,14 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
 
-    @Bind(R.id.timeline_me_activity_list) RecyclerView activityList;
-    @Bind(R.id.timeline_me_activity_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.me_activity_timeline_empty) View emptyView;
-    @Bind(R.id.me_activity_timeline_loading_activity) TextView loadingActivityView;
+    @BindView(R.id.timeline_me_activity_list) RecyclerView activityList;
+    @BindView(R.id.timeline_me_activity_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.me_activity_timeline_empty) View emptyView;
+    @BindView(R.id.me_activity_timeline_loading_activity) TextView loadingActivityView;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private Unbinder unbinder;
     @Inject FeedbackMessage feedbackMessage;
     //endregion
 
@@ -62,13 +64,13 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_me_activity_timeline, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         timelinePresenter.setView(new NullMeActivityTimelineView());
     }
 

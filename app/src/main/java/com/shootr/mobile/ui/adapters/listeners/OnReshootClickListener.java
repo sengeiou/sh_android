@@ -2,8 +2,7 @@ package com.shootr.mobile.ui.adapters.listeners;
 
 import com.shootr.mobile.ui.model.ShotModel;
 
-public interface OnReplyShotListener {
+public interface OnReshootClickListener {
 
-    void reply(ShotModel shotModel);
-
+  void onReshootClick(ShotModel shot);
 }

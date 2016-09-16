@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -125,9 +125,9 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private ShotModel shotModel;
 
-        @Bind(R.id.shot_video_frame) View videoFrame;
-        @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.stream_media_item) ImageView mediaImage;
+        @BindView(R.id.shot_video_frame) View videoFrame;
+        @BindView(R.id.shot_video_duration) TextView videoDuration;
+        @BindView(R.id.stream_media_item) ImageView mediaImage;
 
         private OnVideoClickListener videoClickListener;
 

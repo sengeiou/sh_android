@@ -28,6 +28,7 @@ public class ActivityApiEntity {
 
   private String idPoll;
   private String pollQuestion;
+  private ShotApiEntity shot;
 
   public String getIdActivity() {
     return idActivity;
@@ -155,5 +156,13 @@ public class ActivityApiEntity {
 
   public void setTargetUser(EmbedUserApiEntity targetUser) {
     this.targetUser = targetUser;
+  }
+
+  public ShotApiEntity getShot() {
+    return shot;
+  }
+
+  public void setShot(ShotApiEntity shot) {
+    this.shot = shot;
   }
 }

@@ -1,15 +1,13 @@
-package com.shootr.mobile.domain.interactor.timeline;
+package com.shootr.mobile.domain.interactor.timeline.activity;
 
-import com.shootr.mobile.domain.model.activity.Activity;
-import com.shootr.mobile.domain.model.activity.ActivityTimeline;
-import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
+import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,7 +18,6 @@ public class GetOlderActivityTimelineInteractor
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ActivityRepository remoteActivityRepository;
-  private final SessionRepository sessionRepository;
 
   private Long currentOldestDate;
   private Callback<ActivityTimeline> callback;
@@ -29,12 +26,10 @@ public class GetOlderActivityTimelineInteractor
   private Boolean isUserActivityTimeline;
 
   @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ActivityRepository remoteActivityRepository,
-      SessionRepository sessionRepository) {
+      PostExecutionThread postExecutionThread, @Remote ActivityRepository remoteActivityRepository) {
     this.remoteActivityRepository = remoteActivityRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.sessionRepository = sessionRepository;
   }
 
   public void loadOlderActivityTimeline(Boolean isUserActivityTimeline, Long currentOldestDate,
@@ -61,12 +56,13 @@ public class GetOlderActivityTimelineInteractor
     List<Activity> olderActivities =
         remoteActivityRepository.getActivityTimeline(timelineParameters, language);
     sortActivitiesByPublishDate(olderActivities);
-    notifyTimelineFromActivities(olderActivities);
+    notifyCustomTimeline(olderActivities);
   }
 
   private ActivityTimelineParameters buildTimelineParameters() {
     ActivityTimelineParameters build = ActivityTimelineParameters.builder() //
         .maxDate(currentOldestDate) //
+        .isMeTimeline(isUserActivityTimeline) //
         .build();
     build.excludeHiddenTypes();
     return build;
@@ -77,48 +73,9 @@ public class GetOlderActivityTimelineInteractor
     return remoteActivities;
   }
 
-  //region Result
-  private void notifyTimelineFromActivities(List<Activity> activities) {
-    List<Activity> userActivities = retainUsersActivity(activities);
-    if (isUserActivityTimeline) {
-      notifyCustomTimeline(retainUsersActivity(userActivities));
-    } else {
-      activities.removeAll(userActivities);
-      notifyCustomTimeline(activities);
-    }
-  }
-
   private void notifyCustomTimeline(List<Activity> activities) {
     ActivityTimeline timeline = buildTimeline(activities);
     notifyLoaded(timeline);
-  }
-
-  private boolean isCurrentUserTargetOrAuthor(String currentUserId, Activity activity) {
-    return isCurrentUserTarget(currentUserId, activity) || isCurrentUserAuthor(currentUserId,
-        activity);
-  }
-
-  private boolean isCurrentUserAuthor(String currentUserId, Activity activity) {
-    return activity.getIdUser() != null && activity.getIdUser().equals(currentUserId);
-  }
-
-  private boolean isCurrentUserTarget(String currentUserId, Activity activity) {
-    return activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId);
-  }
-
-  private List<Activity> retainUsersActivity(List<Activity> activities) {
-    String currentUserId = sessionRepository.getCurrentUserId();
-    List<Activity> userActivities = new ArrayList<>();
-    for (Activity activity : activities) {
-      if (isCurrentUserTargetOrAuthor(currentUserId, activity)) {
-        userActivities.add(activity);
-      }
-    }
-    if (userActivities.isEmpty() && !activities.isEmpty()) {
-      currentOldestDate = activities.get(0).getPublishDate().getTime();
-      loadOlderTimeline();
-    }
-    return userActivities;
   }
 
   private ActivityTimeline buildTimeline(List<Activity> activities) {

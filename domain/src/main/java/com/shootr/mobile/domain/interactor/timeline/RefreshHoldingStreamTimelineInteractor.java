@@ -57,7 +57,10 @@ public class RefreshHoldingStreamTimelineInteractor implements Interactor {
       Timeline timeline =
           shootrTimelineService.refreshHoldingTimelineForStream(idStream, idUser, isRealTime);
       notifyLoaded(timeline);
-      shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
+      shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale(),
+          true);
+      shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale(),
+          false);
     } catch (ShootrException error) {
       notifyError(error);
     }

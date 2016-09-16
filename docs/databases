@@ -1,0 +1,10 @@
+#   Bases de datos
+
+En Shootr usamos sqlite a fuego en lugar de utilizar un ORM. La decición de esto se remonta a Inma y Rafa cuando empezaron el proyecto. En Goles se había usado GreenDao, que es una mierda y provoca muchos dolores de cabeza. Por esto, Inma decidió no usar un ORM y hacerlo todo a pelo.
+
+Sinceramente, a Rafa y a mí nos parece una mala decisión. Si tenéis tiempo en un futuro deberíais plantearos meter ORMLITE, que es un orm muy fácil de usar y muy potente. Un buen momento sería quizá el mes ese que iOS tenga que estar arreglando bugs y Android... dándole vueltas al timeline (porque está claro que cuando el diablo se aburre, con el rabo mata moscas).
+
+Dicho esto, voy a explicar una cosa: si aún hay algo que esté hecho siguiendo la Tercera Forma Normal (Recent Streams por ejemplo), matadlo.
+La base de datos en un dispositivo móvil no vale para nada, solo para guardar datos a saco y sacarlos de la forma más rápida posible. Ponerlo en tercera forma normal es un overengineering que no aporta más que dolores de cabeza al proyecto. De hecho, Uncle Bob dijo algo como "las bases datos son tan innecesarias hoy en día que podrías utilizar GitHub para guardar lo que necesites". Igual GitHub es muy hardcore, pero firebase es un buen ejemplo.
+
+Resumen: usad un ORM para no tener que pensar. Usad Realm, usad OrmLite, tened backups en Firebase, usad lo que queráis pero usad la cabeza. Que la solución más complicada no tiene por qué ser la correcta.

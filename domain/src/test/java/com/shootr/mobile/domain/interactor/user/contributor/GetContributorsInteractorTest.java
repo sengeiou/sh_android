@@ -25,6 +25,7 @@ public class GetContributorsInteractorTest {
   private static final boolean USER_EMBED = true;
   private static final boolean NO_USER_EMBED = false;
   @Mock ContributorRepository contributorRepository;
+  @Mock ContributorRepository localContributorRepository;
   @Mock PostExecutionThread postExecutionThread;
   @Mock Interactor.Callback<List<Contributor>> callback;
   @Mock Interactor.ErrorCallback errorCallback;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.shootr.mobile.R;
@@ -20,12 +20,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PollResultViewHolder extends RecyclerView.ViewHolder {
 
-  @Bind(R.id.progressBar) ProgressBar progressBar;
-  @Bind(R.id.option_picture) CircleImageView picture;
-  @Bind(R.id.option_picture_with_text) ImageView pictureWithText;
-  @Bind(R.id.percentage) TextView percentage;
-  @Bind(R.id.poll_question) TextView question;
-  @Bind(R.id.votes) TextView votes;
+  @BindView(R.id.progressBar) ProgressBar progressBar;
+  @BindView(R.id.option_picture) CircleImageView picture;
+  @BindView(R.id.option_picture_with_text) ImageView pictureWithText;
+  @BindView(R.id.percentage) TextView percentage;
+  @BindView(R.id.poll_question) TextView question;
+  @BindView(R.id.votes) TextView votes;
 
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;

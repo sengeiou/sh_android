@@ -31,4 +31,9 @@ public class RemoteUserSettingsRepository implements UserSettingsRepository {
     UserSettingsEntity userSettingsEntities = mapper.mapNiceShot(userSettings);
     datasource.modifyPushSettings(userSettingsEntities);
   }
+
+  @Override public void modifyReShotSettings(UserSettings userSettings) {
+    UserSettingsEntity userSettingsEntities = mapper.mapReShot(userSettings);
+    datasource.modifyPushSettings(userSettingsEntities);
+  }
 }

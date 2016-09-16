@@ -29,7 +29,6 @@ public class SyncActivityRepositoryTest {
   @Mock ActivityEntityMapper activityEntityMapper;
   @Mock ShotRepository remoteShotRepository;
   @Mock ShotRepository localShotRepository;
-
   private SyncActivityRepository repository;
 
   @Before public void setUp() throws Exception {
@@ -45,7 +44,7 @@ public class SyncActivityRepositoryTest {
 
     repository.getActivityTimeline(PARAMETERS, LOCALE);
 
-    verify(localActivityDataSource).putActivities(anyList());
+    verify(localActivityDataSource).putActivities(any(ActivityTimelineParameters.class), anyList());
   }
 
   private Shot shot() {

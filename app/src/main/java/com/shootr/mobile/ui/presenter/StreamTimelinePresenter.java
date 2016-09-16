@@ -1,10 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.model.user.Contributor;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -18,6 +14,10 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -72,6 +72,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean showingHoldingShots;
   private boolean isFirstShotPosition;
   private boolean isFirstLoad;
+  private boolean isTimelineInitialized;
   private Integer newShotsNumber;
   private String streamTitle;
   private String streamDescription;
@@ -81,6 +82,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private SortedSet<ShotModel> shotModels;
   private StreamModel streamModel;
   private Integer streamMode;
+  private ArrayList<String> contributorIdUsers;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -271,60 +273,94 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadStreamMode() {
-    getContributorsInteractor.obtainContributors(streamId, false,
-        new Interactor.Callback<List<Contributor>>() {
-          @Override public void onLoaded(List<Contributor> contributors) {
-            String idUser = sessionRepository.getCurrentUserId();
-            if (isCurrentUserContributor(contributors, idUser) || isCurrentUserStreamAuthor(
-                idUser)) {
-              streamTimelineView.hideStreamViewOnlyIndicator();
-            } else {
-              streamTimelineView.showStreamViewOnlyIndicator();
+    if (contributorIdUsers != null) {
+      getContributorsInteractor.obtainContributors(streamId, false,
+          new Interactor.Callback<List<Contributor>>() {
+            @Override public void onLoaded(List<Contributor> contributors) {
+              String idUser = sessionRepository.getCurrentUserId();
+              initializeContributorIdUsers(contributors);
+              if (isCurrentUserContributor(contributorIdUsers, idUser) || isCurrentUserStreamAuthor(
+                  idUser)) {
+                streamTimelineView.hideStreamViewOnlyIndicator();
+              } else {
+                streamTimelineView.showStreamViewOnlyIndicator();
+              }
             }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
 
-          }
-        });
+            }
+          });
+    }
+  }
+
+  private void initializeContributorIdUsers(List<Contributor> contributors) {
+    contributorIdUsers = new ArrayList<>(contributors.size());
+    for (Contributor contributor : contributors) {
+      contributorIdUsers.add(contributor.getIdUser());
+    }
   }
 
   private boolean isCurrentUserStreamAuthor(String idUser) {
     return idAuthor != null && idAuthor.equals(idUser);
   }
 
-  private boolean isCurrentUserContributor(List<Contributor> contributors, String idUser) {
-    for (Contributor contributor : contributors) {
-      if (contributor.getIdUser().equals(idUser)) {
-        return true;
-      }
-    }
-    return false;
+  private boolean isCurrentUserContributor(ArrayList<String> contributorsIdUsers, String idUser) {
+    return contributorsIdUsers.contains(idUser);
   }
 
   private void showShotsInView(Timeline timeline) {
     List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
-    if (isFirstLoad || isFirstShotPosition) {
-      shotModels.addAll(shots);
-      setShotsWithoutReposition(shots);
-    }
-
-    if (!isFirstShotPosition && !isFirstLoad) {
-      List<ShotModel> newShots = new ArrayList<>();
-      for (ShotModel shot : shots) {
-        if (!shotModels.contains(shot)) {
-          newShots.add(shot);
-        }
-      }
-      shotModels.addAll(newShots);
-      if (newShots.isEmpty()) {
-        updateShotsInfo(timeline);
-      } else {
-        addShotsAbove(newShots);
-      }
-      showTimeLineIndicator();
+    if (isFirstLoad) {
+      showFirstLoad(shots);
+      setTimelineInitialized(shots);
+    } else if (isTimelineInitialized) {
+      showFirstLoad(shots);
+      isTimelineInitialized = false;
+      isFirstLoad = false;
+    } else {
+      handleNewShots(timeline, shots, isFirstShotPosition);
     }
     loadNewShots();
+  }
+
+  private void setTimelineInitialized(List<ShotModel> shots) {
+    if (!shots.isEmpty()) {
+      isTimelineInitialized = true;
+    }
+  }
+
+  private void showFirstLoad(List<ShotModel> shots) {
+    shotModels.addAll(shots);
+    setShotsWithoutReposition(shots);
+  }
+
+  private void handleNewShots(Timeline timeline, List<ShotModel> shots, Boolean isFirstShotPosition) {
+    List<ShotModel> newShots = new ArrayList<>();
+    checkForNewShots(shots, newShots);
+    shotModels.addAll(newShots);
+    if (newShots.isEmpty()) {
+      updateShotsInfo(timeline);
+    } else {
+      addNewShots(isFirstShotPosition, newShots);
+    }
+  }
+
+  private void checkForNewShots(List<ShotModel> shots, List<ShotModel> newShots) {
+    for (ShotModel shot : shots) {
+      if (!shotModels.contains(shot)) {
+        newShots.add(shot);
+      }
+    }
+  }
+
+  private void addNewShots(Boolean isFirstShotPosition, List<ShotModel> newShots) {
+    if (isFirstShotPosition) {
+      streamTimelineView.addShots(newShots);
+    } else {
+      addShotsAbove(newShots);
+      showTimeLineIndicator();
+    }
   }
 
   private void showTimeLineIndicator() {

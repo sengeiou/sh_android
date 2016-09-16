@@ -3,7 +3,6 @@ package com.shootr.mobile.ui.widgets;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.Selection;
@@ -151,10 +150,6 @@ public class ClickableTextView extends TextView {
     return newUrl;
   }
 
-  public void setUrlPattern(Pattern pattern) {
-    this.urlPattern = pattern;
-  }
-
   /**
    * Triggers ClickableSpans' onClick stream when tapped over the span, and does nothing otherwise.
    * Mirror implementation from {@link LinkMovementMethod}
@@ -255,10 +250,6 @@ public class ClickableTextView extends TextView {
     public TouchableUrlSpan(String url, OnUrlClickListener onUrlClickListener) {
       super(url);
       this.onUrlClickListener = onUrlClickListener;
-    }
-
-    public TouchableUrlSpan(Parcel src) {
-      super(src);
     }
 
     @Override public void setPressed(boolean isPressed) {

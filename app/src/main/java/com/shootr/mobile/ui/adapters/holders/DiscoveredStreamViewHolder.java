@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
@@ -17,11 +17,11 @@ import com.yayandroid.parallaxrecyclerview.ParallaxViewHolder;
 
 public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
 
-  @Bind(R.id.container) FrameLayout container;
-  @Bind(R.id.stream_image) ParallaxImageView streamImage;
-  @Bind(R.id.stream_title) TextView streamTitle;
-  @Bind(R.id.stream_description) TextView streamDescription;
-  @Bind(R.id.favorite_discovered_indicator) ShineButton favoriteButton;
+  @BindView(R.id.container) FrameLayout container;
+  @BindView(R.id.stream_image) ParallaxImageView streamImage;
+  @BindView(R.id.stream_title) TextView streamTitle;
+  @BindView(R.id.stream_description) TextView streamDescription;
+  @BindView(R.id.favorite_discovered_indicator) ShineButton favoriteButton;
 
   private final ImageLoader imageLoader;
   private final OnDiscoveredStreamClickListener onDiscoveredStreamClickListener;

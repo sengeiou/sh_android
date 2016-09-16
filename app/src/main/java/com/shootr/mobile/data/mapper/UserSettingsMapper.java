@@ -44,6 +44,13 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
     return response;
   }
 
+  public UserSettingsEntity mapReShot(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.SHARED_SHOT);
+    response.setValue(userSettings.getReShotPushSettings());
+    return response;
+  }
+
   public UserSettings reverseMapList(List<UserSettingsEntity> userSettings) {
     UserSettings domainValue =
         UserSettings.builder().user(sessionRepository.getCurrentUserId()).build();
@@ -60,6 +67,8 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
       domainValue.setStartedShootingPushSettings(userSetting.getValue());
     } else if (userSetting.getPushType().equals(PushSettingType.NICE_SHOT)) {
       domainValue.setNiceShotPushSettings(userSetting.getValue());
+    } else if (userSetting.getPushType().equals(PushSettingType.SHARED_SHOT)) {
+      domainValue.setReShotPushSettings(userSetting.getValue());
     }
   }
 }

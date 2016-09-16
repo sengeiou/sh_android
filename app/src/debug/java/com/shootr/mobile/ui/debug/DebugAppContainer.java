@@ -25,7 +25,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.pedrovgs.lynx.LynxActivity;
@@ -135,46 +135,46 @@ import static butterknife.ButterKnife.findById;
         this.app = app;
     }
 
-    @Bind(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
-    @Bind(R.id.debug_content) ViewGroup content;
+    @BindView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.debug_content) ViewGroup content;
 
-    @Bind(R.id.debug_contextual_title) View contextualTitleView;
-    @Bind(R.id.debug_contextual_list) LinearLayout contextualListView;
+    @BindView(R.id.debug_contextual_title) View contextualTitleView;
+    @BindView(R.id.debug_contextual_list) LinearLayout contextualListView;
 
-    @Bind(R.id.debug_network_endpoint) Spinner endpointView;
-    @Bind(R.id.debug_network_endpoint_edit) View endpointEditView;
-    @Bind(R.id.debug_network_debugmode) Switch debugModeView;
-    @Bind(R.id.debug_network_enabled) Switch networkEnabledView;
-    @Bind(R.id.debug_network_delay) Spinner networkDelayView;
-    @Bind(R.id.debug_network_variance) Spinner networkVarianceView;
-    @Bind(R.id.debug_network_error) Spinner networkErrorView;
-    @Bind(R.id.debug_network_proxy) Spinner networkProxyView;
-    @Bind(R.id.debug_network_poller) Switch networkPollerView;
+    @BindView(R.id.debug_network_endpoint) Spinner endpointView;
+    @BindView(R.id.debug_network_endpoint_edit) View endpointEditView;
+    @BindView(R.id.debug_network_debugmode) Switch debugModeView;
+    @BindView(R.id.debug_network_enabled) Switch networkEnabledView;
+    @BindView(R.id.debug_network_delay) Spinner networkDelayView;
+    @BindView(R.id.debug_network_variance) Spinner networkVarianceView;
+    @BindView(R.id.debug_network_error) Spinner networkErrorView;
+    @BindView(R.id.debug_network_proxy) Spinner networkProxyView;
+    @BindView(R.id.debug_network_poller) Switch networkPollerView;
 
-    @Bind(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
+    @BindView(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
 
-    @Bind(R.id.debug_notif_enable) Switch notificationsEnabledView;
+    @BindView(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
-    @Bind(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
-    @Bind(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
-    @Bind(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
-    @Bind(R.id.debug_ui_scalpel) Switch uiScalpelView;
-    @Bind(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
-    @Bind(R.id.debug_capture_intents) Switch uiCaptureIntents;
+    @BindView(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
+    @BindView(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
+    @BindView(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
+    @BindView(R.id.debug_ui_scalpel) Switch uiScalpelView;
+    @BindView(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
+    @BindView(R.id.debug_capture_intents) Switch uiCaptureIntents;
 
-    @Bind(R.id.debug_build_name) TextView buildNameView;
-    @Bind(R.id.debug_build_code) TextView buildCodeView;
-    @Bind(R.id.debug_build_sha) TextView buildShaView;
-    @Bind(R.id.debug_build_branch) TextView buildBranchView;
+    @BindView(R.id.debug_build_name) TextView buildNameView;
+    @BindView(R.id.debug_build_code) TextView buildCodeView;
+    @BindView(R.id.debug_build_sha) TextView buildShaView;
+    @BindView(R.id.debug_build_branch) TextView buildBranchView;
 
-    @Bind(R.id.debug_device_make) TextView deviceMakeView;
-    @Bind(R.id.debug_device_model) TextView deviceModelView;
-    @Bind(R.id.debug_device_resolution) TextView deviceResolutionView;
-    @Bind(R.id.debug_device_density) TextView deviceDensityView;
-    @Bind(R.id.debug_device_release) TextView deviceReleaseView;
-    @Bind(R.id.debug_device_api) TextView deviceApiView;
-    @Bind(R.id.debug_logs_show) TextView deviceLogView;
-    @Bind(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
+    @BindView(R.id.debug_device_make) TextView deviceMakeView;
+    @BindView(R.id.debug_device_model) TextView deviceModelView;
+    @BindView(R.id.debug_device_resolution) TextView deviceResolutionView;
+    @BindView(R.id.debug_device_density) TextView deviceDensityView;
+    @BindView(R.id.debug_device_release) TextView deviceReleaseView;
+    @BindView(R.id.debug_device_api) TextView deviceApiView;
+    @BindView(R.id.debug_logs_show) TextView deviceLogView;
+    @BindView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
     @Override public ViewGroup get(final Activity activity) {
         this.activity = activity;
@@ -220,9 +220,10 @@ import static butterknife.ButterKnife.findById;
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
         debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
         debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
-        debugActions.add(new LoginDebugAction("artjimlop", "654321"));
-        debugActions.add(new LoginDebugAction("heisenberg", "123456"));
-        debugActions.add(new LoginDebugAction("fakeuser", "fakepassword"));
+        debugActions.add(new LoginDebugAction("fukdalaw", "654321"));
+        debugActions.add(new LoginDebugAction("VSaldanya", "123456"));
+        debugActions.add(new LoginDebugAction("AlterEgoVic", "123456"));
+        debugActions.add(new LoginDebugAction("JorgeShoot", "poned_una_contraseña"));
         return debugActions;
     }
 

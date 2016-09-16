@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -21,7 +21,6 @@ import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -36,6 +35,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import java.util.Locale;
@@ -55,10 +55,11 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @Inject ShareManager shareManager;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
+  @Inject NumberFormatUtil numberFormatUtil;
 
-  @Bind(R.id.all_shots_list) ListView listView;
-  @Bind(R.id.timeline_empty) View emptyView;
-  @Bind(R.id.all_shots_loading) View loadingView;
+  @BindView(R.id.all_shots_list) ListView listView;
+  @BindView(R.id.timeline_empty) View emptyView;
+  @BindView(R.id.all_shots_loading) View loadingView;
   @BindString(R.string.shot_shared_message) String shotShared;
   @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
   @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
@@ -196,14 +197,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
 
     adapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, new OnReplyShotListener() {
-          @Override public void reply(ShotModel shotModel) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getBaseContext()) //
-                .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()).build();
-            startActivity(newShotIntent);
-          }
-        }, onHideClickListener, presenter.getIsCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
+            presenter.getIsCurrentUser()) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }

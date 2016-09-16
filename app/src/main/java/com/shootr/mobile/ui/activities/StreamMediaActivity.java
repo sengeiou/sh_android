@@ -8,7 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -30,9 +30,9 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     private MediaAdapter mediaAdapter;
     private GridLayoutManager layoutManager;
 
-    @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
-    @Bind(R.id.media_empty) View emptyView;
-    @Bind(R.id.stream_media_loading) View loadingView;
+    @BindView(R.id.stream_media_recycler_view) RecyclerView mediaView;
+    @BindView(R.id.media_empty) View emptyView;
+    @BindView(R.id.stream_media_loading) View loadingView;
     @BindString(R.string.stream_media_no_more_media) String noMoreMedia;
     @BindString(R.string.analytics_screen_stream_media) String analyticsScreenStreamMedia;
 

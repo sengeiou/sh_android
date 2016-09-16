@@ -1,5 +1,10 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
+import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.executor.TestPostExecutionThread;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
@@ -7,11 +12,6 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.executor.PostExecutionThread;
-import com.shootr.mobile.domain.executor.TestPostExecutionThread;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
@@ -58,7 +58,8 @@ public class GetActivityTimelineInteractorTest {
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock LocaleProvider localeProvider;
 
-  private GetActivityTimelineInteractor interactor;
+  private com.shootr.mobile.domain.interactor.timeline.activity.GetActivityTimelineInteractor
+      interactor;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -68,8 +69,9 @@ public class GetActivityTimelineInteractorTest {
     when(localUserRepository.getPeople()).thenReturn(people());
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-    interactor = new GetActivityTimelineInteractor(interactorHandler, postExecutionThread,
-        localActivityRepository, sessionRepository);
+    interactor =
+        new com.shootr.mobile.domain.interactor.timeline.activity.GetActivityTimelineInteractor(
+            interactorHandler, postExecutionThread, localActivityRepository);
   }
 
   @Test public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {

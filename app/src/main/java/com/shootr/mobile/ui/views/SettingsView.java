@@ -7,4 +7,6 @@ public interface SettingsView {
   void setStartedShootingSettings(Integer startedShootingPushSettings);
 
   void setNiceShotSettings(Integer startedShootingPushSettings);
+
+  void setReShotSettings(Integer reShotPushSettings);
 }

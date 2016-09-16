@@ -42,7 +42,7 @@ public class SyncActivityRepository implements ActivityRepository {
     List<ActivityEntity> activityEntities =
         remoteActivityDataSource.getActivityTimeline(parameters, locale);
     List<ActivityEntity> activities = bindActivityShots(activityEntities, parameters);
-    localActivityDataSource.putActivities(activities);
+    localActivityDataSource.putActivities(parameters, activities);
     return activityEntityMapper.transform(activities);
   }
 

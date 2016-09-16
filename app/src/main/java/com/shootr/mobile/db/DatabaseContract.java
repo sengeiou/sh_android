@@ -89,12 +89,13 @@ public class DatabaseContract {
     public static final String VIDEO_DURATION = "videoDuration";
     public static final String PROFILE_HIDDEN = "profileHidden";
     public static final String REPLY_COUNT = "replyCount";
+    public static final String RESHOOT_COUNT = "reshootCount";
 
     public static final String[] PROJECTION = {
         ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
         ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
         VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, VIEWS, LINK_CLICKS,
-        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        RESHOOT_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -287,6 +288,35 @@ public class DatabaseContract {
     };
   }
 
+  public static final class MeActivityTable implements SyncColumns {
+
+    private MeActivityTable() {
+
+    }
+
+    public static final String TABLE = "MeActivity";
+
+    public static final String ID_ACTIVITY = "idActivity";
+    public static final String ID_USER = "idUser";
+    public static final String ID_TARGET_USER = "idTargetUser";
+    public static final String USERNAME = "userName";
+    public static final String ID_STREAM = "idStream";
+    public static final String USER_PHOTO = "userPhoto";
+    public static final String STREAM_TITLE = "streamTitle";
+    public static final String COMMENT = "comment";
+    public static final String TYPE = "type";
+    public static final String ID_SHOT = "idShot";
+    public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
+    public static final String ID_POLL = "idPoll";
+    public static final String POLL_QUESTION = "pollQuestion";
+
+    public static final String[] PROJECTION = {
+        ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, TYPE, BIRTH, MODIFIED, DELETED,
+        REVISION, SYNCHRONIZED
+    };
+  }
+
   public static final class SuggestedPeopleTable extends UserTable {
 
     private SuggestedPeopleTable() {
@@ -408,7 +438,7 @@ public class DatabaseContract {
         ID_HIGHLIGHTED_SHOT, ACTIVE, VISIBLE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT,
         IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT, ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT,
         ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN,
-        REPLY_COUNT, VIEWS, LINK_CLICKS, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        REPLY_COUNT, VIEWS, LINK_CLICKS, RESHOOT_COUNT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 

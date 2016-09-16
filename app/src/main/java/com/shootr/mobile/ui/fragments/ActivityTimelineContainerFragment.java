@@ -10,16 +10,19 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseFragment;
 import java.util.Locale;
 
 public class ActivityTimelineContainerFragment extends BaseFragment {
 
-  @Bind(R.id.activity_pager_timelines) ViewPager viewPager;
-  @Bind(R.id.activity_tab_layout) TabLayout tabLayout;
+  @BindView(R.id.activity_pager_timelines) ViewPager viewPager;
+  @BindView(R.id.activity_tab_layout) TabLayout tabLayout;
+
+  private Unbinder unbinder;
 
   public static ActivityTimelineContainerFragment newInstance() {
     return new ActivityTimelineContainerFragment();
@@ -29,14 +32,14 @@ public class ActivityTimelineContainerFragment extends BaseFragment {
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.fragment_activity_timeline_container, container, false);
-    ButterKnife.bind(this, fragmentView);
+    unbinder = ButterKnife.bind(this, fragmentView);
     initializeViews();
     return fragmentView;
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+    unbinder.unbind();
   }
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {

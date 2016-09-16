@@ -10,9 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
@@ -46,17 +47,18 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
     @Inject AnalyticsTool analyticsTool;
+    @Inject FeedbackMessage feedbackMessage;
 
-    @Bind(R.id.timeline_activity_list) RecyclerView activityList;
-    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.timeline_empty) View emptyView;
-    @Bind(R.id.timeline_loading_activity) TextView loadingActivityView;
+    @BindView(R.id.timeline_activity_list) RecyclerView activityList;
+    @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.timeline_empty) View emptyView;
+
+    @BindView(R.id.timeline_loading_activity) TextView loadingActivityView;
 
     @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
-
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
-    @Inject FeedbackMessage feedbackMessage;
+    private Unbinder unbinder;
     //endregion
 
     public static ActivityTimelineFragment newInstance() {
@@ -67,14 +69,14 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         timelinePresenter.setView(new NullActivityTimelineView());
     }
 

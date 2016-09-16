@@ -50,6 +50,7 @@ import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
+import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -107,7 +108,8 @@ import javax.inject.Singleton;
     DiscoverSearchActivity.class,
     FindFriendsFragment.class,
     FindStreamsFragment.class,
-    CropPictureActivity.class
+    CropPictureActivity.class,
+    EasterEggActivity.class
   },
   complete = false) public class UiModule {
 

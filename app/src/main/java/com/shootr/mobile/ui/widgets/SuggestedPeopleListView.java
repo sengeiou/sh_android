@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -19,8 +19,8 @@ import com.shootr.mobile.ui.model.UserModel;
 
 public class SuggestedPeopleListView extends FrameLayout {
 
-    @Bind(R.id.suggested_people_list) LinearLayout suggestedPeopleList;
-    @Bind(R.id.suggested_people_title) TextView suggestedPeopleTitle;
+    @BindView(R.id.suggested_people_list) LinearLayout suggestedPeopleList;
+    @BindView(R.id.suggested_people_title) TextView suggestedPeopleTitle;
     private UserListAdapter userListAdapter;
     private OnUserClickListener onUserClickListener;
     private Drawable selectableBackground;

@@ -19,7 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -44,11 +44,11 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(R.id.new_stream_title) EditText titleView;
-    @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
-    @Bind(R.id.new_stream_title_error) TextView titleErrorView;
-    @Bind(R.id.new_stream_description) EditText descriptionView;
-    @Bind(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
+    @BindView(R.id.new_stream_title) EditText titleView;
+    @BindView(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
+    @BindView(R.id.new_stream_title_error) TextView titleErrorView;
+    @BindView(R.id.new_stream_description) EditText descriptionView;
+    @BindView(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
 
     @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
     @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;

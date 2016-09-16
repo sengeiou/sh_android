@@ -9,12 +9,12 @@ import com.shootr.mobile.ui.adapters.holders.ShotViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +26,20 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
-    private final OnReplyShotListener onReplyShotListener;
     private final AndroidTimeUtils timeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnHideClickListener onHideClickListener;
+    private final NumberFormatUtil numberFormatUtil;
 
     private List<ShotModel> shots;
 
     private boolean isCurrentUser;
 
     public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-      OnReplyShotListener onReplyShotListener, OnHideClickListener onHideClickListener, Boolean isCurrentUser) {
+        OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
+        OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
+        OnHideClickListener onHideClickListener, NumberFormatUtil numberFormatUtil,
+        Boolean isCurrentUser) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -46,7 +47,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.onNiceShotListener = onNiceShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
-        this.onReplyShotListener = onReplyShotListener;
+        this.numberFormatUtil = numberFormatUtil;
         this.shots = new ArrayList<>(0);
         shotTextSpannableBuilder = new ShotTextSpannableBuilder();
         this.onHideClickListener = onHideClickListener;
@@ -89,12 +90,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 view.setTag(new ShotViewHolder(view,
                   avatarClickListener,
                   videoClickListener,
-                  onNiceShotListener, onReplyShotListener, onHideClickListener,
+                  onNiceShotListener, onHideClickListener,
                   onUsernameClickListener,
                   timeUtils,
                   imageLoader,
-                  shotTextSpannableBuilder,
-                  isCurrentUser));
+                  shotTextSpannableBuilder, numberFormatUtil, isCurrentUser));
                 break;
             default:
                 break;

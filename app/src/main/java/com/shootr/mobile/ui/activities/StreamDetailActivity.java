@@ -29,7 +29,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,22 +77,22 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     public static final String EXTRA_STREAM_TITLE = "title";
     private int counterToolbarPrintTimes = 0;
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.toolbar_dummy_content) View toolbarDummyContent;
-    @Bind(R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
-    @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
-    @Bind(R.id.stream_title_container) View streamTitleContainer;
-    @Bind(R.id.cat_avatar) View streamPictureContainer;
-    @Bind(R.id.stream_avatar) ImageView streamPicture;
-    @Bind(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
-    @Bind(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
-    @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
-    @Bind(R.id.cat_title) TextView streamTitle;
-    @Bind(R.id.subtitle) TextView streamSubtitle;
-    @Bind(R.id.blurLayout) FrameLayout blurLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_dummy_content) View toolbarDummyContent;
+    @BindView(R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.stream_title_container) View streamTitleContainer;
+    @BindView(R.id.cat_avatar) View streamPictureContainer;
+    @BindView(R.id.stream_avatar) ImageView streamPicture;
+    @BindView(R.id.stream_avatar_without_text) ImageView streamPictureWithoutText;
+    @BindView(R.id.image_toolbar_detail_stream) ImageView toolbarImage;
+    @BindView(R.id.stream_photo_edit_loading) View streamPictureLoading;
+    @BindView(R.id.cat_title) TextView streamTitle;
+    @BindView(R.id.subtitle) TextView streamSubtitle;
+    @BindView(R.id.blurLayout) FrameLayout blurLayout;
 
-    @Bind(R.id.list) RecyclerView recyclerView;
-    @Bind(R.id.loading_progress) View progressView;
+    @BindView(R.id.list) RecyclerView recyclerView;
+    @BindView(R.id.loading_progress) View progressView;
 
     @BindString(R.string.shared_stream_notification) String streamNotification;
     @BindString(R.string.analytics_screen_stream_detail) String analyticsScreenStreamDetail;
@@ -204,7 +204,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     private void openContextualMenuForSharing() {
-        new CustomContextMenu.Builder(this).addAction(R.string.share_via_shootr, new Runnable() {
+        new CustomContextMenu.Builder(this).addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamViaShootr();
             }

@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SupportPresenter;
+import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.views.SupportView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
@@ -29,9 +31,9 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject SupportPresenter supportPresenter;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(R.id.support_version_number) TextView versionNumber;
-    @Bind(R.id.support_blog_text) TextView blog;
-    @Bind(R.id.support_help_text) TextView help;
+    @BindView(R.id.support_version_number) TextView versionNumber;
+    @BindView(R.id.support_blog_text) TextView blog;
+    @BindView(R.id.support_help_text) TextView help;
 
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
@@ -87,6 +89,11 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
         supportPresenter.helpClicked();
     }
 
+    @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
+        Intent intent = new Intent(this, EasterEggActivity.class);
+        startActivity(intent);
+        return true;
+    }
     //endregion
 
     @Override public void showError() {

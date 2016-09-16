@@ -14,8 +14,8 @@ public interface ActivityApiService {
   List<ActivityApiEntity> getActivityTimeline(@Query("activityType") List<String> types,
       @Query("streamReadWriteMode") String[] streamTypes, @Query("shotType") String[] shotTypes,
       @Query("count") Integer count, @Query("sinceTimestamp") Long sinceTimestamp,
-      @Query("maxTimestamp") Long maxTimestamp, @Query("locale") String locale)
-      throws ApiException, IOException;
+      @Query("maxTimestamp") Long maxTimestamp, @Query("locale") String locale,
+      @Query("activityFilter") String filter) throws ApiException, IOException;
 
   @GET("/activity/{id}") ActivityApiEntity getActivity(@Path("id") String id)
       throws ApiException, IOException;

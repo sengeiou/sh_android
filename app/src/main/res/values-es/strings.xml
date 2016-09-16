@@ -223,7 +223,7 @@
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_shot_via">Compartir vía…</string>
-  <string name="menu_share_shot_via_shootr">Compartir vía Shootr</string>
+  <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
@@ -249,7 +249,7 @@
   <string name="niced_shot_activity">Te ha hecho un nice</string>
   <string name="niced_shot_activity_with_comment">"Ha hecho un nice en: "</string>
   <string name="nicers">Nicers</string>
-  <string name="nices_push_settings">Nice Shot</string>
+  <string name="nices_push_settings">Nice shot</string>
   <string name="nices_push_settings_off">Ninguna</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
@@ -329,6 +329,7 @@
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d respuesta</item>
     <item quantity="other">%d respuestas</item>
+    <item quantity="zero">%d respuestas</item>
   </plurals>
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Responder a %s…</string>
@@ -341,13 +342,19 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entra tu nombre de usuario o email en Shootr.</string>
   <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
+  <plurals name="reshot_count_pattern">
+    <item quantity="one">%s reshot</item>
+    <item quantity="other">%s reshots</item>
+    <item quantity="zero">%s reshots</item>
+  </plurals>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="search_users_hint">Buscar usuarios</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Ha compartido la encuesta %s</string>
-  <string name="shared_shot_activity">Ha compartido un shot de %s</string>
-  <string name="shared_shot_activity_with_comment">"Ha compartido: "</string>
+  <string name="shared_shot_activity">Reshot de %s</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">Stream compartido</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Encuesta %s</string>
@@ -358,10 +365,15 @@
   <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
   <string name="share_via">Compartir vía…</string>
-  <string name="share_via_shootr">Compartir vía Shootr</string>
+  <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Enviar todo</string>
   <string name="shot_pinned">Anclado</string>
-  <string name="shot_shared_message">Shot compartido</string>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="one">%s respuesta</item>
+    <item quantity="other">%s respuestas</item>
+    <item quantity="zero">%s respuestas</item>
+  </plurals>
+  <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No hay shots</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
@@ -382,7 +394,7 @@
   <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hay más archivos</string>
   <string name="stream_notification_confirmation_message">¿Notificar a tus seguidores acerca de este stream?</string>
-  <string name="stream_notification_confirmation_no">Nop</string>
+  <string name="stream_notification_confirmation_no">No</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">siguiendo a %d</string>
   <string name="stream_privacy">Privacidad</string>
@@ -448,4 +460,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
+  <string name="share_stream_via_shootr">Compartir vía Shootr</string>
 </resources>

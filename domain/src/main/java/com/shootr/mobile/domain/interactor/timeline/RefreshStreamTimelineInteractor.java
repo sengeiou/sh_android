@@ -1,10 +1,10 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.Date;
@@ -56,7 +56,6 @@ public class RefreshStreamTimelineInteractor implements Interactor {
           calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
       Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, isRealTime);
       notifyLoaded(timeline);
-      shootrTimelineService.refreshTimelinesForActivity(localeProvider.getLocale());
       incrementCalls();
     } catch (ShootrException error) {
       notifyError(error);

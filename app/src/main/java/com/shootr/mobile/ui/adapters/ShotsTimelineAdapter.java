@@ -13,7 +13,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnReplyShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,14 @@ public class ShotsTimelineAdapter
 
   private static final int HEADER_POSITION = 0;
 
+  private static final int ITEM_POSITION_WITH_HEADER = 1;
+  private static final int ITEM_POSITION_WITHOUT_HEADER = 0;
+
   private final ImageLoader imageLoader;
   private final OnAvatarClickListener avatarClickListener;
   private final OnVideoClickListener videoClickListener;
   private final OnNiceShotListener onNiceShotListener;
   private final OnUsernameClickListener onUsernameClickListener;
-  private final OnReplyShotListener onReplyShotListener;
   private final AndroidTimeUtils timeUtils;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final ShotClickListener shotClickListener;
@@ -48,6 +51,8 @@ public class ShotsTimelineAdapter
   private final OnImageClickListener onImageClickListener;
   private final OnHideHighlightShot onHideHighlightClickListener;
   private final OnUrlClickListener onUrlClickListener;
+  private final OnReshootClickListener onReshootClickListener;
+  private final NumberFormatUtil numberFormatUtil;
 
   private List<ShotModel> shots;
   private HighlightedShotModel highlightedShotModel;
@@ -56,10 +61,11 @@ public class ShotsTimelineAdapter
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-      OnReplyShotListener onReplyShotListener, ShotClickListener shotClickListener,
-      OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
-      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnUrlClickListener onUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
+      ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
+      OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
+      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
+      OnHideHighlightShot onHideHighlightClickListener,
+      OnReshootClickListener onReshootClickListener, NumberFormatUtil numberFormatUtil,
       Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
@@ -67,9 +73,10 @@ public class ShotsTimelineAdapter
     this.onNiceShotListener = onNiceShotListener;
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
-    this.onReplyShotListener = onReplyShotListener;
     this.onUrlClickListener = onUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
+    this.onReshootClickListener = onReshootClickListener;
+    this.numberFormatUtil = numberFormatUtil;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     this.shotClickListener = shotClickListener;
@@ -85,9 +92,9 @@ public class ShotsTimelineAdapter
     View v =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.highlighted_shot, parent, false);
     return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onReplyShotListener, onHideHighlightClickListener,
+        onNiceShotListener, onHideHighlightClickListener,
         onUsernameClickListener, timeUtils, imageLoader,
-        shotTextSpannableBuilder);
+        shotTextSpannableBuilder, numberFormatUtil);
   }
 
   @Override
@@ -97,10 +104,10 @@ public class ShotsTimelineAdapter
 
   @NonNull RecyclerView.ViewHolder getShotViewHolder(ViewGroup parent) {
     View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_shot_timeline, parent, false);
+        .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
     return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onReplyShotListener, onUsernameClickListener, timeUtils, imageLoader,
-        shotTextSpannableBuilder);
+        onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader,
+        numberFormatUtil, shotTextSpannableBuilder);
   }
 
   @Override
@@ -119,7 +126,7 @@ public class ShotsTimelineAdapter
 
   private void renderShotViewHolder(ShotTimelineViewHolder holder, int position) {
     holder.render(shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onReshootClickListener);
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -191,6 +198,20 @@ public class ShotsTimelineAdapter
     newShotList.addAll(this.shots);
     this.shots = newShotList;
     insertExistingHeader(shots);
+  }
+
+  public void addShots(List<ShotModel> shotModels) {
+    List<ShotModel> newShotList = new ArrayList<>(shotModels);
+    if (hasHeader()) {
+      insertNewShots(newShotList, ITEM_POSITION_WITH_HEADER, newShotList.size());
+    } else {
+      insertNewShots(newShotList, ITEM_POSITION_WITHOUT_HEADER, newShotList.size());
+    }
+  }
+
+  private void insertNewShots(List<ShotModel> newShotList, int position, int size) {
+    shots.addAll(position, newShotList);
+    notifyItemRangeInserted(position, size);
   }
 
   public void onPinnedShot(ShotModel shotModel) {

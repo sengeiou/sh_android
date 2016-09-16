@@ -2,10 +2,11 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
@@ -19,21 +20,25 @@ import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.shot_reply_container) RelativeLayout container;
-    @Bind(R.id.shot_avatar) public ImageView avatar;
-    @Bind(R.id.shot_user_name) public TextView name;
-    @Bind(R.id.shot_timestamp) public TextView timestamp;
-    @Bind(R.id.shot_text) public ClickableTextView text;
-    @Bind(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
-    @Bind(R.id.default_image) ImageView defaultImage;
-    @Bind(R.id.shot_video_frame) View videoFrame;
-    @Bind(R.id.shot_video_title) TextView videoTitle;
-    @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+    @BindView(R.id.shot_reply_container) RelativeLayout container;
+    @BindView(R.id.shot_avatar) public ImageView avatar;
+    @BindView(R.id.shot_user_name) public TextView name;
+    @BindView(R.id.shot_timestamp) public TextView timestamp;
+    @BindView(R.id.shot_text) public ClickableTextView text;
+    @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
+    @BindView(R.id.default_image) ImageView defaultImage;
+    @BindView(R.id.shot_video_frame) View videoFrame;
+    @BindView(R.id.shot_video_title) TextView videoTitle;
+    @BindView(R.id.shot_video_duration) TextView videoDuration;
+    @BindView(R.id.shot_nice_button) NiceButtonView niceButton;
+    @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
+    @BindView(R.id.shot_reply_count) TextView replyCount;
+
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
@@ -43,12 +48,13 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final ShotClickListener replyShotClickListener;
+    private final NumberFormatUtil numberFormatUtil;
 
     public ShotDetailReplyHolder(View itemView, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
-      AvatarClickListener avatarClickListener, ShotClickListener imageClickListener,
-      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      ShotClickListener replyShotClickListener) {
+        OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
+        AvatarClickListener avatarClickListener, ShotClickListener imageClickListener,
+        OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+        ShotClickListener replyShotClickListener, NumberFormatUtil numberFormatUtil) {
         super(itemView);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -59,6 +65,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
         this.replyShotClickListener = replyShotClickListener;
+        this.numberFormatUtil = numberFormatUtil;
         ButterKnife.bind(this, itemView);
     }
 
@@ -66,11 +73,13 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         this.name.setText(reply.getUsername());
         setupComment(reply);
         setupBirthData(reply);
+        setupShotMediaContentVisibility(reply);
         loadImage(reply);
         bindImageInfo(reply, imageClickListener);
         setupVideoListener(reply);
         setupNiceListener(reply);
         setupReplyClickListener(reply);
+        bindReplyCount(reply);
     }
 
     private void setupBirthData(ShotModel reply) {
@@ -88,6 +97,18 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
             this.text.addLinks();
         } else {
             this.text.setVisibility(View.GONE);
+        }
+    }
+
+    private void bindReplyCount(final ShotModel shot) {
+        Long replies = shot.getReplyCount();
+        if (replies > 0L) {
+            replyCount.setVisibility(View.VISIBLE);
+            replyCount.setText(replyCount.getResources()
+                .getQuantityString(R.plurals.shot_replies_count_pattern, replies.intValue(),
+                    numberFormatUtil.formatNumbers(replies)));
+        } else {
+            replyCount.setVisibility(View.GONE);
         }
     }
 
@@ -175,5 +196,13 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
                 replyShotClickListener.onClick(reply);
             }
         });
+    }
+
+    private void setupShotMediaContentVisibility(ShotModel shotModel) {
+        if (shotModel.hasVideo() || shotModel.getImage().getImageUrl() != null) {
+            shotMediaContent.setVisibility(View.VISIBLE);
+        } else {
+            shotMediaContent.setVisibility(View.GONE);
+        }
     }
 }

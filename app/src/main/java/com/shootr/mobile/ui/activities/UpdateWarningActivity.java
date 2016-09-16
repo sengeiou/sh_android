@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -14,7 +14,7 @@ import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
 
 public class UpdateWarningActivity extends BaseNoToolbarActivity {
 
-    @Bind(R.id.update_warning_button) TextView updateButton;
+    @BindView(R.id.update_warning_button) TextView updateButton;
 
     public static Intent newIntent(@NonNull Context context) {
         Intent intent = new Intent(context, UpdateWarningActivity.class);

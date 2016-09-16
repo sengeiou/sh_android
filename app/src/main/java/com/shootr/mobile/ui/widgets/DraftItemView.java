@@ -12,17 +12,17 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 
 public class DraftItemView extends FrameLayout {
 
-    @Bind(R.id.shot_avatar) ImageView avatar;
-    @Bind(R.id.shot_user_name) TextView name;
-    @Bind(R.id.shot_text) ClickableTextView text;
-    @Bind(R.id.shot_image) ImageView image;
-    @Bind(R.id.shot_draft_buttons) View draftButtons;
+    @BindView(R.id.shot_avatar) ImageView avatar;
+    @BindView(R.id.shot_user_name) TextView name;
+    @BindView(R.id.shot_text) ClickableTextView text;
+    @BindView(R.id.shot_image) ImageView image;
+    @BindView(R.id.shot_draft_buttons) View draftButtons;
 
     private boolean isExpanded;
     private float expandedElevation;

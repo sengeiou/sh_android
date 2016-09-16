@@ -63,6 +63,8 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.PROFILE_HIDDEN)));
     highlightedShot.setReplyCount(
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.REPLY_COUNT)));
+    highlightedShot.setReshootCounter(
+        c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.RESHOOT_COUNT)));
     setSynchronizedfromCursor(c, highlightedShot);
     return highlightedShot;
   }
@@ -96,6 +98,7 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.HighlightedShotTable.REPLY_COUNT, highlightedShot.getReplyCount());
     contentValues.put(DatabaseContract.HighlightedShotTable.VIEWS, highlightedShot.getViews());
     contentValues.put(DatabaseContract.HighlightedShotTable.LINK_CLICKS, highlightedShot.getLinkClicks());
+    contentValues.put(DatabaseContract.HighlightedShotTable.RESHOOT_COUNT, highlightedShot.getReshootCounter());
     setSynchronizedtoContentValues(highlightedShot, contentValues);
     return contentValues;
   }

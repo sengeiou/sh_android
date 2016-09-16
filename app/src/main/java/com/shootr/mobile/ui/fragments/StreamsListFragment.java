@@ -13,10 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -44,10 +45,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     public static final int REQUEST_NEW_STREAM = 3;
 
-  @Bind(R.id.streams_list) RecyclerView streamsList;
-  @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @Bind(R.id.streams_empty) View emptyView;
-  @Bind(R.id.streams_loading) View loadingView;
+  @BindView(R.id.streams_list) RecyclerView streamsList;
+  @BindView(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @BindView(R.id.streams_empty) View emptyView;
+  @BindView(R.id.streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
@@ -64,6 +65,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Inject InitialsLoader initialsLoader;
 
     private StreamsListAdapter adapter;
+    private Unbinder unbinder;
 
     public static StreamsListFragment newInstance() {
         return new StreamsListFragment();
@@ -85,13 +87,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override public void onDestroyView() {
         super.onDestroyView();
         analyticsTool.analyticsStop(getContext(), getActivity());
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         presenter.setView(new NullStreamListView());
     }
     //endregion
 
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this, getView());
+        unbinder = ButterKnife.bind(this, getView());
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
@@ -182,7 +184,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
                 analyticsLabelFavoriteStream);
           }
-        }).addAction(R.string.share_via_shootr, new Runnable() {
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
         presenter.shareStream(stream);
       }

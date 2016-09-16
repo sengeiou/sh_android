@@ -8,9 +8,13 @@ import java.util.List;
 
 public class ActivityTimelineParameters extends TimelineParameters {
 
+    public static final String FOLLOWING = "FOLLOWING";
+    public static final String ME = "ME";
     private List<String> includedTypes;
     private String[] streamTypes;
     private String[] shotTypes;
+    private String activityFilter;
+    private Boolean isMeTimeline;
 
     public static Builder builder() {
         return new Builder();
@@ -32,6 +36,14 @@ public class ActivityTimelineParameters extends TimelineParameters {
         return shotTypes;
     }
 
+    public String getActivityFilter() {
+        return activityFilter;
+    }
+
+    public Boolean isMeTimeline() {
+        return isMeTimeline;
+    }
+
     public static class Builder {
 
         private ActivityTimelineParameters parameters = new ActivityTimelineParameters();
@@ -46,6 +58,8 @@ public class ActivityTimelineParameters extends TimelineParameters {
             parameters.includedTypes = allKnownActivityTypes();
             parameters.streamTypes = allKnownStreamTypes();
             parameters.shotTypes = allKnownShotTypes();
+            parameters.isMeTimeline = false;
+            parameters.activityFilter = FOLLOWING;
         }
 
         public Builder since(Long sinceDate) {
@@ -55,6 +69,16 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
         public Builder maxDate(Long maxDate) {
             parameters.maxDate = maxDate;
+            return this;
+        }
+
+        public Builder isMeTimeline(Boolean isMe) {
+            parameters.isMeTimeline = isMe;
+            if (isMe) {
+                parameters.activityFilter = ME;
+            } else {
+                parameters.activityFilter = FOLLOWING;
+            }
             return this;
         }
 

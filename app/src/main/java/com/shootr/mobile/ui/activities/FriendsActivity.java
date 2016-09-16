@@ -10,10 +10,11 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -42,10 +43,10 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
 
-  @Bind(R.id.userlist_list) ListView userlistListView;
-  @Bind(R.id.userlist_progress) ProgressBar progressBar;
+  @BindView(R.id.userlist_list) ListView userlistListView;
+  @BindView(R.id.userlist_progress) ProgressBar progressBar;
 
-  @Bind(R.id.userlist_empty) TextView emptyTextView;
+  @BindView(R.id.userlist_empty) TextView emptyTextView;
 
   @BindString(R.string.analytics_screen_friends) String analyticsScreenFriends;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
@@ -53,10 +54,11 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
 
   private FriendsAdapter peopleAdapter;
   private UserListAdapter suggestedPeopleAdapter;
+  private Unbinder unbinder;
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    ButterKnife.bind(this);
+    unbinder = ButterKnife.bind(this);
     analyticsTool.analyticsStart(this, analyticsScreenFriends);
     presenter.setView(this);
     presenter.initialize();
@@ -89,7 +91,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
     suggestedPeoplePresenter.pause();
 
     analyticsTool.analyticsStop(this, this);
-    ButterKnife.unbind(this);
+    unbinder.unbind();
     presenter.setView(new NullPeopleView());
     suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
   }

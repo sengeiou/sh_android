@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.ChangeNiceShotSettingsInteractor;
+import com.shootr.mobile.domain.interactor.user.ChangeReShotSettingsInteractor;
 import com.shootr.mobile.domain.interactor.user.ChangeStartedShootingSettingsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetSettingsByIdUserInteractor;
 import com.shootr.mobile.domain.model.PushSettingType;
@@ -19,6 +20,7 @@ public class SettingsPresenter implements Presenter {
   private final GetSettingsByIdUserInteractor getSettingsByIdUserInteractor;
   private final ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor;
   private final ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor;
+  private final ChangeReShotSettingsInteractor changeReShotSettingsInteractor;
   private final UserSettingsModelMapper userSettingsModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private SettingsView settingsView;
@@ -27,10 +29,12 @@ public class SettingsPresenter implements Presenter {
   @Inject public SettingsPresenter(GetSettingsByIdUserInteractor getSettingsByIdUserInteractor,
       ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor,
       ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor,
+      ChangeReShotSettingsInteractor changeReShotSettingsInteractor,
       UserSettingsModelMapper userSettingsModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getSettingsByIdUserInteractor = getSettingsByIdUserInteractor;
     this.changeStartedShootingSettingsInteractor = changeStartedShootingSettingsInteractor;
     this.changeNiceShotSettingsInteractor = changeNiceShotSettingsInteractor;
+    this.changeReShotSettingsInteractor = changeReShotSettingsInteractor;
     this.userSettingsModelMapper = userSettingsModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -54,6 +58,9 @@ public class SettingsPresenter implements Presenter {
         String niceShotPushSettings = userSettingsModel.getNiceShotPushSettings();
         Integer optionNiceShot = mapNiceShotOption(niceShotPushSettings);
         settingsView.setNiceShotSettings(optionNiceShot);
+        String reshotPushSettings = userSettingsModel.getReShotPushSettings();
+        Integer optionReShot = mapReShotOption(reshotPushSettings);
+        settingsView.setReShotSettings(optionReShot);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -73,6 +80,24 @@ public class SettingsPresenter implements Presenter {
         break;
       case PushSettingType.STARTED_SHOOTING_OFF:
         option = 0;
+        break;
+      default:
+        break;
+    }
+    return option;
+  }
+
+  @NonNull private Integer mapReShotOption(String reShotPushSettings) {
+    Integer option = 2;
+    switch (reShotPushSettings) {
+      case PushSettingType.RESHOT_ALL:
+        option = 2;
+        break;
+      case PushSettingType.RESHOT_OFF:
+        option = 0;
+        break;
+      case PushSettingType.RESHOT_FOLLOWING:
+        option = 1;
         break;
       default:
         break;
@@ -118,6 +143,23 @@ public class SettingsPresenter implements Presenter {
             Integer option =
                 mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
             settingsView.setStartedShootingSettings(option);
+          }
+        });
+  }
+
+  public void reShotSettingChanged(String selectedOption) {
+    final UserSettingsModel changedSettings = userSettingsModel;
+    changedSettings.setReShotPushSettings(selectedOption);
+    changeReShotSettingsInteractor.changeReShotSettings(
+        userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            userSettingsModel = changedSettings;
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            Integer option =
+                mapReShotOption(userSettingsModel.getReShotPushSettings());
+            settingsView.setReShotSettings(option);
           }
         });
   }

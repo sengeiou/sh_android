@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
@@ -31,23 +31,24 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     public static final int NICES_TRESHOLD = 2;
     private Context context;
 
-    @Bind(R.id.shot_detail_avatar) ImageView avatar;
-    @Bind(R.id.shot_detail_user_name) TextView username;
-    @Bind(R.id.shot_detail_timestamp) TextView timestamp;
-    @Bind(R.id.shot_detail_text) ClickableTextView shotText;
-    @Bind(R.id.shot_detail_image) ImageView shotImage;
-    @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
-    @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
-    @Bind(R.id.shot_video_frame) View videoFrame;
-    @Bind(R.id.shot_video_title) TextView videoTitle;
-    @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
-    @Bind(R.id.shot_nice_count) TextView niceCount;
-    @Bind(R.id.shot_nicers) ClickableTextView nicers;
-    @Bind(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
-    @Bind(R.id.shot_view_count) TextView viewsCount;
-    @Bind(R.id.shot_link_clicks_count) TextView linkClicksCount;
-    @Bind(R.id.counts_dot) TextView countsDot;
+    @BindView(R.id.shot_detail_avatar) ImageView avatar;
+    @BindView(R.id.shot_detail_user_name) TextView username;
+    @BindView(R.id.shot_detail_timestamp) TextView timestamp;
+    @BindView(R.id.shot_detail_text) ClickableTextView shotText;
+    @BindView(R.id.shot_detail_image) ImageView shotImage;
+    @BindView(R.id.shot_detail_stream_title) TextView streamTitle;
+    @BindView(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
+    @BindView(R.id.shot_video_frame) View videoFrame;
+    @BindView(R.id.shot_video_title) TextView videoTitle;
+    @BindView(R.id.shot_video_duration) TextView videoDuration;
+    @BindView(R.id.shot_nice_button) NiceButtonView niceButton;
+    @BindView(R.id.shot_nice_count) TextView niceCount;
+    @BindView(R.id.shot_nicers) ClickableTextView nicers;
+    @BindView(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
+    @BindView(R.id.shot_view_count) TextView viewsCount;
+    @BindView(R.id.shot_link_clicks_count) TextView linkClicksCount;
+    @BindView(R.id.counts_dot) TextView countsDot;
+    @BindView(R.id.reshoot_count) TextView reshotCount;
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
@@ -111,6 +112,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     private void setupCounts(ShotModel shotModel) {
         setupViewCount(shotModel);
         setupLinkClicksCount(shotModel);
+        setupReshotCount(shotModel);
+        setupCountDot(shotModel);
     }
 
     private void setupViewCount(ShotModel shotModel) {
@@ -127,10 +130,25 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         Long clicks = shotModel.getLinkClickCount();
         if (clicks != 0) {
             linkClicksCount.setVisibility(View.VISIBLE);
-            countsDot.setVisibility(View.VISIBLE);
             linkClicksCount.setText(context.getResources()
                 .getQuantityString(R.plurals.link_click_count_pattern, clicks.intValue(),
                     numberFormatUtil.formatNumbers(clicks)));
+        }
+    }
+
+    private void setupReshotCount(ShotModel shotModel) {
+        Long reshoots = shotModel.getReshootCount();
+        if (reshoots != 0) {
+            reshotCount.setVisibility(View.VISIBLE);
+            reshotCount.setText(context.getResources()
+                .getQuantityString(R.plurals.reshot_count_pattern, reshoots.intValue(),
+                    numberFormatUtil.formatNumbers(reshoots)));
+        }
+    }
+
+    private void setupCountDot(ShotModel shotModel) {
+        if (shotModel.getReshootCount() > 0 && shotModel.getViews() > 0) {
+            countsDot.setVisibility(View.VISIBLE);
         }
     }
 

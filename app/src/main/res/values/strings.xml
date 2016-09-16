@@ -223,7 +223,7 @@
   <string name="menu_search_streams">Search</string>
   <string name="menu_search_timeline">Search timeline</string>
   <string name="menu_share_shot_via">Share via…</string>
-  <string name="menu_share_shot_via_shootr">Share via Shootr</string>
+  <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Photo</string>
   <!-- TimeUtils -->
@@ -243,7 +243,7 @@
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
   <string name="new_stream_title_label">Title</string>
-  <string formatted="false" name="new_topic">New message…</string>
+  <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
   <string name="niced_by">"Niced by "</string>
   <string name="niced_shot_activity">Niced your shot</string>
@@ -279,11 +279,11 @@
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
   <string name="photo_edit_take">Camera</string>
   <string name="pinned_shot_activity">Pinned to profile</string>
-  <string name="pinned_shot_activity_with_comment">"Pinned to profile: "</string>
-  <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
-  <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to current participants and users who have the stream as a favorite.</string>
-  <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
-  <string formatted="false" name="pin_topic">Pin message</string>
+  <string name="pinned_shot_activity_with_comment">Pinned to profile: </string>
+  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to current participants and users who have the stream as a favorite.</string>
+  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
+  <string name="pin_topic" formatted="false">Pin message</string>
   <string name="poll_ignore">Remove poll</string>
   <string name="poll_live_results">Live results</string>
   <string name="poll_results">Final result</string>
@@ -327,8 +327,8 @@
   <string name="replied_activity" formatted="false">Responded</string>
   <string name="replied_activity_with_comment" formatted="false">"Responded: "</string>
   <plurals name="replies_header_count_pattern">
-    <item quantity="one">            %d respond\n        </item>
-    <item quantity="other">            %d responses\n        </item>
+    <item quantity="one">            %d respond        </item>
+    <item quantity="other">            %d responses        </item>
   </plurals>
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
@@ -341,13 +341,19 @@
   <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
   <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
   <string name="reset_password_send_email">Send a Password Reset Email</string>
+  <plurals name="reshot_count_pattern">
+    <item quantity="one">%s reshot</item>
+    <item quantity="other">%s reshots</item>
+    <item quantity="zero">%s reshots</item>
+  </plurals>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restore stream</string>
   <string name="restore_stream_snackbar_action">Restore</string>
   <string name="search_users_hint">Search for users</string>
   <string name="seconds">s</string>
   <string name="shared_poll">Shared poll %s</string>
-  <string name="shared_shot_activity">Shared %s\'s shot</string>
-  <string name="shared_shot_activity_with_comment">"Shared: "</string>
+  <string name="shared_shot_activity">Reshot from %s</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
@@ -358,10 +364,15 @@
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Check out %s on Shootr</string>
   <string name="share_via">Share via…</string>
-  <string name="share_via_shootr">Share via Shootr</string>
+  <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Shoot all</string>
   <string name="shot_pinned">Pinned</string>
-  <string name="shot_shared_message">Shot shared</string>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="one">%s respond</item>
+    <item quantity="other">%s responses</item>
+    <item quantity="zero">%s responses</item>
+  </plurals>
+  <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No Shots</string>
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
@@ -416,8 +427,9 @@
   <string name="title_pin_message_notification" formatted="false">Notify message?</string>
   <string name="topic" formatted="false">Message</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">\n            %d participant\n        </item>
-    <item quantity="other">\n            %d participants\n        </item>
+    <item quantity="one">%d participant        </item>
+    <item quantity="other">%d participants       </item>
+    <item quantity="zero">%d participants</item>
   </plurals>
   <string name="unfollow_dialog_message">Unfollow %s?</string>
   <string name="unfollow_dialog_no">No</string>
@@ -448,4 +460,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="share_stream_via_shootr">Share via Shootr</string>
 </resources>

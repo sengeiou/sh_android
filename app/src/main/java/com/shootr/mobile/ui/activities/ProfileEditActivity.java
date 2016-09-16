@@ -15,7 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,12 +39,12 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
 
-    @Bind(R.id.scroll) ScrollView scroll;
-    @Bind(R.id.profile_edit_name) EditText name;
-    @Bind(R.id.profile_edit_username) TextView username;
-    @Bind(R.id.profile_edit_website) TextView website;
-    @Bind(R.id.profile_edit_bio) EditText bio;
-    @Bind(R.id.profile_edit_email) TextView email;
+    @BindView(R.id.scroll) ScrollView scroll;
+    @BindView(R.id.profile_edit_name) EditText name;
+    @BindView(R.id.profile_edit_username) TextView username;
+    @BindView(R.id.profile_edit_website) TextView website;
+    @BindView(R.id.profile_edit_bio) EditText bio;
+    @BindView(R.id.profile_edit_email) TextView email;
     @BindString(R.string.profile_updated) String profileUpdated;
     @BindString(R.string.communication_error) String communicationError;
     @BindString(R.string.connection_lost) String connectionLost;

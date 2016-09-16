@@ -221,7 +221,7 @@
   <string name="menu_search_streams">搜尋</string>
   <string name="menu_search_timeline">搜尋timeline</string>
   <string name="menu_share_shot_via">透過以下方式分享：</string>
-  <string name="menu_share_shot_via_shootr">通過Shootr分享</string>
+  <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">信息</string>
   <string name="menu_stream_edit_photo">相片</string>
   <!-- TimeUtils -->
@@ -261,7 +261,7 @@
   <string name="notification_shot_has_stream_removed_subtitle">這stream已清除</string>
   <!-- Notifications -->
   <string name="notification_shot_multiple_title">%d個新的 Shots</string>
-  <string name="notification_shot_sending">Shooting…</string>
+  <string name="notification_shot_sending">Shooting...</string>
   <string name="notification_shot_sent">Shot已發送</string>
   <string name="now">現在</string>
   <string name="no_intent_handler">沒有應用程式可用來處理此行動。\n</string>
@@ -275,7 +275,7 @@
   <string name="photo_edit_remove_confirmation">清除相片?</string>
   <string name="photo_edit_take">相機</string>
   <string name="pinned_shot_activity">已釘選到個人主頁</string>
-  <string name="pinned_shot_activity_with_comment">"已釘選到個人主頁: "</string>
+  <string name="pinned_shot_activity_with_comment">已釘選到個人主頁:</string>
   <string name="pin_message_notification_confirmation_no" formatted="false">否</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">通知將傳送給喜愛Stream的參與者與使用者。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
@@ -323,6 +323,7 @@
   <string name="replied_activity_with_comment" formatted="false">"已回覆: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="other">%d回覆</item>
+    <item quantity="zero">%d回覆</item>
   </plurals>
   <string name="reply_name_pattern">%1$s 回覆 %2$s</string>
   <string name="reply_placeholder_pattern">回覆%s…</string>
@@ -335,6 +336,11 @@
   <string name="reset_password_confirmation_message_email_pattern">電郵已發送至%s</string>
   <string name="reset_password_enter_username_email">請輸入Shootr的用戶名稱或電郵。</string>
   <string name="reset_password_send_email">發送密碼重設電郵</string>
+  <plurals name="reshot_count_pattern">
+    <item quantity="other">%sreshots</item>
+    <item quantity="zero">%sreshots</item>
+  </plurals>
+  <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">還原stream</string>
   <string name="restore_stream_snackbar_action">復原</string>
   <string name="search_users_hint">查找用戶</string>
@@ -352,10 +358,14 @@
   <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
   <string name="share_via">透過以下方式分享：</string>
-  <string name="share_via_shootr">通過Shootr分享</string>
+  <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Shoot所有</string>
   <string name="shot_pinned">已釘選</string>
-  <string name="shot_shared_message">已分享shot</string>
+  <plurals name="shot_replies_count_pattern">
+    <item quantity="other">%s回覆</item>
+    <item quantity="zero">%s回覆</item>
+  </plurals>
+  <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出…</string>
@@ -411,7 +421,7 @@
   <string name="topic" formatted="false">訊息</string>
   <plurals name="total_watchers_pattern">
     <item quantity="other">%d個參與者</item>
-    <item quantity="zero"/>
+    <item quantity="zero">%d個參與者</item>
   </plurals>
   <string name="unfollow_dialog_message">取消對%s的關注?</string>
   <string name="unfollow_dialog_no">不用了</string>
@@ -441,4 +451,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="share_stream_via_shootr">通過Shootr分享</string>
 </resources>
