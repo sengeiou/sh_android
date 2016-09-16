@@ -221,7 +221,7 @@
   <string name="menu_search_streams">搜尋</string>
   <string name="menu_search_timeline">搜尋timeline</string>
   <string name="menu_share_shot_via">透過以下方式分享：</string>
-  <string name="menu_share_shot_via_shootr">通過Shootr分享</string>
+  <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">信息</string>
   <string name="menu_stream_edit_photo">相片</string>
   <!-- TimeUtils -->
@@ -358,14 +358,14 @@
   <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
   <string name="share_via">透過以下方式分享：</string>
-  <string name="share_via_shootr">通過Shootr分享</string>
+  <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Shoot所有</string>
   <string name="shot_pinned">已釘選</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="other">%s回覆</item>
     <item quantity="zero">%s回覆</item>
   </plurals>
-  <string name="shot_shared_message">已分享shot</string>
+  <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出…</string>

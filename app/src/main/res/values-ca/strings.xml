@@ -224,7 +224,7 @@
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_shot_via">Compartir via…</string>
-  <string name="menu_share_shot_via_shootr">Compartir via Shootr</string>
+  <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
@@ -374,7 +374,7 @@
     <item quantity="other">%s respostes</item>
     <item quantity="zero">%s respostes</item>
   </plurals>
-  <string name="shot_shared_message">Shot compartit</string>
+  <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No hi ha shots</string>
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>

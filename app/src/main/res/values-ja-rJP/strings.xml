@@ -222,7 +222,7 @@
   <string name="menu_search_streams">検索</string>
   <string name="menu_search_timeline">タイムラインを検索</string>
   <string name="menu_share_shot_via">共有する</string>
-  <string name="menu_share_shot_via_shootr">Shootrで共有</string>
+  <string name="menu_share_shot_via_shootr">リシュート</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">写真</string>
   <!-- TimeUtils -->
@@ -359,14 +359,14 @@
   <string name="share_stream_message">Shootrで%1$sを覗いてみましょう: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Shootrで%sをチェックしてみよう</string>
   <string name="share_via">共有する</string>
-  <string name="share_via_shootr">Shootrで共有</string>
+  <string name="share_via_shootr">リシュート</string>
   <string name="shoot_all_button">全て送信</string>
   <string name="shot_pinned">完了しました</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="other">%s件の返信</item>
     <item quantity="zero">%s件の返信</item>
   </plurals>
-  <string name="shot_shared_message">ショットが共有されました</string>
+  <string name="shot_shared_message">リショット</string>
   <string name="shot_timeline_empty_title">ショットはありません</string>
   <string name="showing_shots_by_holder">管理者のショット。</string>
   <string name="sign_out_message">ログアウトしています…</string>
