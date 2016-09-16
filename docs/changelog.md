@@ -13,6 +13,27 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.18.0] - 2016-09-16
+
+### Added
+
+- new activity endpoint
+- reshot in timeline with swipe layout
+- reshot counter in shot detail
+- reshot push settings
+
+### Changed
+
+- activity shared shot for activity reshot
+- timeline goes IOS
+- easter egg
+
+
+### Fixed
+
+- reset "no results" label on research
+
+
 ## [1.17.0] - 2016-09-02
 
 ### Added

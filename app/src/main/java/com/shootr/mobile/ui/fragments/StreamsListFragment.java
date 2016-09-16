@@ -184,7 +184,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
                 analyticsLabelFavoriteStream);
           }
-        }).addAction(R.string.share_via_shootr, new Runnable() {
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
         presenter.shareStream(stream);
       }

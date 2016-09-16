@@ -395,7 +395,7 @@
   <string name="stream_subtitle">在關注%d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在關注%2$s個參與者中的%1$s個參與者</string>
   <string name="stream_timeline_add_favorite">加入最愛</string>
-  <string name="stream_timeline_empty_message">正在檢查shots...</string>
+  <string name="stream_timeline_empty_message">正在檢查shots…</string>
   <string name="stream_timeline_remove_favorite">從最愛中清除</string>
   <string name="stream_timeline_view_only">私人編輯</string>
   <string name="suggested_people_section_title">建議關注</string>
@@ -451,4 +451,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="share_stream_via_shootr">通過Shootr分享</string>
 </resources>
