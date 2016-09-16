@@ -116,7 +116,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
               @Override public void run() {
                   favoritesListPresenter.removeFromFavorites(stream);
               }
-          }).addAction(R.string.share_via_shootr, new Runnable() {
+          }).addAction(R.string.share_stream_via_shootr, new Runnable() {
               @Override public void run() {
                   favoritesListPresenter.shareStream(stream);
               }

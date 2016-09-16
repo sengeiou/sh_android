@@ -208,7 +208,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showContextMenuWithoutAddFavorite(final StreamResultModel stream) {
         CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);
-        builder.addAction(R.string.share_via_shootr, new Runnable() {
+        builder.addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }
@@ -245,7 +245,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                 startActivity(intent);
             }
         });
-        builder.addAction(R.string.share_via_shootr, new Runnable() {
+        builder.addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }
@@ -272,7 +272,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
             @Override public void run() {
                 presenter.addToFavorite(stream);
             }
-        }).addAction(R.string.share_via_shootr, new Runnable() {
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
                 presenter.shareStream(stream);
             }

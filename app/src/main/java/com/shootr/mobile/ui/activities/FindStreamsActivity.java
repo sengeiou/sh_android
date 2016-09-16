@@ -108,7 +108,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
             @Override public void run() {
                 findStreamsPresenter.addToFavorites(stream);
             }
-        }).addAction(R.string.share_via_shootr, new Runnable() {
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.shareStream(stream);
             }

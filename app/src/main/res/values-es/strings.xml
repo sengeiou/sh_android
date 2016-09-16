@@ -460,4 +460,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
+  <string name="share_stream_via_shootr">Compartir vía Shootr</string>
 </resources>
