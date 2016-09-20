@@ -13,6 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.18.1] - 2016-09-20
+
+### Fixed
+
+- Timeline view-only bug
+
+
 ## [1.18.0] - 2016-09-16
 
 ### Added
