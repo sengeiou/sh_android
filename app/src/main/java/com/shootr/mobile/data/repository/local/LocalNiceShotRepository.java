@@ -3,14 +3,14 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.db.manager.NiceManager;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton public class LocalNiceShotRepository implements NiceShotRepository {
+@Singleton public class LocalNiceShotRepository implements InternalNiceShotRepository {
 
     private final NiceManager niceManager;
     private WeakReference<Set<String>> markedShots;

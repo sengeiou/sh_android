@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.NicerRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

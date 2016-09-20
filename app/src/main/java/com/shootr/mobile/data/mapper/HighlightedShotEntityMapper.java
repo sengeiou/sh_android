@@ -6,8 +6,7 @@ import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,10 +14,10 @@ import javax.inject.Inject;
 
 public class HighlightedShotEntityMapper {
 
-  private final NiceShotRepository niceShotRepository;
+  private final InternalNiceShotRepository niceShotRepository;
   private final MetadataMapper metadataMapper;
 
-  @Inject public HighlightedShotEntityMapper(@Local NiceShotRepository niceShotRepository,
+  @Inject public HighlightedShotEntityMapper(InternalNiceShotRepository niceShotRepository,
       MetadataMapper metadataMapper) {
     this.niceShotRepository = niceShotRepository;
     this.metadataMapper = metadataMapper;

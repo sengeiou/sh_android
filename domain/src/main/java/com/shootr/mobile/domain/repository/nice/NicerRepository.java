@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.nice;
 
 import com.shootr.mobile.domain.model.shot.Nicer;
 import java.util.List;

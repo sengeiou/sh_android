@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.dagger;
 import com.shootr.mobile.data.repository.datasource.nicer.NicerDataSource;
 import com.shootr.mobile.data.repository.datasource.nicer.ServiceNicerDatasource;
 import com.shootr.mobile.data.repository.remote.SyncNicerRepository;
-import com.shootr.mobile.domain.repository.NicerRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

@@ -4,11 +4,11 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
-import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class ShootrUserServiceLoginTest {
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
     @Mock NicerRepository nicerRepository;
-    @Mock NiceShotRepository localNiceShotRepository;
+    @Mock InternalNiceShotRepository localNiceShotRepository;
     @Mock ExternalFavoriteRepository favoriteRepository;
 
     private ShootrUserService shootrUserService;

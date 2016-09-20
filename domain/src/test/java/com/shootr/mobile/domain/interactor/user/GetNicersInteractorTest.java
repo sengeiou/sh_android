@@ -8,7 +8,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.NicerRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;

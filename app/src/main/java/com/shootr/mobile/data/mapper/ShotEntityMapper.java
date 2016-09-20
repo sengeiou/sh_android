@@ -5,8 +5,7 @@ import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +13,10 @@ import javax.inject.Inject;
 
 public class ShotEntityMapper {
 
-    private final NiceShotRepository niceShotRepository;
+    private final InternalNiceShotRepository niceShotRepository;
     private final MetadataMapper metadataMapper;
 
-    @Inject public ShotEntityMapper(@Local NiceShotRepository niceShotRepository, MetadataMapper metadataMapper) {
+    @Inject public ShotEntityMapper(InternalNiceShotRepository niceShotRepository, MetadataMapper metadataMapper) {
         this.niceShotRepository = niceShotRepository;
         this.metadataMapper = metadataMapper;
     }

@@ -9,7 +9,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.NicerRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Arrays;
 import java.util.Collections;
