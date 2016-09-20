@@ -8,7 +8,6 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DatabaseVersionUtils;
 import com.shootr.mobile.util.LogTreeFactory;
-import com.squareup.leakcanary.LeakCanary;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -29,7 +28,6 @@ public class ShootrApplication extends MultiDexApplication {
         CustomActivityOnCrash.install(this);
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
         crashReportTool.init(this);
-        LeakCanary.install(this);
     }
 
     public void plantLoggerTrees() {
