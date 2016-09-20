@@ -1,4 +1,4 @@
-package com.shootr.mobile.data.repository.datasource.event;
+package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.RecentStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;

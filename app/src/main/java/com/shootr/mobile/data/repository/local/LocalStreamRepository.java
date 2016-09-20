@@ -2,8 +2,8 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
-import com.shootr.mobile.data.repository.datasource.event.StreamSearchDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamSearchDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;

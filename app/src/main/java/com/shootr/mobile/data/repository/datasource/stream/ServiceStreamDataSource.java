@@ -1,4 +1,4 @@
-package com.shootr.mobile.data.repository.datasource.event;
+package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;

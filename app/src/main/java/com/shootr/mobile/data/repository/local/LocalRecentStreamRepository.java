@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.data.entity.RecentStreamEntity;
 import com.shootr.mobile.data.mapper.RecentStreamEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.RecentStreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.RecentStreamDataSource;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.RecentStreamRepository;

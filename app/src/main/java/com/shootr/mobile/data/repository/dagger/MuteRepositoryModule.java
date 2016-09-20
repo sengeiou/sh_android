@@ -1,8 +1,8 @@
 package com.shootr.mobile.data.repository.dagger;
 
-import com.shootr.mobile.data.repository.datasource.event.DatabaseMuteDataSource;
-import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
-import com.shootr.mobile.data.repository.datasource.event.ServiceMuteDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.DatabaseMuteDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.MuteDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.ServiceMuteDataSource;
 import com.shootr.mobile.data.repository.local.LocalMuteRepository;
 import com.shootr.mobile.data.repository.remote.SyncMuteRepository;
 import com.shootr.mobile.domain.repository.Local;
