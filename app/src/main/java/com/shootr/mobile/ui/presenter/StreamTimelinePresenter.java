@@ -82,7 +82,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private SortedSet<ShotModel> shotModels;
   private StreamModel streamModel;
   private Integer streamMode;
-  private ArrayList<String> contributorIdUsers;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -273,40 +272,35 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadStreamMode() {
-    if (contributorIdUsers != null) {
-      getContributorsInteractor.obtainContributors(streamId, false,
-          new Interactor.Callback<List<Contributor>>() {
-            @Override public void onLoaded(List<Contributor> contributors) {
-              String idUser = sessionRepository.getCurrentUserId();
-              initializeContributorIdUsers(contributors);
-              if (isCurrentUserContributor(contributorIdUsers, idUser) || isCurrentUserStreamAuthor(
-                  idUser)) {
-                streamTimelineView.hideStreamViewOnlyIndicator();
-              } else {
-                streamTimelineView.showStreamViewOnlyIndicator();
-              }
+    getContributorsInteractor.obtainContributors(streamId, false,
+        new Interactor.Callback<List<Contributor>>() {
+          @Override public void onLoaded(List<Contributor> contributors) {
+            String idUser = sessionRepository.getCurrentUserId();
+            if (isCurrentUserContributor(contributors, idUser) || isCurrentUserStreamAuthor(
+                idUser)) {
+              streamTimelineView.hideStreamViewOnlyIndicator();
+            } else {
+              streamTimelineView.showStreamViewOnlyIndicator();
             }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
 
-            }
-          });
-    }
-  }
-
-  private void initializeContributorIdUsers(List<Contributor> contributors) {
-    contributorIdUsers = new ArrayList<>(contributors.size());
-    for (Contributor contributor : contributors) {
-      contributorIdUsers.add(contributor.getIdUser());
-    }
+          }
+        });
   }
 
   private boolean isCurrentUserStreamAuthor(String idUser) {
     return idAuthor != null && idAuthor.equals(idUser);
   }
 
-  private boolean isCurrentUserContributor(ArrayList<String> contributorsIdUsers, String idUser) {
-    return contributorsIdUsers.contains(idUser);
+  private boolean isCurrentUserContributor(List<Contributor> contributors, String idUser) {
+    for (Contributor contributor : contributors) {
+      if (contributor.getIdUser().equals(idUser)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private void showShotsInView(Timeline timeline) {
