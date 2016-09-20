@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.stream;
 
 public interface StreamListSynchronizationRepository {
 

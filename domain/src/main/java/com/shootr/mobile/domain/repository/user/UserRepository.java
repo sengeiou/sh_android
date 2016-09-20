@@ -1,9 +1,9 @@
 package com.shootr.mobile.domain.repository.user;
 
-import com.shootr.mobile.domain.model.user.SuggestedPeople;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import com.shootr.mobile.domain.model.user.SuggestedPeople;
+import com.shootr.mobile.domain.model.user.User;
 import java.io.IOException;
 import java.util.List;
 

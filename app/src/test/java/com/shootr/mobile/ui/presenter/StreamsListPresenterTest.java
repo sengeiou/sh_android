@@ -1,8 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
@@ -12,6 +9,9 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;

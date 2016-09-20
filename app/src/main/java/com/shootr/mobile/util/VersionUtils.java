@@ -3,9 +3,7 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
 import com.shootr.mobile.BuildConfig;
-
 import timber.log.Timber;
 
 public class VersionUtils {

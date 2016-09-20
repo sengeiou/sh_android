@@ -1,7 +1,6 @@
 package com.shootr.mobile.util;
 
 import android.text.SpannableStringBuilder;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 

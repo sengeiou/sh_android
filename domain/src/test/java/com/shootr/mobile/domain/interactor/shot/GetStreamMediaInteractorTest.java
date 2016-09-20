@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;

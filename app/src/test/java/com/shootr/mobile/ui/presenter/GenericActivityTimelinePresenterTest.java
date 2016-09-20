@@ -1,9 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
-import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ActivityModel;

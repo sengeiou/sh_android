@@ -1,13 +1,14 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class RemoveStreamInteractorTest {
   private static final String USER_ID = "userId";
   private static final String STREAM_ID = "streamId";
   @Mock StreamRepository localStreamRepository;
-  @Mock StreamRepository remoteStreamRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock SessionRepository sessionRepository;
   @Mock UserRepository localUserRepository;
   @Mock UserRepository remoteUserRepository;

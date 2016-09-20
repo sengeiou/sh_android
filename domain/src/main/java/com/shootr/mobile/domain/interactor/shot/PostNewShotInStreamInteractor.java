@@ -1,13 +1,13 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.executor.PostExecutionThread;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
 import java.io.File;

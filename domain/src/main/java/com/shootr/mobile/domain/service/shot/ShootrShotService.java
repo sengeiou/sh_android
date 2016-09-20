@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.service.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.ShotRepository;

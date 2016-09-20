@@ -1,7 +1,6 @@
 package com.shootr.mobile.stetho;
 
 import java.io.PrintStream;
-
 import timber.log.Timber;
 
 public class StethoTree implements Timber.Tree {

@@ -11,7 +11,7 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;

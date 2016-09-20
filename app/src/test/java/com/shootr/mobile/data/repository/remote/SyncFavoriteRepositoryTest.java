@@ -8,9 +8,9 @@ import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDat
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableFavoriteEntityFactory;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
-import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.List;

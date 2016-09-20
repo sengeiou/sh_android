@@ -21,10 +21,6 @@ public class DatabaseRecentStreamDataSource implements RecentStreamDataSource {
     recentStreamManager.saveStream(recentStreamEntity);
   }
 
-  @Override public void removeRecentStream(String idStream) {
-    //TODO NOT IMPLEMENTED YET
-  }
-
   @Override public List<RecentStreamEntity> getRecentStreams() {
     return recentStreamManager.readRecentStreams();
   }

@@ -8,7 +8,5 @@ public interface RecentStreamDataSource {
 
     void putRecentStream(StreamEntity stream, long currentTime);
 
-    void removeRecentStream(String idStream);
-
     List<RecentStreamEntity> getRecentStreams();
 }

@@ -1,7 +1,5 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -9,10 +7,12 @@ import com.shootr.mobile.domain.exception.ShootrServerException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
@@ -25,7 +25,7 @@ public class CreateStreamInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final SessionRepository sessionRepository;
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private final LocaleProvider localeProvider;
   private final UserRepository localUserRepository;
@@ -43,7 +43,7 @@ public class CreateStreamInteractor implements Interactor {
 
   @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote StreamRepository remoteStreamRepository,
+      ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository, LocaleProvider localeProvider,
       @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;

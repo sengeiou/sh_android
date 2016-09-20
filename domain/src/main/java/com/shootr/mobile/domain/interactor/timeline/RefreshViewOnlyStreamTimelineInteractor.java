@@ -13,7 +13,7 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import com.shootr.mobile.domain.utils.LocaleProvider;

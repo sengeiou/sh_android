@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderStreamMediaInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.StreamMediaView;

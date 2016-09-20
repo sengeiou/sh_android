@@ -7,7 +7,7 @@ import com.shootr.mobile.data.repository.datasource.stream.StreamSearchDataSourc
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -59,27 +59,11 @@ public class LocalStreamRepository implements StreamRepository {
         return stream;
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
-        throw new IllegalStateException("Notify not allowed in local repository.");
-    }
-
-    @Override public void shareStream(String idStream) {
-        throw new IllegalStateException("Not allowed in local repository.");
-    }
-
     @Override public void removeStream(String idStream) {
         localStreamDataSource.removeStream(idStream);
     }
 
     @Override public void restoreStream(String idStream) {
         localStreamDataSource.restoreStream(idStream);
-    }
-
-    @Override public Stream getBlogStream(String country, String language) {
-        throw new IllegalStateException("Not allowed in local repository.");
-    }
-
-    @Override public Stream getHelpStream(String country, String language) {
-        throw new IllegalStateException("Not allowed in local repository.");
     }
 }

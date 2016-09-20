@@ -1,8 +1,8 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.user.UserSettings;
-import com.shootr.mobile.ui.model.UserSettingsModel;
 import com.shootr.mobile.infraestructure.Mapper;
+import com.shootr.mobile.ui.model.UserSettingsModel;
 import javax.inject.Inject;
 
 public class UserSettingsModelMapper extends Mapper<UserSettings, UserSettingsModel> {

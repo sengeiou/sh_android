@@ -1,15 +1,15 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
-import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.ShotRepository;
 import java.util.Arrays;
 import java.util.Collections;

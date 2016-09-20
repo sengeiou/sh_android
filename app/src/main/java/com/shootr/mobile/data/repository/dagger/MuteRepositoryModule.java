@@ -6,8 +6,8 @@ import com.shootr.mobile.data.repository.datasource.stream.ServiceMuteDataSource
 import com.shootr.mobile.data.repository.local.LocalMuteRepository;
 import com.shootr.mobile.data.repository.remote.SyncMuteRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

@@ -15,9 +15,11 @@ import com.shootr.mobile.data.repository.remote.RemoteStreamSearchRepository;
 import com.shootr.mobile.data.repository.remote.SyncStreamRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -33,7 +35,7 @@ import javax.inject.Singleton;
         return streamRepository;
     }
 
-    @Provides @Singleton @Remote StreamRepository provideRemoteStreamRepository(SyncStreamRepository streamRepository) {
+    @Provides @Singleton ExternalStreamRepository provideRemoteStreamRepository(SyncStreamRepository streamRepository) {
         return streamRepository;
     }
 
@@ -47,7 +49,7 @@ import javax.inject.Singleton;
         return streamDataSource;
     }
 
-    @Provides @Local StreamSearchRepository provideLocalStreamSearchRepository(
+    @Provides InternalStreamSearchRepository provideLocalStreamSearchRepository(
       LocalStreamSearchRepository streamSearchRepository) {
         return streamSearchRepository;
     }

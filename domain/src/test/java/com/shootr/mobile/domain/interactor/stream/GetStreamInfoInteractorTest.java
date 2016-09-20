@@ -1,13 +1,14 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamInfo;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamInfo;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,7 @@ public class GetStreamInfoInteractorTest {
   };
   @Mock UserRepository localUserRepository;
   @Mock UserRepository remoteUserRepository;
-  @Mock StreamRepository remoteStreamRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock SessionRepository sessionRepository;
   @Mock GetStreamInfoInteractor.Callback callback;

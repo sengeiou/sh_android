@@ -1,10 +1,5 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
@@ -12,12 +7,18 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class StreamsListInteractorTest {
   private static final String WATCHING_STREAM = "streamId";
 
   @Mock StreamSearchRepository remoteStreamSearchRepository;
-  @Mock StreamSearchRepository localStreamSearchRepository;
+  @Mock InternalStreamSearchRepository localStreamSearchRepository;
   @Mock StreamListSynchronizationRepository streamListSynchronizationRepository;
   @Mock SessionRepository sessionRepository;
   @Mock UserRepository localUserRepository;

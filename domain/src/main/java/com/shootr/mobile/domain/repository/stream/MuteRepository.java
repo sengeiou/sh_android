@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.stream;
 
 import java.util.List;
 

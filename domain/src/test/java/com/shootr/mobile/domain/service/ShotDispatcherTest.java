@@ -1,10 +1,10 @@
 package com.shootr.mobile.domain.service;
 
-import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.ArrayList;

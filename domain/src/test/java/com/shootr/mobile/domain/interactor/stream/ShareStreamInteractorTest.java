@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 public class ShareStreamInteractorTest {
 
   private static final String ID_STREAM = "idStream";
-  @Mock StreamRepository remoteStreamRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock Interactor.CompletedCallback completedCallback;
   @Mock Interactor.ErrorCallback errorCallback;
 

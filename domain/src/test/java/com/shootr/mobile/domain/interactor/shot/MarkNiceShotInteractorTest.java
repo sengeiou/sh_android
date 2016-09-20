@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
+
 import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NiceShotRepository;

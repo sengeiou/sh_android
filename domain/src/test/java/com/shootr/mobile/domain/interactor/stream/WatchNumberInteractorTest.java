@@ -6,7 +6,8 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ public class WatchNumberInteractorTest {
   public static final String STREAM_ID = "id";
   @Mock UserRepository remoteUserRepository;
   @Mock UserRepository localUserRepository;
-  @Mock StreamRepository remoteStreamRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock StreamRepository localStreamRepository;
   @Spy SpyCallback spyCallback = new SpyCallback();
   private WatchNumberInteractor interactor;

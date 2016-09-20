@@ -1,11 +1,11 @@
 package com.shootr.mobile.domain.interactor.user;
 
-import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.service.ResetPasswordException;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
 import javax.inject.Inject;

@@ -1,12 +1,12 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetSuggestedPeopleInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.SuggestedPeopleView;

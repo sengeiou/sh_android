@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.ui.views.SupportView;
 import org.junit.Before;
 import org.junit.Test;

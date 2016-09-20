@@ -1,8 +1,5 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.model.poll.Poll;
-import com.shootr.mobile.domain.model.poll.PollOption;
-import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -11,8 +8,11 @@ import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollOption;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import java.util.Collections;
 import javax.inject.Inject;
 

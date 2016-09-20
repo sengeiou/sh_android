@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import java.io.File;

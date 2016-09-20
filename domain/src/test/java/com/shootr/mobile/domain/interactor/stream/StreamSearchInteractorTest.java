@@ -1,13 +1,13 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.Collections;

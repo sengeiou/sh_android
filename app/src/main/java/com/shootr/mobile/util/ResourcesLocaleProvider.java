@@ -3,10 +3,8 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.telephony.TelephonyManager;
-
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-
 import javax.inject.Inject;
 
 public class ResourcesLocaleProvider implements LocaleProvider {

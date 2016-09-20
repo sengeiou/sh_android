@@ -1,8 +1,8 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;

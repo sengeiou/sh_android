@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
@@ -9,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;

@@ -1,12 +1,13 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.PhotoService;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ChangeStreamPhotoInteractorTest {
   @Mock ImageResizer imageResizer;
   @Mock PhotoService photoService;
   @Mock StreamRepository localStreamRepository;
-  @Mock StreamRepository remoteStreamRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock ChangeStreamPhotoInteractor.Callback callback;
   @Mock Interactor.ErrorCallback errorCallback;
 

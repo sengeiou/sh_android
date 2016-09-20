@@ -1,12 +1,12 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.bus.ShotQueued;
 import com.shootr.mobile.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendDraftInteractor;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.mappers.DraftModelMapper;
 import com.shootr.mobile.ui.views.DraftsView;

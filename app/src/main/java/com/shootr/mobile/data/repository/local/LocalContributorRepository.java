@@ -2,8 +2,8 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.mapper.ContributorEntityMapper;
 import com.shootr.mobile.data.repository.datasource.contributor.ContributorDataSource;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
+import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
 import java.util.List;

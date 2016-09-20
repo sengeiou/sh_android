@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.MuteRepository;
+import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

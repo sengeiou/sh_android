@@ -5,8 +5,8 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.utils.Preconditions;
 import javax.inject.Inject;
 
@@ -15,14 +15,14 @@ public class RestoreStreamInteractor implements com.shootr.mobile.domain.interac
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final StreamRepository localStreamRepository;
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
   private String idStream;
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
   @Inject public RestoreStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
-      @Remote StreamRepository remoteStreamRepository) {
+      ExternalStreamRepository remoteStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;

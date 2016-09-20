@@ -1,9 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.Contributor;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamInfo;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
@@ -16,8 +12,12 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamInfo;
+import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;

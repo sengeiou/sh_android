@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;

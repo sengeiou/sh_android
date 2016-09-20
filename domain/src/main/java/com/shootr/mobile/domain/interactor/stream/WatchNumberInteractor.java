@@ -9,7 +9,8 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,14 @@ public class WatchNumberInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final UserRepository remoteUserRepository;
   private final UserRepository localUserRepository;
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private String idStream;
   private Callback callback;
 
   @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, @Remote StreamRepository remoteStreamRepository,
+      @Local UserRepository localUserRepository, ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;

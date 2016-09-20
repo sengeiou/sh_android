@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
-import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderViewOnlyStreamTimelineInteractor;
@@ -8,6 +7,7 @@ import com.shootr.mobile.domain.interactor.timeline.GetStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetViewOnlyStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.RefreshViewOnlyStreamTimelineInteractor;
+import com.shootr.mobile.domain.model.stream.Timeline;
 import javax.inject.Inject;
 
 public class StreamTimelineInteractorsWrapper {

@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.repository;
 
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.exception.ContributorNumberStreamException;
+import com.shootr.mobile.domain.model.user.Contributor;
 import java.util.List;
 
 public interface ContributorRepository {

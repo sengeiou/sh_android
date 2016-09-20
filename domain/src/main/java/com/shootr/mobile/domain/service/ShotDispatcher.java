@@ -1,7 +1,5 @@
 package com.shootr.mobile.domain.service;
 
-import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.bus.ShotQueued;
@@ -11,6 +9,8 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import com.shootr.mobile.domain.utils.Patterns;
 import java.io.File;
