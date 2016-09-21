@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.shot;
 
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
@@ -29,25 +29,13 @@ public interface ShotRepository {
   List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate, String[] streamTypes,
       String[] shotTypes);
 
-  void putShots(List<Shot> shotsFromUser);
-
   Shot putShot(Shot shot);
-
-  void shareShot(String idShot);
 
   void deleteShot(String idShot);
 
-  void deleteShotsByStream(String idStream);
-
   void hideShot(String idShot, Long timestamp, String[] streamTypes, String[] shotTypes);
-
-  void unhideShot(String idShot);
-
-  void highlightShot(String idShot);
 
   HighlightedShot getHighlightedShots(String idStream);
 
   void dismissHighlightedShot(String idHighlightedShot);
-
-  void hideHighlightedShot(String idHighlightedShot);
 }

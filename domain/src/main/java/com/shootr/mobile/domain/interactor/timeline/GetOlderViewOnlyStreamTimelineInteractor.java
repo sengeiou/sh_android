@@ -13,9 +13,8 @@ import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
   private final SessionRepository sessionRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final StreamRepository localStreamRepository;
   private final ContributorRepository contributorRepository;
   private final UserRepository localUserRepository;
@@ -39,7 +38,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
 
   @Inject public GetOlderViewOnlyStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
+      ExternalShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
       @Local ContributorRepository contributorRepository,
       @Local UserRepository localUserRepository) {
     this.sessionRepository = sessionRepository;

@@ -10,7 +10,8 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +27,8 @@ public class GetStreamHoldingTimelineInteractorTest {
   public static final String ID_USER = "id_user";
   public static final boolean GONE_BACKGROUND = false;
   private GetStreamHoldingTimelineInteractor getStreamHoldingTimelineInteractor;
-  @Mock ShotRepository localShotRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock Interactor.Callback<Timeline> callback;
   @Mock Interactor.ErrorCallback errorCallback;
 

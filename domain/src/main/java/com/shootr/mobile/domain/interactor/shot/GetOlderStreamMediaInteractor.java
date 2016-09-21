@@ -11,7 +11,7 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class GetOlderStreamMediaInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final UserRepository remoteUserRepository;
   private final SessionRepository sessionRepository;
   private ErrorCallback errorCallback;
@@ -32,7 +32,7 @@ public class GetOlderStreamMediaInteractor implements Interactor {
   private Long maxTimestamp;
 
   @Inject public GetOlderStreamMediaInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository,
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
       @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;

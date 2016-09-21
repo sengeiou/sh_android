@@ -9,8 +9,9 @@ import com.shootr.mobile.data.repository.local.LocalShotRepository;
 import com.shootr.mobile.data.repository.remote.SyncShotRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.service.ShotQueueRepository;
 import dagger.Module;
 import dagger.Provides;
@@ -23,11 +24,11 @@ import javax.inject.Singleton;
   complete = false,
   library = true) public class ShotRepositoryModule {
 
-    @Provides @Singleton @Remote ShotRepository provideRemoteShotRepository(SyncShotRepository syncShotRepository) {
+    @Provides @Singleton ExternalShotRepository provideRemoteShotRepository(SyncShotRepository syncShotRepository) {
         return syncShotRepository;
     }
 
-    @Provides @Singleton @Local ShotRepository provideLocalShotRepository(LocalShotRepository localShotRepository) {
+    @Provides @Singleton InternalShotRepository provideLocalShotRepository(LocalShotRepository localShotRepository) {
         return localShotRepository;
     }
 

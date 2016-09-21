@@ -12,8 +12,8 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class GetStreamTimelineInteractorTest {
   private static final Boolean NOT_PAUSED = false;
   String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
 
-  @Mock ShotRepository localShotRepository;
+  @Mock InternalShotRepository localShotRepository;
   @Mock UserRepository localUserRepository;
   @Spy SpyCallback spyCallback = new SpyCallback();
   @Mock StreamRepository streamRepository;

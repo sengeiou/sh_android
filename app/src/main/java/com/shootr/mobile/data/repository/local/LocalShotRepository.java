@@ -9,11 +9,11 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class LocalShotRepository implements ShotRepository {
+public class LocalShotRepository implements InternalShotRepository {
 
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
@@ -84,10 +84,6 @@ public class LocalShotRepository implements ShotRepository {
     localShotDataSource.putShots(shotEntityMapper.transformInEntities(shotsFromUser));
   }
 
-  @Override public void shareShot(String idShot) {
-    throw new IllegalArgumentException("No local implementation");
-  }
-
   @Override public void deleteShot(String idShot) {
     localShotDataSource.deleteShot(idShot);
   }
@@ -106,14 +102,6 @@ public class LocalShotRepository implements ShotRepository {
   @Override
   public void hideShot(String idShot, Long timestamp, String[] streamTypes, String[] shotTypes) {
     localShotDataSource.hideShot(idShot, timestamp);
-  }
-
-  @Override public void unhideShot(String idShot) {
-    throw new IllegalArgumentException("No local implementation");
-  }
-
-  @Override public void highlightShot(String idShot) {
-    throw new IllegalArgumentException("No local implementation");
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {

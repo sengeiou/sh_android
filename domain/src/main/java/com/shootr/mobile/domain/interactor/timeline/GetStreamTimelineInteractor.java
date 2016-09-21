@@ -6,8 +6,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -17,13 +16,13 @@ public class GetStreamTimelineInteractor implements Interactor {
   //region Dependencies
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository localShotRepository;
+  private final InternalShotRepository localShotRepository;
   private String idStream;
   private Callback callback;
   private Boolean goneBackground;
 
   @Inject public GetStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository) {
+      PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository) {
     this.localShotRepository = localShotRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;

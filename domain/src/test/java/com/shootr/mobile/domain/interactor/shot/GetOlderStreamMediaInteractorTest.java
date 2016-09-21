@@ -8,7 +8,7 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ public class GetOlderStreamMediaInteractorTest {
 
   private static final String ID_STREAM = "idStream";
   private static final Long TIME = 1L;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock UserRepository remoteUserRepository;
   @Mock SessionRepository sessionRepository;
   @Mock Interactor.Callback<List<Shot>> callback;

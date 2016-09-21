@@ -6,8 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.Date;
 import javax.inject.Inject;
 
@@ -15,13 +14,13 @@ public class HideShotInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
 
   private String idShot;
   private CompletedCallback completedCallback;
 
   @Inject HideShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;

@@ -5,7 +5,8 @@ import com.shootr.mobile.data.mapper.ActivityEntityMapper;
 import com.shootr.mobile.data.repository.datasource.activity.ActivityDataSource;
 import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -27,8 +28,8 @@ public class SyncActivityRepositoryTest {
   @Mock ActivityDataSource localActivityDataSource;
   @Mock ActivityDataSource remoteActivityDataSource;
   @Mock ActivityEntityMapper activityEntityMapper;
-  @Mock ShotRepository remoteShotRepository;
-  @Mock ShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
   private SyncActivityRepository repository;
 
   @Before public void setUp() throws Exception {

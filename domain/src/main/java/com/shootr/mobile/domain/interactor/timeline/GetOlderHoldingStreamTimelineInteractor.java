@@ -10,9 +10,8 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
@@ -25,7 +24,7 @@ public class GetOlderHoldingStreamTimelineInteractor
   private final SessionRepository sessionRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final StreamRepository localStreamRepository;
   private final UserRepository localUserRepository;
 
@@ -36,7 +35,7 @@ public class GetOlderHoldingStreamTimelineInteractor
 
   @Inject public GetOlderHoldingStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
+      ExternalShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
       @Local UserRepository localUserRepository) {
     this.sessionRepository = sessionRepository;
     this.remoteShotRepository = remoteShotRepository;

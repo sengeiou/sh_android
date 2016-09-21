@@ -9,10 +9,10 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
-
-import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -35,8 +35,8 @@ public class MarkNiceShotInteractorTest {
   private static final String SHOT_USERNAME = "username";
 
   @Mock InternalNiceShotRepository localNiceShotRepository;
-  @Mock ShotRepository localShotRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock NiceShotRepository remoteNiceShotRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;

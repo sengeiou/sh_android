@@ -4,21 +4,20 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import javax.inject.Inject;
 
 public class PinShotInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
 
   private String idShot;
   private CompletedCallback completedCallback;
 
   @Inject PinShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;

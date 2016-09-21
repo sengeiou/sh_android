@@ -4,25 +4,24 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import javax.inject.Inject;
 
 public class DismissHighlightShotInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
-  private final ShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
 
   private String idHighlightedShot;
   private Boolean isAdmin;
   private CompletedCallback completedCallback;
 
   @Inject public DismissHighlightShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository) {
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
+      InternalShotRepository localShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;

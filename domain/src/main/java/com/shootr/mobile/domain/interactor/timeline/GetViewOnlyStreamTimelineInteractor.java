@@ -13,7 +13,7 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository localShotRepository;
+  private final InternalShotRepository localShotRepository;
   private final UserRepository localUserRepository;
   private final ContributorRepository localContributorRepository;
   private final StreamRepository localStreamRepository;
@@ -36,7 +36,7 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
   private Boolean goneBackground;
 
   @Inject public GetViewOnlyStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
+      PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository,
       @Local UserRepository localUserRepository,
       @Local ContributorRepository localContributorRepository,
       @Local StreamRepository localStreamRepository, SessionRepository sessionRepository) {

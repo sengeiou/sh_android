@@ -13,7 +13,7 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class GetOlderStreamTimelineInteractorTest {
   public static final String USER_ID = "user_id";
   String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock SessionRepository sessionRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock Interactor.Callback<Timeline> callback;
   @Mock Interactor.ErrorCallback errorCallback;

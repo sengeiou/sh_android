@@ -9,8 +9,8 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ActivityRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +45,7 @@ public class ShootrTimelineServiceTest {
     private static final Date DATE_STUB = new Date();
     public static final String LANGUAGE = "LANGUAGE";
     private static final Boolean NOT_PAUSED = false;
-    @Mock ShotRepository remoteShotRepository;
+    @Mock ExternalShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;

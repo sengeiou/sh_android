@@ -7,7 +7,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -31,8 +32,8 @@ public class GetLastShotsInteractorTest {
   private static final String ID_NOT_FOLLOWING = "not_following";
 
   @Mock UserRepository localUserRepository;
-  @Mock ShotRepository localShotRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock Interactor.Callback<List<Shot>> callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock SessionRepository sessionRepository;

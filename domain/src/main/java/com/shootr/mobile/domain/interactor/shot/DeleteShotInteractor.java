@@ -6,14 +6,14 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import javax.inject.Inject;
 
 public class DeleteShotInteractor implements Interactor {
 
-  private final ShotRepository localShotRepository;
-  private final ShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final ActivityRepository localActivityRepository;
   private final PostExecutionThread postExecutionThread;
   private final InteractorHandler interactorHandler;
@@ -21,8 +21,8 @@ public class DeleteShotInteractor implements Interactor {
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  @Inject public DeleteShotInteractor(@Local ShotRepository localShotRepository,
-      @Remote ShotRepository remoteShotRepository,
+  @Inject public DeleteShotInteractor(InternalShotRepository localShotRepository,
+      ExternalShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, PostExecutionThread postExecutionThread,
       InteractorHandler interactorHandler) {
     this.localShotRepository = localShotRepository;
