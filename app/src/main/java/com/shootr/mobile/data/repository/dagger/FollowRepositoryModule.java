@@ -5,7 +5,7 @@ import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.ServiceFollowDataSource;
 import com.shootr.mobile.data.repository.local.LocalFollowRepository;
 import com.shootr.mobile.data.repository.remote.SyncFollowRepository;
-import com.shootr.mobile.domain.repository.FollowRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import dagger.Module;

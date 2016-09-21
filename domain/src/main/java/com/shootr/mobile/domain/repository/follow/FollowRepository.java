@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.follow;
 
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import java.util.List;
