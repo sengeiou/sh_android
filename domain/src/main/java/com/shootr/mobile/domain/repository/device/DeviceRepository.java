@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.repository;
+package com.shootr.mobile.domain.repository.device;
 
 import com.shootr.mobile.domain.model.Device;
 
