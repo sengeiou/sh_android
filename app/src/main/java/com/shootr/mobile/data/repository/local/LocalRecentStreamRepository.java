@@ -24,7 +24,9 @@ public class LocalRecentStreamRepository implements RecentStreamRepository {
   }
 
   @Override public void putRecentStream(Stream stream, long currentTime) {
-    localStreamDataSource.putRecentStream(streamEntityMapper.transform(stream), currentTime);
+    if (stream != null) {
+      localStreamDataSource.putRecentStream(streamEntityMapper.transform(stream), currentTime);
+    }
   }
 
   @Override public List<StreamSearchResult> getDefaultStreams() {
