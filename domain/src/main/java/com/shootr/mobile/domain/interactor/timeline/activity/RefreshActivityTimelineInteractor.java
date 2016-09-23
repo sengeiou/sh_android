@@ -5,10 +5,6 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
-import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
 import javax.inject.Inject;
 
@@ -17,8 +13,6 @@ public class RefreshActivityTimelineInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ShootrTimelineService shootrTimelineService;
-  private final SessionRepository sessionRepository;
-  private final UserRepository localUserRepository;
 
   private String language;
   private Callback<ActivityTimeline> callback;
@@ -26,13 +20,10 @@ public class RefreshActivityTimelineInteractor implements Interactor {
   private Boolean isUserActivityTimeline;
 
   @Inject public RefreshActivityTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
+      PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.shootrTimelineService = shootrTimelineService;
-    this.sessionRepository = sessionRepository;
-    this.localUserRepository = localUserRepository;
   }
 
   public void refreshActivityTimeline(Boolean isUserActivityTimeline, String language,
@@ -53,10 +44,6 @@ public class RefreshActivityTimelineInteractor implements Interactor {
       ActivityTimeline activityTimeline =
           shootrTimelineService.refreshTimelinesForActivity(language, isUserActivityTimeline);
       notifyLoaded(activityTimeline);
-      User user = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-      if (user != null && user.getIdWatchingStream() != null) {
-        shootrTimelineService.refreshTimelinesForStream(user.getIdWatchingStream(), false);
-      }
     } catch (ShootrException error) {
       notifyError(error);
     }
