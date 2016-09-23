@@ -39,4 +39,6 @@ public interface UserRepository {
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
+
+    void forceUpdatePeople();
 }

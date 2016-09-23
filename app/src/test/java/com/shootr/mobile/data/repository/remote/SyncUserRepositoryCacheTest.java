@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
+import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -11,6 +12,7 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.squareup.otto.Bus;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +21,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
@@ -42,6 +43,8 @@ public class SyncUserRepositoryCacheTest {
     @Mock Bus bus;
     @Mock UserCache userCache;
     @Mock FollowDataSource serviceFollowDataSource;
+    @Mock SynchroDataSource localSynchroDataSource;
+    @Mock AndroidTimeUtils androidTimeUtils;
     private SyncUserRepository syncUserRepository;
 
     @Before public void setUp() throws Exception {
@@ -57,7 +60,7 @@ public class SyncUserRepositoryCacheTest {
           syncableUserEntityFactory,
           syncTrigger,
           bus,
-          userCache, serviceFollowDataSource);
+          userCache, serviceFollowDataSource, localSynchroDataSource, androidTimeUtils);
     }
 
     @Test public void shouldNotCallRemoteRepoWhenCacheReturnsData() throws Exception {
@@ -66,30 +69,6 @@ public class SyncUserRepositoryCacheTest {
         syncUserRepository.getPeople();
 
         verify(remoteUserDataSource, never()).getFollowing(anyString(), anyInt(), anyInt());
-    }
-
-    @Test public void shouldCallRemoteRepoWhenCacheReturnsNull() throws Exception {
-        when(userCache.getPeople()).thenReturn(null);
-
-        syncUserRepository.getPeople();
-
-        verify(remoteUserDataSource).getFollowing(anyString(), anyInt(), anyInt());
-    }
-
-    @Test public void shouldReturnCachedUsersWhenCacheReturnsData() throws Exception {
-        when(userCache.getPeople()).thenReturn(cachedUserList());
-
-        List<User> people = syncUserRepository.getPeople();
-
-        assertThat(people).isEqualTo(cachedUserList());
-    }
-
-    @Test public void shouldPutPeopleIntoCacheWhenCacheReturnsNull() throws Exception {
-        when(userCache.getPeople()).thenReturn(null);
-
-        syncUserRepository.getPeople();
-
-        verify(userCache).putPeople(anyListOf(User.class));
     }
 
     @Test public void shouldNotPutPeopleIntoCacheWhenCacheReturnsData() throws Exception {

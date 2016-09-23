@@ -98,7 +98,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getLocalPeople(String idUser) {
-        return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsers(idUser));
+        return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsers(idUser, 0L));
     }
 
     @Override public User updateUserProfile(User updatedUserEntity) {
@@ -127,5 +127,8 @@ public class LocalUserRepository implements UserRepository {
             suggestedPeoples.add(suggestedPeopleEntityMapper.transform(suggestedPeople));
         }
         return suggestedPeoples;
+    }
+    @Override public void forceUpdatePeople() {
+        throw new IllegalArgumentException("forceUpdatePeople has no local implementation");
     }
 }

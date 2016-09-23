@@ -33,5 +33,5 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
 
     List<String> getMutuals();
 
-    List<FollowEntity> getFollows(String idUser, Integer page);
+    List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp);
 }

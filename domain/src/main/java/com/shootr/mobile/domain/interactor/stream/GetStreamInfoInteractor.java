@@ -62,9 +62,9 @@ public class GetStreamInfoInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      obtainLocalStreamInfo();
       obtainRemoteStreamInfo();
     } catch (ServerCommunicationException networkError) {
+      obtainLocalStreamInfo();
       notifyError(networkError);
     }
   }

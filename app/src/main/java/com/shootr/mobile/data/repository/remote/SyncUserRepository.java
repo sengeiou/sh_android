@@ -5,9 +5,11 @@ import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
+import com.shootr.mobile.data.entity.SynchroEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
+import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -26,6 +28,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.IOException;
@@ -37,6 +40,7 @@ import timber.log.Timber;
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     public static final int PAGE_SIZE = 100;
+    public static final int PAGE = 0;
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
@@ -50,73 +54,78 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final Bus bus;
     private final UserCache userCache;
     private final FollowDataSource serviceFollowDataSource;
+    private final SynchroDataSource synchroDataSource;
+    private final AndroidTimeUtils androidTimeUtils;
 
-    @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
+  @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
       @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
       CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
       @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
-      SyncTrigger syncTrigger, @Default Bus bus, UserCache userCache,
-      @Remote FollowDataSource serviceFollowDataSource) {
-        this.localUserDataSource = localUserDataSource;
-        this.remoteUserDataSource = remoteUserDataSource;
-        this.sessionRepository = sessionRepository;
-        this.remoteSuggestedPeopleDataSource = remoteSuggestedPeopleDataSource;
-        this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
-        this.localFollowDataSource = localFollowDataSource;
-        this.userEntityMapper = userEntityMapper;
-        this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
-        this.syncableUserEntityFactory = syncableUserEntityFactory;
-        this.syncTrigger = syncTrigger;
-        this.bus = bus;
-        this.userCache = userCache;
-        this.serviceFollowDataSource = serviceFollowDataSource;
-        this.bus.register(this);
-    }
+      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger,
+      @Default Bus bus, UserCache userCache, @Remote FollowDataSource serviceFollowDataSource,
+      SynchroDataSource synchroDataSource, AndroidTimeUtils androidTimeUtils) {
+    this.localUserDataSource = localUserDataSource;
+    this.remoteUserDataSource = remoteUserDataSource;
+    this.sessionRepository = sessionRepository;
+    this.remoteSuggestedPeopleDataSource = remoteSuggestedPeopleDataSource;
+    this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
+    this.localFollowDataSource = localFollowDataSource;
+    this.userEntityMapper = userEntityMapper;
+    this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
+    this.syncableUserEntityFactory = syncableUserEntityFactory;
+    this.syncTrigger = syncTrigger;
+    this.bus = bus;
+    this.userCache = userCache;
+    this.serviceFollowDataSource = serviceFollowDataSource;
+    this.synchroDataSource = synchroDataSource;
+    this.androidTimeUtils = androidTimeUtils;
+    this.bus.register(this);
+  }
 
-    @Override public synchronized List<User> getPeople() {
-        List<User> people = userCache.getPeople();
-        if (people == null) {
-            Integer page = 0;
-            List<UserEntity> remotePeopleEntities =
-              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), page, PAGE_SIZE);
-            List<User> peopleToCache = new ArrayList<>();
-            List<UserEntity> usersToLocalDatabase = new ArrayList<>();
-            while (!remotePeopleEntities.isEmpty()) {
-                page++;
-                usersToLocalDatabase.addAll(remotePeopleEntities);
-                people = transformUserEntitiesForPeople(remotePeopleEntities);
-                peopleToCache.addAll(people);
-                remotePeopleEntities =
-                  remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), page, PAGE_SIZE);
-            }
-            savePeopleInLocal(usersToLocalDatabase);
-            userCache.putPeople(peopleToCache);
-            return peopleToCache;
-        } else {
-            return people;
-        }
-    }
+  @Override public synchronized List<User> getPeople() {
 
-    private void savePeopleInLocal(List<UserEntity> remotePeople) {
-        markSynchronized(remotePeople);
-        List<FollowEntity> follows = getFollows();
-        localFollowDataSource.putFollows(follows);
-        localUserDataSource.putUsers(remotePeople);
-    }
+    SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.USER);
+    Long userTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.USER);
+    List<UserEntity> remotePeopleEntities =
+        remoteUserDataSource.getRelatedUsers(sessionRepository.getCurrentUserId(), userTimestamp);
+    savePeopleInLocal(remotePeopleEntities);
+    synchroDataSource.putEntity(synchroEntity);
+    return transformUserEntitiesForPeople(
+        localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE, PAGE_SIZE));
+  }
 
-    @NonNull private List<FollowEntity> getFollows() {
-        Integer page = 0;
-        List<FollowEntity> follows =
-          serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
-        while (follows.size() == PAGE_SIZE) {
-            localFollowDataSource.putFollows(follows);
-            page++;
-            follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
-        }
-        return follows;
+  private SynchroEntity getSynchroEntity(String entity) {
+    SynchroEntity synchroEntity = new SynchroEntity();
+    synchroEntity.setEntity(entity);
+    synchroEntity.setTimestamp(androidTimeUtils.getCurrentTime());
+    return synchroEntity;
+  }
+
+  private void savePeopleInLocal(List<UserEntity> remotePeople) {
+    markSynchronized(remotePeople);
+    List<FollowEntity> follows = getFollows();
+    localFollowDataSource.putFollows(follows);
+    localUserDataSource.putUsers(remotePeople);
+  }
+
+  @NonNull private List<FollowEntity> getFollows() {
+    SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.FOLLOW);
+    Long followTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.FOLLOW);
+    Integer page = 0;
+    List<FollowEntity> follows =
+        serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page,
+            followTimestamp);
+    while (follows.size() == PAGE_SIZE) {
+      localFollowDataSource.putFollows(follows);
+      page++;
+      follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page,
+          followTimestamp);
     }
+    synchroDataSource.putEntity(synchroEntity);
+    return follows;
+  }
 
     @Override public User getUserById(String id) {
         UserEntity remoteUser = remoteUserDataSource.getUser(id);
@@ -314,18 +323,15 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
     }
 
-    private void forceUpdatePeopleAndMe() {
+    @Override public void forceUpdatePeople() {
         syncTrigger.triggerSync();
         userCache.invalidatePeople();
         this.getPeople();
-        UserEntity me = remoteUserDataSource.getUser(sessionRepository.getCurrentUserId());
-        markEntitySynchronized(me);
-        localUserDataSource.putUser(me);
     }
 
     @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         try {
-            forceUpdatePeopleAndMe();
+            //TODO test if calll this method is necesary forceUpdatePeopleAndMe();
         } catch (ServerCommunicationException networkError) {
             Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
             /* swallow silently */

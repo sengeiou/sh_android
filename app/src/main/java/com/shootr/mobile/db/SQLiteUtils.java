@@ -657,4 +657,12 @@ public class SQLiteUtils {
         + " TEXT NULL,"
         + DatabaseContract.ShotEventTable.TIMESTAMP
         + " INTEGER NULL)";
+
+    public static final String CREATE_TABLE_SYNCHRO = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.SynchroTable.TABLE
+        + " ("
+        + DatabaseContract.SynchroTable.ENTITY
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.SynchroTable.TIMESTAMP
+        + " INTEGER NULL)";
 }

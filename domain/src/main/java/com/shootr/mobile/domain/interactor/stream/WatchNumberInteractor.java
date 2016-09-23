@@ -27,8 +27,8 @@ public class WatchNumberInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final UserRepository remoteUserRepository;
   private final UserRepository localUserRepository;
+  private final UserRepository remoteUserRepository;
   private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private String idStream;
@@ -39,8 +39,8 @@ public class WatchNumberInteractor implements Interactor {
       @Local UserRepository localUserRepository, ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
-    this.postExecutionThread = postExecutionThread;
     this.remoteUserRepository = remoteUserRepository;
+    this.postExecutionThread = postExecutionThread;
     this.localUserRepository = localUserRepository;
     this.remoteStreamRepository = remoteStreamRepository;
     this.localStreamRepository = localStreamRepository;
@@ -53,9 +53,9 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    List<User> people = getRemotePeopleOrFallbackToLocal();
+    remoteUserRepository.forceUpdatePeople();
     Stream stream = getRemoteStreamOrFallbackToLocal();
-    List<User> watchers = filterUsersWatchingStream(people, idStream);
+    List<User> watchers = filterUsersWatchingStream(stream.getWatchers());
     Integer[] watchersCount = setWatchers(stream, watchers);
     notifyLoaded(watchersCount);
   }
@@ -68,11 +68,11 @@ public class WatchNumberInteractor implements Interactor {
     return watchersCount;
   }
 
-  protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
+  protected List<User> filterUsersWatchingStream(List<User> people) {
     List<User> watchers = new ArrayList<>();
     if (people != null) {
       for (User user : people) {
-        if (idStream.equals(user.getIdWatchingStream())) {
+        if (localUserRepository.isFollowing(user.getIdUser())) {
           watchers.add(user);
         }
       }
@@ -86,18 +86,6 @@ public class WatchNumberInteractor implements Interactor {
         callback.onLoaded(countIsWatching);
       }
     });
-  }
-
-  private List<User> getRemotePeopleOrFallbackToLocal() {
-    List<User> people = localUserRepository.getPeople();
-    if (people.isEmpty()) {
-      try {
-        people = remoteUserRepository.getPeople();
-      } catch (ServerCommunicationException networkError) {
-        /* no-op */
-      }
-    }
-    return people;
   }
 
   private Stream getRemoteStreamOrFallbackToLocal() {
