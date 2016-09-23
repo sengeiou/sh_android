@@ -10,8 +10,10 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
@@ -27,6 +29,8 @@ public class GetOlderHoldingStreamTimelineInteractor
   private final ExternalShotRepository remoteShotRepository;
   private final StreamRepository localStreamRepository;
   private final UserRepository localUserRepository;
+  private final UserRepository remoteUserRepository;
+  private final ExternalStreamRepository externalStreamRepository;
 
   private Long currentOldestDate;
   private Callback<Timeline> callback;
@@ -36,13 +40,16 @@ public class GetOlderHoldingStreamTimelineInteractor
   @Inject public GetOlderHoldingStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
       ExternalShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository) {
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      ExternalStreamRepository externalStreamRepository) {
     this.sessionRepository = sessionRepository;
     this.remoteShotRepository = remoteShotRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
     this.localUserRepository = localUserRepository;
+    this.remoteUserRepository = remoteUserRepository;
+    this.externalStreamRepository = externalStreamRepository;
   }
 
   public void loadOlderHoldingStreamTimeline(String idUser, Long currentOldestDate,
@@ -98,6 +105,18 @@ public class GetOlderHoldingStreamTimelineInteractor
 
     if (visibleStreamId != null) {
       return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
+    } else {
+      return getRemoteVisibleStream();
+    }
+  }
+
+  private Stream getRemoteVisibleStream() {
+    String currentUserId = sessionRepository.getCurrentUserId();
+    User currentUser = remoteUserRepository.getUserById(currentUserId);
+    String visibleStreamId = currentUser.getIdWatchingStream();
+
+    if (visibleStreamId != null) {
+      return externalStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
     }
     return null;
   }

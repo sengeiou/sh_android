@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Arrays;
@@ -42,6 +43,8 @@ public class GetOlderHoldingStreamTimelineInteractorTest {
   @Mock Interactor.Callback<Timeline> callback;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock UserRepository localUserRepository;
+  @Mock UserRepository remoteUserRepository;
+  @Mock ExternalStreamRepository externalStreamRepository;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -49,7 +52,8 @@ public class GetOlderHoldingStreamTimelineInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     getOlderHoldingStreamTimelineInteractor =
         new GetOlderHoldingStreamTimelineInteractor(interactorHandler, postExecutionThread,
-            sessionRepository, remoteShotRepository, localStreamRepository, localUserRepository);
+            sessionRepository, remoteShotRepository, localStreamRepository, localUserRepository,
+            remoteUserRepository, externalStreamRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     when(localUserRepository.getUserById(USER_ID)).thenReturn(user());
     when(localStreamRepository.getStreamById(VISIBLE_STREAM_ID, TYPES_STREAM)).thenReturn(stream());
