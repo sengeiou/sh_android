@@ -88,10 +88,15 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.USER);
     Long userTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.USER);
-    List<UserEntity> remotePeopleEntities =
-        remoteUserDataSource.getRelatedUsers(sessionRepository.getCurrentUserId(), userTimestamp);
-    savePeopleInLocal(remotePeopleEntities);
-    synchroDataSource.putEntity(synchroEntity);
+    try {
+      List<UserEntity> remotePeopleEntities =
+          remoteUserDataSource.getRelatedUsers(sessionRepository.getCurrentUserId(), userTimestamp);
+      savePeopleInLocal(remotePeopleEntities);
+      synchroDataSource.putEntity(synchroEntity);
+    } catch (ServerCommunicationException networkError) {
+      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
+            /* swallow silently */
+    }
     return transformUserEntitiesForPeople(
         localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE, PAGE_SIZE));
   }
