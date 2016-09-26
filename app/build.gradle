@@ -231,6 +231,8 @@ dependencies {
   compile 'com.sackcentury:shinebutton:0.1.4'
   compile "com.daimajia.swipelayout:library:1.2.0@aar"
   compile 'com.adamstyrc.cookiecutter:cookie-cutter:1.0.2'
+  compile 'com.eftimoff:androidplayer:1.0.3@aar'
+  compile 'com.nineoldandroids:library:2.4.0'
 }
 
 /**

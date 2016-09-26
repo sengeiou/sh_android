@@ -20,11 +20,16 @@
         android:background="#388E3C"
         android:gravity="center"
         >
-      <ImageView
-          android:layout_width="28dp"
-          android:layout_height="28dp"
+      <TextView
+          android:id="@+id/hide_highlighted"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_gravity="center"
-          android:src="@drawable/ic_reshoot_white_36dp"
+          android:gravity="center"
+          android:text="@string/menu_share_shot_via_shootr"
+          android:textAllCaps="true"
+          android:textColor="@color/white"
+          android:textStyle="bold"
           />
     </FrameLayout>
 
