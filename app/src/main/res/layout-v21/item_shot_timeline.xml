@@ -216,10 +216,18 @@
   </RelativeLayout>
   <LinearLayout
       android:layout_weight=".1"
-      android:layout_width="2dp"
+      android:layout_width="2.1dp"
+      android:layout_marginRight="2dp"
+      android:layout_height="24dp"
+      android:background="@color/gray_92"
+      android:layout_gravity="center"
+      />
+  <LinearLayout
+      android:layout_weight=".1"
+      android:layout_width="2.3dp"
       android:layout_marginRight="4dp"
       android:layout_height="24dp"
-      android:background="@color/gray_90"
+      android:background="@color/gray_92"
       android:layout_gravity="center"
       />
 </LinearLayout>
