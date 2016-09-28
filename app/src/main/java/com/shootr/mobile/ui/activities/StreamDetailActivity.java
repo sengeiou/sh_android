@@ -396,7 +396,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void setStreamPicture(String picture) {
-        imageLoader.loadStreamPicture(picture, streamPicture);
+        imageLoader.loadStreamPicture(picture, streamPicture, new ImageLoader.CompletedCallback() {
+            @Override public void onCompleted(Bitmap bitmap) {
+                changeToolbarColor(bitmap);
+            }
+        });
     }
 
     @Override
@@ -440,7 +444,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               boolean isFromMemoryCache, boolean isFirstResource) {
 
                 if (counterToolbarPrintTimes == 0) {
-                    changeToolbarColor();
                     counterToolbarPrintTimes++;
                 }
                 return false;
@@ -464,11 +467,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamPictureWithoutText.setVisibility(View.VISIBLE);
     }
 
-    private void changeToolbarColor() {
+    private void changeToolbarColor(Bitmap bitmap) {
         try {
             blurLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_40));
-            streamPicture.buildDrawingCache();
-            Bitmap bitmap = streamPicture.getDrawingCache();
             Palette palette = Palette.from(bitmap).generate();
             collapsingToolbar.setContentScrimColor(getDarkVibrantColor(palette));
             collapsingToolbar.setStatusBarScrimColor(getDarkVibrantColor(palette));

@@ -19,6 +19,11 @@ public class ImageLoaderEditMode implements ImageLoader {
     }
 
     @Override
+    public void loadStreamPicture(String url, ImageView image, CompletedCallback callback) {
+        /* no-op */
+    }
+
+    @Override
     public void loadBlurStreamPicture(String url, ImageView blurView, RequestListener<String, GlideDrawable> listener) {
         /* no-op */
     }

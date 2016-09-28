@@ -18,6 +18,9 @@ public interface ImageLoader {
     void loadStreamPicture(String url, ImageView view);
 
     @UiThread
+    void loadStreamPicture(String url, ImageView image, CompletedCallback callback);
+
+    @UiThread
     void loadBlurStreamPicture(String url, ImageView blurView, RequestListener<String, GlideDrawable> listener);
 
     @UiThread
@@ -50,5 +53,10 @@ public interface ImageLoader {
     interface Callback {
 
         void onLoaded();
+    }
+
+    interface CompletedCallback {
+
+        void onCompleted(Bitmap bitmap);
     }
 }
