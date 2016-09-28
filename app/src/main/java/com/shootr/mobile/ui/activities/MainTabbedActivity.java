@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import com.eftimoff.androidplayer.Player;
+import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -30,6 +33,8 @@ import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
+  private static final int ANIMATION_DURATION = 200;
+  private static final int ANIMATION_TRANSLATION = 500;
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
   private static final int ACTIVITY_FRAGMENT = 3;
@@ -66,6 +71,16 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     loadIntentData();
     handleUpdateVersion();
     handleMultipleActivitiesIntent();
+    setupAnimation();
+  }
+
+  private void setupAnimation() {
+    PropertyAction bottomBarAction = PropertyAction.newPropertyAction(bottomBar)
+        .interpolator(new AccelerateDecelerateInterpolator())
+        .translationY(ANIMATION_TRANSLATION)
+        .duration(ANIMATION_DURATION)
+        .build();
+    Player.init().animate(bottomBarAction).play();
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
@@ -227,7 +242,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         Intent intent =
             ProfileActivity.getIntent(view.getContext(), userModel.getIdUser());
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
       }
     });
   }

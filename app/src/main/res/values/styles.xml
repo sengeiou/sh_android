@@ -425,7 +425,7 @@
         <item name="android:background">@color/white_bar</item>
     </style>
     <style name="StreamDetailBackground">
-        <item name="android:background">#f0f0f0</item>
+        <item name="android:background">@color/gray_80</item>
     </style>
 
     <style name="OverlayTheme" parent="ShootrTheme">

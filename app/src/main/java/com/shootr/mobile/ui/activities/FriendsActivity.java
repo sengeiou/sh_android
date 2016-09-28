@@ -105,7 +105,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   private void openUserProfile(String idUser) {
     startActivityForResult(ProfileActivity.getIntent(this, idUser),
         REQUEST_CAN_CHANGE_DATA);
-    this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
   }
 
   public void onInviteFriendClick() {

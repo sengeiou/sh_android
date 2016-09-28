@@ -290,7 +290,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void onBackPressed() {
     super.onBackPressed();
-    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    overridePendingTransition(R.anim.stay, R.anim.slide_out_bottom);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -308,7 +308,7 @@ public class ProfileActivity extends BaseActivity
     switch (item.getItemId()) {
       case android.R.id.home:
         backStackHandler.handleBackStack(this);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.stay, R.anim.slide_out_bottom);
         return true;
       case R.id.menu_profile_logout:
         profilePresenter.logoutSelected();

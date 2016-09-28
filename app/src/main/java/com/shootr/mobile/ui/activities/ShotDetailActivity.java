@@ -460,6 +460,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override public void openProfile(String idUser) {
         Intent intentForUser = ProfileActivity.getIntent(this, idUser);
         startActivity(intentForUser);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
     }
 
     @Override public void setReplyUsername(String username) {

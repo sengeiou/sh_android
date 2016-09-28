@@ -522,6 +522,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void openProfile(String idUser) {
     Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
     startActivity(profileIntent);
+    getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
   }
 
   private void openImage(View sharedImage, String imageUrl) {

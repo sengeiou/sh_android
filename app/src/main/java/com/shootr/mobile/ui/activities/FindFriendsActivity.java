@@ -271,6 +271,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity
     @OnItemClick(R.id.find_friends_search_results_list) public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
     }
 
     @Override protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
