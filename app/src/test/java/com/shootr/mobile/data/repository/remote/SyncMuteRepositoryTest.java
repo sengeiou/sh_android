@@ -2,7 +2,7 @@ package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
-import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.MuteDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;

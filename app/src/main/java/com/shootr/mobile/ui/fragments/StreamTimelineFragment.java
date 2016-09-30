@@ -23,8 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -522,6 +522,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void openProfile(String idUser) {
     Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
     startActivity(profileIntent);
+    getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
   }
 
   private void openImage(View sharedImage, String imageUrl) {

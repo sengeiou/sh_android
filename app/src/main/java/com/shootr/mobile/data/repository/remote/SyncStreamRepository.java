@@ -3,18 +3,20 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SyncStreamRepository implements StreamRepository, SyncableRepository {
+public class SyncStreamRepository implements StreamRepository, SyncableRepository,
+    ExternalStreamRepository {
 
     private final StreamEntityMapper streamEntityMapper;
     private final StreamDataSource localStreamDataSource;

@@ -117,8 +117,12 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getRelatedUsers(String idUser) {
-        throw new RuntimeException("Server DataSource can't access to this");
+    @Override public List<UserEntity> getRelatedUsers(String idUser, Long timestamp) {
+        try {
+            return userApiService.getRelatedUsers(idUser, timestamp);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public UserEntity updateUser(UserEntity currentUserEntity)

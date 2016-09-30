@@ -1,15 +1,14 @@
 package com.shootr.mobile.domain.interactor.timeline;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
-import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -19,13 +18,13 @@ public class ReloadStreamTimelineInteractor implements Interactor {
   //region Dependencies
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private String idStream;
   private Callback callback;
   private ErrorCallback errorCallback;
 
   @Inject public ReloadStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository) {
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository) {
     this.remoteShotRepository = remoteShotRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;

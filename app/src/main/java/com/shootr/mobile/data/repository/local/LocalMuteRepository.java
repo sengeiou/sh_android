@@ -2,10 +2,10 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.Synchronized;
-import com.shootr.mobile.data.repository.datasource.event.MuteDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.MuteDataSource;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.MuteRepository;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

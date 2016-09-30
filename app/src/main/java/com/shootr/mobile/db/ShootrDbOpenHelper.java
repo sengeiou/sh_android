@@ -40,6 +40,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_HIGHTLIGHTED_SHOT);
         db.execSQL(SQLiteUtils.CREATE_TABLE_RECENT_STREAM);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT_EVENT);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_SYNCHRO);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -64,6 +65,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.HighlightedShotTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.RecentStreamTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotEventTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.SynchroTable.TABLE);
         onCreate(db);
     }
 

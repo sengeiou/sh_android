@@ -1,17 +1,18 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamInfo;
-import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamInfo;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.Preconditions;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class GetStreamInfoInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final UserRepository localUserRepository;
   private final UserRepository remoteUserRepository;
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private final SessionRepository sessionRepository;
   private ErrorCallback errorCallback;
@@ -40,7 +41,7 @@ public class GetStreamInfoInteractor implements Interactor {
 
   @Inject public GetStreamInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, @Remote StreamRepository remoteStreamRepository,
+      @Remote UserRepository remoteUserRepository, ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository, SessionRepository sessionRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
@@ -61,9 +62,9 @@ public class GetStreamInfoInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      obtainLocalStreamInfo();
       obtainRemoteStreamInfo();
     } catch (ServerCommunicationException networkError) {
+      obtainLocalStreamInfo();
       notifyError(networkError);
     }
   }

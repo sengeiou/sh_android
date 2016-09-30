@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.repository.datasource.shot.ShotEventDataSource;
 import com.shootr.mobile.domain.model.shot.ShotEvent;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotEventRepository;
+import com.shootr.mobile.domain.repository.shot.ShotEventRepository;
 import javax.inject.Inject;
 
 public class RemoteShotEventRepository implements ShotEventRepository {

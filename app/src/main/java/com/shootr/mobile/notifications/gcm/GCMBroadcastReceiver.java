@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-
 import timber.log.Timber;
 
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {

@@ -8,7 +8,7 @@ import com.shootr.mobile.data.api.service.ActivityApiService;
 import com.shootr.mobile.data.entity.ActivityEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
-import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;

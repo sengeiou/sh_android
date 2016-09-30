@@ -3,15 +3,15 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.DatabaseMemoryStreamSearchDataSource;
-import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
-import com.shootr.mobile.data.repository.datasource.event.StreamListDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.DatabaseMemoryStreamSearchDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamListDataSource;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +97,6 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         localStreamSearchDataSource.setLastSearchResults(transformStreamEntitiesInStreamSearchEntities(streamEntityList,
           watchers));
         return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
-    }
-
-    @Override public void putDefaultStreams(List<StreamSearchResult> streamSearchResults) {
-        throw new IllegalStateException("Method not implemented in remote repository");
-    }
-
-    @Override public void deleteDefaultStreams() {
-        throw new IllegalStateException("Method not implemented in remote repository");
     }
 
     @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser, String[] types) {

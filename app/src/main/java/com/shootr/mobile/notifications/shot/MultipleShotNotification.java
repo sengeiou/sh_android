@@ -8,11 +8,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.ui.model.ShotModel;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

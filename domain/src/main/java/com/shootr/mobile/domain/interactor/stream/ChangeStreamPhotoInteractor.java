@@ -1,15 +1,16 @@
 package com.shootr.mobile.domain.interactor.stream;
 
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.PhotoService;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class ChangeStreamPhotoInteractor implements Interactor {
   private final PhotoService photoService;
       //TODO does this need to be a repository? It's a bit special, I think
   private final StreamRepository localStreamRepository;
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
 
   private String idStream;
   private File photoFile;
@@ -33,7 +34,7 @@ public class ChangeStreamPhotoInteractor implements Interactor {
   @Inject public ChangeStreamPhotoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ImageResizer imageResizer, PhotoService photoService,
       @Local StreamRepository localStreamRepository,
-      @com.shootr.mobile.domain.repository.Remote StreamRepository remoteStreamRepository) {
+      ExternalStreamRepository remoteStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.imageResizer = imageResizer;

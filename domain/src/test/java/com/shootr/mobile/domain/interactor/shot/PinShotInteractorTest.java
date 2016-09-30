@@ -3,7 +3,7 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -19,7 +19,7 @@ public class PinShotInteractorTest {
 
   public static final String ID_SHOT = "idShot";
   private PinShotInteractor interactor;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock Interactor.CompletedCallback completedCallback;
   @Mock PostExecutionThread postExecutionThread;
 

@@ -4,7 +4,7 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotEventRepository;
+import com.shootr.mobile.domain.repository.shot.ShotEventRepository;
 import javax.inject.Inject;
 
 public class SendShotEventStatsIneteractor implements Interactor {

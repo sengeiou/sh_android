@@ -116,9 +116,9 @@ public class ServiceFollowDataSource implements FollowDataSource {
         throw new IllegalArgumentException("this method should not have remote implementation");
     }
 
-    @Override public List<FollowEntity> getFollows(String idUser, Integer page) {
+    @Override public List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp) {
         try {
-            return userApiService.getFollows(idUser, page);
+            return userApiService.getFollows(idUser, page, timestamp);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

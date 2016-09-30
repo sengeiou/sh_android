@@ -1,13 +1,14 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,8 +25,8 @@ public class IncrementReplyCountShotInteractorTest {
   private static String[] TYPES_SHOT = ShotType.TYPES_SHOWN;
   private static String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   private IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
-  @Mock ShotRepository localShotRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;
 

@@ -74,7 +74,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
-    @Override public List<UserEntity> getRelatedUsers(String idUser) {
+    @Override public List<UserEntity> getRelatedUsers(String idUser, Long timestamp) {
         return userManager.getRelatedUsers(idUser);
     }
 

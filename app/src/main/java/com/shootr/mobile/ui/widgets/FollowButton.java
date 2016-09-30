@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.shootr.mobile.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.shootr.mobile.R;
 
 public class FollowButton extends FrameLayout {
 

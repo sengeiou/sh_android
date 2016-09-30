@@ -1,7 +1,5 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -9,8 +7,12 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -32,9 +34,9 @@ public class MarkNiceShotInteractorTest {
   private static final Long SHOT_USER_ID = 3L;
   private static final String SHOT_USERNAME = "username";
 
-  @Mock NiceShotRepository localNiceShotRepository;
-  @Mock ShotRepository localShotRepository;
-  @Mock ShotRepository remoteShotRepository;
+  @Mock InternalNiceShotRepository localNiceShotRepository;
+  @Mock InternalShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
   @Mock NiceShotRepository remoteNiceShotRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock Interactor.ErrorCallback errorCallback;

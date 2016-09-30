@@ -474,4 +474,21 @@ public class DatabaseContract {
         ID_SHOT, TYPE, TIMESTAMP
     };
   }
+
+  public static final class SynchroTable {
+
+    private SynchroTable() {
+
+    }
+
+    public static final String TABLE = "SynchroTable";
+
+    public static final String ENTITY = "entity";
+    public static final String TIMESTAMP = "timestamp";
+
+    public static final String[] PROJECTION = {
+        ENTITY, TIMESTAMP
+    };
+  }
+
 }

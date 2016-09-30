@@ -1,9 +1,9 @@
 package com.shootr.mobile.data.repository.dagger;
 
-import com.shootr.mobile.data.repository.datasource.event.DatabaseRecentStreamDataSource;
-import com.shootr.mobile.data.repository.datasource.event.RecentStreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.DatabaseRecentStreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.RecentStreamDataSource;
 import com.shootr.mobile.data.repository.local.LocalRecentStreamRepository;
-import com.shootr.mobile.domain.repository.RecentStreamRepository;
+import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

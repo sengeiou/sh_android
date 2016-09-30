@@ -1,10 +1,10 @@
 package com.shootr.mobile.domain.interactor.discover;
 
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.Device;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.repository.DeviceRepository;
+import com.shootr.mobile.domain.repository.device.DeviceRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.utils.DeviceFactory;

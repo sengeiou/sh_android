@@ -11,7 +11,8 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,13 +24,13 @@ public class SyncActivityRepository implements ActivityRepository {
   private final ActivityDataSource localActivityDataSource;
   private final ActivityDataSource remoteActivityDataSource;
   private final ActivityEntityMapper activityEntityMapper;
-  private final ShotRepository remoteShotRepository;
-  private final ShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
 
   @Inject public SyncActivityRepository(@Local ActivityDataSource localActivityDataSource,
       @Remote ActivityDataSource remoteActivityDataSource,
-      ActivityEntityMapper activityEntityMapper, @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository) {
+      ActivityEntityMapper activityEntityMapper, ExternalShotRepository remoteShotRepository,
+      InternalShotRepository localShotRepository) {
     this.localActivityDataSource = localActivityDataSource;
     this.remoteActivityDataSource = remoteActivityDataSource;
     this.activityEntityMapper = activityEntityMapper;

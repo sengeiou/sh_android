@@ -1,14 +1,13 @@
 package com.shootr.mobile.domain.interactor.shot;
 
+import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.executor.PostExecutionThread;
-import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.service.ShotSender;
 import com.shootr.mobile.domain.service.dagger.Background;
 import java.io.File;
@@ -18,14 +17,14 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
-  private final ShotRepository localShotRepository;
-  private final ShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private String replyParentId;
 
   @Inject public PostNewShotAsReplyInteractor(PostExecutionThread postExecutionThread,
       InteractorHandler interactorHandler, SessionRepository sessionRepository,
-      @Background ShotSender shotSender, @Local ShotRepository localShotRepository,
-      @Remote ShotRepository remoteShotRepository) {
+      @Background ShotSender shotSender, InternalShotRepository localShotRepository,
+      ExternalShotRepository remoteShotRepository) {
     super(postExecutionThread, interactorHandler, sessionRepository, shotSender);
     this.localShotRepository = localShotRepository;
     this.remoteShotRepository = remoteShotRepository;

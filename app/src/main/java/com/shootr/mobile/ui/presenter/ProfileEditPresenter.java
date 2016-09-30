@@ -1,12 +1,12 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UpdateUserProfileInteractor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.task.validation.FieldValidationError;
 import com.shootr.mobile.task.validation.profile.BioValidator;

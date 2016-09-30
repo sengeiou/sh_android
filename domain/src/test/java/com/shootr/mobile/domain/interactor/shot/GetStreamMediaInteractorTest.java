@@ -1,14 +1,15 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +28,8 @@ import static org.mockito.Mockito.when;
 public class GetStreamMediaInteractorTest {
 
   private static final String ID_STREAM = "idStream";
-  @Mock ShotRepository remoteShotRepository;
-  @Mock ShotRepository localShotRepository;
+  @Mock ExternalShotRepository remoteShotRepository;
+  @Mock InternalShotRepository localShotRepository;
   @Mock UserRepository remoteUserRepository;
   @Mock UserRepository localUserRepository;
   @Mock SessionRepository sessionRepository;

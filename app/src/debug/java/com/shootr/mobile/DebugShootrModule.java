@@ -3,7 +3,6 @@ package com.shootr.mobile;
 import com.shootr.mobile.data.DebugDataModule;
 import com.shootr.mobile.stetho.StethoModule;
 import com.shootr.mobile.ui.DebugUiModule;
-
 import dagger.Module;
 
 @Module(

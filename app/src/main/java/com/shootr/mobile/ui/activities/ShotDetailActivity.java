@@ -10,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
@@ -460,6 +460,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override public void openProfile(String idUser) {
         Intent intentForUser = ProfileActivity.getIntent(this, idUser);
         startActivity(intentForUser);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
     }
 
     @Override public void setReplyUsername(String username) {

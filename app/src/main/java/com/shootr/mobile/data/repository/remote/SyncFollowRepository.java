@@ -11,7 +11,7 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.repository.FollowRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -115,11 +115,11 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     @Override public List<String> getMutualIdUsers() {
         Integer page = 0;
         List<String> followedIdUsers = new ArrayList<>();
-        List<FollowEntity> follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+        List<FollowEntity> follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page, 0L);
         while (follows.size() == PAGE_SIZE) {
             localFollowDataSource.putFollows(follows);
             page++;
-            follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page);
+            follows = remoteFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page, 0L);
         }
         for (FollowEntity follow : follows) {
             if (follow.isFriend() == 1L) {

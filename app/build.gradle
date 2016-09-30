@@ -38,11 +38,11 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 1
 def versionMinor = 18
-def versionRevision = 1
+def versionRevision = 2
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 37
+def databaseVersion = 38
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -177,15 +177,9 @@ dependencies {
   androidTestCompile 'com.android.support.test:runner:0.4'
   androidTestCompile 'com.android.support.test:rules:0.4'
   androidTestCompile 'com.android.support:support-annotations:24.2.0'
-  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-  testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
   androidTestCompile 'com.android.support.test:runner:0.4'
   androidTestCompile 'com.android.support.test:rules:0.4'
-  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-  testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
   compile 'com.artjimlop:altex-image-downloader:0.0.4'
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
@@ -237,6 +231,8 @@ dependencies {
   compile 'com.sackcentury:shinebutton:0.1.4'
   compile "com.daimajia.swipelayout:library:1.2.0@aar"
   compile 'com.adamstyrc.cookiecutter:cookie-cutter:1.0.2'
+  compile 'com.eftimoff:androidplayer:1.0.3@aar'
+  compile 'com.nineoldandroids:library:2.4.0'
 }
 
 /**

@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.repository;
 
-import com.shootr.mobile.domain.repository.StreamListSynchronizationRepository;
+import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import javax.inject.Inject;
 
 public class MemoryStreamListSynchronizationRepository implements StreamListSynchronizationRepository {

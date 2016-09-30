@@ -4,19 +4,19 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.StreamSearchEntityMapper;
-import com.shootr.mobile.data.repository.datasource.event.StreamDataSource;
-import com.shootr.mobile.data.repository.datasource.event.StreamSearchDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamSearchDataSource;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
-public class LocalStreamSearchRepository implements StreamSearchRepository {
+public class LocalStreamSearchRepository implements InternalStreamSearchRepository {
 
   private final StreamSearchDataSource localStreamSearchDataSource;
   private final StreamSearchEntityMapper streamSearchEntityMapper;

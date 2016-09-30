@@ -17,11 +17,11 @@ import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SyncShotRepository implements ShotRepository, SyncableRepository {
+public class SyncShotRepository implements ExternalShotRepository, SyncableRepository {
 
   private final ShotDataSource remoteShotDataSource;
   private final ShotDataSource localShotDataSource;
@@ -108,10 +108,6 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
             shotTypes));
   }
 
-  @Override public void putShots(List<Shot> shotsFromUser) {
-    throw new IllegalArgumentException("putShots not implemented in remote");
-  }
-
   @Override public void shareShot(String idShot) {
     remoteShotDataSource.shareShot(idShot);
   }
@@ -126,10 +122,6 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
         remoteShotDataSource.getUserShotsForStreamTimeline(timelineParameters);
     localShotDataSource.putShots(shotEntitiesFromTimeline);
     return shotEntityMapper.transform(shotEntitiesFromTimeline);
-  }
-
-  @Override public void deleteShotsByStream(String idStream) {
-    throw new IllegalArgumentException("deleteShotsByStream not implemented in remote");
   }
 
   @Override
@@ -172,10 +164,6 @@ public class SyncShotRepository implements ShotRepository, SyncableRepository {
 
   @Override public void dismissHighlightedShot(String idHighlightedShot) {
     remoteShotDataSource.dismissHighlight(idHighlightedShot);
-  }
-
-  @Override public void hideHighlightedShot(String idHighlightedShot) {
-    throw new IllegalArgumentException("not implemented in remote");
   }
 
   @Override public void dispatchSync() {

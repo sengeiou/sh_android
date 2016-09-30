@@ -14,7 +14,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -54,11 +53,10 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
 
   private FriendsAdapter peopleAdapter;
   private UserListAdapter suggestedPeopleAdapter;
-  private Unbinder unbinder;
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    unbinder = ButterKnife.bind(this);
+    ButterKnife.bind(this);
     analyticsTool.analyticsStart(this, analyticsScreenFriends);
     presenter.setView(this);
     presenter.initialize();
@@ -89,9 +87,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
     super.onPause();
     presenter.pause();
     suggestedPeoplePresenter.pause();
-
     analyticsTool.analyticsStop(this, this);
-    unbinder.unbind();
     presenter.setView(new NullPeopleView());
     suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
   }
@@ -109,7 +105,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   private void openUserProfile(String idUser) {
     startActivityForResult(ProfileActivity.getIntent(this, idUser),
         REQUEST_CAN_CHANGE_DATA);
-    this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
   }
 
   public void onInviteFriendClick() {

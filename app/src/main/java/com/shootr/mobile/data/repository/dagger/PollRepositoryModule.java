@@ -7,8 +7,8 @@ import com.shootr.mobile.data.repository.local.LocalPollRepository;
 import com.shootr.mobile.data.repository.remote.RemotePollRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
+import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import dagger.Module;
 import dagger.Provides;
 

@@ -7,7 +7,7 @@ import com.shootr.mobile.data.repository.local.LocalShotEventRepository;
 import com.shootr.mobile.data.repository.remote.RemoteShotEventRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotEventRepository;
+import com.shootr.mobile.domain.repository.shot.ShotEventRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

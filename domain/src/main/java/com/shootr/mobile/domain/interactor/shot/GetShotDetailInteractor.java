@@ -1,17 +1,16 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
-import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.NicerRepository;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,8 +19,8 @@ public class GetShotDetailInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository localShotRepository;
-  private final ShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final NicerRepository nicerRepository;
 
   private String idShot;
@@ -29,8 +28,8 @@ public class GetShotDetailInteractor implements Interactor {
   private ErrorCallback errorCallback;
 
   @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
-      @Remote ShotRepository remoteShotRepository, NicerRepository nicerRepository) {
+      PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository,
+      ExternalShotRepository remoteShotRepository, NicerRepository nicerRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localShotRepository = localShotRepository;

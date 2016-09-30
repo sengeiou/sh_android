@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,7 +17,7 @@ public class DeleteLocalShotsByStreamInteractorTest {
 
   public static final String ID_STREAM = "id_stream";
   private DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor;
-  @Mock ShotRepository localShotRepository;
+  @Mock InternalShotRepository localShotRepository;
   @Mock Interactor.CompletedCallback callback;
 
   @Before public void setUp() throws Exception {

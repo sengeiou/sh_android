@@ -1,14 +1,14 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
-import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;

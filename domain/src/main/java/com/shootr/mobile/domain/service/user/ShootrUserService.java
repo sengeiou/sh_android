@@ -15,12 +15,12 @@ import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
-import com.shootr.mobile.domain.repository.NicerRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.StreamRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.NicerRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,22 +35,22 @@ public class ShootrUserService {
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
     private final ConfirmEmailGateway confirmEmailGateway;
-    private final StreamRepository remoteStreamRepository;
+    private final ExternalStreamRepository remoteStreamRepository;
     private final ChangePasswordGateway changePasswordGateway;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
     private final NicerRepository nicerRepository;
-    private final NiceShotRepository localNiceShotRepository;
+    private final InternalNiceShotRepository localNiceShotRepository;
     private final ExternalFavoriteRepository favoriteRepository;
 
     @Inject
     public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
         CreateAccountGateway createAccountGateway, LoginGateway loginGateway, ResetPasswordGateway resetPasswordGateway,
         ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway,
-        @Remote StreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
+        ExternalStreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
         ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils,
-        NicerRepository nicerRepository, @Local NiceShotRepository localNiceShotRepository,
+        NicerRepository nicerRepository, InternalNiceShotRepository localNiceShotRepository,
         ExternalFavoriteRepository favoriteRepository) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;

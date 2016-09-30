@@ -1,11 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendDraftInteractor;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.mappers.DraftModelMapper;

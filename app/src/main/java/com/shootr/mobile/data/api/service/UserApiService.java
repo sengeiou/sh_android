@@ -71,6 +71,12 @@ public interface UserApiService {
 
     @DELETE("/ban/{idUser}") Response unban(@Path("idUser") String idUser) throws IOException, ApiException;
 
-    @GET("/follow") List<FollowEntity> getFollows(@Query("idUser") String idUser, @Query("page") Integer page)
-      throws IOException, ApiException;
+    @GET("/follow") List<FollowEntity> getFollows(@Query("idUser") String idUser,
+        @Query("page") Integer page, @Query("modifiedTimestamp") Long timestamp)
+        throws IOException, ApiException;
+
+    @GET("/user/related?includeLinks=false&includeEmbed=true&"
+        + "following=true&followers=false&me=false&streamHolder=false")
+    List<UserEntity> getRelatedUsers(@Query("idUser") String idUser,
+        @Query("modifiedTimestamp") Long timestamp) throws IOException, ApiException;
 }

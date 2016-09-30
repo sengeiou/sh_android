@@ -3,8 +3,8 @@ package com.shootr.mobile.data.repository.sync;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
+import com.shootr.mobile.domain.model.stream.Favorite;
 import javax.inject.Inject;
 
 public class SyncableFavoriteEntityFactory extends SyncableEntityFactory<Favorite, FavoriteEntity> {

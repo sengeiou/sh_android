@@ -1,10 +1,10 @@
 package com.shootr.mobile.domain.interactor.poll;
 
-import com.shootr.mobile.domain.model.poll.Poll;
-import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import javax.inject.Inject;
 

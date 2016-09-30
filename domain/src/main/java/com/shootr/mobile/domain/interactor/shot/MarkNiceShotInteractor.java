@@ -1,8 +1,5 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.NiceNotMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -11,29 +8,33 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.NiceShotRepository;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
+import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import javax.inject.Inject;
 
 public class MarkNiceShotInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final NiceShotRepository localNiceShotRepository;
+  private final InternalNiceShotRepository localNiceShotRepository;
   private final NiceShotRepository remoteNiceShotRepository;
-  private final ShotRepository localShotRepository;
-  private final ShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
 
   private String idShot;
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
   @Inject public MarkNiceShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local NiceShotRepository localNiceShotRepository,
+      PostExecutionThread postExecutionThread, InternalNiceShotRepository localNiceShotRepository,
       @Remote NiceShotRepository remoteNiceShotRepository,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
+      InternalShotRepository localShotRepository, ExternalShotRepository remoteShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localNiceShotRepository = localNiceShotRepository;

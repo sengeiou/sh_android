@@ -2,8 +2,8 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.repository.WatchersRepository;
+import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

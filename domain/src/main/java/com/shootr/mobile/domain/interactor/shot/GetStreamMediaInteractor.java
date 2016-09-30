@@ -1,18 +1,20 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.ShotRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,8 @@ public class GetStreamMediaInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotRepository remoteShotRepository;
-  private final ShotRepository localShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
+  private final InternalShotRepository localShotRepository;
   private final UserRepository remoteUserRepository;
   private final UserRepository localUserRepository;
   private final SessionRepository sessionRepository;
@@ -34,8 +36,8 @@ public class GetStreamMediaInteractor implements Interactor {
   private String currentidUser;
 
   @Inject public GetStreamMediaInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
+      InternalShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
       @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;

@@ -6,14 +6,13 @@ import android.os.Bundle;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.bus.BadgeChanged;
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.bus.BadgeChanged;
-import com.shootr.mobile.domain.bus.BusPublisher;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -38,7 +37,7 @@ public class GCMIntentService extends IntentService {
   @Inject ShotNotificationManager shotNotificationManager;
 
   @Inject ActivityNotificationManager activityNotificationManager;
-  @Inject @Remote ShotRepository remoteShotRepository;
+  @Inject ExternalShotRepository remoteShotRepository;
   @Inject ShotModelMapper shotModelMapper;
   @Inject JsonAdapter jsonAdapter;
   @Inject @ActivityBadgeCount IntPreference badgeCount;

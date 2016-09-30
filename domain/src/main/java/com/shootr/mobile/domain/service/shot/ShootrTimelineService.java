@@ -9,20 +9,20 @@ import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final ActivityRepository localActivityRepository;
   private final ActivityRepository remoteActivityRepository;
   private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
-  @Inject public ShootrTimelineService(@Remote ShotRepository remoteShotRepository,
+  @Inject public ShootrTimelineService(ExternalShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository,
       @Remote ActivityRepository remoteActivityRepository,
       TimelineSynchronizationRepository timelineSynchronizationRepository) {

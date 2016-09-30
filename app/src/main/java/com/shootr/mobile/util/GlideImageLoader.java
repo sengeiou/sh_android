@@ -64,6 +64,15 @@ public class GlideImageLoader implements ImageLoader {
     }
   }
 
+  @Override public void loadStreamPicture(String url, ImageView image, final CompletedCallback callback) {
+    glide.load(url).asBitmap().into(new ImageViewTarget<Bitmap>(image) {
+      @Override protected void setResource(Bitmap resource) {
+        view.setImageBitmap(resource);
+        callback.onCompleted(resource);
+      }
+    });
+  }
+
   @Override public void loadBlurStreamPicture(String url, ImageView blurView,
       RequestListener<String, GlideDrawable> listener) {
     boolean isValidPicture = url != null && !url.isEmpty();

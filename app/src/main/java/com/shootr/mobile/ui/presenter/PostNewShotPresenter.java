@@ -2,13 +2,13 @@ package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
+import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
 import com.shootr.mobile.ui.model.UserModel;

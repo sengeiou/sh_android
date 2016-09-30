@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.interactor.user;
 
-import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.service.user.ShootrUserService;
 import org.junit.Before;
 import org.junit.Test;

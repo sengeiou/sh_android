@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -25,12 +27,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -38,6 +42,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.eftimoff.androidplayer.Player;
+import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
@@ -90,6 +96,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @BindView(R.id.cat_title) TextView streamTitle;
     @BindView(R.id.subtitle) TextView streamSubtitle;
     @BindView(R.id.blurLayout) FrameLayout blurLayout;
+    @BindView(R.id.stream_share_button) FloatingActionButton floatingActionButton;
+    @BindView(R.id.appbar) AppBarLayout appBarLayout;
 
     @BindView(R.id.list) RecyclerView recyclerView;
     @BindView(R.id.loading_progress) View progressView;
@@ -137,6 +145,36 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getSupportActionBar().setTitle(null);
         writePermissionManager.init(this);
         setupAdapter();
+
+        setupAnimation();
+    }
+
+    private void setupAnimation() {
+        final PropertyAction fabAction = PropertyAction.newPropertyAction(floatingActionButton).
+            scaleX(0).
+            scaleY(0).
+            duration(750).
+            interpolator(new AccelerateDecelerateInterpolator()).
+            build();
+        final PropertyAction headerAction = PropertyAction.newPropertyAction(appBarLayout).
+            interpolator(new DecelerateInterpolator()).
+            translationY(-700).
+            duration(600).
+            alpha(0.4f).
+            build();
+        final PropertyAction bottomAction = PropertyAction.newPropertyAction(recyclerView).
+            translationY(500).
+            duration(200).
+            alpha(0f).
+            build();
+
+        Player.init().
+            animate(headerAction).
+            then().
+            animate(bottomAction).
+            then().
+            animate(fabAction).
+            play();
     }
 
     private void setupAdapter() {
@@ -358,7 +396,11 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override public void setStreamPicture(String picture) {
-        imageLoader.loadStreamPicture(picture, streamPicture);
+        imageLoader.loadStreamPicture(picture, streamPicture, new ImageLoader.CompletedCallback() {
+            @Override public void onCompleted(Bitmap bitmap) {
+                changeToolbarColor(bitmap);
+            }
+        });
     }
 
     @Override
@@ -402,7 +444,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               boolean isFromMemoryCache, boolean isFirstResource) {
 
                 if (counterToolbarPrintTimes == 0) {
-                    changeToolbarColor();
                     counterToolbarPrintTimes++;
                 }
                 return false;
@@ -426,11 +467,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamPictureWithoutText.setVisibility(View.VISIBLE);
     }
 
-    private void changeToolbarColor() {
+    private void changeToolbarColor(Bitmap bitmap) {
         try {
             blurLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_40));
-            streamPicture.buildDrawingCache();
-            Bitmap bitmap = streamPicture.getDrawingCache();
             Palette palette = Palette.from(bitmap).generate();
             collapsingToolbar.setContentScrimColor(getDarkVibrantColor(palette));
             collapsingToolbar.setStatusBarScrimColor(getDarkVibrantColor(palette));

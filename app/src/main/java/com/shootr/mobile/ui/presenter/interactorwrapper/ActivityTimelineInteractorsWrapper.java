@@ -1,10 +1,10 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
-import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.activity.GetActivityTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.activity.GetOlderActivityTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.activity.RefreshActivityTimelineInteractor;
+import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import javax.inject.Inject;
 

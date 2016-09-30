@@ -1,11 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserCanPinMessageInteractor;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;

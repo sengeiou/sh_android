@@ -1,9 +1,7 @@
 package com.shootr.mobile.ui;
 
 import android.os.Handler;
-
 import com.shootr.mobile.data.prefs.BooleanPreference;
-
 import timber.log.Timber;
 
 public class DebugPoller extends Poller {

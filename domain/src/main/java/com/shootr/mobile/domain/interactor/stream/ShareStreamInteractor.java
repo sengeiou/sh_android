@@ -5,20 +5,19 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import javax.inject.Inject;
 
 public class ShareStreamInteractor implements Interactor {
 
-  private final StreamRepository remoteStreamRepository;
+  private final ExternalStreamRepository remoteStreamRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private String idStream;
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  @Inject public ShareStreamInteractor(@Remote StreamRepository remoteStreamRepository,
+  @Inject public ShareStreamInteractor(ExternalStreamRepository remoteStreamRepository,
       InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
     this.remoteStreamRepository = remoteStreamRepository;
     this.interactorHandler = interactorHandler;

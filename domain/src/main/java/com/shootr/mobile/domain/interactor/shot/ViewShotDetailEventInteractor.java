@@ -6,7 +6,7 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.ShotEvent;
 import com.shootr.mobile.domain.model.shot.ShotEventType;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.ShotEventRepository;
+import com.shootr.mobile.domain.repository.shot.ShotEventRepository;
 import javax.inject.Inject;
 
 public class ViewShotDetailEventInteractor implements Interactor {

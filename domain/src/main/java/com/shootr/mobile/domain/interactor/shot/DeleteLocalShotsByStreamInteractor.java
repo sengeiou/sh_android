@@ -3,19 +3,18 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import javax.inject.Inject;
 
 public class DeleteLocalShotsByStreamInteractor implements Interactor {
 
-  private final ShotRepository localShotRepository;
+  private final InternalShotRepository localShotRepository;
   private final PostExecutionThread postExecutionThread;
   private final InteractorHandler interactorHandler;
   private String idStream;
   private CompletedCallback completedCallback;
 
-  @Inject public DeleteLocalShotsByStreamInteractor(@Local ShotRepository localShotRepository,
+  @Inject public DeleteLocalShotsByStreamInteractor(InternalShotRepository localShotRepository,
       PostExecutionThread postExecutionThread, InteractorHandler interactorHandler) {
     this.localShotRepository = localShotRepository;
     this.postExecutionThread = postExecutionThread;

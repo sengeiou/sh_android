@@ -8,9 +8,9 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
-import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.StreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
+import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class StreamReactiveSearchInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final StreamSearchRepository remoteStreamSearchRepository;
-  private final StreamSearchRepository localStreamSearchRepository;
+  private final InternalStreamSearchRepository localStreamSearchRepository;
   private final WatchingStreamService watchingStreamService;
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
@@ -29,7 +29,7 @@ public class StreamReactiveSearchInteractor implements Interactor {
   private Interactor.ErrorCallback errorCallback;
 
   @Inject public StreamReactiveSearchInteractor(InteractorHandler interactorHandler,
-      @Local StreamSearchRepository localStreamSearchRepository,
+      InternalStreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository,
       WatchingStreamService watchingStreamService, PostExecutionThread postExecutionThread,
       LocaleProvider localeProvider) {

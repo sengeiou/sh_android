@@ -24,8 +24,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
@@ -290,7 +290,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void onBackPressed() {
     super.onBackPressed();
-    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    overridePendingTransition(R.anim.stay, R.anim.slide_out_bottom);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -308,7 +308,7 @@ public class ProfileActivity extends BaseActivity
     switch (item.getItemId()) {
       case android.R.id.home:
         backStackHandler.handleBackStack(this);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.stay, R.anim.slide_out_bottom);
         return true;
       case R.id.menu_profile_logout:
         profilePresenter.logoutSelected();

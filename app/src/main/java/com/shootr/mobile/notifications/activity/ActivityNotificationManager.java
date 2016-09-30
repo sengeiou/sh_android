@@ -2,8 +2,7 @@ package com.shootr.mobile.notifications.activity;
 
 import android.app.Application;
 import android.content.Context;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.ShotRepository;
+import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
@@ -25,13 +24,13 @@ import javax.inject.Singleton;
   private final NotificationBuilderFactory notificationBuilderFactory;
   private final ImageLoader imageLoader;
   private final List<SingleActivityNotification> activeNotifications = new ArrayList<>();
-  private final ShotRepository remoteShotRepository;
+  private final ExternalShotRepository remoteShotRepository;
   private final ShotModelMapper shotModelMapper;
 
   @Inject public ActivityNotificationManager(Application context,
       AndroidNotificationManager androidNotificationManager,
       NotificationBuilderFactory notificationBuilderFactory, ImageLoader imageLoader,
-      @Remote ShotRepository remoteShotRepository, ShotModelMapper shotModelMapper) {
+      ExternalShotRepository remoteShotRepository, ShotModelMapper shotModelMapper) {
     this.context = context;
     this.androidNotificationManager = androidNotificationManager;
     this.notificationBuilderFactory = notificationBuilderFactory;

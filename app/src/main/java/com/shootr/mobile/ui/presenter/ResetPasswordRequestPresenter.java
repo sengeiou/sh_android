@@ -1,9 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.ResetPasswordInteractor;
+import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.service.ResetPasswordException;
 import com.shootr.mobile.ui.model.ForgotPasswordUserModel;
 import com.shootr.mobile.ui.model.mappers.ForgotPasswordUserModelMapper;
