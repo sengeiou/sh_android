@@ -13,6 +13,29 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.18.2] - 2016-09-30
+
+### Addded
+
+- Synchro table
+- Reshoot lines in timeline
+- Material Animations
+
+### Fixed
+
+- FriendActivity bug on onDestroy
+- Dominant color in streamDetail
+
+### Removed
+- LeakCanary
+
+### Changed
+
+- Refactor in repositories
+- Call to server in timeline and activities
+
+
+
 ## [1.18.1] - 2016-09-20
 
 ### Fixed
