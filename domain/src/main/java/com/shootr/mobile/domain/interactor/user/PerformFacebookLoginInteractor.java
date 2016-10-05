@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.InvalidLoginException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -44,7 +45,9 @@ public class PerformFacebookLoginInteractor implements Interactor {
             notifyLoaded(shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLocale()));
         } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
-        } catch (ShootrException unknownException) {
+        } catch (InvalidLoginMethodForFacebookException loginFacebookError) {
+            notifyError(new LoginException(loginFacebookError));
+        }catch (ShootrException unknownException) {
             notifyError(unknownException);
         }
     }

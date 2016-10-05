@@ -5,6 +5,8 @@ import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.mobile.domain.exception.InvalidForgotPasswordException;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.InvalidPasswordException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
@@ -74,12 +76,14 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public void performLogin(String usernameOrEmail, String password) throws InvalidLoginException {
+    public void performLogin(String usernameOrEmail, String password) throws InvalidLoginException,
+        InvalidLoginMethodForShootrException {
         LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
         retrievePostLoginInformation(loginResult);
     }
 
-    public Boolean performFacebookLogin(String facebookToken, String locale) throws InvalidLoginException {
+    public Boolean performFacebookLogin(String facebookToken, String locale) throws InvalidLoginException,
+        InvalidLoginMethodForFacebookException {
         LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, locale);
         retrievePostLoginInformation(loginResult);
         return loginResult.isNewUser();

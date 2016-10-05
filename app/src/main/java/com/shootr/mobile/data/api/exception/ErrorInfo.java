@@ -21,6 +21,8 @@ public enum ErrorInfo {
   UsernameNotFoundException(1017, "Username not found", 401),
   RevokedAuthorizationException(1018, "Revoked authorization", 401),
   RejectedAuthorizationException(1019, "Rejected authorization", 401),
+  InvalidLoginForFacebookException(1020, "Invalid login method for Facebook account", 401),
+  InvalidLoginForShootrException(1021, "Invalid login method for Shootr account", 401),
   InvalidRequestException(2001, "invalid request due to validation errors", 422),
   InvalidAppVersionException(2002, "invalid App Version", 412),
   InvalidAppVersionPlatformException(2003, "Invalid App platform", 412),

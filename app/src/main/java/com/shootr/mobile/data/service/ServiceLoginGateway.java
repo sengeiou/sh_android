@@ -11,6 +11,8 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.domain.exception.InvalidLoginException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.model.user.User;
@@ -31,21 +33,26 @@ public class ServiceLoginGateway implements LoginGateway {
         this.deviceManager = deviceManager;
     }
 
-    @Override public LoginResult performLogin(String usernameOrEmail, String password) throws InvalidLoginException {
+    @Override public LoginResult performLogin(String usernameOrEmail, String password)
+        throws InvalidLoginException, InvalidLoginMethodForShootrException {
         try {
             UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
             User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
             String sessionToken = loggedInUserEntity.getSessionToken();
             return new LoginResult(loggedInUser, sessionToken);
         } catch (ApiException error) {
-            throw new InvalidLoginException(error);
+            if (String.valueOf(error.getErrorInfo().code()).equals("1020")) {
+                throw new InvalidLoginMethodForShootrException(error);
+            } else {
+                throw new InvalidLoginException(error);
+            }
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         }
     }
 
     @Override public LoginResult performFacebookLogin(String facebookToken, String locale)
-      throws InvalidLoginException {
+      throws InvalidLoginException, InvalidLoginMethodForFacebookException {
         try {
             FacebookUserEntity loggedInUserEntity =
               authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken, locale));
@@ -58,8 +65,12 @@ public class ServiceLoginGateway implements LoginGateway {
                 loginResult.setIsNewUser(false);
             }
             return loginResult;
-        } catch (ApiException apiError) {
-            throw new InvalidLoginException(apiError);
+        } catch (ApiException error) {
+            if (String.valueOf(error.getErrorInfo().code()).equals("1021")) {
+                throw new InvalidLoginMethodForFacebookException(error);
+            } else {
+                throw new InvalidLoginException(error);
+            }
         } catch (IOException networkError) {
             throw new ServerCommunicationException(networkError);
         }
