@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.mobile.ui.adapters.listeners.AvatarClickListener;
@@ -76,6 +77,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
     @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
     @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
+    @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
+    @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
+    @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
 
     @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
@@ -91,6 +95,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Inject CrashReportTool crashReportTool;
     @Inject PinShotPresenter pinShotPresenter;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -101,6 +106,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private LinearLayoutManager linearLayoutManager;
     private int overallYScroll;
     private int replies = 0;
+    private String idUser;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -137,6 +143,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         ShotModel shotModel = extractShotFromIntent();
         if (shotModel != null) {
             setupNewShotBarDelegate(shotModel);
+            idUser = shotModel.getIdUser();
         }
         setupAdapter();
     }
@@ -192,17 +199,36 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShotViaShootr();
-                analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionShareShot,
-                    analyticsLabelShareShot);
+                sendShareShotAnalythics();
             }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
                 detailPresenter.shareShot();
-                analyticsTool.analyticsSendAction(getBaseContext(),
-                    analyticsActionExternalShare,
-                    analyticsLabelExternalShare);
+                sendExternalShareAnalythics();
             }
         }).show();
+    }
+
+    private void sendExternalShareAnalythics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionExternalShare);
+        builder.setLabelId(analyticsLabelExternalShare);
+        builder.setSource(shotDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(idUser);
+        analyticsTool.analyticsSendAction(builder);
+    }
+
+    private void sendShareShotAnalythics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionShareShot);
+        builder.setLabelId(analyticsLabelShareShot);
+        builder.setSource(shotDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(idUser);
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override public void shareShot(ShotModel shotModel) {
@@ -262,12 +288,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             }
         }, //
             new OnNiceShotListener() {
-                @Override public void markNice(String idShot) {
-                    detailPresenter.markNiceShot(idShot);
-                    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
-                        analyticsLabelNice);
+                @Override public void markNice(ShotModel shot) {
+                    detailPresenter.markNiceShot(shot.getIdShot());
+                    sendAnalythics(shot);
                 }
-
                 @Override public void unmarkNice(String idShot) {
                     detailPresenter.unmarkNiceShot(idShot);
                 }
@@ -279,9 +303,32 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             }, new OnUrlClickListener() {
             @Override public void onClick() {
                 detailPresenter.storeClickCount();
+                sendOpenlinkAnalythics();
             }
         }, timeFormatter, getResources(), timeUtils);
         setupDetailList();
+    }
+
+    private void sendOpenlinkAnalythics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionOpenLink);
+        builder.setLabelId(analyticsLabelOpenlink);
+        builder.setSource(shotDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
+    }
+
+    private void sendAnalythics(ShotModel shot) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionNice);
+        builder.setLabelId(analyticsLabelNice);
+        builder.setSource(shotDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(shot.getIdUser());
+        builder.setTargetUsername(shot.getUsername());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     private void setupDetailList() {
@@ -397,8 +444,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     //region Listeners
     public void onShotImageClick(ShotModel shot) {
         detailPresenter.imageClick(shot);
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionPhoto,
-            analyticsLabelPhoto);
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionPhoto);
+        builder.setLabelId(analyticsLabelPhoto);
+        builder.setSource(shotDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     public void onShotAvatarClick(String userId) {

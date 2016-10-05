@@ -11,10 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.DiscoverAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredFavoriteClickListener;
@@ -25,6 +27,7 @@ import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.DiscoverPresenter;
 import com.shootr.mobile.ui.views.DiscoverView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -36,10 +39,16 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   private static final int COLUMNS_COUNT = 2;
 
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_source_discover) String discoverSource;
+
   @Inject DiscoverPresenter discoverPresenter;
   @Inject ImageLoader imageLoader;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AndroidTimeUtils timeUtils;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.discover_recycler) ParallaxRecyclerView discoverList;
   @BindView(R.id.discover_empty) View empty;
@@ -105,6 +114,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     }, new OnDiscoveredFavoriteClickListener() {
       @Override public void onFavoriteClick(String idStream) {
         discoverPresenter.addStreamToFavorites(idStream);
+        sendFavoriteAnalytics();
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
@@ -119,6 +129,16 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
         discoverPresenter.onAvatarClicked(userId);
       }
     }, timeUtils);
+  }
+
+  private void sendFavoriteAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(discoverSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void setupGridlayout() {

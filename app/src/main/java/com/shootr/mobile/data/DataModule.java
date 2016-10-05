@@ -54,7 +54,7 @@ import com.shootr.mobile.util.DefaultTabUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.GlideImageLoader;
-import com.shootr.mobile.util.GoogleAnalyticsTool;
+import com.shootr.mobile.util.GenericAnalyticsTool;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.InitialsLoaderTool;
@@ -211,7 +211,7 @@ import static android.content.Context.MODE_PRIVATE;
   }
 
   @Provides @Singleton AnalyticsTool provideAnalyticsTool() {
-    return new GoogleAnalyticsTool();
+    return new GenericAnalyticsTool();
   }
 
   @Provides @Singleton CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {

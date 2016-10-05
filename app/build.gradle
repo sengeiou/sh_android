@@ -42,7 +42,7 @@ def versionRevision = 5
 
 def isSnapshot = true
 def isPreProduction = false
-def databaseVersion = 38
+def databaseVersion = 39
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -233,6 +233,7 @@ dependencies {
   compile 'com.adamstyrc.cookiecutter:cookie-cutter:1.0.2'
   compile 'com.eftimoff:androidplayer:1.0.3@aar'
   compile 'com.nineoldandroids:library:2.4.0'
+  compile "com.mixpanel.android:mixpanel-android:4.+"
 }
 
 /**

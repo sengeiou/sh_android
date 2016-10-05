@@ -5,7 +5,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
+import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.domain.utils.TimeUtils;
@@ -38,6 +40,8 @@ public class MainScreenPresenterTest {
     @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
     @Mock SendShotEventStatsIneteractor sendShoEventStatsIneteractor;
+    @Mock GetUserByIdInteractor getUserByIdInteractor;
+    @Mock SessionRepository sessionRepository;
     @Mock IntPreference badgeCount;
     @Mock Bus bus;
     @Mock MainScreenView view;
@@ -49,7 +53,8 @@ public class MainScreenPresenterTest {
           new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         mainScreenPresenter =
           new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
-              sendShoEventStatsIneteractor, userModelMapper, badgeCount, bus);
+              sendShoEventStatsIneteractor, getUserByIdInteractor, sessionRepository,
+              userModelMapper, badgeCount, bus);
         mainScreenPresenter.setView(view);
     }
 

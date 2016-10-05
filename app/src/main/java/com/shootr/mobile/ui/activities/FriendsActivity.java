@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -41,6 +42,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.userlist_list) ListView userlistListView;
   @BindView(R.id.userlist_progress) ProgressBar progressBar;
@@ -50,6 +52,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   @BindString(R.string.analytics_screen_friends) String analyticsScreenFriends;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+  @BindString(R.string.analytics_source_friends) String friendsSource;
 
   private FriendsAdapter peopleAdapter;
   private UserListAdapter suggestedPeopleAdapter;
@@ -206,8 +209,21 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   }
 
   @Override public void follow(int position) {
-    suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
-    analyticsTool.analyticsSendAction(this, analyticsActionFollow, analyticsLabelFollow);
+    UserModel user = getSuggestedPeopleAdapter().getItem(position);
+    suggestedPeoplePresenter.followUser(user);
+    sendAnalytics(user);
+  }
+
+  private void sendAnalytics(UserModel user) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelFollow);
+    builder.setSource(friendsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(user.getIdUser());
+    builder.setTargetUsername(user.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void unFollow(final int position) {

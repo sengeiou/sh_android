@@ -81,9 +81,9 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnReshootClickListener onReshootClickListener) {
+      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
-    bindComment(shot, null);
+    bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
     setupShotMediaContentVisibility(shot);
@@ -293,7 +293,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
         if (shot.isMarkedAsNice()) {
           onNiceShotListener.unmarkNice(shot.getIdShot());
         } else {
-          onNiceShotListener.markNice(shot.getIdShot());
+          onNiceShotListener.markNice(shot);
         }
       }
     });

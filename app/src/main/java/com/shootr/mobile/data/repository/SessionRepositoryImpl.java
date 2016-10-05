@@ -60,7 +60,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         crashReportTool.setUserId(userId);
         crashReportTool.setUserName(loggedInUser.getUsername());
         crashReportTool.setUserEmail(loggedInUser.getEmail());
-        analyticsTool.setUserId(userId);
+        analyticsTool.setUser(loggedInUser);
     }
 
     @Override public void destroySession() {

@@ -14,6 +14,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
 import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.base.BaseSearchFragment;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -41,12 +43,19 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   @BindView(R.id.find_streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
   @BindString(R.string.shared_stream_notification) String sharedStream;
+  @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
+  @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
+  @BindString(R.string.analytics_source_discover_stream_search) String discoverSearchSource;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
 
   @Inject FindStreamsPresenter findStreamsPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject ShareManager shareManager;
   @Inject InitialsLoader initialsLoader;
   @Inject ImageLoader imageLoader;
+  @Inject SessionRepository sessionRepository;
+  @Inject AnalyticsTool analyticsTool;
 
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -92,6 +101,7 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
         new Runnable() {
           @Override public void run() {
             findStreamsPresenter.addToFavorites(stream);
+            sendFavoriteAnalytics();
           }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
@@ -100,8 +110,29 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
     }).addAction(R.string.share_via, new Runnable() {
       @Override public void run() {
         shareStream(stream);
+        sendExternalShareAnalytics();
       }
     }).show();
+  }
+
+  private void sendFavoriteAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(discoverSearchSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendExternalShareAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionExternalShare);
+    builder.setLabelId(analyticsLabelExternalShare);
+    builder.setSource(discoverSearchSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void shareStream(StreamResultModel stream) {

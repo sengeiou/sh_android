@@ -236,7 +236,7 @@ public class ShotViewHolder {
                 if (shot.isMarkedAsNice()) {
                     onNiceShotListener.unmarkNice(shot.getIdShot());
                 } else {
-                    onNiceShotListener.markNice(shot.getIdShot());
+                    onNiceShotListener.markNice(shot);
                 }
             }
         });

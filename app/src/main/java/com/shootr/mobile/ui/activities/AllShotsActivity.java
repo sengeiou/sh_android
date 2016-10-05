@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -56,6 +57,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
   @Inject NumberFormatUtil numberFormatUtil;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.all_shots_list) ListView listView;
   @BindView(R.id.timeline_empty) View emptyView;
@@ -72,6 +74,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
+  @BindString(R.string.analytics_source_all_shots) String allShotsSource;
 
   @Deprecated private TimelineAdapter adapter;
 
@@ -170,10 +173,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     };
 
     OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
-      @Override public void markNice(String idShot) {
-        presenter.markNiceShot(idShot);
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
-            analyticsLabelNice);
+      @Override public void markNice(ShotModel shot) {
+        presenter.markNiceShot(shot.getIdShot());
+          sendNiceAnalytics(shot);
       }
 
       @Override public void unmarkNice(String idShot) {
@@ -204,6 +206,18 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
           }
         };
     listView.setAdapter(adapter);
+  }
+
+  private void sendNiceAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionNice);
+    builder.setLabelId(analyticsLabelNice);
+    builder.setSource(allShotsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void shareShot(ShotModel shotModel) {
@@ -465,21 +479,44 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
         new Runnable() {
           @Override public void run() {
             presenter.shareShot(shotModel);
-            analyticsTool.analyticsSendAction(getBaseContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendShareAnalytics(shotModel);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getBaseContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendExternalShareAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
         Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
       }
     });
+  }
+
+  private void sendExternalShareAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setAction(getString(R.string.menu_share_shot_via));
+    builder.setActionId(analyticsActionExternalShare);
+    builder.setLabelId(analyticsLabelExternalShare);
+    builder.setSource(allShotsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendShareAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setAction(getString(R.string.menu_share_shot_via_shootr));
+    builder.setActionId(analyticsActionShareShot);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(allShotsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void openDeleteConfirmation(final ShotModel shotModel) {

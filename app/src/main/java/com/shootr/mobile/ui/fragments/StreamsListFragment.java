@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
@@ -53,9 +54,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
+  @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
-  @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
-  @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
+  @BindString(R.string.analytics_source_streams) String streamsSource;
 
   @Inject StreamsListPresenter presenter;
   @Inject ImageLoader imageLoader;
@@ -63,6 +65,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
   @Inject InitialsLoader initialsLoader;
+  @Inject SessionRepository sessionRepository;
 
     private StreamsListAdapter adapter;
     private Unbinder unbinder;
@@ -181,8 +184,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         R.string.add_to_favorites_menu_title, new Runnable() {
           @Override public void run() {
             presenter.addToFavorites(stream);
-            analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
-                analyticsLabelFavoriteStream);
+            sendFavoriteAnalytics();
           }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
@@ -191,10 +193,29 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }).addAction(R.string.share_via, new Runnable() {
       @Override public void run() {
         shareStream(stream);
-        analyticsTool.analyticsSendAction(getContext(), analyticsActionExternalShare,
-            analyticsLabelExternalShare);
+        sendExternalShareAnalytics();
       }
     });
+  }
+
+  private void sendExternalShareAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionExternalShareStream);
+    builder.setLabelId(analyticsLabelExternalShareStream);
+    builder.setSource(streamsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendFavoriteAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(streamsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void shareStream(StreamResultModel stream) {

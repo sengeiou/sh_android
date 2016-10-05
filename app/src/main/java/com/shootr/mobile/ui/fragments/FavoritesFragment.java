@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
@@ -41,12 +42,16 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
   @Inject InitialsLoader initialsLoader;
+  @Inject SessionRepository sessionRepository;
 
     @BindView(R.id.favorites_list) RecyclerView favoritesList;
     @BindView(R.id.favorites_empty) View empty;
     @BindView(R.id.favorites_loading) View loading;
     @BindString(R.string.shared_stream_notification) String sharedStream;
     @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
+  @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
+  @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
+  @BindString(R.string.analytics_source_streams) String streamsSource;
 
     private WatchableStreamsAdapter adapter;
     private Unbinder unbinder;
@@ -123,9 +128,20 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
           }).addAction(R.string.share_via, new Runnable() {
               @Override public void run() {
                   shareStream(stream);
+                sendExternalShareAnalytics();
               }
           });
     }
+
+  private void sendExternalShareAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionExternalShareStream);
+    builder.setLabelId(analyticsLabelExternalShareStream);
+    builder.setSource(streamsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
 
   private void shareStream(StreamResultModel stream) {
     Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream.getStreamModel());

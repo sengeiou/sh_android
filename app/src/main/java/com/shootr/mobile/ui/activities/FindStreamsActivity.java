@@ -15,6 +15,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
 import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
@@ -46,11 +48,18 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @BindView(R.id.find_streams_loading) View loadingView;
     @BindString(R.string.added_to_favorites) String addedToFavorites;
     @BindString(R.string.shared_stream_notification) String sharedStream;
+    @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
+    @BindString(R.string.analytics_source_find_streams) String findStreamsSource;
+    @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+    @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject FeedbackMessage feedbackMessage;
     @Inject ShareManager shareManager;
     @Inject InitialsLoader initialsLoader;
+    @Inject SessionRepository sessionRepository;
+    @Inject AnalyticsTool analyticsTool;
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -107,6 +116,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title, new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.addToFavorites(stream);
+                sendFavoriteAnalytics();
             }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
@@ -115,8 +125,29 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 shareStream(stream);
+                sendExternalShareAnalytics();
             }
         }).show();
+    }
+
+    private void sendFavoriteAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(this);
+        builder.setActionId(analyticsActionFavoriteStream);
+        builder.setLabelId(analyticsLabelFavoriteStream);
+        builder.setSource(findStreamsSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
+    }
+
+    private void sendExternalShareAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(this);
+        builder.setActionId(analyticsActionExternalShare);
+        builder.setLabelId(analyticsLabelExternalShare);
+        builder.setSource(findStreamsSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     private void shareStream(StreamResultModel stream) {

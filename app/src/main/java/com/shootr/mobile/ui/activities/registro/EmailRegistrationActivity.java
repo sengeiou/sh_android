@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.mobile.ui.activities.WelcomePageActivity;
@@ -36,6 +37,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Inject EmailRegistrationPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -144,8 +146,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
           .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmAccountCreation();
-                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionSignup,
-                      analyticsLabelSignup);
+                  sendAnalytics();
               }
           })
           .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -154,6 +155,15 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
               }
           })
           .show();
+    }
+
+    private void sendAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionSignup);
+        builder.setLabelId(analyticsLabelSignup);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override public void focusOnEmailField() {

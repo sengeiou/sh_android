@@ -76,7 +76,7 @@ public interface UserApiService {
         throws IOException, ApiException;
 
     @GET("/user/related?includeLinks=false&includeEmbed=true&"
-        + "following=true&followers=false&me=false&streamHolder=false")
+        + "following=true&followers=false&me=true&streamHolder=false")
     List<UserEntity> getRelatedUsers(@Query("idUser") String idUser,
         @Query("modifiedTimestamp") Long timestamp) throws IOException, ApiException;
 }

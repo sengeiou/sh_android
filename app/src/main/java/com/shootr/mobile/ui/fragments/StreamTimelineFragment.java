@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -136,6 +137,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
   @Inject NumberFormatUtil numberFormatUtil;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -168,6 +170,15 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
+  @BindString(R.string.analytics_source_timeline) String timelineSource;
+  @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
+  @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
+  @BindString(R.string.analytics_label_open_pin_message_link) String analyticsLabelOpenPinMessagelink;
+  @BindString(R.string.analytics_action_open_pin_message_link) String analyticsActionOpenPinMessageLink;
+  @BindString(R.string.analytics_action_timeline) String analyticsTimelineAction;
+  @BindString(R.string.analytics_label_timeline) String timelineLabelAnalytics;
+  @BindString(R.string.analytics_action_timeline_scroll) String analyticsTimelineScrollAction;
+  @BindString(R.string.analytics_label_timeline_scroll) String analyticsLabelTimelineScrollAction;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -188,6 +199,7 @@ public class StreamTimelineFragment extends BaseFragment
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
+  private boolean scrollMoved;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -204,6 +216,17 @@ public class StreamTimelineFragment extends BaseFragment
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
     shotsTimeline.setLayoutManager(preCachingLayoutManager);
     shotsTimeline.setHasFixedSize(false);
+    shotsTimeline.setOnTouchListener(new View.OnTouchListener() {
+      @Override public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+          if (!scrollMoved) {
+            sendTimelineScrollAnalytics();
+            scrollMoved = true;
+          }
+        }
+        return false;
+      }
+    });
     newShotBarContainer.setVisibility(View.GONE);
     return fragmentView;
   }
@@ -230,6 +253,7 @@ public class StreamTimelineFragment extends BaseFragment
     setStreamTitleClickListener(idStream);
     setupPresentersInitialization(idStream, streamAuthorIdUser, streamMode);
     analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+    sendTimelineAnalytics();
   }
 
   protected void setupPresentersInitialization(String idStream, String streamAuthorIdUser,
@@ -282,8 +306,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
-        analyticsTool.analyticsSendAction(getContext(), analyticsActionFavoriteStream,
-            analyticsLabelFavoriteStream);
+        sendFavoriteAnalytics();
         return true;
       case R.id.menu_stream_remove_favorite:
         streamTimelineOptionsPresenter.removeFromFavorites();
@@ -297,6 +320,35 @@ public class StreamTimelineFragment extends BaseFragment
       default:
         return super.onOptionsItemSelected(item);
     }
+  }
+
+  private void sendTimelineAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsTimelineAction);
+    builder.setLabelId(timelineLabelAnalytics);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendTimelineScrollAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsTimelineScrollAction);
+    builder.setLabelId(analyticsLabelTimelineScrollAction);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+
+  private void sendFavoriteAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void onResume() {
@@ -410,10 +462,9 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }, //
         new OnNiceShotListener() {
-          @Override public void markNice(String idShot) {
-            streamTimelinePresenter.markNiceShot(idShot);
-            analyticsTool.analyticsSendAction(getContext(), analyticsActionNice,
-                analyticsLabelNice);
+          @Override public void markNice(ShotModel shot) {
+            streamTimelinePresenter.markNiceShot(shot.getIdShot());
+              sendNiceAnalytics(shot);
           }
 
           @Override public void unmarkNice(String idShot) {
@@ -459,6 +510,11 @@ public class StreamTimelineFragment extends BaseFragment
     }, new OnUrlClickListener() {
       @Override public void onClick() {
         highlightedShotPresenter.storeClickCount();
+        sendOpenlinkAnalythics();
+      }
+    }, new OnUrlClickListener() {
+      @Override public void onClick() {
+        sendOpenlinkAnalythics();
       }
     }, new OnHideHighlightShot() {
       @Override public void onHideClick(HighlightedShotModel highlightedShotModel) {
@@ -469,9 +525,32 @@ public class StreamTimelineFragment extends BaseFragment
     }, new OnReshootClickListener() {
       @Override public void onReshootClick(ShotModel shot) {
         streamTimelinePresenter.shareShot(shot);
+        sendReshootAnalytics(shot);
       }
     }, numberFormatUtil, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
+  }
+
+  private void sendOpenlinkAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenLink);
+    builder.setLabelId(analyticsLabelOpenlink);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendNiceAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionNice);
+    builder.setLabelId(analyticsLabelNice);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void setupSwipeRefreshLayout() {
@@ -587,7 +666,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupImageDialog(ShotModel shot) {
-    analyticsTool.analyticsSendAction(getContext(), analyticsActionPhoto, analyticsLabelPhoto);
+    sendImageAnalytics();
     LayoutInflater inflater = getActivity().getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_shot_image, null);
     TextView user = (TextView) dialogView.findViewById(R.id.shot_user_name);
@@ -600,6 +679,16 @@ public class StreamTimelineFragment extends BaseFragment
     shotImageDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
     shotImageDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
     shotImageDialog.show();
+  }
+
+  private void sendImageAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionPhoto);
+    builder.setLabelId(analyticsLabelPhoto);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void loadImages(ShotModel shot, ImageView image, CircleImageView avatar) {
@@ -783,9 +872,23 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       streamMessage.setVisibility(View.VISIBLE);
       streamMessage.setText(topic);
-      streamMessage.addLinks();
+      streamMessage.addLinks(new OnUrlClickListener() {
+        @Override public void onClick() {
+          sendPinMessageOpenlinkAnalythics();
+        }
+      });
       streamMessage.setLinkTextColor(Color.WHITE);
     }
+  }
+
+  private void sendPinMessageOpenlinkAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenPinMessageLink);
+    builder.setLabelId(analyticsLabelOpenPinMessagelink);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void hidePinnedMessage() {
@@ -1033,15 +1136,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1052,6 +1152,32 @@ public class StreamTimelineFragment extends BaseFragment
         openDeleteConfirmation(shotModel);
       }
     }).show();
+  }
+
+  private void sendShareExternalShotAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setAction(getString(R.string.menu_share_shot_via));
+    builder.setActionId(analyticsActionExternalShare);
+    builder.setLabelId(analyticsLabelExternalShare);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendReshootAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setAction(getString(R.string.menu_share_shot_via_shootr));
+    builder.setActionId(analyticsActionShareShot);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void showAuthorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel) {
@@ -1066,15 +1192,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1127,15 +1250,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1156,15 +1276,11 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
-        shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1182,15 +1298,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1212,15 +1325,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1244,15 +1354,12 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
-            analyticsTool.analyticsSendAction(getContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendReshootAnalytics(shot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shot);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1270,15 +1377,12 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
-            analyticsTool.analyticsSendAction(getContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendReshootAnalytics(shot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shot);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1337,15 +1441,12 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
-            analyticsTool.analyticsSendAction(getContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendReshootAnalytics(shot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shot);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1367,15 +1468,12 @@ public class StreamTimelineFragment extends BaseFragment
         new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shot);
-            analyticsTool.analyticsSendAction(getContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendReshootAnalytics(shot);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shot);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shot);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1424,15 +1522,12 @@ public class StreamTimelineFragment extends BaseFragment
     }).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
       @Override public void run() {
         streamTimelinePresenter.shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getContext(),
-            getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-            analyticsLabelShareShot);
+        sendReshootAnalytics(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
@@ -1462,15 +1557,12 @@ public class StreamTimelineFragment extends BaseFragment
         R.string.menu_share_shot_via_shootr, new Runnable() {
           @Override public void run() {
             streamTimelinePresenter.shareShot(shotModel);
-            analyticsTool.analyticsSendAction(getContext(),
-                getString(R.string.menu_share_shot_via_shootr), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendReshootAnalytics(shotModel);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
-        analyticsTool.analyticsSendAction(getContext(), getString(R.string.menu_share_shot_via),
-            analyticsActionExternalShare, analyticsLabelExternalShare);
+        sendShareExternalShotAnalytics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {

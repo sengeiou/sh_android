@@ -9,4 +9,6 @@ public interface SettingsView {
   void setNiceShotSettings(Integer startedShootingPushSettings);
 
   void setReShotSettings(Integer reShotPushSettings);
+
+  void sendNotificationAnalytics(String type);
 }

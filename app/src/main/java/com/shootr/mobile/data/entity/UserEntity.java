@@ -26,6 +26,8 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private Long createdStreamsCount;
     private Long favoritedStreamsCount;
     private Boolean socialLogin;
+    private String analyticsUserType;
+    private Long receivedReactions;
 
     public UserEntity() {
     }
@@ -229,5 +231,21 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setSocialLogin(Boolean socialLogin) {
         this.socialLogin = socialLogin;
+    }
+
+    public String getAnalyticsUserType() {
+        return analyticsUserType;
+    }
+
+    public void setAnalyticsUserType(String analyticsUserType) {
+        this.analyticsUserType = analyticsUserType;
+    }
+
+    public Long getReceivedReactions() {
+        return receivedReactions;
+    }
+
+    public void setReceivedReactions(Long receivedReactions) {
+        this.receivedReactions = receivedReactions;
     }
 }

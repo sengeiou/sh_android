@@ -214,7 +214,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
                 if (shotModel.isMarkedAsNice()) {
                     onNiceShotListener.unmarkNice(shotModel.getIdShot());
                 } else {
-                    onNiceShotListener.markNice(shotModel.getIdShot());
+                    onNiceShotListener.markNice(shotModel);
                 }
             }
         });

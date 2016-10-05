@@ -54,6 +54,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.SOCIAL_LOGIN
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.RECEIVED_REACTIONS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -502,6 +506,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.SOCIAL_LOGIN
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.RECEIVED_REACTIONS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED

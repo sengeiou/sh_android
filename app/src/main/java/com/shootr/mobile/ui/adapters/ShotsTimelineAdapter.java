@@ -51,6 +51,7 @@ public class ShotsTimelineAdapter
   private final OnImageClickListener onImageClickListener;
   private final OnHideHighlightShot onHideHighlightClickListener;
   private final OnUrlClickListener onUrlClickListener;
+  private final OnUrlClickListener onShotUrlClickListener;
   private final OnReshootClickListener onReshootClickListener;
   private final NumberFormatUtil numberFormatUtil;
 
@@ -64,6 +65,7 @@ public class ShotsTimelineAdapter
       ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
+      OnUrlClickListener onShotUrlClickListener,
       OnHideHighlightShot onHideHighlightClickListener,
       OnReshootClickListener onReshootClickListener, NumberFormatUtil numberFormatUtil,
       Boolean isAdmin) {
@@ -74,6 +76,7 @@ public class ShotsTimelineAdapter
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.onUrlClickListener = onUrlClickListener;
+    this.onShotUrlClickListener = onShotUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
     this.onReshootClickListener = onReshootClickListener;
     this.numberFormatUtil = numberFormatUtil;
@@ -126,7 +129,7 @@ public class ShotsTimelineAdapter
 
   private void renderShotViewHolder(ShotTimelineViewHolder holder, int position) {
     holder.render(shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onReshootClickListener);
+        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onReshootClickListener, onShotUrlClickListener);
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
