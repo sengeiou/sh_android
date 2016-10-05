@@ -128,6 +128,7 @@ public class SQLiteUtils {
       + " INT NOT NULL,"
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
+
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ShotQueueTable.TABLE
       + " ("
@@ -282,6 +283,8 @@ public class SQLiteUtils {
       + " VARCHAR(255) NOT NULL,"
       + DatabaseContract.StreamTable.PHOTO
       + " TEXT NULL,"
+      + DatabaseContract.StreamTable.LANDSCAPE_PHOTO
+      + " TEXT NULL,"
       + DatabaseContract.StreamTable.DESCRIPTION
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.TOPIC
@@ -329,6 +332,8 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.TITLE
       + " VARCHAR(255) NOT NULL,"
       + DatabaseContract.StreamTable.PHOTO
+      + " TEXT NULL,"
+      + DatabaseContract.StreamTable.LANDSCAPE_PHOTO
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.COUNTRY
       + " TEXT NULL,"

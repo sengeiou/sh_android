@@ -37,9 +37,9 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     this.onDiscoveredStreamClickListener = onDiscoveredStreamClickListener;
   }
 
-  public void render(final DiscoveredModel discoveredModel) {
+  public void render(final DiscoveredModel discoveredModel,  Boolean landscape) {
     final StreamModel streamModel = discoveredModel.getStreamModel();
-    setupInfo(streamModel);
+    setupInfo(streamModel, landscape);
     container.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onDiscoveredStreamClickListener.onStreamClick(streamModel.getIdStream());
@@ -48,16 +48,30 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     setupFavoriteButton(discoveredModel);
   }
 
-  private void setupInfo(StreamModel streamModel) {
-    imageLoader.loadDiscoverImage(streamModel.getPicture(), streamImage,
-        new ImageLoader.Callback() {
-          @Override public void onLoaded() {
-            streamImage.centerCrop(true);
-          }
-        });
+  private void setupInfo(StreamModel streamModel, boolean landscape) {
+    setupImage(streamModel, landscape);
     streamImage.reuse();
     streamTitle.setText(streamModel.getTitle());
     streamDescription.setText(streamModel.getDescription());
+  }
+
+  private void setupImage(StreamModel streamModel, boolean landscape) {
+    if (landscape) {
+      imageLoader.loadDiscoverImage(
+          streamModel.getLandscapePicture() != null ? streamModel.getLandscapePicture()
+              : streamModel.getPicture(), streamImage, new ImageLoader.Callback() {
+            @Override public void onLoaded() {
+              streamImage.centerCrop(true);
+            }
+          });
+    } else {
+      imageLoader.loadDiscoverImage(streamModel.getPicture(), streamImage,
+          new ImageLoader.Callback() {
+            @Override public void onLoaded() {
+              streamImage.centerCrop(true);
+            }
+          });
+    }
   }
 
   private void setupFavoriteButton(final DiscoveredModel discoveredModel) {

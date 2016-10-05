@@ -196,6 +196,7 @@ public class DatabaseContract {
     public static final String USERNAME = "userName";
     public static final String TITLE = "title";
     public static final String PHOTO = "photo";
+    public static final String LANDSCAPE_PHOTO = "LandscapePhoto";
     public static final String DESCRIPTION = "description";
     public static final String LAST_UPDATED_USER = "lastUpdatedUser";
     public static final String COUNTRY = "country";
@@ -210,10 +211,10 @@ public class DatabaseContract {
     public static final String READ_WRITE_MODE = "readWriteMode";
 
     public static final String[] PROJECTION = {
-        ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, DESCRIPTION, TOPIC,
-        BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES, TOTAL_WATCHERS,
-        HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, REMOVED, DELETED, REVISION,
-        SYNCHRONIZED
+        ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, LANDSCAPE_PHOTO,
+        DESCRIPTION, TOPIC, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES,
+        TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, REMOVED,
+        DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -224,9 +225,9 @@ public class DatabaseContract {
     public static final String WATCHERS = "watchers";
 
     public static final String[] PROJECTION = {
-        WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, DESCRIPTION, TOPIC, REMOVED,
-        MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS,
-        READ_WRITE_MODE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, LANDSCAPE_PHOTO, DESCRIPTION,
+        TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS,
+        TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 

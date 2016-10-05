@@ -13,6 +13,7 @@ public class Stream {
     private String authorUsername;
     private String title;
     private String picture;
+    private String landscapePicture;
     private String description;
     private String topic;
     private String country;
@@ -80,6 +81,14 @@ public class Stream {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getLandscapePicture() {
+        return landscapePicture;
+    }
+
+    public void setLandscapePicture(String landscapePicture) {
+        this.landscapePicture = landscapePicture;
     }
 
     public String getAuthorId() {
