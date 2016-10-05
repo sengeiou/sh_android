@@ -128,8 +128,8 @@ public class ShotsTimelineAdapter
   }
 
   private void renderShotViewHolder(ShotTimelineViewHolder holder, int position) {
-    holder.render(shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onReshootClickListener, onShotUrlClickListener);
+    holder.render(shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
+        onTouchListener, onImageClickListener, onReshootClickListener, onShotUrlClickListener);
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
