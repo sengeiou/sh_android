@@ -28,7 +28,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
   private static final String SIGNUP_METHOD = "Signup method";
-  private static final String EMAIL = "Email";
+  private static final String EMAIL = "$email";
   private static final String FIRST_NAME = "$first_name";
   private static final String ACTIVATED = "Activated";
   private static final String TYPE = "Type";
