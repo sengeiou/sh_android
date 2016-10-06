@@ -129,6 +129,7 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_profile) String profileSource;
+  @BindString(R.string.analytics_source_friends) String whoToFollowSource;
 
   @Inject ImageLoader imageLoader;
   @Inject IntentFactory intentFactory;
@@ -478,8 +479,22 @@ public class ProfileActivity extends BaseActivity
     builder.setSource(profileSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idUser);
+    builder.setTargetUsername(profilePresenter.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
+
+  private void sendWhoToFollowAnalytics(UserModel userModel) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(whoToFollowSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(userModel.getIdUser());
+    builder.setTargetUsername(userModel.getUsername());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
 
   private void unfollowUser() {
     profilePresenter.unfollow();
@@ -918,6 +933,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void follow(int position) {
     suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
+    sendWhoToFollowAnalytics(getSuggestedPeopleAdapter().getItem(position));
   }
 
   @Override public void unFollow(final int position) {
