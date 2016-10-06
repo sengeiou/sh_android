@@ -1138,8 +1138,6 @@ public class ProfileActivity extends BaseActivity
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(profileSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(shot.getIdUser());
-    builder.setTargetUsername(shot.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
 

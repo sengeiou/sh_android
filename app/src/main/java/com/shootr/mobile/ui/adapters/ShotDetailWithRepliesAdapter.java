@@ -318,5 +318,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         ShotModel shotModel = replies.get(replyPosition);
         holder.bindView(shotModel);
     }
+
+    public ShotModel getMainShot() {
+        return mainShot;
+    }
+
     //endregion
 }

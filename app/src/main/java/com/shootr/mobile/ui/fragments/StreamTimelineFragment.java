@@ -1183,8 +1183,6 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(shot.getIdUser());
-    builder.setTargetUsername(shot.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
 

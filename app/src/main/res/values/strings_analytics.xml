@@ -63,6 +63,7 @@
     <string name="analytics_source_shot_detail">shot detail</string>
     <string name="analytics_source_profile">profile</string>
     <string name="analytics_source_friends">whoToFollow</string>
+    <string name="analytics_source_favorites">favorites</string>
     <string name="analytics_source_followers">followers</string>
     <string name="analytics_source_following">following</string>
     <string name="analytics_source_discover">discover</string>
