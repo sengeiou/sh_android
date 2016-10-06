@@ -42,12 +42,13 @@ public class PerformFacebookLoginInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLocale()));
+            notifyLoaded(
+                shootrUserService.performFacebookLogin(facebookToken, localeProvider.getLocale()));
         } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
         } catch (InvalidLoginMethodForFacebookException loginFacebookError) {
             notifyError(loginFacebookError);
-        }catch (ShootrException unknownException) {
+        } catch (ShootrException unknownException) {
             notifyError(unknownException);
         }
     }
