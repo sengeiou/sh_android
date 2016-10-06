@@ -112,9 +112,9 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
         discoverPresenter.streamClicked(streamId);
       }
     }, new OnDiscoveredFavoriteClickListener() {
-      @Override public void onFavoriteClick(String idStream) {
+      @Override public void onFavoriteClick(String idStream, String streamTitle) {
         discoverPresenter.addStreamToFavorites(idStream);
-        sendFavoriteAnalytics();
+        sendFavoriteAnalytics(idStream, streamTitle);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
@@ -131,13 +131,15 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     }, timeUtils);
   }
 
-  private void sendFavoriteAnalytics() {
+  private void sendFavoriteAnalytics(String idStream, String streamTitle) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(discoverSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setStreamName(streamTitle);
+    builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
   }
 

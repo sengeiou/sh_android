@@ -116,7 +116,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         new CustomContextMenu.Builder(this).addAction(R.string.add_to_favorites_menu_title, new Runnable() {
             @Override public void run() {
                 findStreamsPresenter.addToFavorites(stream);
-                sendFavoriteAnalytics();
+                sendFavoriteAnalytics(stream);
             }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
             @Override public void run() {
@@ -125,28 +125,32 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 shareStream(stream);
-                sendExternalShareAnalytics();
+                sendExternalShareAnalytics(stream);
             }
         }).show();
     }
 
-    private void sendFavoriteAnalytics() {
+    private void sendFavoriteAnalytics(StreamResultModel streamResultModel) {
         AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
         builder.setContext(this);
         builder.setActionId(analyticsActionFavoriteStream);
         builder.setLabelId(analyticsLabelFavoriteStream);
         builder.setSource(findStreamsSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setStreamName(streamResultModel.getStreamModel().getTitle());
+        builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
         analyticsTool.analyticsSendAction(builder);
     }
 
-    private void sendExternalShareAnalytics() {
+    private void sendExternalShareAnalytics(StreamResultModel streamResultModel) {
         AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
         builder.setContext(this);
         builder.setActionId(analyticsActionExternalShare);
         builder.setLabelId(analyticsLabelExternalShare);
         builder.setSource(findStreamsSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setStreamName(streamResultModel.getStreamModel().getTitle());
+        builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
         analyticsTool.analyticsSendAction(builder);
     }
 

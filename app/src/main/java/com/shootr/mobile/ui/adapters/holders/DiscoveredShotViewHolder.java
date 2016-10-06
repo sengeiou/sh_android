@@ -125,7 +125,8 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
     favoriteButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (((ShineButton) view).isChecked()) {
-          onFavoriteClickListener.onFavoriteClick(discoveredModel.getShotModel().getStreamId());
+          onFavoriteClickListener.onFavoriteClick(discoveredModel.getShotModel().getStreamId(),
+              discoveredModel.getShotModel().getStreamTitle());
         } else {
           onFavoriteClickListener.onRemoveFavoriteClick(
               discoveredModel.getShotModel().getStreamId());
