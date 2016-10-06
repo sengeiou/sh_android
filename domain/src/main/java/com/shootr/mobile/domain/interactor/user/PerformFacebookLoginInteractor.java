@@ -46,7 +46,7 @@ public class PerformFacebookLoginInteractor implements Interactor {
         } catch (InvalidLoginException loginError) {
             notifyError(new LoginException(loginError));
         } catch (InvalidLoginMethodForFacebookException loginFacebookError) {
-            notifyError(new LoginException(loginFacebookError));
+            notifyError(loginFacebookError);
         }catch (ShootrException unknownException) {
             notifyError(unknownException);
         }

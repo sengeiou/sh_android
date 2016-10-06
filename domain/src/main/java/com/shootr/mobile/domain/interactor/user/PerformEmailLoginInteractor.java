@@ -46,7 +46,7 @@ public class PerformEmailLoginInteractor implements Interactor {
         } catch (InvalidLoginException loginError) {
             handleServerError(new LoginException(loginError));
         } catch (InvalidLoginMethodForShootrException loginShootrError) {
-            notifyError(new LoginException(loginShootrError));
+            notifyError(loginShootrError);
         }catch (ShootrException unknownError) {
             handleServerError(unknownError);
         }

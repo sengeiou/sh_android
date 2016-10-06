@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -135,6 +137,10 @@ public class ErrorMessageFactory {
             return context.getString(R.string.user_not_found);
         } else if (error instanceof LoginException) {
             return context.getString(R.string.error_login_credentials_invalid);
+        } else if (error instanceof InvalidLoginMethodForShootrException) {
+            return context.getString(R.string.error_login_shootr_method);
+        } else if (error instanceof InvalidLoginMethodForFacebookException) {
+            return context.getString(R.string.error_login_facebook_method);
         } else if (error instanceof ChangePasswordInvalidException) {
             return context.getString(R.string.error_message_invalid_change_password);
         } else if (error instanceof CannotFollowBlockedUserException) {
