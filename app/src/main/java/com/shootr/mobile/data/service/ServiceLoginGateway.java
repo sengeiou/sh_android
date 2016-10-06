@@ -42,7 +42,8 @@ public class ServiceLoginGateway implements LoginGateway {
             String sessionToken = loggedInUserEntity.getSessionToken();
             return new LoginResult(loggedInUser, sessionToken);
         } catch (ApiException error) {
-            if (String.valueOf(error.getErrorInfo().code()).equals(ShootrError.ERROR_CODE_INVALID_LOGIN_SHOOTR_METHOD)) {
+            if (String.valueOf(error.getErrorInfo().code())
+                .equals(ShootrError.ERROR_CODE_INVALID_LOGIN_SHOOTR_METHOD)) {
                 throw new InvalidLoginMethodForShootrException(error);
             } else {
                 throw new InvalidLoginException(error);
@@ -67,7 +68,8 @@ public class ServiceLoginGateway implements LoginGateway {
             }
             return loginResult;
         } catch (ApiException error) {
-            if (String.valueOf(error.getErrorInfo().code()).equals(ShootrError.ERROR_CODE_INVALID_LOGIN_FACEBOOK_METHOD)) {
+            if (String.valueOf(error.getErrorInfo().code())
+                .equals(ShootrError.ERROR_CODE_INVALID_LOGIN_FACEBOOK_METHOD)) {
                 throw new InvalidLoginMethodForFacebookException(error);
             } else {
                 throw new InvalidLoginException(error);
