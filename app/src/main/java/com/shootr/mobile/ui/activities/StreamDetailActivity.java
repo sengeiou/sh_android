@@ -200,6 +200,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                   if (isChecked) {
                       streamDetailPresenter.onMuteChecked();
+                      sendMuteAnalytics();
                   } else {
                       streamDetailPresenter.onUnmuteChecked();
                   }
@@ -237,6 +238,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           }); //follow
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void sendMuteAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionMute);
+        builder.setLabelId(analyticsLabelMute);
+        builder.setSource(streamDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     private void sendAnalythics(UserModel user) {
@@ -675,15 +686,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
-        if (isChecked) {
-            AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-            builder.setContext(getBaseContext());
-            builder.setActionId(analyticsActionMute);
-            builder.setLabelId(analyticsLabelMute);
-            builder.setSource(streamDetailSource);
-            builder.setUser(sessionRepository.getCurrentUser());
-            analyticsTool.analyticsSendAction(builder);
-        }
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {

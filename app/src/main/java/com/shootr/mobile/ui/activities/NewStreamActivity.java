@@ -194,6 +194,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override public void closeScreenWithResult(String streamId) {
         setResult(RESULT_OK, new Intent() //
           .putExtra(KEY_STREAM_ID, streamId));
+        sendAnalytics(streamId, getStreamTitle());
         finish();
     }
 
@@ -212,26 +213,26 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),  true);
-                    sendAnalytics();
                 }
             })
           .setNegativeButton(getString(R.string.stream_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(), false);
-                    sendAnalytics();
                 }
             })
           .create()
           .show();
     }
 
-    private void sendAnalytics() {
+    private void sendAnalytics(String streamId, String streamName) {
         AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
         builder.setContext(getBaseContext());
         builder.setActionId(analyticsActionCreateStream);
         builder.setLabelId(analyticsLabelCreateStream);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setStreamName(streamName);
+        builder.setIdStream(streamId);
         analyticsTool.analyticsSendAction(builder);
     }
 
