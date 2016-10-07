@@ -356,6 +356,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setActionId(analyticsTimelineScrollAction);
     builder.setLabelId(analyticsLabelTimelineScrollAction);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -366,6 +368,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
   }
@@ -909,6 +913,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelOpenPinMessagelink);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
