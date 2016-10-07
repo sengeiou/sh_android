@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.InvalidLoginException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -44,6 +45,8 @@ public class PerformEmailLoginInteractor implements Interactor {
             notifyLoaded();
         } catch (InvalidLoginException loginError) {
             handleServerError(new LoginException(loginError));
+        } catch (InvalidLoginMethodForShootrException loginShootrError) {
+            notifyError(loginShootrError);
         } catch (ShootrException unknownError) {
             handleServerError(unknownError);
         }

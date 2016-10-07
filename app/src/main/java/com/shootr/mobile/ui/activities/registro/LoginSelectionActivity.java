@@ -64,6 +64,7 @@ public class LoginSelectionActivity extends BaseActivity {
     @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
 
     @BindString(R.string.error_facebook_login) String facebookError;
+    @BindString(R.string.error_login_facebook_method) String facebookMethodError;
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
     @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
@@ -252,7 +253,7 @@ public class LoginSelectionActivity extends BaseActivity {
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override public void onError(ShootrException error) {
-                        showFacebookError();
+                        showFacebookError(facebookMethodError);
                         hideLoading();
                     }
                 });
@@ -260,7 +261,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
             @Override public void onError(FacebookException e) {
                 Timber.e(e, "Failed to obtain FB access token");
-                showFacebookError();
+                showFacebookError(facebookError);
                 hideLoading();
             }
 
@@ -307,7 +308,7 @@ public class LoginSelectionActivity extends BaseActivity {
         buttonsContainer.setVisibility(View.VISIBLE);
     }
 
-    private void showFacebookError() {
-        feedbackMessage.show(getView(), facebookError);
+    private void showFacebookError(String errorMessage) {
+        feedbackMessage.show(getView(), errorMessage);
     }
 }

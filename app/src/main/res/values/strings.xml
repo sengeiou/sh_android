@@ -121,6 +121,8 @@
   <string name="error_has_voted">You voted already</string>
   <string name="error_image_upload">Error trying to upload image</string>
   <string name="error_login_credentials_invalid">Id or password are not valid</string>
+  <string name="error_login_facebook_method">Logged by Shootr account!</string>
+  <string name="error_login_shootr_method">Logged by facebook!</string>
   <string name="error_message">Shootr encountered a problem and needs to close</string>
   <!-- Profile: Bio -->
   <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
