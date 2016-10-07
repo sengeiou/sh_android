@@ -32,7 +32,6 @@ import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.data.prefs.StringPreference;
-import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
