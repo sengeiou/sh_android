@@ -146,7 +146,6 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
           .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmAccountCreation();
-                  sendAnalytics();
               }
           })
           .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -179,6 +178,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void navigateToWelcomePage() {
+        sendAnalytics();
         finish();
         Intent navigateToWelcomePageIntent = new Intent(this, WelcomePageActivity.class);
         navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
