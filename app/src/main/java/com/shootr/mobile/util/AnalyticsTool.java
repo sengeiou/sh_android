@@ -27,6 +27,8 @@ public interface AnalyticsTool {
     String targetUsername;
     String notificationName;
     String pushRedirection;
+    String streamName;
+    String idStream;
     User user;
 
     public Context getContext() {
@@ -107,6 +109,22 @@ public interface AnalyticsTool {
 
     public void setTargetUsername(String targetUsername) {
       this.targetUsername = targetUsername;
+    }
+
+    public String getStreamName() {
+      return streamName;
+    }
+
+    public void setStreamName(String streamName) {
+      this.streamName = streamName;
+    }
+
+    public String getIdStream() {
+      return idStream;
+    }
+
+    public void setIdStream(String idStream) {
+      this.idStream = idStream;
     }
   }
 }

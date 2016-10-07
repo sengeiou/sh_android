@@ -56,6 +56,7 @@ public class UserFollowsFragment extends BaseFragment
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
     @BindString(R.string.analytics_source_followers) String followsSource;
+    @BindString(R.string.analytics_source_following) String followingsSource;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
@@ -162,7 +163,11 @@ public class UserFollowsFragment extends BaseFragment
         builder.setContext(getContext());
         builder.setActionId(analyticsActionFollow);
         builder.setLabelId(analyticsLabelFollow);
-        builder.setSource(followsSource);
+        if (followType == 0) {
+            builder.setSource(followsSource);
+        } else {
+            builder.setSource(followingsSource);
+        }
         builder.setUser(sessionRepository.getCurrentUser());
         builder.setIdTargetUser(user.getIdUser());
         builder.setTargetUsername(user.getUsername());

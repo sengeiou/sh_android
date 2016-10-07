@@ -28,7 +28,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
   private static final String SIGNUP_METHOD = "Signup method";
-  private static final String EMAIL = "Email";
+  private static final String EMAIL = "$email";
   private static final String FIRST_NAME = "$first_name";
   private static final String ACTIVATED = "Activated";
   private static final String TYPE = "Type";
@@ -87,21 +87,32 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String targetUsername = builder.getTargetUsername();
     String notificationName = builder.getNotificationName();
     String pushRedirection = builder.getPushRedirection();
+    String idStream = builder.getIdStream();
+    String stream = builder.getStreamName();
     User user = builder.getUser();
 
     sendGoogleAnalytics(context, action, actionId, labelId);
-    sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName, pushRedirection);
+    sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername,
+        notificationName, pushRedirection, idStream, stream);
   }
 
   private void sendMixPanelAnalytics(User user, String actionId, String source,
       String idTargetUser, String targetUsername,
-      String notificationName, String pushRedirection) {
+      String notificationName, String pushRedirection, String idStream, String streamName) {
     try {
       if (user != null) {
         JSONObject props = new JSONObject();
         props.put(DISTINCT_ID, user.getIdUser());
-        props.put(ID_STREAM, user.getIdWatchingStream());
-        props.put(STREAM_TITLE, user.getWatchingStreamTitle());
+        if (idStream == null) {
+          props.put(ID_STREAM, user.getIdWatchingStream());
+        } else {
+          props.put(ID_STREAM, idStream);
+        }
+        if (streamName == null) {
+          props.put(STREAM_TITLE, user.getWatchingStreamTitle());
+        } else {
+          props.put(STREAM_TITLE, streamName);
+        }
         props.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
         props.put(USER_TYPE, user.getAnalyticsUserType());
         if (source != null) {

@@ -39,11 +39,13 @@ import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.WelcomePageActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -64,6 +66,8 @@ public class LoginSelectionActivity extends BaseActivity {
     @BindString(R.string.error_facebook_login) String facebookError;
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
     @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
+    @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
     @Inject FeedbackMessage feedbackMessage;
@@ -74,6 +78,8 @@ public class LoginSelectionActivity extends BaseActivity {
     @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
+    @Inject SessionRepository sessionRepository;
+    @Inject AnalyticsTool analyticsTool;
 
     private CallbackManager callbackManager;
     private LoginManager loginManager;
@@ -236,6 +242,7 @@ public class LoginSelectionActivity extends BaseActivity {
                         finish();
                         Intent intent;
                         if (isNewUser) {
+                            sendAnalytics();
                             intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
                         } else {
                             intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
@@ -261,6 +268,15 @@ public class LoginSelectionActivity extends BaseActivity {
                 hideLoading();
             }
         });
+    }
+
+    private void sendAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionSignup);
+        builder.setLabelId(analyticsLabelSignup);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @OnClick(R.id.login_btn_login) public void login() {

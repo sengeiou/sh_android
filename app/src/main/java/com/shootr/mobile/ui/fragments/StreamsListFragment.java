@@ -184,7 +184,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         R.string.add_to_favorites_menu_title, new Runnable() {
           @Override public void run() {
             presenter.addToFavorites(stream);
-            sendFavoriteAnalytics();
+            sendFavoriteAnalytics(stream);
           }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
@@ -193,28 +193,32 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }).addAction(R.string.share_via, new Runnable() {
       @Override public void run() {
         shareStream(stream);
-        sendExternalShareAnalytics();
+        sendExternalShareAnalytics(stream);
       }
     });
   }
 
-  private void sendExternalShareAnalytics() {
+  private void sendExternalShareAnalytics(StreamResultModel streamResultModel) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionExternalShareStream);
     builder.setLabelId(analyticsLabelExternalShareStream);
     builder.setSource(streamsSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setStreamName(streamResultModel.getStreamModel().getTitle());
+    builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
     analyticsTool.analyticsSendAction(builder);
   }
 
-  private void sendFavoriteAnalytics() {
+  private void sendFavoriteAnalytics(StreamResultModel streamResultModel) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(streamsSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setStreamName(streamResultModel.getStreamModel().getTitle());
+    builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
     analyticsTool.analyticsSendAction(builder);
   }
 

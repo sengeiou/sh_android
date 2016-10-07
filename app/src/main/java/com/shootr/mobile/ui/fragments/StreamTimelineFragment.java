@@ -179,6 +179,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_timeline) String timelineLabelAnalytics;
   @BindString(R.string.analytics_action_timeline_scroll) String analyticsTimelineScrollAction;
   @BindString(R.string.analytics_label_timeline_scroll) String analyticsLabelTimelineScrollAction;
+  @BindString(R.string.analytics_action_mute) String analyticsActionMute;
+  @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -200,6 +202,8 @@ public class StreamTimelineFragment extends BaseFragment
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
   private boolean scrollMoved;
+  private String idStream;
+  private String streamTitle;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -246,7 +250,7 @@ public class StreamTimelineFragment extends BaseFragment
     super.onActivityCreated(savedInstanceState);
     initializeViews();
     setHasOptionsMenu(true);
-    String idStream = getArguments().getString(EXTRA_STREAM_ID);
+    idStream = getArguments().getString(EXTRA_STREAM_ID);
     String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
@@ -313,6 +317,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_mute_stream:
         streamTimelineOptionsPresenter.mute();
+        sendMuteAnalytics();
         return true;
       case R.id.menu_unmute_stream:
         streamTimelineOptionsPresenter.unmute();
@@ -322,12 +327,26 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
+  private void sendMuteAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionMute);
+    builder.setLabelId(analyticsLabelMute);
+    builder.setSource(timelineSource);
+    builder.setStreamName(streamTitle);
+    builder.setIdStream(idStream);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
   private void sendTimelineAnalytics() {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsTimelineAction);
     builder.setLabelId(timelineLabelAnalytics);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -337,6 +356,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setActionId(analyticsTimelineScrollAction);
     builder.setLabelId(analyticsLabelTimelineScrollAction);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -347,6 +368,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
   }
@@ -606,6 +629,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void openImage(View sharedImage, String imageUrl) {
     Intent intent = PhotoViewActivity.getIntentForActivity(getContext(), imageUrl, imageUrl);
+    sendImageAnalytics();
     startActivity(intent);
   }
 
@@ -630,6 +654,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setStreamTitle(String streamTitle) {
+    this.streamTitle = streamTitle;
     toolbarDecorator.setTitle(streamTitle);
   }
 
@@ -888,6 +913,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelOpenPinMessagelink);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -1162,8 +1189,6 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(shot.getIdUser());
-    builder.setTargetUsername(shot.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
 

@@ -79,7 +79,8 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     favoriteButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (((ShineButton) view).isChecked()) {
-          onFavoriteClickListener.onFavoriteClick(discoveredModel.getStreamModel().getIdStream());
+          onFavoriteClickListener.onFavoriteClick(discoveredModel.getStreamModel().getIdStream(),
+              discoveredModel.getStreamModel().getTitle());
         } else {
           onFavoriteClickListener.onRemoveFavoriteClick(discoveredModel.getStreamModel().getIdStream());
         }

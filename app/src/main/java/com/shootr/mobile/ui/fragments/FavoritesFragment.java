@@ -51,7 +51,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
   @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
   @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
-  @BindString(R.string.analytics_source_streams) String streamsSource;
+  @BindString(R.string.analytics_source_favorites) String streamsSource;
 
     private WatchableStreamsAdapter adapter;
     private Unbinder unbinder;
@@ -128,17 +128,19 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
           }).addAction(R.string.share_via, new Runnable() {
               @Override public void run() {
                   shareStream(stream);
-                sendExternalShareAnalytics();
+                sendExternalShareAnalytics(stream);
               }
           });
     }
 
-  private void sendExternalShareAnalytics() {
+  private void sendExternalShareAnalytics(StreamResultModel stream) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionExternalShareStream);
     builder.setLabelId(analyticsLabelExternalShareStream);
     builder.setSource(streamsSource);
+    builder.setTargetUsername(stream.getStreamModel().getAuthorUsername());
+    builder.setIdTargetUser(stream.getStreamModel().getAuthorId());
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
   }

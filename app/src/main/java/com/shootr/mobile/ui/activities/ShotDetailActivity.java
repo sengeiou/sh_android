@@ -228,6 +228,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         builder.setSource(shotDetailSource);
         builder.setUser(sessionRepository.getCurrentUser());
         builder.setIdTargetUser(idUser);
+        if (detailAdapter.getMainShot() != null) {
+            builder.setTargetUsername(detailAdapter.getMainShot().getUsername());
+            builder.setIdStream(detailAdapter.getMainShot().getStreamId());
+            builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
+        }
         analyticsTool.analyticsSendAction(builder);
     }
 
