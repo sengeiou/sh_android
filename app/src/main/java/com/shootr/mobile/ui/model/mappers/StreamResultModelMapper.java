@@ -12,31 +12,34 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 @Singleton public class StreamResultModelMapper {
 
-    private final StreamModelMapper streamModelMapper;
+  private final StreamModelMapper streamModelMapper;
 
-    @Inject public StreamResultModelMapper(StreamModelMapper streamModelMapper) {
-        this.streamModelMapper = streamModelMapper;
+  @Inject public StreamResultModelMapper(StreamModelMapper streamModelMapper) {
+    this.streamModelMapper = streamModelMapper;
+  }
+
+  public StreamResultModel transform(StreamSearchResult streamSearchResult) {
+    if (streamSearchResult == null) {
+      return null;
     }
+    checkNotNull(streamSearchResult.getStream());
+    StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
 
-    public StreamResultModel transform(StreamSearchResult streamSearchResult) {
-        if (streamSearchResult == null) {
-            return null;
-        }
-        checkNotNull(streamSearchResult.getStream());
-        StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
+    StreamResultModel resultModel = new StreamResultModel();
+    resultModel.setStreamModel(streamModel);
+    resultModel.setWatchers(streamSearchResult.getFollowingWatchersNumber());
+    resultModel.setIsWatching(streamSearchResult.isWatching());
+    return resultModel;
+  }
 
-        StreamResultModel resultModel = new StreamResultModel();
-        resultModel.setStreamModel(streamModel);
-        resultModel.setWatchers(streamSearchResult.getFollowingWatchersNumber());
-        resultModel.setIsWatching(streamSearchResult.isWatching());
-        return resultModel;
+  public List<StreamResultModel> transform(List<StreamSearchResult> streamSearchResults) {
+    List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
+    for (StreamSearchResult streamSearchResult : streamSearchResults) {
+      if (streamSearchResult.getStream() != null
+          && streamSearchResult.getStream().getId() != null) {
+        models.add(transform(streamSearchResult));
+      }
     }
-
-    public List<StreamResultModel> transform(List<StreamSearchResult> streamSearchResults) {
-        List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
-        for (StreamSearchResult streamSearchResult : streamSearchResults) {
-            models.add(transform(streamSearchResult));
-        }
-        return models;
-    }
+    return models;
+  }
 }
