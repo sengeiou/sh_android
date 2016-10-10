@@ -83,7 +83,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
         if (userModel != null) {
             getUserByIdInteractor.loadUserById(userModel.getIdUser(), new Interactor.Callback<User>() {
                 @Override public void onLoaded(User user) {
-                    sessionRepository.setCurrentUser(user);
+                    sessionRepository.getCurrentUser().setAnalyticsUserType(user.getAnalyticsUserType());
+                    sessionRepository.getCurrentUser().setReceivedReactions(user.getReceivedReactions());
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
