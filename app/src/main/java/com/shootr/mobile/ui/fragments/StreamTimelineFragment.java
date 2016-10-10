@@ -921,11 +921,17 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void hidePinnedMessage() {
     if (streamMessage != null) {
       streamMessage.setVisibility(View.GONE);
-      timelineNewShotsIndicator.setVisibility(View.GONE);
-      timelineIndicatorContainer.setVisibility(View.GONE);
+      if (timelineNewShotsIndicator != null) {
+        timelineNewShotsIndicator.setVisibility(View.GONE);
+      }
+      if (timelineIndicatorContainer != null) {
+        timelineIndicatorContainer.setVisibility(View.GONE);
+      }
     }
     if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
-      timelineNewShotsIndicator.setVisibility(View.GONE);
+      if (timelineNewShotsIndicator != null) {
+        timelineNewShotsIndicator.setVisibility(View.GONE);
+      }
       timelinePollIndicator.setVisibility(View.VISIBLE);
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
     }
