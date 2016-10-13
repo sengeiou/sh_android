@@ -134,6 +134,9 @@ public class ServiceShotDatasource implements ShotDataSource {
   public ShotDetailEntity getShotDetail(String idShot, String[] streamTypes, String[] shotTypes)
       throws ShotNotFoundException {
     try {
+      if (idShot == null) {
+        throw new ApiException(ErrorInfo.ResourceNotFoundException);
+      }
       ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot, streamTypes, shotTypes);
 
       ShotEntity shotEntity = shotApiEntityMapper.transform(shotApiEntity);
