@@ -795,7 +795,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);
-    if (streamMessage.getText().toString().isEmpty()) {
+    if (streamMessage.getText().toString().isEmpty() && timelineNewShotsIndicator != null
+        && timelineIndicatorContainer != null) {
       timelineNewShotsIndicator.setVisibility(View.GONE);
       timelineIndicatorContainer.setVisibility(View.GONE);
     }
@@ -865,29 +866,37 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
-    timelineNewShotsIndicator.setVisibility(View.VISIBLE);
-    timelineIndicatorContainer.setVisibility(View.VISIBLE);
-    timelineIndicatorText.setVisibility(View.VISIBLE);
-    String indicatorText =
-        getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
-            numberNewShots);
-    timelineIndicatorText.setText(indicatorText);
-    if (pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
-      timelinePollIndicator.setVisibility(View.GONE);
-      pollIndicatorStatus = POLL_STATUS_INVISIBLE;
+    try {
+      timelineNewShotsIndicator.setVisibility(View.VISIBLE);
+      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+      timelineIndicatorText.setVisibility(View.VISIBLE);
+      String indicatorText =
+          getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
+              numberNewShots);
+      timelineIndicatorText.setText(indicatorText);
+      if (pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
+        timelinePollIndicator.setVisibility(View.GONE);
+        pollIndicatorStatus = POLL_STATUS_INVISIBLE;
+      }
+    } catch (NullPointerException error) {
+      crashReportTool.logException(error);
     }
   }
 
   @Override public void hideNewShotsIndicator() {
-    timelineIndicatorText.setVisibility(View.GONE);
-    streamTimelinePresenter.setNewShotsNumber(0);
-    if (streamMessage.getText().toString().isEmpty()) {
-      timelineNewShotsIndicator.setVisibility(View.GONE);
-    }
-    if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_INVISIBLE)) {
-      pollIndicatorStatus = POLL_STATUS_SHOWING;
-      timelinePollIndicator.setVisibility(View.VISIBLE);
-      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+    try {
+      timelineIndicatorText.setVisibility(View.GONE);
+      streamTimelinePresenter.setNewShotsNumber(0);
+      if (streamMessage.getText().toString().isEmpty()) {
+        timelineNewShotsIndicator.setVisibility(View.GONE);
+      }
+      if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_INVISIBLE)) {
+        pollIndicatorStatus = POLL_STATUS_SHOWING;
+        timelinePollIndicator.setVisibility(View.VISIBLE);
+        timelineIndicatorContainer.setVisibility(View.VISIBLE);
+      }
+    } catch (NullPointerException error) {
+      crashReportTool.logException(error);
     }
   }
 
