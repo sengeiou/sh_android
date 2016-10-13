@@ -103,14 +103,10 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       if (user != null) {
         JSONObject props = new JSONObject();
         props.put(DISTINCT_ID, user.getIdUser());
-        if (idStream == null) {
-          props.put(ID_STREAM, user.getIdWatchingStream());
-        } else {
+        if (idStream != null) {
           props.put(ID_STREAM, idStream);
         }
-        if (streamName == null) {
-          props.put(STREAM_TITLE, user.getWatchingStreamTitle());
-        } else {
+        if (streamName != null) {
           props.put(STREAM_TITLE, streamName);
         }
         props.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
