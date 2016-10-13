@@ -15,6 +15,7 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
@@ -49,6 +50,7 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   @Mock ContributorRepository contributorRepository;
   @Mock SessionRepository sessionRepository;
   @Mock UserRepository userRepository;
+  @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock StreamRepository streamRepository;
   @Mock ExternalShotRepository shotRepository;
   private GetOlderViewOnlyStreamTimelineInteractor interactor;
@@ -59,7 +61,8 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     this.interactor =
         new GetOlderViewOnlyStreamTimelineInteractor(interactorHandler, postExecutionThread,
-            sessionRepository, shotRepository, streamRepository, contributorRepository,
+            sessionRepository, shotRepository, streamRepository, remoteStreamRepository,
+            contributorRepository,
             userRepository);
   }
 
