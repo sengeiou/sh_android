@@ -777,6 +777,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (hasBeenPaused) {
       selectStream();
       handleVisibilityTimelineIndicatorInResume();
+      setIsFirstLoad(true);
+      setIsFirstShotPosition(true);
     }
   }
 
