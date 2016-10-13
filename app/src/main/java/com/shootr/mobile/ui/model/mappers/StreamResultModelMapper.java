@@ -19,7 +19,7 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
   }
 
   public StreamResultModel transform(StreamSearchResult streamSearchResult) {
-    if (streamSearchResult == null) {
+    if (streamSearchResult == null || streamSearchResult.getStream() == null) {
       return null;
     }
     checkNotNull(streamSearchResult.getStream());

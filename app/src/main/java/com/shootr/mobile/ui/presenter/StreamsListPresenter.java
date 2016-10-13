@@ -136,7 +136,9 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     }
 
     private void setViewCurrentVisibleWatchingStream(StreamResultModel currentVisibleStream) {
-        streamsListView.setCurrentWatchingStreamId(currentVisibleStream);
+        if (currentVisibleStream != null) {
+            streamsListView.setCurrentWatchingStreamId(currentVisibleStream);
+        }
     }
 
     private void renderViewStreamsList(List<StreamResultModel> streamModels) {
