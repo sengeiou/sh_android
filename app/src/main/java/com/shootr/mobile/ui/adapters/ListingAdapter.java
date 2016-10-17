@@ -97,9 +97,9 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
         StreamResultModel stream = getItem(section, position);
         boolean showSeparator = position != 0;
         if (isCurrentUser) {
-            holder.render(stream, showSeparator, favoritedStreams);
+            holder.render(stream, showSeparator, favoritedStreams, true);
         } else {
-            holder.render(stream, showSeparator);
+            holder.render(stream, showSeparator, true);
         }
     }
 

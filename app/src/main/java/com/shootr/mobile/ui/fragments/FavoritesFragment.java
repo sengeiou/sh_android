@@ -31,6 +31,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.ShareManager;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -102,7 +103,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
                 favoritesListPresenter.onFavoriteLongClicked(stream);
                 return true;
             }
-        });
+        }, null, false);
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
             @Override public void onUnwatchClick() {
                 favoritesListPresenter.unwatchStream();
@@ -150,70 +151,78 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     Intents.maybeStartActivity(getActivity(), shareIntent);
   }
 
-    @Override public void renderFavorites(List<StreamResultModel> streamModels) {
-        adapter.setStreams(streamModels);
-        adapter.notifyDataSetChanged();
-    }
+  @Override public void renderFavorites(List<StreamResultModel> streamModels) {
+    adapter.setStreams(streamModels);
+    adapter.notifyDataSetChanged();
+  }
 
-    @Override public void showContent() {
-        favoritesList.setVisibility(View.VISIBLE);
+  private List<String> convertStreamFavoritesToIds(List<StreamResultModel> streamModels) {
+    List<String> favoriteIds = new ArrayList<>();
+    for (StreamResultModel favorite : streamModels) {
+      favoriteIds.add(favorite.getStreamModel().getIdStream());
     }
+    return favoriteIds;
+  }
 
-    @Override public void hideContent() {
-        favoritesList.setVisibility(View.GONE);
-    }
+  @Override public void showContent() {
+    favoritesList.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title, String authorId) {
-        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title, authorId));
-    }
+  @Override public void hideContent() {
+    favoritesList.setVisibility(View.GONE);
+  }
 
-    @Override public void showStreamShared() {
-        feedbackMessage.show(getView(), sharedStream);
-    }
+  @Override public void navigateToStreamTimeline(String idStream, String title, String authorId) {
+    startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title, authorId));
+  }
 
-    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
-        adapter.setMutedStreamIds(mutedStreamIds);
-    }
+  @Override public void showStreamShared() {
+    feedbackMessage.show(getView(), sharedStream);
+  }
 
-    @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
-        baseContextualMenu(stream).addAction(R.string.unmute, new Runnable() {
-            @Override public void run() {
-                favoritesListPresenter.onUnmuteClicked(stream);
-            }
-        }).show();
-    }
+  @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
+    adapter.setMutedStreamIds(mutedStreamIds);
+  }
 
-    @Override public void showContextMenuWithMute(final StreamResultModel stream) {
-        baseContextualMenu(stream).addAction(R.string.mute, new Runnable() {
-            @Override public void run() {
-                favoritesListPresenter.onMuteClicked(stream);
-            }
-        }).show();
-    }
-
-    @Override public void scrollListToTop() {
-      if (favoritesList != null) {
-        favoritesList.scrollToPosition(0);
+  @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
+    baseContextualMenu(stream).addAction(R.string.unmute, new Runnable() {
+      @Override public void run() {
+        favoritesListPresenter.onUnmuteClicked(stream);
       }
-    }
+    }).show();
+  }
 
-    @Override public void showEmpty() {
-        empty.setVisibility(View.VISIBLE);
-    }
+  @Override public void showContextMenuWithMute(final StreamResultModel stream) {
+    baseContextualMenu(stream).addAction(R.string.mute, new Runnable() {
+      @Override public void run() {
+        favoritesListPresenter.onMuteClicked(stream);
+      }
+    }).show();
+  }
 
-    @Override public void hideEmpty() {
-        empty.setVisibility(View.GONE);
+  @Override public void scrollListToTop() {
+    if (favoritesList != null) {
+      favoritesList.scrollToPosition(0);
     }
+  }
 
-    @Override public void showLoading() {
-        loading.setVisibility(View.VISIBLE);
-    }
+  @Override public void showEmpty() {
+    empty.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void hideLoading() {
-        loading.setVisibility(View.GONE);
-    }
+  @Override public void hideEmpty() {
+    empty.setVisibility(View.GONE);
+  }
 
-    @Override public void showError(String message) {
-        feedbackMessage.show(getView(), message);
-    }
+  @Override public void showLoading() {
+    loading.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    loading.setVisibility(View.GONE);
+  }
+
+  @Override public void showError(String message) {
+    feedbackMessage.show(getView(), message);
+  }
 }

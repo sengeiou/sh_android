@@ -42,4 +42,22 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
     }
     return models;
   }
+
+  public List<StreamResultModel> transformWithFavorites(List<StreamSearchResult> streamSearchResults,
+      List<String> favorites) {
+    List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
+    for (StreamSearchResult streamSearchResult : streamSearchResults) {
+      if (streamSearchResult.getStream() != null
+          && streamSearchResult.getStream().getId() != null) {
+        StreamResultModel streamResultModel = transform(streamSearchResult);
+        if (favorites != null && favorites.contains(streamSearchResult.getStream().getId())) {
+          streamResultModel.setFavorited(true);
+        } else {
+          streamResultModel.setFavorited(false);
+        }
+        models.add(streamResultModel);
+      }
+    }
+    return models;
+  }
 }

@@ -81,7 +81,7 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
         openContextualMenu(stream);
         return true;
       }
-    });
+    }, null, false);
     adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
       @Override public void onUnwatchClick() {
         findStreamsPresenter.unwatchStream();

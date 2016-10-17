@@ -40,6 +40,7 @@
   <string name="activity_timeline_empty_title">No hi ha activitat</string>
   <string name="added_contributor">Afegit</string>
   <string name="added_to_favorites">Afegit a Favorits</string>
+  <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="add_contributor">Afegir</string>
   <string name="add_contributor_button">Afegir col·laborador</string>
   <string name="add_contributor_confirmation_message">Afegir %s?</string>
@@ -97,6 +98,7 @@
   <string name="drawer_following_activity_title" formatted="false">Seguint</string>
   <string name="drawer_friends_title">Amics</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_users_title">Usuaris</string>
   <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>

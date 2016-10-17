@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.StreamResultViewHolder;
 import com.shootr.mobile.ui.adapters.holders.SubheaderViewHolder;
+import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
@@ -20,16 +21,22 @@ public class StreamsListAdapter
 
     private final ImageLoader imageLoader;
     private final InitialsLoader initialsLoader;
+    private boolean hasToShowIsFavorite = true;
 
     private OnStreamClickListener onStreamClickListener;
     private OnUnwatchClickListener onUnwatchClickListener;
+    private OnFavoriteClickListener onFavoriteClickListener;
     private List<String> mutedStreamsIds;
 
     public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
-        OnStreamClickListener onStreamClickListener) {
+        OnStreamClickListener onStreamClickListener,
+        OnFavoriteClickListener onFavoriteClickListener,
+        boolean hasToShowIsFavorite) {
         this.imageLoader = imageLoader;
         this.initialsLoader = initialsLoader;
         this.onStreamClickListener = onStreamClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
+        this.hasToShowIsFavorite = hasToShowIsFavorite;
     }
 
     public void setStreams(List<StreamResultModel> streams) {
@@ -45,7 +52,8 @@ public class StreamsListAdapter
     @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
         StreamResultViewHolder watchingViewHolder =
-          new StreamResultViewHolder(view, onStreamClickListener, imageLoader, initialsLoader,
+          new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
+              imageLoader, initialsLoader,
               mutedStreamsIds);
         watchingViewHolder.enableWatchingState(onUnwatchClickListener);
         return watchingViewHolder;
@@ -58,14 +66,15 @@ public class StreamsListAdapter
 
     @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, imageLoader, initialsLoader,
+        return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
+            imageLoader, initialsLoader,
             mutedStreamsIds);
     }
 
     @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getHeader();
         ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
-        ((StreamResultViewHolder) viewHolder).render(stream, false);
+        ((StreamResultViewHolder) viewHolder).render(stream, false, hasToShowIsFavorite);
     }
 
     @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -76,7 +85,7 @@ public class StreamsListAdapter
         StreamResultModel stream = getItem(position);
         boolean showSeparator = position != getFirstItemPosition();
         ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
-        ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
+        ((StreamResultViewHolder) viewHolder).render(stream, showSeparator, hasToShowIsFavorite);
     }
 
     public void setCurrentWatchingStream(StreamResultModel streamResultModel) {
@@ -98,4 +107,5 @@ public class StreamsListAdapter
     public List<String> getMutedStreamIds() {
         return mutedStreamsIds;
     }
+
 }

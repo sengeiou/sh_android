@@ -3,8 +3,10 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
@@ -55,6 +57,8 @@ public class StreamsListPresenterTest {
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
     @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
+    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     @Mock MuteInteractor muteInteractor;
     @Mock UnmuteInteractor unmuteInterator;
 
@@ -63,24 +67,19 @@ public class StreamsListPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        StreamResultModelMapper streamResultModelMapper = new StreamResultModelMapper(streamModelMapper);
-        presenter = new StreamsListPresenter(streamsListInteractor,
-          addToFavoritesInteractor,
-          unwatchStreamInteractor,
-          shareStreamInteractor,
-          getMutedStreamsInteractor,
-          muteInteractor,
-          unmuteInterator,
-          streamResultModelMapper,
-          errorMessageFactory,
-          bus);
+        StreamResultModelMapper streamResultModelMapper =
+            new StreamResultModelMapper(streamModelMapper);
+        presenter = new StreamsListPresenter(streamsListInteractor, addToFavoritesInteractor,
+            removeFromFavoritesInteractor, getFavoriteStreamsInteractor, unwatchStreamInteractor,
+            shareStreamInteractor, getMutedStreamsInteractor, muteInteractor, unmuteInterator,
+            streamResultModelMapper, errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
 
     @Test public void shouldLoadStreamListOnInitialized() throws Exception {
         presenter.initialize(streamsListView);
 
-        verify(streamsListInteractor).loadStreams(anyStreamsCallback(), anyErrorCallback());
+        verify(getFavoriteStreamsInteractor, times(1)).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
     @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
@@ -138,7 +137,7 @@ public class StreamsListPresenterTest {
         presenter.initialize(streamsListView);
         presenter.resume();
 
-        verify(streamsListInteractor, times(1)).loadStreams(anyStreamsCallback(), anyErrorCallback());
+        verify(getFavoriteStreamsInteractor, times(1)).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
     @Test public void shouldLoadStreamListTwiceWhenInitializedPausedAndResumed() throws Exception {
@@ -146,7 +145,7 @@ public class StreamsListPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(streamsListInteractor, times(2)).loadStreams(anyStreamsCallback(), anyErrorCallback());
+        verify(getFavoriteStreamsInteractor, times(2)).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
     @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {

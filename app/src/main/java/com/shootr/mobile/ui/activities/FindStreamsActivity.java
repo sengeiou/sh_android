@@ -103,7 +103,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
                 openContextualMenu(stream);
                 return true;
             }
-        });
+        }, null, false);
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
             @Override public void onUnwatchClick() {
                 findStreamsPresenter.unwatchStream();

@@ -40,6 +40,7 @@
   <string name="activity_timeline_empty_title">无动态</string>
   <string name="added_contributor">已新增</string>
   <string name="added_to_favorites">添加到喜爱</string>
+  <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
@@ -97,6 +98,7 @@
   <string name="drawer_following_activity_title" formatted="false">正在关注</string>
   <string name="drawer_friends_title">朋友</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_users_title">用户</string>
   <string name="edit_stream">编辑stream</string>
   <string name="edit_stream_listing_context_menu">编辑</string>

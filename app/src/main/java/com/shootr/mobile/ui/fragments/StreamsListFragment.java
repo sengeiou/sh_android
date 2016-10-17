@@ -25,6 +25,7 @@ import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
+import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
@@ -51,6 +52,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindView(R.id.streams_empty) View emptyView;
   @BindView(R.id.streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
+  @BindString(R.string.removed_from_favorites) String removedFromFavorites;
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
@@ -99,16 +101,25 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         unbinder = ButterKnife.bind(this, getView());
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
-            @Override public void onStreamClick(StreamResultModel stream) {
-                presenter.selectStream(stream);
-            }
+      adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+        @Override public void onStreamClick(StreamResultModel stream) {
+          presenter.selectStream(stream);
+        }
 
-            @Override public boolean onStreamLongClick(StreamResultModel stream) {
-                presenter.onStreamLongClicked(stream);
-                return true;
-            }
-        });
+        @Override public boolean onStreamLongClick(StreamResultModel stream) {
+          presenter.onStreamLongClicked(stream);
+          return true;
+        }
+      }, new OnFavoriteClickListener() {
+        @Override public void onFavoriteClick(StreamResultModel stream) {
+          presenter.addToFavorites(stream, false);
+          sendFavoriteAnalytics(stream);
+        }
+
+        @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
+          presenter.removeFromFavorites(stream, false);
+        }
+      }, true);
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
             @Override public void onUnwatchClick() {
                 presenter.unwatchStream();
@@ -179,12 +190,30 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         }
     }
 
-  private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
+  private CustomContextMenu.Builder baseContextualMenuWithFavorite(final StreamResultModel stream) {
     return new CustomContextMenu.Builder(getActivity()).addAction(
         R.string.add_to_favorites_menu_title, new Runnable() {
           @Override public void run() {
-            presenter.addToFavorites(stream);
+            presenter.addToFavorites(stream, true);
             sendFavoriteAnalytics(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+      @Override public void run() {
+        presenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        sendExternalShareAnalytics(stream);
+      }
+    });
+  }
+
+  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(final StreamResultModel stream) {
+    return new CustomContextMenu.Builder(getActivity()).addAction(
+        R.string.menu_remove_favorite, new Runnable() {
+          @Override public void run() {
+            presenter.removeFromFavorites(stream, true);
           }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
@@ -252,24 +281,44 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         feedbackMessage.show(getView(), addedToFavorites);
     }
 
+    @Override public void showRemovedFromFavorites() {
+      feedbackMessage.show(getView(), removedFromFavorites);
+    }
+
     @Override public void showStreamShared() {
         feedbackMessage.show(getView(), sharedStream);
     }
 
     @Override public void showContextMenuWithMute(final StreamResultModel stream) {
-        baseContextualMenu(stream).addAction(R.string.mute, new Runnable() {
-            @Override public void run() {
-                presenter.onMuteClicked(stream);
-            }
+      if (stream.isFavorited()) {
+        baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
+          @Override public void run() {
+            presenter.onMuteClicked(stream);
+          }
         }).show();
+      } else {
+        baseContextualMenuWithFavorite(stream).addAction(R.string.mute, new Runnable() {
+          @Override public void run() {
+            presenter.onMuteClicked(stream);
+          }
+        }).show();
+      }
     }
 
     @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
-        baseContextualMenu(stream).addAction(R.string.unmute, new Runnable() {
-            @Override public void run() {
-                presenter.onUnmuteClicked(stream);
-            }
+      if (stream.isFavorited()) {
+        baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
+          @Override public void run() {
+            presenter.onUnmuteClicked(stream);
+          }
         }).show();
+      } else {
+        baseContextualMenuWithFavorite(stream).addAction(R.string.unmute, new Runnable() {
+          @Override public void run() {
+            presenter.onUnmuteClicked(stream);
+          }
+        }).show();
+      }
     }
 
     @Override public void setMutedStreamIds(List<String> mutedStreamIds) {

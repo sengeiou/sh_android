@@ -40,6 +40,7 @@
   <string name="activity_timeline_empty_title">Nenhuma atividade</string>
   <string name="added_contributor">Adicionado</string>
   <string name="added_to_favorites">Adicionado aos Favoritos</string>
+  <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="add_contributor">Adicionar</string>
   <string name="add_contributor_button">Adicionar colaborador</string>
   <string name="add_contributor_confirmation_message">Adicionar %s?</string>
@@ -97,6 +98,7 @@
   <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
   <string name="drawer_friends_title">Amigos</string>
   <string name="drawer_streams_title">Streams</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_users_title">Usuários</string>
   <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>
