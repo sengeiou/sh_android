@@ -585,7 +585,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -595,7 +595,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -605,7 +605,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -616,7 +616,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -643,7 +643,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -655,7 +655,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -1207,11 +1207,11 @@ public class StreamTimelinePresenterTest {
   private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[2]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
         return null;
       }
     }).when(timelineInteractorWrapper)
-        .obtainOlderTimeline(anyLong(), anyInt(), anyCallback(), anyErrorCallback());
+        .obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(), anyErrorCallback());
   }
 
   private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {

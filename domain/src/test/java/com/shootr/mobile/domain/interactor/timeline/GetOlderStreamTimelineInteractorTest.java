@@ -12,10 +12,8 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -33,13 +31,12 @@ public class GetOlderStreamTimelineInteractorTest {
   public static final long CURRENT_OLDEST_DATE = 0L;
   public static final String VISIBLE_STREAM_ID = "visible_stream_id";
   public static final String USER_ID = "user_id";
+  private static final String STREAM_ID = "stream_id";
   String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
-  @Mock SessionRepository sessionRepository;
   @Mock ExternalShotRepository remoteShotRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock Interactor.Callback<Timeline> callback;
   @Mock Interactor.ErrorCallback errorCallback;
-  @Mock UserRepository localUserRepository;
   private GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
 
   @Before public void setUp() throws Exception {
@@ -48,14 +45,12 @@ public class GetOlderStreamTimelineInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     getOlderStreamTimelineInteractor =
         new GetOlderStreamTimelineInteractor(interactorHandler, postExecutionThread,
-            sessionRepository, remoteShotRepository, localStreamRepository, localUserRepository);
-    when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-    when(localUserRepository.getUserById(USER_ID)).thenReturn(user());
-    when(localStreamRepository.getStreamById(VISIBLE_STREAM_ID, TYPES_STREAM)).thenReturn(stream());
+            remoteShotRepository, localStreamRepository);
+    when(localStreamRepository.getStreamById(STREAM_ID, TYPES_STREAM)).thenReturn(stream());
   }
 
   @Test public void shouldGetShotsForStreamTimeline() throws Exception {
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(remoteShotRepository).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
@@ -67,7 +62,7 @@ public class GetOlderStreamTimelineInteractorTest {
         any(StreamTimelineParameters.class))).thenThrow(new ShootrException() {
     });
 
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
@@ -77,7 +72,7 @@ public class GetOlderStreamTimelineInteractorTest {
     when(remoteShotRepository.getShotsForStreamTimeline(
         any(StreamTimelineParameters.class))).thenReturn(shots());
 
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(callback).onLoaded(any(Timeline.class));
@@ -98,6 +93,8 @@ public class GetOlderStreamTimelineInteractorTest {
   }
 
   private Stream stream() {
-    return new Stream();
+    Stream stream = new Stream();
+    stream.setId(STREAM_ID);
+    return stream;
   }
 }
