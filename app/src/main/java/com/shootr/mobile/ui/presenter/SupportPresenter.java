@@ -1,26 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.GetBlogInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetHelpInteractor;
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.ui.views.SupportView;
 import javax.inject.Inject;
 
 public class SupportPresenter implements Presenter {
 
     private static final String EN_LOCALE = "en";
-    private final GetBlogInteractor getBlogInteractor;
-    private final GetHelpInteractor getHelpInteractor;
 
     private SupportView supportView;
-    private Stream blog;
-    private Stream help;
 
-    @Inject public SupportPresenter(GetBlogInteractor getBlogInteractor, GetHelpInteractor getHelpInteractor) {
-        this.getBlogInteractor = getBlogInteractor;
-        this.getHelpInteractor = getHelpInteractor;
+     @Inject public SupportPresenter() {
     }
 
     protected void setView(SupportView supportView) {
@@ -29,59 +18,6 @@ public class SupportPresenter implements Presenter {
 
     public void initialize(SupportView supportView) {
         this.setView(supportView);
-        loadBlog();
-        loadHelp();
-        showAlertDialog();
-    }
-
-    private void showAlertDialog() {
-        supportView.handleReport();
-    }
-
-    public boolean isEnglishLocale(String locale) {
-        return locale.equals(EN_LOCALE);
-    }
-
-    public void setUpAlertDialog(String language) {
-        if (!isEnglishLocale(language)) {
-            supportView.showAlertDialog();
-        }
-    }
-
-    private void loadHelp() {
-        getHelpInteractor.obtainHelpStream(new Interactor.Callback<Stream>() {
-            @Override public void onLoaded(Stream helpStream) {
-                help = helpStream;
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                supportView.showError();
-            }
-        });
-    }
-
-    private void loadBlog() {
-        getBlogInteractor.obtainBlogStream(new Interactor.Callback<Stream>() {
-            @Override public void onLoaded(Stream blogStream) {
-                blog = blogStream;
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                supportView.showError();
-            }
-        });
-    }
-
-    public void blogClicked() {
-        if (blog != null) {
-            supportView.goToStream(blog);
-        }
-    }
-
-    public void helpClicked() {
-        if (help != null) {
-            supportView.goToStream(help);
-        }
     }
 
     @Override public void resume() {

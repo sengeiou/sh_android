@@ -66,7 +66,7 @@ public class LoginSelectionActivity extends BaseActivity {
     @BindString(R.string.error_facebook_login) String facebookError;
     @BindString(R.string.error_login_facebook_method) String facebookMethodError;
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
     @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
     @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
 
