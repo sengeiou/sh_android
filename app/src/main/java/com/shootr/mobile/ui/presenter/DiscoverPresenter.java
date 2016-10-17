@@ -7,8 +7,10 @@ import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.model.discover.Discovered;
+import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.DiscoveredModelMapper;
@@ -21,6 +23,7 @@ public class DiscoverPresenter implements Presenter {
 
   private final GetDiscoveredInteractor getDiscoveredInteractor;
   private final GetLocalDiscoveredInteractor getLocalDiscoveredInteractor;
+  private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
   private final AddToFavoritesInteractor addToFavoritesInteractor;
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
@@ -33,13 +36,14 @@ public class DiscoverPresenter implements Presenter {
 
   @Inject public DiscoverPresenter(GetDiscoveredInteractor getDiscoveredInteractor,
       GetLocalDiscoveredInteractor getLocalDiscoveredInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
+      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       DiscoveredModelMapper discoveredModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getDiscoveredInteractor = getDiscoveredInteractor;
     this.getLocalDiscoveredInteractor = getLocalDiscoveredInteractor;
+    this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
@@ -52,11 +56,23 @@ public class DiscoverPresenter implements Presenter {
     this.discoverView = discoverView;
     loadDiscover();
   }
+  private void loadFavorites() {
+    getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
+      @Override public void onLoaded(List<StreamSearchResult> streamSearchResults) {
+        if (streamSearchResults.size() < 3) {
+          discoverView.showBanner();
+        } else {
+          discoverView.hideBanner();
+        }
+      }
+    });
+  }
 
   public void loadDiscover() {
     getDiscoveredInteractor.getDiscovered(new Interactor.Callback<List<Discovered>>() {
       @Override public void onLoaded(List<Discovered> discovereds) {
         discoverView.renderDiscover(discoveredModelMapper.transform(discovereds));
+        loadFavorites();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -90,6 +106,7 @@ public class DiscoverPresenter implements Presenter {
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             loadLocalDiscover();
+            loadFavorites();
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -104,6 +121,7 @@ public class DiscoverPresenter implements Presenter {
         idStream, new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             loadLocalDiscover();
+            loadFavorites();
           }
         });
   }

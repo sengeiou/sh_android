@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.discover.GetLocalDiscoveredInteractor
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.model.discover.Discovered;
 import com.shootr.mobile.domain.model.discover.DiscoveredType;
@@ -46,6 +47,7 @@ public class DiscoverPresenterTest {
   @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock SessionRepository sessionRepository;
+  @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
 
   private DiscoveredModelMapper discoveredModelMapper;
   private DiscoverPresenter presenter;
@@ -55,7 +57,7 @@ public class DiscoverPresenterTest {
     discoveredModelMapper = new DiscoveredModelMapper(new StreamModelMapper(sessionRepository),
         new ShotModelMapper());
     presenter = new DiscoverPresenter(getDiscoveredInteractor, getLocalDiscoveredInteractor,
-        addToFavoritesInteractor,
+        getFavoriteStreamsInteractor, addToFavoritesInteractor,
         removeFromFavoritesInteractor, markNiceShotInteractor, unmarkNiceShotInteractor,
         discoveredModelMapper, errorMessageFactory);
     when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);

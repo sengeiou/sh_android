@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +54,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @BindView(R.id.discover_recycler) ParallaxRecyclerView discoverList;
   @BindView(R.id.discover_empty) View empty;
   @BindView(R.id.discover_loading) View loading;
+  @BindView(R.id.banner) LinearLayout banner;
 
   private DiscoverAdapter adapter;
   private Unbinder unbinder;
@@ -200,6 +202,14 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
+  }
+
+  @Override public void showBanner() {
+    banner.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideBanner() {
+    banner.setVisibility(View.GONE);
   }
 
   @Override public void onResume() {

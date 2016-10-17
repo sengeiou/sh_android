@@ -465,4 +465,6 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="share_stream_via_shootr">Share via Shootr</string>
+  <string name="discover_banner_content">Tap the star to favorite. TV and radio shows will notify you when they start.</string>
+  <string name="discover_banner_title">Add streams to Favorites</string>
 </resources>
