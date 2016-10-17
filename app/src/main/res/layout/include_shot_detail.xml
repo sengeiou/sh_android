@@ -209,28 +209,82 @@
         tools:text="Niced by user1, user2" />
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/shot_detail_pin_to_profile_container"
-      android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:background="?selectableItemBackground"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:visibility="gone">
+    <LinearLayout android:id="@+id/reshoot_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
-        <ImageView android:id="@+id/shot_detail_pint_to_profile_image"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:paddingLeft="24dp"
-          android:src="@drawable/ic_pin_grey600_36dp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="24dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_pin_grey600_36dp" />
 
-        <TextView android:id="@+id/shot_detail_pint_to_profile_text"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:paddingLeft="32dp"
-          android:text="@string/menu_pin_shot"
-          android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row" />
+        <TextView android:id="@+id/reshoot_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:text="@string/menu_share_shot_via_shootr"
+            android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row" />
 
     </LinearLayout>
+
+    <LinearLayout android:id="@+id/external_share_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="24dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_pin_grey600_36dp" />
+
+        <TextView android:id="@+id/external_share_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:text="@string/menu_share_shot_via"
+            android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row" />
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/shot_detail_pin_to_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView android:id="@+id/shot_detail_pint_to_profile_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="24dp"
+            android:src="@drawable/ic_pin_grey600_36dp" />
+
+        <TextView android:id="@+id/shot_detail_pint_to_profile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:text="@string/menu_pin_shot"
+            android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

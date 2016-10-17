@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -55,6 +56,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final ShotClickListener onClickListenerPinToProfile;
     private final ShotClickListener nicesClickListener;
     private final OnUrlClickListener onUrlClickListener;
+    private final ShareClickListener reshootClickListener;
+    private final ShareClickListener shareClickListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -73,7 +76,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
         OnNiceShotListener onNiceShotListener, ShotClickListener nicesClickListener,
         OnUrlClickListener onUrlClickListener, TimeFormatter timeFormatter, Resources resources,
-        AndroidTimeUtils timeUtils) {
+        AndroidTimeUtils timeUtils, ShareClickListener reshootClickListener,
+        ShareClickListener shareClickListener) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.parentShotClickListener = parentShotClickListener;
@@ -91,6 +95,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.resources = resources;
         this.timeUtils = timeUtils;
         this.onNiceShotListener = onNiceShotListener;
+        this.reshootClickListener = reshootClickListener;
+        this.shareClickListener = shareClickListener;
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -250,7 +256,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           onClickListenerPinToProfile,
           nicesClickListener,
           shotTextSpannableBuilder,
-          nicerTextSpannableBuilder, onUrlClickListener);
+          nicerTextSpannableBuilder, onUrlClickListener, reshootClickListener, shareClickListener);
     }
 
     @NonNull

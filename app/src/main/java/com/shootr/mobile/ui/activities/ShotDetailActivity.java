@@ -25,6 +25,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnParentShownListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
@@ -198,15 +199,23 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private void openContextualMenu() {
         new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
             @Override public void run() {
-                detailPresenter.shareShotViaShootr();
-                sendShareShotAnalythics();
+                reshoot();
             }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
             @Override public void run() {
-                detailPresenter.shareShot();
-                sendExternalShareAnalythics();
+                externalShare();
             }
         }).show();
+    }
+
+    private void externalShare() {
+        detailPresenter.shareShot();
+        sendExternalShareAnalythics();
+    }
+
+    private void reshoot() {
+        detailPresenter.shareShotViaShootr();
+        sendShareShotAnalythics();
     }
 
     private void sendExternalShareAnalythics() {
@@ -280,10 +289,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             }, //
             numberFormatUtil, new ShotClickListener() {
 
-                @Override public void onClick(ShotModel shot) {
-                    pinShotPresenter.pinToProfile(shot);
-                }
-            }, new OnParentShownListener() {
+            @Override public void onClick(ShotModel shot) {
+                pinShotPresenter.pinToProfile(shot);
+            }
+        }, new OnParentShownListener() {
             @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
                 replies = repliesNumber;
                 linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
@@ -297,6 +306,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                     detailPresenter.markNiceShot(shot.getIdShot());
                     sendAnalythics(shot);
                 }
+
                 @Override public void unmarkNice(String idShot) {
                     detailPresenter.unmarkNiceShot(idShot);
                 }
@@ -310,7 +320,15 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 detailPresenter.storeClickCount();
                 sendOpenlinkAnalythics();
             }
-        }, timeFormatter, getResources(), timeUtils);
+        }, timeFormatter, getResources(), timeUtils, new ShareClickListener() {
+            @Override public void onClickListener() {
+                reshoot();
+            }
+        }, new ShareClickListener() {
+            @Override public void onClickListener() {
+                externalShare();
+            }
+        });
         setupDetailList();
     }
 
@@ -345,10 +363,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 overallYScroll = overallYScroll + dy;
-                if (overallYScroll > 0 && replies == 0) {
-                    linearLayoutManager.scrollToPositionWithOffset(detailAdapter.getItemCount() - 1, 0);
-                    overallYScroll = 0;
-                }
             }
         });
     }

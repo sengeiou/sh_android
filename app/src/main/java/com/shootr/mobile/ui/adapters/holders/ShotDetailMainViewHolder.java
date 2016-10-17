@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
@@ -49,6 +50,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_link_clicks_count) TextView linkClicksCount;
     @BindView(R.id.counts_dot) TextView countsDot;
     @BindView(R.id.reshoot_count) TextView reshotCount;
+    @BindView(R.id.reshoot_container) LinearLayout reshootContainer;
+    @BindView(R.id.external_share_container) LinearLayout externalShare;
 
     private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
@@ -65,6 +68,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final NicerTextSpannableBuilder nicerTextSpannableBuilder;
     private final OnUrlClickListener onUrlClickListener;
+    private final ShareClickListener reshootClickListener;
+    private final ShareClickListener shareClickListener;
 
     public ShotDetailMainViewHolder(View itemView, ImageLoader imageLoader,
         AvatarClickListener avatarClickListener, ShotClickListener streamClickListener,
@@ -73,8 +78,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         NumberFormatUtil followsFormatUtil, Resources resources,
         OnNiceShotListener onNiceShotListener, ShotClickListener onClickListenerPinToProfile,
         ShotClickListener nicesClickListener, ShotTextSpannableBuilder shotTextSpannableBuilder,
-        NicerTextSpannableBuilder nicerTextSpannableBuilder,
-        OnUrlClickListener onUrlClickListener) {
+        NicerTextSpannableBuilder nicerTextSpannableBuilder, OnUrlClickListener onUrlClickListener,
+        ShareClickListener reshootClickListener, ShareClickListener shareClickListener) {
         super(itemView);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -91,6 +96,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.nicerTextSpannableBuilder = nicerTextSpannableBuilder;
         this.onUrlClickListener = onUrlClickListener;
+        this.reshootClickListener = reshootClickListener;
+        this.shareClickListener = shareClickListener;
         ButterKnife.bind(this, itemView);
         context = itemView.getContext();
     }
@@ -107,6 +114,20 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setupReply(shotModel);
         setupNiceButton(shotModel);
         setupPinToProfileContainer(shotModel);
+        setupShareListener();
+    }
+
+    private void setupShareListener() {
+        reshootContainer.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                reshootClickListener.onClickListener();
+            }
+        });
+        externalShare.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                shareClickListener.onClickListener();
+            }
+        });
     }
 
     private void setupCounts(ShotModel shotModel) {
