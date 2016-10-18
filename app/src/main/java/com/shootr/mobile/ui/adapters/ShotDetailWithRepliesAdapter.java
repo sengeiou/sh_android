@@ -144,10 +144,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return adapterPosition - firstReplyPosition;
     }
 
-    private boolean isShowingParent() {
-        return isShowingParent;
-    }
-
     //region Lifecycle methods
     @Override public int getItemViewType(int position) {
         if (hasParent() && position < parents.size()) {

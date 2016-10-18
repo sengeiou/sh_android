@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -68,6 +70,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @BindView(R.id.shot_detail_list) RecyclerView detailList;
     @BindView(R.id.shot_bar_text) TextView replyPlaceholder;
     @BindView(R.id.shot_bar_drafts) View replyDraftsButton;
+    @BindView(R.id.detail_new_shot_bar) View newShotBar;
+    @BindView(R.id.container) View container;
     @BindString(R.string.shot_shared_message) String shotShared;
     @BindString(R.string.analytics_screen_shot_detail) String analyticsScreenShotDetail;
     @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
@@ -106,6 +110,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     private LinearLayoutManager linearLayoutManager;
     private int overallYScroll;
+    private int screenHeight;
+    private int containerHeight;
+    private int barHeight;
     private int replies = 0;
     private String idUser;
 
@@ -355,14 +362,35 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void setupDetailList() {
+
+        container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                screenHeight = container.getHeight() - newShotBar.getHeight();
+                container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         linearLayoutManager = new LinearLayoutManager(this);
         detailList.setLayoutManager(linearLayoutManager);
         detailList.setAdapter(detailAdapter);
         detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET));
         detailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
                 overallYScroll = overallYScroll + dy;
+                int itemsCount = recyclerView.getAdapter().getItemCount();
+                if (itemsCount == 1) {
+                    int viewSize = recyclerView.getChildAt(0).getHeight();
+                    if (viewSize < screenHeight) {
+                        linearLayoutManager.scrollToPosition(0);
+                    } else {
+                        super.onScrolled(recyclerView, dx, dy);
+                    }
+                } else {
+                    super.onScrolled(recyclerView, dx, dy);
+                }
             }
         });
     }
