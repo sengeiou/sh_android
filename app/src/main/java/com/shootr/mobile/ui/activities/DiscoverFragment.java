@@ -205,11 +205,15 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   }
 
   @Override public void showBanner() {
-    banner.setVisibility(View.VISIBLE);
+    if (banner != null) {
+      banner.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideBanner() {
-    banner.setVisibility(View.GONE);
+    if (banner != null) {
+      banner.setVisibility(View.GONE);
+    }
   }
 
   @Override public void onResume() {
