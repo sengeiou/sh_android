@@ -399,7 +399,9 @@ public class StreamDetailPresenter implements Presenter {
   }
 
   public void dataInfoClicked() {
-    streamDetailView.goToStreamDataInfo(streamModel);
+    if (streamModel != null) {
+      streamDetailView.goToStreamDataInfo(streamModel);
+    }
   }
 
   public void contributorsClicked() {
