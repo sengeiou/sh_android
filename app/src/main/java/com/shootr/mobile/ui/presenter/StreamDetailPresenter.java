@@ -459,4 +459,8 @@ public class StreamDetailPresenter implements Presenter {
   @Override public void pause() {
     hasBeenPaused = true;
   }
+
+  protected void setStreamModel(StreamModel streamModel) {
+    this.streamModel = streamModel;
+  }
 }
