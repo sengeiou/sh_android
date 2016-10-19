@@ -399,7 +399,9 @@ public class StreamDetailPresenter implements Presenter {
   }
 
   public void dataInfoClicked() {
-    streamDetailView.goToStreamDataInfo(streamModel);
+    if (streamModel != null) {
+      streamDetailView.goToStreamDataInfo(streamModel);
+    }
   }
 
   public void contributorsClicked() {
@@ -456,5 +458,9 @@ public class StreamDetailPresenter implements Presenter {
 
   @Override public void pause() {
     hasBeenPaused = true;
+  }
+
+  protected void setStreamModel(StreamModel streamModel) {
+    this.streamModel = streamModel;
   }
 }

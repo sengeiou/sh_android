@@ -219,6 +219,7 @@ public class StreamDetailPresenterTest {
   }
 
   @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
+    presenter.setStreamModel(streamModel());
     presenter.dataInfoClicked();
 
     verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
@@ -578,6 +579,16 @@ public class StreamDetailPresenterTest {
     stream.setTotalWatchers(NO_WATCHERS);
     stream.setPicture(PICTURE_URL);
     return stream;
+  }
+
+  private StreamModel streamModel() {
+    StreamModel streamModel = new StreamModel();
+    streamModel.setIdStream(SELECTED_STREAM_ID);
+    streamModel.setTitle(SELECTED_STREAM_TITLE);
+    streamModel.setAuthorId(STREAM_AUTHOR_ID);
+    streamModel.setTotalWatchers(NO_WATCHERS);
+    streamModel.setPicture(PICTURE_URL);
+    return streamModel;
   }
 
   private Stream streamWithPhoto() {
