@@ -4,6 +4,8 @@ import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
+import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
+import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.util.List;
 
@@ -53,4 +55,7 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
   void dismissHighlight(String idHighlightedShot);
 
   void hideHighlightedShot(String idHighlightedShot);
+
+  void callCtaCheckIn(String idStream) throws UserCannotCheckInRequestException,
+      UserAlreadyCheckInRequestException;
 }

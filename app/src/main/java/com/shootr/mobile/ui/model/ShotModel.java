@@ -28,6 +28,11 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private Long views;
     private Long linkClickCount;
     private Long reshootCount;
+    private String type;
+    private String ctaCaption;
+    private String ctaButtonLink;
+    private String ctaButtonText;
+    private Long promoted;
 
     public String getIdShot() {
         return idShot;
@@ -211,6 +216,46 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setReshootCount(Long reshootCount) {
         this.reshootCount = reshootCount;
+    }
+
+    public String getCtaCaption() {
+        return ctaCaption;
+    }
+
+    public void setCtaCaption(String ctaCaption) {
+        this.ctaCaption = ctaCaption;
+    }
+
+    public String getCtaButtonLink() {
+        return ctaButtonLink;
+    }
+
+    public void setCtaButtonLink(String ctaButtonLink) {
+        this.ctaButtonLink = ctaButtonLink;
+    }
+
+    public String getCtaButtonText() {
+        return ctaButtonText;
+    }
+
+    public void setCtaButtonText(String ctaButtonText) {
+        this.ctaButtonText = ctaButtonText;
+    }
+
+    public Long getPromoted() {
+        return promoted;
+    }
+
+    public void setPromoted(Long promoted) {
+        this.promoted = promoted;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

@@ -13,9 +13,12 @@ import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
+import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
+import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.io.IOException;
 import java.util.List;
@@ -243,7 +246,11 @@ public class ServiceShotDatasource implements ShotDataSource {
 
   @Override public HighlightedShotEntity getHighlightedShot(String idStream) {
     try {
-      List<HighlightedShotApiEntity> highlightedShot = shotApiService.getHighlightedShot(idStream);
+      StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder()
+          .forStream(idStream)
+          .build();
+      List<HighlightedShotApiEntity> highlightedShot =
+          shotApiService.getHighlightedShot(idStream, streamTimelineParameters.getShotTypes());
       HighlightedShotEntity localHighlightedShot =
           databaseShotDataSource.getHighlightedShot(idStream);
 
@@ -310,6 +317,23 @@ public class ServiceShotDatasource implements ShotDataSource {
 
   @Override public void hideHighlightedShot(String idHighlightedShot) {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
+  }
+
+  @Override public void callCtaCheckIn(String idStream)
+      throws UserCannotCheckInRequestException, UserAlreadyCheckInRequestException {
+    try {
+      shotApiService.checkIn(idStream);
+    } catch (IOException e) {
+      throw new ServerCommunicationException(e);
+    } catch (ApiException e) {
+      if (String.valueOf(e.getErrorInfo().code()).equals(ShootrError.ERROR_CODE_CHECKIN)) {
+        throw new UserCannotCheckInRequestException(e);
+      } else if (String.valueOf(e.getErrorInfo().code()).equals(ShootrError.ERROR_ALREADY_CHECKIN)) {
+        throw new UserAlreadyCheckInRequestException(e);
+      } else {
+        throw new ServerCommunicationException(e);
+      }
+    }
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

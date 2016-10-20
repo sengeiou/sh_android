@@ -4,6 +4,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
@@ -14,6 +15,7 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.Timeline;
@@ -41,12 +43,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
   private static final int MAX_LENGTH = 40;
+  private static final String SCHEMA = "shootr://";
 
   private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
   private final StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
   private final SelectStreamInteractor selectStreamInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+  private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final ShareShotInteractor shareShotInteractor;
   private final GetStreamInteractor getStreamInteractor;
   private final ShotModelMapper shotModelMapper;
@@ -86,7 +90,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      CallCtaCheckInInteractor callCtaCheckInInteractor, ShareShotInteractor shareShotInteractor,
       GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper,
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor,
@@ -99,6 +104,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.selectStreamInteractor = selectStreamInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+    this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.shareShotInteractor = shareShotInteractor;
     this.getStreamInteractor = getStreamInteractor;
     this.shotModelMapper = shotModelMapper;
@@ -791,6 +797,23 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onHidePoll() {
     if (streamModel != null && streamModel.getTopic() != null) {
       streamTimelineView.showPinnedMessage(streamModel.getTopic());
+    }
+  }
+
+  public void onCtaPressed(ShotModel shotModel) {
+    if (shotModel.getCtaButtonLink().startsWith(SCHEMA) && shotModel.getType().equals(
+        ShotType.CTACHECKIN)) {
+      callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
+        @Override public void onCompleted() {
+          streamTimelineView.showChecked();
+        }
+      }, new Interactor.ErrorCallback() {
+        @Override public void onError(ShootrException error) {
+          streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
+        }
+      });
+    } else {
+      streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }
 }

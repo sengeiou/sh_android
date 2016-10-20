@@ -65,6 +65,14 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.REPLY_COUNT)));
     highlightedShot.setReshootCounter(
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.RESHOOT_COUNT)));
+    highlightedShot.setCtaButtonLink(
+        c.getString(c.getColumnIndex(DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK)));
+    highlightedShot.setCtaButtonText(
+        c.getString(c.getColumnIndex(DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT)));
+    highlightedShot.setCtaCaption(
+        c.getString(c.getColumnIndex(DatabaseContract.HighlightedShotTable.CTA_CAPTION)));
+    highlightedShot.setPromoted(
+        c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.PROMOTED)));
     setSynchronizedfromCursor(c, highlightedShot);
     return highlightedShot;
   }
@@ -99,6 +107,10 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.HighlightedShotTable.VIEWS, highlightedShot.getViews());
     contentValues.put(DatabaseContract.HighlightedShotTable.LINK_CLICKS, highlightedShot.getLinkClicks());
     contentValues.put(DatabaseContract.HighlightedShotTable.RESHOOT_COUNT, highlightedShot.getReshootCounter());
+    contentValues.put(DatabaseContract.HighlightedShotTable.PROMOTED, highlightedShot.getPromoted());
+    contentValues.put(DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK, highlightedShot.getCtaButtonLink());
+    contentValues.put(DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT, highlightedShot.getCtaButtonText());
+    contentValues.put(DatabaseContract.HighlightedShotTable.CTA_CAPTION, highlightedShot.getCtaCaption());
     setSynchronizedtoContentValues(highlightedShot, contentValues);
     return contentValues;
   }

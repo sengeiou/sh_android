@@ -19,6 +19,8 @@ import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.CannotAddContributorException;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.mobile.domain.service.user.LoginException;
+import com.shootr.mobile.domain.service.user.UserAlreadyCheckedException;
+import com.shootr.mobile.domain.service.user.UserCannotCheckInException;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
 import java.util.HashMap;
 import java.util.Map;
@@ -153,6 +155,10 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_has_voted);
         } else if (error instanceof PollHasBeenDeletedException) {
             return context.getString(R.string.error_poll_has_been_deleted);
+        } else if (error instanceof UserAlreadyCheckedException) {
+            return context.getString(R.string.error_user_already_checked);
+        } else if (error instanceof UserCannotCheckInException) {
+            return context.getString(R.string.error_user_cannot_check);
         } else {
             return getUnknownErrorMessage();
         }

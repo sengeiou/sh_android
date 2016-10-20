@@ -114,6 +114,14 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op*/
     }
 
+    @Override public void showChecked() {
+        /* no-op */
+    }
+
+    @Override public void openCtaAction(String link) {
+        /* no-op*/
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

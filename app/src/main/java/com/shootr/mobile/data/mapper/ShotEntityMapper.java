@@ -58,6 +58,10 @@ public class ShotEntityMapper {
         shot.setViews(shotEntity.getViews());
         shot.setLinkClicks(shotEntity.getLinkClicks());
         shot.setReshootCount(shotEntity.getReshootCounter());
+        shot.setCtaButtonLink(shotEntity.getCtaButtonLink());
+        shot.setCtaButtonText(shotEntity.getCtaButtonText());
+        shot.setCtaCaption(shotEntity.getCtaCaption());
+        shot.setPromoted(shotEntity.getPromoted());
         return shot;
     }
 
@@ -109,6 +113,10 @@ public class ShotEntityMapper {
         shotEntity.setViews(shot.getViews());
         shotEntity.setLinkClicks((shot.getLinkClicks()));
         shotEntity.setReshootCounter(shot.getReshootCount());
+        shotEntity.setCtaButtonLink(shot.getCtaButtonLink());
+        shotEntity.setCtaButtonText(shot.getCtaButtonText());
+        shotEntity.setCtaCaption(shot.getCtaCaption());
+        shotEntity.setPromoted(shot.getPromoted());
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;

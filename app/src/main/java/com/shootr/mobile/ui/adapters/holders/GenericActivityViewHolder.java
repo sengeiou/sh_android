@@ -44,7 +44,9 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
 
     protected void renderText(ActivityModel activity) {
-        text.setText(activity.getComment());
+        if (activity.getComment() != null) {
+            text.setText(activity.getComment());
+        }
     }
 
     protected void renderName(ActivityModel activity) {

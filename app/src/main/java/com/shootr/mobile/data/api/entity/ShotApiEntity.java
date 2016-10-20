@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.api.entity;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ShotApiEntity {
@@ -38,6 +39,13 @@ public class ShotApiEntity {
     private Long profileHidden;
     private Long replyCount;
     private Long reshootCount;
+    private Long promoted;
+    @SerializedName("CTAButtonLink")
+    private String ctaButtonLink;
+    @SerializedName("CTAButtonText")
+    private String ctaButtonText;
+    @SerializedName("CTACaption")
+    private String ctaCaption;
 
     public String getIdShot() {
         return idShot;
@@ -253,5 +261,37 @@ public class ShotApiEntity {
 
     public void setReshootCount(Long reshootCount) {
         this.reshootCount = reshootCount;
+    }
+
+    public Long getPromoted() {
+        return promoted;
+    }
+
+    public void setPromoted(Long promoted) {
+        this.promoted = promoted;
+    }
+
+    public String getCtaButtonLink() {
+        return ctaButtonLink;
+    }
+
+    public void setCtaButtonLink(String ctaButtonLink) {
+        this.ctaButtonLink = ctaButtonLink;
+    }
+
+    public String getCtaButtonText() {
+        return ctaButtonText;
+    }
+
+    public void setCtaButtonText(String ctaButtonText) {
+        this.ctaButtonText = ctaButtonText;
+    }
+
+    public String getCtaCaption() {
+        return ctaCaption;
+    }
+
+    public void setCtaCaption(String ctaCaption) {
+        this.ctaCaption = ctaCaption;
     }
 }

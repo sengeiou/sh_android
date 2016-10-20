@@ -35,6 +35,11 @@ public class Shot {
     private Long views;
     private Long reshootCount;
 
+    private String ctaCaption;
+    private String ctaButtonLink;
+    private String ctaButtonText;
+    private Long promoted;
+
     public String getIdShot() {
         return idShot;
     }
@@ -408,5 +413,37 @@ public class Shot {
 
     public void setReshootCount(Long reshootCount) {
         this.reshootCount = reshootCount;
+    }
+
+    public String getCtaCaption() {
+        return ctaCaption;
+    }
+
+    public void setCtaCaption(String ctaCaption) {
+        this.ctaCaption = ctaCaption;
+    }
+
+    public Long getPromoted() {
+        return promoted;
+    }
+
+    public void setPromoted(Long promoted) {
+        this.promoted = promoted;
+    }
+
+    public String getCtaButtonLink() {
+        return ctaButtonLink;
+    }
+
+    public void setCtaButtonLink(String ctaButtonLink) {
+        this.ctaButtonLink = ctaButtonLink;
+    }
+
+    public String getCtaButtonText() {
+        return ctaButtonText;
+    }
+
+    public void setCtaButtonText(String ctaButtonText) {
+        this.ctaButtonText = ctaButtonText;
     }
 }

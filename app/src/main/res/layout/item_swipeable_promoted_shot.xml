@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+  <com.daimajia.swipe.SwipeLayout xmlns:swipe="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/swipe"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      swipe:leftEdgeSwipeOffset="0dp"
+      >
+
+    <FrameLayout
+        android:id="@+id/reshoot_container"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="#388E3C"
+        android:gravity="center"
+        >
+      <TextView
+          android:id="@+id/hide_highlighted"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:text="@string/menu_share_shot_via_shootr"
+          android:textAllCaps="true"
+          android:textColor="@color/white"
+          android:textStyle="bold"
+          />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+      <include
+          layout="@layout/item_promoted_shot"
+          android:id="@+id/shot_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          />
+    </RelativeLayout>
+  </com.daimajia.swipe.SwipeLayout>
+</LinearLayout>

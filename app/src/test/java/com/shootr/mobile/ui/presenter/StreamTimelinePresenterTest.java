@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
@@ -97,6 +98,7 @@ public class StreamTimelinePresenterTest {
   @Captor ArgumentCaptor<Boolean> booleanArgumentCaptor;
   @Mock SessionRepository sessionRepository;
   @Mock GetContributorsInteractor getContributorsInteractor;
+  @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
@@ -106,7 +108,7 @@ public class StreamTimelinePresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
-        unmarkNiceShotInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
+        unmarkNiceShotInteractor, callCtaCheckInInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStreamInteractor,
         updateWatchNumberInteractor,
         reloadStreamTimelineInteractor, createStreamInteractor,

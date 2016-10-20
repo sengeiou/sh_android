@@ -118,6 +118,14 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.RESHOOT_COUNT
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.CTA_CAPTION
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.CTA_BUTTON_LINK
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.CTA_BUTTON_TEXT
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.PROMOTED
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -641,6 +649,14 @@ public class SQLiteUtils {
         + DatabaseContract.HighlightedShotTable.LINK_CLICKS
         + " NUMBER NULL,"
         + DatabaseContract.HighlightedShotTable.RESHOOT_COUNT
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_CAPTION
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.PROMOTED
         + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"

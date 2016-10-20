@@ -50,6 +50,8 @@ public interface ShootrError {
     String ERROR_CODE_INVALID_LOGIN_SHOOTR_METHOD = "1020";
     String ERROR_CODE_INVALID_LOGIN_FACEBOOK_METHOD = "1021";
 
+    String ERROR_CODE_CHECKIN = "8001";
+    String ERROR_ALREADY_CHECKIN = "8002";
 
     String getErrorCode();
 

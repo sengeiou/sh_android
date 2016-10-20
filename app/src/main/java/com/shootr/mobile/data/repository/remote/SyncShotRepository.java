@@ -11,6 +11,8 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
+import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
@@ -155,6 +157,11 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   @Override public void highlightShot(String idShot) {
     HighlightedShotEntity highlightedShotEntity = remoteShotDataSource.highlightShot(idShot);
     localShotDataSource.putHighlightShot(highlightedShotEntity);
+  }
+
+  @Override public void callCtaCheckIn(String idStream) throws UserAlreadyCheckInRequestException,
+      UserCannotCheckInRequestException {
+    remoteShotDataSource.callCtaCheckIn(idStream);
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {

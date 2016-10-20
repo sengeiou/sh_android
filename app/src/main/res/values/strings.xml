@@ -467,4 +467,9 @@
   <string name="share_stream_via_shootr">Share via Shootr</string>
   <string name="discover_banner_content">Tap the star to favorite. TV and radio shows will notify you when they start.</string>
   <string name="discover_banner_title">Add streams to Favorites</string>
+  <string name="stream_checked">Checked-In</string>
+  <string name="stream_check_in_activity_text_pattern">is watching (stream)</string>
+  <string name="promoted">Promocionado</string>
+  <string name="error_user_already_checked">User already checked</string>
+  <string name="error_user_cannot_check">User cannot check</string>
 </resources>

@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.holders.HighLightedShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.HighlightedPromotedShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.PromotedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShotTimelineViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
@@ -19,7 +23,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
-import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
+import com.shootr.mobile.ui.adapters.recyclerview.SubheaderShotRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -30,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShotsTimelineAdapter
-    extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
+    extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
 
   private static final int HEADER_POSITION = 0;
 
@@ -53,6 +57,7 @@ public class ShotsTimelineAdapter
   private final OnUrlClickListener onUrlClickListener;
   private final OnUrlClickListener onShotUrlClickListener;
   private final OnReshootClickListener onReshootClickListener;
+  private final OnCtaClickListener onCtaClickListener;
   private final NumberFormatUtil numberFormatUtil;
 
   private List<ShotModel> shots;
@@ -65,10 +70,9 @@ public class ShotsTimelineAdapter
       ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      OnUrlClickListener onShotUrlClickListener,
-      OnHideHighlightShot onHideHighlightClickListener,
-      OnReshootClickListener onReshootClickListener, NumberFormatUtil numberFormatUtil,
-      Boolean isAdmin) {
+      OnUrlClickListener onShotUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
+      OnReshootClickListener onReshootClickListener, OnCtaClickListener onCtaClickListener,
+      NumberFormatUtil numberFormatUtil, Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -79,6 +83,7 @@ public class ShotsTimelineAdapter
     this.onShotUrlClickListener = onShotUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
     this.onReshootClickListener = onReshootClickListener;
+    this.onCtaClickListener = onCtaClickListener;
     this.numberFormatUtil = numberFormatUtil;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -90,46 +95,129 @@ public class ShotsTimelineAdapter
     this.isAdmin = isAdmin;
   }
 
+  @Override public int getItemViewType(int position) {
+    int typeHeader = TYPE_ITEM_SHOT;
+    ShotModel shotModel =
+        shots != null && !shots.isEmpty() ? (ShotModel) shots.get(position) : null;
+    if (isHeaderPosition(position)) {
+      typeHeader = getHeaderType(shotModel);
+    } else if (isSubheaderPosition(position)) {
+      typeHeader = getSubheaderType(shotModel);
+    } else {
+      typeHeader = getItemType(shotModel);
+    }
+    return typeHeader;
+  }
+
+  private int getItemType(ShotModel shotModel) {
+    int typeHeader = TYPE_ITEM_SHOT;
+    if (shotModel != null) {
+      if (shotModel.getType().equals(ShotType.CTACHECKIN) || shotModel.getType()
+          .equals(ShotType.CTAGENERICLINK)) {
+        typeHeader = TYPE_ITEM_CHECK_IN;
+      } else {
+        typeHeader = TYPE_ITEM_SHOT;
+      }
+    }
+    return typeHeader;
+  }
+
+  private int getSubheaderType(ShotModel shotModel) {
+    int typeHeader = TYPE_SUBHEADER_SHOT;
+    if (shotModel != null) {
+      if (shotModel.getType().equals(ShotType.CTACHECKIN) || shotModel.getType()
+          .equals(ShotType.CTAGENERICLINK)) {
+        typeHeader = TYPE_SUBHEADER_CHECK_IN;
+      } else {
+        typeHeader = TYPE_SUBHEADER_SHOT;
+      }
+    }
+    return typeHeader;
+  }
+
+  private int getHeaderType(ShotModel shotModel) {
+    int typeHeader = TYPE_HEADER_SHOT;
+    if (shotModel != null) {
+      if (shotModel.getType().equals(ShotType.CTACHECKIN) || shotModel.getType()
+          .equals(ShotType.CTAGENERICLINK)) {
+        typeHeader = TYPE_HEADER_CHECK_IN;
+      } else {
+        typeHeader = TYPE_HEADER_SHOT;
+      }
+    }
+    return typeHeader;
+  }
+
   @Override
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-    View v =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.highlighted_shot, parent, false);
-    return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onHideHighlightClickListener,
-        onUsernameClickListener, timeUtils, imageLoader,
-        shotTextSpannableBuilder, numberFormatUtil);
+    if (viewType == TYPE_HEADER_CHECK_IN) {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.highlighted_shot_promoted, parent, false);
+      return new HighlightedPromotedShotViewHolder(v, avatarClickListener, videoClickListener,
+          onNiceShotListener, onHideHighlightClickListener, onUsernameClickListener, timeUtils,
+          imageLoader, shotTextSpannableBuilder, numberFormatUtil);
+    } else {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.highlighted_shot, parent, false);
+      return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
+          onNiceShotListener, onHideHighlightClickListener, onUsernameClickListener, timeUtils,
+          imageLoader, shotTextSpannableBuilder, numberFormatUtil);
+    }
   }
 
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-    return getShotViewHolder(parent);
+    return getShotViewHolder(parent, viewType);
   }
 
-  @NonNull RecyclerView.ViewHolder getShotViewHolder(ViewGroup parent) {
-    View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
-    return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
-        onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader,
-        numberFormatUtil, shotTextSpannableBuilder);
+  @NonNull RecyclerView.ViewHolder getShotViewHolder(ViewGroup parent, int viewType) {
+    if (viewType == TYPE_SUBHEADER_CHECK_IN || viewType == TYPE_ITEM_CHECK_IN) {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_swipeable_promoted_shot, parent, false);
+      return new PromotedShotViewHolder(v, avatarClickListener, videoClickListener,
+          onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
+          shotTextSpannableBuilder);
+    } else {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
+      return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
+          onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
+          shotTextSpannableBuilder);
+    }
   }
 
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-    return getShotViewHolder(parent);
+    return getShotViewHolder(parent, viewType);
   }
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-    ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel, shots.get(position), shotClickListener,
-        onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
+    if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
+      ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel, shots.get(position),
+          shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
+          onImageClickListener, onUrlClickListener, isAdmin, onCtaClickListener);
+    } else {
+      ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
+          shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
+          onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
+    }
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
-  private void renderShotViewHolder(ShotTimelineViewHolder holder, int position) {
-    holder.render(shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener, onReshootClickListener, onShotUrlClickListener);
+  private void renderShotViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_SUBHEADER_CHECK_IN
+        || holder.getItemViewType() == TYPE_ITEM_CHECK_IN) {
+      ((PromotedShotViewHolder) holder).render(shots.get(position), shotClickListener,
+          onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
+          onReshootClickListener, onShotUrlClickListener, onCtaClickListener);
+    } else {
+      ((ShotTimelineViewHolder) holder).render(shots.get(position), shotClickListener,
+          onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
+          onReshootClickListener, onShotUrlClickListener);
+    }
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -232,7 +320,6 @@ public class ShotsTimelineAdapter
   public ShotModel getItem(int position) {
     return shots.get(position);
   }
-
 
   public ShotModel getLastShot() {
     Integer shotsNumber = shots.size();

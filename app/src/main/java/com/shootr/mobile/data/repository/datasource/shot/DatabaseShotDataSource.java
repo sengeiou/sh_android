@@ -130,6 +130,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
     highlightedManager.hideHighlightedShot(idHighlightedShot);
   }
 
+  @Override public void callCtaCheckIn(String idStream) {
+    throw new IllegalArgumentException("Should not have local implementation");
+  }
+
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {
     return shotManager.getHiddenShotNotSynchronized();
   }

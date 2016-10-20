@@ -31,6 +31,7 @@ import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -43,6 +44,7 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
@@ -88,6 +90,7 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.NumberFormatUtil;
@@ -126,6 +129,8 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject PinShotPresenter pinShotPresenter;
   @Inject StreamPollIndicatorPresenter streamPollIndicatorPresenter;
   @Inject HighlightedShotPresenter highlightedShotPresenter;
+  @Inject LocaleProvider localeProvider;
+  @Inject IntentFactory intentFactory;
 
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
@@ -156,6 +161,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
+  @BindString(R.string.stream_checked) String streamChecked;
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
   @BindString(R.string.poll_vote) String pollVoteString;
   @BindString(R.string.poll_view) String pollViewString;
@@ -487,7 +493,7 @@ public class StreamTimelineFragment extends BaseFragment
         new OnNiceShotListener() {
           @Override public void markNice(ShotModel shot) {
             streamTimelinePresenter.markNiceShot(shot.getIdShot());
-              sendNiceAnalytics(shot);
+            sendNiceAnalytics(shot);
           }
 
           @Override public void unmarkNice(String idShot) {
@@ -549,6 +555,10 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void onReshootClick(ShotModel shot) {
         streamTimelinePresenter.shareShot(shot);
         sendReshootAnalytics(shot);
+      }
+    }, new OnCtaClickListener() {
+      @Override public void onCtaClick(ShotModel shotModel) {
+        streamTimelinePresenter.onCtaPressed(shotModel);
       }
     }, numberFormatUtil, highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
@@ -991,6 +1001,16 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void addShots(List<ShotModel> shotModels) {
     adapter.addShots(shotModels);
     shotsTimeline.smoothScrollToPosition(0);
+  }
+
+  @Override public void showChecked() {
+    feedbackMessage.show(getView(), streamChecked);
+  }
+
+  @Override public void openCtaAction(String link) {
+    String termsUrl = String.format(link, localeProvider.getLanguage());
+    Intent termsIntent = intentFactory.openEmbededUrlIntent(getActivity(), termsUrl);
+    Intents.maybeStartActivity(getActivity(), termsIntent);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
