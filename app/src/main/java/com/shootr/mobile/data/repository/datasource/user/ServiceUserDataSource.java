@@ -47,6 +47,10 @@ public class ServiceUserDataSource implements UserDataSource {
         throw new RuntimeException("Method not implemented");
     }
 
+    @Override public List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser) {
+        throw new RuntimeException("Method not implemented");
+    }
+
     @Override public UserEntity getUser(String id) {
         try {
             if (id.equals(sessionRepository.getCurrentUserId())) {

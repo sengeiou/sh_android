@@ -1,7 +1,10 @@
 package com.shootr.mobile.notifications.gcm;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
@@ -65,6 +68,10 @@ public class GCMIntentService extends IntentService {
       }
 
       if (push.isSilent()) {
+        return;
+      }
+
+      if (appIsRunning()) {
         return;
       }
 
@@ -206,5 +213,36 @@ public class GCMIntentService extends IntentService {
 
   private void receivedUnknown(PushNotification pushNotification) {
     Timber.w("Received unknown notification: %s", pushNotification.toString());
+  }
+
+  private boolean appIsRunning() {
+    ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+      List<ActivityManager.RunningAppProcessInfo> runningProcesses =
+          activityManager.getRunningAppProcesses();
+      for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+        if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+          if (checkAppPackage(processInfo)) return true;
+        }
+      }
+    } else {
+      List<ActivityManager.RunningTaskInfo> taskInfo = activityManager.getRunningTasks(1);
+      ComponentName componentInfo = taskInfo.get(0).topActivity;
+      if (componentInfo.getPackageName().equals(this.getPackageName())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private boolean checkAppPackage(ActivityManager.RunningAppProcessInfo processInfo) {
+    for (String activeProcess : processInfo.pkgList) {
+      if (activeProcess.equals(this.getPackageName())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

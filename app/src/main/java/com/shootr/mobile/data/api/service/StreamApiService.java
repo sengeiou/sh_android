@@ -18,7 +18,7 @@ import retrofit.http.Query;
 public interface StreamApiService {
 
   @GET("/stream/{idStream}?watchersCount=51&includeWatchers=true"
-      + "&includeLinks=false&includeMediaCountByRelatedUsers=true") StreamEntity getStream(
+      + "&includeLinks=false") StreamEntity getStream(
       @Path("idStream") String idStream, @Query("streamReadWriteMode") String[] types)
       throws IOException, ApiException;
 

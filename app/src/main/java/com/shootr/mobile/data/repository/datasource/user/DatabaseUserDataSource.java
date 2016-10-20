@@ -78,6 +78,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userManager.getRelatedUsers(idUser);
     }
 
+    @Override public List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser) {
+        return userManager.getRelatedUsersByIdStream(idStream, idUser);
+    }
+
     @Override public UserEntity updateUser(UserEntity currentOrNewUserEntity) {
         throw new IllegalArgumentException("this method has no local implementation");
     }

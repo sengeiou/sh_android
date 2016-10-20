@@ -18,6 +18,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -92,7 +93,7 @@ public class PinShotPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(getShotDetailInteractor).loadShotDetail(anyString(),
+        verify(getShotDetailInteractor).loadShotDetail(anyString(), anyBoolean(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -100,7 +101,7 @@ public class PinShotPresenterTest {
     @Test public void shouldNotGetShotDetailWhenResumeIfHasNotBeenPaused() throws Exception {
         presenter.resume();
 
-        verify(getShotDetailInteractor, never()).loadShotDetail(anyString(),
+        verify(getShotDetailInteractor, never()).loadShotDetail(anyString(), anyBoolean(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -159,12 +160,13 @@ public class PinShotPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ShotDetail> callback =
-                  (Interactor.Callback<ShotDetail>) invocation.getArguments()[1];
+                    (Interactor.Callback<ShotDetail>) invocation.getArguments()[2];
                 callback.onLoaded(shotDetail(profileHidden));
                 return null;
             }
         }).when(getShotDetailInteractor)
-          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+            .loadShotDetail(anyString(), anyBoolean(), any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private ShotModel shotModel(Long hidden) {

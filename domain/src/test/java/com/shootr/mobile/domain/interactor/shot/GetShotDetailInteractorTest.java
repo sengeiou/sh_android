@@ -57,7 +57,7 @@ public class GetShotDetailInteractorTest {
     when(localShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
         unorderedReplies());
 
-    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
+    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), true, spyCallback, errorCallback);
 
     List<Shot> localReplies = spyCallback.firstResult().getReplies();
     assertThat(localReplies).isSortedAccordingTo(new Shot.NewerBelowComparator());
@@ -67,7 +67,7 @@ public class GetShotDetailInteractorTest {
     when(remoteShotRepository.getShotDetail(ANY_SHOT_ID, TYPES_STREAM, TYPES_SHOT)).thenReturn(
         unorderedReplies());
 
-    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
+    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), true, spyCallback, errorCallback);
 
     List<Shot> remoteReplies = spyCallback.lastResult().getReplies();
     assertThat(remoteReplies).isSortedAccordingTo(new Shot.NewerBelowComparator());
@@ -78,7 +78,7 @@ public class GetShotDetailInteractorTest {
         new ShootrException() {
         });
 
-    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
+    interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), false, spyCallback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }

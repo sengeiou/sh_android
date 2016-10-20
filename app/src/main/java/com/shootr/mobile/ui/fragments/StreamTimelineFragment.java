@@ -151,13 +151,14 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.shot_bar_drafts) View draftsButton;
-  @BindView(R.id.timeline_new_shots_indicator_text) TextView timelineIndicatorText;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
   @BindView(R.id.timeline_message) ClickableTextView streamMessage;
   @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
   @BindView(R.id.poll_question) TextView pollQuestion;
   @BindView(R.id.poll_action) TextView pollAction;
+  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
+  @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -605,10 +606,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        if (dy > 10) {
-          hideNewShotsIndicator();
-        }
-
         if (shotsTimeline != null) {
           if (preCachingLayoutManager.findFirstVisibleItemPosition() == 0) {
             streamTimelinePresenter.setIsFirstShotPosition(true);
@@ -803,13 +800,8 @@ public class StreamTimelineFragment extends BaseFragment
     startActivity(new Intent(getActivity(), DraftsActivity.class));
   }
 
-  @OnClick(R.id.timeline_new_shots_indicator_text) public void goToTopOfTimeline() {
+  @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);
-    if (streamMessage.getText().toString().isEmpty() && timelineNewShotsIndicator != null
-        && timelineIndicatorContainer != null) {
-      timelineNewShotsIndicator.setVisibility(View.GONE);
-      timelineIndicatorContainer.setVisibility(View.GONE);
-    }
   }
 
   //region View methods
@@ -877,17 +869,11 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
     try {
-      timelineNewShotsIndicator.setVisibility(View.VISIBLE);
-      timelineIndicatorContainer.setVisibility(View.VISIBLE);
-      timelineIndicatorText.setVisibility(View.VISIBLE);
+        newShotsNotificatorContainer.setVisibility(View.VISIBLE);
       String indicatorText =
           getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
               numberNewShots);
-      timelineIndicatorText.setText(indicatorText);
-      if (pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
-        timelinePollIndicator.setVisibility(View.GONE);
-        pollIndicatorStatus = POLL_STATUS_INVISIBLE;
-      }
+      newShotsNotificatorText.setText(indicatorText);
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }
@@ -895,16 +881,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void hideNewShotsIndicator() {
     try {
-      timelineIndicatorText.setVisibility(View.GONE);
-      streamTimelinePresenter.setNewShotsNumber(0);
-      if (streamMessage.getText().toString().isEmpty()) {
-        timelineNewShotsIndicator.setVisibility(View.GONE);
-      }
-      if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_INVISIBLE)) {
-        pollIndicatorStatus = POLL_STATUS_SHOWING;
-        timelinePollIndicator.setVisibility(View.VISIBLE);
-        timelineIndicatorContainer.setVisibility(View.VISIBLE);
-      }
+      newShotsNotificatorContainer.setVisibility(View.GONE);
+      streamTimelinePresenter.setIsFirstShotPosition(true);
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }
@@ -1001,6 +979,8 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void addShots(List<ShotModel> shotModels) {
     adapter.addShots(shotModels);
     shotsTimeline.smoothScrollToPosition(0);
+    streamTimelinePresenter.setIsFirstShotPosition(true);
+    streamTimelinePresenter.setNewShotsNumber(0);
   }
 
   @Override public void showChecked() {

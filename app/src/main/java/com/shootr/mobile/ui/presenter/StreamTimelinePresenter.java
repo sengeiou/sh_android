@@ -314,6 +314,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (isFirstLoad) {
       showFirstLoad(shots);
       setTimelineInitialized(shots);
+      isFirstShotPosition = true;
     } else if (isTimelineInitialized) {
       showFirstLoad(shots);
       isTimelineInitialized = false;
@@ -783,8 +784,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (hasBeenPaused) {
       selectStream();
       handleVisibilityTimelineIndicatorInResume();
-      setIsFirstLoad(true);
-      setIsFirstShotPosition(true);
     }
   }
 

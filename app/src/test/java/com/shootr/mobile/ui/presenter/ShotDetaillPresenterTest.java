@@ -26,6 +26,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
@@ -220,7 +221,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.initialize(shotDetailView, ID_SHOT);
 
-        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(), anyBoolean(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -246,7 +247,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.initialize(shotDetailView, shotModel());
 
-        verify(getShotDetaillInteractor).loadShotDetail(anyString(),
+        verify(getShotDetaillInteractor).loadShotDetail(anyString(), anyBoolean(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -256,7 +257,7 @@ public class ShotDetaillPresenterTest {
 
         presenter.initialize(shotDetailView, shotModelNull());
 
-        verify(getShotDetaillInteractor, never()).loadShotDetail(anyString(),
+        verify(getShotDetaillInteractor, never()).loadShotDetail(anyString(), anyBoolean(),
           any(Interactor.Callback.class),
           any(Interactor.ErrorCallback.class));
     }
@@ -403,24 +404,26 @@ public class ShotDetaillPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ShotDetail> callback =
-                  (Interactor.Callback<ShotDetail>) invocation.getArguments()[1];
+                    (Interactor.Callback<ShotDetail>) invocation.getArguments()[2];
                 callback.onLoaded(shotDetail());
                 return null;
             }
         }).when(getShotDetaillInteractor)
-          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+            .loadShotDetail(anyString(), anyBoolean(), any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetShotDetailWithRepliesInteractorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<ShotDetail> callback =
-                  (Interactor.Callback<ShotDetail>) invocation.getArguments()[1];
+                    (Interactor.Callback<ShotDetail>) invocation.getArguments()[2];
                 callback.onLoaded(shotDetailWithReplies());
                 return null;
             }
         }).when(getShotDetaillInteractor)
-          .loadShotDetail(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+            .loadShotDetail(anyString(), anyBoolean(), any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupMarkNiceShotInteractorCallback() {

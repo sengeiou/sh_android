@@ -13,6 +13,8 @@ public interface UserRepository {
 
     User getUserById(String id);
 
+    User getUserForAnalythicsById(String id);
+
     User getUserByUsername(String username);
 
     boolean isFollower(String userId);
@@ -34,6 +36,8 @@ public interface UserRepository {
     List<User> getFollowers(String idUser, Integer page, Integer pageSize);
 
     List<User> getLocalPeople(String idUser);
+
+    List<User> getLocalPeopleFromIdStream(String idStream);
 
     User updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
