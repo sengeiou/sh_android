@@ -13,6 +13,33 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.18.2] - 2016-10-21
+
+### Addded
+
+- MixPanel
+- Discover landscape image
+- SHot with CTA and promoted Shot
+- Facebook login cases
+- Hot
+- Discover banner
+
+### Fixed
+
+- Fix nullPointer en StreamParameters
+- Dominant color in streamDetail
+
+### Removed
+- Blog stream en soporte
+- Push notification in app
+
+### Changed
+
+- Timeline new shots indicator
+- Shot detail design
+- Send shot in shotDetail
+
+
 ## [1.18.2] - 2016-09-30
 
 ### Addded
