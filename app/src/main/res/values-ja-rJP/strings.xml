@@ -462,4 +462,5 @@
   <string name="error_user_already_checked">Already checked in</string>
   <string name="stream_checked">Checked in</string>
   <string name="promoted">Promoted</string>
+  <string name="drawer_hot_title">Hot</string>
 </resources>
