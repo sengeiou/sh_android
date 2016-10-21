@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/shot_user_name"
             android:orientation="horizontal"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="10dp"
             >
           <com.shootr.mobile.ui.widgets.ClickableTextView
@@ -135,13 +135,14 @@
 
           <Button
               android:text="Check-in"
-              android:layout_width="120dp"
-              android:layout_height="wrap_content"
-              android:maxWidth="250dp"
+              android:layout_width="wrap_content"
+              android:layout_height="32dp"
+              android:maxWidth="100dp"
               android:id="@+id/check_in_button"
               android:layout_gravity="center"
               android:textAllCaps="false"
               android:textColor="@color/black"
+              android:textSize="12sp"
               android:layout_marginLeft="4dp"
               android:background="@drawable/cta_button_state"
               />
