@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -55,7 +54,7 @@ public class WatchNumberInteractor implements Interactor {
   @Override public void execute() throws Exception {
     remoteUserRepository.forceUpdatePeople();
     Stream stream = getRemoteStreamOrFallbackToLocal();
-    List<User> watchers = filterUsersWatchingStream(stream.getWatchers());
+    List<User> watchers = localUserRepository.getLocalPeopleFromIdStream(idStream);
     Integer[] watchersCount = setWatchers(stream, watchers);
     notifyLoaded(watchersCount);
   }
@@ -64,20 +63,8 @@ public class WatchNumberInteractor implements Interactor {
     Integer[] watchersCount = new Integer[2];
     watchersCount[FRIENDS] = watchers.size();
     watchersCount[WATCHERS] =
-        (stream.getWatchers() != null) ? stream.getWatchers().size() : NO_WATCHERS;
+        (stream.getWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
     return watchersCount;
-  }
-
-  protected List<User> filterUsersWatchingStream(List<User> people) {
-    List<User> watchers = new ArrayList<>();
-    if (people != null) {
-      for (User user : people) {
-        if (localUserRepository.isFollowing(user.getIdUser())) {
-          watchers.add(user);
-        }
-      }
-    }
-    return watchers;
   }
 
   private void notifyLoaded(final Integer[] countIsWatching) {

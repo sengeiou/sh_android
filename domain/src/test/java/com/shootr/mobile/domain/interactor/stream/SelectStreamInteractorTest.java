@@ -82,7 +82,7 @@ public class SelectStreamInteractorTest {
 
     interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
 
-    verify(localUserRepository).updateWatch(currentUserWatchingNewStream());
+    verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
   }
 
   @Test public void shouldSetNewStreamIdInRemoteRepository() throws Exception {

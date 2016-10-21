@@ -33,6 +33,8 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
 
     List<UserEntity> getRelatedUsers(String idUser, Long timestamp);
 
+    List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser);
+
     UserEntity updateUser(UserEntity currentOrNewUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 

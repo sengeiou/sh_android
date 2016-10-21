@@ -59,12 +59,10 @@ public class ShotManager extends AbstractManager {
 
     public List<ShotEntity> getShotsByStreamParameters(StreamTimelineParameters parameters) {
         String streamSelection = ShotTable.ID_STREAM + " = ?";
-        String typeSelection = ShotTable.TYPE + " = ?";
 
-        String[] whereArguments = new String[2];
+        String[] whereArguments = new String[1];
         whereArguments[0] = String.valueOf(parameters.getStreamId());
-        whereArguments[1] = String.valueOf(parameters.getShotTypes()[0]);
-        String whereClause = streamSelection + " AND " + typeSelection;
+        String whereClause = streamSelection;
 
         return readShots(whereClause, whereArguments);
     }

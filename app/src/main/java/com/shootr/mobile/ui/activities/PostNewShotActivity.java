@@ -76,6 +76,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
     @BindString(R.string.analytics_action_response) String analyticsActionResponse;
     @BindString(R.string.analytics_label_response) String analyticsLabelResponse;
+    @BindString(R.string.analytics_source_timeline) String timelineSource;
+    @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
 
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
@@ -93,6 +95,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
     private boolean isReply = false;
+    private String idUserReplied;
+    private String replyUsername;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getToolbar().setVisibility(View.GONE);
@@ -117,6 +121,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         if (extras != null) {
             String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
             String replyParentId = extras.getString(EXTRA_REPLY_PARENT_ID);
+            idUserReplied = replyParentId;
+            if (replyToUsername != null) {
+                replyUsername = replyToUsername;
+            }
             isReply = replyToUsername != null;
             if (isReply) {
                 presenter.initializeAsReply(this, replyParentId, replyToUsername);
@@ -281,11 +289,26 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     @OnClick(R.id.new_shot_send_button) public void onSendShot() {
         presenter.sendShot(editTextView.getText().toString());
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionSendShot,
-            analyticsLabelSendShot);
         if (isReply) {
-            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionResponse,
-                analyticsLabelResponse);
+            AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+            builder.setContext(getBaseContext());
+            builder.setActionId(analyticsActionResponse);
+            builder.setLabelId(analyticsLabelResponse);
+            builder.setSource(shotDetailSource);
+            builder.setUser(sessionRepository.getCurrentUser());
+            if (idUserReplied != null) {
+                builder.setIdTargetUser(idUserReplied);
+                builder.setTargetUsername(replyUsername);
+            }
+            analyticsTool.analyticsSendAction(builder);
+        } else {
+            AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+            builder.setContext(getBaseContext());
+            builder.setActionId(analyticsActionSendShot);
+            builder.setLabelId(analyticsLabelSendShot);
+            builder.setSource(timelineSource);
+            builder.setUser(sessionRepository.getCurrentUser());
+            analyticsTool.analyticsSendAction(builder);
         }
     }
 

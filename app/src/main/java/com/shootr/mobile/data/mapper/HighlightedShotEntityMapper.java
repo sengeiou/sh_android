@@ -66,6 +66,11 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setViews((shotApiEntity.getViews()));
     highlightedShot.setLinkClicks(shotApiEntity.getLinkClicks());
     highlightedShot.setReshootCounter(shotApiEntity.getReshootCount());
+    highlightedShot.setPromoted(
+        shotApiEntity.getPromoted() != null ? shotApiEntity.getPromoted() : 0L);
+    highlightedShot.setCtaButtonLink(shotApiEntity.getCtaButtonLink());
+    highlightedShot.setCtaButtonText(shotApiEntity.getCtaButtonText());
+    highlightedShot.setCtaCaption(shotApiEntity.getCtaCaption());
 
     return highlightedShot;
   }
@@ -123,6 +128,10 @@ public class HighlightedShotEntityMapper {
     shot.setViews(value.getViews());
     shot.setLinkClicks(value.getLinkClicks());
     shot.setReshootCount(value.getReshootCounter());
+    shot.setCtaButtonLink(value.getCtaButtonLink());
+    shot.setCtaButtonText(value.getCtaButtonText());
+    shot.setCtaCaption(value.getCtaCaption());
+    shot.setPromoted(value.getPromoted());
 
     highlightedShot.setShot(shot);
 

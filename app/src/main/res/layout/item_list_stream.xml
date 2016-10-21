@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -75,6 +76,15 @@
           android:visibility="gone"
           tools:visibility="visible"
           />
+      <TextView
+          android:id="@+id/stream_watchers"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          android:layout_marginLeft="6dp"
+          tools:text="2"
+          style="@style/WatchersIndicator"
+      />
 
     </LinearLayout>
 
@@ -101,6 +111,7 @@
           android:singleLine="true"
           android:textSize="15sp"
           android:paddingLeft="4dp"
+          android:layout_marginRight="8dp"
           style="@style/InlineDescriptionAppearance"
           android:visibility="gone"
           tools:visibility="visible"
@@ -119,16 +130,6 @@
       android:paddingTop="16dp"
       >
 
-    <TextView
-        android:id="@+id/stream_watchers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginLeft="6dp"
-        tools:text="2"
-        style="@style/WatchersIndicator"
-        />
-
     <ImageView
         android:id="@+id/stream_remove"
         android:layout_width="24dp"
@@ -141,7 +142,7 @@
         tools:visibility="visible"
         />
 
-    <ImageView
+    <com.sackcentury.shinebuttonlib.ShineButton
         android:id="@+id/favorite_stream_indicator"
         android:layout_width="26dp"
         android:layout_height="26dp"
@@ -151,6 +152,18 @@
         android:src="@drawable/ic_favorite_not_added_28_gray50"
         android:visibility="gone"
         tools:visibility="visible"
+        app:allow_random_color="false"
+        app:big_shine_color="@color/primary_dark"
+        app:btn_color="#d9d9d9"
+        app:btn_fill_color="@color/primary"
+        app:click_animation_duration="200"
+        app:enable_flashing="false"
+        app:shine_animation_duration="1500"
+        app:shine_count="8"
+        app:shine_turn_angle="10"
+        app:siShape="@drawable/ic_favorite_not_added_28_gray50"
+        app:small_shine_color="@color/accent"
+        app:small_shine_offset_angle="20"
         />
   </FrameLayout>
 </LinearLayout>

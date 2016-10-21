@@ -113,7 +113,11 @@ public class StreamsListInteractor implements Interactor {
   }
 
   private StreamSearchResult getWatchingStreamsWithWatchNumber() {
-    User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+    String idUser = sessionRepository.getCurrentUserId();
+    if (idUser == null) {
+      idUser = sessionRepository.getCurrentUser().getIdUser();
+    }
+    User currentUser = localUserRepository.getUserById(idUser);
     String idWatchingStream = currentUser.getIdWatchingStream();
     if (idWatchingStream != null) {
       Stream stream =

@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -34,9 +35,11 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
     @Inject FeedbackMessage feedbackMessage;
     @Inject NicersPresenter presenter;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_source_nicers) String nicersSource;
 
     private UserListAdapter adapter;
 
@@ -121,9 +124,21 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void follow(int position) {
-        presenter.followUser(adapter.getItem(position));
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
-            analyticsLabelFollow);
+        UserModel user = adapter.getItem(position);
+        presenter.followUser(user);
+        sendAnalytics(user);
+    }
+
+    private void sendAnalytics(UserModel user) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setLabelId(analyticsLabelFollow);
+        builder.setSource(nicersSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(user.getIdUser());
+        builder.setTargetUsername(user.getUsername());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override public void unFollow(int position) {

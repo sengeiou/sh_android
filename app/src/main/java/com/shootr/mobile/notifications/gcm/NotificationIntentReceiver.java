@@ -3,11 +3,11 @@ package com.shootr.mobile.notifications.gcm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
@@ -37,54 +37,67 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   public static final String ACTION_NEED_UPDATE = "com.shootr.mobile.ACTION_NEED_UPDATE";
   public static final String ACTION_OPEN_POLL_VOTE = "com.shootr.mobile.ACTION_OPEN_POLL_VOTE";
 
-  @BindString(R.string.analytics_action_push_open) String analyticsActionPushOpen;
-  @BindString(R.string.analytics_label_push_open) String analyticsLabelPushOpen;
+  private String analyticsActionPushOpen;
+  private String analyticsLabelPushOpen;
 
   @Inject ShotNotificationManager shotNotificationManager;
   @Inject ActivityNotificationManager activityNotificationManager;
   @Inject @ActivityBadgeCount IntPreference badgeCount;
   @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @Override public void onReceive(Context context, Intent intent) {
     ShootrApplication.get(context).inject(this);
+
+    analyticsActionPushOpen = context.getString(R.string.analytics_action_push_open);
+    analyticsLabelPushOpen = context.getString(R.string.analytics_label_push_open);
+    String pollRedirection = context.getString(R.string.analytics_push_redirection_poll);
+    String profileRedirection = context.getString(R.string.analytics_push_redirection_profile);
+    String shotDetailRedirection = context.getString(R.string.analytics_push_redirection_shot_detail);
+    String streamRedirection = context.getString(R.string.analytics_push_redirection_stream);
+    String activityRedirection = context.getString(R.string.analytics_push_redirection_activity);
+    String discardRedirection = context.getString(R.string.analytics_push_redirection_discard);
+    String needUpdateRedirection = context.getString(R.string.analytics_push_redirection_need_update);
 
     String action = intent.getAction();
     switch (action) {
       case ACTION_DISCARD_SHOT_NOTIFICATION:
         shotNotificationManager.clearShotNotifications();
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
         break;
       case ACTION_OPEN_SHOT_NOTIFICATION:
         openActivities(context);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, activityRedirection);
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, activityRedirection);
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
         break;
       case ACTION_OPEN_PROFILE:
         openProfile(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, profileRedirection);
         break;
       case ACTION_OPEN_STREAM:
         openStream(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, streamRedirection);
         break;
       case ACTION_OPEN_SHOT_DETAIL:
         openShotDetail(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, shotDetailRedirection);
         break;
       case ACTION_OPEN_POLL_VOTE:
         openPollVote(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, pollRedirection);
         break;
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
-        sendGoogleAnalythicsPushOpen(context, ACTION_NEED_UPDATE);
+        sendGoogleAnalythicsPushOpen(context, ACTION_NEED_UPDATE, needUpdateRedirection);
         break;
       default:
         openUpdateNeeded(context);
@@ -145,7 +158,14 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     badgeCount.set(numberOfActivities - 1);
   }
 
-  private void sendGoogleAnalythicsPushOpen(Context context, String action) {
-    analyticsTool.analyticsSendAction(context, action, analyticsActionPushOpen, analyticsLabelPushOpen);
+  private void sendGoogleAnalythicsPushOpen(Context context, String action, String redirection) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(context);
+    builder.setAction(action);
+    builder.setActionId(analyticsActionPushOpen);
+    builder.setLabelId(analyticsLabelPushOpen);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setPushRedirection(redirection);
+    analyticsTool.analyticsSendAction(builder);
   }
 }

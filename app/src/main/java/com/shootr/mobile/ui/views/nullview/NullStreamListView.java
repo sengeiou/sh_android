@@ -30,6 +30,10 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void showRemovedFromFavorites() {
+        /* no-op */
+    }
+
     @Override public void showStreamShared() {
         /* no-op */
     }

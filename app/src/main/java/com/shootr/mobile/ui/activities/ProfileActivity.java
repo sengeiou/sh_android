@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
@@ -127,6 +128,8 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
+  @BindString(R.string.analytics_source_profile) String profileSource;
+  @BindString(R.string.analytics_source_friends) String whoToFollowSource;
 
   @Inject ImageLoader imageLoader;
   @Inject IntentFactory intentFactory;
@@ -140,6 +143,7 @@ public class ProfileActivity extends BaseActivity
   @Inject WritePermissionManager writePermissionManager;
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject BackStackHandler backStackHandler;
+  @Inject SessionRepository sessionRepository;
 
   //endregion
 
@@ -200,10 +204,9 @@ public class ProfileActivity extends BaseActivity
     };
 
     OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
-      @Override public void markNice(String idShot) {
-        profilePresenter.markNiceShot(idShot);
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionNice,
-            analyticsLabelNice);
+      @Override public void markNice(ShotModel shot) {
+        profilePresenter.markNiceShot(shot.getIdShot());
+          sendAnalytics(shot);
       }
 
       @Override public void unmarkNice(String idShot) {
@@ -243,6 +246,18 @@ public class ProfileActivity extends BaseActivity
         reportShotPresenter.onShotLongPressed(shot);
       }
     });
+  }
+
+  private void sendAnalytics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionNice);
+    builder.setLabelId(analyticsLabelNice);
+    builder.setSource(profileSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void resetTimelineAdapter() {
@@ -453,9 +468,33 @@ public class ProfileActivity extends BaseActivity
 
   private void followUser() {
     profilePresenter.follow();
-    analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
-        analyticsLabelFollow);
+    sendFollowAnalytics();
   }
+
+  private void sendFollowAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(profileSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(idUser);
+    builder.setTargetUsername(profilePresenter.getUsername());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendWhoToFollowAnalytics(UserModel userModel) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(whoToFollowSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(userModel.getIdUser());
+    builder.setTargetUsername(userModel.getUsername());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
 
   private void unfollowUser() {
     profilePresenter.unfollow();
@@ -894,6 +933,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void follow(int position) {
     suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
+    sendWhoToFollowAnalytics(getSuggestedPeopleAdapter().getItem(position));
   }
 
   @Override public void unFollow(final int position) {
@@ -1077,20 +1117,40 @@ public class ProfileActivity extends BaseActivity
         new Runnable() {
           @Override public void run() {
             profilePresenter.shareShot(shotModel);
-            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionShareShot,
-                analyticsLabelShareShot);
+            sendShareShotAnalythics(shotModel);
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShot(shotModel);
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionExternalShare,
-            analyticsLabelExternalShare);
+        sendExternalShareAnalythics(shotModel);
       }
     }).addAction(R.string.menu_copy_text, new Runnable() {
       @Override public void run() {
         Clipboard.copyShotComment(context, shotModel);
       }
     });
+  }
+
+  private void sendExternalShareAnalythics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionExternalShare);
+    builder.setLabelId(analyticsLabelExternalShare);
+    builder.setSource(profileSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendShareShotAnalythics(ShotModel shot) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionShareShot);
+    builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(profileSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(shot.getIdUser());
+    builder.setTargetUsername(shot.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void notifyDeletedShot(ShotModel shotModel) {

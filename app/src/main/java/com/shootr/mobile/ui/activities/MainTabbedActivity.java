@@ -228,6 +228,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       unreadActivities = bottomBar.makeBadgeForTabAt(ACTIVITY_FRAGMENT, Color.TRANSPARENT, count);
     } else {
       unreadActivities.setCount(count);
+      unreadActivities.show();
     }
   }
 

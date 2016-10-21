@@ -1,16 +1,16 @@
 package com.shootr.mobile.db.manager;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.mobile.data.entity.ShotEventEntity;
-import com.shootr.mobile.db.DatabaseContract;
-import com.shootr.mobile.db.mappers.ShotEventEntityDBMapper;
-import com.shootr.mobile.domain.model.shot.ShotEventType;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
+    import android.content.ContentValues;
+    import android.database.Cursor;
+    import android.database.sqlite.SQLiteDatabase;
+    import android.database.sqlite.SQLiteOpenHelper;
+    import com.shootr.mobile.data.entity.ShotEventEntity;
+    import com.shootr.mobile.db.DatabaseContract;
+    import com.shootr.mobile.db.mappers.ShotEventEntityDBMapper;
+    import com.shootr.mobile.domain.model.shot.ShotEventType;
+    import java.util.ArrayList;
+    import java.util.List;
+    import javax.inject.Inject;
 
 public class ShotEventManager extends AbstractManager {
 
@@ -43,7 +43,7 @@ public class ShotEventManager extends AbstractManager {
   }
 
   public void shotDetailViewed(ShotEventEntity shotEventEntity) {
-    if (shotEventEntity != null) {
+    if (shotEventEntity != null && shotEventEntity.getIdShot() != null) {
       shotEventEntity.setType(ShotEventType.SHOT_DETAIL_VIEW);
       ContentValues contentValues = shotEventEntityDBMapper.toContentValues(shotEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,

@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
@@ -97,6 +98,7 @@ public class StreamTimelinePresenterTest {
   @Captor ArgumentCaptor<Boolean> booleanArgumentCaptor;
   @Mock SessionRepository sessionRepository;
   @Mock GetContributorsInteractor getContributorsInteractor;
+  @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
@@ -106,7 +108,7 @@ public class StreamTimelinePresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
-        unmarkNiceShotInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
+        unmarkNiceShotInteractor, callCtaCheckInInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStreamInteractor,
         updateWatchNumberInteractor,
         reloadStreamTimelineInteractor, createStreamInteractor,
@@ -585,7 +587,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -595,7 +597,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -605,7 +607,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -616,7 +618,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -643,7 +645,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -655,7 +657,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -1207,11 +1209,11 @@ public class StreamTimelinePresenterTest {
   private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[2]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
         return null;
       }
     }).when(timelineInteractorWrapper)
-        .obtainOlderTimeline(anyLong(), anyInt(), anyCallback(), anyErrorCallback());
+        .obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(), anyErrorCallback());
   }
 
   private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {

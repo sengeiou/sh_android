@@ -21,16 +21,15 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
   public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
   public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
 
-  @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
-  @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenLink;
+  @BindString(R.string.analytics_action_open_deep_linking) String analyticsActionOpenLink;
+  @BindString(R.string.analytics_label_open_deep_linking) String analyticsLabelOpenLink;
 
   @Inject AnalyticsTool analyticsTool;
   @Inject public DeeplinkingTool() {
   }
 
   @Override public void navigate(Context context, String address) {
-    analyticsTool.analyticsSendAction(context, analyticsActionOpenLink,
-        analyticsLabelOpenLink);
+    sendAnalytics(context);
 
     Pattern shareStreamPatternWithHttps = Pattern.compile(SHARE_STREAM_PATTERN_HTTPS);
     Matcher matcherShareStreamHttps = shareStreamPatternWithHttps.matcher(address);
@@ -81,6 +80,14 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
       String idPoll = address.substring(matcherSharePollHttp.end());
       context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll)));
     }
+  }
+
+  private void sendAnalytics(Context context) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(context);
+    builder.setActionId(analyticsActionOpenLink);
+    builder.setLabelId(analyticsLabelOpenLink);
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private String removeLocale(String anyIdPlusLocale) {

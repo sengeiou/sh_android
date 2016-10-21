@@ -55,7 +55,11 @@ public class GetStreamInteractor implements Interactor {
 
   private void loadLocalStream() {
     Stream localStream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
-    notifyLoaded(localStream);
+    if (localStream != null) {
+      notifyLoaded(localStream);
+    } else {
+      // TODO: Notify error
+    }
   }
 
   private void notifyLoaded(final Stream stream) {

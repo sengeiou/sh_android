@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     >
 
@@ -11,7 +12,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true"
-      android:visibility="gone"/>
+      android:visibility="gone"
+      tools:visibility="visible"/>
 
   <android.support.design.widget.CoordinatorLayout android:id="@+id/timeline_list_container"
       android:layout_width="match_parent"
@@ -58,6 +60,30 @@
         android:visibility="gone"
         tools:visibility="visible"
         />
+
+    <RelativeLayout
+        android:id="@+id/new_shots_notificator_container"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:layout_marginTop="4dp"
+        app:layout_behavior="com.shootr.mobile.ui.widgets.NewShotsNotificatorBehavior"
+        tools:visibility="visible"
+        >
+      <TextView
+          android:id="@+id/new_shots_notificator_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="24dp"
+          android:paddingRight="24dp"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"
+          android:layout_margin="8dp"
+          android:textColor="@color/white"
+          android:background="@drawable/new_shots_notificator"
+          />
+    </RelativeLayout>
 
   </android.support.design.widget.CoordinatorLayout>
 

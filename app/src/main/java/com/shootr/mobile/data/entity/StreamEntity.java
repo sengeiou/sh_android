@@ -11,6 +11,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String topic;
     private String title;
     private String photo;
+    private String landscapePhoto;
     private Integer notifyCreation;
     private String country;
     private Integer mediaCountByRelatedUsers;
@@ -113,6 +114,14 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getLandscapePhoto() {
+        return landscapePhoto;
+    }
+
+    public void setLandscapePhoto(String landscapePhoto) {
+        this.landscapePhoto = landscapePhoto;
     }
 
     public String getIdUser() {

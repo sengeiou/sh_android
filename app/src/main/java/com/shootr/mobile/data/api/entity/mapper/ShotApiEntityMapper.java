@@ -61,6 +61,11 @@ public class ShotApiEntityMapper {
             shotApiEntity.getLinkClicks() != null ? shotApiEntity.getLinkClicks() : 0);
         shotEntity.setReshootCounter(
             shotApiEntity.getReshootCount() != null ? shotApiEntity.getReshootCount() : 0);
+        shotEntity.setPromoted(
+            shotApiEntity.getPromoted() != null ? shotApiEntity.getPromoted() : 0);
+        shotEntity.setCtaCaption(shotApiEntity.getCtaCaption());
+        shotEntity.setCtaButtonText(shotApiEntity.getCtaButtonText());
+        shotEntity.setCtaButtonLink(shotApiEntity.getCtaButtonLink());
 
         return shotEntity;
     }

@@ -42,7 +42,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.shot_avatar) ImageView avatar;
   @BindView(R.id.shot_user_name) TextView name;
-  @BindView(R.id.shot_timestamp) TextView timestamp;
+  @Nullable @BindView(R.id.shot_timestamp) TextView timestamp;
   @BindView(R.id.shot_text) ClickableTextView text;
   @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
   @BindView(R.id.default_image) ImageView defaultImage;
@@ -81,9 +81,9 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnReshootClickListener onReshootClickListener) {
+      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
-    bindComment(shot, null);
+    bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
     setupShotMediaContentVisibility(shot);
@@ -188,7 +188,9 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void bindElapsedTime(ShotModel shot) {
     long shotTimestamp = shot.getBirth().getTime();
-    this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), shotTimestamp));
+    if (timestamp != null) {
+      this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), shotTimestamp));
+    }
   }
 
   private void bindUserPhoto(final ShotModel shot) {
@@ -293,7 +295,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
         if (shot.isMarkedAsNice()) {
           onNiceShotListener.unmarkNice(shot.getIdShot());
         } else {
-          onNiceShotListener.markNice(shot.getIdShot());
+          onNiceShotListener.markNice(shot);
         }
       }
     });

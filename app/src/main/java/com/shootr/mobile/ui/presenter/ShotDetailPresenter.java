@@ -72,7 +72,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
         this.setShotDetailView(shotDetailView);
         this.setShotModel(shotModel);
-        this.loadShotDetail(shotModel);
+        this.loadShotDetail(shotModel, false);
         if (shotModel != null) {
             this.storeViewCount(shotModel.getIdShot());
         }
@@ -85,7 +85,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void loadShotDetailFromIdShot(final ShotDetailView shotDetailView, String idShot) {
-        getShotDetailInteractor.loadShotDetail(idShot, new Interactor.Callback<ShotDetail>() {
+        getShotDetailInteractor.loadShotDetail(idShot, false, new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 ShotModel shotModel = shotModelMapper.transform(shotDetail.getShot());
                 setShotModel(shotModel);
@@ -142,16 +142,16 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    private void loadShotDetail(ShotModel shotModel) {
+    private void loadShotDetail(ShotModel shotModel, boolean localOnly) {
         if (shotModel != null) {
-            handleShotDetail(shotModel);
+            handleShotDetail(shotModel, localOnly);
         } else {
             shotDetailView.showError(errorMessageFactory.getCommunicationErrorMessage());
         }
     }
 
-    private void handleShotDetail(ShotModel shotModel) {
-        getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
+    private void handleShotDetail(ShotModel shotModel, boolean localOnly) {
+        getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), localOnly, new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 onShotDetailLoaded(shotDetail);
             }
@@ -199,7 +199,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setNiceBlocked(true);
             markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail(shotModel);
+                    loadShotDetail(shotModel, true);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -214,7 +214,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setNiceBlocked(true);
             unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail(shotModel);
+                    loadShotDetail(shotModel, true);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -238,7 +238,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         justSentReply = true;
-        this.loadShotDetail(shotModel);
+        this.loadShotDetail(shotModel, true);
     }
 
     public void shareShotViaShootr() {

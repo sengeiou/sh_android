@@ -584,4 +584,8 @@ public class ProfilePresenter implements Presenter {
     return isCurrentUser;
   }
 
+  public String getUsername() {
+    return userModel.getUsername();
+  }
+
 }

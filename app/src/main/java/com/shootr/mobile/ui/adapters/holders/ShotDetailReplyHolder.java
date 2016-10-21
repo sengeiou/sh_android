@@ -184,7 +184,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
                 if (reply.isMarkedAsNice()) {
                     onNiceShotListener.unmarkNice(reply.getIdShot());
                 } else {
-                    onNiceShotListener.markNice(reply.getIdShot());
+                    onNiceShotListener.markNice(reply);
                 }
             }
         });

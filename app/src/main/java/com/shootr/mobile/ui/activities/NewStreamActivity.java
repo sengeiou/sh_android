@@ -23,6 +23,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamReadWriteModeAdapter;
 import com.shootr.mobile.ui.presenter.NewStreamPresenter;
@@ -43,6 +44,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Inject NewStreamPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     @BindView(R.id.new_stream_title) EditText titleView;
     @BindView(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
@@ -192,6 +194,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Override public void closeScreenWithResult(String streamId) {
         setResult(RESULT_OK, new Intent() //
           .putExtra(KEY_STREAM_ID, streamId));
+        sendAnalytics(streamId, getStreamTitle());
         finish();
     }
 
@@ -210,22 +213,27 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),  true);
-                    analyticsTool.analyticsSendAction(getBaseContext(),
-                        analyticsActionCreateStream,
-                        analyticsLabelCreateStream);
                 }
             })
           .setNegativeButton(getString(R.string.stream_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(), false);
-                    analyticsTool.analyticsSendAction(getBaseContext(),
-                        analyticsActionCreateStream,
-                        analyticsLabelCreateStream);
                 }
             })
           .create()
           .show();
+    }
+
+    private void sendAnalytics(String streamId, String streamName) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionCreateStream);
+        builder.setLabelId(analyticsLabelCreateStream);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setStreamName(streamName);
+        builder.setIdStream(streamId);
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override public void showDescription(String description) {

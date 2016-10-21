@@ -8,12 +8,9 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,31 +18,29 @@ import javax.inject.Inject;
 public class GetOlderStreamTimelineInteractor
     implements com.shootr.mobile.domain.interactor.Interactor {
 
-  private final SessionRepository sessionRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ExternalShotRepository remoteShotRepository;
   private final StreamRepository localStreamRepository;
-  private final UserRepository localUserRepository;
 
   private Long currentOldestDate;
+  private String streamId;
   private Callback<Timeline> callback;
   private ErrorCallback errorCallback;
 
   @Inject public GetOlderStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      ExternalShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository) {
-    this.sessionRepository = sessionRepository;
+      PostExecutionThread postExecutionThread,
+      ExternalShotRepository remoteShotRepository,
+      @Local StreamRepository localStreamRepository) {
     this.remoteShotRepository = remoteShotRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
-    this.localUserRepository = localUserRepository;
   }
 
-  public void loadOlderStreamTimeline(Long currentOldestDate, Callback<Timeline> callback,
+  public void loadOlderStreamTimeline(String streamId, Long currentOldestDate, Callback<Timeline> callback,
       ErrorCallback errorCallback) {
+    this.streamId = streamId;
     this.currentOldestDate = currentOldestDate;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -60,6 +55,8 @@ public class GetOlderStreamTimelineInteractor
       notifyTimelineFromShots(olderShots);
     } catch (ShootrException error) {
       notifyError(error);
+    } catch (NullPointerException ignored) {
+      /* no-op */
     }
   }
 
@@ -90,12 +87,12 @@ public class GetOlderStreamTimelineInteractor
   }
 
   private Stream getVisibleStream() {
-    User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-    String visibleStreamId = currentUser.getIdWatchingStream();
+    String visibleStreamId = streamId;
     if (visibleStreamId != null) {
       return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
+    } else {
+      return null;
     }
-    return null;
   }
 
   private void notifyLoaded(final Timeline timeline) {

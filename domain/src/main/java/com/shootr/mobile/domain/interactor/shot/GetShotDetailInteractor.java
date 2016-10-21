@@ -26,6 +26,7 @@ public class GetShotDetailInteractor implements Interactor {
   private String idShot;
   private Callback<ShotDetail> callback;
   private ErrorCallback errorCallback;
+  private boolean localOnly;
 
   @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository,
@@ -37,21 +38,24 @@ public class GetShotDetailInteractor implements Interactor {
     this.nicerRepository = nicerRepository;
   }
 
-  public void loadShotDetail(String idShot, Callback<ShotDetail> callback,
+  public void loadShotDetail(String idShot, Boolean localOnly, Callback<ShotDetail> callback,
       ErrorCallback errorCallback) {
     this.idShot = idShot;
     this.callback = callback;
     this.errorCallback = errorCallback;
+    this.localOnly = localOnly;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
     try {
-      ShotDetail remoteShotDetail =
-          remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-      remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
-      notifyLoaded(reorderReplies(remoteShotDetail));
-      localShotRepository.putShot(remoteShotDetail.getShot());
+      if (!localOnly) {
+        ShotDetail remoteShotDetail =
+            remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+        remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
+        notifyLoaded(reorderReplies(remoteShotDetail));
+        localShotRepository.putShot(remoteShotDetail.getShot());
+      }
       ShotDetail localShotDetail =
           localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
       notifyLoaded(reorderReplies(localShotDetail));

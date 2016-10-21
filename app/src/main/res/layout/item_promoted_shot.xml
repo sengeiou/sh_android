@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="12dp"
+      android:paddingBottom="12dp"
+      android:layout_weight=".9"
+      >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/shot_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+
+    <LinearLayout
+        android:id="@+id/action_container"
+        android:layout_width="46dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:gravity="end"
+        >
+      <TextView
+          android:id="@+id/shot_nice_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/gray_80"
+          android:textSize="12sp"
+          android:gravity="center"
+          android:layout_marginTop="2dp"
+          android:layout_marginRight="4dp"
+          tools:text="2"
+          />
+      <com.sackcentury.shinebuttonlib.ShineButton
+          android:id="@+id/shot_nice_button"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:scaleType="centerCrop"
+          android:visibility="visible"
+          app:allow_random_color="false"
+          app:big_shine_color="@color/primary_dark"
+          app:btn_color="@color/gray_92"
+          app:btn_fill_color="@color/primary"
+          app:click_animation_duration="200"
+          app:enable_flashing="false"
+          app:shine_animation_duration="1500"
+          app:shine_count="8"
+          app:shine_turn_angle="10"
+          app:siShape="@drawable/ic_action_favorite_gray"
+          app:small_shine_color="@color/accent"
+          app:small_shine_offset_angle="20"
+          />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout2"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/shot_avatar"
+        android:layout_toEndOf="@+id/shot_avatar"
+        >
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:id="@+id/shot_name_container"
+          >
+
+        <TextView
+            android:id="@+id/shot_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="200dp"
+            android:ellipsize="end"
+            android:textColor="@color/gray_10"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:textStyle="bold"
+            tools:text="Ignasi to cnhdscbhbggkk "
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            />
+
+        <TextView
+            android:id="@+id/shot_promoted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_80"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:maxLines="1"
+            android:text="@string/promoted"
+            android:layout_toEndOf="@+id/shot_user_name"
+            />
+
+        <TextView
+            android:id="@+id/shot_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_80"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:maxLines="1"
+            tools:text="22m"
+            android:layout_toEndOf="@+id/shot_user_name"
+            android:visibility="gone"
+            />
+
+      </RelativeLayout>
+
+      <com.shootr.mobile.ui.widgets.ClickableTextView
+          android:id="@+id/shot_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="12dp"
+          android:textColor="@color/material_black"
+          android:textColorLink="@color/links"
+          android:textSize="14sp"
+          tools:text="Who's the referee? vfdvsdfvgdngjbn mgjknjn gmkfg"
+          tools:visibility ="visible"
+
+          />
+
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/shot_media_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_marginLeft="46dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:focusableInTouchMode="false"
+        android:layout_below="@id/linearLayout2"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+      <com.shootr.mobile.ui.widgets.ProportionalImageView
+          android:id="@+id/shot_image_landscape"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="1dp"
+          android:visibility="gone"
+          android:transitionName="shared_image"
+          app:riv_corner_radius="10dp"
+          tools:src="@drawable/sample_avatar"
+          tools:visibility="gone"
+          />
+      <com.makeramen.roundedimageview.RoundedImageView
+          android:id="@+id/default_image"
+          android:layout_width="match_parent"
+          android:layout_height="165dp"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:scaleType="centerCrop"
+          android:visibility="gone"
+          app:riv_corner_radius="10dp"
+          tools:visibility="visible" />
+
+      <FrameLayout
+          android:id="@+id/shot_video_frame"
+          android:layout_width="match_parent"
+          android:layout_height="165dp"
+          android:background="@drawable/round_corner"
+          android:foreground="?selectableItemBackground"
+          android:visibility="gone"
+          tools:visibility="visible"
+          android:layout_gravity="left|bottom"
+          >
+
+        <TextView
+            android:id="@+id/shot_video_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            tools:text="Titulo del video"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_video_play_circle_48_white"
+            />
+
+        <TextView
+            android:id="@+id/shot_video_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            tools:text="0:00"
+            />
+      </FrameLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/shot_reply_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_80"
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_below="@+id/shot_caption_contianer"
+        tools:text="8 responses"
+        tools:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/shot_caption_contianer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shot_media_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="20dp"
+        >
+      <com.shootr.mobile.ui.widgets.ClickableTextView
+          android:id="@+id/shot_caption"
+          android:layout_weight=".6"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:textColor="@color/material_black"
+          android:textColorLink="@color/links"
+          android:textSize="14sp"
+          android:layout_gravity="center"
+          android:text="Who's the referee? prueba de cómo quedaría"
+          tools:visibility ="visible"
+          />
+
+      <Button
+          android:text="Descargar"
+          android:layout_width="wrap_content"
+          android:layout_height="32dp"
+          android:maxWidth="100dp"
+          android:id="@+id/check_in_button"
+          android:layout_gravity="center"
+          android:textAllCaps="false"
+          android:textSize="12sp"
+          android:textColor="@color/black"
+          android:layout_marginLeft="4dp"
+          android:background="@drawable/cta_button_state"
+          />
+
+    </LinearLayout>
+
+  </RelativeLayout>
+  <LinearLayout
+      android:layout_weight=".1"
+      android:layout_width="2.1dp"
+      android:layout_marginRight="2dp"
+      android:layout_height="24dp"
+      android:background="@color/gray_92"
+      android:layout_gravity="center"
+      />
+  <LinearLayout
+      android:layout_weight=".1"
+      android:layout_width="2.3dp"
+      android:layout_marginRight="4dp"
+      android:layout_height="24dp"
+      android:background="@color/gray_92"
+      android:layout_gravity="center"
+      />
+</LinearLayout>

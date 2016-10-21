@@ -88,8 +88,8 @@ public interface ShotApiService {
   @DELETE("/shot/{idShot}/hide") Response unhideShot(@Path("idShot") String idShot)
       throws ApiException, IOException;
 
-  @GET("/highlightedShot?includeEmbed=true")
-  List<HighlightedShotApiEntity> getHighlightedShot(@Query("idStream") String idStream)
+  @GET("/highlightedShot?includeEmbed=true") List<HighlightedShotApiEntity> getHighlightedShot(
+      @Query("idStream") String idStream, @Query("shotType") String[] shotTypes)
       throws ApiException, IOException;
 
   @DELETE("/highlightedShot/{idHighlightedShot}") Response dismissHighlightedShot(
@@ -99,4 +99,6 @@ public interface ShotApiService {
       @Body CreateAHighlightedShotEntity createAHighlightedShotEntity)
       throws ApiException, IOException;
 
+  @PUT("/stream/{idStream}/checkin") Response checkIn(@Path("idStream") String idStream)
+      throws ApiException, IOException;
 }

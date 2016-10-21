@@ -3,9 +3,11 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
+import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -33,6 +35,7 @@ import static org.mockito.Mockito.when;
 public class SyncShotRepositoryTest {
 
   private static final String ID_SHOT = "idShot";
+  private static final String PHOTO = "photo";
   public static final long TIMESTAMP = 10L;
   private static final String ID_USER = "idUser";
   private static final StreamTimelineParameters PARAMETERS =
@@ -47,6 +50,7 @@ public class SyncShotRepositoryTest {
   @Mock ShotDataSource localShotDataSource;
   @Mock ShotEntityMapper shotEntityMapper;
   @Mock SyncTrigger syncTrigger;
+  @Mock UserDataSource userDataSource;
   @Mock HighlightedShotEntityMapper highlightedShotEntityMapper;
 
   private SyncShotRepository syncShotRepository;
@@ -55,7 +59,7 @@ public class SyncShotRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncShotRepository =
         new SyncShotRepository(remoteShotDataSource, localShotDataSource, shotEntityMapper,
-            highlightedShotEntityMapper, syncTrigger);
+            highlightedShotEntityMapper, userDataSource, syncTrigger);
   }
 
   @Test public void shouldGetRemoteShotWhenGetShotAndLocalShotIsNull() throws Exception {
@@ -104,6 +108,9 @@ public class SyncShotRepositoryTest {
   }
 
   @Test public void shouldPutShotInRemoteWhenDataSourceWhenCallPutShot() throws Exception {
+    when(userDataSource.getUser(ID_USER)).thenReturn(userEntity());
+    when(remoteShotDataSource.putShot(any(ShotEntity.class))).thenReturn(shotEntity());
+
     syncShotRepository.putShot(shot());
 
     verify(remoteShotDataSource).putShot(any(ShotEntity.class));
@@ -165,6 +172,13 @@ public class SyncShotRepositoryTest {
     verify(localShotDataSource).putShots(anyList());
   }
 
+  private UserEntity userEntity() {
+    UserEntity userEntity = new UserEntity();
+    userEntity.setIdUser(ID_USER);
+    userEntity.setPhoto(PHOTO);
+    return userEntity;
+  }
+
   private ShotDetailEntity shotDetail() {
     ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
     shotDetailEntity.setParents(Collections.singletonList(shotEntity()));
@@ -173,7 +187,8 @@ public class SyncShotRepositoryTest {
 
   private ShotEntity shotEntity() {
     ShotEntity shotEntity = new ShotEntity();
-    shotEntity.setIdShot(ID_USER);
+    shotEntity.setIdShot(ID_SHOT);
+    shotEntity.setIdUser(ID_USER);
     shotEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
     return shotEntity;
   }

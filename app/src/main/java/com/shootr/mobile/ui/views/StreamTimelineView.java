@@ -59,4 +59,8 @@ public interface StreamTimelineView extends LoadDataView {
     void showStreamViewOnlyIndicator();
 
     void addShots(List<ShotModel> shotModels);
+
+    void showChecked();
+
+    void openCtaAction(String link);
 }

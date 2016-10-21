@@ -46,6 +46,7 @@ import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -108,8 +109,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
     @BindString(R.string.analytics_action_mute) String analyticsActionMute;
     @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
-    @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
-    @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
+    @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
+    @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
+    @BindString(R.string.analytics_source_stream_detail) String streamDetailSource;
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
@@ -119,6 +121,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Inject WritePermissionManager writePermissionManager;
     @Inject CrashReportTool crashReportTool;
     @Inject InitialsLoader initialsLoader;
+    @Inject SessionRepository sessionRepository;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -197,6 +200,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                   if (isChecked) {
                       streamDetailPresenter.onMuteChecked();
+                      sendMuteAnalytics();
                   } else {
                       streamDetailPresenter.onUnmuteChecked();
                   }
@@ -214,8 +218,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           new OnFollowUnfollowListener() {
               @Override public void onFollow(UserModel user) {
                   streamDetailPresenter.follow(user.getIdUser());
-                  analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
-                      analyticsLabelFollow);
+                  sendAnalythics(user);
               }
 
               @Override public void onUnfollow(final UserModel user) {
@@ -237,6 +240,28 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void sendMuteAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionMute);
+        builder.setLabelId(analyticsLabelMute);
+        builder.setSource(streamDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
+    }
+
+    private void sendAnalythics(UserModel user) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setLabelId(analyticsLabelFollow);
+        builder.setSource(streamDetailSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(user.getIdUser());
+        builder.setTargetUsername(user.getUsername());
+        analyticsTool.analyticsSendAction(builder);
+    }
+
     @OnClick(R.id.stream_share_button) public void onShareClick() {
         openContextualMenuForSharing();
     }
@@ -249,9 +274,13 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }).addAction(R.string.share_via, new Runnable() {
             @Override public void run() {
                 streamDetailPresenter.shareStreamVia();
-                analyticsTool.analyticsSendAction(getBaseContext(),
-                    analyticsActionExternalShare,
-                    analyticsLabelExternalShare);
+                AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+                builder.setContext(getBaseContext());
+                builder.setActionId(analyticsActionExternalShare);
+                builder.setLabelId(analyticsLabelExternalShare);
+                builder.setSource(streamDetailSource);
+                builder.setUser(sessionRepository.getCurrentUser());
+                analyticsTool.analyticsSendAction(builder);
             }
         }).show();
     }
@@ -657,10 +686,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override public void setMuteStatus(Boolean isChecked) {
         adapter.setMuteStatus(isChecked);
-        if (isChecked) {
-            analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionMute,
-                analyticsLabelMute);
-        }
     }
 
     @Override public void goToStreamDataInfo(StreamModel streamModel) {

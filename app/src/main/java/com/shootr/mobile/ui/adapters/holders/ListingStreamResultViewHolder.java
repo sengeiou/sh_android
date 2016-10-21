@@ -26,18 +26,19 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
   public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
       ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener,
       InitialsLoader initialsLoader) {
-    super(itemView, onStreamClickListener, imageLoader, initialsLoader);
+    super(itemView, onStreamClickListener, onFavoriteClickListener, imageLoader, initialsLoader);
     this.onFavoriteClickListener = onFavoriteClickListener;
   }
 
-  @Override public void render(StreamResultModel streamResultModel, boolean showSeparator) {
-    super.render(streamResultModel, showSeparator);
+  @Override public void render(StreamResultModel streamResultModel, boolean showSeparator,
+      boolean hasToShowIsFavorite) {
+    super.render(streamResultModel, showSeparator, hasToShowIsFavorite);
     setupFavoriteIndicator(streamResultModel);
   }
 
   @Override public void render(StreamResultModel streamResultModel, boolean showSeparator,
-      List<StreamResultModel> favoritedStreams) {
-    super.render(streamResultModel, showSeparator, favoritedStreams);
+      List<StreamResultModel> favoritedStreams, boolean hasToShowIsFavorite) {
+    super.render(streamResultModel, showSeparator, favoritedStreams, hasToShowIsFavorite);
     setupFavoriteIndicator(streamResultModel);
   }
 

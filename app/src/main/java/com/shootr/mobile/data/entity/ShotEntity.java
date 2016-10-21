@@ -32,6 +32,11 @@ public class ShotEntity extends Synchronized {
     private Long imageHeight;
     private Long reshootCounter;
 
+    private Long promoted;
+    private String ctaButtonLink;
+    private String ctaButtonText;
+    private String ctaCaption;
+
     public String getIdShot() {
         return idShot;
     }
@@ -214,5 +219,37 @@ public class ShotEntity extends Synchronized {
 
     public void setReshootCounter(Long reshootCounter) {
         this.reshootCounter = reshootCounter;
+    }
+
+    public Long getPromoted() {
+        return promoted;
+    }
+
+    public void setPromoted(Long promoted) {
+        this.promoted = promoted;
+    }
+
+    public String getCtaButtonLink() {
+        return ctaButtonLink;
+    }
+
+    public void setCtaButtonLink(String ctaButtonLink) {
+        this.ctaButtonLink = ctaButtonLink;
+    }
+
+    public String getCtaButtonText() {
+        return ctaButtonText;
+    }
+
+    public void setCtaButtonText(String ctaButtonText) {
+        this.ctaButtonText = ctaButtonText;
+    }
+
+    public String getCtaCaption() {
+        return ctaCaption;
+    }
+
+    public void setCtaCaption(String ctaCaption) {
+        this.ctaCaption = ctaCaption;
     }
 }

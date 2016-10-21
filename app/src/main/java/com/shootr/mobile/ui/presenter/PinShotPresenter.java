@@ -76,16 +76,17 @@ public class PinShotPresenter implements Presenter {
     @Override public void resume() {
         if (hasBeenPaused) {
             if (shotModel != null) {
-                getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
-                    @Override public void onLoaded(ShotDetail shotDetail) {
-                        setShot(shotModelMapper.transform(shotDetail.getShot()));
-                        setupPinShotButton();
-                    }
-                }, new Interactor.ErrorCallback() {
-                    @Override public void onError(ShootrException error) {
+                getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), true,
+                    new Interactor.Callback<ShotDetail>() {
+                        @Override public void onLoaded(ShotDetail shotDetail) {
+                            setShot(shotModelMapper.transform(shotDetail.getShot()));
+                            setupPinShotButton();
+                        }
+                    }, new Interactor.ErrorCallback() {
+                        @Override public void onError(ShootrException error) {
                     /* no - op */
-                    }
-                });
+                        }
+                    });
             }
             hasBeenPaused = false;
         }

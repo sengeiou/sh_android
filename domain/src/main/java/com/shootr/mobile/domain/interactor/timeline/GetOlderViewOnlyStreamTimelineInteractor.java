@@ -33,6 +33,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
   private final UserRepository localUserRepository;
 
   private Long currentOldestDate;
+  private String idStream;
   private Interactor.Callback<Timeline> callback;
   private Interactor.ErrorCallback errorCallback;
 
@@ -50,9 +51,10 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
     this.localUserRepository = localUserRepository;
   }
 
-  public void loadOlderStreamTimeline(Long currentOldestDate,
+  public void loadOlderStreamTimeline(String idStream, Long currentOldestDate,
       Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
     this.currentOldestDate = currentOldestDate;
+    this.idStream = idStream;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -68,6 +70,8 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
       notifyTimelineFromShots(olderShots);
     } catch (ShootrException error) {
       notifyError(error);
+    } catch (NullPointerException ignored) {
+      /* no-op */
     }
   }
 
@@ -134,8 +138,7 @@ public class GetOlderViewOnlyStreamTimelineInteractor implements Interactor {
   }
 
   private Stream getVisibleStream() {
-    User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-    String visibleStreamId = currentUser.getIdWatchingStream();
+    String visibleStreamId = idStream;
     if (visibleStreamId != null) {
       return localStreamRepository.getStreamById(visibleStreamId, StreamMode.TYPES_STREAM);
     }

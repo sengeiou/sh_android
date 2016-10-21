@@ -9,6 +9,7 @@ public class StreamModel implements Serializable {
     private String authorUsername;
     private String title;
     private String picture;
+    private String landscapePicture;
     private String description;
     private String topic;
     private boolean amIAuthor;
@@ -71,6 +72,14 @@ public class StreamModel implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getLandscapePicture() {
+        return landscapePicture;
+    }
+
+    public void setLandscapePicture(String landscapePicture) {
+        this.landscapePicture = landscapePicture;
     }
 
     public boolean amIAuthor() {

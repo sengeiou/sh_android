@@ -73,18 +73,18 @@ public class StreamTimelineInteractorsWrapperTest {
   }
 
   @Test public void shouldGetOlderStreamTimelineInteractorWhenStreamModeIsZero() throws Exception {
-    streamTimelineInteractorsWrapper.obtainOlderTimeline(LAST_REFRESH_DATE, 0, callback,
+    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, LAST_REFRESH_DATE, 0, callback,
         errorCallback);
 
-    verify(getOlderStreamTimelineInteractor).loadOlderStreamTimeline(anyLong(), anyCallback(),
+    verify(getOlderStreamTimelineInteractor).loadOlderStreamTimeline(anyString(), anyLong(), anyCallback(),
         anyErrorCallback());
   }
 
   @Test public void shouldGetOlderViewOnlyStreamTimelineWhenStreamModeIsOne() throws Exception {
-    streamTimelineInteractorsWrapper.obtainOlderTimeline(LAST_REFRESH_DATE, 1, callback,
+    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, LAST_REFRESH_DATE, 1, callback,
         errorCallback);
 
-    verify(getOlderViewOnlyStreamTimelineInteractor).loadOlderStreamTimeline(anyLong(),
+    verify(getOlderViewOnlyStreamTimelineInteractor).loadOlderStreamTimeline(anyString(), anyLong(),
         anyCallback(), anyErrorCallback());
   }
 

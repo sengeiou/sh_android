@@ -90,7 +90,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (isStreamTypes(holder)) {
-      ((DiscoveredStreamViewHolder) holder).render(items.get(position));
+      ((DiscoveredStreamViewHolder) holder).render(items.get(position),
+          holder.getItemViewType() == DISCOVERED_STREAM);
     } else if (isShotTypes(holder)) {
       ((DiscoveredShotViewHolder) holder).render(items.get(position));
     }

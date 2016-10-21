@@ -137,6 +137,7 @@ public class SettingsPresenter implements Presenter {
         userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             userSettingsModel = changedSettings;
+            settingsView.sendNotificationAnalytics(PushSettingType.STARTED_SHOOTING);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -154,6 +155,7 @@ public class SettingsPresenter implements Presenter {
         userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             userSettingsModel = changedSettings;
+            settingsView.sendNotificationAnalytics(PushSettingType.SHARED_SHOT);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -171,6 +173,7 @@ public class SettingsPresenter implements Presenter {
         userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             userSettingsModel = changedSettings;
+            settingsView.sendNotificationAnalytics(PushSettingType.NICE_SHOT);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {

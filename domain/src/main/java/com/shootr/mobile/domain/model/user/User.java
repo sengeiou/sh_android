@@ -33,6 +33,8 @@ public class User {
 
     private Integer relationship;
     private Boolean socialLogin;
+    private String analyticsUserType;
+    private Long receivedReactions;
 
     public Long getFavoritedStreamsCount() {
         return favoritedStreamsCount;
@@ -246,5 +248,21 @@ public class User {
         @Override public int compare(User o1, User o2) {
             return o1.getUsername().compareTo(o2.getUsername());
         }
+    }
+
+    public String getAnalyticsUserType() {
+        return analyticsUserType;
+    }
+
+    public void setAnalyticsUserType(String analyticsUserType) {
+        this.analyticsUserType = analyticsUserType;
+    }
+
+    public Long getReceivedReactions() {
+        return receivedReactions;
+    }
+
+    public void setReceivedReactions(Long receivedReactions) {
+        this.receivedReactions = receivedReactions;
     }
 }

@@ -39,11 +39,13 @@ import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.WelcomePageActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -62,8 +64,11 @@ public class LoginSelectionActivity extends BaseActivity {
     @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
 
     @BindString(R.string.error_facebook_login) String facebookError;
+    @BindString(R.string.error_login_facebook_method) String facebookMethodError;
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
+    @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
     @Inject FeedbackMessage feedbackMessage;
@@ -74,6 +79,8 @@ public class LoginSelectionActivity extends BaseActivity {
     @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
     @Inject LocaleProvider localeProvider;
     @Inject IntentFactory intentFactory;
+    @Inject SessionRepository sessionRepository;
+    @Inject AnalyticsTool analyticsTool;
 
     private CallbackManager callbackManager;
     private LoginManager loginManager;
@@ -236,6 +243,7 @@ public class LoginSelectionActivity extends BaseActivity {
                         finish();
                         Intent intent;
                         if (isNewUser) {
+                            sendAnalytics();
                             intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
                         } else {
                             intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
@@ -245,7 +253,7 @@ public class LoginSelectionActivity extends BaseActivity {
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override public void onError(ShootrException error) {
-                        showFacebookError();
+                        showFacebookError(facebookMethodError);
                         hideLoading();
                     }
                 });
@@ -253,7 +261,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
             @Override public void onError(FacebookException e) {
                 Timber.e(e, "Failed to obtain FB access token");
-                showFacebookError();
+                showFacebookError(facebookError);
                 hideLoading();
             }
 
@@ -261,6 +269,15 @@ public class LoginSelectionActivity extends BaseActivity {
                 hideLoading();
             }
         });
+    }
+
+    private void sendAnalytics() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionSignup);
+        builder.setLabelId(analyticsLabelSignup);
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @OnClick(R.id.login_btn_login) public void login() {
@@ -291,7 +308,7 @@ public class LoginSelectionActivity extends BaseActivity {
         buttonsContainer.setVisibility(View.VISIBLE);
     }
 
-    private void showFacebookError() {
-        feedbackMessage.show(getView(), facebookError);
+    private void showFacebookError(String errorMessage) {
+        feedbackMessage.show(getView(), errorMessage);
     }
 }

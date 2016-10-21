@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ParticipantsListAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
@@ -48,11 +49,13 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_source_all_participants) String allParticipantsSource;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
     @Inject AllParticipantsPresenter allParticipantsPresenter;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, AllParticipantsActivity.class);
@@ -190,9 +193,21 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void follow(int position) {
-        allParticipantsPresenter.followUser(adapter.getItem(position));
-        analyticsTool.analyticsSendAction(getBaseContext(), analyticsActionFollow,
-            analyticsLabelFollow);
+        UserModel user = adapter.getItem(position);
+        allParticipantsPresenter.followUser(user);
+        sendAnalytics(user);
+    }
+
+    private void sendAnalytics(UserModel user) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setLabelId(analyticsLabelFollow);
+        builder.setSource(allParticipantsSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(user.getIdUser());
+        builder.setTargetUsername(user.getUsername());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override public void unFollow(int position) {

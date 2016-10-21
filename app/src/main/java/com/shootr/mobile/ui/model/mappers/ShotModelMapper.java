@@ -48,6 +48,11 @@ public class ShotModelMapper {
         shotModel.setLinkClickCount(shot.getLinkClicks() == null ? 0 : shot.getLinkClicks());
         shotModel.setViews(shot.getViews() == null ? 0 : shot.getViews());
         shotModel.setReshootCount(shot.getReshootCount() == null ? 0 : shot.getReshootCount());
+        shotModel.setCtaButtonLink(shot.getCtaButtonLink());
+        shotModel.setCtaButtonText(shot.getCtaButtonText());
+        shotModel.setCtaCaption(shot.getCtaCaption());
+        shotModel.setPromoted(shot.getPromoted());
+        shotModel.setType(shot.getType());
         return shotModel;
     }
 

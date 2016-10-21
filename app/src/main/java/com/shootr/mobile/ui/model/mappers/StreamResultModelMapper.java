@@ -12,31 +12,52 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 @Singleton public class StreamResultModelMapper {
 
-    private final StreamModelMapper streamModelMapper;
+  private final StreamModelMapper streamModelMapper;
 
-    @Inject public StreamResultModelMapper(StreamModelMapper streamModelMapper) {
-        this.streamModelMapper = streamModelMapper;
+  @Inject public StreamResultModelMapper(StreamModelMapper streamModelMapper) {
+    this.streamModelMapper = streamModelMapper;
+  }
+
+  public StreamResultModel transform(StreamSearchResult streamSearchResult) {
+    if (streamSearchResult == null || streamSearchResult.getStream() == null) {
+      return null;
     }
+    checkNotNull(streamSearchResult.getStream());
+    StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
 
-    public StreamResultModel transform(StreamSearchResult streamSearchResult) {
-        if (streamSearchResult == null) {
-            return null;
+    StreamResultModel resultModel = new StreamResultModel();
+    resultModel.setStreamModel(streamModel);
+    resultModel.setWatchers(streamSearchResult.getFollowingWatchersNumber());
+    resultModel.setIsWatching(streamSearchResult.isWatching());
+    return resultModel;
+  }
+
+  public List<StreamResultModel> transform(List<StreamSearchResult> streamSearchResults) {
+    List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
+    for (StreamSearchResult streamSearchResult : streamSearchResults) {
+      if (streamSearchResult.getStream() != null
+          && streamSearchResult.getStream().getId() != null) {
+        models.add(transform(streamSearchResult));
+      }
+    }
+    return models;
+  }
+
+  public List<StreamResultModel> transformWithFavorites(List<StreamSearchResult> streamSearchResults,
+      List<String> favorites) {
+    List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
+    for (StreamSearchResult streamSearchResult : streamSearchResults) {
+      if (streamSearchResult.getStream() != null
+          && streamSearchResult.getStream().getId() != null) {
+        StreamResultModel streamResultModel = transform(streamSearchResult);
+        if (favorites != null && favorites.contains(streamSearchResult.getStream().getId())) {
+          streamResultModel.setFavorited(true);
+        } else {
+          streamResultModel.setFavorited(false);
         }
-        checkNotNull(streamSearchResult.getStream());
-        StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
-
-        StreamResultModel resultModel = new StreamResultModel();
-        resultModel.setStreamModel(streamModel);
-        resultModel.setWatchers(streamSearchResult.getFollowingWatchersNumber());
-        resultModel.setIsWatching(streamSearchResult.isWatching());
-        return resultModel;
+        models.add(streamResultModel);
+      }
     }
-
-    public List<StreamResultModel> transform(List<StreamSearchResult> streamSearchResults) {
-        List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
-        for (StreamSearchResult streamSearchResult : streamSearchResults) {
-            models.add(transform(streamSearchResult));
-        }
-        return models;
-    }
+    return models;
+  }
 }

@@ -4,13 +4,17 @@ import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
+import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
+import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
+import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
@@ -27,21 +31,28 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final UserDataSource userDataSource;
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource,
       @Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper,
-      HighlightedShotEntityMapper highlightedShotEntityMapper, SyncTrigger syncTrigger) {
+      HighlightedShotEntityMapper highlightedShotEntityMapper, @Local UserDataSource userDataSource,
+      SyncTrigger syncTrigger) {
     this.remoteShotDataSource = remoteShotDataSource;
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.userDataSource = userDataSource;
     this.syncTrigger = syncTrigger;
   }
 
   @Override public Shot putShot(Shot shot) {
     ShotEntity shotEntity = shotEntityMapper.transform(shot);
     ShotEntity responseShotEntity = remoteShotDataSource.putShot(shotEntity);
+    UserEntity userEntity = userDataSource.getUser(responseShotEntity.getIdUser());
+    responseShotEntity.setUsername(userEntity.getUserName());
+    responseShotEntity.setUserPhoto(userEntity.getPhoto());
+    localShotDataSource.putShot(responseShotEntity);
     return shotEntityMapper.transform(responseShotEntity);
   }
 
@@ -155,6 +166,11 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   @Override public void highlightShot(String idShot) {
     HighlightedShotEntity highlightedShotEntity = remoteShotDataSource.highlightShot(idShot);
     localShotDataSource.putHighlightShot(highlightedShotEntity);
+  }
+
+  @Override public void callCtaCheckIn(String idStream) throws UserAlreadyCheckInRequestException,
+      UserCannotCheckInRequestException {
+    remoteShotDataSource.callCtaCheckIn(idStream);
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {

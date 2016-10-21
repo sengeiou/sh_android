@@ -19,6 +19,7 @@ import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
@@ -54,9 +55,12 @@ public class UserFollowsFragment extends BaseFragment
     @BindString(R.string.analytics_screen_user_following) String analyticsScreenUserFollowing;
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_source_followers) String followsSource;
+    @BindString(R.string.analytics_source_following) String followingsSource;
 
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     // Args
     String userId;
@@ -151,8 +155,23 @@ public class UserFollowsFragment extends BaseFragment
 
     private void followUser(UserModel user) {
         userFollowsPresenter.follow(user);
-        analyticsTool.analyticsSendAction(getContext(), analyticsActionFollow,
-            analyticsLabelFollow);
+        sendFollowAnalytics(user);
+    }
+
+    private void sendFollowAnalytics(UserModel user) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setLabelId(analyticsLabelFollow);
+        if (followType == 0) {
+            builder.setSource(followsSource);
+        } else {
+            builder.setSource(followingsSource);
+        }
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(user.getIdUser());
+        builder.setTargetUsername(user.getUsername());
+        analyticsTool.analyticsSendAction(builder);
     }
 
     public void unfollowUser(final UserModel user) {

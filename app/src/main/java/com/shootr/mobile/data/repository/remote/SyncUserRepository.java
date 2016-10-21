@@ -138,6 +138,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return entityToDomain(remoteUser);
     }
 
+  @Override public User getUserForAnalythicsById(String id) {
+    UserEntity remoteUser = remoteUserDataSource.getUser(id);
+    return entityToDomain(remoteUser);
+  }
+
     @Override public User getUserByUsername(String username) {
         UserEntity user = remoteUserDataSource.getUserByUsername(username);
         return entityToDomain(user);
@@ -216,6 +221,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
             entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
             localUserDataSource.updateWatch(entityWithWatchValues);
         } catch (ServerCommunicationException e) {
+            localUserDataSource.updateWatch(entityWithWatchValues);
             queueWatchUpload(entityWithWatchValues, e);
         }
     }
@@ -231,6 +237,10 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     @Override public List<User> getLocalPeople(String idUser) {
         throw new IllegalArgumentException("No remote implementation");
     }
+
+  @Override public List<User> getLocalPeopleFromIdStream(String idStream) {
+    throw new IllegalArgumentException("No remote implementation");
+  }
 
     @Override public User updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {

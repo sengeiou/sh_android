@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,7 +10,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.presenter.SupportPresenter;
@@ -21,7 +19,6 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.VersionUtils;
-import java.util.Locale;
 import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
@@ -32,11 +29,11 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Inject AnalyticsTool analyticsTool;
 
     @BindView(R.id.support_version_number) TextView versionNumber;
-    @BindView(R.id.support_blog_text) TextView blog;
     @BindView(R.id.support_help_text) TextView help;
 
     @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+    @BindString(R.string.help_service_base_url) String helpServiceBaseUrl;
     @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
 
     //region lifecycle methods
@@ -76,17 +73,15 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     }
 
     @OnClick(R.id.privacy_policy_text) public void onPrivacyPolicyClick() {
-        String termsUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-        Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
-        Intents.maybeStartActivity(this, termsIntent);
-    }
-
-    @OnClick(R.id.support_blog_text) public void onBlogClick() {
-        supportPresenter.blogClicked();
+        String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+        Intent privacyIntent = intentFactory.openEmbededUrlIntent(this, privacyUrl);
+        Intents.maybeStartActivity(this, privacyIntent);
     }
 
     @OnClick(R.id.support_help_text) public void onHelpClick() {
-        supportPresenter.helpClicked();
+        String helpUrl = String.format(helpServiceBaseUrl, localeProvider.getLanguage());
+        Intent helpIntent = intentFactory.openEmbededUrlIntent(this, helpUrl);
+        Intents.maybeStartActivity(this, helpIntent);
     }
 
     @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
@@ -99,24 +94,6 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
     @Override public void showError() {
         help.setEnabled(false);
         help.setTextColor(getResources().getColor(R.color.gray_60));
-        blog.setEnabled(false);
-        blog.setTextColor(getResources().getColor(R.color.gray_60));
-    }
-
-    @Override public void goToStream(Stream blog) {
-        Intent intent = StreamTimelineActivity.newIntent(this, blog.getId(), blog.getTitle(), blog.getAuthorId());
-        startActivity(intent);
-    }
-
-    @Override public void handleReport() {
-        supportPresenter.setUpAlertDialog(Locale.getDefault().getLanguage());
-    }
-
-    @Override public void showAlertDialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder //
-          .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok), null).show();
     }
 
     @Override protected void onPause() {

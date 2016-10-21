@@ -18,4 +18,8 @@ public interface DiscoverView extends LoadDataView {
   void navigateToUserProfile(String userId);
 
   void showError(String message);
+
+  void showBanner();
+
+  void hideBanner();
 }

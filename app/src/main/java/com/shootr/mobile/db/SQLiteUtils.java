@@ -54,6 +54,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.SOCIAL_LOGIN
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.RECEIVED_REACTIONS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -114,6 +118,14 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.RESHOOT_COUNT
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.CTA_CAPTION
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.CTA_BUTTON_LINK
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.CTA_BUTTON_TEXT
+      + " TEXT NULL,"
+      + DatabaseContract.ShotTable.PROMOTED
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -124,6 +136,7 @@ public class SQLiteUtils {
       + " INT NOT NULL,"
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
+
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ShotQueueTable.TABLE
       + " ("
@@ -278,6 +291,8 @@ public class SQLiteUtils {
       + " VARCHAR(255) NOT NULL,"
       + DatabaseContract.StreamTable.PHOTO
       + " TEXT NULL,"
+      + DatabaseContract.StreamTable.LANDSCAPE_PHOTO
+      + " TEXT NULL,"
       + DatabaseContract.StreamTable.DESCRIPTION
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.TOPIC
@@ -325,6 +340,8 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.TITLE
       + " VARCHAR(255) NOT NULL,"
       + DatabaseContract.StreamTable.PHOTO
+      + " TEXT NULL,"
+      + DatabaseContract.StreamTable.LANDSCAPE_PHOTO
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.COUNTRY
       + " TEXT NULL,"
@@ -502,6 +519,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.SOCIAL_LOGIN
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.RECEIVED_REACTIONS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -628,6 +649,14 @@ public class SQLiteUtils {
         + DatabaseContract.HighlightedShotTable.LINK_CLICKS
         + " NUMBER NULL,"
         + DatabaseContract.HighlightedShotTable.RESHOOT_COUNT
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_CAPTION
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT
+        + " TEXT NULL,"
+        + DatabaseContract.HighlightedShotTable.PROMOTED
         + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"

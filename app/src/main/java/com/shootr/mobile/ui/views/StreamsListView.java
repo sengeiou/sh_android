@@ -18,6 +18,8 @@ public interface StreamsListView extends LoadDataView {
 
     void showAddedToFavorites();
 
+    void showRemovedFromFavorites();
+
     void showStreamShared();
 
     void showContextMenuWithMute(StreamResultModel stream);

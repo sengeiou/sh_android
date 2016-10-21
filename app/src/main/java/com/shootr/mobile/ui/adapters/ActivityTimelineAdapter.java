@@ -20,7 +20,9 @@ import com.shootr.mobile.ui.adapters.holders.ReplyViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShareShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.SharedStreamViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StartedShootingViewHolder;
+import com.shootr.mobile.ui.adapters.holders.StreamCheckInViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StreamFavoritedViewHolder;
+import com.shootr.mobile.ui.adapters.holders.WakeUpShotActivityViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -55,6 +57,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_POLL_VOTED = 13;
     public static final int TYPE_POLL_SHARED = 14;
     public static final int TYPE_POLL_FINISHED = 15;
+    public static final int TYPE_WAKE_UP_SHOT = 16;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -123,6 +126,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_POLL_SHARED;
                 case ActivityType.FINISHED_POLL:
                     return TYPE_POLL_FINISHED;
+                case ActivityType.WAKE_UP_SHOT:
+                    return TYPE_WAKE_UP_SHOT;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -138,7 +143,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             case TYPE_GENERIC_ACTIVITY:
                 return onCreateActivityViewHolder(parent);
             case TYPE_CHECKIN:
-                return onCreateActivityViewHolder(parent);
+                return onCreateStreamCheckInViewHolder(parent);
             case TYPE_SHARE_STREAM:
                 return onCreateSharedStreamViewHolder(parent);
             case TYPE_SHARE_SHOT:
@@ -169,6 +174,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreatePollSharedViewHolder(parent);
             case TYPE_POLL_FINISHED:
                 return onCreatePollFinishedViewHolder(parent);
+            case TYPE_WAKE_UP_SHOT:
+                return onCreateWakeUpViewHolder(parent);
             default:
                 throw new IllegalStateException("View type %d not handled");
         }
@@ -191,12 +198,28 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             streamTitleClickListener);
     }
 
+    private WakeUpShotActivityViewHolder onCreateWakeUpViewHolder(ViewGroup parent) {
+        return new WakeUpShotActivityViewHolder(createActivityView(parent),
+            imageLoader,
+            timeUtils,
+            avatarClickListener,
+            streamTitleClickListener);
+    }
+
     private StreamFavoritedViewHolder onCreateStreamFavoritedViewHolder(ViewGroup parent) {
         return new StreamFavoritedViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           avatarClickListener,
           streamTitleClickListener);
+    }
+
+    private StreamCheckInViewHolder onCreateStreamCheckInViewHolder(ViewGroup parent) {
+        return new StreamCheckInViewHolder(createActivityView(parent),
+            imageLoader,
+            timeUtils,
+            avatarClickListener,
+            streamTitleClickListener);
     }
 
     private SharedStreamViewHolder onCreateSharedStreamViewHolder(ViewGroup parent) {

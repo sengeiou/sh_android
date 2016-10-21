@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
+import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -17,6 +19,8 @@ import com.shootr.mobile.domain.service.UserCannotVoteException;
 import com.shootr.mobile.domain.service.user.CannotAddContributorException;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
 import com.shootr.mobile.domain.service.user.LoginException;
+import com.shootr.mobile.domain.service.user.UserAlreadyCheckedException;
+import com.shootr.mobile.domain.service.user.UserCannotCheckInException;
 import com.shootr.mobile.domain.service.user.UserHasVotedException;
 import java.util.HashMap;
 import java.util.Map;
@@ -135,6 +139,10 @@ public class ErrorMessageFactory {
             return context.getString(R.string.user_not_found);
         } else if (error instanceof LoginException) {
             return context.getString(R.string.error_login_credentials_invalid);
+        } else if (error instanceof InvalidLoginMethodForShootrException) {
+            return context.getString(R.string.error_login_shootr_method);
+        } else if (error instanceof InvalidLoginMethodForFacebookException) {
+            return context.getString(R.string.error_login_facebook_method);
         } else if (error instanceof ChangePasswordInvalidException) {
             return context.getString(R.string.error_message_invalid_change_password);
         } else if (error instanceof CannotFollowBlockedUserException) {
@@ -147,6 +155,10 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_has_voted);
         } else if (error instanceof PollHasBeenDeletedException) {
             return context.getString(R.string.error_poll_has_been_deleted);
+        } else if (error instanceof UserAlreadyCheckedException) {
+            return context.getString(R.string.error_user_already_checked);
+        } else if (error instanceof UserCannotCheckInException) {
+            return context.getString(R.string.error_user_cannot_check);
         } else {
             return getUnknownErrorMessage();
         }

@@ -55,13 +55,13 @@ public class StreamTimelineInteractorsWrapper {
     }
   }
 
-  public void obtainOlderTimeline(Long currentOldestDate, Integer streamMode,
+  public void obtainOlderTimeline(String streamId, Long currentOldestDate, Integer streamMode,
       Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
-      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(currentOldestDate, callback,
+      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,
           errorCallback);
     } else {
-      getOlderViewOnlyStreamTimelineInteractor.loadOlderStreamTimeline(currentOldestDate, callback,
+      getOlderViewOnlyStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,
           errorCallback);
     }
   }

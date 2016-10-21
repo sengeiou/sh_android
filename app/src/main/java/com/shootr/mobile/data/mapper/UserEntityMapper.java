@@ -41,6 +41,10 @@ public class UserEntityMapper {
 
         user.setJoinStreamDate(userEntity.getJoinStreamDate());
         user.setSocialLogin(userEntity.getSocialLogin());
+        user.setReceivedReactions(
+            (userEntity.getReceivedReactions() == null ? 0L : userEntity.getReceivedReactions()));
+        user.setAnalyticsUserType(userEntity.getAnalyticsUserType() == null ? "NORMAL"
+            : userEntity.getAnalyticsUserType());
 
         user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
@@ -78,6 +82,8 @@ public class UserEntityMapper {
         userEntity.setSocialLogin(user.isSocialLogin());
         userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+        userEntity.setAnalyticsUserType(user.getAnalyticsUserType());
+        userEntity.setReceivedReactions(user.getReceivedReactions());
 
         return userEntity;
     }
