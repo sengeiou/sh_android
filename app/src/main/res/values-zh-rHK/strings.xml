@@ -40,7 +40,6 @@
   <string name="activity_timeline_empty_title">沒有動態消息</string>
   <string name="added_contributor">已新增</string>
   <string name="added_to_favorites">已被加入最愛</string>
-  <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
@@ -81,6 +80,8 @@
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消變更？</string>
   <string name="discover">發現</string>
+  <string name="discover_banner_content">點擊星形添加，電視和廣播節目開始的時候會提醒你。</string>
+  <string name="discover_banner_title">添加到喜愛</string>
   <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完成</string>
@@ -98,7 +99,6 @@
   <string name="drawer_following_activity_title" formatted="false">關注中</string>
   <string name="drawer_friends_title">朋友</string>
   <string name="drawer_streams_title">Streams</string>
-  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_users_title">用戶</string>
   <string name="edit_stream">編輯Stream</string>
   <string name="edit_stream_listing_context_menu">編輯</string>
@@ -123,6 +123,10 @@
   <string name="error_has_voted">你已投票</string>
   <string name="error_image_upload">上傳圖片失敗</string>
   <string name="error_login_credentials_invalid">用戶名稱或密碼無效</string>
+  <!-- When a user logged by facebook and he has logged before with the same mail on Shootr vía Shootr login method -->
+  <string name="error_login_facebook_method">請用電子郵件登入，您沒有用facebook註冊。</string>
+  <!-- When a user logged by email or username method and he has logged before with the same mail by facebook login method -->
+  <string name="error_login_shootr_method">請用facebook登入，您沒用電子郵件註冊。</string>
   <string name="error_message">Shootr遇到問題，需要關閉。</string>
   <!-- Profile: Bio -->
   <string name="error_message_bio_too_long">個人資料不能超過150字元</string>
@@ -170,6 +174,7 @@
   <string name="error_stream_already_favorites">已被加入最愛</string>
   <string name="error_stream_read_only">這stream已被清除並只能唯讀</string>
   <string name="error_title">Ooops!</string>
+  <string name="error_user_already_checked">你今天已經在這個 stream 簽到過</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">需要電子郵件和好友列表。</string>
@@ -294,7 +299,7 @@
     <item quantity="zero">%d 投票</item>
   </plurals>
   <string name="poll_vote_timeout_retry">重試</string>
-  <string name="profile_all_shots">所有shots</string>
+  <string name="profile_all_shots">所有 shots</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">編輯個人檔案</string>
   <string name="profile_follow">關注</string>
@@ -308,6 +313,7 @@
   <string name="profile_settings">推送通知</string>
   <string name="profile_support">支援</string>
   <string name="profile_updated">個人檔案已更新</string>
+  <string name="promoted">推廣</string>
   <string name="publish_poll">%1$s %2$s 新的投票</string>
   <string name="push_settings_everyone">任何用戶</string>
   <string name="push_settings_people_follow">我關注的用戶</string>
@@ -317,6 +323,8 @@
   <string name="read_write_mode_view_only_title">私人編輯</string>
   <string name="registration_create_button_text">建立帳戶</string>
   <string name="remove">清除</string>
+  <!-- When a stream has been removed from favorites feedback -->
+  <string name="removed_from_favorites">取消喜愛</string>
   <string name="remove_highlight">刪除置頂</string>
   <string name="remove_stream_confirmation">清除stream?</string>
   <string name="remove_stream_label">清除stream</string>
@@ -339,8 +347,8 @@
   <string name="reset_password_enter_username_email">請輸入Shootr的用戶名稱或電郵。</string>
   <string name="reset_password_send_email">發送密碼重設電郵</string>
   <plurals name="reshot_count_pattern">
-    <item quantity="other">%sreshots</item>
-    <item quantity="zero">%sreshots</item>
+    <item quantity="other">%s reshots</item>
+    <item quantity="zero">%s reshots</item>
   </plurals>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">還原stream</string>
@@ -348,8 +356,8 @@
   <string name="search_users_hint">查找用戶</string>
   <string name="seconds">秒</string>
   <string name="shared_poll">分享了投票 %s</string>
-  <string name="shared_shot_activity">分享了%s的 Shot</string>
-  <string name="shared_shot_activity_with_comment">"分享了: "</string>
+  <string name="shared_shot_activity">Reshot 了 %s</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">分享了 Stream</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">投票 %s</string>
@@ -359,6 +367,7 @@
   <string name="share_stream_activity_text_pattern">分享了(stream)</string>
   <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
+  <string name="share_stream_via_shootr">通過 Shootr 分享</string>
   <string name="share_via">透過以下方式分享：</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Shoot所有</string>
@@ -373,6 +382,8 @@
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
+  <string name="stream_checked">簽到</string>
+  <string name="stream_check_in_activity_text_pattern">你已經在 (steam) 簽到</string>
   <string name="stream_data_info_favorites">喜爱</string>
   <string name="stream_data_info_participants">参与者</string>
   <string name="stream_data_info_participants_with_shots">發送shot的參與者</string>
@@ -397,7 +408,7 @@
   <string name="stream_subtitle">在關注%d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在關注%2$s個參與者中的%1$s個參與者</string>
   <string name="stream_timeline_add_favorite">加入最愛</string>
-  <string name="stream_timeline_empty_message">正在檢查shots…</string>
+  <string name="stream_timeline_empty_message">正在檢查shots...</string>
   <string name="stream_timeline_remove_favorite">從最愛中清除</string>
   <string name="stream_timeline_view_only">私人編輯</string>
   <string name="suggested_people_section_title">建議關注</string>
@@ -407,7 +418,7 @@
   <string name="support_terms_service">服務條款</string>
   <string name="support_version">版本</string>
   <string name="title_activity_all_participants">所有參與者</string>
-  <string name="title_activity_all_shots">所有shots</string>
+  <string name="title_activity_all_shots">所有 shots</string>
   <string name="title_activity_change_password">更改密碼</string>
   <string name="title_activity_contributors">合作者</string>
   <string name="title_activity_email_confirmation">電郵</string>
@@ -453,12 +464,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
-  <string name="share_stream_via_shootr">通過Shootr分享</string>
-  <string name="discover_banner_content">Tap the star to favorite. TV and radio shows will notify you when they start.</string>
-  <string name="discover_banner_title">Add streams to Favorites</string>
-  <string name="stream_checked">Checked-In</string>
-  <string name="stream_check_in_activity_text_pattern">is watching (stream)</string>
-  <string name="promoted">Promocionado</string>
-  <string name="error_user_already_checked">User already checked</string>
-  <string name="error_user_cannot_check">User cannot check</string>
 </resources>
