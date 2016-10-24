@@ -132,6 +132,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     return follows;
   }
 
+  @Override public void synchronizeFollow() {
+    List<FollowEntity> follows = getFollows();
+    localFollowDataSource.putFollows(follows);
+  }
+
     @Override public User getUserById(String id) {
         UserEntity remoteUser = remoteUserDataSource.getUser(id);
         localUserDataSource.putUser(remoteUser);
