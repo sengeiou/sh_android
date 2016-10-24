@@ -264,8 +264,7 @@ public class ProfileEditPresenter implements Presenter {
   }
 
   private void showUsernameValidationError(String errorCode) {
-    String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
-    profileEditView.showUsernameValidationError(messageForCode);
+    profileEditView.showUsernameValidationError(errorCode);
   }
 
   private void showNameValidationError(String errorCode) {
