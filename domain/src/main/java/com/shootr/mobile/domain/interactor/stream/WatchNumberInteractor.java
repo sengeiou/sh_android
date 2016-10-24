@@ -59,16 +59,21 @@ public class WatchNumberInteractor implements Interactor {
     List<User> watchers = new ArrayList<>();
     int followingNotCounted = 0;
     for (User user : localUserRepository.getLocalPeopleFromIdStream(idStream)) {
-      if (user.isFollowing()) {
-        watchers.add(user);
-        if (!stream.getWatchers().contains(user)) {
-          followingNotCounted++;
-        }
-      }
+      followingNotCounted = filterFollowingUsers(stream, watchers, followingNotCounted, user);
     }
-
     Integer[] watchersCount = setWatchers(stream, watchers, followingNotCounted);
     notifyLoaded(watchersCount);
+  }
+
+  private int filterFollowingUsers(Stream stream, List<User> watchers, int followingNotCounted,
+      User user) {
+    if (user.isFollowing()) {
+      watchers.add(user);
+      if (!stream.getWatchers().contains(user)) {
+        followingNotCounted++;
+      }
+    }
+    return followingNotCounted;
   }
 
   private Integer[] setWatchers(Stream stream, List<User> watchers, int followingNotCounted) {

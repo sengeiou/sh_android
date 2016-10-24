@@ -97,19 +97,10 @@ public class GetStreamInfoInteractor implements Interactor {
 
 
     List<User> watchers = new ArrayList<>();
-    for (User user : followingInStream) {
-      if (user.isFollowing()) {
-        watchers.add(user);
-      }
-    }
+    filterFollowingUsers(followingInStream, watchers);
     Integer followingsNumber = watchers.size();
 
-    if (stream.getWatchers() != null) {
-      List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
-      watchesFromStream.removeAll(watchers);
-      watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
-      watchers.addAll(watchesFromStream);
-    }
+    handlerWatchersList(stream, watchers);
 
     Boolean hasMoreParticipants = false;
     if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
@@ -119,6 +110,23 @@ public class GetStreamInfoInteractor implements Interactor {
 
     return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants,
         localOnly);
+  }
+
+  private void handlerWatchersList(Stream stream, List<User> watchers) {
+    if (stream.getWatchers() != null) {
+      List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
+      watchesFromStream.removeAll(watchers);
+      watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
+      watchers.addAll(watchesFromStream);
+    }
+  }
+
+  private void filterFollowingUsers(List<User> followingInStream, List<User> watchers) {
+    for (User user : followingInStream) {
+      if (user.isFollowing()) {
+        watchers.add(user);
+      }
+    }
   }
 
   private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
