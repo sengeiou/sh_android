@@ -95,7 +95,6 @@ public class GetStreamInfoInteractor implements Interactor {
     List<User> followingInStream = localUserRepository.getLocalPeopleFromIdStream(stream.getId());
     followingInStream = sortWatchersListByJoinStreamDate(followingInStream);
 
-
     List<User> watchers = new ArrayList<>();
     filterFollowingUsers(followingInStream, watchers);
     Integer followingsNumber = watchers.size();
@@ -117,7 +116,12 @@ public class GetStreamInfoInteractor implements Interactor {
       List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
       watchesFromStream.removeAll(watchers);
       watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
-      watchers.addAll(watchesFromStream);
+
+      for (User user : watchesFromStream) {
+        if (!localUserRepository.isFollowing(user.getIdUser())) {
+          watchers.add(user);
+        }
+      }
     }
   }
 
