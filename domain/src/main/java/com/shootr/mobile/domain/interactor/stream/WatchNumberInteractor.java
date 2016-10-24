@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -23,6 +24,7 @@ public class WatchNumberInteractor implements Interactor {
   public static final int NO_WATCHERS = 0;
   public static final int FRIENDS = 0;
   public static final int WATCHERS = 1;
+  public static final int MAX_WATCHERS_VISIBLE = 50;
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -54,16 +56,32 @@ public class WatchNumberInteractor implements Interactor {
   @Override public void execute() throws Exception {
     remoteUserRepository.forceUpdatePeople();
     Stream stream = getRemoteStreamOrFallbackToLocal();
-    List<User> watchers = localUserRepository.getLocalPeopleFromIdStream(idStream);
-    Integer[] watchersCount = setWatchers(stream, watchers);
+    List<User> watchers = new ArrayList<>();
+    int followingNotCounted = 0;
+    for (User user : localUserRepository.getLocalPeopleFromIdStream(idStream)) {
+      if (user.isFollowing()) {
+        watchers.add(user);
+        if (!stream.getWatchers().contains(user)) {
+          followingNotCounted++;
+        }
+      }
+    }
+
+    Integer[] watchersCount = setWatchers(stream, watchers, followingNotCounted);
     notifyLoaded(watchersCount);
   }
 
-  private Integer[] setWatchers(Stream stream, List<User> watchers) {
+  private Integer[] setWatchers(Stream stream, List<User> watchers, int followingNotCounted) {
     Integer[] watchersCount = new Integer[2];
     watchersCount[FRIENDS] = watchers.size();
-    watchersCount[WATCHERS] =
-        (stream.getWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
+    if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
+      watchersCount[WATCHERS] =
+          (stream.getTotalWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
+    } else {
+      watchersCount[WATCHERS] =
+          (stream.getWatchers() != null) ? stream.getWatchers().size() + followingNotCounted : NO_WATCHERS;
+    }
+
     return watchersCount;
   }
 
