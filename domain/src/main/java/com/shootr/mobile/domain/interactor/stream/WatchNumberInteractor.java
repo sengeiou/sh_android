@@ -9,9 +9,11 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -23,11 +25,13 @@ public class WatchNumberInteractor implements Interactor {
   public static final int NO_WATCHERS = 0;
   public static final int FRIENDS = 0;
   public static final int WATCHERS = 1;
+  public static final int MAX_WATCHERS_VISIBLE = 50;
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final UserRepository localUserRepository;
   private final UserRepository remoteUserRepository;
+  private final SessionRepository sessionRepository;
   private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private String idStream;
@@ -35,12 +39,14 @@ public class WatchNumberInteractor implements Interactor {
 
   @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, ExternalStreamRepository remoteStreamRepository,
+      @Local UserRepository localUserRepository, SessionRepository sessionRepository,
+      ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.remoteUserRepository = remoteUserRepository;
     this.postExecutionThread = postExecutionThread;
     this.localUserRepository = localUserRepository;
+    this.sessionRepository = sessionRepository;
     this.remoteStreamRepository = remoteStreamRepository;
     this.localStreamRepository = localStreamRepository;
   }
@@ -54,16 +60,39 @@ public class WatchNumberInteractor implements Interactor {
   @Override public void execute() throws Exception {
     remoteUserRepository.forceUpdatePeople();
     Stream stream = getRemoteStreamOrFallbackToLocal();
-    List<User> watchers = localUserRepository.getLocalPeopleFromIdStream(idStream);
-    Integer[] watchersCount = setWatchers(stream, watchers);
+    List<User> followingWatching = new ArrayList<>();
+    ArrayList<User> watchers = new ArrayList<>();
+    for (User user : localUserRepository.getLocalPeopleFromIdStream(idStream)) {
+      filterFollowingUsers(followingWatching, user);
+    }
+    for (User watcher : stream.getWatchers()) {
+      if (!watcher.getIdUser().equals(sessionRepository.getCurrentUserId())
+          && !localUserRepository.isFollowing(watcher.getIdUser())) {
+        watchers.add(watcher);
+      }
+    }
+    Integer[] watchersCount = setWatchers(stream, followingWatching, watchers);
     notifyLoaded(watchersCount);
   }
 
-  private Integer[] setWatchers(Stream stream, List<User> watchers) {
+  private void filterFollowingUsers(List<User> watchers, User user) {
+    if (user.isFollowing()) {
+      watchers.add(user);
+    }
+  }
+
+  private Integer[] setWatchers(Stream stream, List<User> followingWatching, List<User> watchers) {
     Integer[] watchersCount = new Integer[2];
-    watchersCount[FRIENDS] = watchers.size();
-    watchersCount[WATCHERS] =
-        (stream.getWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
+    watchersCount[FRIENDS] = followingWatching.size();
+    if (followingWatching.size() >= MAX_WATCHERS_VISIBLE) {
+      watchersCount[WATCHERS] =
+          (stream.getTotalWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
+    } else {
+      watchersCount[WATCHERS] =
+          (stream.getWatchers() != null) ? followingWatching.size() + watchers.size() + 1
+              : NO_WATCHERS;
+    }
+
     return watchersCount;
   }
 
