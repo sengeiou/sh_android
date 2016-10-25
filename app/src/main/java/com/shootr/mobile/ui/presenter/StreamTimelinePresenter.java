@@ -360,6 +360,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.addShots(newShots);
     } else {
       addShotsAbove(newShots);
+      newShotsNumber += newShots.size();
       showTimeLineIndicator();
     }
   }
@@ -492,7 +493,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private void loadNewShotsInView(Timeline timeline) {
     boolean hasNewShots = !timeline.getShots().isEmpty();
     if (hasNewShots) {
-      newShotsNumber += timeline.getShots().size();
       loadTimeline(streamMode);
     } else if (isEmpty) {
       streamTimelineView.showEmpty();
