@@ -90,7 +90,7 @@ public class WatchNumberInteractor implements Interactor {
   private Integer[] setWatchers(Stream stream, List<User> followingWatching, List<User> watchers) {
     Integer[] watchersCount = new Integer[2];
     watchersCount[FRIENDS] = followingWatching.size();
-    if (followingWatching.size() >= MAX_WATCHERS_VISIBLE) {
+    if (stream.getWatchers().size() >= MAX_WATCHERS_VISIBLE) {
       watchersCount[WATCHERS] =
           (stream.getTotalWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
     } else {
