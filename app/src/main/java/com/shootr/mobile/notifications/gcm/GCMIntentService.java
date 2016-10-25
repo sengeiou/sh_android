@@ -74,7 +74,7 @@ public class GCMIntentService extends IntentService {
       switch (push.getParameters().getPushType()) {
         case PushNotification.Parameters.PUSH_TYPE_SHOT:
           if (appIsRunning()) {
-            return;
+            break;
           }
           receivedShot(push);
           break;
