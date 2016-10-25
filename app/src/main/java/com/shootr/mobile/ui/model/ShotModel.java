@@ -33,6 +33,8 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
+    private boolean canBePinned;
+    private boolean titleEnabled;
 
     public String getIdShot() {
         return idShot;
@@ -248,6 +250,22 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setPromoted(Long promoted) {
         this.promoted = promoted;
+    }
+
+    public Boolean getCanBePinned() {
+        return canBePinned;
+    }
+
+    public void setCanBePinned(Boolean canBePinned) {
+        this.canBePinned = canBePinned;
+    }
+
+    public boolean isTitleEnabled() {
+        return titleEnabled;
+    }
+
+    public void setTitleEnabled(boolean titleEnabled) {
+        this.titleEnabled = titleEnabled;
     }
 
     public String getType() {

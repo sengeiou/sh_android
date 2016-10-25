@@ -113,8 +113,10 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setupVideo(shotModel);
         setupReply(shotModel);
         setupNiceButton(shotModel);
+        setupPinShotView(shotModel);
         setupPinToProfileContainer(shotModel);
         setupShareListener();
+        setupStreamTitle(shotModel);
     }
 
     private void setupShareListener() {
@@ -333,14 +335,22 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void disableStreamTitle() {
+    private void disableStreamTitle() {
         streamTitle.setTextColor(context.getResources().getColor(R.color.gray_material));
         streamTitle.setEnabled(false);
     }
 
-    public void enableStreamTitle() {
+    private void enableStreamTitle() {
         streamTitle.setTextColor(context.getResources().getColor(R.color.links));
         streamTitle.setEnabled(true);
+    }
+
+    private void setupStreamTitle(ShotModel shotModel) {
+        if (shotModel.isTitleEnabled()) {
+            enableStreamTitle();
+        } else {
+            disableStreamTitle();
+        }
     }
 
     private void setupPinToProfileContainer(final ShotModel shotModel) {
@@ -351,11 +361,11 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void hidePintToProfileContainer() {
-        pinToProfileContainer.setVisibility(View.GONE);
-    }
-
-    public void showPintToProfileContainer() {
-        pinToProfileContainer.setVisibility(View.VISIBLE);
+    private void setupPinShotView(final ShotModel shotModel) {
+        if (shotModel.getCanBePinned()) {
+            pinToProfileContainer.setVisibility(View.VISIBLE);
+        } else {
+            pinToProfileContainer.setVisibility(View.GONE);
+        }
     }
 }

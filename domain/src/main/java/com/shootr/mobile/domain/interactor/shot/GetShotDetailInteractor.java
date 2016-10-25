@@ -50,18 +50,26 @@ public class GetShotDetailInteractor implements Interactor {
   @Override public void execute() throws Exception {
     try {
       if (!localOnly) {
-        ShotDetail remoteShotDetail =
-            remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-        remoteShotDetail.setNicers(nicerRepository.getNicers(idShot));
-        notifyLoaded(reorderReplies(remoteShotDetail));
-        localShotRepository.putShot(remoteShotDetail.getShot());
+        loadRemoteShotDetail();
       }
-      ShotDetail localShotDetail =
-          localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-      notifyLoaded(reorderReplies(localShotDetail));
+      loadLocalShotDetail();
     } catch (ShootrException error) {
       notifyError(error);
     }
+  }
+
+  private void loadLocalShotDetail() {
+    ShotDetail localShotDetail =
+        localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+    localShotDetail.setNicers(nicerRepository.getNicers(idShot));
+    notifyLoaded(reorderReplies(localShotDetail));
+  }
+
+  private void loadRemoteShotDetail() {
+    ShotDetail remoteShotDetail =
+        remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+    notifyLoaded(reorderReplies(remoteShotDetail));
+    localShotRepository.putShot(remoteShotDetail.getShot());
   }
 
   private ShotDetail reorderReplies(ShotDetail shotDetail) {
