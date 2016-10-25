@@ -806,6 +806,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);
+    streamTimelinePresenter.setNewShotsNumber(0);
   }
 
   //region View methods
