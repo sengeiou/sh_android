@@ -133,8 +133,13 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
   }
 
   @Override public void synchronizeFollow() {
-    List<FollowEntity> follows = getFollows();
-    localFollowDataSource.putFollows(follows);
+    try {
+      List<FollowEntity> follows = getFollows();
+      localFollowDataSource.putFollows(follows);
+    } catch (ServerCommunicationException networkError) {
+      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
+            /* swallow silently */
+    }
   }
 
     @Override public User getUserById(String id) {
