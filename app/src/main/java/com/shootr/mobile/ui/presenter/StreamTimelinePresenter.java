@@ -356,6 +356,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void addNewShots(Boolean isFirstShotPosition, List<ShotModel> newShots) {
+    if (hasBeenPaused) isFirstShotPosition = false;
     if (isFirstShotPosition) {
       streamTimelineView.addShots(newShots);
     } else {
@@ -782,8 +783,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     bus.register(this);
     startPollingShots();
     if (hasBeenPaused) {
+      isFirstLoad = false;
+      isTimelineInitialized = false;
+      isFirstShotPosition = false;
       selectStream();
-      handleVisibilityTimelineIndicatorInResume();
     }
   }
 
