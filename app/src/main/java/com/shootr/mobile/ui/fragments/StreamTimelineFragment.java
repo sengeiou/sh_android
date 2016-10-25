@@ -679,6 +679,7 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void openNewShotView() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
+                .setStreamData(idStream, streamTitle)
                 .build();
             startActivity(newShotIntent);
           }
@@ -687,6 +688,7 @@ public class StreamTimelineFragment extends BaseFragment
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .withImage(image) //
+                .setStreamData(idStream, streamTitle)
                 .build();
             startActivity(newShotIntent);
           }
@@ -720,6 +722,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelPhoto);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
