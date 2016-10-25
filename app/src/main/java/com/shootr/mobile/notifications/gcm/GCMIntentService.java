@@ -71,12 +71,11 @@ public class GCMIntentService extends IntentService {
         return;
       }
 
-      if (appIsRunning()) {
-        return;
-      }
-
       switch (push.getParameters().getPushType()) {
         case PushNotification.Parameters.PUSH_TYPE_SHOT:
+          if (appIsRunning()) {
+            return;
+          }
           receivedShot(push);
           break;
         case PushNotification.Parameters.PUSH_TYPE_ACTIVITY:
