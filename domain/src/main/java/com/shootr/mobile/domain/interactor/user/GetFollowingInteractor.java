@@ -45,9 +45,17 @@ public class GetFollowingInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         if (onlySynchronize) {
-            remoteUserRepository.synchronizeFollow();
+            tryObtainRemoteFollows();
         } else {
             tryObtainingLocalPeople();
+        }
+    }
+
+    private void tryObtainRemoteFollows() {
+        try {
+            remoteUserRepository.synchronizeFollow();
+        } catch (ServerCommunicationException networkError) {
+            /* swallow silently */
         }
     }
 

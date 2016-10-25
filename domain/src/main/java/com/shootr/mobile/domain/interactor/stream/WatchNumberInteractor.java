@@ -58,21 +58,27 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    remoteUserRepository.forceUpdatePeople();
-    Stream stream = getRemoteStreamOrFallbackToLocal();
-    List<User> followingWatching = new ArrayList<>();
-    ArrayList<User> watchers = new ArrayList<>();
-    for (User user : localUserRepository.getLocalPeopleFromIdStream(idStream)) {
-      filterFollowingUsers(followingWatching, user);
-    }
-    for (User watcher : stream.getWatchers()) {
-      if (!watcher.getIdUser().equals(sessionRepository.getCurrentUserId())
-          && !localUserRepository.isFollowing(watcher.getIdUser())) {
-        watchers.add(watcher);
+      remoteUserRepository.forceUpdatePeople();
+      Stream stream = getRemoteStreamOrFallbackToLocal();
+      List<User> followingWatching = new ArrayList<>();
+      ArrayList<User> watchers = new ArrayList<>();
+      for (User user : localUserRepository.getLocalPeopleFromIdStream(idStream)) {
+        filterFollowingUsers(followingWatching, user);
+      }
+    filterOthersWatchers(stream, watchers);
+    Integer[] watchersCount = setWatchers(stream, followingWatching, watchers);
+      notifyLoaded(watchersCount);
+  }
+
+  private void filterOthersWatchers(Stream stream, ArrayList<User> watchers) {
+    if (stream.getWatchers() != null) {
+      for (User watcher : stream.getWatchers()) {
+        if (!watcher.getIdUser().equals(sessionRepository.getCurrentUserId()) &&
+            !localUserRepository.isFollowing(watcher.getIdUser())) {
+          watchers.add(watcher);
+        }
       }
     }
-    Integer[] watchersCount = setWatchers(stream, followingWatching, watchers);
-    notifyLoaded(watchersCount);
   }
 
   private void filterFollowingUsers(List<User> watchers, User user) {
