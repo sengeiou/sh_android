@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ public class GetUserByIdInteractorTest {
     @Mock UserRepository remoteUserRepository;
     @Mock Interactor.Callback<User> callback;
     @Mock Interactor.ErrorCallback errorCallback;
+    @Mock SessionRepository sessionRepository;
     private GetUserByIdInteractor interactor;
 
     @Before public void setUp() throws Exception {
@@ -39,7 +41,9 @@ public class GetUserByIdInteractorTest {
         interactor = new GetUserByIdInteractor(interactorHandler,
           postExecutionThread,
           localUserRepository,
-          remoteUserRepository);
+          remoteUserRepository, sessionRepository);
+
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     }
 
     @Test public void shouldLoadUserFromLocalRepository() throws Exception {
