@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/root_view"
+<LinearLayout android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_black"
+    android:orientation="vertical"
     tools:context="com.shootr.mobile.ui.activities.CropPictureActivity"
     >
 
-  <com.adamstyrc.cookiecutter.CookieCutterImageView
+  <com.isseiaoki.simplecropview.CropImageView
+      xmlns:custom="http://schemas.android.com/apk/res-auto"
       android:id="@+id/ivCrop"
+      android:layout_weight="1"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
+      android:paddingLeft="8dp"
+      android:paddingRight="8dp"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:src="@drawable/logo_white_104"/>
+      android:layout_height="wrap_content"
+      custom:scv_crop_mode="fit_image"
+      custom:scv_background_color="@color/material_black"
+      custom:scv_handle_color="@color/primary_dark"
+      custom:scv_guide_color="@color/accent"
+      custom:scv_overlay_color="@color/overlay"
+      custom:scv_frame_color="@color/accent"
+      custom:scv_handle_size="14dp"
+      custom:scv_touch_padding="8dp"
+      custom:scv_handle_show_mode="show_always"
+      custom:scv_guide_show_mode="show_always"
+      custom:scv_min_frame_size="50dp"
+      custom:scv_frame_stroke_weight="1dp"
+      custom:scv_guide_stroke_weight="1dp"/>
 
   <FrameLayout
       android:layout_width="match_parent"
@@ -56,4 +75,4 @@
         android:visibility="gone" />
   </FrameLayout>
 
-</RelativeLayout>
+</LinearLayout>
