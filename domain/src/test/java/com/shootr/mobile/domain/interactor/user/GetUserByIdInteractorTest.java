@@ -39,7 +39,7 @@ public class GetUserByIdInteractorTest {
         interactor = new GetUserByIdInteractor(interactorHandler,
           postExecutionThread,
           localUserRepository,
-          remoteUserRepository);
+          remoteUserRepository, sessionRepository);
     }
 
     @Test public void shouldLoadUserFromLocalRepository() throws Exception {
