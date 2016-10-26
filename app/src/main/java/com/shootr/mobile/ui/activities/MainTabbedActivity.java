@@ -224,6 +224,13 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void showActivityBadge(int count) {
+    if (currentFragment != null &&
+        !(currentFragment instanceof ActivityTimelineContainerFragment)) {
+      showBadge(count);
+    }
+  }
+
+  private void showBadge(int count) {
     if (unreadActivities == null) {
       unreadActivities = bottomBar.makeBadgeForTabAt(ACTIVITY_FRAGMENT, Color.TRANSPARENT, count);
     } else {
