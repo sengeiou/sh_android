@@ -205,6 +205,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         String comment = shotModel.getComment();
         if (comment != null) {
             setComment(comment);
+        } else if (shotModel.getCtaCaption() != null) {
+          setComment(shotModel.getCtaCaption());
         } else {
             shotText.setVisibility(View.GONE);
         }
