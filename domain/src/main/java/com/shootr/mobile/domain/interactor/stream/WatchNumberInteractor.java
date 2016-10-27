@@ -88,15 +88,17 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   private Integer[] setWatchers(Stream stream, List<User> followingWatching, List<User> watchers) {
-    Integer[] watchersCount = new Integer[2];
-    watchersCount[FRIENDS] = followingWatching.size();
-    if (stream.getWatchers().size() >= MAX_WATCHERS_VISIBLE) {
-      watchersCount[WATCHERS] =
-          (stream.getTotalWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
-    } else {
-      watchersCount[WATCHERS] =
-          (stream.getWatchers() != null) ? followingWatching.size() + watchers.size() + 1
-              : NO_WATCHERS;
+    Integer[] watchersCount = new Integer[] {0, 0};
+    try {
+      watchersCount[FRIENDS] = followingWatching.size();
+      if (stream.getWatchers().size() >= MAX_WATCHERS_VISIBLE) {
+        watchersCount[WATCHERS] = (stream.getTotalWatchers() != null) ? stream.getTotalWatchers() : NO_WATCHERS;
+      } else {
+        watchersCount[WATCHERS] =
+            (stream.getWatchers() != null) ? followingWatching.size() + watchers.size() + 1 : NO_WATCHERS;
+      }
+    } catch (NullPointerException error) {
+      /* no - op */
     }
 
     return watchersCount;
