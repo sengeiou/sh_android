@@ -22,6 +22,7 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -57,10 +58,15 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   }
 
   @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
-    List<ShotEntity> shotEntitiesFromTimeline =
-        remoteShotDataSource.getShotsForStreamTimeline(parameters);
-    localShotDataSource.putShots(shotEntitiesFromTimeline);
-    return shotEntityMapper.transform(shotEntitiesFromTimeline);
+    try {
+      List<ShotEntity> shotEntitiesFromTimeline =
+          remoteShotDataSource.getShotsForStreamTimeline(parameters);
+      localShotDataSource.putShots(shotEntitiesFromTimeline);
+      return shotEntityMapper.transform(shotEntitiesFromTimeline);
+    } catch (ServerCommunicationException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
   }
 
   @Override public Shot getShot(String shotId, String[] streamTypes, String[] shotTypes) {

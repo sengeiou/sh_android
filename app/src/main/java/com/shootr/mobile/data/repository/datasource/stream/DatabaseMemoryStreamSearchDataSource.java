@@ -33,8 +33,12 @@ import javax.inject.Singleton;
 
     public void setLastSearchResults(List<StreamSearchEntity> streamSearchEntities) {
         lastStreamSearchResults.clear();
-        for (StreamSearchEntity streamSearchEntity : streamSearchEntities) {
-            lastStreamSearchResults.put(streamSearchEntity.getIdStream(), streamSearchEntity);
+        try {
+            for (StreamSearchEntity streamSearchEntity : streamSearchEntities) {
+                lastStreamSearchResults.put(streamSearchEntity.getIdStream(), streamSearchEntity);
+            }
+        } catch (ArrayIndexOutOfBoundsException error) {
+            /* no-op */
         }
     }
 

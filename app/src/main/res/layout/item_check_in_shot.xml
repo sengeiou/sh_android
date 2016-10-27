@@ -118,11 +118,16 @@
             android:layout_below="@id/shot_user_name"
             android:orientation="horizontal"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             >
           <com.shootr.mobile.ui.widgets.ClickableTextView
               android:id="@+id/shot_caption"
               android:layout_weight=".6"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp"
+              android:paddingTop="4dp"
+              android:paddingBottom="4dp"
+              android:maxWidth="150dp"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:textColor="@color/material_black"

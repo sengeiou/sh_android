@@ -7,6 +7,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.user.User;
 import java.util.HashMap;
@@ -16,7 +17,8 @@ import org.json.JSONObject;
 public class GenericAnalyticsTool implements AnalyticsTool {
 
   private static final String APP_TRACKER = "app_tracker";
-  private static final String MIX_PANEL = "017c3e7d9670fec221d97a4eeeca00bf";
+  private static final String MIX_PANEL_PRO = "017c3e7d9670fec221d97a4eeeca00bf";
+  private static final String MIX_PANEL_TST = "e86d9d782e8d6d32b0c2263d5cf2758a";
   private static final String DISTINCT_ID = "distinct_id";
   private static final String ID_STREAM = "idStream";
   private static final String STREAM_TITLE = "streamTitle";
@@ -48,7 +50,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     } catch (Exception error) {
     }
     mixpanel =
-        MixpanelAPI.getInstance(context, MIX_PANEL);
+        MixpanelAPI.getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
   }
 
   private void storeUserMixPanel() {

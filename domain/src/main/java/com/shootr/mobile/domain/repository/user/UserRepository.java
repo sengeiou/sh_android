@@ -11,6 +11,8 @@ public interface UserRepository {
 
     List<User> getPeople();
 
+    void synchronizeFollow();
+
     User getUserById(String id);
 
     User getUserForAnalythicsById(String id);

@@ -22,6 +22,7 @@ public class GetFollowingInteractor implements Interactor {
 
     private Callback<List<User>> callback;
     private ErrorCallback errorCallback;
+    private boolean onlySynchronize = false;
 
     @Inject public GetFollowingInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
@@ -37,8 +38,25 @@ public class GetFollowingInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
+    public void synchronizeFollow() {
+        this.onlySynchronize = true;
+        interactorHandler.execute(this);
+    }
+
     @Override public void execute() throws Exception {
-        tryObtainingLocalPeople();
+        if (onlySynchronize) {
+            tryObtainRemoteFollows();
+        } else {
+            tryObtainingLocalPeople();
+        }
+    }
+
+    private void tryObtainRemoteFollows() {
+        try {
+            remoteUserRepository.synchronizeFollow();
+        } catch (ServerCommunicationException networkError) {
+            /* swallow silently */
+        }
     }
 
     private void tryObtainingLocalPeople() {
@@ -66,16 +84,20 @@ public class GetFollowingInteractor implements Interactor {
     private void notifyResult(final List<User> suggestedPeople) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(suggestedPeople);
+                if (!onlySynchronize) {
+                    callback.onLoaded(suggestedPeople);
+                }
             }
         });
     }
 
     private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
+        if (!onlySynchronize) {
+            postExecutionThread.post(new Runnable() {
+                @Override public void run() {
+                    errorCallback.onError(error);
+                }
+            });
+        }
     }
 }

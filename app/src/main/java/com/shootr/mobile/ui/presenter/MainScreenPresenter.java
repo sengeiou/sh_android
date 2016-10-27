@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
+import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -28,6 +29,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
   private final IntPreference badgeCount;
+  private final GetFollowingInteractor followingInteractor;
   private final Bus bus;
 
   private MainScreenView mainScreenView;
@@ -39,7 +41,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
       SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      @ActivityBadgeCount IntPreference badgeCount, @Main Bus bus) {
+      @ActivityBadgeCount IntPreference badgeCount, GetFollowingInteractor followingInteractor,
+      @Main Bus bus) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
@@ -47,6 +50,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
     this.badgeCount = badgeCount;
+    this.followingInteractor = followingInteractor;
     this.bus = bus;
   }
 
@@ -57,6 +61,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
   public void initialize(MainScreenView mainScreenView) {
     setView(mainScreenView);
     this.loadCurrentUser();
+    this.getFollows();
     this.sendDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
@@ -64,6 +69,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
   private void sendDeviceInfo() {
     sendDeviceInfoInteractor.sendDeviceInfo();
+  }
+
+  private void getFollows() {
+    followingInteractor.synchronizeFollow();
   }
 
   private void sendShotEventStats() {

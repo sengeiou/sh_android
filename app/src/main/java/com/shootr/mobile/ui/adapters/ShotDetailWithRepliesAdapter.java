@@ -104,26 +104,30 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public void hidePinToProfileButton() {
-        if (mainHolder != null) {
-            mainHolder.hidePintToProfileContainer();
+        if (mainShot != null) {
+            mainShot.setCanBePinned(false);
+            notifyItemChanged(getPositionMainShot());
         }
     }
 
     public void showPinToProfileContainer() {
-        if (mainHolder != null) {
-            mainHolder.showPintToProfileContainer();
+        if (mainShot != null) {
+            mainShot.setCanBePinned(true);
+            notifyItemChanged(getPositionMainShot());
         }
     }
 
     public void disableStreamTitle() {
-        if (mainHolder != null) {
-            mainHolder.disableStreamTitle();
+        if (mainShot != null) {
+            mainShot.setTitleEnabled(false);
+            notifyItemChanged(getPositionMainShot());
         }
     }
 
     public void enableStreamTitle() {
-        if (mainHolder != null) {
-            mainHolder.enableStreamTitle();
+        if (mainShot != null) {
+            mainShot.setTitleEnabled(true);
+            notifyItemChanged(getPositionMainShot());
         }
     }
 

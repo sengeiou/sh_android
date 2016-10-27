@@ -132,6 +132,16 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     return follows;
   }
 
+  @Override public void synchronizeFollow() {
+    try {
+      List<FollowEntity> follows = getFollows();
+      localFollowDataSource.putFollows(follows);
+    } catch (ServerCommunicationException networkError) {
+      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
+            /* swallow silently */
+    }
+  }
+
     @Override public User getUserById(String id) {
         UserEntity remoteUser = remoteUserDataSource.getUser(id);
         localUserDataSource.putUser(remoteUser);

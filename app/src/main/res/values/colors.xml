@@ -59,4 +59,5 @@
     <color name="dissmiss">#F44336</color>
 
     <color name="translucent_background">#CC3E4447</color>
+    <color name="overlay">#AA1C1C1C</color>
 </resources>

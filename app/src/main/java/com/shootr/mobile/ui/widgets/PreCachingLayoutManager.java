@@ -9,7 +9,7 @@ import android.util.DisplayMetrics;
 
 public class PreCachingLayoutManager extends LinearLayoutManager {
   private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 1000;
-  private static final float MILLISECONDS_PER_INCH = 75f;
+  private static final float MILLISECONDS_PER_INCH = 90f;
 
   private Context context;
 

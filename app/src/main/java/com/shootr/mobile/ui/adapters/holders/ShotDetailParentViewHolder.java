@@ -95,13 +95,19 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     private void setupComment(ShotModel shotModel) {
         String comment = shotModel.getComment();
         if (comment != null) {
-            CharSequence spannedComment =
-              shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
-            this.text.setText(spannedComment);
-            this.text.addLinks();
+            setComment(comment);
+        } else if (shotModel.getCtaCaption() != null) {
+            setComment(shotModel.getCtaCaption());
         } else {
             this.text.setVisibility(View.GONE);
         }
+    }
+
+    private void setComment(String comment) {
+        CharSequence spannedComment =
+          shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+        this.text.setText(spannedComment);
+        this.text.addLinks();
     }
 
     private void setupShotMediaContentVisibility(ShotModel shotModel) {

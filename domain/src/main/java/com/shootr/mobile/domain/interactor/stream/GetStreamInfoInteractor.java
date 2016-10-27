@@ -70,12 +70,12 @@ public class GetStreamInfoInteractor implements Interactor {
   }
 
   private void obtainLocalStreamInfo() {
-    StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository, true);
+    StreamInfo streamInfo = getStreamInfo(localStreamRepository, true);
     notifyLoaded(streamInfo);
   }
 
   private void obtainRemoteStreamInfo() {
-    StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository, false);
+    StreamInfo streamInfo = getStreamInfo(remoteStreamRepository, false);
     if (streamInfo != null) {
       notifyLoaded(streamInfo);
     } else {
@@ -83,8 +83,7 @@ public class GetStreamInfoInteractor implements Interactor {
     }
   }
 
-  protected StreamInfo getStreamInfo(UserRepository userRepository,
-      final StreamRepository streamRepository, boolean localOnly) {
+  protected StreamInfo getStreamInfo(final StreamRepository streamRepository, boolean localOnly) {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     Stream stream = streamRepository.getStreamById(idStreamWanted, StreamMode.TYPES_STREAM);
     checkNotNull(stream, new Preconditions.LazyErrorMessage() {
@@ -93,20 +92,14 @@ public class GetStreamInfoInteractor implements Interactor {
       }
     });
 
-    List<User> people = userRepository.getPeople();
-    List<User> followingInStream = filterUsersWatchingStream(people, idStreamWanted);
+    List<User> followingInStream = localUserRepository.getLocalPeopleFromIdStream(stream.getId());
     followingInStream = sortWatchersListByJoinStreamDate(followingInStream);
 
-    Integer followingsNumber = followingInStream.size();
+    List<User> watchers = new ArrayList<>();
+    filterFollowingUsers(followingInStream, watchers);
+    Integer followingsNumber = watchers.size();
 
-    List<User> watchers = followingInStream;
-
-    if (stream.getWatchers() != null) {
-      List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
-      watchesFromStream.removeAll(followingInStream);
-      watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
-      watchers.addAll(watchesFromStream);
-    }
+    handlerWatchersList(stream, watchers);
 
     Boolean hasMoreParticipants = false;
     if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
@@ -118,6 +111,28 @@ public class GetStreamInfoInteractor implements Interactor {
         localOnly);
   }
 
+  private void handlerWatchersList(Stream stream, List<User> watchers) {
+    if (stream.getWatchers() != null) {
+      List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
+      watchesFromStream.removeAll(watchers);
+      watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
+
+      for (User user : watchesFromStream) {
+        if (!localUserRepository.isFollowing(user.getIdUser())) {
+          watchers.add(user);
+        }
+      }
+    }
+  }
+
+  private void filterFollowingUsers(List<User> followingInStream, List<User> watchers) {
+    for (User user : followingInStream) {
+      if (user.isFollowing()) {
+        watchers.add(user);
+      }
+    }
+  }
+
   private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
     Collections.sort(watchesFromPeople, new Comparator<User>() {
       @Override public int compare(User userModel, User t1) {
@@ -125,16 +140,6 @@ public class GetStreamInfoInteractor implements Interactor {
       }
     });
     return watchesFromPeople;
-  }
-
-  private List<User> filterUsersWatchingStream(List<User> people, String idStream) {
-    List<User> watchers = new ArrayList<>();
-    for (User user : people) {
-      if (idStream.equals(user.getIdWatchingStream())) {
-        watchers.add(user);
-      }
-    }
-    return watchers;
   }
 
   private List<User> removeCurrentUserFromWatchers(List<User> watchers) {

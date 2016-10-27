@@ -101,18 +101,6 @@
             />
 
         <TextView
-            android:id="@+id/shot_promoted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_80"
-            android:textSize="14sp"
-            android:layout_marginLeft="8dp"
-            android:maxLines="1"
-            android:text="@string/promoted"
-            android:layout_toEndOf="@+id/shot_user_name"
-            />
-
-        <TextView
             android:id="@+id/shot_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,6 +111,18 @@
             tools:text="22m"
             android:layout_toEndOf="@+id/shot_user_name"
             android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/shot_promoted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_80"
+            android:textSize="13sp"
+            android:layout_marginLeft="8dp"
+            android:maxLines="1"
+            android:text="@string/promoted"
+            android:layout_toEndOf="@+id/shot_user_name"
+            android:layout_alignBottom="@id/shot_user_name"
             />
 
       </RelativeLayout>
@@ -146,7 +146,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="false"
-        android:layout_marginLeft="46dp"
+        android:layout_marginLeft="44dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="4dp"
         android:focusableInTouchMode="false"
@@ -222,7 +222,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_80"
-        android:layout_marginLeft="46dp"
+        android:layout_marginLeft="44dp"
         android:layout_marginTop="4dp"
         android:textSize="14sp"
         android:visibility="gone"
@@ -238,15 +238,15 @@
         android:layout_below="@id/shot_media_content"
         android:orientation="horizontal"
         android:layout_marginRight="8dp"
-        android:layout_marginLeft="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="8dp"
         >
       <com.shootr.mobile.ui.widgets.ClickableTextView
           android:id="@+id/shot_caption"
           android:layout_weight=".6"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:textColor="@color/material_black"
+          android:textColor="@color/gray_30"
           android:textColorLink="@color/links"
           android:textSize="14sp"
           android:layout_gravity="center"
@@ -255,14 +255,19 @@
           />
 
       <Button
-          android:text="Descargar"
+          android:text="Comprar"
           android:layout_width="wrap_content"
-          android:layout_height="32dp"
-          android:maxWidth="100dp"
+          android:layout_height="36dp"
+          android:paddingLeft="8dp"
+          android:paddingRight="8dp"
+          android:paddingTop="4dp"
+          android:paddingBottom="4dp"
+          android:maxWidth="150dp"
           android:id="@+id/check_in_button"
           android:layout_gravity="center"
           android:textAllCaps="false"
           android:textSize="12sp"
+          android:maxLength="25"
           android:textColor="@color/black"
           android:layout_marginLeft="4dp"
           android:background="@drawable/cta_button_state"

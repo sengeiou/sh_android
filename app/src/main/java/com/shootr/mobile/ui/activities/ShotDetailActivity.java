@@ -436,6 +436,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle())
                   .build();
                 startActivity(newShotIntent);
             }
@@ -445,6 +446,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
                   .from(ShotDetailActivity.this) //
                   .withImage(image) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle())
                   .build();
                 startActivity(newShotIntent);
             }
@@ -497,6 +499,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         builder.setLabelId(analyticsLabelPhoto);
         builder.setSource(shotDetailSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdStream(shot.getStreamId());
+        builder.setStreamName(shot.getStreamTitle());
         analyticsTool.analyticsSendAction(builder);
     }
 

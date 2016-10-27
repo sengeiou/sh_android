@@ -93,6 +93,9 @@ public class GetFavoriteStreamsInteractor implements Interactor {
 
   private void markWatchingStream(List<StreamSearchResult> streams) {
     String watchingId = null;
+    if (sessionRepository.getCurrentUserId() == null) {
+      return;
+    }
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     if (currentUser != null) {
       watchingId = localUserRepository.getUserById(sessionRepository.getCurrentUserId())

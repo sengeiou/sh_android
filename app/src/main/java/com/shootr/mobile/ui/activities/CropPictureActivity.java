@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.activities;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +8,8 @@ import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.adamstyrc.cookiecutter.CookieCutterImageView;
-import com.adamstyrc.cookiecutter.CookieCutterShape;
-import com.adamstyrc.cookiecutter.ImageUtils;
-import com.artjimlop.altex.AltexImageDownloader;
+import com.isseiaoki.simplecropview.CropImageView;
+import com.isseiaoki.simplecropview.callback.LoadCallback;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.base.BaseNoToolbarActivity;
 import com.shootr.mobile.util.CrashReportTool;
@@ -31,11 +28,12 @@ public class CropPictureActivity extends BaseNoToolbarActivity {
   @Inject CrashReportTool crashReportTool;
   @Inject FeedbackMessage feedbackMessage;
 
-  @BindView(R.id.ivCrop) CookieCutterImageView ivCrop;
+  @BindView(R.id.ivCrop) CropImageView ivCrop;
   @BindView(R.id.crop_loading) ProgressBar cropLoading;
   @BindView(R.id.button_crop) View cropButton;
   private String filename;
   private View parentLayout;
+  private Uri uri;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -47,9 +45,9 @@ public class CropPictureActivity extends BaseNoToolbarActivity {
     boolean isPictureFromCamera = getIntent().getBooleanExtra(EXTRA_PHOTO_TYPE, false);
     filename = getIntent().getStringExtra(EXTRA_IMAGE_NAME);
     String url = getIntent().getStringExtra(EXTRA_URI);
-    Uri uri = Uri.parse(url);
+    uri = Uri.parse(url);
 
-    ivCrop.getParams().setShape(CookieCutterShape.SQUARE);
+    ivCrop.setCropMode(CropImageView.CropMode.SQUARE);
 
     if (isPictureFromCamera) {
       cropCameraPicture();
@@ -60,18 +58,36 @@ public class CropPictureActivity extends BaseNoToolbarActivity {
 
   private void cropGalleryPicture(Uri uri) {
     try {
-      Point screenSize = ImageUtils.getScreenSize(this);
-      Bitmap scaledBitmap =
-          ImageUtils.decodeUriToScaledBitmap(this, uri, screenSize.x, screenSize.y);
-      ivCrop.setImageBitmap(scaledBitmap);
-    } catch (FileNotFoundException e) {
+      ivCrop.startLoad(uri, new LoadCallback() {
+        @Override public void onSuccess() {
+              /* no-op */
+        }
+
+        @Override public void onError() {
+              /* no-op */
+        }
+      });
+    } catch (Exception e) {
       crashReportTool.logException(e);
     }
   }
 
   private void cropCameraPicture() {
-    File photoFile = getCameraPhotoFile();
-    ivCrop.setImageBitmap(AltexImageDownloader.readFromDisk(photoFile));
+    try {
+      File photoFile = getCameraPhotoFile();
+      uri = Uri.fromFile(photoFile);
+      ivCrop.startLoad(uri, new LoadCallback() {
+        @Override public void onSuccess() {
+            /* no-op */
+        }
+
+        @Override public void onError() {
+            /* no-op */
+        }
+      });
+    } catch (Exception e) {
+      crashReportTool.logException(e.getMessage());
+    }
   }
 
   @OnClick(R.id.button_crop) public void cropClicked() {

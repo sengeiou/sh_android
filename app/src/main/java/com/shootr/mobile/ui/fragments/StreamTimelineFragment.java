@@ -608,7 +608,6 @@ public class StreamTimelineFragment extends BaseFragment
 
         if (shotsTimeline != null) {
           if (preCachingLayoutManager.findFirstVisibleItemPosition() == 0) {
-            streamTimelinePresenter.setIsFirstShotPosition(true);
             hideNewShotsIndicator();
           } else {
             streamTimelinePresenter.setIsFirstShotPosition(false);
@@ -679,6 +678,7 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void openNewShotView() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
+                .setStreamData(idStream, streamTitle)
                 .build();
             startActivity(newShotIntent);
           }
@@ -687,6 +687,7 @@ public class StreamTimelineFragment extends BaseFragment
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .withImage(image) //
+                .setStreamData(idStream, streamTitle)
                 .build();
             startActivity(newShotIntent);
           }
@@ -720,6 +721,8 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelPhoto);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName(streamTitle);
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -802,6 +805,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);
+    streamTimelinePresenter.setNewShotsNumber(0);
+    streamTimelinePresenter.setIsFirstShotPosition(true);
   }
 
   //region View methods
@@ -869,7 +874,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
     try {
-        newShotsNotificatorContainer.setVisibility(View.VISIBLE);
+      newShotsNotificatorContainer.setVisibility(View.VISIBLE);
       String indicatorText =
           getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
               numberNewShots);
@@ -978,9 +983,9 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void addShots(List<ShotModel> shotModels) {
     adapter.addShots(shotModels);
-    shotsTimeline.smoothScrollToPosition(0);
     streamTimelinePresenter.setIsFirstShotPosition(true);
     streamTimelinePresenter.setNewShotsNumber(0);
+    shotsTimeline.smoothScrollToPosition(0);
   }
 
   @Override public void showChecked() {

@@ -58,6 +58,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_REPLY_PARENT_ID = "parentId";
     private static final String EXTRA_REPLY_USERNAME = "parentUsername";
     public static final String EXTRA_PHOTO = "photo";
+    public static final String EXTRA_ID_STREAM = "idStream";
+    public static final String EXTRA_STREAM_TITLE = "streamTitle";
     public static final String SPACE = " ";
 
     @BindView(R.id.new_shot_avatar) ImageView avatar;
@@ -97,6 +99,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private boolean isReply = false;
     private String idUserReplied;
     private String replyUsername;
+    private String idStream;
+    private String streamTitle;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getToolbar().setVisibility(View.GONE);
@@ -121,9 +125,17 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         if (extras != null) {
             String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
             String replyParentId = extras.getString(EXTRA_REPLY_PARENT_ID);
+            String extraIdStream = extras.getString(EXTRA_ID_STREAM);
+            String extraStreamTitle = extras.getString(EXTRA_STREAM_TITLE);
             idUserReplied = replyParentId;
             if (replyToUsername != null) {
                 replyUsername = replyToUsername;
+            }
+            if (extraIdStream != null) {
+                this.idStream = extraIdStream;
+            }
+            if (extraStreamTitle != null) {
+                this.streamTitle = extraStreamTitle;
             }
             isReply = replyToUsername != null;
             if (isReply) {
@@ -296,6 +308,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             builder.setLabelId(analyticsLabelResponse);
             builder.setSource(shotDetailSource);
             builder.setUser(sessionRepository.getCurrentUser());
+            if (streamTitle != null) {
+                builder.setStreamName(streamTitle);
+            }
+            if (idStream != null) {
+                builder.setIdStream(idStream);
+            }
             if (idUserReplied != null) {
                 builder.setIdTargetUser(idUserReplied);
                 builder.setTargetUsername(replyUsername);
@@ -308,6 +326,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             builder.setLabelId(analyticsLabelSendShot);
             builder.setSource(timelineSource);
             builder.setUser(sessionRepository.getCurrentUser());
+            if (streamTitle != null) {
+                builder.setStreamName(streamTitle);
+            }
+            if (idStream != null) {
+                builder.setIdStream(idStream);
+            }
             analyticsTool.analyticsSendAction(builder);
         }
     }
@@ -504,6 +528,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         private Context launchingContext;
         private String idShotParent;
         private String replyToUsername;
+        private String idStream;
+        private String streamTitle;
 
         public static IntentBuilder from(Context launchingContext) {
             IntentBuilder intentBuilder = new IntentBuilder();
@@ -521,6 +547,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             return this;
         }
 
+        public IntentBuilder setStreamData(String idStream, String streamTitle) {
+            this.idStream = idStream;
+            this.streamTitle = streamTitle;
+            return this;
+        }
+
         public IntentBuilder inReplyTo(String idShot, String username) {
             idShotParent = idShot;
             replyToUsername = username;
@@ -535,6 +567,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
             if (idShotParent != null && replyToUsername != null) {
                 intent.putExtra(EXTRA_REPLY_PARENT_ID, idShotParent);
                 intent.putExtra(EXTRA_REPLY_USERNAME, replyToUsername);
+            }
+            if (idStream != null) {
+                intent.putExtra(EXTRA_ID_STREAM, idStream);
+            }
+            if (streamTitle != null) {
+                intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
             }
             return intent;
         }

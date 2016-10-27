@@ -89,6 +89,10 @@ public class LocalUserRepository implements UserRepository {
         localUserDataSource.updateWatch(entity);
     }
 
+    @Override public void synchronizeFollow() {
+        throw new IllegalArgumentException("Find Participants has no local implementation");
+    }
+
     @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
         throw new IllegalArgumentException("this method has no local implementation");
     }
