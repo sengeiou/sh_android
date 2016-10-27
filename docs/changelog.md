@@ -13,7 +13,20 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.18.2] - 2016-10-21
+## [1.20.0] - 2016-10-27
+
+### Addded
+
+- Synchro de follows al iniciar app
+
+### Changed
+
+- Pushes tipo shot cancelados dentro de app
+- new shots indicator
+- crop image library
+
+
+## [1.19.0] - 2016-10-21
 
 ### Addded
 
