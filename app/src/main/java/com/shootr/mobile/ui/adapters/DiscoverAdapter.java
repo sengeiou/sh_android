@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.discover.DiscoveredType;
 import com.shootr.mobile.ui.adapters.holders.DiscoveredShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.DiscoveredStaticStreamViewHolder;
 import com.shootr.mobile.ui.adapters.holders.DiscoveredStreamViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDiscoveredFavoriteClickListener;
@@ -23,6 +24,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   private static final int DISCOVERED_STREAM_SMALL = 1;
   private static final int DISCOVERED_SHOT = 2;
   private static final int DISCOVERED_SHOT_SMALL = 3;
+  private static final int DISCOVERED_STATIC_STREAM = 4;
 
   private static final int UNKNOWN = -1;
 
@@ -50,11 +52,23 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override public int getItemViewType(int position) {
     if (items.get(position).getType().equals(DiscoveredType.STREAM)) {
-      return (position % 3 == 0 ? DISCOVERED_STREAM : DISCOVERED_STREAM_SMALL);
+      return getStreamType(position);
     } else if (items.get(position).getType().equals(DiscoveredType.SHOT)) {
       return (position % 3 == 0 ? DISCOVERED_SHOT : DISCOVERED_SHOT_SMALL);
     } else {
       return UNKNOWN;
+    }
+  }
+
+  private int getStreamType(int position) {
+    if (position % 3 == 0) {
+      if (items.get(position).getStreamModel().getLandscapePicture() != null) {
+        return DISCOVERED_STATIC_STREAM;
+      } else {
+        return DISCOVERED_STREAM;
+      }
+    } else {
+      return DISCOVERED_STREAM_SMALL;
     }
   }
 
@@ -67,6 +81,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       return createShotViewHolder(parent, R.layout.item_discovered_shot);
     } else if (viewType == DISCOVERED_SHOT_SMALL) {
       return createShotViewHolder(parent, R.layout.item_small_discovered_shot);
+    } else if (viewType == DISCOVERED_STATIC_STREAM) {
+      return createStaticStreamViewHolder(parent, R.layout.item_discovered_static_stream);
     } else {
       return null;
     }
@@ -88,10 +104,22 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         onFavoriteClickListener);
   }
 
+  private RecyclerView.ViewHolder createStaticStreamViewHolder(ViewGroup parent,
+      int itemDiscoveredStream) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(itemDiscoveredStream, parent, false);
+    return new DiscoveredStaticStreamViewHolder(view, imageLoader, onDiscoveredStreamClickListener,
+        onFavoriteClickListener);
+  }
+
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (isStreamTypes(holder)) {
-      ((DiscoveredStreamViewHolder) holder).render(items.get(position),
-          holder.getItemViewType() == DISCOVERED_STREAM);
+      if (holder.getItemViewType() == DISCOVERED_STATIC_STREAM) {
+        ((DiscoveredStaticStreamViewHolder) holder).render(items.get(position));
+      } else {
+        ((DiscoveredStreamViewHolder) holder).render(items.get(position),
+            holder.getItemViewType() == DISCOVERED_STREAM_SMALL);
+      }
     } else if (isShotTypes(holder)) {
       ((DiscoveredShotViewHolder) holder).render(items.get(position));
     }
@@ -104,7 +132,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   private boolean isStreamTypes(RecyclerView.ViewHolder holder) {
     return holder.getItemViewType() == DISCOVERED_STREAM
-        || holder.getItemViewType() == DISCOVERED_STREAM_SMALL;
+        || holder.getItemViewType() == DISCOVERED_STREAM_SMALL
+        || holder.getItemViewType() == DISCOVERED_STATIC_STREAM;
   }
 
   public void setItems(List<DiscoveredModel> discoveredModels) {

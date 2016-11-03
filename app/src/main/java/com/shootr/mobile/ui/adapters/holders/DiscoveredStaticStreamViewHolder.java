@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,11 +15,10 @@ import com.shootr.mobile.util.ImageLoader;
 import com.yayandroid.parallaxrecyclerview.ParallaxImageView;
 import com.yayandroid.parallaxrecyclerview.ParallaxViewHolder;
 
-public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
+public class DiscoveredStaticStreamViewHolder extends ParallaxViewHolder {
 
   @BindView(R.id.container) FrameLayout container;
-  @BindView(R.id.stream_image) ParallaxImageView streamImage;
-  @BindView(R.id.stream_static_image) ImageView streamStaticImage;
+  @BindView(R.id.stream_fake_image) ParallaxImageView streamImage;
   @BindView(R.id.stream_title) TextView streamTitle;
   @BindView(R.id.stream_description) TextView streamDescription;
   @BindView(R.id.favorite_discovered_indicator) ShineButton favoriteButton;
@@ -28,8 +26,9 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
   private final ImageLoader imageLoader;
   private final OnDiscoveredStreamClickListener onDiscoveredStreamClickListener;
   private final OnDiscoveredFavoriteClickListener onFavoriteClickListener;
+  private StreamModel streamModel;
 
-  public DiscoveredStreamViewHolder(View itemView, ImageLoader imageLoader,
+  public DiscoveredStaticStreamViewHolder(View itemView, ImageLoader imageLoader,
       OnDiscoveredStreamClickListener onDiscoveredStreamClickListener,
       OnDiscoveredFavoriteClickListener onFavoriteClickListener) {
     super(itemView);
@@ -39,9 +38,9 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     this.onDiscoveredStreamClickListener = onDiscoveredStreamClickListener;
   }
 
-  public void render(final DiscoveredModel discoveredModel, boolean smallItem) {
-    final StreamModel streamModel = discoveredModel.getStreamModel();
-    setupInfo(streamModel, smallItem);
+  public void render(final DiscoveredModel discoveredModel) {
+    streamModel = discoveredModel.getStreamModel();
+    setupInfo();
     container.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onDiscoveredStreamClickListener.onStreamClick(streamModel.getIdStream());
@@ -50,31 +49,20 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
     setupFavoriteButton(discoveredModel);
   }
 
-  private void setupInfo(StreamModel streamModel, boolean smallItem) {
-    setupImage(streamModel, smallItem);
+  private void setupInfo() {
+    setupImage();
     streamImage.reuse();
     streamTitle.setText(streamModel.getTitle());
     streamDescription.setText(streamModel.getDescription());
   }
 
-  private void setupImage(StreamModel streamModel, boolean smallItem) {
-    setupImageVisibility(smallItem);
-    imageLoader.loadDiscoverImage(streamModel.getPicture(), smallItem ? streamStaticImage : streamImage,
-        new ImageLoader.Callback() {
+  private void setupImage() {
+    imageLoader.loadDiscoverImage(
+        streamModel.getPicture(), streamImage, new ImageLoader.Callback() {
           @Override public void onLoaded() {
             streamImage.centerCrop(true);
           }
         });
-  }
-
-  private void setupImageVisibility(boolean smallItem) {
-    if (smallItem) {
-      streamImage.setVisibility(View.GONE);
-      streamStaticImage.setVisibility(View.VISIBLE);
-    } else {
-      streamImage.setVisibility(View.VISIBLE);
-      streamStaticImage.setVisibility(View.GONE);
-    }
   }
 
   private void setupFavoriteButton(final DiscoveredModel discoveredModel) {
@@ -93,6 +81,6 @@ public class DiscoveredStreamViewHolder extends ParallaxViewHolder {
   }
 
   @Override public int getParallaxImageId() {
-    return R.id.stream_image;
+    return R.id.stream_fake_image;
   }
 }
