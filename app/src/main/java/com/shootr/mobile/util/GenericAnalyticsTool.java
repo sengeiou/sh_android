@@ -64,15 +64,23 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void setUser(User user) {
-    this.user = user;
-    tracker.set("&uid", user.getIdUser());
-    storeUserMixPanel();
+      this.user = user;
+    try {
+      tracker.set("&uid", user.getIdUser());
+      storeUserMixPanel();
+    } catch (NullPointerException error) {
+      /* no-op */
+    }
   }
 
   @Override public void analyticsStart(Context context, String name) {
     tracker = getTracker(context, APP_TRACKER);
     tracker.setScreenName(name);
     tracker.send(new HitBuilders.AppViewBuilder().build());
+    if (mixpanel == null) {
+      mixpanel =
+          MixpanelAPI.getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+    }
   }
 
   @Override public void analyticsStop(Context context, Activity activity) {

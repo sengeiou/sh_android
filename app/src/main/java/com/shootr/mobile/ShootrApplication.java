@@ -23,8 +23,8 @@ public class ShootrApplication extends MultiDexApplication {
         super.onCreate();
         buildObjectGraphAndInject();
         plantLoggerTrees();
-        analyticsTool.init(this);
         databaseVersionUtils.clearDataOnNewerVersion();
+        analyticsTool.init(this);
         CustomActivityOnCrash.install(this);
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
         crashReportTool.init(this);
