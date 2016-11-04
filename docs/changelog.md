@@ -13,6 +13,23 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.21.0] - 2016-11-04
+
+### Addded
+
+- Stream title en polls
+- Se oculta automáticamente el checkIn al hacer checkIn (sólo para los usuarios normales)
+- Se pone el caption del cta en el shotDetail (cuando es necesario)
+- Cambios en subida de foto de perfil y stream (crop)
+- Se añaden los threads en local
+
+### Changed
+
+- Mixpanel al entrar a la app
+- Diseño del discover
+- Se quita la recursividad del timeline (hacía llamadas excesivas y podía tirar server)
+
+
 ## [1.20.0] - 2016-10-27
 
 ### Addded
