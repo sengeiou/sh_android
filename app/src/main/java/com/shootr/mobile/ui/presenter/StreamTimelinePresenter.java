@@ -393,7 +393,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     } else {
       streamTimelineView.hideEmpty();
       streamTimelineView.showShots();
-      isFirstLoad = false;
+      if (isTimelineInitialized) {
+        isFirstLoad = false;
+      }
     }
   }
 
