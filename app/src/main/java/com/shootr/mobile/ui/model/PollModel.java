@@ -13,6 +13,7 @@ public class PollModel {
   private String voteStatus;
   private Boolean published;
   private List<PollOptionModel> pollOptionModels;
+  private String streamTitle;
 
   public String getIdPoll() {
     return idPoll;
@@ -84,5 +85,13 @@ public class PollModel {
 
   public void setIdUser(String idUser) {
     this.idUser = idUser;
+  }
+
+  public String getStreamTitle() {
+    return streamTitle;
+  }
+
+  public void setStreamTitle(String streamTitle) {
+    this.streamTitle = streamTitle;
   }
 }

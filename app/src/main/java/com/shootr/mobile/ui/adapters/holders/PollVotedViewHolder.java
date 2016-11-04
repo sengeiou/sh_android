@@ -30,7 +30,7 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
   protected CharSequence formatActivityComment(final ActivityModel activity) {
     activity.setComment(itemView.getResources()
         .getString(R.string.voted_poll, activity.getStreamTitle()));
-    return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(),
+    return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(), activity.getStreamTitle(),
         activity.getPollQuestion(), activity.getComment(), onPollQuestionClickListener);
   }
 }

@@ -177,8 +177,9 @@ public class GCMIntentService extends IntentService {
 
   private void setupGoToPollVote(PushNotification push) {
     String idPoll = push.getParameters().getIdPoll();
+    String streamTitle = push.getParameters().getTitle();
     activityNotificationManager.sendOpenPollVoteNotification(push.getNotificationValues(),
-        checkNotNull(idPoll), !isStreamPushTypeKnown(push));
+        checkNotNull(idPoll), streamTitle, !isStreamPushTypeKnown(push));
   }
 
   private void setupGoToProfileNotification(PushNotification push) {
