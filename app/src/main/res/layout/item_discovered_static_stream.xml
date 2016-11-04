@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="180dp"
     android:padding="0.15dp"
     >
 
-    <com.yayandroid.parallaxrecyclerview.ParallaxImageView
-        android:id="@+id/stream_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:src="@drawable/sample_avatar"
-        android:visibility="gone"
-        />
-
   <ImageView
-      android:id="@+id/stream_static_image"
+      android:id="@+id/stream_image"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scaleType="centerCrop"
+      android:visibility="gone"
+      tools:src="@drawable/sample_avatar"
+      />
+  <com.yayandroid.parallaxrecyclerview.ParallaxImageView
+      android:id="@+id/stream_fake_image"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="visible"
       tools:src="@drawable/sample_avatar"
       />
 
@@ -41,11 +41,11 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:paddingLeft="8dp"
+        android:paddingLeft="16dp"
         android:paddingRight="8dp"
         android:paddingTop="8dp"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Buenos días"
         android:layout_toLeftOf="@+id/favorite_discovered_indicator"
@@ -57,13 +57,13 @@
         android:id="@+id/stream_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:paddingLeft="8dp"
         android:layout_marginBottom="8dp"
         android:paddingRight="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingLeft="16dp"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="18sp"
         tools:text="En este stream se hace lo que yo diga"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -74,9 +74,9 @@
         android:id="@+id/favorite_discovered_indicator"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:scaleType="centerCrop"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
+        android:scaleType="centerCrop"
         android:visibility="visible"
         app:allow_random_color="false"
         app:big_shine_color="@color/primary_dark"
@@ -94,5 +94,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         />
+
   </RelativeLayout>
 </FrameLayout>

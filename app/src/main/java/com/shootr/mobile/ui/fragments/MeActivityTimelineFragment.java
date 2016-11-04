@@ -152,15 +152,15 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
                     openShotDetail(shot);
                 }
             }, new OnPollQuestionClickListener() {
-            @Override public void onPollQuestionClick(String idPoll) {
-                openPollVote(idPoll);
+            @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
+                openPollVote(idPoll, streamTitle);
             }
         });
         activityList.setAdapter(adapter);
     }
 
-    private void openPollVote(String idPoll) {
-        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll);
+    private void openPollVote(String idPoll, String streamTitle) {
+        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll, streamTitle);
         startActivity(pollVoteIntent);
     }
 

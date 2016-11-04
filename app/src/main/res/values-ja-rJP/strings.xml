@@ -96,6 +96,7 @@
   <string name="drawer_favorites_title">お気に入り</string>
   <string name="drawer_following_activity_title" formatted="false">フォロー中</string>
   <string name="drawer_friends_title">友達</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">ストリーム</string>
   <string name="drawer_users_title">ユーザー</string>
   <string name="edit_stream">編集</string>
@@ -455,13 +456,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">暫くお待ちください</string>
   <string name="yes">はい</string>
-  <string name="discover_banner_content">Tap the star to favorite. TV and radio shows will notify you when they start.</string>
-  <string name="stream_check_in_activity_text_pattern">Checked in to (stream)</string>
-  <string name="removed_from_favorites">Removed from Favorites</string>
-  <string name="discover_banner_title">Add streams to Favorites</string>
-  <string name="error_user_already_checked">Already checked in</string>
-  <string name="stream_checked">Checked in</string>
-  <string name="promoted">Promoted</string>
-  <string name="drawer_hot_title">Hot</string>
-  <string name="error_user_cannot_check">user cannot check</string>
 </resources>

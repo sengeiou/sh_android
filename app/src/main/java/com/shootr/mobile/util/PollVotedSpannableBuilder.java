@@ -11,14 +11,14 @@ public class PollVotedSpannableBuilder {
 
   private static final String REGEX = "\\(question\\)";
 
-  public CharSequence formatWithPollQuestionSpans(final String idPoll, String question,
+  public CharSequence formatWithPollQuestionSpans(final String idPoll, final String streamTitle, String question,
       String comment, final OnPollQuestionClickListener clickListener) {
     String streamPlaceholder = REGEX;
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
 
     PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
       @Override public void onPollQuestionClick(String pollQuestion) {
-        clickListener.onPollQuestionClick(idPoll);
+        clickListener.onPollQuestionClick(idPoll, streamTitle);
       }
     };
 

@@ -98,6 +98,7 @@
   <string name="drawer_favorites_title">喜爱</string>
   <string name="drawer_following_activity_title" formatted="false">正在关注</string>
   <string name="drawer_friends_title">朋友</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">用户</string>
   <string name="edit_stream">编辑stream</string>
@@ -465,6 +466,4 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
-  <string name="drawer_hot_title">Hot</string>
-  <string name="error_user_cannot_check">user cannot check</string>
 </resources>

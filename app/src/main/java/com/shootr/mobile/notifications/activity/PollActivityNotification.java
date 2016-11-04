@@ -15,12 +15,15 @@ public class PollActivityNotification extends SingleActivityNotification {
   private static final int REQUEST_OPEN = 2;
 
   private String idPoll;
+  private String streamTitle;
   private Boolean updateNeeded;
 
-  public PollActivityNotification(Context context, String idPoll, NotificationBuilderFactory builderFactory,
-      ImageLoader imageLoader, PushNotification.NotificationValues values, Boolean updateNeeded) {
+  public PollActivityNotification(Context context, String idPoll, String streamTitle,
+      NotificationBuilderFactory builderFactory, ImageLoader imageLoader,
+      PushNotification.NotificationValues values, Boolean updateNeeded) {
     super(context, builderFactory, imageLoader, values);
     this.idPoll = idPoll;
+    this.streamTitle = streamTitle;
     this.updateNeeded = updateNeeded;
   }
 
@@ -34,6 +37,7 @@ public class PollActivityNotification extends SingleActivityNotification {
     if (!updateNeeded) {
       Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_POLL_VOTE);
       intent.putExtra(PollVoteActivity.EXTRA_ID_POLL, idPoll);
+      intent.putExtra(PollVoteActivity.EXTRA_STREAM_TITLE, streamTitle);
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     } else {
       Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);

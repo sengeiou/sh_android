@@ -11,6 +11,7 @@ import com.shootr.mobile.ui.model.PollModel;
 public class PollQuestionViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.poll_question) TextView pollQuestion;
+  @BindView(R.id.stream_title) TextView streamTitle;
 
   public PollQuestionViewHolder(View itemView) {
     super(itemView);
@@ -19,6 +20,7 @@ public class PollQuestionViewHolder extends RecyclerView.ViewHolder {
 
   public void render(PollModel model) {
     pollQuestion.setText(model.getQuestion());
+    streamTitle.setText(model.getStreamTitle());
   }
 
 }

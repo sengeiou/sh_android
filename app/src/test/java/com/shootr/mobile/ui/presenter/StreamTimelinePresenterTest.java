@@ -331,6 +331,7 @@ public class StreamTimelinePresenterTest {
     setupFirstShotPosition();
     setupShotsModels();
 
+    presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
     verify(streamTimelineView).hideEmpty();
@@ -342,6 +343,7 @@ public class StreamTimelinePresenterTest {
     setupFirstShotPosition();
     setupShotsModels();
 
+    presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
     verify(streamTimelineView).hideEmpty();
@@ -352,6 +354,7 @@ public class StreamTimelinePresenterTest {
     setupFirstShotPosition();
     setupShotsModels();
 
+    presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
     verify(streamTimelineView).hideEmpty();
@@ -363,6 +366,7 @@ public class StreamTimelinePresenterTest {
     setupFirstShotPosition();
     setupShotsModels();
 
+    presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
     verify(streamTimelineView).hideEmpty();
@@ -1039,7 +1043,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, times(2)).refreshTimeline(anyString(), anyLong(),
+    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyLong(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback(), anyErrorCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }
@@ -1056,7 +1060,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, times(2)).refreshTimeline(anyString(), anyLong(),
+    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyLong(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback(), anyErrorCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }

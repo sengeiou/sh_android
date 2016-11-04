@@ -921,21 +921,25 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hidePinnedMessage() {
-    if (streamMessage != null) {
-      streamMessage.setVisibility(View.GONE);
-      if (timelineNewShotsIndicator != null) {
-        timelineNewShotsIndicator.setVisibility(View.GONE);
+    try {
+      if (streamMessage != null) {
+        streamMessage.setVisibility(View.GONE);
+        if (timelineNewShotsIndicator != null) {
+          timelineNewShotsIndicator.setVisibility(View.GONE);
+        }
+        if (timelineIndicatorContainer != null) {
+          timelineIndicatorContainer.setVisibility(View.GONE);
+        }
       }
-      if (timelineIndicatorContainer != null) {
-        timelineIndicatorContainer.setVisibility(View.GONE);
+      if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
+        if (timelineNewShotsIndicator != null) {
+          timelineNewShotsIndicator.setVisibility(View.GONE);
+        }
+        timelinePollIndicator.setVisibility(View.VISIBLE);
+        timelineIndicatorContainer.setVisibility(View.VISIBLE);
       }
-    }
-    if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
-      if (timelineNewShotsIndicator != null) {
-        timelineNewShotsIndicator.setVisibility(View.GONE);
-      }
-      timelinePollIndicator.setVisibility(View.VISIBLE);
-      timelineIndicatorContainer.setVisibility(View.VISIBLE);
+    } catch (NullPointerException error) {
+      /* no-op */
     }
   }
 
@@ -1667,18 +1671,18 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void goToPollVote(String idStream, String streamAuthorIdUser) {
-    Intent intent = PollVoteActivity.newIntent(getContext(), idStream);
+    Intent intent = PollVoteActivity.newIntent(getContext(), idStream, streamTitle);
     intent.putExtra(PollVoteActivity.EXTRA_ID_USER_OWNER, streamAuthorIdUser);
     startActivity(intent);
   }
 
   @Override public void goToPollResults(String idPoll) {
-    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll);
+    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle);
     startActivity(intent);
   }
 
   @Override public void goToPollLiveResults(String idPoll) {
-    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll);
+    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle);
     startActivity(intent);
   }
 

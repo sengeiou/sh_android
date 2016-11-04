@@ -9,14 +9,14 @@ import java.util.regex.Pattern;
 
 public class PollQuestionSpannableBuilder {
 
-  public CharSequence formatWithPollQuestionSpans(final String idPoll, String question,
+  public CharSequence formatWithPollQuestionSpans(final String idPoll, final String streamTitle, String question,
       CharSequence comment, final OnPollQuestionClickListener clickListener) {
 
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
 
     PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
       @Override public void onPollQuestionClick(String pollQuestion) {
-        clickListener.onPollQuestionClick(idPoll);
+        clickListener.onPollQuestionClick(idPoll, streamTitle);
       }
     };
     spannableBuilder.setSpan(pollQuestionSpan, 0, question.length(),
@@ -25,7 +25,7 @@ public class PollQuestionSpannableBuilder {
     return spannableBuilder;
   }
 
-  public CharSequence formatPollQuestionSpans(final String idPoll, String question,
+  public CharSequence formatPollQuestionSpans(final String idPoll, final String streamTitle, String question,
       CharSequence comment, final OnPollQuestionClickListener clickListener) {
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
     question = question.trim();
@@ -35,7 +35,7 @@ public class PollQuestionSpannableBuilder {
     if (matcher.find()) {
       PollQuestionSpan pollQuestionSpan = new PollQuestionSpan(idPoll) {
         @Override public void onPollQuestionClick(String pollQuestion) {
-          clickListener.onPollQuestionClick(idPoll);
+          clickListener.onPollQuestionClick(idPoll, streamTitle);
         }
       };
       spannableBuilder.setSpan(pollQuestionSpan, matcher.start(), spannableBuilder.length(),

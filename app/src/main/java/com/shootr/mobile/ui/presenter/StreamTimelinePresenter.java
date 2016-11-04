@@ -322,7 +322,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     } else {
       handleNewShots(timeline, shots, isFirstShotPosition);
     }
-    loadNewShots();
+    if (isFirstLoad) {
+      loadNewShots();
+    }
   }
 
   private void setTimelineInitialized(List<ShotModel> shots) {
@@ -391,7 +393,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     } else {
       streamTimelineView.hideEmpty();
       streamTimelineView.showShots();
-      isFirstLoad = false;
+      if (isTimelineInitialized) {
+        isFirstLoad = false;
+      }
     }
   }
 
@@ -786,6 +790,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       isTimelineInitialized = false;
       isFirstShotPosition = false;
       selectStream();
+      loadNewShots();
     }
   }
 

@@ -25,7 +25,7 @@ import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
 public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
-  private final OnHideHighlightShot onHideHighlightClickListener;
+  protected final OnHideHighlightShot onHideHighlightClickListener;
 
   @BindView(R.id.hide_highlighted) TextView hideHighlighted;
   @BindView(R.id.shot_container) View shotContainer;

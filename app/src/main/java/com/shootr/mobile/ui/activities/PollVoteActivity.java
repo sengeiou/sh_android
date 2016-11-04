@@ -35,14 +35,17 @@ import javax.inject.Inject;
 public class PollVoteActivity extends BaseToolbarDecoratedActivity implements PollVoteView {
 
   private static final String EXTRA_STREAM = "idStream";
+  public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_POLL = "idPoll";
   public static final String EXTRA_ID_USER_OWNER = "userIdOwner";
+  private static final String NO_TITLE = "";
   private static final int COLUMNS_NUMBER = 4;
 
   @BindView(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
   @BindView(R.id.poll_question) TextView pollQuestion;
   @BindView(R.id.pollvote_progress) ProgressBar progressBar;
   @BindView(R.id.poll_results) TextView viewResults;
+  @BindView(R.id.stream_title) TextView streamTitle;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollVotePresenter presenter;
@@ -52,15 +55,17 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newIntent(Context context, String idStream) {
+  public static Intent newIntent(Context context, String idStream, String streamTitle) {
     Intent intent = new Intent(context, PollVoteActivity.class);
     intent.putExtra(EXTRA_STREAM, idStream);
+    intent.putExtra(EXTRA_STREAM_TITLE, streamTitle == null ? NO_TITLE : streamTitle);
     return intent;
   }
 
-  public static Intent newIntentWithIdPoll(Context context, String idPoll) {
+  public static Intent newIntentWithIdPoll(Context context, String idPoll, String streamTitle) {
     Intent intent = new Intent(context, PollVoteActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
+    intent.putExtra(EXTRA_STREAM_TITLE, streamTitle == null ? NO_TITLE : streamTitle);
     return intent;
   }
 
@@ -113,6 +118,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   @Override public void renderPoll(PollModel pollModel) {
+    String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
+    streamTitle.setText(title);
     pollQuestion.setText(pollModel.getQuestion());
     pollVoteAdapter.setPollOptionModels(pollModel.getPollOptionModels());
     pollVoteAdapter.notifyDataSetChanged();
@@ -130,7 +137,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   @Override public void goToResults(String idPoll) {
-    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll);
+    String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
+    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title);
     startActivity(intent);
     finish();
   }

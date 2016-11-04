@@ -75,10 +75,10 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
       context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherSharePollHttps.find()) {
       String idPoll = address.substring(matcherSharePollHttps.end());
-      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll)));
+      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
     } else if (matcherSharePollHttp.find()) {
       String idPoll = address.substring(matcherSharePollHttp.end());
-      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll)));
+      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
     }
   }
 

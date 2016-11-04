@@ -81,6 +81,8 @@ public class ServiceShotDatasource implements ShotDataSource {
       }
     } catch (ApiException | IOException e) {
       throw new ServerCommunicationException(e);
+    } catch (Exception generalError) {
+      throw new ServerCommunicationException(generalError);
     }
   }
 

@@ -98,6 +98,7 @@
   <string name="drawer_favorites_title">Favorits</string>
   <string name="drawer_following_activity_title" formatted="false">Seguint</string>
   <string name="drawer_friends_title">Amics</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuaris</string>
   <string name="edit_stream">Editar</string>
@@ -188,7 +189,7 @@
   <string name="highlight_shot_dialog">El shot deixarà d\'estar destacat</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No hi ha streams</string>
-  <string name="intro_create_text">Dirigeixes una comunitat? Crea el seu scream.</string>
+  <string name="intro_create_text">Dirigeixes una comunitat? Crea el seu stream.</string>
   <string name="intro_create_title">Crear</string>
   <string name="intro_favorites_text">Desenes d\'streams s\'afegeixen cada dia. Crea els teus Favorits.</string>
   <string name="intro_free_title">Gratis</string>
@@ -404,7 +405,7 @@
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">Ha marcat com a favorit (stream)</string>
   <string name="stream_list_empty">No hi ha resultats</string>
-  <string name="stream_media_empty_title">No hi ha fotos ni videus</string>
+  <string name="stream_media_empty_title">No hi ha fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hi ha més arxius</string>
   <string name="stream_notification_confirmation_message">Notificar als teus seguidors sobre aquest stream?</string>
   <string name="stream_notification_confirmation_no">No</string>
@@ -473,6 +474,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="drawer_hot_title">Hot</string>
-  <string name="error_user_cannot_check">user cannot check</string>
 </resources>

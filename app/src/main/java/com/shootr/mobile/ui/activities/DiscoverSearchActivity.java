@@ -71,10 +71,12 @@ public class DiscoverSearchActivity extends BaseToolbarDecoratedActivity {
   }
 
   private void changeSearchViewHint(int position) {
-    if (position == 1) {
-      searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
-    } else {
-      searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
+    if (searchView != null) {
+      if (position == 1) {
+        searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
+      } else {
+        searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
+      }
     }
   }
 

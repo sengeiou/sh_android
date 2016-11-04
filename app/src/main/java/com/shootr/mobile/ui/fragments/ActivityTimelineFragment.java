@@ -138,8 +138,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
                     openShotDetail(shot);
                 }
             }, new OnPollQuestionClickListener() {
-            @Override public void onPollQuestionClick(String idPoll) {
-                openPollVote(idPoll);
+            @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
+                openPollVote(idPoll, streamTitle);
             }
         });
         activityList.setAdapter(adapter);
@@ -197,8 +197,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         startActivity(shotIntent);
     }
 
-    private void openPollVote(String idPoll) {
-        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll);
+    private void openPollVote(String idPoll, String streamTitle) {
+        Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll, streamTitle);
         startActivity(pollVoteIntent);
     }
 

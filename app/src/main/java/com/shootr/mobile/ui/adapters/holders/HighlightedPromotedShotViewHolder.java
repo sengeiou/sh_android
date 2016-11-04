@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.BindView;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
@@ -39,11 +40,11 @@ public class HighlightedPromotedShotViewHolder extends HighLightedShotViewHolder
         shotTextSpannableBuilder, numberFormatUtil);
   }
 
-  public void render(HighlightedShotModel highlightedShotModel, final ShotModel shotModel,
+  public void render(final HighlightedShotModel highlightedShotModel, final ShotModel shotModel,
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      Boolean isAdmin, final OnCtaClickListener onCtaClickListener) {
+      final Boolean isAdmin, final OnCtaClickListener onCtaClickListener) {
     super.renderHighLight(highlightedShotModel, shotModel, shotClickListener, onShotLongClick,
         onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
     setupCaption(shotModel);
@@ -51,6 +52,9 @@ public class HighlightedPromotedShotViewHolder extends HighLightedShotViewHolder
     checkInButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onCtaClickListener.onCtaClick(shotModel);
+        if (!isAdmin && highlightedShotModel.getShotModel().getType().equals(ShotType.CTACHECKIN)) {
+          onHideHighlightClickListener.onHideClick(highlightedShotModel);
+        }
       }
     });
     setupPromotedVisibility(shotModel);

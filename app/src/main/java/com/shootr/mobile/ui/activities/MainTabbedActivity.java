@@ -26,6 +26,7 @@ import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.DefaultTabUtils;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -43,6 +44,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Inject FeedbackMessage feedbackMessage;
   @Inject DeeplinkingNavigator deeplinkingNavigator;
   @Inject DefaultTabUtils defaultTabUtils;
+  @Inject CrashReportTool crashReportTool;
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBar bottomBar;
@@ -135,10 +137,13 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   protected void switchTab(Fragment fragment) {
-    getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.container, fragment, fragment.getClass().getName())
-        .commit();
+    try {
+      getSupportFragmentManager().beginTransaction()
+          .replace(R.id.container, fragment, fragment.getClass().getName())
+          .commit();
+    } catch (IllegalStateException error) {
+      crashReportTool.logException(error);
+    }
   }
 
   private void scrollToTop(@IdRes int menuItemId) {

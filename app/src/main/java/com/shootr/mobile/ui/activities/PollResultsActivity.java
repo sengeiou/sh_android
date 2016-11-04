@@ -33,6 +33,8 @@ import javax.inject.Inject;
 public class PollResultsActivity extends BaseToolbarDecoratedActivity implements PollResultsView {
   private static final String EXTRA_ID_POLL = "pollId";
   private static final String EXTRA_RESULTS = "results";
+  private static final String EXTRA_STREAM_TITLE = "title";
+  private static final String NO_TITLE = "";
 
   @BindView(R.id.results_recycler) RecyclerView results;
   @BindView(R.id.pollresults_progress) ProgressBar progressBar;
@@ -48,17 +50,19 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newResultsIntent(Context context, String idPoll) {
+  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
+    intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
     return intent;
   }
 
-  public static Intent newLiveResultsIntent(Context context, String idPoll) {
+  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
+    intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
     return intent;
   }
 
@@ -112,6 +116,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override public void renderPollResults(PollModel pollModel) {
+    String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
+    pollModel.setStreamTitle(title == null ? NO_TITLE : title);
     adapter.setPollModel(pollModel);
     adapter.notifyDataSetChanged();
   }

@@ -64,9 +64,13 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void setUser(User user) {
-    this.user = user;
-    tracker.set("&uid", user.getIdUser());
-    storeUserMixPanel();
+      this.user = user;
+    try {
+      tracker.set("&uid", user.getIdUser());
+      storeUserMixPanel();
+    } catch (NullPointerException error) {
+      /* no-op */
+    }
   }
 
   @Override public void analyticsStart(Context context, String name) {
@@ -95,12 +99,13 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername,
-        notificationName, pushRedirection, idStream, stream);
+        notificationName, pushRedirection, idStream, stream, context);
   }
 
   private void sendMixPanelAnalytics(User user, String actionId, String source,
       String idTargetUser, String targetUsername,
-      String notificationName, String pushRedirection, String idStream, String streamName) {
+      String notificationName, String pushRedirection, String idStream, String streamName,
+      Context context) {
     try {
       if (user != null) {
         JSONObject props = new JSONObject();
@@ -128,10 +133,20 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         if (pushRedirection != null) {
           props.put(PUSH_REDIRECTION, pushRedirection);
         }
-        mixpanel.track(actionId, props);
+
+        try {
+          mixpanel.track(actionId, props);
+        } catch (Exception error) {
+          mixpanel = MixpanelAPI.
+              getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+          mixpanel.track(actionId, props);
+        }
+
       }
     } catch (JSONException e) {
       Log.e("Shootr", "Unable to add properties to JSONObject", e);
+    } catch (NullPointerException error) {
+      Log.e("Shootr", "Unable to build mixPanel object", error);
     }
   }
 

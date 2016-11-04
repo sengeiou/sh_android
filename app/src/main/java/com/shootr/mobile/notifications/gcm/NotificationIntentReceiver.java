@@ -137,8 +137,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   public void openPollVote(Context context, Intent intent) {
     String idPoll = intent.getStringExtra(PollVoteActivity.EXTRA_ID_POLL);
+    String streamTitle = intent.getStringExtra(PollVoteActivity.EXTRA_STREAM_TITLE);
     decrementBadgeCount();
-    startActivityFromIntent(context, PollVoteActivity.newIntentWithIdPoll(context, idPoll)
+    startActivityFromIntent(context, PollVoteActivity.newIntentWithIdPoll(context, idPoll, streamTitle)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 

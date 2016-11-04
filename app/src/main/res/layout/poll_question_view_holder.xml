@@ -11,6 +11,16 @@
       android:id="@+id/poll_question"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:textSize="16sp"
+      android:textStyle="bold"
       tools:text="¿Juanito le pagará la fanta a María?"
       />
+
+  <TextView
+      android:id="@+id/stream_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:text="Pepe el grillo"
+      />
+
 </LinearLayout>

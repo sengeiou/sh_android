@@ -42,6 +42,13 @@
             tools:text="¿Cómo cree que acabará Fransisca después de la fiesta de ayer?"
             />
 
+        <TextView
+            android:id="@+id/stream_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="¿Juanito le pagará la fanta a María?"
+            />
+
       </LinearLayout>
 
 
