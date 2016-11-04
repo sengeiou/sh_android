@@ -98,6 +98,7 @@
   <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
   <string name="drawer_friends_title">Amigos</string>
+  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuários</string>
   <string name="edit_stream">Editar</string>
@@ -473,6 +474,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="drawer_hot_title">Hot</string>
-  <string name="error_user_cannot_check">user cannot check</string>
 </resources>
