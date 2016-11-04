@@ -71,13 +71,17 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   private void filterOthersWatchers(Stream stream, ArrayList<User> watchers) {
-    if (stream.getWatchers() != null) {
-      for (User watcher : stream.getWatchers()) {
-        if (!watcher.getIdUser().equals(sessionRepository.getCurrentUserId()) &&
-            !localUserRepository.isFollowing(watcher.getIdUser())) {
-          watchers.add(watcher);
+    try {
+      if (stream.getWatchers() != null) {
+        for (User watcher : stream.getWatchers()) {
+          if (!watcher.getIdUser().equals(sessionRepository.getCurrentUserId())
+              && !localUserRepository.isFollowing(watcher.getIdUser())) {
+            watchers.add(watcher);
+          }
         }
       }
+    } catch (NullPointerException e) {
+     /* no-op */
     }
   }
 
