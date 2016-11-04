@@ -6,6 +6,7 @@ import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.HighlightedShotManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -62,14 +63,31 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
       shotDetailEntity.setReplies(getReplies(idShot, streamTypes, shotTypes));
 
+      ArrayList<ShotEntity> parents = new ArrayList<>();
+
       String parentId = shot.getIdShotParent();
       if (parentId != null) {
         shotDetailEntity.setParentShot(getShot(parentId, streamTypes, shotTypes));
+        setupParents(streamTypes, shotTypes, parents, parentId);
+        shotDetailEntity.setParents(parents);
       }
 
       return shotDetailEntity;
     } else {
       return null;
+    }
+  }
+
+  private void setupParents(String[] streamTypes, String[] shotTypes, ArrayList<ShotEntity> parents,
+      String parentId) {
+    try {
+      while (parentId != null) {
+        ShotEntity shotEntity = getShot(parentId, streamTypes, shotTypes);
+        parents.add(parents.size(), shotEntity);
+        parentId = shotEntity.getIdShotParent();
+      }
+    } catch (Exception error) {
+      /* no-op */
     }
   }
 
