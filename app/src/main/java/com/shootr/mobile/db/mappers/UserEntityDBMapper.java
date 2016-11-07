@@ -18,9 +18,13 @@ public class UserEntityDBMapper extends GenericDBMapper {
     }
 
     public ContentValues toContentValues(UserEntity u) {
-        ContentValues cv = new ContentValues();
-        fillContentValuesWithEntity(cv, u);
-        return cv;
+        if (u != null) {
+            ContentValues cv = new ContentValues();
+            fillContentValuesWithEntity(cv, u);
+            return cv;
+        } else {
+            return null;
+        }
     }
 
     protected void fillContentValuesWithEntity(ContentValues contentValues, UserEntity entity) {
