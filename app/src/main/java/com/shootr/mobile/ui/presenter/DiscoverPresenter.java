@@ -57,8 +57,10 @@ public class DiscoverPresenter implements Presenter {
     loadDiscover();
   }
   private void loadFavorites() {
+    discoverView.showLoading();
     getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
       @Override public void onLoaded(List<StreamSearchResult> streamSearchResults) {
+        discoverView.hideLoading();
         if (streamSearchResults.size() < 3) {
           discoverView.showBanner();
         } else {
@@ -76,6 +78,7 @@ public class DiscoverPresenter implements Presenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
+        discoverView.showEmpty();
         discoverView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
