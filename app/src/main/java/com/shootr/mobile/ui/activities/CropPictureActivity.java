@@ -112,7 +112,10 @@ public class CropPictureActivity extends BaseNoToolbarActivity {
       feedbackMessage.show(parentLayout, getString(R.string.error_message_unknown));
       cropButton.setVisibility(View.VISIBLE);
       cropLoading.setVisibility(View.GONE);
+    } catch (NullPointerException err) {
+      crashReportTool.logException(err);
     }
+
   }
 
   private File getCameraPhotoFile() {
