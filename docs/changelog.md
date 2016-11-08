@@ -13,9 +13,20 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.21.3] - 2016-11-08
+
+### Changed
+
+- Load user profile
+
+### Fixed
+
+- Varios fixes de chrashlytics poco criticos
+- Orden de los parents
+
 ## [1.21.0] - 2016-11-04
 
-### Addded
+### Added
 
 - Stream title en polls
 - Se oculta automáticamente el checkIn al hacer checkIn (sólo para los usuarios normales)
