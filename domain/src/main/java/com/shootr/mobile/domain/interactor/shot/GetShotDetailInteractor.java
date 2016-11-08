@@ -77,6 +77,7 @@ public class GetShotDetailInteractor implements Interactor {
   private void loadRemoteShotDetail() {
     ShotDetail remoteShotDetail =
         remoteShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+    orderParents(remoteShotDetail);
     notifyLoaded(reorderReplies(remoteShotDetail));
     localShotRepository.putShot(remoteShotDetail.getShot());
   }
@@ -94,7 +95,7 @@ public class GetShotDetailInteractor implements Interactor {
   }
 
   private List<Shot> orderParentsShots(List<Shot> replies) {
-    Collections.sort(replies, new Shot.NewerAboveComparator());
+    Collections.sort(replies, new Shot.NewerBelowComparator());
     return replies;
   }
 
