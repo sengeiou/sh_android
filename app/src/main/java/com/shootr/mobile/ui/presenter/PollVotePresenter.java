@@ -158,18 +158,19 @@ public class PollVotePresenter implements Presenter {
   public void voteOption(String pollOptionId) {
     pollVoteView.showLoading();
     setVotedPollOption(pollOptionId);
-    votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId,
-        new Interactor.Callback<Poll>() {
-          @Override public void onLoaded(Poll poll) {
-            pollVoteView.hideLoading();
-            pollVoteView.goToResults(pollModel.getIdPoll());
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            pollVoteView.hideLoading();
-            pollVoteView.showTimeoutAlert();
-          }
-        });
+    if (pollModel != null) {
+      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, new Interactor.Callback<Poll>() {
+        @Override public void onLoaded(Poll poll) {
+          pollVoteView.hideLoading();
+          pollVoteView.goToResults(pollModel.getIdPoll());
+        }
+      }, new Interactor.ErrorCallback() {
+        @Override public void onError(ShootrException error) {
+          pollVoteView.hideLoading();
+          pollVoteView.showTimeoutAlert();
+        }
+      });
+    }
   }
 
   public void retryVote() {

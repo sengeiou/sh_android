@@ -26,74 +26,74 @@ import static org.mockito.Mockito.when;
 
 public class GetUserByIdInteractorTest {
 
-    public static final String ID_USER = "idUser";
-    @Mock UserRepository localUserRepository;
-    @Mock UserRepository remoteUserRepository;
-    @Mock Interactor.Callback<User> callback;
-    @Mock Interactor.ErrorCallback errorCallback;
-    @Mock SessionRepository sessionRepository;
-    private GetUserByIdInteractor interactor;
+  public static final String ID_USER = "idUser";
+  @Mock UserRepository localUserRepository;
+  @Mock UserRepository remoteUserRepository;
+  @Mock Interactor.Callback<User> callback;
+  @Mock Interactor.ErrorCallback errorCallback;
+  @Mock SessionRepository sessionRepository;
+  private GetUserByIdInteractor interactor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetUserByIdInteractor(interactorHandler,
-          postExecutionThread,
-          localUserRepository,
-          remoteUserRepository, sessionRepository);
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    InteractorHandler interactorHandler = new TestInteractorHandler();
+    PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    interactor =
+        new GetUserByIdInteractor(interactorHandler, postExecutionThread, localUserRepository,
+            remoteUserRepository, sessionRepository);
 
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-    }
+    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
+  }
 
-    @Test public void shouldLoadUserFromLocalRepository() throws Exception {
-        interactor.loadUserById(anyString(), callback, errorCallback);
+  @Test public void shouldLoadUserFromLocalRepository() throws Exception {
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        verify(localUserRepository).getUserById(anyString());
-    }
+    verify(localUserRepository).getUserById(anyString());
+  }
 
-    @Test public void shouldLoadUserFromRemoteRepository() throws Exception {
-        interactor.loadUserById(anyString(), callback, errorCallback);
+  @Test public void shouldLoadUserFromRemoteRepository() throws Exception {
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        verify(remoteUserRepository).getUserById(anyString());
-    }
+    verify(remoteUserRepository).getUserById(anyString());
+  }
 
-    @Test public void shouldLoadUserFromLocalRepositoryAndThenRemoteRepository() throws Exception {
-        interactor.loadUserById(anyString(), callback, errorCallback);
+  @Test public void shouldLoadUserFromLocalRepositoryAndThenRemoteRepository() throws Exception {
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        InOrder inOrder = inOrder(localUserRepository, remoteUserRepository);
-        inOrder.verify(localUserRepository).getUserById(anyString());
-        inOrder.verify(remoteUserRepository).getUserById(anyString());
-    }
+    InOrder inOrder = inOrder(localUserRepository, remoteUserRepository);
+    inOrder.verify(localUserRepository).getUserById(anyString());
+    inOrder.verify(remoteUserRepository).getUserById(anyString());
+  }
 
-    @Test public void shouldCallbackUserOnceIfLocalRepositoryReturnsNull() throws Exception {
-        when(localUserRepository.getUserById(anyString())).thenReturn(null);
+  @Test public void shouldCallbackUserOnceIfLocalRepositoryReturnsNull() throws Exception {
+    when(localUserRepository.getUserById(anyString())).thenReturn(null);
 
-        interactor.loadUserById(anyString(), callback, errorCallback);
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        verify(callback, times(1)).onLoaded(any(User.class));
-    }
+    verify(callback, times(1)).onLoaded(any(User.class));
+  }
 
-    @Test public void shouldCallbackUserTwiceIfLocalRepositoryReturnsUser() throws Exception {
-        when(localUserRepository.getUserById(anyString())).thenReturn(user());
-        when(remoteUserRepository.getUserById(anyString())).thenReturn(user());
+  @Test public void shouldCallbackUserTwiceIfLocalRepositoryReturnsUser() throws Exception {
+    when(localUserRepository.getUserById(anyString())).thenReturn(user());
+    when(remoteUserRepository.getUserById(anyString())).thenReturn(user());
 
-        interactor.loadUserById(anyString(), callback, errorCallback);
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        verify(callback, times(2)).onLoaded(any(User.class));
-    }
+    verify(callback, times(2)).onLoaded(any(User.class));
+  }
 
-    @Test public void shouldCallbackErrorIfRemoteRepositoryFailsWithException() throws Exception {
-        doThrow(new ServerCommunicationException(null)).when(remoteUserRepository).getUserById(anyString());
+  @Test public void shouldCallbackErrorIfRemoteRepositoryFailsWithException() throws Exception {
+    doThrow(new ServerCommunicationException(null)).when(remoteUserRepository)
+        .getUserById(anyString());
 
-        interactor.loadUserById(anyString(), callback, errorCallback);
+    interactor.loadUserById(anyString(), false, callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
+    verify(errorCallback).onError(any(ShootrException.class));
+  }
 
-    private User user() {
-        User user = new User();
-        user.setIdUser(ID_USER);
-        return user;
-    }
+  private User user() {
+    User user = new User();
+    user.setIdUser(ID_USER);
+    return user;
+  }
 }

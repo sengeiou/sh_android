@@ -10,19 +10,10 @@
         <TextView android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:paddingTop="240dp"
+          android:paddingTop="256dp"
           android:text="@string/welcome_shootr_title"
           android:textColor="@color/black"
           android:textSize="22sp" />
-
-        <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:gravity="center"
-          android:paddingTop="16dp"
-          android:text="@string/welcome_friends_text"
-          android:textColor="@color/gray_50"
-          android:textSize="14sp" />
 
         <FrameLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"

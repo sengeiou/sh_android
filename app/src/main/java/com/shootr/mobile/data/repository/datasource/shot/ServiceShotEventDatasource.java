@@ -34,6 +34,8 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
       }
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
+    } catch (Exception error) {
+      throw new ServerCommunicationException(error);
     }
   }
 

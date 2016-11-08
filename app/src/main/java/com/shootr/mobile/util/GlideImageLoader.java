@@ -40,7 +40,8 @@ public class GlideImageLoader implements ImageLoader {
     boolean isValidPhoto = url != null && !url.isEmpty();
     if (isValidPhoto) {
             /* dont animate: https://github.com/bumptech/glide/issues/504#issuecomment-113459960 */
-      glide.load(url)
+      String photoBig = url.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
+      glide.load(photoBig)
           .dontAnimate()
           .placeholder(DEFAULT_PROFILE_PHOTO_RES)
           .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -44,11 +44,13 @@ public class UserManager extends AbstractManager {
 
   private void insertUser(UserEntity user, SQLiteDatabase writableDatabase) {
     ContentValues contentValues = userMapper.toContentValues(user);
-    if (contentValues.getAsString(DatabaseContract.SyncColumns.DELETED) != null) {
-      deleteUser(user);
-    } else {
-      writableDatabase.insertWithOnConflict(DatabaseContract.UserTable.TABLE, null, contentValues,
-          SQLiteDatabase.CONFLICT_REPLACE);
+    if (contentValues != null) {
+      if (contentValues.getAsString(DatabaseContract.SyncColumns.DELETED) != null) {
+        deleteUser(user);
+      } else {
+        writableDatabase.insertWithOnConflict(DatabaseContract.UserTable.TABLE, null, contentValues,
+            SQLiteDatabase.CONFLICT_REPLACE);
+      }
     }
   }
 

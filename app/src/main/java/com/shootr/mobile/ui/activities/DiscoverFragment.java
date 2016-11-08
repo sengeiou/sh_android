@@ -164,6 +164,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @Override public void renderDiscover(List<DiscoveredModel> discoveredModels) {
     adapter.setItems(discoveredModels);
     adapter.notifyDataSetChanged();
+    hideEmpty();
   }
 
   @Override public void navigateToStreamTimeline(String idStream) {
@@ -185,19 +186,27 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   }
 
   @Override public void showEmpty() {
-    empty.setVisibility(View.VISIBLE);
+    if (empty != null) {
+      empty.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideEmpty() {
-    empty.setVisibility(View.GONE);
+    if (empty != null) {
+      empty.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showLoading() {
-    loading.setVisibility(View.VISIBLE);
+    if (loading != null) {
+      loading.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideLoading() {
-    loading.setVisibility(View.GONE);
+    if (loading != null) {
+      loading.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showError(String message) {

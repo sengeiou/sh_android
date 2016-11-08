@@ -27,6 +27,8 @@ public class SendShotEventStatsIneteractor implements Interactor {
       sendshotEvents();
     } catch (ServerCommunicationException error) {
       /* no-op */
+    } catch (Exception gralError) {
+      /* no-op */
     }
   }
 

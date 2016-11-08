@@ -14,68 +14,71 @@ import javax.inject.Inject;
 
 public class GetUserByIdInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final UserRepository localUserRepository;
-    private final UserRepository remoteUserRepository;
-    private final SessionRepository sessionRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final UserRepository localUserRepository;
+  private final UserRepository remoteUserRepository;
+  private final SessionRepository sessionRepository;
 
-    private Callback<User> callback;
-    private ErrorCallback errorCallback;
-    private String userId;
+  private Callback<User> callback;
+  private ErrorCallback errorCallback;
+  private String userId;
+  private Boolean onlyLocal = false;
 
-    @Inject public GetUserByIdInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-        @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
-        SessionRepository sessionRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localUserRepository = localUserRepository;
-        this.remoteUserRepository = remoteUserRepository;
-        this.sessionRepository = sessionRepository;
+  @Inject public GetUserByIdInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localUserRepository = localUserRepository;
+    this.remoteUserRepository = remoteUserRepository;
+    this.sessionRepository = sessionRepository;
+  }
+
+  public void loadUserById(String userId, Boolean onlyLocal, Callback<User> callback,
+      ErrorCallback errorCallback) {
+    this.onlyLocal = onlyLocal;
+    this.userId = userId;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    loadLocalUser();
+    if (!sessionRepository.getCurrentUserId().equals(userId) || !onlyLocal) {
+      loadRemoteUser();
     }
+  }
 
-    public void loadUserById(String userId, Callback<User> callback, ErrorCallback errorCallback) {
-        this.userId = userId;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private void loadLocalUser() {
+    User localUser = localUserRepository.getUserById(userId);
+    if (localUser != null) {
+      notifyResult(localUser);
     }
+  }
 
-    @Override public void execute() throws Exception {
-        loadLocalUser();
-        if (!sessionRepository.getCurrentUserId().equals(userId)) {
-            loadRemoteUser();
-        }
+  private void loadRemoteUser() {
+    try {
+      notifyResult(remoteUserRepository.getUserById(userId));
+    } catch (ServerCommunicationException error) {
+      notifyError(error);
     }
+  }
 
-    private void loadLocalUser() {
-        User localUser = localUserRepository.getUserById(userId);
-        if (localUser != null) {
-            notifyResult(localUser);
-        }
-    }
+  private void notifyResult(final User user) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(user);
+      }
+    });
+  }
 
-    private void loadRemoteUser() {
-        try {
-            notifyResult(remoteUserRepository.getUserById(userId));
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
-    }
-
-    private void notifyResult(final User user) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(user);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }

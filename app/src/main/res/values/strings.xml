@@ -380,7 +380,7 @@
   <string name="shoot_all_button">Shoot all</string>
   <string name="shot_pinned">Pinned</string>
   <plurals name="shot_replies_count_pattern">
-    <item quantity="one">%s respond</item>
+    <item quantity="one">%s response</item>
     <item quantity="other">%s responses</item>
     <item quantity="zero">%s responses</item>
   </plurals>
@@ -467,11 +467,11 @@
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
   <string name="watch_profile_photo" formatted="false">View</string>
-  <string name="welcome_friends_text">Leave to disconnect</string>
   <string name="welcome_get_started_button">Got it</string>
   <string name="welcome_shootr_title">Enter a stream to connect</string>
   <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="error_user_cannot_check">user cannot check</string>
 </resources>

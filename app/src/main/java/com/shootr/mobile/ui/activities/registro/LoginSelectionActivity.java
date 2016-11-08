@@ -57,258 +57,264 @@ import timber.log.Timber;
 
 public class LoginSelectionActivity extends BaseActivity {
 
-    private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
+  private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
 
-    @BindView(R.id.login_progress) View loading;
-    @BindView(R.id.login_buttons) View buttonsContainer;
-    @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
+  @BindView(R.id.login_progress) View loading;
+  @BindView(R.id.login_buttons) View buttonsContainer;
+  @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
 
-    @BindString(R.string.error_facebook_login) String facebookError;
-    @BindString(R.string.error_login_facebook_method) String facebookMethodError;
-    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
-    @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
-    @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
+  @BindString(R.string.error_facebook_login) String facebookError;
+  @BindString(R.string.error_login_facebook_method) String facebookMethodError;
+  @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+  @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+  @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
+  @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
 
-    @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
-    @Inject FeedbackMessage feedbackMessage;
-    @Inject @SessionToken StringPreference sessionTokenPreference;
-    @Inject @CurrentUserId StringPreference currentUserIdPreference;
-    @Inject GetUserByIdInteractor getUserByIdInteractor;
-    @Inject GetStreamInteractor getStreamById;
-    @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
-    @Inject LocaleProvider localeProvider;
-    @Inject IntentFactory intentFactory;
-    @Inject SessionRepository sessionRepository;
-    @Inject AnalyticsTool analyticsTool;
+  @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
+  @Inject FeedbackMessage feedbackMessage;
+  @Inject @SessionToken StringPreference sessionTokenPreference;
+  @Inject @CurrentUserId StringPreference currentUserIdPreference;
+  @Inject GetUserByIdInteractor getUserByIdInteractor;
+  @Inject GetStreamInteractor getStreamById;
+  @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
+  @Inject LocaleProvider localeProvider;
+  @Inject IntentFactory intentFactory;
+  @Inject SessionRepository sessionRepository;
+  @Inject AnalyticsTool analyticsTool;
 
-    private CallbackManager callbackManager;
-    private LoginManager loginManager;
+  private CallbackManager callbackManager;
+  private LoginManager loginManager;
 
-    @Override protected int getLayoutResource() {
-        return R.layout.activity_login;
+  @Override protected int getLayoutResource() {
+    return R.layout.activity_login;
+  }
+
+  @Override protected void initializeViews(Bundle savedInstanceState) {
+    ButterKnife.bind(this);
+    setupDisclaimerLinks();
+    setupStatusBarColor();
+  }
+
+  private void setupStatusBarColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Window window = getWindow();
+      window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
     }
+  }
 
-    @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
-        setupDisclaimerLinks();
-        setupStatusBarColor();
-    }
+  private void setupDisclaimerLinks() {
+    String originalDisclaimerText = getString(R.string.activity_registration_legal_disclaimer);
+    SpannableStringBuilder spannableStringBuilder =
+        new SpannableStringBuilder(originalDisclaimerText);
 
-    private void setupStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+    String termsPatternText = "\\(terms-of-service\\)";
+    String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
+    final View.OnClickListener termsClickListener = new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        showSupportAlertDialog(termsOfServiceClickListener());
+      }
+    };
+    replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText,
+        termsClickListener);
+
+    String privacyPatternText = "\\(privacy-policy\\)";
+    String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
+    final View.OnClickListener privacyClickListener = new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        showSupportAlertDialog(privacyPolicyClickListener());
+      }
+    };
+    replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText,
+        privacyClickListener);
+
+    disclaimer.setText(spannableStringBuilder);
+    disclaimer.setMovementMethod(new LinkMovementMethod());
+  }
+
+  @NonNull public DialogInterface.OnClickListener privacyPolicyClickListener() {
+    return new DialogInterface.OnClickListener() {
+      @Override public void onClick(DialogInterface dialog, int which) {
+        String privacyUrl =
+            String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+        Intent privacyIntent =
+            intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
+        Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
+      }
+    };
+  }
+
+  @NonNull public DialogInterface.OnClickListener termsOfServiceClickListener() {
+    return new DialogInterface.OnClickListener() {
+      @Override public void onClick(DialogInterface dialog, int which) {
+        String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+        Intent termsIntent =
+            intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
+        Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
+      }
+    };
+  }
+
+  private void showSupportAlertDialog(DialogInterface.OnClickListener onClickListener) {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder //
+        .setMessage(getString(R.string.language_support_alert)) //
+        .setPositiveButton(getString(R.string.email_confirmation_ok), onClickListener).show();
+  }
+
+  private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder,
+      String patternText, String replaceText, final View.OnClickListener onClick) {
+    Pattern termsPattern = Pattern.compile(patternText);
+    Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
+    if (termsMatcher.find()) {
+      int termsStart = termsMatcher.start();
+      int termsEnd = termsMatcher.end();
+      spannableBuilder.replace(termsStart, termsEnd, replaceText);
+
+      CharacterStyle termsSpan = new ClickableSpan() {
+        @Override public void updateDrawState(TextPaint ds) {
+          super.updateDrawState(ds);
+          ds.setColor(getResources().getColor(R.color.white));
+          ds.setUnderlineText(false);
         }
-    }
 
-    private void setupDisclaimerLinks() {
-        String originalDisclaimerText = getString(R.string.activity_registration_legal_disclaimer);
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(originalDisclaimerText);
-
-        String termsPatternText = "\\(terms-of-service\\)";
-        String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
-        final View.OnClickListener termsClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                showSupportAlertDialog(termsOfServiceClickListener());
-            }
-        };
-        replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
-
-        String privacyPatternText = "\\(privacy-policy\\)";
-        String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
-        final View.OnClickListener privacyClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                showSupportAlertDialog(privacyPolicyClickListener());
-            }
-        };
-        replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
-
-        disclaimer.setText(spannableStringBuilder);
-        disclaimer.setMovementMethod(new LinkMovementMethod());
-    }
-
-    @NonNull public DialogInterface.OnClickListener privacyPolicyClickListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-                Intent privacyIntent = intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
-                Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
-            }
-        };
-    }
-
-    @NonNull public DialogInterface.OnClickListener termsOfServiceClickListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-                Intent termsIntent = intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
-                Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
-            }
-        };
-    }
-
-    private void showSupportAlertDialog(DialogInterface.OnClickListener onClickListener) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder //
-          .setMessage(getString(R.string.language_support_alert)) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok), onClickListener).show();
-    }
-
-    private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder, String patternText,
-      String replaceText, final View.OnClickListener onClick) {
-        Pattern termsPattern = Pattern.compile(patternText);
-        Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
-        if (termsMatcher.find()) {
-            int termsStart = termsMatcher.start();
-            int termsEnd = termsMatcher.end();
-            spannableBuilder.replace(termsStart, termsEnd, replaceText);
-
-            CharacterStyle termsSpan = new ClickableSpan() {
-                @Override public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(getResources().getColor(R.color.white));
-                    ds.setUnderlineText(false);
-                }
-
-                @Override public void onClick(View widget) {
-                    onClick.onClick(widget);
-                }
-            };
-            spannableBuilder.setSpan(termsSpan,
-              termsStart,
-              termsStart + replaceText.length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        @Override public void onClick(View widget) {
+          onClick.onClick(widget);
         }
+      };
+      spannableBuilder.setSpan(termsSpan, termsStart, termsStart + replaceText.length(),
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
+  }
 
-    @Override protected void initializePresenter() {
-        if (sessionTokenPreference.get() != null) {
-            retrieveOnUpgradeInfo();
-        } else {
-            if (shouldShowIntro.get()) {
-                shouldShowIntro.set(false);
-                startActivity(new Intent(this, IntroActivity.class));
-                finish();
+  @Override protected void initializePresenter() {
+    if (sessionTokenPreference.get() != null) {
+      retrieveOnUpgradeInfo();
+    } else {
+      if (shouldShowIntro.get()) {
+        shouldShowIntro.set(false);
+        startActivity(new Intent(this, IntroActivity.class));
+        finish();
+      } else {
+        setupFacebook();
+      }
+    }
+  }
+
+  private void retrieveOnUpgradeInfo() {
+    buttonsContainer.setVisibility(View.GONE);
+    showLoading();
+    final Intent i = new Intent(this, MainTabbedActivity.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), false,
+        new Interactor.Callback<User>() {
+          @Override public void onLoaded(User user) {
+            String visibleStreamId = user.getIdWatchingStream();
+            if (visibleStreamId != null) {
+              getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
+                @Override public void onLoaded(Stream stream) {
+                  hideLoading();
+                  startActivity(i);
+                  finish();
+                }
+              });
             } else {
-                setupFacebook();
+              hideLoading();
+              startActivity(i);
+              finish();
             }
-        }
-    }
-
-    private void retrieveOnUpgradeInfo() {
-        buttonsContainer.setVisibility(View.GONE);
-        showLoading();
-        final Intent i = new Intent(this, MainTabbedActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), new Interactor.Callback<User>() {
-            @Override public void onLoaded(User user) {
-                String visibleStreamId = user.getIdWatchingStream();
-                if (visibleStreamId != null) {
-                    getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
-                        @Override public void onLoaded(Stream stream) {
-                            hideLoading();
-                            startActivity(i);
-                            finish();
-                        }
-                    });
-                } else {
-                    hideLoading();
-                    startActivity(i);
-                    finish();
-                }
-            }
+          }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+          @Override public void onError(ShootrException error) {
                 /* no-op */
-            }
+          }
         });
-    }
+  }
 
-    @Override protected boolean requiresUserLogin() {
-        return false;
-    }
+  @Override protected boolean requiresUserLogin() {
+    return false;
+  }
 
-    private void setupFacebook() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        loginManager = LoginManager.getInstance();
+  private void setupFacebook() {
+    FacebookSdk.sdkInitialize(getApplicationContext());
+    callbackManager = CallbackManager.Factory.create();
+    loginManager = LoginManager.getInstance();
 
-        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override public void onSuccess(LoginResult loginResult) {
-                final AccessToken accessToken = loginResult.getAccessToken();
-                Timber.d("FB Token: %s", accessToken.getToken());
-                performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.Callback<Boolean>() {
-                    @Override public void onLoaded(Boolean isNewUser) {
-                        finish();
-                        Intent intent;
-                        if (isNewUser) {
-                            sendAnalytics();
-                            intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
-                        } else {
-                            intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
-                        }
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    }
-                }, new Interactor.ErrorCallback() {
-                    @Override public void onError(ShootrException error) {
-                        showFacebookError(facebookMethodError);
-                        hideLoading();
-                    }
-                });
-            }
-
-            @Override public void onError(FacebookException e) {
-                Timber.e(e, "Failed to obtain FB access token");
-                showFacebookError(facebookError);
+    loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+      @Override public void onSuccess(LoginResult loginResult) {
+        final AccessToken accessToken = loginResult.getAccessToken();
+        Timber.d("FB Token: %s", accessToken.getToken());
+        performFacebookLoginInteractor.attempLogin(accessToken.getToken(),
+            new Interactor.Callback<Boolean>() {
+              @Override public void onLoaded(Boolean isNewUser) {
+                finish();
+                Intent intent;
+                if (isNewUser) {
+                  sendAnalytics();
+                  intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
+                } else {
+                  intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
+                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+              }
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                showFacebookError(facebookMethodError);
                 hideLoading();
-            }
+              }
+            });
+      }
 
-            @Override public void onCancel() {
-                hideLoading();
-            }
-        });
-    }
+      @Override public void onError(FacebookException e) {
+        Timber.e(e, "Failed to obtain FB access token");
+        showFacebookError(facebookError);
+        hideLoading();
+      }
 
-    private void sendAnalytics() {
-        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-        builder.setContext(getBaseContext());
-        builder.setActionId(analyticsActionSignup);
-        builder.setLabelId(analyticsLabelSignup);
-        builder.setUser(sessionRepository.getCurrentUser());
-        analyticsTool.analyticsSendAction(builder);
-    }
+      @Override public void onCancel() {
+        hideLoading();
+      }
+    });
+  }
 
-    @OnClick(R.id.login_btn_login) public void login() {
-        startActivity(new Intent(this, EmailLoginActivity.class));
-    }
+  private void sendAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionSignup);
+    builder.setLabelId(analyticsLabelSignup);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
 
-    @OnClick(R.id.login_btn_email) public void registerWithEmail() {
-        startActivity(new Intent(this, EmailRegistrationActivity.class));
-    }
+  @OnClick(R.id.login_btn_login) public void login() {
+    startActivity(new Intent(this, EmailLoginActivity.class));
+  }
 
-    @OnClick(R.id.login_btn_facebook) public void loginWithFacebook() {
-        showLoading();
-        loginManager.logInWithReadPermissions(this, Arrays.asList(FACEBOOK_PERMISIONS));
-    }
+  @OnClick(R.id.login_btn_email) public void registerWithEmail() {
+    startActivity(new Intent(this, EmailRegistrationActivity.class));
+  }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
+  @OnClick(R.id.login_btn_facebook) public void loginWithFacebook() {
+    showLoading();
+    loginManager.logInWithReadPermissions(this, Arrays.asList(FACEBOOK_PERMISIONS));
+  }
 
-    private void showLoading() {
-        loading.setVisibility(View.VISIBLE);
-        buttonsContainer.setVisibility(View.INVISIBLE);
-    }
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    callbackManager.onActivityResult(requestCode, resultCode, data);
+  }
 
-    private void hideLoading() {
-        loading.setVisibility(View.GONE);
-        buttonsContainer.setVisibility(View.VISIBLE);
-    }
+  private void showLoading() {
+    loading.setVisibility(View.VISIBLE);
+    buttonsContainer.setVisibility(View.INVISIBLE);
+  }
 
-    private void showFacebookError(String errorMessage) {
-        feedbackMessage.show(getView(), errorMessage);
-    }
+  private void hideLoading() {
+    loading.setVisibility(View.GONE);
+    buttonsContainer.setVisibility(View.VISIBLE);
+  }
+
+  private void showFacebookError(String errorMessage) {
+    feedbackMessage.show(getView(), errorMessage);
+  }
 }

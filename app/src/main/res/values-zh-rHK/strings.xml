@@ -458,11 +458,11 @@
   <string name="watching_stream_connected">已連接</string>
   <string name="watching_stream_connected_muted">已連接(靜音)</string>
   <string name="watch_profile_photo" formatted="false">點開</string>
-  <string name="welcome_friends_text">離開以取消連結</string>
   <string name="welcome_get_started_button">明白了</string>
   <string name="welcome_shootr_title">進入一個stream以進行聯繫</string>
   <string name="whale_message_default">我們正在為您優化Shootr，很快就會回來。</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="error_user_cannot_check">user cannot check</string>
 </resources>
