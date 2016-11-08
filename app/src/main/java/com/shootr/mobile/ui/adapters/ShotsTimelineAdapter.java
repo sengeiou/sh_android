@@ -336,12 +336,14 @@ public class ShotsTimelineAdapter
   }
 
   public void updateHighligthShotInfo(HighlightedShotModel highlightedShotModel) {
-    if (!getHeader().equals(highlightedShotModel.getShotModel())) {
-      shots.remove(HEADER_POSITION);
-      shots.add(HEADER_POSITION, highlightedShotModel.getShotModel());
-      this.highlightedShotModel = highlightedShotModel;
-      setHeader(highlightedShotModel.getShotModel());
-      notifyDataSetChanged();
+    if (getHeader() != null) {
+      if (!getHeader().equals(highlightedShotModel.getShotModel())) {
+        shots.remove(HEADER_POSITION);
+        shots.add(HEADER_POSITION, highlightedShotModel.getShotModel());
+        this.highlightedShotModel = highlightedShotModel;
+        setHeader(highlightedShotModel.getShotModel());
+        notifyDataSetChanged();
+      }
     }
   }
 }
