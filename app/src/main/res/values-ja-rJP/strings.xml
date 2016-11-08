@@ -449,7 +449,6 @@
   <string name="watching_stream_connected">オンライン</string>
   <string name="watching_stream_connected_muted">オンライン (通知なし)</string>
   <string name="watch_profile_photo" formatted="false">見る</string>
-  <string name="welcome_friends_text">退出すると切断されます</string>
   <string name="welcome_get_started_button">さっそく使う</string>
   <string name="welcome_shootr_title">オンライン状態にするためには、ストリームにアクセスしてください</string>
   <string name="whale_message_default">現在Shootrの改善を実施しています。</string>

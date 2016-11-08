@@ -467,7 +467,6 @@
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">ver</string>
-  <string name="welcome_friends_text">Sair para desconectar</string>
   <string name="welcome_get_started_button">Começar</string>
   <string name="welcome_shootr_title">Entre em um stream para conectar-se</string>
   <string name="whale_message_default">Estamos melhorando Shootr para você. Voltaremos logo.</string>

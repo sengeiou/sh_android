@@ -467,7 +467,6 @@
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
-  <string name="welcome_friends_text">Sortir per desconnectar</string>
   <string name="welcome_get_started_button">Començar</string>
   <string name="welcome_shootr_title">Entra en un stream per connectar-te</string>
   <string name="whale_message_default">Estem millorant Shootr per a tu. Tornem aviat.</string>

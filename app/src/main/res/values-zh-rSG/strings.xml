@@ -459,7 +459,6 @@
   <string name="watching_stream_connected">已连接</string>
   <string name="watching_stream_connected_muted">已连接（已静音）</string>
   <string name="watch_profile_photo" formatted="false">点开</string>
-  <string name="welcome_friends_text">离开断开连接</string>
   <string name="welcome_get_started_button">好的</string>
   <string name="welcome_shootr_title">进入stream连接</string>
   <string name="whale_message_default">我们正在为您优化Shootr，很快就会回来。</string>
