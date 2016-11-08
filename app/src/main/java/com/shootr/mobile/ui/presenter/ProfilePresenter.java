@@ -65,6 +65,7 @@ public class ProfilePresenter implements Presenter {
   private boolean isBlocked = false;
   private boolean isBanned = false;
   private int hadleBlockMenuCalls;
+  private boolean refreshOnlyLocal = false;
 
   @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
@@ -281,7 +282,7 @@ public class ProfilePresenter implements Presenter {
   }
 
   public void updateFollowingsInfo() {
-    getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+    getUserByIdInteractor.loadUserById(profileIdUser, refreshOnlyLocal, new Interactor.Callback<User>() {
       @Override public void onLoaded(User user) {
         setUserModel(userModelMapper.transform(user));
         profileView.setUserInfo(userModel);
@@ -382,9 +383,10 @@ public class ProfilePresenter implements Presenter {
     return Observable.create(new Observable.OnSubscribe<Void>() {
       @Override public void call(Subscriber<? super Void> subscriber) {
         if (profileIdUser != null) {
-          getUserByIdInteractor.loadUserById(profileIdUser, new Interactor.Callback<User>() {
+          getUserByIdInteractor.loadUserById(profileIdUser, refreshOnlyLocal, new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
               onProfileLoaded(user);
+              refreshOnlyLocal = false;
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -560,6 +562,7 @@ public class ProfilePresenter implements Presenter {
   }
 
   @Override public void resume() {
+    refreshOnlyLocal = true;
     if (hasBeenPaused && userModel != null && !uploadingPhoto) {
       refreshProfile();
     }

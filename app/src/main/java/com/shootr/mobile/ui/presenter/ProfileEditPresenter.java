@@ -58,7 +58,7 @@ public class ProfileEditPresenter implements Presenter {
   }
 
   private void fillCurrentUserData() {
-    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(),
+    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), false,
         new Interactor.Callback<User>() {
           @Override public void onLoaded(User user) {
             loadProfileData();
@@ -71,7 +71,7 @@ public class ProfileEditPresenter implements Presenter {
   }
 
   private void loadProfileData() {
-    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(),
+    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), false,
         new Interactor.Callback<User>() {
           @Override public void onLoaded(User user) {
             currentUserModel = userModelMapper.transform(user);
