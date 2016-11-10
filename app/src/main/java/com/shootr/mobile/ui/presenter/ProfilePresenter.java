@@ -306,12 +306,14 @@ public class ProfilePresenter implements Presenter {
   public void websiteClicked() {
     if (userModel != null) {
       String website = userModel.getWebsite();
-      String httpPrefix = "http://";
-      String httpsPrefix = "https://";
-      if (!website.contains(httpPrefix) && !website.contains(httpsPrefix)) {
-        website = httpPrefix + website;
+      if (website != null) {
+        String httpPrefix = "http://";
+        String httpsPrefix = "https://";
+        if (!website.contains(httpPrefix) && !website.contains(httpsPrefix)) {
+          website = httpPrefix + website;
+        }
+        profileView.goToWebsite(website);
       }
-      profileView.goToWebsite(website);
     }
   }
 
