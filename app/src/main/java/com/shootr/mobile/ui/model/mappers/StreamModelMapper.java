@@ -36,6 +36,7 @@ public class StreamModelMapper {
         streamModel.setUniqueShots(stream.getUniqueShots() != null ? stream.getUniqueShots() : 0);
         streamModel.setReadWriteMode(stream.getReadWriteMode() == null ||
                 stream.getReadWriteMode().equals(StreamMode.PUBLIC) ? 0 : 1);
+        streamModel.setVerifiedUser(stream.isVerifiedUser());
         return streamModel;
     }
 

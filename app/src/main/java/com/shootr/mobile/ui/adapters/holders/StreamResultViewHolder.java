@@ -42,6 +42,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
   @BindView(R.id.stream_watchers) TextView watchers;
+  @BindView(R.id.stream_verified) ImageView streamVerified;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
@@ -108,6 +109,14 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
     handleShowFavorite(streamResultModel, hasToShowIsFavorite);
     setupStreamPicture(streamResultModel);
+  }
+
+  private void setVerifiedVisibility(StreamModel streamModel) {
+    if (streamModel.isVerifiedUser()) {
+      streamVerified.setVisibility(View.VISIBLE);
+    } else {
+      streamVerified.setVisibility(View.GONE);
+    }
   }
 
   public void render(StreamResultModel streamResultModel, boolean showSeparator,
@@ -236,6 +245,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
       setupConnectedSubtitle(stream);
     } else {
       setupAuthorAndDescriptionSubtitle(stream);
+      setVerifiedVisibility(stream);
     }
   }
 

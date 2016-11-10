@@ -26,6 +26,7 @@ public class Stream {
     private Long totalShots;
     private Long uniqueShots;
     private String readWriteMode;
+    private boolean verifiedUser;
 
     public Boolean isRemoved() {
         return removed;
@@ -239,5 +240,13 @@ public class Stream {
         @Override public int compare(Stream left, Stream right) {
             return left.getTitle().compareTo(right.getTitle());
         }
+    }
+
+    public boolean isVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(boolean verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }
