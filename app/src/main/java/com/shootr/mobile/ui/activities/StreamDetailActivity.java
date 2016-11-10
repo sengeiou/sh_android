@@ -142,7 +142,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    sendAnalythics();
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setTitle(null);
@@ -302,6 +301,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override protected void initializePresenter() {
     idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
     streamDetailPresenter.initialize(this, idStream);
+    sendAnalythics();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
