@@ -39,6 +39,8 @@ import javax.inject.Singleton;
             }
         } catch (ArrayIndexOutOfBoundsException error) {
             /* no-op */
+        } catch (Exception error) {
+            /* no-op */
         }
     }
 
