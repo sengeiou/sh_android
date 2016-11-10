@@ -114,8 +114,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   public void openProfile(Context context, Intent intent) {
     decrementBadgeCount();
     String idUser = intent.getExtras().getString(ProfileActivity.EXTRA_USER);
-    startActivityFromIntent(context, ProfileActivity.getIntent(context, idUser)
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    if (idUser != null) {
+      startActivityFromIntent(context,
+          ProfileActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
   }
 
   public void openStream(Context context, Intent intent) {
