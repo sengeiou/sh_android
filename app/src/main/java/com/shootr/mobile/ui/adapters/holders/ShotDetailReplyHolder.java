@@ -28,6 +28,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_reply_container) RelativeLayout container;
     @BindView(R.id.shot_avatar) public ImageView avatar;
     @BindView(R.id.shot_user_name) public TextView name;
+    @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
     @BindView(R.id.shot_text) public ClickableTextView text;
     @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
@@ -71,6 +72,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
     public void bindView(final ShotModel reply) {
         this.name.setText(reply.getUsername());
+        setupVerified(reply);
         setupComment(reply);
         setupBirthData(reply);
         setupShotMediaContentVisibility(reply);
@@ -80,6 +82,14 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         setupNiceListener(reply);
         setupReplyClickListener(reply);
         bindReplyCount(reply);
+    }
+
+    private void setupVerified(ShotModel shotModel) {
+        if (shotModel.getVerifiedUser()) {
+            verifiedUser.setVisibility(View.VISIBLE);
+        } else {
+            verifiedUser.setVisibility(View.GONE);
+        }
     }
 
     private void setupBirthData(ShotModel reply) {

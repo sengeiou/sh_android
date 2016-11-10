@@ -39,6 +39,7 @@ public class Shot {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
+    private Long verifiedUser;
 
     public String getIdShot() {
         return idShot;
@@ -445,5 +446,13 @@ public class Shot {
 
     public void setCtaButtonText(String ctaButtonText) {
         this.ctaButtonText = ctaButtonText;
+    }
+
+    public Long getVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Long verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }

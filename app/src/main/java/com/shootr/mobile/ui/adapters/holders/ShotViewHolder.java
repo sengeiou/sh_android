@@ -36,6 +36,7 @@ public class ShotViewHolder {
 
     @BindView(R.id.shot_avatar) ImageView avatar;
     @BindView(R.id.shot_user_name) TextView name;
+    @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) TextView timestamp;
     @BindView(R.id.shot_text) ClickableTextView text;
     @BindView(R.id.shot_text_stream_title) ClickableTextView streamTitle;
@@ -76,6 +77,7 @@ public class ShotViewHolder {
 
     public void render(ShotModel shot, boolean shouldShowTitle) {
         bindUsername(shot);
+        setupVerified(shot);
         bindComment(shot, shouldShowTitle);
         bindElapsedTime(shot);
         bindUserPhoto(shot);
@@ -88,6 +90,14 @@ public class ShotViewHolder {
             bindNiceInfo(shot);
         }
         bindReplyCount(shot);
+    }
+
+    private void setupVerified(ShotModel shotModel) {
+        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+            verifiedUser.setVisibility(View.VISIBLE);
+        } else {
+            verifiedUser.setVisibility(View.GONE);
+        }
     }
 
     private void bindReplyCount(final ShotModel shot) {

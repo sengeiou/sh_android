@@ -66,6 +66,7 @@ public class ShotApiEntityMapper {
         shotEntity.setCtaCaption(shotApiEntity.getCtaCaption());
         shotEntity.setCtaButtonText(shotApiEntity.getCtaButtonText());
         shotEntity.setCtaButtonLink(shotApiEntity.getCtaButtonLink());
+        shotEntity.setVerifiedUser(shotApiEntity.getVerifiedUser());
 
         return shotEntity;
     }

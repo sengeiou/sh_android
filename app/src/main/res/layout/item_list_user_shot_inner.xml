@@ -52,12 +52,24 @@
           tools:text="Ignasi to pepe"
           />
 
+      <ImageView
+          android:id="@+id/verified_user"
+          android:layout_width="10dp"
+          android:layout_height="10dp"
+          android:layout_marginLeft="2dp"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_action_verified_shot"
+          android:layout_toEndOf="@+id/shot_user_name"
+          android:visibility="gone"
+          tools:visibility="visible"
+          />
+
       <TextView
           android:id="@+id/shot_timestamp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="8dp"
-          android:layout_toEndOf="@+id/shot_user_name"
+          android:layout_toEndOf="@+id/verified_user"
           android:maxLines="1"
           android:textColor="@color/gray_80"
           android:textSize="14sp"
