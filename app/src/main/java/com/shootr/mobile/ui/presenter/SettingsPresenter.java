@@ -133,20 +133,23 @@ public class SettingsPresenter implements Presenter {
   public void startedShootingSettingChanged(String selectedOption) {
     if (selectedOption != null) {
       final UserSettingsModel changedSettings = userSettingsModel;
-      changedSettings.setStartedShootingPushSettings(selectedOption);
-      changeStartedShootingSettingsInteractor.changeStartedShotSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-              userSettingsModel = changedSettings;
-              settingsView.sendNotificationAnalytics(PushSettingType.STARTED_SHOOTING);
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              Integer option =
-                  mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
-              settingsView.setStartedShootingSettings(option);
-            }
-          });
+      if (changedSettings != null) {
+        changedSettings.setStartedShootingPushSettings(selectedOption);
+        changeStartedShootingSettingsInteractor.changeStartedShotSettings(
+            userSettingsModelMapper.reverseMap(changedSettings),
+            new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                userSettingsModel = changedSettings;
+                settingsView.sendNotificationAnalytics(PushSettingType.STARTED_SHOOTING);
+              }
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                Integer option =
+                    mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
+                settingsView.setStartedShootingSettings(option);
+              }
+            });
+      }
     }
   }
 
