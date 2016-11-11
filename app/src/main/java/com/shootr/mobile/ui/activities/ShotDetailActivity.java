@@ -362,16 +362,19 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     }
 
     private void setupDetailList() {
-        try {
-            container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        container.getViewTreeObserver()
+            .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override public void onGlobalLayout() {
-                    screenHeight = container.getHeight() - newShotBar.getHeight();
-                    container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    try {
+                        screenHeight = container.getHeight() - newShotBar.getHeight();
+                        container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } catch (Exception error) {
+                        /* no-op */
+                    }
                 }
             });
-        } catch (Exception error) {
-            /* no-op */
-        }
+
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);

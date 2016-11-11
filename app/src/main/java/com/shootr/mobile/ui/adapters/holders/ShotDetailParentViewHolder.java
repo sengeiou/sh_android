@@ -30,6 +30,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_detail_parent) FrameLayout container;
     @BindView(R.id.shot_avatar) public ImageView avatar;
     @BindView(R.id.shot_user_name) public TextView name;
+    @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
     @BindView(R.id.shot_text) public ClickableTextView text;
     @BindView(R.id.shot_image_landscape) public ProportionalImageView proportionalImageView;
@@ -81,6 +82,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         shot.setVisibility(View.VISIBLE);
         progress.setVisibility(View.GONE);
         this.name.setText(getUsernameTitle(shotModel));
+        setupVerified(shotModel);
         setupComment(shotModel);
         setupBirthData(shotModel);
         setupUserAvatar(shotModel);
@@ -90,6 +92,14 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
         setupNiceListener(shotModel);
         setupParentListener(shotModel);
         bindReplyCount(shotModel);
+    }
+
+    private void setupVerified(ShotModel shotModel) {
+        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+            verifiedUser.setVisibility(View.VISIBLE);
+        } else {
+            verifiedUser.setVisibility(View.GONE);
+        }
     }
 
     private void setupComment(ShotModel shotModel) {

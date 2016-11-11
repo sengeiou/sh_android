@@ -40,6 +40,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setCtaButtonLink(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.CTA_BUTTON_LINK)));
         shot.setCtaButtonText(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.CTA_BUTTON_TEXT)));
         shot.setCtaCaption(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.CTA_CAPTION)));
+        shot.setVerifiedUser(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.VERIFIED_USER)));
         setSynchronizedfromCursor(c, shot);
         return shot;
     }
@@ -73,6 +74,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.CTA_BUTTON_LINK, shot.getCtaButtonLink());
         cv.put(DatabaseContract.ShotTable.CTA_BUTTON_TEXT, shot.getCtaButtonText());
         cv.put(DatabaseContract.ShotTable.CTA_CAPTION, shot.getCtaCaption());
+        cv.put(DatabaseContract.ShotTable.VERIFIED_USER, shot.getVerifiedUser());
         setSynchronizedtoContentValues(shot, cv);
         return cv;
     }

@@ -54,7 +54,7 @@ public class UserSettings {
     }
 
     private void setDefaults() {
-      settings.startedShootingPushSettings = PushSettingType.STARTED_SHOOTING_ALL;
+      settings.startedShootingPushSettings = PushSettingType.STARTED_SHOOTING_FAVORITE_STREAMS;
       settings.niceShotPushSettings = PushSettingType.NICE_SHOT_ALL;
       settings.reShotPushSettings = PushSettingType.RESHOT_ALL;
     }

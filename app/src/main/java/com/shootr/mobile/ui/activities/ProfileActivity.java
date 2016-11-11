@@ -617,8 +617,12 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void hideLogoutInProgress() {
-    if (this != null) {
-      progress.dismiss();
+    try {
+      if (this != null) {
+        progress.dismiss();
+      }
+    } catch (Exception error) {
+      /* no-op */
     }
   }
 

@@ -71,6 +71,7 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setCtaButtonLink(shotApiEntity.getCtaButtonLink());
     highlightedShot.setCtaButtonText(shotApiEntity.getCtaButtonText());
     highlightedShot.setCtaCaption(shotApiEntity.getCtaCaption());
+    highlightedShot.setVerifiedUser(shotApiEntity.getVerifiedUser());
 
     return highlightedShot;
   }
@@ -132,6 +133,7 @@ public class HighlightedShotEntityMapper {
     shot.setCtaButtonText(value.getCtaButtonText());
     shot.setCtaCaption(value.getCtaCaption());
     shot.setPromoted(value.getPromoted());
+    shot.setVerifiedUser(value.getVerifiedUser());
 
     highlightedShot.setShot(shot);
 

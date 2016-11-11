@@ -26,15 +26,18 @@ public class WritePermissionManager {
 
     public void requestWritePermissionToUser() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(activity).setMessage(R.string.download_photo_permission_explaination)
+            try {
+                new AlertDialog.Builder(activity).setMessage(R.string.download_photo_permission_explaination)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        @Override public void onClick(DialogInterface dialog, int which) {
                             requestWritePermission();
                         }
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
+            } catch (Exception error) {
+                /* no-op */
+            }
         } else {
             requestWritePermission();
         }

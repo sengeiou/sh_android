@@ -33,6 +33,7 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
+    private Boolean verifiedUser;
     private boolean canBePinned;
     private boolean titleEnabled;
 
@@ -250,6 +251,14 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setPromoted(Long promoted) {
         this.promoted = promoted;
+    }
+
+    public Boolean getVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Boolean verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 
     public Boolean getCanBePinned() {

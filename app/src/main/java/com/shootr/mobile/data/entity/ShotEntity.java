@@ -36,6 +36,7 @@ public class ShotEntity extends Synchronized {
     private String ctaButtonLink;
     private String ctaButtonText;
     private String ctaCaption;
+    private Long verifiedUser;
 
     public String getIdShot() {
         return idShot;
@@ -251,5 +252,13 @@ public class ShotEntity extends Synchronized {
 
     public void setCtaCaption(String ctaCaption) {
         this.ctaCaption = ctaCaption;
+    }
+
+    public Long getVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Long verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }

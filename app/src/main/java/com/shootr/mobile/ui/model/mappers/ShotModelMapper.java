@@ -53,6 +53,11 @@ public class ShotModelMapper {
         shotModel.setCtaCaption(shot.getCtaCaption());
         shotModel.setPromoted(shot.getPromoted());
         shotModel.setType(shot.getType());
+        if (shot.getVerifiedUser() != null) {
+            shotModel.setVerifiedUser(shot.getVerifiedUser() == 1);
+        } else {
+            shotModel.setVerifiedUser(false);
+        }
         return shotModel;
     }
 

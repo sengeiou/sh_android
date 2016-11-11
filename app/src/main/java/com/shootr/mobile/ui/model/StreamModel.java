@@ -21,6 +21,7 @@ public class StreamModel implements Serializable {
     private Long totalShots;
     private Long uniqueShots;
     private Integer readWriteMode;
+    private boolean verifiedUser;
 
     public Boolean isRemoved() {
         return removed;
@@ -174,5 +175,13 @@ public class StreamModel implements Serializable {
 
     public void setReadWriteMode(Integer readWriteMode) {
         this.readWriteMode = readWriteMode;
+    }
+
+    public boolean isVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(boolean verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }

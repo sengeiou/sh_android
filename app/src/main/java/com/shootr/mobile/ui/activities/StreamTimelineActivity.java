@@ -12,8 +12,6 @@ import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
 
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
-
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject BackStackHandler backStackHandler;
@@ -37,7 +35,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        checkNotNull(getIntent().getExtras());
+        getIntent().getExtras();
         setupAndAddFragment(savedInstanceState);
     }
 

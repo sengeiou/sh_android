@@ -23,6 +23,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Long totalShots;
     private Long uniqueShots;
     private String readWriteMode;
+    private Long verifiedUser;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -202,5 +203,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setReadWriteMode(String readWriteMode) {
         this.readWriteMode = readWriteMode;
+    }
+
+    public Long getVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public void setVerifiedUser(Long verifiedUser) {
+        this.verifiedUser = verifiedUser;
     }
 }

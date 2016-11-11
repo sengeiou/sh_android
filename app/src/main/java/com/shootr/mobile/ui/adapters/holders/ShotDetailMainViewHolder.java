@@ -34,6 +34,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.shot_detail_avatar) ImageView avatar;
     @BindView(R.id.shot_detail_user_name) TextView username;
+    @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_detail_timestamp) TextView timestamp;
     @BindView(R.id.shot_detail_text) ClickableTextView shotText;
     @BindView(R.id.shot_detail_image) ImageView shotImage;
@@ -105,6 +106,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     public void bindView(final ShotModel shotModel) {
         username.setText(getUsernameTitle(shotModel));
         timestamp.setText(getTimestampForDate(shotModel.getBirth()));
+        setupVerified(shotModel);
         setupCounts(shotModel);
         setupComment(shotModel);
         showStreamTitle(shotModel);
@@ -117,6 +119,14 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
         setupPinToProfileContainer(shotModel);
         setupShareListener();
         setupStreamTitle(shotModel);
+    }
+
+    private void setupVerified(ShotModel shotModel) {
+        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+            verifiedUser.setVisibility(View.VISIBLE);
+        } else {
+            verifiedUser.setVisibility(View.GONE);
+        }
     }
 
     private void setupShareListener() {

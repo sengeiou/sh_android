@@ -42,6 +42,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.shot_avatar) ImageView avatar;
   @BindView(R.id.shot_user_name) TextView name;
+  @BindView(R.id.verified_user) ImageView verifiedUser;
   @Nullable @BindView(R.id.shot_timestamp) TextView timestamp;
   @BindView(R.id.shot_text) ClickableTextView text;
   @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
@@ -83,6 +84,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
       OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
+    setupVerified(shot);
     bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
@@ -100,6 +102,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
       OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
+    setupVerified(shot);
     bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
@@ -178,6 +181,14 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       name.setText(getReplyName(shot));
     } else {
       name.setText(usernameTitle);
+    }
+  }
+
+  private void setupVerified(ShotModel shot) {
+    if (shot.getParentShotId() == null && shot.getVerifiedUser()) {
+      verifiedUser.setVisibility(View.VISIBLE);
+    } else {
+      verifiedUser.setVisibility(View.GONE);
     }
   }
 

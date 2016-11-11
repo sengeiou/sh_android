@@ -32,6 +32,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.TOTAL_SHOTS, streamEntity.getTotalShots());
         contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS, streamEntity.getUniqueShots());
         contentValues.put(DatabaseContract.StreamTable.READ_WRITE_MODE, streamEntity.getReadWriteMode());
+        contentValues.put(DatabaseContract.StreamTable.VERIFIED_USER, streamEntity.getVerifiedUser());
         setSynchronizedtoContentValues(streamEntity, contentValues);
     }
 
@@ -59,6 +60,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setTotalShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_SHOTS)));
         streamEntity.setUniqueShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.UNIQUE_SHOTS)));
         streamEntity.setReadWriteMode(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.READ_WRITE_MODE)));
+        streamEntity.setVerifiedUser(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.VERIFIED_USER)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

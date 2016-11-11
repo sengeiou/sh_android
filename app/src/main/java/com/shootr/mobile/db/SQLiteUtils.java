@@ -126,6 +126,8 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ShotTable.PROMOTED
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.VERIFIED_USER
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -317,6 +319,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.READ_WRITE_MODE
       + " TEXT NULL,"
+      + DatabaseContract.StreamTable.VERIFIED_USER
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -365,6 +369,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.READ_WRITE_MODE
       + " TEXT NULL,"
+      + DatabaseContract.StreamTable.VERIFIED_USER
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -657,6 +663,8 @@ public class SQLiteUtils {
         + DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT
         + " TEXT NULL,"
         + DatabaseContract.HighlightedShotTable.PROMOTED
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.VERIFIED_USER
         + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"

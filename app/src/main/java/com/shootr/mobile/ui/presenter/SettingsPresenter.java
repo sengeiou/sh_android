@@ -131,21 +131,26 @@ public class SettingsPresenter implements Presenter {
   }
 
   public void startedShootingSettingChanged(String selectedOption) {
-    final UserSettingsModel changedSettings = userSettingsModel;
-    changedSettings.setStartedShootingPushSettings(selectedOption);
-    changeStartedShootingSettingsInteractor.changeStartedShotSettings(
-        userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
-            userSettingsModel = changedSettings;
-            settingsView.sendNotificationAnalytics(PushSettingType.STARTED_SHOOTING);
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            Integer option =
-                mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
-            settingsView.setStartedShootingSettings(option);
-          }
-        });
+    if (selectedOption != null) {
+      final UserSettingsModel changedSettings = userSettingsModel;
+      if (changedSettings != null) {
+        changedSettings.setStartedShootingPushSettings(selectedOption);
+        changeStartedShootingSettingsInteractor.changeStartedShotSettings(
+            userSettingsModelMapper.reverseMap(changedSettings),
+            new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                userSettingsModel = changedSettings;
+                settingsView.sendNotificationAnalytics(PushSettingType.STARTED_SHOOTING);
+              }
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                Integer option =
+                    mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
+                settingsView.setStartedShootingSettings(option);
+              }
+            });
+      }
+    }
   }
 
   public void reShotSettingChanged(String selectedOption) {
@@ -159,8 +164,7 @@ public class SettingsPresenter implements Presenter {
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
-            Integer option =
-                mapReShotOption(userSettingsModel.getReShotPushSettings());
+            Integer option = mapReShotOption(userSettingsModel.getReShotPushSettings());
             settingsView.setReShotSettings(option);
           }
         });
@@ -177,8 +181,7 @@ public class SettingsPresenter implements Presenter {
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
-            Integer option =
-                mapNiceShotOption(userSettingsModel.getNiceShotPushSettings());
+            Integer option = mapNiceShotOption(userSettingsModel.getNiceShotPushSettings());
             settingsView.setNiceShotSettings(option);
           }
         });
