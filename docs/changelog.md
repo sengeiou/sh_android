@@ -13,6 +13,17 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.22.0] - 2016-11-11
+
+### Added
+
+- Verified streams, verified users and verified shots
+
+### Fixed
+
+- Varios fixes de chrashlytics poco criticos
+
+
 ## [1.21.3] - 2016-11-08
 
 ### Changed
