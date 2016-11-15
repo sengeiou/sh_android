@@ -36,6 +36,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
+import com.shootr.mobile.domain.interactor.user.PerformAutoLoginInteractor;
 import com.shootr.mobile.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
@@ -81,6 +82,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject IntentFactory intentFactory;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
+  @Inject PerformAutoLoginInteractor performAutoLoginInteractor;
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
@@ -208,6 +210,7 @@ public class LoginSelectionActivity extends BaseActivity {
     getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), false,
         new Interactor.Callback<User>() {
           @Override public void onLoaded(User user) {
+            performAutoLoginInteractor.storePostAutoLoginInfo(user.getIdUser());
             String visibleStreamId = user.getIdWatchingStream();
             if (visibleStreamId != null) {
               getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {
