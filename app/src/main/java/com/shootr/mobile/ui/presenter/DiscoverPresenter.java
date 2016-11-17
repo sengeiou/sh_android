@@ -75,10 +75,12 @@ public class DiscoverPresenter implements Presenter {
       @Override public void onLoaded(List<Discovered> discovereds) {
         discoverView.renderDiscover(discoveredModelMapper.transform(discovereds));
         loadFavorites();
+        if (discovereds.size() == 0) {
+          discoverView.showEmpty();
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        discoverView.showEmpty();
         discoverView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
