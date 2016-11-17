@@ -10,5 +10,11 @@ public interface SettingsView {
 
   void setReShotSettings(Integer reShotPushSettings);
 
+  void setPollSettings(Integer reShotPushSettings);
+
+  void setCheckinSettings(Integer reShotPushSettings);
+
+  void setNewFollowersSettings(Integer reShotPushSettings);
+
   void sendNotificationAnalytics(String type);
 }

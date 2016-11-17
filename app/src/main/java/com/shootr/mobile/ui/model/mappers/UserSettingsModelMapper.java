@@ -16,6 +16,9 @@ public class UserSettingsModelMapper extends Mapper<UserSettings, UserSettingsMo
     model.setStartedShootingPushSettings(value.getStartedShootingPushSettings());
     model.setNiceShotPushSettings(value.getNiceShotPushSettings());
     model.setReShotPushSettings(value.getReShotPushSettings());
+    model.setNewFollowersPushSettings(value.getNewFollowersPushSettings());
+    model.setPollPushSettings(value.getPollPushSettings());
+    model.setCheckinPushSettings(value.getCheckinPushSettings());
     return model;
   }
 
@@ -25,6 +28,9 @@ public class UserSettingsModelMapper extends Mapper<UserSettings, UserSettingsMo
     domainEntity.setIdUser(value.getIdUser());
     domainEntity.setNiceShotPushSettings(value.getNiceShotPushSettings());
     domainEntity.setReShotPushSettings(value.getReShotPushSettings());
+    domainEntity.setNewFollowersPushSettings(value.getNewFollowersPushSettings());
+    domainEntity.setPollPushSettings(value.getPollPushSettings());
+    domainEntity.setCheckinPushSettings(value.getCheckinPushSettings());
     return domainEntity;
   }
 }

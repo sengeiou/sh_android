@@ -79,6 +79,9 @@
     <string name="analytics_source_pin_message">pinMessage</string>
     <string name="analytics_notification_disabled_started_shooting">startedShooting</string>
     <string name="analytics_notification_disabled_nice">niceShot</string>
+    <string name="analytics_notification_disabled_newFollowers">newFollowers</string>
+    <string name="analytics_notification_disabled_poll">poll</string>
+    <string name="analytics_notification_disabled_checkin">check-in</string>
     <string name="analytics_notification_disabled_reshoot">reshoot</string>
     <string name="analytics_push_redirection_stream">stream</string>
     <string name="analytics_push_redirection_profile">profile</string>

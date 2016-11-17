@@ -8,6 +8,33 @@ public class UserSettings {
   private String startedShootingPushSettings;
   private String niceShotPushSettings;
   private String reShotPushSettings;
+  private String newFollowersPushSettings;
+  private String pollPushSettings;
+  private String checkinPushSettings;
+
+  public String getNewFollowersPushSettings() {
+    return newFollowersPushSettings;
+  }
+
+  public void setNewFollowersPushSettings(String newFollowersPushSettings) {
+    this.newFollowersPushSettings = newFollowersPushSettings;
+  }
+
+  public String getPollPushSettings() {
+    return pollPushSettings;
+  }
+
+  public void setPollPushSettings(String pollPushSettings) {
+    this.pollPushSettings = pollPushSettings;
+  }
+
+  public String getCheckinPushSettings() {
+    return checkinPushSettings;
+  }
+
+  public void setCheckinPushSettings(String checkinPushSettings) {
+    this.checkinPushSettings = checkinPushSettings;
+  }
 
   public String getReShotPushSettings() {
     return reShotPushSettings;
@@ -54,9 +81,12 @@ public class UserSettings {
     }
 
     private void setDefaults() {
-      settings.startedShootingPushSettings = PushSettingType.STARTED_SHOOTING_FAVORITE_STREAMS;
-      settings.niceShotPushSettings = PushSettingType.NICE_SHOT_ALL;
-      settings.reShotPushSettings = PushSettingType.RESHOT_ALL;
+      settings.startedShootingPushSettings = PushSettingType.FAVORITE_STREAMS;
+      settings.niceShotPushSettings = PushSettingType.ALL;
+      settings.reShotPushSettings = PushSettingType.ALL;
+      settings.newFollowersPushSettings = PushSettingType.ALL;
+      settings.pollPushSettings = PushSettingType.FAVORITE_STREAMS;
+      settings.checkinPushSettings = PushSettingType.FAVORITE_STREAMS;
     }
 
     public Builder user(String idUser) {
