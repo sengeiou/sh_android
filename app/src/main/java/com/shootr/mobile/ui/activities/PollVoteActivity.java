@@ -148,13 +148,15 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   @Override public void showTimeoutAlert() {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-    alertDialogBuilder.setMessage(R.string.connection_lost) //
-        .setPositiveButton(getString(R.string.poll_vote_timeout_retry), new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            presenter.retryVote();
-          }
-        }).show();
+    if (!isFinishing()) {
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+      alertDialogBuilder.setMessage(R.string.connection_lost) //
+          .setPositiveButton(getString(R.string.poll_vote_timeout_retry), new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+              presenter.retryVote();
+            }
+          }).show();
+    }
   }
 
   @Override public void showViewResultsButton() {
