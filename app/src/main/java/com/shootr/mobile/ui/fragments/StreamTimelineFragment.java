@@ -1551,16 +1551,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showContextMenu(final ShotModel shotModel) {
-    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
-        new Runnable() {
-          @Override public void run() {
-            reportShotPresenter.report(shotModel);
-          }
-        }).addAction(R.string.report_context_menu_block, new Runnable() {
-      @Override public void run() {
-        reportShotPresenter.blockUserClicked(shotModel);
-      }
-    }).show();
+    try {
+      getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
+        @Override public void run() {
+          reportShotPresenter.report(shotModel);
+        }
+      }).addAction(R.string.report_context_menu_block, new Runnable() {
+        @Override public void run() {
+          reportShotPresenter.blockUserClicked(shotModel);
+        }
+      }).show();
+    } catch (NullPointerException error) {
+      crashReportTool.logException(error);
+    }
   }
 
   @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
