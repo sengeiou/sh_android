@@ -78,9 +78,13 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @Override protected void onPause() {
         super.onPause();
-        bus.unregister(serverDownReceiver);
-        bus.unregister(unauthorizedReceiver);
-        bus.unregister(preconditionFailedReceiver);
+        try {
+            bus.unregister(serverDownReceiver);
+            bus.unregister(unauthorizedReceiver);
+            bus.unregister(preconditionFailedReceiver);
+        } catch (RuntimeException error) {
+            /* no-op */
+        }
     }
 
     @Override protected void onDestroy() {
