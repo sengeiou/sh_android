@@ -109,6 +109,9 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     if (shotDetail.getParents() != null) {
       localShotDataSource.putShots(shotDetail.getParents());
     }
+    if (shotDetail.getReplies() != null) {
+      localShotDataSource.putShots(shotDetail.getReplies());
+    }
     return shotEntityMapper.transform(shotDetail);
   }
 

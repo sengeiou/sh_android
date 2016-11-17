@@ -49,10 +49,10 @@ public class GetShotDetailInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
+      loadLocalShotDetail();
       if (!localOnly) {
         loadRemoteShotDetail();
       }
-      loadLocalShotDetail();
     } catch (ShootrException error) {
       notifyError(error);
     }
