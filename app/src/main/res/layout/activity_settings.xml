@@ -7,6 +7,115 @@
     >
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/layout_new_followers_push_settings"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+      >
+    <TextView
+        android:id="@+id/new_followers_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
+        android:text="@string/new_followers_push_settings"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        tools:text="@string/new_followers_push_settings"
+        />
+    <TextView
+        android:id="@+id/new_followers_push_option"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/push_settings_everyone"
+        android:textColor="@color/gray_50"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="@string/push_settings_everyone"
+        tools:visibility="visible"
+        />
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/layout_nice_push_settings"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:background="?selectableItemBackground"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+      >
+    <TextView
+        android:id="@+id/nice_shot_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
+        android:text="@string/nices_push_settings"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        tools:text="@string/nices_push_settings"
+        />
+    <TextView
+        android:id="@+id/nice_shot_push_option"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/push_settings_everyone"
+        android:textColor="@color/gray_50"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="@string/push_settings_everyone"
+        tools:visibility="visible"
+        />
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_reshot_push_settings"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    >
+  <TextView
+      android:id="@+id/reshot_push"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?selectableItemBackground"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
+      android:paddingRight="8dp"
+      android:text="@string/reshot_push_settings"
+      android:textAppearance="@style/TextAppearance.Switch"
+      android:textColor="@color/material_black"
+      tools:text="@string/reshot_push_settings"
+      />
+
+  <TextView
+      android:id="@+id/reshot_push_option"
+      android:layout_width="match_parent"
+      android:layout_height="24dp"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
+      android:text="@string/all_push_settings"
+      android:textColor="@color/gray_50"
+      android:textSize="14sp"
+      android:visibility="gone"
+      tools:text="@string/push_settings_everyone"
+      tools:visibility="visible"
+      />
+</LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
       android:id="@+id/layout_push_settings"
       android:layout_width="match_parent"
       android:layout_height="56dp"
@@ -44,7 +153,7 @@
   </LinearLayout>
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-      android:id="@+id/layout_nice_push_settings"
+      android:id="@+id/layout_poll_push_settings"
       android:layout_width="match_parent"
       android:layout_height="56dp"
       android:background="?selectableItemBackground"
@@ -52,67 +161,68 @@
       android:paddingTop="8dp"
       >
     <TextView
-        android:id="@+id/nice_shot_push"
+        android:id="@+id/poll_push"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="8dp"
-        android:text="@string/nices_push_settings"
+        android:text="@string/poll_push_settings"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        tools:text="@string/nices_push_settings"
+        tools:text="@string/poll_push_settings"
         />
+
     <TextView
-        android:id="@+id/nice_shot_push_option"
+        android:id="@+id/poll_push_option"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
-        android:text="@string/push_settings_everyone"
+        android:text="@string/favorite_streams_push_settings"
         android:textColor="@color/gray_50"
         android:textSize="14sp"
         android:visibility="gone"
-        tools:text="@string/nices_push_settings_off"
+        tools:text="Streams favoritos"
         tools:visibility="visible"
         />
   </LinearLayout>
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-      android:id="@+id/layout_reshot_push_settings"
+      android:id="@+id/layout_checkin_push_settings"
       android:layout_width="match_parent"
       android:layout_height="56dp"
       android:background="?selectableItemBackground"
       android:orientation="vertical"
       android:paddingTop="8dp"
-  >
+      >
     <TextView
-        android:id="@+id/reshot_push"
+        android:id="@+id/checkin_push"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="8dp"
-        android:text="@string/reshot_push_settings"
+        android:text="@string/checkin_push_settings"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        tools:text="@string/reshot_push_settings"
-    />
+        tools:text="@string/checkin_push_settings"
+        />
 
     <TextView
-        android:id="@+id/reshot_push_option"
+        android:id="@+id/checkin_push_option"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
-        android:text="@string/all_push_settings"
+        android:text="@string/favorite_streams_push_settings"
         android:textColor="@color/gray_50"
         android:textSize="14sp"
         android:visibility="gone"
-        tools:text="por defecto"
+        tools:text="Streams favoritos"
         tools:visibility="visible"
-    />
+        />
   </LinearLayout>
 </LinearLayout>

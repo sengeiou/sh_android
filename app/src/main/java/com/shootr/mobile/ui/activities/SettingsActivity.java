@@ -30,16 +30,25 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
   @BindView(R.id.started_shooting_push_option) TextView selectedPushStartedShootingSetting;
   @BindView(R.id.nice_shot_push_option) TextView selectedPushNiceShotSetting;
   @BindView(R.id.reshot_push_option) TextView selectedPushReShotSetting;
+  @BindView(R.id.new_followers_push_option) TextView selectedPushNewFollowersSetting;
+  @BindView(R.id.poll_push_option) TextView selectedPushPollSetting;
+  @BindView(R.id.checkin_push_option) TextView selectedPushCheckinSetting;
   @BindString(R.string.analytics_screen_push_settings) String analytics_screen_push_settings;
   @BindString(R.string.analytics_notification_disabled_nice) String analyticsNiceDisabled;
   @BindString(R.string.analytics_notification_disabled_reshoot) String analyticsReshootDisabled;
   @BindString(R.string.analytics_notification_disabled_started_shooting) String analyticsStartedShootingDisabled;
+  @BindString(R.string.analytics_notification_disabled_poll) String analyticsPollDisabled;
+  @BindString(R.string.analytics_notification_disabled_newFollowers) String analyticsnewFollowersDisabled;
+  @BindString(R.string.analytics_notification_disabled_checkin) String analyticsCheckinDisabled;
   @BindString(R.string.analytics_action_notification_disabled) String analyticsAction;
   @BindString(R.string.analytics_label_notification_disabled) String analyticsLabel;
 
   private CharSequence[] itemsStartedShooting = new CharSequence[3];
   private CharSequence[] itemsNiceShot = new CharSequence[3];
   private CharSequence[] itemsReShot = new CharSequence[3];
+  private CharSequence[] itemsNewFollowers = new CharSequence[3];
+  private CharSequence[] itemsPoll = new CharSequence[3];
+  private CharSequence[] itemsCheckin = new CharSequence[3];
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
     /* no-op */
@@ -62,6 +71,18 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     itemsReShot[0] = getResources().getString(R.string.nices_push_settings_off);
     itemsReShot[1] = getResources().getString(R.string.push_settings_people_follow);
     itemsReShot[2] = getResources().getString(R.string.push_settings_everyone);
+
+    itemsNewFollowers[0] = getResources().getString(R.string.nices_push_settings_off);
+    itemsNewFollowers[1] = getResources().getString(R.string.push_settings_people_follow);
+    itemsNewFollowers[2] = getResources().getString(R.string.push_settings_everyone);
+
+    itemsPoll[0] = getResources().getString(R.string.nices_push_settings_off);
+    itemsPoll[1] = getResources().getString(R.string.favorite_streams_push_settings);
+    itemsPoll[2] = getResources().getString(R.string.all_push_settings);
+
+    itemsCheckin[0] = getResources().getString(R.string.nices_push_settings_off);
+    itemsCheckin[1] = getResources().getString(R.string.favorite_streams_push_settings);
+    itemsCheckin[2] = getResources().getString(R.string.all_push_settings);
   }
 
   @Override protected void initializePresenter() {
@@ -95,6 +116,24 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     presenter.niceShotSettingChanged(selectedOption);
   }
 
+  private void setSelectedSettingsNewFollowers(String selectedOption, int which) {
+    selectedPushNewFollowersSetting.setVisibility(View.VISIBLE);
+    selectedPushNewFollowersSetting.setText(itemsNiceShot[which]);
+    presenter.newFollowersSettingChanged(selectedOption);
+  }
+
+  private void setSelectedSettingsPoll(String selectedOption, int which) {
+    selectedPushPollSetting.setVisibility(View.VISIBLE);
+    selectedPushPollSetting.setText(itemsNiceShot[which]);
+    presenter.pollSettingChanged(selectedOption);
+  }
+
+  private void setSelectedSettingsCheckin(String selectedOption, int which) {
+    selectedPushCheckinSetting.setVisibility(View.VISIBLE);
+    selectedPushCheckinSetting.setText(itemsNiceShot[which]);
+    presenter.checkinSettingChanged(selectedOption);
+  }
+
   @OnClick(R.id.layout_push_settings) public void onSettingsClick() {
     showStartedShootingDialog();
   }
@@ -105,6 +144,18 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
 
   @OnClick(R.id.layout_reshot_push_settings) public void onReshotSettingsClick() {
     showReShotDialog();
+  }
+
+  @OnClick(R.id.layout_new_followers_push_settings) public void onNewFollowersSettingsClick() {
+    showNewFollowersDialog();
+  }
+
+  @OnClick(R.id.layout_poll_push_settings) public void onPollSettingsClick() {
+    showPollDialog();
+  }
+
+  @OnClick(R.id.layout_checkin_push_settings) public void onCheckinSettingsClick() {
+    showCheckinDialog();
   }
 
   public void showStartedShootingDialog() {
@@ -146,6 +197,45 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
         .show();
   }
 
+  public void showNewFollowersDialog() {
+    new AlertDialog.Builder(this).setTitle(
+        getResources().getString(R.string.new_followers_push_settings))
+        .setNegativeButton(getResources().getString(R.string.cancel), null)
+        .setItems(itemsNewFollowers, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            setSelectedSettingsNewFollowers(PushSettingType.TYPES_NEW_FOLLOWERS[which], which);
+          }
+        })
+        .create()
+        .show();
+  }
+
+  public void showCheckinDialog() {
+    new AlertDialog.Builder(this).setTitle(
+        getResources().getString(R.string.checkin_push_settings))
+        .setNegativeButton(getResources().getString(R.string.cancel), null)
+        .setItems(itemsCheckin, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            setSelectedSettingsCheckin(PushSettingType.TYPES_CHECKIN[which], which);
+          }
+        })
+        .create()
+        .show();
+  }
+
+  public void showPollDialog() {
+    new AlertDialog.Builder(this).setTitle(
+        getResources().getString(R.string.poll_push_settings))
+        .setNegativeButton(getResources().getString(R.string.cancel), null)
+        .setItems(itemsPoll, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            setSelectedSettingsPoll(PushSettingType.TYPES_POLL[which], which);
+          }
+        })
+        .create()
+        .show();
+  }
+
   @Override public void showError(String messageForError) {
     feedbackMessage.show(getView(), messageForError);
   }
@@ -165,6 +255,21 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
     selectedPushReShotSetting.setText(itemsReShot[reShotPushSettings]);
   }
 
+  @Override public void setNewFollowersSettings(Integer newFollowersPushSettings) {
+    selectedPushNewFollowersSetting.setVisibility(View.VISIBLE);
+    selectedPushNewFollowersSetting.setText(itemsNewFollowers[newFollowersPushSettings]);
+  }
+
+  @Override public void setPollSettings(Integer pollPushSettings) {
+    selectedPushPollSetting.setVisibility(View.VISIBLE);
+    selectedPushPollSetting.setText(itemsPoll[pollPushSettings]);
+  }
+
+  @Override public void setCheckinSettings(Integer checkinPushSettings) {
+    selectedPushCheckinSetting.setVisibility(View.VISIBLE);
+    selectedPushCheckinSetting.setText(itemsCheckin[checkinPushSettings]);
+  }
+
   @Override public void sendNotificationAnalytics(String type) {
     if (type.equals(PushSettingType.STARTED_SHOOTING)) {
       sendAnalytics(analyticsStartedShootingDisabled);
@@ -172,6 +277,12 @@ public class SettingsActivity extends BaseToolbarDecoratedActivity implements Se
       sendAnalytics(analyticsNiceDisabled);
     } else if (type.equals(PushSettingType.SHARED_SHOT)) {
       sendAnalytics(analyticsReshootDisabled);
+    } else if (type.equals(PushSettingType.NEW_FOLLOWERS)) {
+      sendAnalytics(analyticsnewFollowersDisabled);
+    } else if (type.equals(PushSettingType.POLL)) {
+      sendAnalytics(analyticsPollDisabled);
+    } else if (type.equals(PushSettingType.CHECK_IN)) {
+      sendAnalytics(analyticsCheckinDisabled);
     }
   }
 

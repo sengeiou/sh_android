@@ -67,7 +67,8 @@ public class GetShotDetailInteractor implements Interactor {
   }
 
   private void orderParents(ShotDetail localShotDetail) {
-    if (localShotDetail.getParents() != null) {
+    if (localShotDetail != null &&
+        localShotDetail.getParents() != null) {
       List<Shot> unorderedParents = localShotDetail.getParents();
       List<Shot> reorderedParents = orderParentsShots(unorderedParents);
       localShotDetail.setParents(reorderedParents);
@@ -83,9 +84,11 @@ public class GetShotDetailInteractor implements Interactor {
   }
 
   private ShotDetail reorderReplies(ShotDetail shotDetail) {
-    List<Shot> unorderedReplies = shotDetail.getReplies();
-    List<Shot> reorderedReplies = orderShots(unorderedReplies);
-    shotDetail.setReplies(reorderedReplies);
+    if (shotDetail != null) {
+      List<Shot> unorderedReplies = shotDetail.getReplies();
+      List<Shot> reorderedReplies = orderShots(unorderedReplies);
+      shotDetail.setReplies(reorderedReplies);
+    }
     return shotDetail;
   }
 

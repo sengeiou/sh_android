@@ -13,6 +13,17 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.23.0] - 2016-11-18
+
+### Added
+
+- Push settings extended
+
+### Fixed
+
+- Varios fixes de chrashlytics poco criticos
+
+
 ## [1.22.0] - 2016-11-11
 
 ### Added

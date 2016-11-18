@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -366,11 +367,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         container.getViewTreeObserver()
             .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override public void onGlobalLayout() {
-                    try {
-                        screenHeight = container.getHeight() - newShotBar.getHeight();
+                    screenHeight = container.getHeight() - newShotBar.getHeight();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                        container.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    } else {
                         container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } catch (Exception error) {
-                        /* no-op */
                     }
                 }
             });

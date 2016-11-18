@@ -36,4 +36,19 @@ public class RemoteUserSettingsRepository implements UserSettingsRepository {
     UserSettingsEntity userSettingsEntities = mapper.mapReShot(userSettings);
     datasource.modifyPushSettings(userSettingsEntities);
   }
+
+  @Override public void modifyNewFollowersSettings(UserSettings userSettings) {
+    UserSettingsEntity userSettingsEntities = mapper.mapNewFollowers(userSettings);
+    datasource.modifyPushSettings(userSettingsEntities);
+  }
+
+  @Override public void modifyPollSettings(UserSettings userSettings) {
+    UserSettingsEntity userSettingsEntities = mapper.mapPoll(userSettings);
+    datasource.modifyPushSettings(userSettingsEntities);
+  }
+
+  @Override public void modifyCheckinSettings(UserSettings userSettings) {
+    UserSettingsEntity userSettingsEntities = mapper.mapCheckin(userSettings);
+    datasource.modifyPushSettings(userSettingsEntities);
+  }
 }

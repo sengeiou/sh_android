@@ -12,4 +12,10 @@ public interface UserSettingsRepository {
 
   void modifyReShotSettings(UserSettings userSettings);
 
+  void modifyPollSettings(UserSettings userSettings);
+
+  void modifyCheckinSettings(UserSettings userSettings);
+
+  void modifyNewFollowersSettings(UserSettings userSettings);
+
 }

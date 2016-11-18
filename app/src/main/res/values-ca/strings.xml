@@ -358,6 +358,9 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
+  <string name="new_followers_push_settings">Nous seguidors</string>
+  <string name="poll_push_settings">Enquesta</string>
+  <string name="checkin_push_settings">Check-in</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>

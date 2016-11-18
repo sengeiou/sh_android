@@ -19,7 +19,28 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
   @Override public UserSettings map(UserSettingsEntity value) {
     UserSettings userSettings = new UserSettings();
     userSettings.setIdUser(sessionRepository.getCurrentUserId());
-    userSettings.setStartedShootingPushSettings(value.getValue());
+    switch (value.getPushType()) {
+      case PushSettingType.STARTED_SHOOTING:
+      userSettings.setStartedShootingPushSettings(value.getValue());
+        break;
+      case PushSettingType.NICE_SHOT:
+        userSettings.setNiceShotPushSettings(value.getValue());
+        break;
+      case PushSettingType.SHARED_SHOT:
+        userSettings.setReShotPushSettings(value.getValue());
+        break;
+      case PushSettingType.POLL:
+        userSettings.setPollPushSettings(value.getValue());
+        break;
+      case PushSettingType.CHECK_IN:
+        userSettings.setCheckinPushSettings(value.getValue());
+        break;
+      case PushSettingType.NEW_FOLLOWERS:
+        userSettings.setNewFollowersPushSettings(value.getValue());
+        break;
+      default:
+        break;
+    }
     return userSettings;
   }
 
@@ -51,6 +72,27 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
     return response;
   }
 
+  public UserSettingsEntity mapCheckin(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.CHECK_IN);
+    response.setValue(userSettings.getCheckinPushSettings());
+    return response;
+  }
+
+  public UserSettingsEntity mapPoll(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.POLL);
+    response.setValue(userSettings.getPollPushSettings());
+    return response;
+  }
+
+  public UserSettingsEntity mapNewFollowers(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.NEW_FOLLOWERS);
+    response.setValue(userSettings.getNewFollowersPushSettings());
+    return response;
+  }
+
   public UserSettings reverseMapList(List<UserSettingsEntity> userSettings) {
     UserSettings domainValue =
         UserSettings.builder().user(sessionRepository.getCurrentUserId()).build();
@@ -69,6 +111,12 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
       domainValue.setNiceShotPushSettings(userSetting.getValue());
     } else if (userSetting.getPushType().equals(PushSettingType.SHARED_SHOT)) {
       domainValue.setReShotPushSettings(userSetting.getValue());
+    } else if (userSetting.getPushType().equals(PushSettingType.NEW_FOLLOWERS)) {
+      domainValue.setNewFollowersPushSettings(userSetting.getValue());
+    } else if (userSetting.getPushType().equals(PushSettingType.POLL)) {
+      domainValue.setPollPushSettings(userSetting.getValue());
+    } else if (userSetting.getPushType().equals(PushSettingType.CHECK_IN)) {
+      domainValue.setCheckinPushSettings(userSetting.getValue());
     }
   }
 }

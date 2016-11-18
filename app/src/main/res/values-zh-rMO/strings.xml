@@ -352,6 +352,9 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
+  <string name="new_followers_push_settings">新的关注者</string>
+  <string name="poll_push_settings">投票</string>
+  <string name="checkin_push_settings">签到</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">还原stream</string>
   <string name="restore_stream_snackbar_action">复原</string>

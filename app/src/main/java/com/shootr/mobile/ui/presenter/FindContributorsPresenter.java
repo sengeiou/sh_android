@@ -114,7 +114,9 @@ public class FindContributorsPresenter implements Presenter {
 
     @Override public void resume() {
         if (hasBeenPaused) {
-            searchContributors(query);
+            if (query != null && !query.isEmpty()) {
+                searchContributors(query);
+            }
         }
     }
 

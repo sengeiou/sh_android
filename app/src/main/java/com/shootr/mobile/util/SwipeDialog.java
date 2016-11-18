@@ -1,5 +1,6 @@
 package com.shootr.mobile.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -23,8 +24,13 @@ public class SwipeDialog extends SwipeAwayDialogFragment {
 
   private LayoutInflater layoutInflater;
 
+  @SuppressLint("ValidFragment")
   public SwipeDialog(ImageLoader imageLoader) {
     this.imageLoader = imageLoader;
+  }
+
+  public SwipeDialog() {
+    imageLoader = null;
   }
 
   public static SwipeDialog newPollImageDialog(PollOptionModel pollOptionModel,
@@ -63,6 +69,8 @@ public class SwipeDialog extends SwipeAwayDialogFragment {
 
   private void setupPicturePollOption(PollOptionModel pollOptionModel, View dialogView) {
     ImageView pollOptionImage = (ImageView) dialogView.findViewById(R.id.poll_option_image);
-    imageLoader.load(pollOptionModel.getImageUrl(), pollOptionImage);
+    if (imageLoader != null) {
+      imageLoader.load(pollOptionModel.getImageUrl(), pollOptionImage);
+    }
   }
 }

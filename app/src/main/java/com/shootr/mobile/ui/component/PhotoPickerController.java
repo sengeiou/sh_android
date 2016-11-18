@@ -84,23 +84,25 @@ public class PhotoPickerController {
     }
 
     private void pickPhotoOption() {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
-          .sheet(R.menu.photo_picker_bottom_sheet)
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          pickPhotoFromGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          pickPhotoFromCamera(activity);
-                          break;
-                      default:
-                          break;
-                  }
-              }
-          });
-        builder.show();
+        if (!activity.isFinishing()) {
+            BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+                .sheet(R.menu.photo_picker_bottom_sheet)
+                .listener(new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case R.id.menu_photo_gallery:
+                                pickPhotoFromGallery();
+                                break;
+                            case R.id.menu_photo_take:
+                                pickPhotoFromCamera(activity);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+            builder.show();
+        }
     }
 
     private void pickHolderOptions() {

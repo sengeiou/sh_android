@@ -27,6 +27,7 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
@@ -139,14 +140,15 @@ public class FindContributorsPresenterTest {
     verify(findContributorsView).showAddConfirmation(any(UserModel.class));
   }
 
-  @Test public void shouldRenderCOntributorsWhenResume() throws Exception {
+  @Test public void shouldRenderContributorsWhenResume() throws Exception {
     setupFindContributorsCallback();
     presenter.initialize(findContributorsView, STREAM_ID);
+    presenter.searchContributors(QUERY);
 
     presenter.pause();
     presenter.resume();
 
-    verify(findContributorsView).renderContributors(anyList());
+    verify(findContributorsView, atLeastOnce()).renderContributors(anyList());
   }
 
   private void setupAddContributorErrorCallback() {

@@ -50,7 +50,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
         contentValues.put(UserTable.WATCHING_SYNCHRONIZED, entity.getWatchSynchronizedStatus());
         contentValues.put(UserTable.CREATED_STREAMS_COUNT, entity.getCreatedStreamsCount());
         contentValues.put(UserTable.FAVORITED_STREAMS_COUNT, entity.getFavoritedStreamsCount());
-        contentValues.put(UserTable.SOCIAL_LOGIN, (entity.getSocialLogin()) ? true : false);
+        contentValues.put(UserTable.SOCIAL_LOGIN, (entity.getSocialLogin() == null ? false : entity.getSocialLogin()));
         contentValues.put(UserTable.RECEIVED_REACTIONS, entity.getReceivedReactions());
         contentValues.put(UserTable.ANALYTICS_USER_TYPE, entity.getAnalyticsUserType());
         setSynchronizedtoContentValues(entity, contentValues);
