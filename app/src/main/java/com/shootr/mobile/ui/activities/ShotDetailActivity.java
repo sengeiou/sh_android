@@ -149,6 +149,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
+        sendScreenToAnalythics();
         writePermissionManager.init(this);
         setupPhotoPicker();
         ShotModel shotModel = extractShotFromIntent();
@@ -157,6 +158,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             idUser = shotModel.getIdUser();
         }
         setupAdapter();
+    }
+
+    private void sendScreenToAnalythics() {
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsScreenShotDetail);
+        builder.setLabelId(analyticsScreenShotDetail);
+        builder.setSource(analyticsScreenShotDetail);
+        builder.setIdStream(detailAdapter.getMainShot().getStreamId());
+        builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
+        if (sessionRepository.getCurrentUser() != null) {
+            builder.setUser(sessionRepository.getCurrentUser());
+            builder.setStreamName(sessionRepository.getCurrentUser().getWatchingStreamTitle());
+        }
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override protected void initializePresenter() {
@@ -361,6 +378,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         builder.setUser(sessionRepository.getCurrentUser());
         builder.setIdTargetUser(shot.getIdUser());
         builder.setTargetUsername(shot.getUsername());
+        builder.setIdStream(shot.getStreamId());
+        builder.setStreamName(shot.getStreamTitle());
         analyticsTool.analyticsSendAction(builder);
     }
 
