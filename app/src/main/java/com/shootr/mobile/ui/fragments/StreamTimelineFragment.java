@@ -180,7 +180,9 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
+  @BindString(R.string.analytics_label_open_cta_link) String analyticsLabelOpenCtaLink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
+  @BindString(R.string.analytics_action_open_cta_link) String analyticsActionOpenCtaLink;
   @BindString(R.string.analytics_label_open_pin_message_link) String
       analyticsLabelOpenPinMessagelink;
   @BindString(R.string.analytics_action_open_pin_message_link) String
@@ -579,6 +581,18 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelOpenlink);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendOpenCtaLinkAnalythics(ShotModel shotModel) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenCtaLink);
+    builder.setLabelId(analyticsLabelOpenCtaLink);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(shotModel.getStreamId());
+    builder.setStreamName(shotModel.getStreamTitle());
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -1008,6 +1022,11 @@ public class StreamTimelineFragment extends BaseFragment
     String termsUrl = String.format(link, localeProvider.getLanguage());
     Intent termsIntent = intentFactory.openEmbededUrlIntent(getActivity(), termsUrl);
     Intents.maybeStartActivity(getActivity(), termsIntent);
+  }
+
+  @Override public void storeCtaClickLink(ShotModel shotModel) {
+    highlightedShotPresenter.storeClickCount();
+    sendOpenCtaLinkAnalythics(shotModel);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
