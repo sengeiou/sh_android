@@ -29,6 +29,7 @@ public class PollResultsPresenter implements Presenter {
   private String idPoll;
   private long pollVotes = ZERO_VOTES;
   private PollModel pollModel;
+  private String idStream;
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
@@ -40,9 +41,10 @@ public class PollResultsPresenter implements Presenter {
     this.errorMessageFactory = errorMessageFactory;
   }
 
-  public void initialize(PollResultsView pollResultsView, String idPoll) {
+  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream) {
     setView(pollResultsView);
     this.idPoll = idPoll;
+    this.idStream = idStream;
     loadPoll();
   }
 
@@ -127,5 +129,11 @@ public class PollResultsPresenter implements Presenter {
 
   public void share() {
     pollResultsView.share(pollModel);
+  }
+
+  public void onStreamTitleClick() {
+    if (idStream != null) {
+      pollResultsView.goToStreamTimeline(idStream);
+    }
   }
 }

@@ -115,7 +115,7 @@ public class PollVotePresenter implements Presenter {
       showPollVotes();
     } else {
       if (pollModel != null) {
-        pollVoteView.goToResults(pollModel.getIdPoll());
+        pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
       }
     }
   }
@@ -162,7 +162,7 @@ public class PollVotePresenter implements Presenter {
       votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, new Interactor.Callback<Poll>() {
         @Override public void onLoaded(Poll poll) {
           pollVoteView.hideLoading();
-          pollVoteView.goToResults(pollModel.getIdPoll());
+          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
         }
       }, new Interactor.ErrorCallback() {
         @Override public void onError(ShootrException error) {
@@ -179,7 +179,7 @@ public class PollVotePresenter implements Presenter {
         new Interactor.Callback<Poll>() {
           @Override public void onLoaded(Poll poll) {
             pollVoteView.hideLoading();
-            pollVoteView.goToResults(pollModel.getIdPoll());
+            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -205,7 +205,7 @@ public class PollVotePresenter implements Presenter {
   }
 
   public void viewResults() {
-    pollVoteView.goToResults(pollModel.getIdPoll());
+    pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
   }
 
   public void onShowPollResults() {
@@ -215,7 +215,7 @@ public class PollVotePresenter implements Presenter {
             if (!isPollOwner() && !isContributor(contributors)) {
               pollVoteView.showResultsWithoutVotingDialog();
             } else {
-              pollVoteView.goToResults(pollModel.getIdPoll());
+              pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
             }
           }
         }, new Interactor.ErrorCallback() {
@@ -242,8 +242,14 @@ public class PollVotePresenter implements Presenter {
     showPollResultsInteractor.showPollResults(pollModel.getIdPoll(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            pollVoteView.goToResults(pollModel.getIdPoll());
+            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
           }
         });
+  }
+
+  public void onStreamTitleClick() {
+    if (idStream != null) {
+      pollVoteView.goToStreamTimeline(idStream);
+    }
   }
 }

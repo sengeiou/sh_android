@@ -1699,13 +1699,13 @@ public class StreamTimelineFragment extends BaseFragment
     startActivity(intent);
   }
 
-  @Override public void goToPollResults(String idPoll) {
-    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle);
+  @Override public void goToPollResults(String idPoll, String idStream) {
+    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 
-  @Override public void goToPollLiveResults(String idPoll) {
-    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle);
+  @Override public void goToPollLiveResults(String idPoll, String idStream) {
+    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 

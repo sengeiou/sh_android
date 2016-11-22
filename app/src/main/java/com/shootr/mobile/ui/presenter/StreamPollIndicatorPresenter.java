@@ -108,13 +108,13 @@ public class StreamPollIndicatorPresenter implements Presenter {
   public void onActionPressed() {
     switch (action) {
       case RESULTS:
-        streamPollView.goToPollResults(idPoll);
+        streamPollView.goToPollResults(idPoll, idStream);
         break;
       case VOTE:
         streamPollView.goToPollVote(idStream, streamAuthorIdUser);
         break;
       default:
-        streamPollView.goToPollLiveResults(idPoll);
+        streamPollView.goToPollLiveResults(idPoll, idStream);
         break;
     }
   }

@@ -136,9 +136,15 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     finish();
   }
 
-  @Override public void goToResults(String idPoll) {
+  @Override public void goToResults(String idPoll, String idStream) {
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
-    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title);
+    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title, idStream);
+    startActivity(intent);
+    finish();
+  }
+
+  @Override public void goToStreamTimeline(String idStream) {
+    Intent intent = StreamTimelineActivity.newIntent(this, idStream);
     startActivity(intent);
     finish();
   }

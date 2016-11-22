@@ -133,7 +133,7 @@ public class StreamPollIndicatorPresenterTest {
 
     presenter.onActionPressed();
 
-    verify(streamPollView).goToPollResults(anyString());
+    verify(streamPollView).goToPollResults(anyString(), anyString());
   }
 
   @Test public void shouldGoToPollVoteInOnActionPressedAndActionIsVote() throws Exception {
@@ -152,7 +152,7 @@ public class StreamPollIndicatorPresenterTest {
 
     presenter.onActionPressed();
 
-    verify(streamPollView).goToPollLiveResults(anyString());
+    verify(streamPollView).goToPollLiveResults(anyString(), anyString());
   }
 
   private void setupGetVotePollByIdStreamInteractor() {
