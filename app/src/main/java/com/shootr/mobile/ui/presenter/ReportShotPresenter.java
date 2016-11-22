@@ -137,10 +137,10 @@ public class ReportShotPresenter implements Presenter {
     public void handlePinContextMenu(ShotModel shot, String streamAuthorId) {
         if (currentUserIsShotAuthor(shot) && currentUserIsStreamHolder(streamAuthorId)) {
             showAuthorContextMenuWithHighlight(shot);
-        } else if (currentUserIsStreamContributor()) {
-            showContributorContextMenu(shot);
         } else if (currentUserIsShotAuthor(shot)) {
             showAuthorContextMenu(shot);
+        } else if (currentUserIsStreamContributor()) {
+            showContributorContextMenu(shot);
         } else {
             if (shotIsHighlighted(shot)) {
                 reportShotView.showHolderContextMenuWithDismissHighlight(shot);
