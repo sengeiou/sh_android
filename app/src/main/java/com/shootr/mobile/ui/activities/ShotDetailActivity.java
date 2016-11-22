@@ -167,8 +167,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         builder.setActionId(analyticsScreenShotDetail);
         builder.setLabelId(analyticsScreenShotDetail);
         builder.setSource(analyticsScreenShotDetail);
-        builder.setIdStream(detailAdapter.getMainShot().getStreamId());
-        builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
         if (sessionRepository.getCurrentUser() != null) {
             builder.setUser(sessionRepository.getCurrentUser());
             builder.setStreamName(sessionRepository.getCurrentUser().getWatchingStreamTitle());
