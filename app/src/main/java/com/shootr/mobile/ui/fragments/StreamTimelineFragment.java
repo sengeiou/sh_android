@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -166,7 +167,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
   @BindString(R.string.poll_vote) String pollVoteString;
   @BindString(R.string.poll_view) String pollViewString;
-  @BindString(R.string.poll_results) String pollResultsString;
+  @BindString(R.string.timeline_poll_results) String pollResultsString;
   @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
   @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
@@ -1641,6 +1642,7 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollViewString.toUpperCase());
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_view));
     }
   }
 
@@ -1648,6 +1650,8 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollVoteString.toUpperCase());
+      pollAction.setTypeface(null, Typeface.BOLD);
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_vote));
     }
   }
 
@@ -1655,6 +1659,7 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollResultsString.toUpperCase());
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_results));
     }
   }
 
@@ -1669,6 +1674,13 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
+      pollQuestion.post(new Runnable() {
+        @Override public void run() {
+          if (pollQuestion.getLineCount() > 1) {
+            pollQuestion.setTextSize(12);
+          }
+        }
+      });
     }
   }
 

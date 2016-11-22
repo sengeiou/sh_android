@@ -468,4 +468,5 @@
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
   <string name="error_user_cannot_check">user cannot check</string>
+  <string name="timeline_poll_results">Results</string>
 </resources>
