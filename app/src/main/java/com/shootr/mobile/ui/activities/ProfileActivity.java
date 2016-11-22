@@ -108,6 +108,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_all_shots_container) View allShotContainer;
 
   @BindView(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
+  @BindView(R.id.profile_loading) ProgressBar progressBar;
 
   @BindView(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
@@ -181,6 +182,7 @@ public class ProfileActivity extends BaseActivity
     ButterKnife.bind(this, getView());
     writePermissionManager.init(this);
     setupToolbar();
+    collapsingToolbarLayout.setTitle("");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
     OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
@@ -884,6 +886,15 @@ public class ProfileActivity extends BaseActivity
   @Override public void showLoadingPhoto() {
     avatarImageView.setVisibility(View.INVISIBLE);
     avatarLoadingView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void showLoading() {
+    collapsingToolbarLayout.setTitle("");
+    progressBar.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    progressBar.setVisibility(View.GONE);
   }
 
   @Override public void hideLoadingPhoto() {
