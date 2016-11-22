@@ -40,4 +40,8 @@ public interface ShotDetailView {
     void shareShot(ShotModel shotModel);
 
     void goToNicers(String idShot);
+
+    void showLoading();
+
+    void hideLoading();
 }
