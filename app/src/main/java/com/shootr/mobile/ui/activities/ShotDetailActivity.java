@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -73,6 +74,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @BindView(R.id.shot_bar_drafts) View replyDraftsButton;
     @BindView(R.id.detail_new_shot_bar) View newShotBar;
     @BindView(R.id.container) View container;
+    @BindView(R.id.shotdetail_progress) ProgressBar progressBar;
     @BindString(R.string.shot_shared_message) String shotShared;
     @BindString(R.string.analytics_screen_shot_detail) String analyticsScreenShotDetail;
     @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
@@ -147,6 +149,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
+        sendScreenToAnalythics();
         writePermissionManager.init(this);
         setupPhotoPicker();
         ShotModel shotModel = extractShotFromIntent();
@@ -155,6 +158,20 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             idUser = shotModel.getIdUser();
         }
         setupAdapter();
+    }
+
+    private void sendScreenToAnalythics() {
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsScreenShotDetail);
+        builder.setLabelId(analyticsScreenShotDetail);
+        builder.setSource(analyticsScreenShotDetail);
+        if (sessionRepository.getCurrentUser() != null) {
+            builder.setUser(sessionRepository.getCurrentUser());
+            builder.setStreamName(sessionRepository.getCurrentUser().getWatchingStreamTitle());
+        }
+        analyticsTool.analyticsSendAction(builder);
     }
 
     @Override protected void initializePresenter() {
@@ -359,6 +376,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         builder.setUser(sessionRepository.getCurrentUser());
         builder.setIdTargetUser(shot.getIdUser());
         builder.setTargetUsername(shot.getUsername());
+        builder.setIdStream(shot.getStreamId());
+        builder.setStreamName(shot.getStreamTitle());
         analyticsTool.analyticsSendAction(builder);
     }
 
@@ -641,5 +660,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         detailAdapter.showPinToProfileContainer();
     }
 
+    @Override public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
+    }
     //endregion
 }

@@ -85,8 +85,10 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void loadShotDetailFromIdShot(final ShotDetailView shotDetailView, String idShot) {
+        shotDetailView.showLoading();
         getShotDetailInteractor.loadShotDetail(idShot, false, new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
+                shotDetailView.hideLoading();
                 ShotModel shotModel = shotModelMapper.transform(shotDetail.getShot());
                 setShotModel(shotModel);
                 onShotDetailLoaded(shotDetail);
@@ -94,6 +96,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                shotDetailView.hideLoading();
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
@@ -151,12 +154,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void handleShotDetail(ShotModel shotModel, boolean localOnly) {
+        shotDetailView.showLoading();
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), localOnly, new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
+                shotDetailView.hideLoading();
                 onShotDetailLoaded(shotDetail);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                shotDetailView.hideLoading();
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });

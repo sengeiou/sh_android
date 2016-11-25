@@ -477,4 +477,7 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="error_user_cannot_check">user cannot check</string>
+  <string name="timeline_poll_results">Results</string>
+  <string name="analytics_action_open_cta_link">Ad</string>
+  <string name="analytics_label_open_cta_link">Ad</string>
 </resources>

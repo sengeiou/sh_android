@@ -819,6 +819,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         }
       });
     } else {
+      streamTimelineView.storeCtaClickLink(shotModel);
       streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }

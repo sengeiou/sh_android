@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -166,7 +167,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_screen_stream_timeline) String analyticsScreenStreamTimeline;
   @BindString(R.string.poll_vote) String pollVoteString;
   @BindString(R.string.poll_view) String pollViewString;
-  @BindString(R.string.poll_results) String pollResultsString;
+  @BindString(R.string.timeline_poll_results) String pollResultsString;
   @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
   @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
@@ -179,7 +180,9 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
+  @BindString(R.string.analytics_label_open_cta_link) String analyticsLabelOpenCtaLink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
+  @BindString(R.string.analytics_action_open_cta_link) String analyticsActionOpenCtaLink;
   @BindString(R.string.analytics_label_open_pin_message_link) String
       analyticsLabelOpenPinMessagelink;
   @BindString(R.string.analytics_action_open_pin_message_link) String
@@ -578,6 +581,18 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setLabelId(analyticsLabelOpenlink);
     builder.setSource(timelineSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendOpenCtaLinkAnalythics(ShotModel shotModel) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenCtaLink);
+    builder.setLabelId(analyticsLabelOpenCtaLink);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(shotModel.getStreamId());
+    builder.setStreamName(shotModel.getStreamTitle());
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -1007,6 +1022,11 @@ public class StreamTimelineFragment extends BaseFragment
     String termsUrl = String.format(link, localeProvider.getLanguage());
     Intent termsIntent = intentFactory.openEmbededUrlIntent(getActivity(), termsUrl);
     Intents.maybeStartActivity(getActivity(), termsIntent);
+  }
+
+  @Override public void storeCtaClickLink(ShotModel shotModel) {
+    highlightedShotPresenter.storeClickCount();
+    sendOpenCtaLinkAnalythics(shotModel);
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
@@ -1641,6 +1661,7 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollViewString.toUpperCase());
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_view));
     }
   }
 
@@ -1648,6 +1669,8 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollVoteString.toUpperCase());
+      pollAction.setTypeface(null, Typeface.BOLD);
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_vote));
     }
   }
 
@@ -1655,6 +1678,7 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollResultsString.toUpperCase());
+      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_results));
     }
   }
 
@@ -1669,6 +1693,13 @@ public class StreamTimelineFragment extends BaseFragment
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
+      pollQuestion.post(new Runnable() {
+        @Override public void run() {
+          if (pollQuestion.getLineCount() > 1) {
+            pollQuestion.setTextSize(12);
+          }
+        }
+      });
     }
   }
 
@@ -1687,13 +1718,13 @@ public class StreamTimelineFragment extends BaseFragment
     startActivity(intent);
   }
 
-  @Override public void goToPollResults(String idPoll) {
-    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle);
+  @Override public void goToPollResults(String idPoll, String idStream) {
+    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 
-  @Override public void goToPollLiveResults(String idPoll) {
-    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle);
+  @Override public void goToPollLiveResults(String idPoll, String idStream) {
+    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 

@@ -468,4 +468,7 @@
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
   <string name="error_user_cannot_check">user cannot check</string>
+  <string name="timeline_poll_results">找不到任何結果</string>
+  <string name="analytics_action_open_cta_link">Ad</string>
+  <string name="analytics_label_open_cta_link">Ad</string>
 </resources>

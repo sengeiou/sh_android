@@ -15,4 +15,6 @@ public interface PollResultsView extends LoadDataView {
 
   void showPollVotes(Long pollVotes);
 
+  void goToStreamTimeline(String idStream);
+
 }

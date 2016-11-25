@@ -20,6 +20,8 @@
       android:id="@+id/stream_title"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:textColor="@color/links"
+      android:clickable="true"
       tools:text="Pepe el grillo"
       />
 

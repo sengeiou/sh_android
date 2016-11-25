@@ -60,4 +60,8 @@
 
     <color name="translucent_background">#CC3E4447</color>
     <color name="overlay">#AA1C1C1C</color>
+
+    <color name="poll_vote">#0277BD</color>
+    <color name="poll_view">#039BE5</color>
+    <color name="poll_results">#039BE5</color>
 </resources>

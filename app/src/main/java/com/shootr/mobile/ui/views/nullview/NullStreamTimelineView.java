@@ -122,6 +122,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op*/
     }
 
+    @Override public void storeCtaClickLink(ShotModel shotModel) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

@@ -3,6 +3,7 @@ package com.shootr.mobile.util;
 import android.content.Context;
 import butterknife.BindString;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -25,6 +26,7 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
   @BindString(R.string.analytics_label_open_deep_linking) String analyticsLabelOpenLink;
 
   @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
   @Inject public DeeplinkingTool() {
   }
 
@@ -87,6 +89,9 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
     builder.setContext(context);
     builder.setActionId(analyticsActionOpenLink);
     builder.setLabelId(analyticsLabelOpenLink);
+    if (sessionRepository.getCurrentUser() != null) {
+      builder.setUser(sessionRepository.getCurrentUser());
+    }
     analyticsTool.analyticsSendAction(builder);
   }
 

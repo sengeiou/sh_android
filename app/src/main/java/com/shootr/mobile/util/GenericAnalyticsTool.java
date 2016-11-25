@@ -29,6 +29,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String TARGET_USERNAME = "targetUsername";
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
+  private static final String FAVORITES = "Favorites";
+  private static final String FOLLOWING = "Following";
+  private static final String FOLLOWERS = "Followers";
   private static final String SIGNUP_METHOD = "Signup method";
   private static final String EMAIL = "$email";
   private static final String FIRST_NAME = "$first_name";
@@ -133,6 +136,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         if (pushRedirection != null) {
           props.put(PUSH_REDIRECTION, pushRedirection);
         }
+        props.put(FAVORITES, user.getFavoritedStreamsCount());
+        props.put(FOLLOWING, user.getNumFollowings());
+        props.put(FOLLOWERS, user.getNumFollowers());
 
         try {
           mixpanel.track(actionId, props);

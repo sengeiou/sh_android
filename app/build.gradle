@@ -38,7 +38,7 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 1
 def versionMinor = 23
-def versionRevision = 0
+def versionRevision = 3
 
 def isSnapshot = false
 def isPreProduction = false

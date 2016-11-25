@@ -17,6 +17,22 @@ Etiquetas para el changelog:
 
 ### Added
 
+- Poll results to streamTimeline
+- Poll status colors
+- Spinners in profiel and shotDetail
+- Mixpanel
+- ClickLink on ctaShot
+
+### Fixed
+
+- Varios fixes de chrashlytics poco criticos
+- Contributors pueden borrar sus propios shots
+- User regex in activity timeline
+
+## [1.23.0] - 2016-11-18
+
+### Added
+
 - Push settings extended
 
 ### Fixed

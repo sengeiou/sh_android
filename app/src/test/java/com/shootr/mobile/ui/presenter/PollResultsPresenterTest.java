@@ -51,7 +51,7 @@ public class PollResultsPresenterTest {
   @Test public void shouldRenderResultsWhenInitialize() throws Exception {
     setupGetPollByIdStreamInteractor();
 
-    presenter.initialize(pollResultsView, POLL_ID);
+    presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
     verify(pollResultsView).renderPollResults(any(PollModel.class));
   }
@@ -59,7 +59,7 @@ public class PollResultsPresenterTest {
   @Test public void shouldShowPollVotesWhenInitialize() throws Exception {
     setupGetPollByIdStreamInteractor();
 
-    presenter.initialize(pollResultsView, POLL_ID);
+    presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
     verify(pollResultsView).showPollVotes(anyLong());
   }
@@ -67,14 +67,14 @@ public class PollResultsPresenterTest {
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
     setupGetPollByIdPollErrorCallback();
 
-    presenter.initialize(pollResultsView, POLL_ID);
+    presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
     verify(pollResultsView).showError(anyString());
   }
 
   @Test public void shouldLoadPollWhenResume() throws Exception {
     setupGetPollByIdStreamInteractor();
-    presenter.initialize(pollResultsView, POLL_ID);
+    presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
     presenter.resume();
 
@@ -86,7 +86,7 @@ public class PollResultsPresenterTest {
     setupGetPollByIdStreamInteractor();
     setupIgnorePollInteractorCallback();
 
-    presenter.initialize(pollResultsView, POLL_ID);
+    presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
     presenter.ignorePoll();
 
     verify(pollResultsView).ignorePoll();

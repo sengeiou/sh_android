@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class ShotTextSpannableBuilder implements TextSpannableBuilder {
 
-  private static final String USERNAME_REGEX = "@[.-_A-Za-z0-9]+";
+  private static final String USERNAME_REGEX = "@[-_A-Za-z0-9]{3,25}";
 
   private final Pattern pattern;
 

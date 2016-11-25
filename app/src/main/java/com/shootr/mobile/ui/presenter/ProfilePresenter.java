@@ -385,26 +385,32 @@ public class ProfilePresenter implements Presenter {
     return Observable.create(new Observable.OnSubscribe<Void>() {
       @Override public void call(Subscriber<? super Void> subscriber) {
         if (profileIdUser != null) {
+          profileView.showLoading();
           getUserByIdInteractor.loadUserById(profileIdUser, refreshOnlyLocal, new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
+              profileView.hideLoading();
               onProfileLoaded(user);
               refreshOnlyLocal = false;
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+              profileView.hideLoading();
               showErrorInView(error);
             }
           });
         } else {
+          profileView.showLoading();
           getUserByUsernameInteractor.searchUserByUsername(username,
               new Interactor.Callback<User>() {
                 @Override public void onLoaded(User user) {
+                  profileView.hideLoading();
                   profileIdUser = user.getIdUser();
                   onProfileLoaded(user);
                   loadLatestShots(userModel.getIdUser());
                 }
               }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
+                  profileView.hideLoading();
                   showErrorInView(error);
                 }
               });

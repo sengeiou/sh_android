@@ -114,7 +114,7 @@ public class PollVotePresenterTest {
 
     presenter.voteOption(POLL_OPTION_ID);
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndPollIsVoted() throws Exception {
@@ -122,7 +122,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndPollIsClosed() throws Exception {
@@ -130,7 +130,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndHadSeenPollResults() throws Exception {
@@ -138,7 +138,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   @Test public void shouldLoadByIdPollWhenViewInitializesByIdPoll() throws Exception {
@@ -187,7 +187,7 @@ public class PollVotePresenterTest {
 
     presenter.retryVote();
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   @Test public void shouldShowErrorAlertWhenRetryVoteError() throws Exception {
@@ -250,7 +250,7 @@ public class PollVotePresenterTest {
 
     presenter.showPollResultsWithoutVoting();
 
-    verify(pollVoteView).goToResults(anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString());
   }
 
   private void setupShowPollResultsInteractorCallback() {

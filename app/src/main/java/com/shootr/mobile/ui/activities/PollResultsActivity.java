@@ -15,6 +15,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollResultsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnPollStreamTitleClickListener;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
@@ -34,6 +35,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   private static final String EXTRA_ID_POLL = "pollId";
   private static final String EXTRA_RESULTS = "results";
   private static final String EXTRA_STREAM_TITLE = "title";
+  private static final String EXTRA_STREAM_ID = "idStream";
   private static final String NO_TITLE = "";
 
   @BindView(R.id.results_recycler) RecyclerView results;
@@ -50,19 +52,21 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle) {
+  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
     intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
+    intent.putExtra(EXTRA_STREAM_ID, idStream);
     return intent;
   }
 
-  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle) {
+  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
     intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
+    intent.putExtra(EXTRA_STREAM_ID, idStream);
     return intent;
   }
 
@@ -76,6 +80,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
       @Override public void onClickPressed(PollOptionModel pollOptionModel) {
         setupPollOptionDialog(pollOptionModel);
       }
+    }, new OnPollStreamTitleClickListener() {
+      @Override public void onClickPressed() {
+        presenter.onStreamTitleClick();
+      }
     }, this, imageLoader, initialsLoader, percentageUtils);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     results.setLayoutManager(linearLayoutManager);
@@ -88,7 +96,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL));
+    presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL),
+        getIntent().getStringExtra(EXTRA_STREAM_ID));
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -140,6 +149,13 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
     getToolbarDecorator().setSubtitle(pollVotesText);
+  }
+
+  @Override public void goToStreamTimeline(String idStream) {
+    Intent intent = StreamTimelineActivity.newIntent(this, idStream);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    startActivity(intent);
+    finish();
   }
 
   @Override protected void onResume() {
