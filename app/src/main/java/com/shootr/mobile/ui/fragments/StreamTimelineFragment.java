@@ -1695,7 +1695,7 @@ public class StreamTimelineFragment extends BaseFragment
       pollQuestion.setText(pollModel.getQuestion());
       pollQuestion.post(new Runnable() {
         @Override public void run() {
-          if (pollQuestion.getLineCount() > 1) {
+          if (pollQuestion != null && pollQuestion.getLineCount() > 1) {
             pollQuestion.setTextSize(12);
           }
         }
