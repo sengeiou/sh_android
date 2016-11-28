@@ -13,7 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.23.0] - 2016-11-18
+## [1.23.4] - 2016-11-28
+
+### Fixed
+
+- Fixed nullPointer showing poll indicator in timeline
+
+## [1.23.3] - 2016-11-25
 
 ### Added
 
