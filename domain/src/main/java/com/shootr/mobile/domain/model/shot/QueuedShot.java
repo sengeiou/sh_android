@@ -5,14 +5,14 @@ import java.io.File;
 public class QueuedShot {
 
     private Long idQueue;
-    private Shot shot;
+    private BaseMessage shot;
     private boolean failed;
     private File imageFile;
 
     public QueuedShot() {
     }
 
-    public QueuedShot(Shot shot) {
+    public QueuedShot(BaseMessage shot) {
         this.shot = shot;
     }
 
@@ -24,11 +24,11 @@ public class QueuedShot {
         this.idQueue = idQueue;
     }
 
-    public Shot getShot() {
+    public BaseMessage getBaseMessage() {
         return shot;
     }
 
-    public void setShot(Shot shot) {
+    public void setBaseMessage(BaseMessage shot) {
         this.shot = shot;
     }
 

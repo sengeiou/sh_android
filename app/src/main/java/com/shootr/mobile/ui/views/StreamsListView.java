@@ -29,4 +29,6 @@ public interface StreamsListView extends LoadDataView {
     void setMutedStreamIds(List<String> mutedStreamIds);
 
     void scrollListToTop();
+
+    void updateChannelBadge(int unreadChannels);
 }

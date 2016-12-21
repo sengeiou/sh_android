@@ -6,6 +6,7 @@ public interface SynchroDataSource {
 
   String FOLLOW = "follow";
   String USER = "user";
+  String PRIVATE_MESSAGE_CHANNEL = "privateMessageChannel";
 
   void putEntity(SynchroEntity synchroEntity);
 

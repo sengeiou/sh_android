@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.service.ShotQueueRepository;
+import com.shootr.mobile.domain.service.QueueRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class DeleteDraftInteractorTest {
 
   public static final long QUEUED_SHOT_ID = 0L;
-  @Mock ShotQueueRepository shotQueueRepository;
+  @Mock QueueRepository queueRepository;
   private DeleteDraftInteractor deleteDraftInteractor;
   @Mock DeleteDraftInteractor.Callback callback;
 
@@ -26,19 +26,19 @@ public class DeleteDraftInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     InteractorHandler interactorHandler = new TestInteractorHandler();
     deleteDraftInteractor =
-        new DeleteDraftInteractor(interactorHandler, postExecutionThread, shotQueueRepository);
+        new DeleteDraftInteractor(interactorHandler, postExecutionThread, queueRepository);
   }
 
   @Test public void shouldGetShotFromShotQueueRepository() throws Exception {
     deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, callback);
 
-    verify(shotQueueRepository).getShotQueue(QUEUED_SHOT_ID);
+    verify(queueRepository).getQueue(QUEUED_SHOT_ID, QueueRepository.SHOT_TYPE);
   }
 
   @Test public void shouldRemoveShotFromShotQueueRepository() throws Exception {
     deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, callback);
 
-    verify(shotQueueRepository).remove(any(QueuedShot.class));
+    verify(queueRepository).remove(any(QueuedShot.class));
   }
 
   @Test public void shouldNotifyDeleted() throws Exception {

@@ -26,7 +26,9 @@ import javax.inject.Singleton;
         DiscoveredRepositoryModule.class,
         RecentStreamRepositoryModule.class,
         ShotEventRepositoryModule.class,
-        SynchroModule.class
+        SynchroModule.class,
+        PrivateMessageRepositoryModule.class,
+        PrivateMessageChannelRepositoryModule.class
     },
     complete = false,
     library = true) public class RepositoryModule {

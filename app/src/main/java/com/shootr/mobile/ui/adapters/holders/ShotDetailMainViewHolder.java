@@ -122,7 +122,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupVerified(ShotModel shotModel) {
-        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+        if (shotModel.getParentShotId() == null && shotModel.isVerifiedUser()) {
             verifiedUser.setVisibility(View.VISIBLE);
         } else {
             verifiedUser.setVisibility(View.GONE);
@@ -223,7 +223,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupAvatar(final ShotModel shotModel) {
-        imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
+        imageLoader.loadProfilePhoto(shotModel.getAvatar(), avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onClick(shotModel.getIdUser());

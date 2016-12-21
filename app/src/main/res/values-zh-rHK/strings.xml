@@ -189,6 +189,7 @@
   <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
   <string name="include_listing_empty">沒有 Streams</string>
+  <string name="include_listing_channels_empty">No private messages</string>
   <string name="intro_create_text">是否在經營團體？讓它成為stream吧！</string>
   <string name="intro_create_title">建立</string>
   <string name="intro_favorites_text">每天有很多新的streams。\n建立您的最愛。</string>
@@ -263,6 +264,9 @@
   <string name="notification_image">圖片</string>
   <string name="notification_image_and_text">圖片: %s</string>
   <string name="notification_shot_failed">Shot 發送失敗</string>
+  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
+  <string name="private_message_video">video</string>
+  <string name="private_message_image">image</string>
   <string name="notification_shot_failed_subtitle_pattern">草稿已儲存: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">草稿已儲存</string>
   <string name="notification_shot_has_parent_deleted_subtitle">您回覆的shot已被刪除</string>
@@ -382,6 +386,7 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
+  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
@@ -471,4 +476,5 @@
   <string name="timeline_poll_results">找不到任何結果</string>
   <string name="analytics_action_open_cta_link">Ad</string>
   <string name="analytics_label_open_cta_link">Ad</string>
+  <string name="title_activity_channels">Channels</string>
 </resources>

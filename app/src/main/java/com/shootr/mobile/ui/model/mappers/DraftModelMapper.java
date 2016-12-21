@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
+import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
@@ -13,36 +15,52 @@ public class DraftModelMapper {
 
     private final SessionRepository sessionRepository;
     private final ShotModelMapper shotModelMapper;
+    private final PrivateMessageModelMapper privateMessageModelMapper;
 
-    @Inject public DraftModelMapper(SessionRepository sessionRepository, ShotModelMapper shotModelMapper) {
+    @Inject public DraftModelMapper(SessionRepository sessionRepository,
+        ShotModelMapper shotModelMapper, PrivateMessageModelMapper privateMessageModelMapper) {
         this.sessionRepository = sessionRepository;
         this.shotModelMapper = shotModelMapper;
+        this.privateMessageModelMapper = privateMessageModelMapper;
     }
 
-    public DraftModel transform(QueuedShot draft) {
+    public DraftModel transformShot(QueuedShot draft) {
         DraftModel draftModel = new DraftModel();
         draftModel.setIdQueue(draft.getIdQueue());
         draftModel.setImageFile(draft.getImageFile());
 
-        Shot shot = draft.getShot();
+        BaseMessage shot = draft.getBaseMessage();
 
         setCurrentUserInShot(shot);
-        draftModel.setShotModel(shotModelMapper.transform(shot));
+        draftModel.setShotModel(shotModelMapper.transform((Shot) shot));
 
         return draftModel;
     }
 
-    public List<DraftModel> transform(List<QueuedShot> drafts) {
+    public DraftModel transformPrivateMessage(QueuedShot draft) {
+        DraftModel draftModel = new DraftModel();
+        draftModel.setIdQueue(draft.getIdQueue());
+        draftModel.setImageFile(draft.getImageFile());
+
+        BaseMessage shot = draft.getBaseMessage();
+
+        setCurrentUserInShot(shot);
+        draftModel.setShotModel(privateMessageModelMapper.transform((PrivateMessage) shot, ""));
+
+        return draftModel;
+    }
+
+    public List<DraftModel> transformShot(List<QueuedShot> drafts) {
         List<DraftModel> draftModels = new ArrayList<>();
         for (QueuedShot draft : drafts) {
-            draftModels.add(transform(draft));
+            draftModels.add(transformShot(draft));
         }
         return draftModels;
     }
 
-    private void setCurrentUserInShot(Shot shot) {
+    private void setCurrentUserInShot(BaseMessage shot) {
         User currentUser = sessionRepository.getCurrentUser();
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setIdUser(currentUser.getIdUser());
         userInfo.setUsername(currentUser.getUsername());
         userInfo.setAvatar(currentUser.getPhoto());

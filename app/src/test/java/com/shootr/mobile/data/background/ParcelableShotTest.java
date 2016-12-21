@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.Date;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class ParcelableShotTest {
 
     @Test public void testShotFromParcelableHasUserInfo() throws Exception {
         Shot shotStub = shotStub();
-        Shot.ShotUserInfo userInfoStub = shotStub.getUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfoStub = shotStub.getUserInfo();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
 
         Parcel parcel = MockParcel.obtain();
@@ -66,7 +67,7 @@ public class ParcelableShotTest {
 
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
-        Shot.ShotUserInfo userInfoFromParcel = shotFromParcel.getUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfoFromParcel = shotFromParcel.getUserInfo();
 
         assertThat(userInfoFromParcel.getIdUser()).isEqualTo(userInfoStub.getIdUser());
         assertThat(userInfoFromParcel.getUsername()).isEqualTo(userInfoStub.getUsername());
@@ -180,8 +181,8 @@ public class ParcelableShotTest {
         return streamInfo;
     }
 
-    private Shot.ShotUserInfo userInfo() {
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+    private BaseMessage.BaseMessageUserInfo userInfo() {
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setIdUser(String.valueOf(USER_ID));
         userInfo.setUsername(USERNAME);
         userInfo.setAvatar(AVATAR);

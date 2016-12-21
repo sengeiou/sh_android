@@ -189,6 +189,9 @@
   <string name="highlight_shot_dialog">El shot deixarà d\'estar destacat</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No hi ha streams</string>
+  <string name="include_listing_channels_empty">No private messages</string>
+  <string name="private_message_video">video</string>
+  <string name="private_message_image">image</string>
   <string name="intro_create_text">Dirigeixes una comunitat? Crea el seu stream.</string>
   <string name="intro_create_title">Crear</string>
   <string name="intro_favorites_text">Desenes d\'streams s\'afegeixen cada dia. Crea els teus Favorits.</string>
@@ -267,6 +270,7 @@
   <string name="notification_image">Imatge</string>
   <string name="notification_image_and_text">Imatge: %s</string>
   <string name="notification_shot_failed">El shot no s\'ha publicat</string>
+  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
   <string name="notification_shot_failed_subtitle_pattern">Esborrany desat: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Esborrany desat</string>
   <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respons ha estat eliminat</string>
@@ -390,6 +394,7 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No hi ha shots</string>
+  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrit a (stream)</string>
@@ -480,4 +485,5 @@
   <string name="timeline_poll_results">Resultats</string>
   <string name="analytics_action_open_cta_link">Ad</string>
   <string name="analytics_label_open_cta_link">Ad</string>
+  <string name="title_activity_channels">Channels</string>
 </resources>

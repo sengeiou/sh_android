@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.Timeline;
@@ -143,11 +144,11 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithContributorShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(CONTRIBUTOR_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(CONTRIBUTOR_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
@@ -156,11 +157,11 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithHolderShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(HOLDER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(HOLDER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
@@ -168,11 +169,11 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithFollowingShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(FOLLOWING_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(FOLLOWING_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
@@ -180,11 +181,11 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithMyShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
@@ -192,31 +193,31 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithShots() {
     Timeline timeline = new Timeline();
     ArrayList<Shot> shots = new ArrayList<>();
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
 
     Shot userShot = new Shot();
-    userShot.setUserInfo(shotUserInfo);
+    userShot.setUserInfo(baseMessageUserInfo);
     shots.add(userShot);
 
     Shot contributorShot = new Shot();
-    shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(CONTRIBUTOR_ID);
-    contributorShot.setUserInfo(shotUserInfo);
+    baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(CONTRIBUTOR_ID);
+    contributorShot.setUserInfo(baseMessageUserInfo);
     shots.add(contributorShot);
 
     Shot holderShot = new Shot();
-    shotUserInfo = new Shot.ShotUserInfo();
+    baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
     holderShot.setIdShot(ID_SHOT);
-    shotUserInfo.setIdUser(HOLDER_ID);
-    holderShot.setUserInfo(shotUserInfo);
+    baseMessageUserInfo.setIdUser(HOLDER_ID);
+    holderShot.setUserInfo(baseMessageUserInfo);
     shots.add(holderShot);
 
     Shot otherShot = new Shot();
-    shotUserInfo = new Shot.ShotUserInfo();
+    baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
     otherShot.setIdShot(ID_SHOT);
-    shotUserInfo.setIdUser(OTHER_USER_ID);
-    otherShot.setUserInfo(shotUserInfo);
+    baseMessageUserInfo.setIdUser(OTHER_USER_ID);
+    otherShot.setUserInfo(baseMessageUserInfo);
     shots.add(otherShot);
 
     timeline.setShots(shots);
@@ -226,24 +227,24 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithViewOnlyShots() {
     Timeline timeline = new Timeline();
     ArrayList<Shot> shots = new ArrayList<>();
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
 
     Shot userShot = new Shot();
-    userShot.setUserInfo(shotUserInfo);
+    userShot.setUserInfo(baseMessageUserInfo);
     shots.add(userShot);
 
     Shot contributorShot = new Shot();
-    shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(CONTRIBUTOR_ID);
-    contributorShot.setUserInfo(shotUserInfo);
+    baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(CONTRIBUTOR_ID);
+    contributorShot.setUserInfo(baseMessageUserInfo);
     shots.add(contributorShot);
 
     Shot holderShot = new Shot();
-    shotUserInfo = new Shot.ShotUserInfo();
+    baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
     holderShot.setIdShot(ID_SHOT);
-    shotUserInfo.setIdUser(HOLDER_ID);
-    holderShot.setUserInfo(shotUserInfo);
+    baseMessageUserInfo.setIdUser(HOLDER_ID);
+    holderShot.setUserInfo(baseMessageUserInfo);
     shots.add(holderShot);
 
     timeline.setShots(shots);

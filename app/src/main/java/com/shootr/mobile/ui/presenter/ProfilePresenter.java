@@ -600,4 +600,13 @@ public class ProfilePresenter implements Presenter {
     return userModel.getUsername();
   }
 
+  public void onChannelClick() {
+    if (userModel != null) {
+      if (isCurrentUser()) {
+        profileView.goToChannelsList();
+      } else {
+        profileView.goToChannelTimeline(userModel.getIdUser());
+      }
+    }
+  }
 }

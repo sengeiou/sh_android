@@ -58,6 +58,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -542,7 +543,7 @@ public class StreamTimelineFragment extends BaseFragment
         return false;
       }
     }, new OnImageClickListener() {
-      @Override public void onImageClick(View sharedImage, ShotModel shot) {
+      @Override public void onImageClick(View sharedImage, BaseMessageModel shot) {
         openImage(sharedImage, shot.getImage().getImageUrl());
       }
     }, new OnUrlClickListener() {
@@ -750,7 +751,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void loadImages(ShotModel shot, ImageView image, CircleImageView avatar) {
     imageLoader.load(shot.getImage().getImageUrl(), image);
-    imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
+    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
   }
 
   private void setupTopicCustomDialog() {
@@ -891,6 +892,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void setTitle(String title) {
     setStreamTitle(title);
+  }
+
+  @Override public void setImage(String avatarImage) {
+    /*no-op*/
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
@@ -1580,11 +1585,12 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showContextMenu(final ShotModel shotModel) {
     try {
-      getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
-        @Override public void run() {
-          reportShotPresenter.report(shotModel);
-        }
-      }).addAction(R.string.report_context_menu_block, new Runnable() {
+      getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_report,
+          new Runnable() {
+            @Override public void run() {
+              reportShotPresenter.report(shotModel);
+            }
+          }).addAction(R.string.report_context_menu_block, new Runnable() {
         @Override public void run() {
           reportShotPresenter.blockUserClicked(shotModel);
         }
@@ -1661,7 +1667,8 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollViewString.toUpperCase());
-      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_view));
+      timelinePollIndicator.setBackgroundColor(
+          getContext().getResources().getColor(R.color.poll_view));
     }
   }
 
@@ -1670,7 +1677,8 @@ public class StreamTimelineFragment extends BaseFragment
     if (canSetPollAction()) {
       pollAction.setText(pollVoteString.toUpperCase());
       pollAction.setTypeface(null, Typeface.BOLD);
-      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_vote));
+      timelinePollIndicator.setBackgroundColor(
+          getContext().getResources().getColor(R.color.poll_vote));
     }
   }
 
@@ -1678,7 +1686,8 @@ public class StreamTimelineFragment extends BaseFragment
     setupPollIndicator(pollModel);
     if (canSetPollAction()) {
       pollAction.setText(pollResultsString.toUpperCase());
-      timelinePollIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.poll_results));
+      timelinePollIndicator.setBackgroundColor(
+          getContext().getResources().getColor(R.color.poll_results));
     }
   }
 
@@ -1719,12 +1728,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void goToPollResults(String idPoll, String idStream) {
-    Intent intent = PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle, idStream);
+    Intent intent =
+        PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 
   @Override public void goToPollLiveResults(String idPoll, String idStream) {
-    Intent intent = PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
+    Intent intent =
+        PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
     startActivity(intent);
   }
 

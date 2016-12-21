@@ -9,9 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollResultsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
@@ -20,6 +22,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -41,12 +44,16 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @BindView(R.id.results_recycler) RecyclerView results;
   @BindView(R.id.pollresults_progress) ProgressBar progressBar;
 
+  @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
+
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;
   @Inject FeedbackMessage feedbackMessage;
   @Inject PollResultsPresenter presenter;
   @Inject BackStackHandler backStackHandler;
   @Inject ShareManager shareManager;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   private PollResultsAdapter adapter;
 
@@ -98,6 +105,23 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override protected void initializePresenter() {
     presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL),
         getIntent().getStringExtra(EXTRA_STREAM_ID));
+    sendAnalythics();
+  }
+
+  private void sendMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsPollResult);
+    builder.setLabelId(analyticsPollResult);
+    builder.setSource(analyticsPollResult);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(presenter.getIdStream());
+    builder.setStreamName(presenter.getStreamTitle());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendAnalythics() {
+    analyticsTool.analyticsStart(getBaseContext(), analyticsPollResult);
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -129,6 +153,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     pollModel.setStreamTitle(title == null ? NO_TITLE : title);
     adapter.setPollModel(pollModel);
     adapter.notifyDataSetChanged();
+    sendMixPanel();
   }
 
   @Override public void showError(String message) {
@@ -166,6 +191,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override protected void onPause() {
     super.onPause();
     presenter.pause();
+    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 
   @Override public void showEmpty() {

@@ -1,17 +1,11 @@
 package com.shootr.mobile.domain.model.shot;
 
-import com.shootr.mobile.domain.model.EntityMetadata;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Shot {
+public class Shot extends BaseMessage {
 
     private String idShot;
-    private String comment;
-    private String image;
-    private Long imageWidth;
-    private Long imageHeight;
-    private ShotUserInfo userInfo;
     private ShotStreamInfo streamInfo;
     private Date publishDate;
     private Long idQueue;
@@ -20,15 +14,10 @@ public class Shot {
     private String parentShotUserId;
     private String parentShotUsername;
 
-    private String videoUrl;
-    private String videoTitle;
-    private Long videoDuration;
-
     private String type;
     private Integer niceCount;
     private Boolean isMarkedAsNice;
     private Long profileHidden;
-    private EntityMetadata metadata;
     private Long replyCount;
 
     private Long linkClicks;
@@ -39,7 +28,6 @@ public class Shot {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
-    private Long verifiedUser;
 
     public String getIdShot() {
         return idShot;
@@ -47,46 +35,6 @@ public class Shot {
 
     public void setIdShot(String idShot) {
         this.idShot = idShot;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Long getImageWidth() {
-        return imageWidth;
-    }
-
-    public void setImageWidth(Long imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    public Long getImageHeight() {
-        return imageHeight;
-    }
-
-    public void setImageHeight(Long imageHeight) {
-        this.imageHeight = imageHeight;
-    }
-
-    public ShotUserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(ShotUserInfo userInfo) {
-        this.userInfo = userInfo;
     }
 
     public ShotStreamInfo getStreamInfo() {
@@ -103,14 +51,6 @@ public class Shot {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
-    }
-
-    public Long getIdQueue() {
-        return idQueue;
-    }
-
-    public void setIdQueue(Long idQueue) {
-        this.idQueue = idQueue;
     }
 
     public String getParentShotId() {
@@ -137,34 +77,6 @@ public class Shot {
         this.parentShotUsername = parentShotUsername;
     }
 
-    public boolean hasVideoEmbed() {
-        return videoUrl != null;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
-    }
-
-    public Long getVideoDuration() {
-        return videoDuration;
-    }
-
-    public void setVideoDuration(Long videoDuration) {
-        this.videoDuration = videoDuration;
-    }
-
     public String getType() {
         return type;
     }
@@ -179,14 +91,6 @@ public class Shot {
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
-    }
-
-    public EntityMetadata getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(EntityMetadata metadata) {
-        this.metadata = metadata;
     }
 
     public Boolean isMarkedAsNice() {
@@ -204,13 +108,30 @@ public class Shot {
         Shot shot = (Shot) o;
 
         if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
-        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
-        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
-        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
-        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) return false;
-        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
-        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
-        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) {
+        if (getComment() != null ? !getComment().equals(shot.getComment())
+            : shot.getComment() != null) {
+            return false;
+        }
+        if (getImage() != null ? !getImage().equals(shot.getImage()) : shot.getImage() != null) {
+            return false;
+        }
+        if (getUserInfo() != null ? !getUserInfo().equals(shot.getUserInfo())
+            : shot.getUserInfo() != null) {
+            return false;
+        }
+        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) {
+            return false;
+        }
+        if (publishDate != null ? !publishDate.equals(shot.publishDate)
+            : shot.publishDate != null) {
+            return false;
+        }
+        if (getIdQueue() != null ? !getIdQueue().equals(shot.getIdQueue())
+            : shot.getIdQueue() != null) {
+            return false;
+        }
+        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId)
+            : shot.parentShotId != null) {
             return false;
         }
         if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
@@ -221,9 +142,16 @@ public class Shot {
           : shot.parentShotUsername != null) {
             return false;
         }
-        if (videoUrl != null ? !videoUrl.equals(shot.videoUrl) : shot.videoUrl != null) return false;
-        if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
-        if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null) {
+        if (getVideoUrl() != null ? !getVideoUrl().equals(shot.getVideoUrl())
+            : shot.getVideoUrl() != null) {
+            return false;
+        }
+        if (getVideoTitle() != null ? !getVideoTitle().equals(shot.getVideoTitle())
+            : shot.getVideoTitle() != null) {
+            return false;
+        }
+        if (getVideoDuration() != null ? !getVideoDuration().equals(shot.getVideoDuration())
+            : shot.getVideoDuration() != null) {
             return false;
         }
         if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
@@ -231,35 +159,35 @@ public class Shot {
         if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shot.isMarkedAsNice) : shot.isMarkedAsNice != null) {
             return false;
         }
-        return !(metadata != null ? !metadata.equals(shot.metadata) : shot.metadata != null);
+        return !(getMetadata() != null ? !getMetadata().equals(shot.getMetadata()) : shot.getMetadata() != null);
     }
 
     @Override public int hashCode() {
         int result = idShot != null ? idShot.hashCode() : 0;
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (getComment() != null ? getComment().hashCode() : 0);
+        result = 31 * result + (getImage() != null ? getImage().hashCode() : 0);
+        result = 31 * result + (getUserInfo() != null ? getUserInfo().hashCode() : 0);
         result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
-        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
+        result = 31 * result + (getIdQueue() != null ? getIdQueue().hashCode() : 0);
         result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);
         result = 31 * result + (parentShotUserId != null ? parentShotUserId.hashCode() : 0);
         result = 31 * result + (parentShotUsername != null ? parentShotUsername.hashCode() : 0);
-        result = 31 * result + (videoUrl != null ? videoUrl.hashCode() : 0);
-        result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
-        result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
+        result = 31 * result + (getVideoUrl() != null ? getVideoUrl().hashCode() : 0);
+        result = 31 * result + (getVideoTitle() != null ? getVideoTitle().hashCode() : 0);
+        result = 31 * result + (getVideoDuration() != null ? getVideoDuration().hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
         result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
-        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        result = 31 * result + (getMetadata() != null ? getMetadata().hashCode() : 0);
         return result;
     }
 
     @Override public String toString() {
         return "Shot{" +
           "idShot=" + idShot +
-          ", comment='" + comment + '\'' +
-          ", image='" + image + '\'' +
+          ", comment='" + getComment() + '\'' +
+          ", image='" + getImage() + '\'' +
           ", niceCount='" + niceCount + '\'' +
           ", publishDate=" + publishDate +
           '}';
@@ -279,6 +207,14 @@ public class Shot {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+
+    @Override public Long getIdQueue() {
+        return idQueue;
+    }
+
+    public void setIdQueue(Long idQueue) {
+        this.idQueue = idQueue;
     }
 
     public static class ShotStreamInfo {
@@ -321,59 +257,6 @@ public class Shot {
             return "ShotStreamInfo{" +
               "streamTitle='" + streamTitle + '\'' +
               ", idStream=" + idStream +
-              '}';
-        }
-    }
-
-    public static class ShotUserInfo {
-
-        private String idUser;
-        private String username;
-        private String avatar;
-
-        public String getAvatar() {
-            return avatar;
-        }
-
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getIdUser() {
-            return idUser;
-        }
-
-        public void setIdUser(String idUser) {
-            this.idUser = idUser;
-        }
-
-        @Override public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ShotUserInfo)) return false;
-
-            ShotUserInfo that = (ShotUserInfo) o;
-
-            if (!idUser.equals(that.idUser)) return false;
-
-            return true;
-        }
-
-        @Override public int hashCode() {
-            return idUser.hashCode();
-        }
-
-        @Override public String toString() {
-            return "ShotUserInfo{" +
-              "username='" + username + '\'' +
-              ", idUser=" + idUser +
               '}';
         }
     }
@@ -448,11 +331,4 @@ public class Shot {
         this.ctaButtonText = ctaButtonText;
     }
 
-    public Long getVerifiedUser() {
-        return verifiedUser;
-    }
-
-    public void setVerifiedUser(Long verifiedUser) {
-        this.verifiedUser = verifiedUser;
-    }
 }

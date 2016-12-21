@@ -58,6 +58,12 @@ import javax.inject.Singleton;
     androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
   }
 
+  public void showNotAllowedToPublishPrivateMessage(QueuedShot shot) {
+    PrivateMessageNotAllowedNotification notification =
+        new PrivateMessageNotAllowedNotification(context, notificationBuilderFactory);
+    androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
+  }
+
   public void showShotIsOnReadOnlyStreamNotification(QueuedShot queuedShot) {
     ShotIsOnReadStreamNotification notification =
         new ShotIsOnReadStreamNotification(context, notificationBuilderFactory);

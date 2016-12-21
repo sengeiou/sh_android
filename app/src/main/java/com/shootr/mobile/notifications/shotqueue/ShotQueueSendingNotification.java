@@ -22,7 +22,7 @@ public class ShotQueueSendingNotification extends CommonNotification {
     @Override public void setNotificationValues(NotificationCompat.Builder builder,
         Boolean areShotTypesKnown) {
         builder.setContentTitle(titleText);
-        builder.setContentText(shot.getShot().getComment());
+        builder.setContentText(shot.getBaseMessage().getComment());
         builder.setOngoing(true);
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
         builder.setProgress(100, 0, true);

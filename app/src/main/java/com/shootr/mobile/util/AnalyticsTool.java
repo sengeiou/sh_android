@@ -29,6 +29,7 @@ public interface AnalyticsTool {
     String pushRedirection;
     String streamName;
     String idStream;
+    String idPoll;
     User user;
 
     public Context getContext() {
@@ -125,6 +126,14 @@ public interface AnalyticsTool {
 
     public void setIdStream(String idStream) {
       this.idStream = idStream;
+    }
+
+    public String getIdPoll() {
+      return idPoll;
+    }
+
+    public void setIdPoll(String idPoll) {
+      this.idPoll = idPoll;
     }
   }
 }

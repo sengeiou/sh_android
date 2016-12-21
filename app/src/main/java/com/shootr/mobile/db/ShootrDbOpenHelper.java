@@ -41,6 +41,9 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_RECENT_STREAM);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT_EVENT);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SYNCHRO);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_PRIVATE_MESSAGE_CHANNEL);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_PRIVATE_MESSAGE);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_MESSAGE_QUEUE);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -66,6 +69,9 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.RecentStreamTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotEventTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.SynchroTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PrivateMessageChannelTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PrivateMessageTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MessageQueueTable.TABLE);
         onCreate(db);
     }
 

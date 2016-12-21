@@ -74,11 +74,21 @@
           app:layout_collapseMode="pin"
           />
 
-
     </android.support.design.widget.CollapsingToolbarLayout>
   </android.support.design.widget.AppBarLayout>
 
   <include
       layout="@layout/profile_content"/>
+
+  <android.support.design.widget.FloatingActionButton android:id="@+id/channel_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:clickable="true"
+      android:src="@drawable/ic_action_communication_forum"
+      app:backgroundTint="@color/primary_dark"
+      app:borderWidth="0dp"
+      app:layout_anchor="@id/app_bar"
+      app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>

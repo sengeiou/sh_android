@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
 import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
@@ -30,6 +31,7 @@ public class PostNewShotPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
     private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
+    private final PostNewPrivateMessageInteractor postNewPrivateMessageInteractor;
     private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
     private final IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
     private final UserModelMapper userModelMapper;
@@ -43,16 +45,20 @@ public class PostNewShotPresenter implements Presenter {
     private boolean isInitialized = false;
     private Integer wordPosition;
     private String[] words;
+    private String idTargetUser;
 
     @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      PostNewShotInStreamInteractor postNewShotInStreamInteractor,
-      PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
-      GetMentionedPeopleInteractor getMentionedPeopleInteractor,
-      IncrementReplyCountShotInteractor incrementReplyCountShotInteractor, UserModelMapper userModelMapper) {
+        PostNewShotInStreamInteractor postNewShotInStreamInteractor,
+        PostNewShotAsReplyInteractor postNewShotAsReplyInteractor,
+        PostNewPrivateMessageInteractor postNewMessageInteractor,
+        GetMentionedPeopleInteractor getMentionedPeopleInteractor,
+        IncrementReplyCountShotInteractor incrementReplyCountShotInteractor,
+        UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
+        this.postNewPrivateMessageInteractor = postNewMessageInteractor;
         this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
         this.incrementReplyCountShotInteractor = incrementReplyCountShotInteractor;
         this.userModelMapper = userModelMapper;
@@ -65,6 +71,11 @@ public class PostNewShotPresenter implements Presenter {
 
     public void initializeAsNewShot(PostNewShotView postNewShotView) {
         this.setView(postNewShotView);
+    }
+
+    public void initializeAsNewMessage(PostNewShotView postNewShotView, String idTargetUser) {
+        this.setView(postNewShotView);
+        this.idTargetUser = idTargetUser;
     }
 
     public void initializeAsReply(PostNewShotView postNewShotView, String replyParentId, String replyToUsername) {
@@ -121,6 +132,20 @@ public class PostNewShotPresenter implements Presenter {
         }
     }
 
+    public void sendMessage(String text) {
+        postNewShotView.hideKeyboard();
+        shotCommentToSend = filterText(text);
+
+        if (canSendShot(shotCommentToSend)) {
+            this.showLoading();
+            if (idTargetUser != null) {
+                postMessage(idTargetUser);
+            }
+        } else {
+            Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
+        }
+    }
+
     private boolean canSendShot(String filteredText) {
         return (hasImage() && isLessThanMaxLength(filteredText)) || isNotEmptyAndLessThanMaxLenght(filteredText);
     }
@@ -166,9 +191,9 @@ public class PostNewShotPresenter implements Presenter {
         });
     }
 
-    private void postStreamShot() {
-        postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend,
-          selectedImageFile,
+    private void postMessage(String idTargetUser) {
+        postNewPrivateMessageInteractor.postNewPrivateMessage(shotCommentToSend,
+          selectedImageFile, idTargetUser,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   onShotSending();
@@ -179,6 +204,21 @@ public class PostNewShotPresenter implements Presenter {
                   onShotError();
               }
           });
+    }
+
+    private void postStreamShot() {
+        postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend,
+            selectedImageFile,
+            new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    onShotSending();
+                }
+            },
+            new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    onShotError();
+                }
+            });
     }
 
     private void onShotSending() {

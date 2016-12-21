@@ -1,9 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
@@ -42,10 +44,12 @@ public class MainScreenPresenterTest {
     @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
     @Mock SendShotEventStatsIneteractor sendShoEventStatsIneteractor;
     @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
+    @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
     @Mock SessionRepository sessionRepository;
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock IntPreference badgeCount;
     @Mock Bus bus;
+    @Mock BusPublisher busPublisher;
     @Mock MainScreenView view;
     private MainScreenPresenter mainScreenPresenter;
 
@@ -56,7 +60,8 @@ public class MainScreenPresenterTest {
         mainScreenPresenter =
           new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
               sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor, sessionRepository,
-              userModelMapper, badgeCount, getFollowingInteractor, bus);
+              userModelMapper, badgeCount, getFollowingInteractor,
+              getPrivateMessagesChannelsInteractor, bus, busPublisher);
         mainScreenPresenter.setView(view);
     }
 

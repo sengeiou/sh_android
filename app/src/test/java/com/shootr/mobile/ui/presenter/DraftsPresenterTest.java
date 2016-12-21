@@ -3,12 +3,15 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendDraftInteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.SendPrivateMessageDraftInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.mappers.DraftModelMapper;
+import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.DraftsView;
 import com.squareup.otto.Bus;
@@ -37,14 +40,17 @@ public class DraftsPresenterTest {
     @Mock GetDraftsInteractor interactor;
     @Mock SendDraftInteractor sendDraftInteractor;
     @Mock DeleteDraftInteractor deleteDraftInteractor;
+    @Mock SendPrivateMessageDraftInteractor sendPrivateMessageDraftInteractor;
     @Mock Bus bus;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         SessionRepository sessionRepository = mock(SessionRepository.class);
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
-        DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper());
-        presenter = new DraftsPresenter(interactor, sendDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
+        DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper(),
+            new PrivateMessageModelMapper(sessionRepository));
+        presenter = new DraftsPresenter(interactor, sendDraftInteractor,
+            sendPrivateMessageDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
     }
 
     @Test public void shouldShowEmptyViewWhenDraftListIsEmpty() throws Exception {
@@ -125,14 +131,14 @@ public class DraftsPresenterTest {
 
     private QueuedShot draft() {
         QueuedShot draft = new QueuedShot();
-        draft.setShot(shot());
+        draft.setBaseMessage(shot());
         return draft;
     }
 
     private Shot shot() {
         Shot shot = new Shot();
         shot.setComment("comment");
-        shot.setUserInfo(new Shot.ShotUserInfo());
+        shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
         return shot;
     }
 

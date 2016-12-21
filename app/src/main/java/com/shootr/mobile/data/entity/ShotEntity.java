@@ -1,15 +1,12 @@
 package com.shootr.mobile.data.entity;
 
-public class ShotEntity extends Synchronized {
+public class ShotEntity extends BaseMessageEntity {
 
     private String idShot;
-    private String idUser;
-    private String username;
-    private String userPhoto;
-    private String comment;
-    private String image;
+
     private String idStream;
     private String streamTitle;
+    private String userPhoto;
 
     private Integer niceCount;
 
@@ -19,24 +16,19 @@ public class ShotEntity extends Synchronized {
     private String idUserParent;
     private String userNameParent;
 
-    private String videoUrl;
-    private String videoTitle;
-    private Long videoDuration;
     private Long profileHidden;
     private Long replyCount;
 
     private Long linkClicks;
     private Long views;
 
-    private Long imageWidth;
-    private Long imageHeight;
     private Long reshootCounter;
 
     private Long promoted;
     private String ctaButtonLink;
     private String ctaButtonText;
     private String ctaCaption;
-    private Long verifiedUser;
+
 
     public String getIdShot() {
         return idShot;
@@ -46,36 +38,20 @@ public class ShotEntity extends Synchronized {
         this.idShot = idShot;
     }
 
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getIdStream() {
         return idStream;
     }
 
     public void setIdStream(String idStream) {
         this.idStream = idStream;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
     }
 
     public String getType() {
@@ -118,46 +94,6 @@ public class ShotEntity extends Synchronized {
         this.userNameParent = userNameParent;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
-    }
-
-    public Long getVideoDuration() {
-        return videoDuration;
-    }
-
-    public void setVideoDuration(Long videoDuration) {
-        this.videoDuration = videoDuration;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
     public Integer getNiceCount() {
         return niceCount;
     }
@@ -180,22 +116,6 @@ public class ShotEntity extends Synchronized {
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
-    }
-
-    public Long getImageWidth() {
-        return imageWidth;
-    }
-
-    public void setImageWidth(Long imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    public Long getImageHeight() {
-        return imageHeight;
-    }
-
-    public void setImageHeight(Long imageHeight) {
-        this.imageHeight = imageHeight;
     }
 
     public Long getViews() {
@@ -254,11 +174,5 @@ public class ShotEntity extends Synchronized {
         this.ctaCaption = ctaCaption;
     }
 
-    public Long getVerifiedUser() {
-        return verifiedUser;
-    }
 
-    public void setVerifiedUser(Long verifiedUser) {
-        this.verifiedUser = verifiedUser;
-    }
 }

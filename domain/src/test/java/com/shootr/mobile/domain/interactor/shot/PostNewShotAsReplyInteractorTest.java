@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
@@ -37,10 +38,10 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor =
         new PostNewShotAsReplyInteractor(postExecutionThread, interactorHandler, sessionRepository,
-            shotSender, localShotRepository, remoteShotRepository);
+            messageSender, localShotRepository, remoteShotRepository);
   }
 
-  @Override protected PostNewShotInteractor getInteractorForCommonTests() {
+  @Override protected PostNewMessageInteractor getInteractorForCommonTests() {
     setupParentShot();
     return interactor;
   }
@@ -126,11 +127,11 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     return shot;
   }
 
-  private Shot.ShotUserInfo parentUserInfo() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(String.valueOf(PARENT_SHOT_USER_ID));
-    shotUserInfo.setUsername(PARENT_SHOT_USERNAME);
-    return shotUserInfo;
+  private BaseMessage.BaseMessageUserInfo parentUserInfo() {
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(String.valueOf(PARENT_SHOT_USER_ID));
+    baseMessageUserInfo.setUsername(PARENT_SHOT_USERNAME);
+    return baseMessageUserInfo;
   }
 
   private String[] anyArray() {

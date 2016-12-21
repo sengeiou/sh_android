@@ -4,23 +4,23 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.service.ShotQueueRepository;
+import com.shootr.mobile.domain.service.QueueRepository;
 import javax.inject.Inject;
 
 public class DeleteDraftInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ShotQueueRepository shotQueueRepository;
+  private final QueueRepository queueRepository;
 
   private Long queuedShotId;
   private Callback callback;
 
   @Inject public DeleteDraftInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ShotQueueRepository shotQueueRepository) {
+      PostExecutionThread postExecutionThread, QueueRepository queueRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.shotQueueRepository = shotQueueRepository;
+    this.queueRepository = queueRepository;
   }
 
   public void deleteDraft(Long queuedShotId, Callback callback) {
@@ -30,8 +30,8 @@ public class DeleteDraftInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    QueuedShot queuedShot = shotQueueRepository.getShotQueue(queuedShotId);
-    shotQueueRepository.remove(queuedShot);
+    QueuedShot queuedShot = queueRepository.getQueue(queuedShotId, QueueRepository.SHOT_TYPE);
+    queueRepository.remove(queuedShot);
     notifyDeleted();
   }
 

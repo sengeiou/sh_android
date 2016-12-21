@@ -95,7 +95,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupVerified(ShotModel shotModel) {
-        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+        if (shotModel.getParentShotId() == null && shotModel.isVerifiedUser()) {
             verifiedUser.setVisibility(View.VISIBLE);
         } else {
             verifiedUser.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupUserAvatar(final ShotModel shotModel) {
-        String photo = shotModel.getPhoto();
+        String photo = shotModel.getAvatar();
         imageLoader.loadProfilePhoto(photo, this.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

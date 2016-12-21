@@ -186,6 +186,10 @@
   <string name="highlight_shot_dialog">メッセージのハイライトを取り消しますか？</string>
   <string name="hours">時間</string>
   <string name="include_listing_empty">ストリームはありません</string>
+  <string name="include_listing_channels_empty">No private messages</string>
+  <string name="private_message_video">video</string>
+  <string name="private_message_image">image</string>
+  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="intro_create_text">所有するコミュニティーのストリームを作成してみてください。</string>
   <string name="intro_create_title">新規作成</string>
   <string name="intro_favorites_text">毎日多くのストリームが追加されます。あなたのお気に入りを作ってください。</string>
@@ -260,6 +264,7 @@
   <string name="notification_image">画像</string>
   <string name="notification_image_and_text">画像: %s</string>
   <string name="notification_shot_failed">ショットは投稿されませんでした</string>
+  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
   <string name="notification_shot_failed_subtitle_pattern">下書きが保存されました: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">下書きが保存されました</string>
   <string name="notification_shot_has_parent_deleted_subtitle">返信したショットは削除されました</string>
@@ -462,4 +467,5 @@
   <string name="timeline_poll_results">検索結果: 0件</string>
   <string name="analytics_action_open_cta_link">Ad</string>
   <string name="analytics_label_open_cta_link">Ad</string>
+  <string name="title_activity_channels">Channels</string>
 </resources>

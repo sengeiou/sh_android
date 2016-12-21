@@ -63,7 +63,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
     }
 
     @Override public Bitmap getLargeIcon() {
-        return getUserPhoto(shot.getPhoto());
+        return getUserPhoto(shot.getAvatar());
     }
 
     protected Bitmap getUserPhoto(String url) {

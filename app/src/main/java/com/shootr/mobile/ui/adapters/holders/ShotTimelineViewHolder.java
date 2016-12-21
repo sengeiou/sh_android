@@ -185,7 +185,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupVerified(ShotModel shot) {
-    if (shot.getParentShotId() == null && shot.getVerifiedUser()) {
+    if (shot.getParentShotId() == null && shot.isVerifiedUser()) {
       verifiedUser.setVisibility(View.VISIBLE);
     } else {
       verifiedUser.setVisibility(View.GONE);
@@ -205,7 +205,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void bindUserPhoto(final ShotModel shot) {
-    imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
+    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
     avatar.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         avatarClickListener.onAvatarClick(shot.getIdUser(), v);

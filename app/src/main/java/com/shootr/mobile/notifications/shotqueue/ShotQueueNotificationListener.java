@@ -50,6 +50,11 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
         Timber.e(e, "Shot has stream removed");
     }
 
+    @Override public void onPrivateMessageNotAllowed(QueuedShot shot, Exception e) {
+        shotQueueNotificationManager.showNotAllowedToPublishPrivateMessage(shot);
+        Timber.e(e, "You're not allowed to publish this private message");
+    }
+
     @Override public void onQueueShot(QueuedShot queuedShot) {
         shotQueueNotificationManager.showSendingShotNotification(queuedShot);
     }

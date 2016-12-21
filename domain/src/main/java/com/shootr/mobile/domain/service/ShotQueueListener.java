@@ -12,6 +12,8 @@ public interface ShotQueueListener {
 
     void onShotHasParentDeleted(QueuedShot shot, Exception e);
 
+    void onPrivateMessageNotAllowed(QueuedShot shot, Exception e);
+
     void onShotHasStreamRemoved(QueuedShot shot, Exception e);
 
     void onQueueShot(QueuedShot queuedShot);

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -27,7 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
+public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver,
+    ChannelsBadgeChanged.Receiver {
 
   private final StreamsListInteractor streamsListInteractor;
   private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -276,6 +278,10 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   @Override public void pause() {
     bus.unregister(this);
     hasBeenPaused = true;
+  }
+
+  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
+    streamsListView.updateChannelBadge(event.getUnreadChannels());
   }
   //endregion
 }

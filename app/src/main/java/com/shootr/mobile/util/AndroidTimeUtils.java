@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.TimeUtils;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
@@ -49,6 +52,22 @@ public class AndroidTimeUtils implements TimeUtils {
             return String.valueOf(seconds + time);
         }
         return res.getString(R.string.now);
+    }
+
+    public String getHourWithDate(long publishTime) {
+        long difference = getCurrentTime() - publishTime;
+        long days = TimeUnit.MILLISECONDS.toDays(difference);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
+        calendar.setTimeInMillis(publishTime);
+
+        if (days > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+            return sdf.format(calendar.getTime());
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            return sdf.format(calendar.getTime());
+        }
     }
 
     @Override public Date getCurrentDate() {

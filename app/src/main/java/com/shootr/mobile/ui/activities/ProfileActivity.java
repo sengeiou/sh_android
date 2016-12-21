@@ -288,6 +288,15 @@ public class ProfileActivity extends BaseActivity
     mutualsContainer.setVisibility(View.GONE);
   }
 
+  @Override public void goToChannelsList() {
+    Intent intent = new Intent(this, ChannelListActivity.class);
+    startActivity(intent);
+  }
+
+  @Override public void goToChannelTimeline(String idTargetUser) {
+    startActivity(PrivateMessageTimelineActivity.newIntent(this, idTargetUser));
+  }
+
   @Override protected void initializePresenter() {
     if (idUser != null) {
       profilePresenter.initializeWithIdUser(this, idUser);
@@ -1179,5 +1188,9 @@ public class ProfileActivity extends BaseActivity
   @OnClick(R.id.mutuals_container) public void onMutualsClick() {
     Intent intent = new Intent(this, FriendsActivity.class);
     startActivity(intent);
+  }
+
+  @OnClick(R.id.channel_button) public void onChannelClick() {
+    profilePresenter.onChannelClick();
   }
 }

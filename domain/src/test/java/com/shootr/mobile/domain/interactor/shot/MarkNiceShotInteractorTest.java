@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
@@ -145,10 +146,10 @@ public class MarkNiceShotInteractorTest {
     return shotStreamInfo;
   }
 
-  private Shot.ShotUserInfo userInfo() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(String.valueOf(SHOT_USER_ID));
-    shotUserInfo.setUsername(SHOT_USERNAME);
-    return shotUserInfo;
+  private BaseMessage.BaseMessageUserInfo userInfo() {
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(String.valueOf(SHOT_USER_ID));
+    baseMessageUserInfo.setUsername(SHOT_USERNAME);
+    return baseMessageUserInfo;
   }
 }

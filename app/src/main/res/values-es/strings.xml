@@ -189,6 +189,9 @@
   <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">No hay streams</string>
+  <string name="include_listing_channels_empty">No private messages</string>
+  <string name="private_message_video">video</string>
+  <string name="private_message_image">image</string>
   <string name="intro_create_text">¿Diriges una comunidad? Crea su stream y… Shoot!</string>
   <string name="intro_create_title">Crear</string>
   <string name="intro_favorites_text">Decenas de streams se añaden cada día. Crea tus Favoritos.</string>
@@ -267,6 +270,7 @@
   <string name="notification_image">Imagen</string>
   <string name="notification_image_and_text">Imagen: %s</string>
   <string name="notification_shot_failed">El shot no se ha publicado</string>
+  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
   <string name="notification_shot_failed_subtitle_pattern">Borrador guardado: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>
   <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respondes ha sido eliminado</string>
@@ -390,6 +394,7 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No hay shots</string>
+  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
@@ -480,4 +485,5 @@
   <string name="timeline_poll_results">Resultado</string>
   <string name="analytics_action_open_cta_link">Ad</string>
   <string name="analytics_label_open_cta_link">Ad</string>
+  <string name="title_activity_channels">Channels</string>
 </resources>

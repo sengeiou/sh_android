@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
@@ -109,10 +110,11 @@ public class HighlightedShotEntityMapper {
       eventInfo.setStreamTitle(value.getStreamTitle());
       shot.setStreamInfo(eventInfo);
     }
-    Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+    BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
     userInfo.setIdUser(value.getIdUser());
     userInfo.setUsername(value.getUsername());
     userInfo.setAvatar(value.getUserPhoto());
+    userInfo.setVerifiedUser(value.getVerifiedUser());
     shot.setUserInfo(userInfo);
     shot.setParentShotId(value.getIdShotParent());
     shot.setParentShotUserId(value.getIdUserParent());
@@ -133,7 +135,6 @@ public class HighlightedShotEntityMapper {
     shot.setCtaButtonText(value.getCtaButtonText());
     shot.setCtaCaption(value.getCtaCaption());
     shot.setPromoted(value.getPromoted());
-    shot.setVerifiedUser(value.getVerifiedUser());
 
     highlightedShot.setShot(shot);
 

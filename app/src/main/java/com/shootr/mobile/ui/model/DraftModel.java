@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class DraftModel implements Serializable {
 
     private Long idQueue;
-    private ShotModel shotModel;
+    private BaseMessageModel shotModel;
     private File imageFile;
 
     public Long getIdQueue() {
@@ -17,11 +17,11 @@ public class DraftModel implements Serializable {
         this.idQueue = idQueue;
     }
 
-    public ShotModel getShotModel() {
+    public BaseMessageModel getBaseMessageModel() {
         return shotModel;
     }
 
-    public void setShotModel(ShotModel shotModel) {
+    public void setShotModel(BaseMessageModel shotModel) {
         this.shotModel = shotModel;
     }
 

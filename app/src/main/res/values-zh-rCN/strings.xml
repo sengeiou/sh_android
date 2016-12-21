@@ -189,6 +189,9 @@
   <string name="highlight_shot_dialog">删除置顶 shot</string>
   <string name="hours">h</string>
   <string name="include_listing_empty">没有streams</string>
+  <string name="include_listing_channels_empty">No private messages</string>
+  <string name="private_message_video">video</string>
+  <string name="private_message_image">image</string>
   <string name="intro_create_text">是否在经营团体？建立一个stream吧！</string>
   <string name="intro_create_title">建立</string>
   <string name="intro_favorites_text">每天都有很多新的streams。\n建立你的喜爱。</string>
@@ -264,6 +267,7 @@
   <string name="notification_image">图片</string>
   <string name="notification_image_and_text">图片: %s</string>
   <string name="notification_shot_failed">发送失败</string>
+  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
   <string name="notification_shot_failed_subtitle_pattern">保存: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">保存</string>
   <string name="notification_shot_has_parent_deleted_subtitle">你回复的shot已被删除</string>
@@ -383,6 +387,7 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">没有shots</string>
+  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">已在(stream)发布信息</string>
@@ -472,4 +477,5 @@
   <string name="timeline_poll_results">无结果</string>
   <string name="analytics_action_open_cta_link">Ad</string>
   <string name="analytics_label_open_cta_link">Ad</string>
+  <string name="title_activity_channels">Channels</string>
 </resources>

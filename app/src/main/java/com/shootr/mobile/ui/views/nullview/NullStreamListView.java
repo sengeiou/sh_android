@@ -54,6 +54,10 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void updateChannelBadge(int unreadChannels) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

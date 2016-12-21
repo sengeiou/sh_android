@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:paddingLeft="16dp"
+      android:paddingTop="12dp"
+      android:paddingBottom="12dp"
+      android:paddingRight="12dp"
+      >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/message_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/message_avatar"
+        android:id="@+id/linearLayout2"
+        >
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:id="@+id/message_name_container"
+          >
+
+        <TextView
+            android:id="@+id/message_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="176dp"
+            android:ellipsize="end"
+            android:textColor="@color/gray_10"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:textStyle="bold"
+            tools:text="Ignasi"
+            android:layout_alignParentTop="true"
+            />
+
+        <ImageView
+            android:id="@+id/verified_user"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="2dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_verified_shot"
+            android:layout_toEndOf="@+id/message_user_name"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_toRightOf="@+id/message_user_name"
+            />
+
+        <TextView
+            android:id="@+id/message_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_80"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:maxLines="1"
+            tools:text="22m"
+            android:layout_toEndOf="@+id/verified_user"
+            android:layout_toRightOf="@+id/verified_user"
+            />
+
+
+
+      </RelativeLayout>
+
+      <com.shootr.mobile.ui.widgets.ClickableTextView
+          android:id="@+id/message_text"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/material_black"
+          android:textColorLink="@color/links"
+          android:textSize="14sp"
+          tools:text="Who's the referee?"
+          tools:visibility ="visible"
+
+          />
+      <FrameLayout
+          android:id="@+id/message_media_content"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:focusable="false"
+          android:layout_marginRight="24dp"
+          android:layout_marginTop="4dp"
+          android:focusableInTouchMode="false"
+          android:visibility="gone"
+          tools:visibility="visible"
+          >
+
+        <com.shootr.mobile.ui.widgets.ProportionalImageView
+            android:id="@+id/message_image_landscape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:minWidth="165dp"
+            android:visibility="gone"
+            app:riv_corner_radius="10dp"
+            tools:src="@drawable/sample_avatar"
+            tools:visibility="visible"
+            />
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/default_image"
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:riv_corner_radius="5dp"
+            tools:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/message_video_frame"
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            android:background="@drawable/round_corner"
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone"
+            tools:visibility="gone"
+            android:layout_gravity="left|bottom"
+            >
+
+          <TextView
+              android:id="@+id/message_video_title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="8dp"
+              android:textColor="@color/white"
+              tools:text="Titulo del video"
+              />
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:scaleType="center"
+              android:src="@drawable/ic_video_play_circle_48_white"
+              />
+
+          <TextView
+              android:id="@+id/message_video_duration"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="right|bottom"
+              android:layout_margin="8dp"
+              android:textColor="@color/white"
+              tools:text="0:00"
+              />
+        </FrameLayout>
+      </FrameLayout>
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+</LinearLayout>

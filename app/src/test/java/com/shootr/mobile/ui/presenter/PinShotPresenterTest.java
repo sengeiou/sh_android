@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.PinShotInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -189,9 +190,9 @@ public class PinShotPresenterTest {
         shot.setIdShot(ID_SHOT);
         shot.setProfileHidden(profileHidden);
         shot.setStreamInfo(new Shot.ShotStreamInfo());
-        Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-        shotUserInfo.setIdUser(ID_USER);
-        shot.setUserInfo(shotUserInfo);
+        BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+        baseMessageUserInfo.setIdUser(ID_USER);
+        shot.setUserInfo(baseMessageUserInfo);
         return shot;
     }
 }

@@ -104,7 +104,7 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
   }
 
   private void setupAvatarPicture(final ShotModel shotModel) {
-    imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
+    imageLoader.loadProfilePhoto(shotModel.getAvatar(), avatar);
     setupAvatarAlpha(shotModel);
     avatar.setVisibility(View.VISIBLE);
     avatar.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +115,7 @@ public class DiscoveredShotViewHolder extends ParallaxViewHolder {
   }
 
   private void setupAvatarAlpha(ShotModel shotModel) {
-    if (shotModel.getPhoto() == null || shotModel.getPhoto().isEmpty()) {
+    if (shotModel.getAvatar() == null || shotModel.getAvatar().isEmpty()) {
       avatar.setAlpha(ALPHA);
     }
   }

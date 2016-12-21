@@ -3,6 +3,7 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
@@ -38,10 +39,11 @@ public class ShotEntityMapper {
             eventInfo.setStreamTitle(shotEntity.getStreamTitle());
             shot.setStreamInfo(eventInfo);
         }
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setIdUser(shotEntity.getIdUser());
         userInfo.setUsername(shotEntity.getUsername());
         userInfo.setAvatar(shotEntity.getUserPhoto());
+        userInfo.setVerifiedUser(shotEntity.getVerifiedUser());
         shot.setUserInfo(userInfo);
         shot.setParentShotId(shotEntity.getIdShotParent());
         shot.setParentShotUserId(shotEntity.getIdUserParent());
@@ -62,7 +64,6 @@ public class ShotEntityMapper {
         shot.setCtaButtonText(shotEntity.getCtaButtonText());
         shot.setCtaCaption(shotEntity.getCtaCaption());
         shot.setPromoted(shotEntity.getPromoted());
-        shot.setVerifiedUser(shotEntity.getVerifiedUser());
         return shot;
     }
 
@@ -92,9 +93,11 @@ public class ShotEntityMapper {
         String idUser = shot.getUserInfo().getIdUser();
         String username = shot.getUserInfo().getUsername();
         String avatar = shot.getUserInfo().getAvatar();
+        Long verifiedUser = shot.getUserInfo().getVerifiedUser();
         shotEntity.setIdUser(idUser);
         shotEntity.setUsername(username);
         shotEntity.setUserPhoto(avatar);
+        shotEntity.setVerifiedUser(verifiedUser);
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
@@ -118,7 +121,6 @@ public class ShotEntityMapper {
         shotEntity.setCtaButtonText(shot.getCtaButtonText());
         shotEntity.setCtaCaption(shot.getCtaCaption());
         shotEntity.setPromoted(shot.getPromoted());
-        shotEntity.setVerifiedUser(shot.getVerifiedUser());
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;

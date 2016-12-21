@@ -1,26 +1,16 @@
 package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
-public class ShotModel implements Comparable<ShotModel>, Serializable {
+public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>, Serializable {
 
     private String idShot;
-    private String comment;
-    private ShotImageModel image;
-    private Date birth;
     private List<String> nicers;
-    private String idUser;
-    private String userName;
-    private String photo;
     private String streamId;
     private String streamTitle;
     private String replyUsername;
     private String parentShotId;
-    private String videoUrl;
-    private String videoTitle;
-    private String videoDuration;
     private Integer niceCount;
     private Boolean isMarkedAsNice;
     private Long hide;
@@ -33,7 +23,6 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
-    private Boolean verifiedUser;
     private boolean canBePinned;
     private boolean titleEnabled;
 
@@ -43,54 +32,6 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setIdShot(String idShot) {
         this.idShot = idShot;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
-    }
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
-
-    public String getUsername() {
-        return userName;
-    }
-
-    public void setUsername(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public ShotImageModel getImage() {
-        return image;
-    }
-
-    public void setImage(ShotImageModel image) {
-        this.image = image;
     }
 
     public String getStreamTitle() {
@@ -119,34 +60,6 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setParentShotId(String parentShotId) {
         this.parentShotId = parentShotId;
-    }
-
-    public boolean hasVideo() {
-        return videoUrl != null;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
-    }
-
-    public String getVideoDuration() {
-        return videoDuration;
-    }
-
-    public void setVideoDuration(String videoDuration) {
-        this.videoDuration = videoDuration;
     }
 
     public Integer getNiceCount() {
@@ -251,14 +164,6 @@ public class ShotModel implements Comparable<ShotModel>, Serializable {
 
     public void setPromoted(Long promoted) {
         this.promoted = promoted;
-    }
-
-    public Boolean getVerifiedUser() {
-        return verifiedUser;
-    }
-
-    public void setVerifiedUser(Boolean verifiedUser) {
-        this.verifiedUser = verifiedUser;
     }
 
     public Boolean getCanBePinned() {

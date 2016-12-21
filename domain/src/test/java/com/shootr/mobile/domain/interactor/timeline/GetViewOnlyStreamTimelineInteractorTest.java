@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
@@ -102,19 +103,19 @@ public class GetViewOnlyStreamTimelineInteractorTest {
   private List<Shot> threeShots() {
     Shot visibleShot = new Shot();
     visibleShot.setPublishDate(new Date(0L));
-    Shot.ShotUserInfo visibleUserInfo = new Shot.ShotUserInfo();
+    BaseMessage.BaseMessageUserInfo visibleUserInfo = new BaseMessage.BaseMessageUserInfo();
     visibleUserInfo.setIdUser(ID_USER);
     visibleShot.setUserInfo(visibleUserInfo);
 
     Shot shot = new Shot();
     shot.setPublishDate(new Date(1L));
-    Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+    BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
     userInfo.setIdUser(ANTOHER_ID_USER);
     shot.setUserInfo(userInfo);
 
     Shot currentUserShot = new Shot();
     currentUserShot.setPublishDate(new Date(2L));
-    Shot.ShotUserInfo currentUserInfo = new Shot.ShotUserInfo();
+    BaseMessage.BaseMessageUserInfo currentUserInfo = new BaseMessage.BaseMessageUserInfo();
     currentUserInfo.setIdUser(ID_CURRENT_USER);
     currentUserShot.setUserInfo(currentUserInfo);
 

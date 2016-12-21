@@ -159,17 +159,18 @@ public class PollVotePresenter implements Presenter {
     pollVoteView.showLoading();
     setVotedPollOption(pollOptionId);
     if (pollModel != null) {
-      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, new Interactor.Callback<Poll>() {
-        @Override public void onLoaded(Poll poll) {
-          pollVoteView.hideLoading();
-          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          pollVoteView.hideLoading();
-          pollVoteView.showTimeoutAlert();
-        }
-      });
+      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId,
+          new Interactor.Callback<Poll>() {
+            @Override public void onLoaded(Poll poll) {
+              pollVoteView.hideLoading();
+              pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              pollVoteView.hideLoading();
+              pollVoteView.showTimeoutAlert();
+            }
+          });
     }
   }
 
@@ -250,6 +251,22 @@ public class PollVotePresenter implements Presenter {
   public void onStreamTitleClick() {
     if (idStream != null) {
       pollVoteView.goToStreamTimeline(idStream);
+    }
+  }
+
+  public String getIdStream() {
+    if (pollModel != null) {
+      return pollModel.getIdStream();
+    } else {
+      return null;
+    }
+  }
+
+  public String getStreamTitle() {
+    if (pollModel != null) {
+      return pollModel.getStreamTitle();
+    } else {
+      return null;
     }
   }
 }
