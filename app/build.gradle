@@ -236,6 +236,7 @@ dependencies {
   compile 'com.isseiaoki:simplecropview:1.1.4'
   compile 'com.mikepenz:actionitembadge:3.3.0@aar'
   compile 'com.mikepenz:iconics-core:2.8.0@aar'
+  compile 'com.appsflyer:af-android-sdk:4+@aar'
 }
 
 /**
