@@ -67,6 +67,8 @@
   <string name="change_password_logout_message">密码已被更改。需重新登录…</string>
   <string name="change_photo">更改照片</string>
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">签到</string>
   <!-- Errors -->
   <string name="communication_error">存在网络连接问题。检查你的网络连接再试一次。</string>
   <string name="confirmation_hide_shot_message" formatted="false">解除钉选</string>
@@ -176,6 +178,8 @@
   <string name="error_stream_read_only">这条stream已被清除，只能阅读</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">你今天已经在这个 stream 签到过</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">需要电子邮件和好友列表。</string>
@@ -188,8 +192,9 @@
   <string name="following_list_empty">没有关注任何人</string>
   <string name="highlight_shot_dialog">删除置顶 shot</string>
   <string name="hours">h</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">没有信息</string>
   <string name="include_listing_empty">没有streams</string>
-  <string name="include_listing_channels_empty">No private messages</string>
   <string name="intro_create_text">是否在经营团体？建立一个stream吧！</string>
   <string name="intro_create_title">建立</string>
   <string name="intro_favorites_text">每天都有很多新的streams。\n建立你的喜爱。</string>
@@ -239,6 +244,8 @@
   <string name="multiple_activity_notification">%d新的动态消息</string>
   <string name="mute">静音</string>
   <string name="new_activity_notification">新的动态</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">新的关注者</string>
   <string name="new_password_again_hint">再次输入新密码</string>
   <string name="new_password_hint">新密码</string>
   <plurals name="new_shots_indicator">
@@ -264,10 +271,8 @@
   <string name="no">不</string>
   <string name="notification_image">图片</string>
   <string name="notification_image_and_text">图片: %s</string>
+  <string name="notification_private_message_not_allowed">用户屏蔽了你，你的信息将不会被发送。</string>
   <string name="notification_shot_failed">发送失败</string>
-  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
-  <string name="private_message_video">video</string>
-  <string name="private_message_image">image</string>
   <string name="notification_shot_failed_subtitle_pattern">保存: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">保存</string>
   <string name="notification_shot_has_parent_deleted_subtitle">你回复的shot已被删除</string>
@@ -295,6 +300,8 @@
   <string name="pin_topic" formatted="false">钉选信息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">当前投票结果</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">投票</string>
   <string name="poll_results">最终结果</string>
   <string name="poll_results_dialog">一旦看到结果，将无法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -305,6 +312,9 @@
     <item quantity="zero">%d 投票</item>
   </plurals>
   <string name="poll_vote_timeout_retry">重试</string>
+  <string name="private_message_image">照片</string>
+  <string name="private_message_timeline_empty_title">没有信息</string>
+  <string name="private_message_video">视频</string>
   <string name="profile_all_shots">所有 shots</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">编辑个人主页</string>
@@ -356,9 +366,6 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
-  <string name="new_followers_push_settings">新的关注者</string>
-  <string name="poll_push_settings">投票</string>
-  <string name="checkin_push_settings">签到</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">还原stream</string>
   <string name="restore_stream_snackbar_action">复原</string>
@@ -387,7 +394,6 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">没有shots</string>
-  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">已在(stream)发布信息</string>
@@ -427,9 +433,11 @@
   <string name="support_privacy_policy">隐私政策</string>
   <string name="support_terms_service">服务条款</string>
   <string name="support_version">版本</string>
+  <string name="timeline_poll_results">无结果</string>
   <string name="title_activity_all_participants">所有参与者</string>
   <string name="title_activity_all_shots">所有 shots</string>
   <string name="title_activity_change_password">更改密码</string>
+  <string name="title_activity_channels">私信</string>
   <string name="title_activity_contributors">合作者</string>
   <string name="title_activity_email_confirmation">邮箱</string>
   <string name="title_activity_listing">Streams</string>
@@ -468,14 +476,9 @@
   <string name="watching_stream_connected_muted">已连接（已静音）</string>
   <string name="watch_profile_photo" formatted="false">点开</string>
   <string name="welcome_get_started_button">好的</string>
-  <string name="welcome_shootr_title">进入stream连接</string>
+  <string name="welcome_shootr_title">关注你喜欢的人，这样可以总是收到他的消息。</string>
   <string name="whale_message_default">我们正在为您优化Shootr，很快就会回来。</string>
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">无结果</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
-  <string name="title_activity_channels">Channels</string>
 </resources>

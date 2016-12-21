@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_channel"
         android:icon="@drawable/ic_action_communication_forum"
-        android:title="@string/menu_search_streams"
+        android:title="@string/title_activity_channels"
         app:showAsAction="always" />
 
     <item

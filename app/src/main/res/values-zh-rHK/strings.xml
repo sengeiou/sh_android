@@ -67,6 +67,8 @@
   <string name="change_password_logout_message">密碼已更改。必須重新登錄…</string>
   <string name="change_photo">更改相片</string>
   <string name="checkin_activity_text_pattern">在(stream)簽到</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">簽到</string>
   <!-- Errors -->
   <string name="communication_error">網絡連接發生問題。請查檢查您的連接，然後重試。</string>
   <string name="confirmation_hide_shot_message" formatted="false">解除釘選</string>
@@ -176,6 +178,8 @@
   <string name="error_stream_read_only">這stream已被清除並只能唯讀</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">你今天已經在這個 stream 簽到過</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">需要電子郵件和好友列表。</string>
@@ -188,8 +192,9 @@
   <string name="following_list_empty">沒有跟關注任何人</string>
   <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">沒有信息</string>
   <string name="include_listing_empty">沒有 Streams</string>
-  <string name="include_listing_channels_empty">No private messages</string>
   <string name="intro_create_text">是否在經營團體？讓它成為stream吧！</string>
   <string name="intro_create_title">建立</string>
   <string name="intro_favorites_text">每天有很多新的streams。\n建立您的最愛。</string>
@@ -214,7 +219,7 @@
   <string name="listing_title_holding">管理員</string>
   <string name="loading_activity_message">等待中…</string>
   <string name="main_activity_title">動態消息</string>
-  <string name="mentioned_shot_activity_with_comment">"提及到您: "</string>
+  <string name="mentioned_shot_activity_with_comment">提及到您: </string>
   <string name="menu_all_shots">顯示所有shots</string>
   <string name="menu_copy_text">複製文字</string>
   <string name="menu_highlight_shot">置頂</string>
@@ -239,6 +244,8 @@
   <string name="multiple_activity_notification">%d個動態消息通知</string>
   <string name="mute">靜音</string>
   <string name="new_activity_notification">新動態消息</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">新的關注者</string>
   <string name="new_password_again_hint">請再輸入您的密碼</string>
   <string name="new_password_hint">新密碼</string>
   <plurals name="new_shots_indicator">
@@ -263,10 +270,8 @@
   <string name="no">不用了</string>
   <string name="notification_image">圖片</string>
   <string name="notification_image_and_text">圖片: %s</string>
+  <string name="notification_private_message_not_allowed">用戶屏蔽了你，你的信息將不會被發送。</string>
   <string name="notification_shot_failed">Shot 發送失敗</string>
-  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
-  <string name="private_message_video">video</string>
-  <string name="private_message_image">image</string>
   <string name="notification_shot_failed_subtitle_pattern">草稿已儲存: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">草稿已儲存</string>
   <string name="notification_shot_has_parent_deleted_subtitle">您回覆的shot已被刪除</string>
@@ -294,6 +299,8 @@
   <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">當前投票結果</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">投票</string>
   <string name="poll_results">最終結果</string>
   <string name="poll_results_dialog">一旦看到結果，將無法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -304,6 +311,9 @@
     <item quantity="zero">%d 投票</item>
   </plurals>
   <string name="poll_vote_timeout_retry">重試</string>
+  <string name="private_message_image">照片</string>
+  <string name="private_message_timeline_empty_title">沒有信息</string>
+  <string name="private_message_video">視頻</string>
   <string name="profile_all_shots">所有 shots</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">編輯個人檔案</string>
@@ -355,9 +365,6 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
-  <string name="new_followers_push_settings">新的關注者</string>
-  <string name="poll_push_settings">投票</string>
-  <string name="checkin_push_settings">簽到</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">還原stream</string>
   <string name="restore_stream_snackbar_action">復原</string>
@@ -386,7 +393,6 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
-  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
@@ -426,9 +432,11 @@
   <string name="support_privacy_policy">隱私政策</string>
   <string name="support_terms_service">服務條款</string>
   <string name="support_version">版本</string>
+  <string name="timeline_poll_results">找不到任何結果</string>
   <string name="title_activity_all_participants">所有參與者</string>
   <string name="title_activity_all_shots">所有 shots</string>
   <string name="title_activity_change_password">更改密碼</string>
+  <string name="title_activity_channels">私信</string>
   <string name="title_activity_contributors">合作者</string>
   <string name="title_activity_email_confirmation">電郵</string>
   <string name="title_activity_listing">Streams</string>
@@ -467,14 +475,9 @@
   <string name="watching_stream_connected_muted">已連接(靜音)</string>
   <string name="watch_profile_photo" formatted="false">點開</string>
   <string name="welcome_get_started_button">明白了</string>
-  <string name="welcome_shootr_title">進入一個stream以進行聯繫</string>
+  <string name="welcome_shootr_title">關注你喜歡的人，這樣可以總是收到他的消息。</string>
   <string name="whale_message_default">我們正在為您優化Shootr，很快就會回來。</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">找不到任何結果</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
-  <string name="title_activity_channels">Channels</string>
 </resources>

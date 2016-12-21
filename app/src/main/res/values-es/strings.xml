@@ -67,6 +67,8 @@
   <string name="change_password_logout_message">La contraseña ha cambiado. Debes reiniciar sesión.</string>
   <string name="change_photo">Cambiar foto</string>
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">Check-in</string>
   <!-- Errors -->
   <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
   <string name="confirmation_hide_shot_message" formatted="false">Quitar shot</string>
@@ -176,6 +178,8 @@
   <string name="error_stream_read_only">Este stream ha sido borrado y es solo de lectura.</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">Hoy ya has hecho check-in en este stream.</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">Se requieren el email y la lista de amigos.</string>
@@ -188,10 +192,9 @@
   <string name="following_list_empty">No sigues a nadie</string>
   <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">No hay mensajes</string>
   <string name="include_listing_empty">No hay streams</string>
-  <string name="include_listing_channels_empty">No private messages</string>
-  <string name="private_message_video">video</string>
-  <string name="private_message_image">image</string>
   <string name="intro_create_text">¿Diriges una comunidad? Crea su stream y… Shoot!</string>
   <string name="intro_create_title">Crear</string>
   <string name="intro_favorites_text">Decenas de streams se añaden cada día. Crea tus Favoritos.</string>
@@ -243,6 +246,8 @@
   <string name="multiple_activity_notification">%d notificaciones nuevas</string>
   <string name="mute">Silenciar</string>
   <string name="new_activity_notification">Nueva actividad</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">Nuevos seguidores</string>
   <string name="new_password_again_hint">Nueva contraseña otra vez</string>
   <string name="new_password_hint">Nueva contraseña</string>
   <plurals name="new_shots_indicator">
@@ -269,8 +274,8 @@
   <string name="no">No</string>
   <string name="notification_image">Imagen</string>
   <string name="notification_image_and_text">Imagen: %s</string>
+  <string name="notification_private_message_not_allowed">El usuario ha restringido los mensajes privados y tu mensaje no puede enviarse</string>
   <string name="notification_shot_failed">El shot no se ha publicado</string>
-  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
   <string name="notification_shot_failed_subtitle_pattern">Borrador guardado: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>
   <string name="notification_shot_has_parent_deleted_subtitle">El shot al que respondes ha sido eliminado</string>
@@ -298,6 +303,8 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">Encuesta</string>
   <string name="poll_results">Resultado final</string>
   <string name="poll_results_dialog">Una vez vistos los resultados no podrás votar en esta encuesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -309,6 +316,9 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
+  <string name="private_message_image">Foto</string>
+  <string name="private_message_timeline_empty_title">No hay mensajes</string>
+  <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Todos los shots</string>
   <string name="profile_edit_done_button">Hecho</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -362,9 +372,6 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
-  <string name="new_followers_push_settings">Nuevos seguidores</string>
-  <string name="poll_push_settings">Encuesta</string>
-  <string name="checkin_push_settings">Check-in</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
@@ -394,7 +401,6 @@
   </plurals>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No hay shots</string>
-  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
@@ -434,9 +440,11 @@
   <string name="support_privacy_policy">Política de privacidad</string>
   <string name="support_terms_service">Condiciones de uso</string>
   <string name="support_version">Versión</string>
+  <string name="timeline_poll_results">Resultado</string>
   <string name="title_activity_all_participants">Todos los participantes</string>
   <string name="title_activity_all_shots">Todos los shots</string>
   <string name="title_activity_change_password">Cambiar contraseña</string>
+  <string name="title_activity_channels">Mensajes privados</string>
   <string name="title_activity_contributors">Colaboradores</string>
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
@@ -476,14 +484,9 @@
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">Ver</string>
   <string name="welcome_get_started_button">Empezar</string>
-  <string name="welcome_shootr_title">Entra en un stream para conectarte</string>
+  <string name="welcome_shootr_title">Sigue a la que gente que te interesa y nunca te pierdas sus mensajes</string>
   <string name="whale_message_default">Estamos mejorando Shootr para ti. Volvemos pronto.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">Resultado</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
-  <string name="title_activity_channels">Channels</string>
 </resources>
