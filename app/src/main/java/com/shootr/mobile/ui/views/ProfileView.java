@@ -119,4 +119,8 @@ public interface ProfileView {
     void showFriendsButton();
 
     void hideFriendsButton();
+
+    void goToChannelsList();
+
+    void goToChannelTimeline(String idTargetUser);
 }

@@ -93,7 +93,7 @@ public class ShotViewHolder {
     }
 
     private void setupVerified(ShotModel shotModel) {
-        if (shotModel.getParentShotId() == null && shotModel.getVerifiedUser()) {
+        if (shotModel.getParentShotId() == null && shotModel.isVerifiedUser()) {
             verifiedUser.setVisibility(View.VISIBLE);
         } else {
             verifiedUser.setVisibility(View.GONE);
@@ -172,7 +172,7 @@ public class ShotViewHolder {
     }
 
     private void bindUserPhoto(final ShotModel shot) {
-        imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
+        imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onAvatarClick(shot.getIdUser(), v);

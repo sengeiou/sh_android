@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -133,11 +134,11 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   }
 
   private List<Shot> contributorShots() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(CONTRIBUTOR_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(CONTRIBUTOR_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     return Collections.singletonList(shot);
   }
@@ -145,22 +146,22 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithContributorShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(CONTRIBUTOR_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(CONTRIBUTOR_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
 
   private List<Shot> holderShots() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(HOLDER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(HOLDER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     return Collections.singletonList(shot);
   }
@@ -168,21 +169,21 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithHolderShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(HOLDER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(HOLDER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
 
   private List<Shot> followingShots() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(FOLLOWING_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(FOLLOWING_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     return Collections.singletonList(shot);
   }
@@ -190,21 +191,21 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithFollowingShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(FOLLOWING_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(FOLLOWING_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }
 
   private List<Shot> myShot() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
 
     return Collections.singletonList(shot);
   }
@@ -212,11 +213,11 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
   private Timeline timelineWithMyShot() {
     Timeline timeline = new Timeline();
 
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
     Shot shot = new Shot();
     shot.setIdShot(ID_SHOT);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     timeline.setShots(Collections.singletonList(shot));
     return timeline;
   }

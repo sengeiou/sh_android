@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
@@ -1154,7 +1155,7 @@ public class StreamTimelinePresenterTest {
   private Shot shot() {
     Shot shot = new Shot();
     shot.setPublishDate(new Date());
-    shot.setUserInfo(new Shot.ShotUserInfo());
+    shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
     return shot;
   }
 

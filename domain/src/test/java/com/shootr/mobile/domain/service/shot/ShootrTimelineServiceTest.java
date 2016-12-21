@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class ShootrTimelineServiceTest {
     @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock ActivityTimelineParameters activityTimelineParameters;
+    @Mock PrivateMessageRepository remotePrivateMessageRepository;
 
     private ShootrTimelineService shootrTimelineService;
 
@@ -58,7 +60,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService = new ShootrTimelineService(remoteShotRepository,
           localActivityRepository,
           remoteActivityRepository,
-          timelineSynchronizationRepository);
+          timelineSynchronizationRepository, remotePrivateMessageRepository);
     }
 
     @Test public void shouldReturnStreamTimelineWhenRefreshStreamTimeline() throws Exception {

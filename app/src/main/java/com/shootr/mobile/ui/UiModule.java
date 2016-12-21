@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
+import com.shootr.mobile.ui.activities.ChannelListActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.CropPictureActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
@@ -25,6 +26,7 @@ import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
@@ -109,7 +111,7 @@ import javax.inject.Singleton;
     FindFriendsFragment.class,
     FindStreamsFragment.class,
     CropPictureActivity.class,
-    EasterEggActivity.class
+    EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListActivity.class
   },
   complete = false) public class UiModule {
 

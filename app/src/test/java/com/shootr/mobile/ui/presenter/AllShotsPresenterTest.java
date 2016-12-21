@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
@@ -179,7 +180,7 @@ public class AllShotsPresenterTest {
 
     private List<Shot> shotList() {
         Shot shot = new Shot();
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setAvatar(AVATAR);
         userInfo.setIdUser(USER_ID);
         userInfo.setUsername(USERNAME);

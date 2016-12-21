@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -1089,7 +1090,7 @@ public class ProfilePresenterTest {
     for (int i = 0; i < numberOfShots; i++) {
       Shot shot = new Shot();
       shot.setIdShot("idShot" + i);
-      shot.setUserInfo(new Shot.ShotUserInfo());
+      shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
       shots.add(shot);
     }
     return shots;

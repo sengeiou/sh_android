@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -27,10 +28,10 @@ public class ShotModelMapper {
         }
         shotModel.setImage(shotImageModel);
         shotModel.setBirth(shot.getPublishDate());
-        Shot.ShotUserInfo userInfo = shot.getUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = shot.getUserInfo();
         shotModel.setUsername(userInfo.getUsername());
         shotModel.setIdUser(userInfo.getIdUser());
-        shotModel.setPhoto(userInfo.getAvatar());
+        shotModel.setAvatar(userInfo.getAvatar());
         Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
         if (streamInfo != null) {
             shotModel.setStreamId(streamInfo.getIdStream());
@@ -53,8 +54,8 @@ public class ShotModelMapper {
         shotModel.setCtaCaption(shot.getCtaCaption());
         shotModel.setPromoted(shot.getPromoted());
         shotModel.setType(shot.getType());
-        if (shot.getVerifiedUser() != null) {
-            shotModel.setVerifiedUser(shot.getVerifiedUser() == 1);
+        if (userInfo.getVerifiedUser() != null) {
+            shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
         } else {
             shotModel.setVerifiedUser(false);
         }

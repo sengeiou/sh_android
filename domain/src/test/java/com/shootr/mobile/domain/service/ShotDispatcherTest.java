@@ -37,13 +37,13 @@ public class ShotDispatcherTest {
     @Mock BusPublisher busPublisher;
     @Mock ShotQueueListener shotQueueListener;
     @Mock ShootrShotService shootrShotService;
-    @Spy ShotQueueRepository shotQueueRepository = new StubShotQueueRepository();
+    @Spy QueueRepository queueRepository = new StubShotQueueRepository();
 
     private ShotDispatcher shotDispatcher;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotDispatcher = new ShotDispatcher(shotQueueRepository,
+        shotDispatcher = new ShotDispatcher(queueRepository,
           shootrShotService,
           busPublisher,
           shotQueueListener,
@@ -51,31 +51,31 @@ public class ShotDispatcherTest {
     }
 
     @Test public void shouldPutOneShotInRepositoryWhenOneShotSent() throws Exception {
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
         verify(shootrShotService, times(1)).sendShot(any(Shot.class));
     }
 
     @Test public void shouldSendTwoShotsThroughServiceWhenTwoShotsSentSequentially() throws Exception {
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
         verify(shootrShotService, times(2)).sendShot(any(Shot.class));
     }
 
     @Test public void shouldRemoveFromQueueWhenShotSent() throws Exception {
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
-        verify(shotQueueRepository, times(1)).remove(any(QueuedShot.class));
+        verify(queueRepository, times(1)).remove(any(QueuedShot.class));
     }
 
     @Test public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
         when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<QueuedShot> queuedShotCaptor = ArgumentCaptor.forClass(QueuedShot.class);
-        verify(shotQueueRepository, atLeastOnce()).put(queuedShotCaptor.capture());
+        verify(queueRepository, atLeastOnce()).put(queuedShotCaptor.capture());
         QueuedShot queuedShot = queuedShotCaptor.getValue();
         assertThat(queuedShot.isFailed()).isTrue();
     }
@@ -83,7 +83,7 @@ public class ShotDispatcherTest {
     @Test public void shouldPostANotNullToBusWhenShotSent() throws Exception {
         when(shootrShotService.sendShot(any(Shot.class))).thenReturn(shot());
 
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<ShotSent.Event> streamArgumentCaptor = ArgumentCaptor.forClass(ShotSent.Event.class);
         verify(busPublisher, atLeastOnce()).post(streamArgumentCaptor.capture());
@@ -93,28 +93,28 @@ public class ShotDispatcherTest {
     }
 
     @Test public void shouldNotifyListenerOnlyOnceWhenSendingShot() throws Exception {
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onSendingShot(any(QueuedShot.class));
     }
 
     @Test public void shouldNotifyListenerWhenShotSent() throws Exception {
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onShotSent(any(QueuedShot.class));
     }
 
     @Test public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
         when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
-        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shot(), IMAGE_FILE_NULL);
 
         verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class), any(Exception.class));
     }
 
     @Test public void shouldNotCreateNewQueuedShotIfShotHasIdQueue() throws Exception {
-        shotDispatcher.sendShot(shotInQueue(), IMAGE_FILE_NULL);
+        shotDispatcher.sendMessage(shotInQueue(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<QueuedShot> captor = ArgumentCaptor.forClass(QueuedShot.class);
-        verify(shotQueueRepository, atLeastOnce()).put(captor.capture());
+        verify(queueRepository, atLeastOnce()).put(captor.capture());
         QueuedShot persistedQueuedShot = captor.getAllValues().get(0);
         assertThat(persistedQueuedShot).hasIdQueue(QUEUED_ID);
     }
@@ -149,13 +149,13 @@ public class ShotDispatcherTest {
 
     private QueuedShot copy(QueuedShot queuedShot) {
         QueuedShot copy = new QueuedShot();
-        copy.setShot(queuedShot.getShot());
+        copy.setBaseMessage(queuedShot.getBaseMessage());
         copy.setIdQueue(queuedShot.getIdQueue());
         copy.setImageFile(queuedShot.getImageFile());
         return copy;
     }
 
-    class StubShotQueueRepository implements ShotQueueRepository {
+    class StubShotQueueRepository implements QueueRepository {
 
         List<QueuedShot> queuedShots = new ArrayList<>();
 
@@ -175,11 +175,11 @@ public class ShotDispatcherTest {
             queuedShots.remove(0);
         }
 
-        @Override public List<QueuedShot> getPendingShotQueue() {
+        @Override public List<QueuedShot> getPendingQueue() {
             return Arrays.asList(new QueuedShot(shot()));
         }
 
-        @Override public QueuedShot nextQueuedShot() {
+        @Override public QueuedShot nextQueued(String queuedType) {
             if (queuedShots.isEmpty()) {
                 return null;
             } else {
@@ -187,11 +187,11 @@ public class ShotDispatcherTest {
             }
         }
 
-        @Override public List<QueuedShot> getFailedShotQueue() {
+        @Override public List<QueuedShot> getFailedQueue() {
             return null;
         }
 
-        @Override public QueuedShot getShotQueue(Long queuedShotId) {
+        @Override public QueuedShot getQueue(Long queuedShotId, String queuedType) {
             return new QueuedShot(shot());
         }
     }

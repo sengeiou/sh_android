@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
@@ -53,12 +54,12 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
   @Override public void onBindViewHolder(DraftViewHolder holder, int position) {
     DraftModel draftModel = drafts.get(position);
-    ShotModel shotModel = draftModel.getShotModel();
+    BaseMessageModel shotModel = draftModel.getBaseMessageModel();
 
     holder.name.setText(shotModel.getUsername());
     holder.text.setText(getShotCommentWithStream(shotModel, holder));
     holder.text.addLinks();
-    imageLoader.loadProfilePhoto(shotModel.getPhoto(), holder.avatar);
+    imageLoader.loadProfilePhoto(shotModel.getAvatar(), holder.avatar);
     bindShotImageIfPresent(holder, draftModel);
     if (isExpandedLocked(position)) {
       currentExpandedItemPosition = position;
@@ -74,30 +75,50 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
   }
 
-  private CharSequence getShotCommentWithStream(ShotModel shot, DraftViewHolder holder) {
+  private CharSequence getShotCommentWithStream(BaseMessageModel shot, DraftViewHolder holder) {
     if (shot.getComment() == null) {
-      return new Truss().pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
-          R.style.InlineDescriptionAppearance)).append(shot.getStreamTitle()).popSpan().build();
+      if (shot instanceof ShotModel) {
+        return new Truss().pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
+            R.style.InlineDescriptionAppearance))
+            .append(((ShotModel) shot).getStreamTitle())
+            .popSpan()
+            .build();
+      } else {
+        return new Truss().pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
+            R.style.InlineDescriptionAppearance)).append(shot.getUsername()).popSpan().build();
+      }
     } else {
       return setupShotCommentAppearance(shot, holder);
     }
   }
 
-  private CharSequence setupShotCommentAppearance(ShotModel shot, DraftViewHolder holder) {
-    if (shot.getStreamTitle() != null) {
+  private CharSequence setupShotCommentAppearance(BaseMessageModel shot, DraftViewHolder holder) {
+    if (shot instanceof ShotModel) {
+      return setupShotComment(shot, holder);
+    } else {
+      return setupPrivateMessageComment(shot, holder);
+    }
+  }
+
+  private CharSequence setupPrivateMessageComment(BaseMessageModel shot, DraftViewHolder holder) {
+    return new Truss().append(shot.getComment())
+        .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
+            R.style.InlineDescriptionAppearance))
+        .popSpan()
+        .build();
+  }
+
+  private CharSequence setupShotComment(BaseMessageModel shot, DraftViewHolder holder) {
+    if (((ShotModel) shot).getStreamTitle() != null) {
       return new Truss().append(shot.getComment())
           .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
               R.style.InlineDescriptionAppearance))
           .append(" ")
-          .append(shot.getStreamTitle())
+          .append(((ShotModel) shot).getStreamTitle())
           .popSpan()
           .build();
     } else {
-      return new Truss().append(shot.getComment())
-          .pushSpan(new TextAppearanceSpan(holder.draftItemView.getContext(),
-              R.style.InlineDescriptionAppearance))
-          .popSpan()
-          .build();
+      return setupPrivateMessageComment(shot, holder);
     }
   }
 
@@ -106,7 +127,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
   }
 
   private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
-    ShotModel shotModel = draftModel.getShotModel();
+    BaseMessageModel shotModel = draftModel.getBaseMessageModel();
     if (shotModel.getImage() != null && shotModel.getImage().getImageUrl() != null) {
       imageLoader.loadTimelineImage(shotModel.getImage().getImageUrl(), holder.image);
       holder.image.setVisibility(View.VISIBLE);

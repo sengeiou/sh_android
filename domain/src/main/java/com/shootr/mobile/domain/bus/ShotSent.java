@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.bus;
 
-import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 
 public interface ShotSent {
 
@@ -11,13 +11,13 @@ public interface ShotSent {
 
     class Event {
 
-        private Shot shot;
+        private BaseMessage shot;
 
-        public Event(Shot shot) {
+        public Event(BaseMessage shot) {
             this.shot = shot;
         }
 
-        public Shot getShot() {
+        public BaseMessage getShot() {
             return shot;
         }
 

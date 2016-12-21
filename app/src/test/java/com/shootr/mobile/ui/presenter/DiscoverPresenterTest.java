@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.DiscoverView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -48,6 +49,7 @@ public class DiscoverPresenterTest {
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock SessionRepository sessionRepository;
   @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
+  @Mock Bus bus;
 
   private DiscoveredModelMapper discoveredModelMapper;
   private DiscoverPresenter presenter;
@@ -58,7 +60,7 @@ public class DiscoverPresenterTest {
         new ShotModelMapper());
     presenter = new DiscoverPresenter(getDiscoveredInteractor, getLocalDiscoveredInteractor,
         getFavoriteStreamsInteractor, addToFavoritesInteractor,
-        removeFromFavoritesInteractor, markNiceShotInteractor, unmarkNiceShotInteractor,
+        removeFromFavoritesInteractor, markNiceShotInteractor, unmarkNiceShotInteractor, bus,
         discoveredModelMapper, errorMessageFactory);
     when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
   }

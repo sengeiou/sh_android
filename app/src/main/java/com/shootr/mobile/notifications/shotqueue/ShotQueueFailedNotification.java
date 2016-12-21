@@ -30,8 +30,8 @@ public class ShotQueueFailedNotification extends CommonNotification {
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder, Boolean areShotTypesKnown) {
         builder.setContentTitle(titleText);
-        if (shot.getShot().getComment() != null) {
-            builder.setContentText(String.format(subtitleTextPattern, shot.getShot().getComment()));
+        if (shot.getBaseMessage().getComment() != null) {
+            builder.setContentText(String.format(subtitleTextPattern, shot.getBaseMessage().getComment()));
         } else {
             builder.setContentText(subtitleTextPatternWithoutComment);
         }

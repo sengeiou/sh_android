@@ -54,8 +54,10 @@ public class ClickableTextView extends TextView {
 
   @Override public void setText(CharSequence text, BufferType type) {
     // Force spannable text
-    String bla = text.toString();
-    super.setText(text, BufferType.SPANNABLE);
+    if (text != null) {
+      String bla = text.toString();
+      super.setText(text, BufferType.SPANNABLE);
+    }
   }
 
   /**

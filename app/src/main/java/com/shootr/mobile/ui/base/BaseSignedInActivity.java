@@ -19,6 +19,8 @@ public class BaseSignedInActivity extends BaseToolbarActivity {
         super.onCreate(savedInstanceState);
     }
 
+
+
     /**
      * Retrieves the current User from database, or redirect to login activity if not found.
      *

@@ -4,13 +4,17 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BadgeChanged;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
+import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.UserModel;
@@ -18,6 +22,7 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.List;
 import javax.inject.Inject;
 
 public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
@@ -30,11 +35,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
   private final UserModelMapper userModelMapper;
   private final IntPreference badgeCount;
   private final GetFollowingInteractor followingInteractor;
+  private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   private final Bus bus;
+  private final BusPublisher busPublisher;
 
   private MainScreenView mainScreenView;
   private boolean hasBeenPaused = false;
   private UserModel userModel;
+  private int unreadChannels = 0;
 
   @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
@@ -42,7 +50,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       SessionRepository sessionRepository, UserModelMapper userModelMapper,
       @ActivityBadgeCount IntPreference badgeCount, GetFollowingInteractor followingInteractor,
-      @Main Bus bus) {
+      GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor, @Main Bus bus,
+      BusPublisher busPublisher) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
@@ -51,7 +60,9 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     this.userModelMapper = userModelMapper;
     this.badgeCount = badgeCount;
     this.followingInteractor = followingInteractor;
+    this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
     this.bus = bus;
+    this.busPublisher = busPublisher;
   }
 
   protected void setView(MainScreenView mainScreenView) {
@@ -107,6 +118,28 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     }
   }
 
+  private void loadChannelsForBadge() {
+    getPrivateMessagesChannelsInteractor.loadChannels(new Interactor.Callback<List<PrivateMessageChannel>>() {
+      @Override public void onLoaded(List<PrivateMessageChannel> privateMessageChannels) {
+        unreadChannels = 0;
+        for (PrivateMessageChannel privateMessageChannel : privateMessageChannels) {
+          if (!privateMessageChannel.isRead()) {
+            unreadChannels++;
+          }
+        }
+        publishChannelBadge();
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        /* no-op */
+      }
+    });
+  }
+
+  public void publishChannelBadge() {
+    busPublisher.post(new ChannelsBadgeChanged.Event(unreadChannels));
+  }
+
   private void updateActivityBadge() {
     int activities = badgeCount.get();
     if (activities > 0) {
@@ -116,6 +149,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
   @Override public void resume() {
     updateActivityBadge();
+    loadChannelsForBadge();
     bus.register(this);
     if (hasBeenPaused) {
       loadCurrentUser();

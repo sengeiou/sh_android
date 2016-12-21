@@ -85,7 +85,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupVerified(ShotModel shotModel) {
-        if (shotModel.getVerifiedUser()) {
+        if (shotModel.isVerifiedUser()) {
             verifiedUser.setVisibility(View.VISIBLE);
         } else {
             verifiedUser.setVisibility(View.GONE);
@@ -123,7 +123,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     }
 
     private void loadImage(final ShotModel reply) {
-        String photo = reply.getPhoto();
+        String photo = reply.getAvatar();
         imageLoader.loadProfilePhoto(photo, this.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

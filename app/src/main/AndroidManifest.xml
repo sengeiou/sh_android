@@ -8,7 +8,8 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
   <uses-permission android:name="android.permission.GET_TASKS"/>
   <!-- GCM -->
   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
@@ -143,9 +144,15 @@
     <meta-data
         android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/facebookID"/>
+    <meta-data
+        android:name="com.mixpanel.android.MPConfig.ResourcePackageName"
+        android:value="com.shootr.mobile"/>
 
-    <meta-data android:name="com.mixpanel.android.MPConfig.ResourcePackageName" android:value="com.shootr.mobile" />
-
+    <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
+      <intent-filter>
+        <action android:name="com.android.vending.INSTALL_REFERRER" />
+      </intent-filter>
+    </receiver>
     <receiver
         android:name=".notifications.gcm.GCMBroadcastReceiver"
         android:exported="true"
@@ -156,15 +163,13 @@
         <category android:name="${applicationId}"/>
       </intent-filter>
     </receiver>
-
     <receiver
         android:name="com.mixpanel.android.mpmetrics.InstallReferrerReceiver"
         android:exported="true">
       <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER" />
+        <action android:name="com.android.vending.INSTALL_REFERRER"/>
       </intent-filter>
     </receiver>
-
     <receiver
         android:name=".notifications.gcm.NotificationIntentReceiver"
         android:exported="false">
@@ -303,8 +308,17 @@
           android:resource="@xml/provider_paths"/>
     </provider>
 
-    <activity android:name=".ui.views.EasterEggActivity"
+    <activity
+        android:name=".ui.views.EasterEggActivity"
         android:theme="@style/OverlayTheme">
+    </activity>
+    <activity
+        android:name=".ui.activities.PrivateMessageTimelineActivity"
+        android:theme="@style/ShootrTheme">
+    </activity>
+    <activity
+        android:label="@string/title_activity_channels"
+        android:name=".ui.activities.ChannelListActivity">
     </activity>
   </application>
 

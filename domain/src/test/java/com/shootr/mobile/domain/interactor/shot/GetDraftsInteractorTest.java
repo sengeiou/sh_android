@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.service.ShotQueueRepository;
+import com.shootr.mobile.domain.service.QueueRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class GetDraftsInteractorTest {
 
   private GetDraftsInteractor getDraftsInteractor;
-  @Mock ShotQueueRepository shotQueueRepository;
+  @Mock QueueRepository queueRepository;
   @Mock GetDraftsInteractor.Callback callback;
 
   @Before public void setUp() throws Exception {
@@ -29,17 +29,17 @@ public class GetDraftsInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     InteractorHandler interactorHandler = new TestInteractorHandler();
     getDraftsInteractor =
-        new GetDraftsInteractor(interactorHandler, postExecutionThread, shotQueueRepository);
+        new GetDraftsInteractor(interactorHandler, postExecutionThread, queueRepository);
   }
 
   @Test public void shouldGetShotsFromQueueRepository() throws Exception {
     getDraftsInteractor.loadDrafts(callback);
 
-    verify(shotQueueRepository).getFailedShotQueue();
+    verify(queueRepository).getFailedQueue();
   }
 
   @Test public void shouldNotifyLoadedWhenGetShotFromQueueRepository() throws Exception {
-    when(shotQueueRepository.getFailedShotQueue()).thenReturn(queuedShot());
+    when(queueRepository.getFailedQueue()).thenReturn(queuedShot());
 
     getDraftsInteractor.loadDrafts(callback);
 
@@ -47,7 +47,7 @@ public class GetDraftsInteractorTest {
   }
 
   @Test public void shouldNotifyLoadedWhenGetShotsFromQueueRepository() throws Exception {
-    when(shotQueueRepository.getFailedShotQueue()).thenReturn(queuedShots());
+    when(queueRepository.getFailedQueue()).thenReturn(queuedShots());
 
     getDraftsInteractor.loadDrafts(callback);
 

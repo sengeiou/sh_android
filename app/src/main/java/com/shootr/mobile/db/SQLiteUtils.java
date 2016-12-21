@@ -191,6 +191,50 @@ public class SQLiteUtils {
       +
       ")";
 
+    public static final String CREATE_TABLE_MESSAGE_QUEUE = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.MessageQueueTable.TABLE
+        + " ("
+        + DatabaseContract.MessageQueueTable.ID_QUEUE
+        + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+        + DatabaseContract.MessageQueueTable.FAILED
+        + " INT NOT NULL,"
+        + DatabaseContract.MessageQueueTable.IMAGE_FILE
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.ID_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.MessageQueueTable.ID_TARGET_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.MessageQueueTable.USERNAME
+        + " TEXT NOT NULL,"
+        + DatabaseContract.MessageQueueTable.COMMENT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.MessageQueueTable.IMAGE
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE_CHANNEL
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.TITLE
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.VIDEO_URL
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.VIDEO_TITLE
+        + " TEXT NULL,"
+        + DatabaseContract.MessageQueueTable.VIDEO_DURATION
+        + " NUMBER NULL,"
+        + DatabaseContract.SyncColumns.BIRTH
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.MODIFIED
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.DELETED
+        + " DATETIME NULL,"
+        + DatabaseContract.SyncColumns.REVISION
+        + " INT NOT NULL,"
+        + DatabaseContract.SyncColumns.SYNCHRONIZED
+        + " CHAR(1) NULL"
+        +
+        ")";
+
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.FollowTable.TABLE
       + " ("
@@ -702,4 +746,71 @@ public class SQLiteUtils {
         + " TEXT NOT NULL PRIMARY KEY,"
         + DatabaseContract.SynchroTable.TIMESTAMP
         + " INTEGER NULL)";
+
+    public static final String CREATE_TABLE_PRIVATE_MESSAGE_CHANNEL = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.PrivateMessageChannelTable.TABLE
+        + " ("
+        + DatabaseContract.PrivateMessageChannelTable.ID_PRIVATE_MESSAGE_CHANNEL
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.PrivateMessageChannelTable.ID_TARGET_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.TITLE
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.IMAGE
+        + " TEXT NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.READ
+        + " NUMBER NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME
+        + " INTEGER NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT
+        + " TEXT NULL,"
+        + DatabaseContract.SyncColumns.BIRTH
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.MODIFIED
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.DELETED
+        + " DATETIME NULL,"
+        + DatabaseContract.SyncColumns.REVISION
+        + " INT NOT NULL,"
+        + DatabaseContract.SyncColumns.SYNCHRONIZED
+        + " CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_PRIVATE_MESSAGE = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.PrivateMessageTable.TABLE
+        + " ("
+        + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE_CHANNEL
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PrivateMessageTable.ID_USER
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PrivateMessageTable.USERNAME
+        + " TEXT NOT NULL,"
+        + DatabaseContract.PrivateMessageTable.COMMENT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.PrivateMessageTable.IMAGE
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.PrivateMessageTable.IMAGE_WIDTH
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.PrivateMessageTable.IMAGE_HEIGHT
+        + " VARCHAR(255) NULL,"
+        + DatabaseContract.PrivateMessageTable.VIDEO_URL
+        + " TEXT NULL,"
+        + DatabaseContract.PrivateMessageTable.VIDEO_TITLE
+        + " TEXT NULL,"
+        + DatabaseContract.PrivateMessageTable.VIDEO_DURATION
+        + " NUMBER NULL,"
+        + DatabaseContract.PrivateMessageTable.VERIFIED_USER
+        + " NUMBER NULL,"
+        + DatabaseContract.SyncColumns.BIRTH
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.MODIFIED
+        + " DATETIME NOT NULL,"
+        + DatabaseContract.SyncColumns.DELETED
+        + " DATETIME NULL,"
+        + DatabaseContract.SyncColumns.REVISION
+        + " INT NOT NULL,"
+        + DatabaseContract.SyncColumns.SYNCHRONIZED
+        + " CHAR(1) NULL)";
+
 }

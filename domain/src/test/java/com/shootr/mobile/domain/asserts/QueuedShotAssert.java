@@ -1,7 +1,7 @@
 package com.shootr.mobile.domain.asserts;
 
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
-import com.shootr.mobile.domain.model.shot.Shot;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
 
@@ -125,7 +125,7 @@ public class QueuedShotAssert extends AbstractAssert<QueuedShotAssert, QueuedSho
      * @return this assertion object.
      * @throws AssertionError - if the actual QueuedShot's shot is not equal to the given one.
      */
-    public QueuedShotAssert hasShot(Shot shot) {
+    public QueuedShotAssert hasShot(BaseMessage shot) {
         // check that actual QueuedShot we want to make assertions on is not null.
         isNotNull();
 
@@ -133,7 +133,7 @@ public class QueuedShotAssert extends AbstractAssert<QueuedShotAssert, QueuedSho
         String assertjErrorMessage = "\nExpected shot of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Shot actualShot = actual.getShot();
+        BaseMessage actualShot = actual.getBaseMessage();
         if (!Objects.areEqual(actualShot, shot)) {
             failWithMessage(assertjErrorMessage, actual, shot, actualShot);
         }

@@ -15,48 +15,48 @@ import javax.inject.Inject;
 
 public class WelcomePageActivity extends BaseActivity implements WelcomePageView {
 
-    @Inject WelcomePagePresenter presenter;
-    @Inject FeedbackMessage feedbackMessage;
+  @Inject WelcomePagePresenter presenter;
+  @Inject FeedbackMessage feedbackMessage;
 
-    @BindView(R.id.button_get_started) View getStartedButton;
-    @BindView(R.id.get_started_progress) View loading;
+  @BindView(R.id.button_get_started) View getStartedButton;
+  @BindView(R.id.get_started_progress) View loading;
 
-    @Override protected int getLayoutResource() {
-        return R.layout.activity_welcome_page;
-    }
+  @Override protected int getLayoutResource() {
+    return R.layout.activity_welcome_page;
+  }
 
-    @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
-    }
+  @Override protected void initializeViews(Bundle savedInstanceState) {
+    ButterKnife.bind(this);
+  }
 
-    @Override protected void initializePresenter() {
-        presenter.initialize(this);
-    }
+  @Override protected void initializePresenter() {
+    presenter.initialize(this);
+  }
 
-    @Override protected boolean requiresUserLogin() {
-        return false;
-    }
+  @Override protected boolean requiresUserLogin() {
+    return false;
+  }
 
-    @Override public void showError(String errorMessage) {
-        feedbackMessage.show(getView(), errorMessage);
-    }
+  @Override public void showError(String errorMessage) {
+    feedbackMessage.show(getView(), errorMessage);
+  }
 
-    @Override public void goToStreamList() {
-        finish();
-        Intent i = new Intent(this, MainTabbedActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-    }
+  @Override public void goToStreamList() {
+    finish();
+    Intent i = new Intent(this, MainTabbedActivity.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    startActivity(i);
+  }
 
-    @Override public void showSpinner() {
-        loading.setVisibility(View.VISIBLE);
-    }
+  @Override public void showSpinner() {
+    loading.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void hideGetStarted() {
-        getStartedButton.setVisibility(View.GONE);
-    }
+  @Override public void hideGetStarted() {
+    getStartedButton.setVisibility(View.GONE);
+  }
 
-    @OnClick(R.id.button_get_started) public void onGetStartedClick() {
-        presenter.getStartedClicked();
-    }
+  @OnClick(R.id.button_get_started) public void onGetStartedClick() {
+    presenter.getStartedClicked();
+  }
 }

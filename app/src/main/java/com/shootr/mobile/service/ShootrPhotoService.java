@@ -38,7 +38,7 @@ public class ShootrPhotoService implements PhotoService {
         this.sessionRepository = sessionRepository;
         this.jsonAdapter = jsonAdapter;
         uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/upload/img/profile";
-        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/shot";
+        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/baseMessage";
         uploadStreamPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/stream";
     }
 
@@ -203,7 +203,7 @@ public class ShootrPhotoService implements PhotoService {
 
     private List<String> getShotImageFromJson(JSONObject responseJson) {
         ArrayList<String> image = new ArrayList<>();
-        image.add(responseJson.optString("shotImageUrl"));
+        image.add(responseJson.optString("imageUrl"));
         image.add(responseJson.optString("imageWidth"));
         image.add(responseJson.optString("imageHeight"));
         return image;

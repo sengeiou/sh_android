@@ -67,6 +67,8 @@
   <string name="change_password_logout_message">A senha foi modificada. Reinicie a sessão</string>
   <string name="change_photo">Trocar foto</string>
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">Check-in</string>
   <!-- Errors -->
   <string name="communication_error">Há um problema com a conexão à Internet. Comprove sua conexão e tente outra vez.</string>
   <string name="confirmation_hide_shot_message" formatted="false">Retirar shot</string>
@@ -176,6 +178,8 @@
   <string name="error_stream_read_only">Este stream foi apagado e é só para leitura.</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">Você já fez o check-in</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">O email e a lista de amigos são necessários.</string>
@@ -188,6 +192,8 @@
   <string name="following_list_empty">Não segue ninguém</string>
   <string name="highlight_shot_dialog">O shot não será mais destacado</string>
   <string name="hours">h</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">Não há mensagens</string>
   <string name="include_listing_empty">Nenhum stream</string>
   <string name="intro_create_text">Dirige uma comunidade? Crie seu stream agora.</string>
   <string name="intro_create_title">Criar</string>
@@ -240,6 +246,8 @@
   <string name="multiple_activity_notification">%d novas notificações</string>
   <string name="mute">Silenciar</string>
   <string name="new_activity_notification">Nova atividade</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">Novos seguidores</string>
   <string name="new_password_again_hint">Repita a nova senha</string>
   <string name="new_password_hint">Nova senha</string>
   <plurals name="new_shots_indicator">
@@ -266,6 +274,7 @@
   <string name="no">Não</string>
   <string name="notification_image">Imagem</string>
   <string name="notification_image_and_text">Imagem: %s</string>
+  <string name="notification_private_message_not_allowed">Este usuário restringiu as mensagens privadas e sua mensagem não pôde ser enviada.</string>
   <string name="notification_shot_failed">O shot não foi publicado</string>
   <string name="notification_shot_failed_subtitle_pattern">Rascunho salvo: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Rascunho salvo</string>
@@ -294,6 +303,8 @@
   <string name="pin_topic" formatted="false">Linkar mensagem</string>
   <string name="poll_ignore">Ignorar</string>
   <string name="poll_live_results">Resultados ao vivo</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">Enquete</string>
   <string name="poll_results">Resultado final</string>
   <string name="poll_results_dialog">Uma vez que você viu os resultados não pode votar nesse questionário.</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -305,6 +316,9 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Tentar novamente</string>
+  <string name="private_message_image">Foto</string>
+  <string name="private_message_timeline_empty_title">Não há mensagens</string>
+  <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Todos os shots</string>
   <string name="profile_edit_done_button">Feito</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -358,9 +372,6 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
-  <string name="new_followers_push_settings">Novos seguidores</string>
-  <string name="poll_push_settings">Enquete</string>
-  <string name="checkin_push_settings">Check-in</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
@@ -429,9 +440,11 @@
   <string name="support_privacy_policy">Política de privacidade</string>
   <string name="support_terms_service">Condições de uso</string>
   <string name="support_version">Versão</string>
+  <string name="timeline_poll_results">Resultados</string>
   <string name="title_activity_all_participants">Todos os participantes</string>
   <string name="title_activity_all_shots">Todos os shots</string>
   <string name="title_activity_change_password">Modificar senha</string>
+  <string name="title_activity_channels">Mensagens Privadas</string>
   <string name="title_activity_contributors">Colaboradores</string>
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
@@ -471,13 +484,9 @@
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">ver</string>
   <string name="welcome_get_started_button">Começar</string>
-  <string name="welcome_shootr_title">Entre em um stream para conectar-se</string>
+  <string name="welcome_shootr_title">Siga as pessoas para não perder nunca as suas mensagens</string>
   <string name="whale_message_default">Estamos melhorando Shootr para você. Voltaremos logo.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">Resultados</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
 </resources>

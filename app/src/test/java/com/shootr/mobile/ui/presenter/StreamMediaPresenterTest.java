@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetOlderStreamMediaInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -157,13 +158,13 @@ public class StreamMediaPresenterTest {
   }
 
   private List<Shot> shots() {
-    Shot.ShotUserInfo shotUserInfo = new Shot.ShotUserInfo();
-    shotUserInfo.setIdUser(USER_ID);
-    shotUserInfo.setUsername(USERNAME);
+    BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+    baseMessageUserInfo.setIdUser(USER_ID);
+    baseMessageUserInfo.setUsername(USERNAME);
 
     Shot shot = new Shot();
     shot.setIdShot(SHOT_ID);
-    shot.setUserInfo(shotUserInfo);
+    shot.setUserInfo(baseMessageUserInfo);
     return Collections.singletonList(shot);
   }
 

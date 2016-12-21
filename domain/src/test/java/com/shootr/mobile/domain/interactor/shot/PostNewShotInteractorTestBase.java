@@ -2,11 +2,12 @@ package com.shootr.mobile.domain.interactor.shot;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.service.ShotSender;
+import com.shootr.mobile.domain.service.MessageSender;
 import java.io.File;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -29,31 +30,31 @@ public abstract class PostNewShotInteractorTestBase {
   public static final String STREAM_TITLE_STUB = "title";
 
   @Mock SessionRepository sessionRepository;
-  @Mock ShotSender shotSender;
+  @Mock MessageSender messageSender;
 
-  protected abstract PostNewShotInteractor getInteractorForCommonTests();
+  protected abstract PostNewMessageInteractor getInteractorForCommonTests();
 
   @Test public void shouldSendShotWithCurrentUserInfo() throws Exception {
     setupCurrentUserSession();
 
-    getInteractorForCommonTests().postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(),
+    getInteractorForCommonTests().postNewBaseMessage(COMMENT_STUB, IMAGE_NULL, true, new DummyCallback(),
         new DummyErrorCallback());
 
     ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
+    verify(messageSender).sendMessage(shotArgumentCaptor.capture(), any(File.class));
     Shot publishedShot = shotArgumentCaptor.getValue();
-    Shot.ShotUserInfo userInfo = publishedShot.getUserInfo();
+    BaseMessage.BaseMessageUserInfo userInfo = publishedShot.getUserInfo();
     assertUserInfoIsFromUser(userInfo, currentUser());
   }
 
   @Test public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
     setupCurrentUserSession();
 
-    getInteractorForCommonTests().postNewShot(COMMENT_EMPTY, IMAGE_NULL, new DummyCallback(),
+    getInteractorForCommonTests().postNewBaseMessage(COMMENT_EMPTY, IMAGE_NULL, true, new DummyCallback(),
         new DummyErrorCallback());
 
     ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
+    verify(messageSender).sendMessage(shotArgumentCaptor.capture(), any(File.class));
     Shot publishedShot = shotArgumentCaptor.getValue();
     assertThat(publishedShot.getComment()).isNull();
   }
@@ -61,14 +62,14 @@ public abstract class PostNewShotInteractorTestBase {
   @Test public void shouldSendShotThroughDispatcher() throws Exception {
     setupCurrentUserSession();
 
-    getInteractorForCommonTests().postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(),
+    getInteractorForCommonTests().postNewBaseMessage(COMMENT_STUB, IMAGE_NULL, true, new DummyCallback(),
         new DummyErrorCallback());
 
-    verify(shotSender, times(1)).sendShot(any(Shot.class), any(File.class));
+    verify(messageSender, times(1)).sendMessage(any(Shot.class), any(File.class));
   }
 
   //region Assertion
-  private void assertUserInfoIsFromUser(Shot.ShotUserInfo userInfo, User user) {
+  private void assertUserInfoIsFromUser(BaseMessage.BaseMessageUserInfo userInfo, User user) {
     assertThat(userInfo.getIdUser()).isEqualTo(user.getIdUser());
     assertThat(userInfo.getUsername()).isEqualTo(user.getUsername());
     assertThat(userInfo.getAvatar()).isEqualTo(user.getPhoto());
@@ -98,12 +99,12 @@ public abstract class PostNewShotInteractorTestBase {
 
   protected Shot captureSentShot() {
     ArgumentCaptor<Shot> shotCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(shotSender).sendShot(shotCaptor.capture(), any(File.class));
+    verify(messageSender).sendMessage(shotCaptor.capture(), any(File.class));
     return shotCaptor.getValue();
   }
   //endregion
 
-  protected class DummyCallback implements PostNewShotInteractor.CompletedCallback {
+  protected class DummyCallback implements PostNewMessageInteractor.CompletedCallback {
 
     @Override public void onCompleted() {
             /* no-op */

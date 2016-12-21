@@ -67,6 +67,8 @@
   <string name="change_password_logout_message">La contrasenya ha canviat. Reinicia sessió.</string>
   <string name="change_photo">Canviar foto</string>
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">Check-in</string>
   <!-- Errors -->
   <string name="communication_error">Hi ha un problema de connexió a Internet. Comprova la teva connexió i prova un altre cop.</string>
   <string name="confirmation_hide_shot_message" formatted="false">Treure del perfil</string>
@@ -176,6 +178,8 @@
   <string name="error_stream_read_only">Aquest stream ha estat esborrat i és només de lectura.</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">Avui ja has fet check-in en aquest stream.</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No es pot votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">Es requereixen l\'email i la llista d\'amics.</string>
@@ -188,6 +192,8 @@
   <string name="following_list_empty">No segueixes ningú</string>
   <string name="highlight_shot_dialog">El shot deixarà d\'estar destacat</string>
   <string name="hours">h</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">Sense missatges</string>
   <string name="include_listing_empty">No hi ha streams</string>
   <string name="intro_create_text">Dirigeixes una comunitat? Crea el seu stream.</string>
   <string name="intro_create_title">Crear</string>
@@ -240,6 +246,8 @@
   <string name="multiple_activity_notification">%d notificacions noves</string>
   <string name="mute">Silenciar</string>
   <string name="new_activity_notification">Nova activitat</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">Nous seguidors</string>
   <string name="new_password_again_hint">Nova contrasenya altre cop</string>
   <string name="new_password_hint">Nova contrasenya</string>
   <plurals name="new_shots_indicator">
@@ -266,6 +274,7 @@
   <string name="no">No</string>
   <string name="notification_image">Imatge</string>
   <string name="notification_image_and_text">Imatge: %s</string>
+  <string name="notification_private_message_not_allowed">L\'usuari ha restringit els missatges privats i el teu missatge no pot enviar-se</string>
   <string name="notification_shot_failed">El shot no s\'ha publicat</string>
   <string name="notification_shot_failed_subtitle_pattern">Esborrany desat: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Esborrany desat</string>
@@ -294,6 +303,8 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
   <string name="poll_live_results">Resultats en viu</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">Enquesta</string>
   <string name="poll_results">Resultat final</string>
   <string name="poll_results_dialog">Un cop vistos els resultats no podràs votar en aquesta enquesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -305,6 +316,9 @@
     <item quantity="zero">%d vots</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
+  <string name="private_message_image">Foto</string>
+  <string name="private_message_timeline_empty_title">Sense missatges</string>
+  <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Tots els shots</string>
   <string name="profile_edit_done_button">Fet</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -358,9 +372,6 @@
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
   </plurals>
-  <string name="new_followers_push_settings">Nous seguidors</string>
-  <string name="poll_push_settings">Enquesta</string>
-  <string name="checkin_push_settings">Check-in</string>
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
@@ -429,9 +440,11 @@
   <string name="support_privacy_policy">Política de privacitat</string>
   <string name="support_terms_service">Condicions d\'ús</string>
   <string name="support_version">Versió</string>
+  <string name="timeline_poll_results">Resultats</string>
   <string name="title_activity_all_participants">Tots els participants</string>
   <string name="title_activity_all_shots">Tots els shots</string>
   <string name="title_activity_change_password">Canviar contrasenya</string>
+  <string name="title_activity_channels">Missatges privats</string>
   <string name="title_activity_contributors">Col·laboradors</string>
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
@@ -471,13 +484,9 @@
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
   <string name="welcome_get_started_button">Començar</string>
-  <string name="welcome_shootr_title">Entra en un stream per connectar-te</string>
+  <string name="welcome_shootr_title">Segueix la gent que t\'interessa i mai et perdis els seus missatges</string>
   <string name="whale_message_default">Estem millorant Shootr per a tu. Tornem aviat.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">Resultats</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
 </resources>

@@ -4,7 +4,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Parcelable;
 import com.shootr.mobile.ShootrApplication;
+import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+import com.shootr.mobile.domain.model.shot.Sendable;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
@@ -19,7 +22,9 @@ import javax.inject.Inject;
 public class ShotDispatcherBackgroundService extends Service {
 
     private static final String EXTRA_SHOT = "shot";
+    private static final String EXTRA_PRIVATE_MESSAGE = "privateMessage";
     private static final String EXTRA_IMAGE = "image";
+    private static final String EXTRA_SEND_TYPE = "sendType";
 
     @Inject ShotDispatcher shotDispatcher;
     @Inject SessionRepository sessionRepository;
@@ -28,10 +33,15 @@ public class ShotDispatcherBackgroundService extends Service {
     private int threadCounter;
     private final List<Thread> threadList = new ArrayList<>();
 
-    public static void startService(Context context, ParcelableShot shot, File imageFile) {
+    public static void startService(Context context, Parcelable shot, File imageFile) {
         Intent serviceIntent = new Intent(context, ShotDispatcherBackgroundService.class);
         serviceIntent.putExtra(EXTRA_SHOT, shot);
         serviceIntent.putExtra(EXTRA_IMAGE, imageFile);
+        if (shot instanceof ParcelableShot) {
+            serviceIntent.putExtra(EXTRA_SEND_TYPE, EXTRA_SHOT);
+        } else {
+            serviceIntent.putExtra(EXTRA_SEND_TYPE, EXTRA_PRIVATE_MESSAGE);
+        }
         context.startService(serviceIntent);
     }
 
@@ -77,11 +87,20 @@ public class ShotDispatcherBackgroundService extends Service {
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         boolean serviceStartedExplicitly = intent != null;
         if (serviceStartedExplicitly) {
-            handleShot(intent);
+            handleSendType(intent);
         } else {
             serviceRestarted();
         }
         return START_STICKY;
+    }
+
+    private void handleSendType(Intent intent) {
+        String sendType = intent.getStringExtra(EXTRA_SEND_TYPE);
+        if (sendType.equals(EXTRA_SHOT)) {
+            handleShot(intent);
+        } else {
+            handlePrivateMessage(intent);
+        }
     }
 
     private void serviceRestarted() {
@@ -98,10 +117,17 @@ public class ShotDispatcherBackgroundService extends Service {
     private void handleShot(Intent intent) {
         Shot shot = ((ParcelableShot) intent.getParcelableExtra(EXTRA_SHOT)).getShot();
         File imageFile = (File) intent.getSerializableExtra(EXTRA_IMAGE);
-        sendShot(shot, imageFile);
+        sendBaseMessage(shot, imageFile);
     }
 
-    private void sendShot(final Shot shot, final File imageFile) {
+    private void handlePrivateMessage(Intent intent) {
+        PrivateMessage privateMessage = ((ParcelablePrivateMessage)
+            intent.getParcelableExtra(EXTRA_SHOT)).getPrivateMessage();
+        File imageFile = (File) intent.getSerializableExtra(EXTRA_IMAGE);
+        sendBaseMessage(privateMessage, imageFile);
+    }
+
+    private void sendBaseMessage(final Sendable shot, final File imageFile) {
         String threadName = "shot_dispatcher_" + threadCounter++;
         SendShotRunnable runnable = new SendShotRunnable(shot, imageFile);
         Thread thread = new Thread(runnable, threadName);
@@ -118,17 +144,17 @@ public class ShotDispatcherBackgroundService extends Service {
 
     private class SendShotRunnable implements Runnable {
 
-        private final Shot shot;
+        private final Sendable shot;
         private final File imageFile;
         Thread thread;
 
-        public SendShotRunnable(Shot shot, File imageFile) {
+        public SendShotRunnable(Sendable shot, File imageFile) {
             this.shot = shot;
             this.imageFile = imageFile;
         }
 
         @Override public void run() {
-            shotDispatcher.sendShot(shot, imageFile);
+            shotDispatcher.sendMessage(shot, imageFile);
             synchronized (threadList) {
                 threadList.remove(thread);
             }

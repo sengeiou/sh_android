@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class ShotQueueEntity extends ShotEntity {
+public class ShotQueueEntity extends ShotEntity implements Queueable {
 
     private Long idQueue;
     private Integer failed;

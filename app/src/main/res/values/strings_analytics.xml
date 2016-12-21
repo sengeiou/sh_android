@@ -12,6 +12,10 @@
     <string name="analytics_screen_all_participants">allParticipants</string>
     <string name="analytics_screen_user_follows">userFollows</string>
     <string name="analytics_screen_edit_profile">editProfile</string>
+    <string name="analytics_screen_poll_result">PollResults</string>
+    <string name="analytics_screen_poll_vote">PollVote</string>
+    <string name="analytics_screen_private_message_timeline">PrivateMessageTimeline</string>
+    <string name="analytics_screen_channel_list">ChannelList</string>
     <string name="analytics_screen_user_follower">followersPeople</string>
     <string name="analytics_screen_user_following">followingPeople</string>
     <string name="analytics_screen_support">support</string>
@@ -34,10 +38,14 @@
     <string name="analytics_label_nice">Nice</string>
     <string name="analytics_action_shot">Shot</string>
     <string name="analytics_label_shot">Shot</string>
+    <string name="analytics_action_private_message">Message</string>
+    <string name="analytics_label_private_message">Message</string>
     <string name="analytics_action_response">Response</string>
     <string name="analytics_label_response">Response</string>
     <string name="analytics_action_favorite_stream">FavoriteStream</string>
     <string name="analytics_label_favorite_stream">Favorite stream</string>
+    <string name="analytics_action_inbox">Inbox</string>
+    <string name="analytics_label_inbox">Inbox</string>
     <string name="analytics_action_share_shot">Reshoot</string>
     <string name="analytics_label_share_shot">Reshoot</string>
     <string name="analytics_action_external_share">ExternalShare</string>
@@ -91,4 +99,7 @@
     <string name="analytics_push_redirection_activity">activity</string>
     <string name="analytics_push_redirection_need_update">needUpdate</string>
     <string name="analytics_push_redirection_discard">discard</string>
+    <string name="appflyer_key">FEg6kuUpkGTE3FrD2BdHPg</string>
+    <string name="analytics_action_open_cta_link">Ad</string>
+    <string name="analytics_label_open_cta_link">Ad</string>
 </resources>

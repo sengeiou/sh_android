@@ -16,6 +16,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.DiscoverAdapter;
@@ -42,6 +43,8 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
+  @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_discover) String discoverSource;
 
   @Inject DiscoverPresenter discoverPresenter;
@@ -58,6 +61,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   private DiscoverAdapter adapter;
   private Unbinder unbinder;
+  private Menu menu;
 
   public static Fragment newInstance() {
     return new DiscoverFragment();
@@ -84,6 +88,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.menu_discover, menu);
+    this.menu = menu;
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,15 +96,46 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
       case R.id.menu_search:
         navigateToDiscoverSearch();
         return true;
+      case R.id.menu_channel:
+        navigateToChannelsList();
       default:
         return super.onOptionsItemSelected(item);
     }
   }
 
+  @Override public void updateChannelBadge(int unreadChannels) {
+    if (menu != null) {
+      if (unreadChannels > 0) {
+        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, unreadChannels);
+      } else {
+        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
+      }
+    }
+  }
+
+
   private void navigateToDiscoverSearch() {
     Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
     startActivity(intent);
     getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+  }
+
+  public void navigateToChannelsList() {
+    sendToMixPanel();
+    Intent intent = new Intent(getContext(), ChannelListActivity.class);
+    startActivity(intent);
+  }
+
+  private void sendToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionInbox);
+    builder.setLabelId(analyticsLabelInbox);
+    builder.setSource(discoverSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void initializeViews() {

@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.GetDiscoveredInteractor;
@@ -16,10 +18,12 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.DiscoveredModelMapper;
 import com.shootr.mobile.ui.views.DiscoverView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DiscoverPresenter implements Presenter {
+public class DiscoverPresenter implements Presenter, ChannelsBadgeChanged.Receiver {
 
   private final GetDiscoveredInteractor getDiscoveredInteractor;
   private final GetLocalDiscoveredInteractor getLocalDiscoveredInteractor;
@@ -28,6 +32,7 @@ public class DiscoverPresenter implements Presenter {
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+  private final Bus bus;
   private final DiscoveredModelMapper discoveredModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
@@ -39,7 +44,7 @@ public class DiscoverPresenter implements Presenter {
       GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, @Main Bus bus,
       DiscoveredModelMapper discoveredModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getDiscoveredInteractor = getDiscoveredInteractor;
     this.getLocalDiscoveredInteractor = getLocalDiscoveredInteractor;
@@ -48,6 +53,7 @@ public class DiscoverPresenter implements Presenter {
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+    this.bus = bus;
     this.discoveredModelMapper = discoveredModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -160,12 +166,18 @@ public class DiscoverPresenter implements Presenter {
   }
 
   @Override public void resume() {
+    bus.register(this);
     if (hasBeenPaused) {
       loadLocalDiscover();
     }
   }
 
   @Override public void pause() {
+    bus.unregister(this);
     this.hasBeenPaused = true;
+  }
+
+  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
+    discoverView.updateChannelBadge(event.getUnreadChannels());
   }
 }

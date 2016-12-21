@@ -18,8 +18,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.activities.ChannelListActivity;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
@@ -59,6 +61,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
   @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
+  @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_streams) String streamsSource;
 
   @Inject StreamsListPresenter presenter;
@@ -71,6 +75,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     private StreamsListAdapter adapter;
     private Unbinder unbinder;
+  private Menu menu;
 
     public static StreamsListFragment newInstance() {
         return new StreamsListFragment();
@@ -155,6 +160,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     //region Activity methods
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.streams_list, menu);
+      this.menu = menu;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -162,10 +168,28 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             case R.id.menu_search:
                 navigateToFindstreams();
                 return true;
+            case R.id.menu_channel:
+              navigateToChannelsList();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void navigateToChannelsList() {
+      sendToMixPanel();
+      Intent intent = new Intent(getContext(), ChannelListActivity.class);
+      startActivity(intent);
+    }
+
+  private void sendToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionInbox);
+    builder.setLabelId(analyticsLabelInbox);
+    builder.setSource(streamsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
 
     @Override public void onResume() {
         super.onResume();
@@ -331,7 +355,19 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       }
     }
 
-    @Override public void showEmpty() {
+  @Override public void updateChannelBadge(int unreadChannels) {
+    if (menu != null) {
+      if (unreadChannels > 0) {
+        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, unreadChannels);
+      } else {
+        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
+      }
+    }
+  }
+
+  @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
 

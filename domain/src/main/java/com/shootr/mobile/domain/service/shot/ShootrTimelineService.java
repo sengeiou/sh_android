@@ -3,6 +3,8 @@ package com.shootr.mobile.domain.service.shot;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.model.activity.ActivityTimelineParameters;
+import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
@@ -10,6 +12,7 @@ import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
+import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.Collections;
 import java.util.List;
@@ -21,15 +24,19 @@ public class ShootrTimelineService {
   private final ActivityRepository localActivityRepository;
   private final ActivityRepository remoteActivityRepository;
   private final TimelineSynchronizationRepository timelineSynchronizationRepository;
+  private final PrivateMessageRepository remotePrivateMessageRepository;
+
 
   @Inject public ShootrTimelineService(ExternalShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository,
       @Remote ActivityRepository remoteActivityRepository,
-      TimelineSynchronizationRepository timelineSynchronizationRepository) {
+      TimelineSynchronizationRepository timelineSynchronizationRepository,
+      @Remote PrivateMessageRepository remotePrivateMessageRepository) {
     this.remoteShotRepository = remoteShotRepository;
     this.localActivityRepository = localActivityRepository;
     this.remoteActivityRepository = remoteActivityRepository;
     this.timelineSynchronizationRepository = timelineSynchronizationRepository;
+    this.remotePrivateMessageRepository = remotePrivateMessageRepository;
   }
 
   public ActivityTimeline refreshTimelinesForActivity(String language,
@@ -81,6 +88,27 @@ public class ShootrTimelineService {
     return newShots;
   }
 
+  public PrivateMessageTimeline refreshTimelinesForChannel(String idChannel, String idTargetUser, Long lastRefresh) {
+    List<PrivateMessage> shotsForStream = refreshChannelMessages(idChannel, idTargetUser, lastRefresh);
+    return buildSortedPrivateMessageTimeline(shotsForStream);
+  }
+
+  private List<PrivateMessage> refreshChannelMessages(String idChannel, String idTargetUser,
+      Long lastRefresh) {
+
+    //TODO consultar la útlima fecha de refresh
+
+    PrivateMessageTimeline timeline =
+        remotePrivateMessageRepository.refreshPrivateMessageTimeline(idTargetUser, lastRefresh);
+    return timeline.getPrivateMessages();
+  }
+
+  private PrivateMessageTimeline buildSortedPrivateMessageTimeline(List<PrivateMessage> privateMessages) {
+    PrivateMessageTimeline timeline = new PrivateMessageTimeline();
+    timeline.setPrivateMessages(sortPrivateMessagesByPublishDate(privateMessages));
+    return timeline;
+  }
+
   private Timeline buildSortedTimeline(List<Shot> shots) {
     Timeline timeline = new Timeline();
     timeline.setShots(sortShotsByPublishDate(shots));
@@ -96,6 +124,11 @@ public class ShootrTimelineService {
   private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
     Collections.sort(remoteShots, new Shot.NewerAboveComparator());
     return remoteShots;
+  }
+
+  private List<PrivateMessage> sortPrivateMessagesByPublishDate(List<PrivateMessage> privateMessages) {
+    Collections.sort(privateMessages, new PrivateMessage.NewerAboveComparator());
+    return privateMessages;
   }
 
   private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {

@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -355,7 +356,7 @@ public class ShotDetaillPresenterTest {
         Shot shot = new Shot();
         shot.setIdShot(ID_SHOT);
         shot.setStreamInfo(new Shot.ShotStreamInfo());
-        shot.setUserInfo(new Shot.ShotUserInfo());
+        shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
         return shot;
     }
 

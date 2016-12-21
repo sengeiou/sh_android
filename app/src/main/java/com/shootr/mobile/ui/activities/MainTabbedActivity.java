@@ -252,8 +252,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void setToolbarClickListener(final UserModel userModel) {
     toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        Intent intent =
-            ProfileActivity.getIntent(view.getContext(), userModel.getIdUser());
+        Intent intent = ProfileActivity.getIntent(view.getContext(), userModel.getIdUser());
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
       }

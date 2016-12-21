@@ -19,6 +19,19 @@ public class DatabaseContract {
     String REVISION = "revision";
   }
 
+  public interface BaseMessageTable extends SyncColumns {
+    String COMMENT = "comment";
+    String IMAGE = "image";
+    String IMAGE_WIDTH = "imageWidth";
+    String IMAGE_HEIGHT = "imageHeight";
+    String VIDEO_URL = "videoUrl";
+    String VIDEO_TITLE = "videoTitle";
+    String VIDEO_DURATION = "videoDuration";
+    String ID_USER = "idUser";
+    String VERIFIED_USER = "verifiedUser";
+    String USERNAME = "username";
+  }
+
   public static class UserTable implements SyncColumns {
 
     private UserTable() {
@@ -103,8 +116,8 @@ public class DatabaseContract {
         ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
         ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
         VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, VIEWS, LINK_CLICKS,
-        RESHOOT_COUNT, CTA_CAPTION, CTA_BUTTON_LINK, CTA_BUTTON_TEXT, PROMOTED, VERIFIED_USER, BIRTH, MODIFIED,
-        DELETED, REVISION, SYNCHRONIZED
+        RESHOOT_COUNT, CTA_CAPTION, CTA_BUTTON_LINK, CTA_BUTTON_TEXT, PROMOTED, VERIFIED_USER,
+        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -256,6 +269,27 @@ public class DatabaseContract {
     };
   }
 
+  public static final class MessageQueueTable implements BaseMessageTable {
+
+    private MessageQueueTable() {
+    }
+
+    public static final String TABLE = "MessageQueue";
+    public static final String ID_QUEUE = "idQueue";
+    public static final String ID_PRIVATE_MESSAGE = "idPrivateMessage";
+    public static final String ID_PRIVATE_MESSAGE_CHANNEL = "idPrivateMessageChannel";
+    public static final String TITLE = "title";
+    public static final String ID_TARGET_USER = "idTargetUser";
+    public static final String FAILED = "failed";
+    public static final String IMAGE_FILE = "imageFile";
+
+    public static final String[] PROJECTION = {
+        ID_QUEUE, FAILED, IMAGE_FILE, ID_PRIVATE_MESSAGE, ID_USER, ID_TARGET_USER, USERNAME,
+        COMMENT, IMAGE, ID_PRIVATE_MESSAGE_CHANNEL, TITLE, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
+        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+    };
+  }
+
   public static final class FavoriteTable implements SyncColumns {
 
     private FavoriteTable() {
@@ -345,8 +379,8 @@ public class DatabaseContract {
         ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
         NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
         WATCHING_STREAM_TITLE, WATCHING_SYNCHRONIZED, SOCIAL_LOGIN, RECEIVED_REACTIONS,
-        ANALYTICS_USER_TYPE, BIRTH, RELEVANCE, CREATED_STREAMS_COUNT,
-        FAVORITED_STREAMS_COUNT, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        ANALYTICS_USER_TYPE, BIRTH, RELEVANCE, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -505,4 +539,43 @@ public class DatabaseContract {
     };
   }
 
+  public static final class PrivateMessageChannelTable implements SyncColumns {
+
+    private PrivateMessageChannelTable() {
+
+    }
+
+    public static final String TABLE = "PrivateMessageChannel";
+
+    public static final String ID_TARGET_USER = "idTargetUser";
+    public static final String ID_PRIVATE_MESSAGE_CHANNEL = "idPrivateMessageChannel";
+    public static final String TITLE = "title";
+    public static final String IMAGE = "image";
+    public static final String READ = "read";
+    public static final String LAST_MESSAGE_TIME = "lastMessageTime";
+    public static final String LAST_MESSAGE_COMMENT = "lastMessageComment";
+
+    public static final String[] PROJECTION = {
+        ID_TARGET_USER, ID_PRIVATE_MESSAGE_CHANNEL, TITLE, IMAGE, READ, LAST_MESSAGE_TIME,
+        LAST_MESSAGE_COMMENT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+    };
+  }
+
+  public static final class PrivateMessageTable implements BaseMessageTable {
+
+    private PrivateMessageTable() {
+
+    }
+
+    public static final String TABLE = "PrivateMessage";
+
+    public static final String ID_PRIVATE_MESSAGE = "idPrivateMessage";
+    public static final String ID_PRIVATE_MESSAGE_CHANNEL = "idPrivateMessageChannel";
+
+    public static final String[] PROJECTION = {
+        ID_PRIVATE_MESSAGE, ID_PRIVATE_MESSAGE_CHANNEL, ID_USER, USERNAME, COMMENT, IMAGE,
+        IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, VERIFIED_USER, BIRTH,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
+    };
+  }
 }

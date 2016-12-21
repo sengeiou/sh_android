@@ -65,7 +65,6 @@ public class PollResultsPresenter implements Presenter {
         pollResultsView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
-
   }
 
   private void handlePollModel(Poll poll) {
@@ -134,6 +133,22 @@ public class PollResultsPresenter implements Presenter {
   public void onStreamTitleClick() {
     if (idStream != null) {
       pollResultsView.goToStreamTimeline(idStream);
+    }
+  }
+
+  public String getIdStream() {
+    if (pollModel != null) {
+      return pollModel.getIdStream();
+    } else {
+      return null;
+    }
+  }
+
+  public String getStreamTitle() {
+    if (pollModel != null) {
+      return pollModel.getStreamTitle();
+    } else {
+      return null;
     }
   }
 }

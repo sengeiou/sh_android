@@ -36,10 +36,10 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
     InteractorHandler interactorHandler = new TestInteractorHandler();
     interactor =
         new PostNewShotInStreamInteractor(postExecutionThread, interactorHandler, sessionRepository,
-            localStreamRepository, shotSender);
+            localStreamRepository, messageSender);
   }
 
-  @Override protected PostNewShotInteractor getInteractorForCommonTests() {
+  @Override protected PostNewMessageInteractor getInteractorForCommonTests() {
     return interactor;
   }
 
@@ -52,7 +52,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         new DummyErrorCallback());
 
     ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
+    verify(messageSender).sendMessage(shotArgumentCaptor.capture(), any(File.class));
     Shot publishedShot = shotArgumentCaptor.getValue();
     Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
     assertStreamInfoIsFromStream(streamInfo, watchingStream());
@@ -65,7 +65,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         new DummyErrorCallback());
 
     ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
+    verify(messageSender).sendMessage(shotArgumentCaptor.capture(), any(File.class));
     Shot publishedShot = shotArgumentCaptor.getValue();
     Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
     assertThat(streamInfo).isNull();

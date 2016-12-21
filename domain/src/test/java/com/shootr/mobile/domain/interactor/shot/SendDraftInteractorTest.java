@@ -3,8 +3,8 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.service.ShotQueueRepository;
-import com.shootr.mobile.domain.service.ShotSender;
+import com.shootr.mobile.domain.service.MessageSender;
+import com.shootr.mobile.domain.service.QueueRepository;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,27 +19,27 @@ public class SendDraftInteractorTest {
 
   public static final long QUEUED_SHOT_ID = 0L;
   private SendDraftInteractor sendDraftInteractor;
-  @Mock ShotQueueRepository shotQueueRepository;
-  @Mock ShotSender shotSender;
+  @Mock QueueRepository queueRepository;
+  @Mock MessageSender messageSender;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     TestInteractorHandler interactorHandler = new TestInteractorHandler();
     sendDraftInteractor =
-        new SendDraftInteractor(interactorHandler, shotQueueRepository, shotSender);
+        new SendDraftInteractor(interactorHandler, queueRepository, messageSender);
   }
 
   @Test public void shouldSendShotGotFromShotQueue() throws Exception {
-    when(shotQueueRepository.getShotQueue(QUEUED_SHOT_ID)).thenReturn(queuedShot());
+    when(queueRepository.getQueue(QUEUED_SHOT_ID, QueueRepository.SHOT_TYPE)).thenReturn(queuedShot());
 
     sendDraftInteractor.sendDraft(QUEUED_SHOT_ID);
 
-    verify(shotSender).sendShot(any(Shot.class), any(File.class));
+    verify(messageSender).sendMessage(any(Shot.class), any(File.class));
   }
 
   private QueuedShot queuedShot() {
     QueuedShot queuedShot = new QueuedShot();
-    queuedShot.setShot(new Shot());
+    queuedShot.setBaseMessage(new Shot());
     queuedShot.setImageFile(new File("anyString"));
     return queuedShot;
   }

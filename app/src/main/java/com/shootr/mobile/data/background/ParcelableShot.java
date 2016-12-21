@@ -2,6 +2,7 @@ package com.shootr.mobile.data.background;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.Date;
 
@@ -35,7 +36,7 @@ public class ParcelableShot implements Parcelable {
         dest.writeLong(shot.getPublishDate() != null ? shot.getPublishDate().getTime() : 0L);
         dest.writeLong(shot.getIdQueue() != null ? shot.getIdQueue() : 0L);
 
-        Shot.ShotUserInfo userInfo = shot.getUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = shot.getUserInfo();
         dest.writeString(userInfo != null ? userInfo.getIdUser() : null);
         dest.writeString(userInfo != null ? userInfo.getUsername() : null);
         dest.writeString(userInfo != null ? userInfo.getAvatar() : null);
@@ -66,7 +67,7 @@ public class ParcelableShot implements Parcelable {
         Long idQueued = parcel.readLong();
         shot.setIdQueue(idQueued != 0 ? idQueued : null);
 
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setIdUser(parcel.readString());
         userInfo.setUsername(parcel.readString());
         userInfo.setAvatar(parcel.readString());

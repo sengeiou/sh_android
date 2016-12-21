@@ -13,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollVoteAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
@@ -25,6 +27,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
@@ -47,10 +50,14 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.poll_results) TextView viewResults;
   @BindView(R.id.stream_title) TextView streamTitle;
 
+  @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
+
   @Inject InitialsLoader initialsLoader;
   @Inject PollVotePresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject BackStackHandler backStackHandler;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
@@ -81,6 +88,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     } else {
       presenter.initializeWithIdPoll(this, getIntent().getStringExtra(EXTRA_ID_POLL));
     }
+    sendAnalythics();
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -105,6 +113,22 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
   }
 
+  private void sendMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsPollVote);
+    builder.setLabelId(analyticsPollVote);
+    builder.setSource(analyticsPollVote);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(presenter.getIdStream());
+    builder.setStreamName(presenter.getStreamTitle());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendAnalythics() {
+    analyticsTool.analyticsStart(getBaseContext(), analyticsPollVote);
+  }
+
   private void setupPollOptionDialog(PollOptionModel pollOptionModel) {
     SwipeDialog.newPollImageDialog(pollOptionModel, imageLoader, this.getLayoutInflater())
         .show(getFragmentManager(), SwipeDialog.DIALOG);
@@ -123,6 +147,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollQuestion.setText(pollModel.getQuestion());
     pollVoteAdapter.setPollOptionModels(pollModel.getPollOptionModels());
     pollVoteAdapter.notifyDataSetChanged();
+    sendMixPanel();
   }
 
   @Override public void showPollVotes(Long votes) {
@@ -211,6 +236,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override protected void onPause() {
     super.onPause();
     presenter.pause();
+    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 
   @Override public void showEmpty() {

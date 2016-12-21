@@ -29,6 +29,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String TARGET_USERNAME = "targetUsername";
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
+  private static final String ID_POLL = "idPoll";
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Following";
   private static final String FOLLOWERS = "Followers";
@@ -46,9 +47,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   @Override public void init(Context context) {
     try {
       GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-      tracker =
-          analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
-      tracker.enableAutoActivityTracking(true);
+      tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
+      tracker.enableAutoActivityTracking(false);
       tracker.enableExceptionReporting(true);
     } catch (Exception error) {
     }
@@ -67,7 +67,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void setUser(User user) {
-      this.user = user;
+    this.user = user;
     try {
       tracker.set("&uid", user.getIdUser());
       storeUserMixPanel();
@@ -98,17 +98,17 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String pushRedirection = builder.getPushRedirection();
     String idStream = builder.getIdStream();
     String stream = builder.getStreamName();
+    String idPoll = builder.getIdPoll();
     User user = builder.getUser();
 
     sendGoogleAnalytics(context, action, actionId, labelId);
-    sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername,
-        notificationName, pushRedirection, idStream, stream, context);
+    sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
+        pushRedirection, idStream, stream, idPoll, context);
   }
 
-  private void sendMixPanelAnalytics(User user, String actionId, String source,
-      String idTargetUser, String targetUsername,
-      String notificationName, String pushRedirection, String idStream, String streamName,
-      Context context) {
+  private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
+      String targetUsername, String notificationName, String pushRedirection, String idStream,
+      String streamName, String idPoll, Context context) {
     try {
       if (user != null) {
         JSONObject props = new JSONObject();
@@ -136,6 +136,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         if (pushRedirection != null) {
           props.put(PUSH_REDIRECTION, pushRedirection);
         }
+        if (idPoll != null) {
+          props.put(ID_POLL, idPoll);
+        }
         props.put(FAVORITES, user.getFavoritedStreamsCount());
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
@@ -147,7 +150,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
               getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
           mixpanel.track(actionId, props);
         }
-
       }
     } catch (JSONException e) {
       Log.e("Shootr", "Unable to add properties to JSONObject", e);

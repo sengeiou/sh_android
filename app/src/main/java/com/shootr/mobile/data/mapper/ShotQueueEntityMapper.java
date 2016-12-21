@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.ShotQueueEntity;
+import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import java.io.File;
@@ -13,7 +14,7 @@ public class ShotQueueEntityMapper {
     @Inject public ShotQueueEntityMapper() {
     }
 
-    public ShotQueueEntity transform(QueuedShot queuedShot) {
+    public ShotQueueEntity transformShotQueue(QueuedShot queuedShot) {
         if (queuedShot == null) {
             return null;
         }
@@ -25,7 +26,7 @@ public class ShotQueueEntityMapper {
             entity.setImageFile(imageFile.getAbsolutePath());
         }
 
-        Shot shot = queuedShot.getShot();
+        Shot shot = (Shot) queuedShot.getBaseMessage();
         String idShot = shot.getIdShot();
         entity.setIdShot(idShot);
         entity.setComment(shot.getComment());
@@ -52,7 +53,7 @@ public class ShotQueueEntityMapper {
         return entity;
     }
 
-    public QueuedShot transform(ShotQueueEntity entity) {
+    public QueuedShot transformShotQueue(ShotQueueEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -72,7 +73,7 @@ public class ShotQueueEntityMapper {
 
         shot.setIdQueue(entity.getIdQueue());
 
-        Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
+        BaseMessage.BaseMessageUserInfo userInfo = new BaseMessage.BaseMessageUserInfo();
         userInfo.setIdUser(entity.getIdUser());
         userInfo.setUsername(entity.getUsername());
         userInfo.setAvatar(entity.getUserPhoto());
@@ -95,14 +96,14 @@ public class ShotQueueEntityMapper {
 
         shot.setType(entity.getType());
 
-        queuedShot.setShot(shot);
+        queuedShot.setBaseMessage(shot);
         return queuedShot;
     }
 
-    public List<QueuedShot> transform(List<ShotQueueEntity> shotQueueEntities) {
+    public List<QueuedShot> transformShotQueue(List<ShotQueueEntity> shotQueueEntities) {
         List<QueuedShot> results = new ArrayList<>(shotQueueEntities.size());
         for (ShotQueueEntity shotQueueEntity : shotQueueEntities) {
-            results.add(transform(shotQueueEntity));
+            results.add(transformShotQueue(shotQueueEntity));
         }
         return results;
     }
