@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.24.0] - 2016-12-21
+
+### Added
+
+- Private messages
+- AppFlyer
+
+
 ## [1.23.4] - 2016-11-28
 
 ### Fixed
