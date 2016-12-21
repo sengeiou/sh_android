@@ -55,6 +55,9 @@ public class SwipeDialog extends SwipeAwayDialogFragment {
   }
 
   private Dialog createPollImageDialog(Context context, PollOptionModel pollOptionModel) {
+    if (layoutInflater == null) {
+      layoutInflater = LayoutInflater.from(context);
+    }
     View dialogView = layoutInflater.inflate(R.layout.dialog_poll_option_image, null);
     setupPicturePollOption(pollOptionModel, dialogView);
     setupTextPollOption(pollOptionModel, dialogView);
