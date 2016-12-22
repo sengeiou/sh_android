@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -63,11 +61,8 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     implements PrivateMessageChannelTimelineView, NewShotBarView {
 
   public static final String EXTRA_ID_TARGET_USER = "targetUser";
-  public static final String EXTRA_ID_USER = "userId";
   public static final String EXTRA_ID_CHANNEL = "idChannel";
-  public static final String TAG = "timeline";
 
-  public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
 
   //region Fields
@@ -103,11 +98,8 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
-  private EditText newTopicText;
   private PreCachingLayoutManager preCachingLayoutManager;
-  private AlertDialog shotImageDialog;
   private Unbinder unbinder;
-  private boolean scrollMoved;
   private String idTargetUser;
   private String streamTitle;
   private String idChannel;
@@ -144,8 +136,6 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     setHasOptionsMenu(true);
     idTargetUser = getArguments().getString(EXTRA_ID_TARGET_USER);
     idChannel = getArguments().getString(EXTRA_ID_CHANNEL);
-    String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-    Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idTargetUser);
     setupPresentersInitialization(idTargetUser, idChannel);
   }
@@ -368,7 +358,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     }
   }
 
-  private void setStreamTitleClickListener(final String idStream) {
+  private void setStreamTitleClickListener(final String idChannel) {
     toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         /* no-op */
