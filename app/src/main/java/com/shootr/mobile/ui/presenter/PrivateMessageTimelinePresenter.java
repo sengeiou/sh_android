@@ -250,6 +250,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
             showErrorLoadingNewMessages();
           }
         });
+
   }
 
   private void updateTimelineLiveSettings() {
