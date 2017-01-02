@@ -95,7 +95,8 @@ public class PrivateMessageTimelinePresenterTest {
         return null;
       }
     }).when(interactorWrapper)
-        .loadTimeline(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class));
+        .loadTimeline(anyString(), anyString(), anyBoolean(), anyBoolean(),
+            any(Interactor.Callback.class));
   }
 
   private void setupLoadOldMessagesInteractorCallbacks() {

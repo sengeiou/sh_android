@@ -84,7 +84,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   public void loadTimeline(final PrivateMessageChannelTimelineView timelineView, String idChannel,
       String idTargetUser) {
 
-    timelineInteractorWrapper.loadTimeline(idChannel, idTargetUser, hasBeenPaused,
+    timelineInteractorWrapper.loadTimeline(idChannel, idTargetUser, hasBeenPaused, true,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
@@ -110,7 +110,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   }
 
   protected void loadTimeline() {
-    timelineInteractorWrapper.loadTimeline(channelId, idTargetUser, hasBeenPaused,
+    timelineInteractorWrapper.loadTimeline(channelId, idTargetUser, hasBeenPaused, false,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
@@ -250,7 +250,6 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
             showErrorLoadingNewMessages();
           }
         });
-
   }
 
   private void updateTimelineLiveSettings() {
@@ -271,7 +270,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     isRefreshing = true;
     if (isEmpty) {
       view.hideEmpty();
-      view.showCheckingForShots();
+      if (isFirstLoad) {
+        view.showCheckingForShots();
+      }
     }
     return false;
   }
@@ -286,6 +287,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     view.hideLoading();
     view.hideCheckingForShots();
     isRefreshing = false;
+    if (isFirstLoad) {
+      isFirstLoad = false;
+    }
   }
 
   private void loadOlderMessages(long lastShotInScreenDate) {
@@ -348,7 +352,6 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   public void setIsFirstLoad(boolean isFirstLoad) {
     this.isFirstLoad = isFirstLoad;
   }
-
 
   @Override public void resume() {
     bus.register(this);
