@@ -90,7 +90,7 @@ public class PrivateMessageTimelinePresenterTest {
   private void setupLoadTimelineInteractorCallbacks() {
     doAnswer(new Answer<Void>() {
       @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<PrivateMessageTimeline>) invocation.getArguments()[3]).onLoaded(
+        ((Interactor.Callback<PrivateMessageTimeline>) invocation.getArguments()[4]).onLoaded(
             privateMessageTimeline());
         return null;
       }
