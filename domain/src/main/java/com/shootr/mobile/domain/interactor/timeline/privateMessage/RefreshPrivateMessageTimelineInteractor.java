@@ -6,17 +6,13 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
-import java.util.Date;
 import javax.inject.Inject;
 
 public class RefreshPrivateMessageTimelineInteractor implements Interactor {
 
-  private static final Long REAL_TIME_INTERVAL = 60 * 1000L;
-
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ShootrTimelineService shootrTimelineService;
-
 
   private Callback<PrivateMessageTimeline> callback;
   private ErrorCallback errorCallback;
@@ -24,7 +20,6 @@ public class RefreshPrivateMessageTimelineInteractor implements Interactor {
   private String idTargetUser;
   private Long lastRefreshDate;
   private Boolean goneBackground;
-  private Integer calls = 0;
 
   @Inject public RefreshPrivateMessageTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService) {
@@ -50,21 +45,13 @@ public class RefreshPrivateMessageTimelineInteractor implements Interactor {
 
   private synchronized void executeSynchronized() {
     try {
-      long timestamp = new Date().getTime();
-      Boolean isRealTime =
-          calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
       PrivateMessageTimeline timeline =
           shootrTimelineService.refreshTimelinesForChannel(idChannel, idTargetUser,
               lastRefreshDate);
       notifyLoaded(timeline);
-      incrementCalls();
     } catch (ShootrException error) {
       notifyError(error);
     }
-  }
-
-  protected void incrementCalls() {
-    calls++;
   }
 
   //region Result

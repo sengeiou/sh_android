@@ -1,36 +1,36 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
-import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
-import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
-import com.shootr.mobile.domain.model.shot.BaseMessage;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.Poller;
-import com.shootr.mobile.ui.model.PrivateMessageModel;
-import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
-import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
-import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
-import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
-import com.shootr.mobile.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import java.util.Collections;
-import java.util.Date;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+    import com.shootr.mobile.domain.interactor.Interactor;
+    import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+    import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
+    import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
+    import com.shootr.mobile.domain.model.shot.BaseMessage;
+    import com.shootr.mobile.domain.repository.SessionRepository;
+    import com.shootr.mobile.ui.Poller;
+    import com.shootr.mobile.ui.model.PrivateMessageModel;
+    import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
+    import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
+    import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
+    import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
+    import com.shootr.mobile.util.ErrorMessageFactory;
+    import com.squareup.otto.Bus;
+    import java.util.Collections;
+    import java.util.Date;
+    import org.junit.Before;
+    import org.junit.Test;
+    import org.mockito.Mock;
+    import org.mockito.MockitoAnnotations;
+    import org.mockito.invocation.InvocationOnMock;
+    import org.mockito.stubbing.Answer;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
+    import static org.mockito.Matchers.any;
+    import static org.mockito.Matchers.anyBoolean;
+    import static org.mockito.Matchers.anyList;
+    import static org.mockito.Matchers.anyLong;
+    import static org.mockito.Matchers.anyString;
+    import static org.mockito.Mockito.atLeastOnce;
+    import static org.mockito.Mockito.doAnswer;
+    import static org.mockito.Mockito.verify;
 
 public class PrivateMessageTimelinePresenterTest {
 
@@ -90,12 +90,13 @@ public class PrivateMessageTimelinePresenterTest {
   private void setupLoadTimelineInteractorCallbacks() {
     doAnswer(new Answer<Void>() {
       @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<PrivateMessageTimeline>) invocation.getArguments()[3]).onLoaded(
+        ((Interactor.Callback<PrivateMessageTimeline>) invocation.getArguments()[4]).onLoaded(
             privateMessageTimeline());
         return null;
       }
     }).when(interactorWrapper)
-        .loadTimeline(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class));
+        .loadTimeline(anyString(), anyString(), anyBoolean(), anyBoolean(),
+            any(Interactor.Callback.class));
   }
 
   private void setupLoadOldMessagesInteractorCallbacks() {

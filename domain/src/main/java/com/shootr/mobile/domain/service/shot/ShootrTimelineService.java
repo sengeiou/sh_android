@@ -95,9 +95,6 @@ public class ShootrTimelineService {
 
   private List<PrivateMessage> refreshChannelMessages(String idChannel, String idTargetUser,
       Long lastRefresh) {
-
-    //TODO consultar la útlima fecha de refresh
-
     PrivateMessageTimeline timeline =
         remotePrivateMessageRepository.refreshPrivateMessageTimeline(idTargetUser, lastRefresh);
     return timeline.getPrivateMessages();

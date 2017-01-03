@@ -301,7 +301,7 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to current participants and users who have the stream as a favorite.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
   <string name="pin_topic" formatted="false">Pin message</string>
-  <string name="poll_ignore">Remove poll</string>
+  <string name="poll_ignore">Dismiss poll</string>
   <string name="poll_live_results">Live results</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Poll</string>
