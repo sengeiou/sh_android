@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
 import com.shootr.mobile.domain.service.shot.ShootrTimelineService;
-import java.util.Date;
 import javax.inject.Inject;
 
 public class RefreshPrivateMessageTimelineInteractor implements Interactor {
