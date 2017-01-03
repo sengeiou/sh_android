@@ -88,6 +88,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
+              channelId = privateMessageTimeline.getPrivateMessageChannel().getIdPrivateMessageChanel();
               privateMessageChannelModel = privateMessageChannelModelMapper.transform(
                   privateMessageTimeline.getPrivateMessageChannel());
               privateMessageModels =
@@ -236,10 +237,10 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
       return;
     }
     //TODO remove
-    long refresTime = (!(privateMessageModels == null || privateMessageModels.isEmpty())
+    long refreshTime = (!(privateMessageModels == null || privateMessageModels.isEmpty())
         ? privateMessageModels.get(0).getBirth().getTime() : 0L);
 
-    timelineInteractorWrapper.refreshTimeline(channelId, idTargetUser, refresTime, hasBeenPaused,
+    timelineInteractorWrapper.refreshTimeline(channelId, idTargetUser, refreshTime, hasBeenPaused,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline timeline) {
             updateTimelineLiveSettings();
