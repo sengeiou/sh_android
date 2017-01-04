@@ -1,24 +1,23 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.ShotSent;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
-import com.shootr.mobile.ui.Poller;
-import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
-import com.shootr.mobile.ui.model.PrivateMessageModel;
-import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
-import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
-import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
-import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
-import com.shootr.mobile.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.inject.Inject;
+    import com.shootr.mobile.data.bus.Main;
+    import com.shootr.mobile.domain.bus.ShotSent;
+    import com.shootr.mobile.domain.exception.ShootrException;
+    import com.shootr.mobile.domain.interactor.Interactor;
+    import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
+    import com.shootr.mobile.ui.Poller;
+    import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
+    import com.shootr.mobile.ui.model.PrivateMessageModel;
+    import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
+    import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
+    import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
+    import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
+    import com.shootr.mobile.util.ErrorMessageFactory;
+    import com.squareup.otto.Bus;
+    import com.squareup.otto.Subscribe;
+    import java.util.ArrayList;
+    import java.util.List;
+    import javax.inject.Inject;
 
 public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Receiver {
 
@@ -43,8 +42,6 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   private boolean isFirstLoad;
   private boolean isTimelineInitialized;
   private Integer newShotsNumber;
-  private boolean isInitialized = false;
-  private Long lastRefreshDate;
   private List<PrivateMessageModel> privateMessageModels;
   private PrivateMessageChannelModel privateMessageChannelModel;
 
@@ -62,16 +59,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   }
 
   public void setView(PrivateMessageChannelTimelineView view) {
-    isInitialized = true;
     this.view = view;
-  }
-
-  protected void setChannelModel(PrivateMessageChannelModel channelModel) {
-    privateMessageChannelModel = channelModel;
-  }
-
-  protected void setMessagesModels(List<PrivateMessageModel> messagesModels) {
-    privateMessageModels = messagesModels;
   }
 
   public void initialize(PrivateMessageChannelTimelineView streamTimelineView, String idChannel,
@@ -79,15 +67,10 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     this.channelId = idChannel;
     this.idTargetUser = idTargetUser;
     this.newShotsNumber = 0;
-    this.lastRefreshDate = 0L;
     this.privateMessageModels = new ArrayList<>();
     this.setView(streamTimelineView);
     this.loadTimeline(streamTimelineView, idChannel, idTargetUser);
     setupPoller();
-  }
-
-  public boolean isInitialized() {
-    return isInitialized;
   }
 
   private void setupPoller() {
@@ -101,14 +84,16 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   public void loadTimeline(final PrivateMessageChannelTimelineView timelineView, String idChannel,
       String idTargetUser) {
 
-    timelineInteractorWrapper.loadTimeline(idChannel, idTargetUser, hasBeenPaused,
+    timelineInteractorWrapper.loadTimeline(idChannel, idTargetUser, hasBeenPaused, true,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
+              channelId = privateMessageTimeline.getPrivateMessageChannel().getIdPrivateMessageChanel();
               privateMessageChannelModel = privateMessageChannelModelMapper.transform(
                   privateMessageTimeline.getPrivateMessageChannel());
-              privateMessageModels = privateMessageModelMapper.transform(privateMessageTimeline.getPrivateMessages(),
-                  privateMessageTimeline.getPrivateMessageChannel().getImage());
+              privateMessageModels =
+                  privateMessageModelMapper.transform(privateMessageTimeline.getPrivateMessages(),
+                      privateMessageTimeline.getPrivateMessageChannel().getImage());
               timelineView.setTitle(privateMessageChannelModel.getTitle());
               timelineView.setImage(privateMessageChannelModel.getImageUrl());
               showMessagesInView(privateMessageTimeline);
@@ -126,7 +111,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   }
 
   protected void loadTimeline() {
-    timelineInteractorWrapper.loadTimeline(channelId, idTargetUser, hasBeenPaused,
+    timelineInteractorWrapper.loadTimeline(channelId, idTargetUser, hasBeenPaused, false,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
@@ -252,10 +237,10 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
       return;
     }
     //TODO remove
-    long refresTime = (!(privateMessageModels == null || privateMessageModels.isEmpty()) ?
-        privateMessageModels.get(0).getBirth().getTime() : 0L);
+    long refreshTime = (!(privateMessageModels == null || privateMessageModels.isEmpty())
+        ? privateMessageModels.get(0).getBirth().getTime() : 0L);
 
-    timelineInteractorWrapper.refreshTimeline(channelId, idTargetUser, refresTime, hasBeenPaused,
+    timelineInteractorWrapper.refreshTimeline(channelId, idTargetUser, refreshTime, hasBeenPaused,
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline timeline) {
             updateTimelineLiveSettings();
@@ -270,7 +255,6 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
 
   private void updateTimelineLiveSettings() {
     hasBeenPaused = false;
-    lastRefreshDate = new Date().getTime();
   }
 
   private void showErrorLoadingNewMessages() {
@@ -287,7 +271,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     isRefreshing = true;
     if (isEmpty) {
       view.hideEmpty();
-      view.showCheckingForShots();
+      if (isFirstLoad) {
+        view.showCheckingForShots();
+      }
     }
     return false;
   }
@@ -302,6 +288,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     view.hideLoading();
     view.hideCheckingForShots();
     isRefreshing = false;
+    if (isFirstLoad) {
+      isFirstLoad = false;
+    }
   }
 
   private void loadOlderMessages(long lastShotInScreenDate) {
@@ -342,15 +331,6 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     }
   }
 
-  private void refreshForUpdatingShotsInfo() {
-    timelineInteractorWrapper.loadTimeline(channelId, idTargetUser, hasBeenPaused,
-        new Interactor.Callback<PrivateMessageTimeline>() {
-          @Override public void onLoaded(PrivateMessageTimeline timeline) {
-            updateMessagesInfo(timeline);
-          }
-        });
-  }
-
   private void updateMessagesInfo(PrivateMessageTimeline timeline) {
     List<PrivateMessageModel> messageModels =
         privateMessageModelMapper.transform(timeline.getPrivateMessages(),
@@ -359,7 +339,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   }
 
   @Subscribe @Override public void onShotSent(ShotSent.Event event) {
+    stopPollingShots();
     refresh();
+    startPollingShots();
   }
 
   public void setIsFirstShotPosition(Boolean firstPositionVisible) {
@@ -374,20 +356,12 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     this.isFirstLoad = isFirstLoad;
   }
 
-  protected void setOldListSize(Integer oldListSize) {
-  }
-
-  private void handleVisibilityTimelineIndicatorInResume() {
-    view.hideNewShotsIndicator();
-  }
-
   @Override public void resume() {
     bus.register(this);
     startPollingShots();
     if (hasBeenPaused) {
       isFirstLoad = false;
       isTimelineInitialized = false;
-      isFirstShotPosition = false;
       loadNewMessages();
     }
   }

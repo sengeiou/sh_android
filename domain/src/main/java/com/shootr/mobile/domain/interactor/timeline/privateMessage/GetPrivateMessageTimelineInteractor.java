@@ -25,6 +25,7 @@ public class GetPrivateMessageTimelineInteractor implements Interactor {
   private String idChannel;
   private Callback callback;
   private Boolean goneBackground;
+  private Boolean loadFromServer = true;
 
   @Inject public GetPrivateMessageTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -38,11 +39,12 @@ public class GetPrivateMessageTimelineInteractor implements Interactor {
   //endregion
 
   public void loadStreamTimeline(String idChannel, String idTargetUser, Boolean goneBackground,
-      Callback<PrivateMessageTimeline> callback) {
+      Boolean loadFromServer, Callback<PrivateMessageTimeline> callback) {
     this.idTargetUser = idTargetUser;
     this.idChannel = idChannel;
     this.goneBackground = goneBackground;
     this.callback = callback;
+    this.loadFromServer = loadFromServer;
     interactorHandler.execute(this);
   }
 
@@ -51,16 +53,19 @@ public class GetPrivateMessageTimelineInteractor implements Interactor {
       loadLocalPrivateMessages();
     }
     try {
-      PrivateMessageTimeline timeline = remotePrivateMessageRepository.getPrivateMessageTimeline(idTargetUser);
-      notifyLoaded(timeline);
+      if (loadFromServer) {
+        PrivateMessageTimeline timeline =
+            remotePrivateMessageRepository.getPrivateMessageTimeline(idTargetUser);
+        notifyLoaded(timeline);
+      }
     } catch (ServerCommunicationException error) {
       //TODO aquí hay que retornar algo para crear el timeline en local
     }
-
   }
 
   private void loadLocalPrivateMessages() {
-    PrivateMessageTimeline timeline = localPrivateMessageRepository.getPrivateMessageTimeline(idTargetUser);
+    PrivateMessageTimeline timeline =
+        localPrivateMessageRepository.getPrivateMessageTimeline(idTargetUser);
     List<PrivateMessage> messages = timeline.getPrivateMessages();
     messages = sortShotsByPublishDate(messages);
     timeline.setPrivateMessages(messages);

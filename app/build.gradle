@@ -38,7 +38,7 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 1
 def versionMinor = 24
-def versionRevision = 0
+def versionRevision = 2
 
 def isSnapshot = false
 def isPreProduction = false
@@ -169,7 +169,7 @@ dependencies {
     exclude group: 'com.android.support'
   }
 
-  compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+  compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
     transitive = true;
   }
   // If you want to use the GPU Filters

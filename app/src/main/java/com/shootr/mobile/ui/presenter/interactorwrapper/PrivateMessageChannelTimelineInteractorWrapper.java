@@ -25,22 +25,23 @@ public class PrivateMessageChannelTimelineInteractorWrapper {
   }
 
   public void loadTimeline(String idChannel, String idTargetuser, Boolean hasBeenPaused,
-      Interactor.Callback<PrivateMessageTimeline> callback) {
-    getPrivateMessageTimelineInteractor.loadStreamTimeline(idChannel, idTargetuser, hasBeenPaused, callback);
+      Boolean loadFromServer, Interactor.Callback<PrivateMessageTimeline> callback) {
+    getPrivateMessageTimelineInteractor.loadStreamTimeline(idChannel, idTargetuser, hasBeenPaused,
+        loadFromServer, callback);
   }
 
-  public void refreshTimeline(String idChannel, String idTargetUser, Long lastRefreshDate, Boolean hasBeenPaused,
-      Interactor.Callback<PrivateMessageTimeline> callback,
+  public void refreshTimeline(String idChannel, String idTargetUser, Long lastRefreshDate,
+      Boolean hasBeenPaused, Interactor.Callback<PrivateMessageTimeline> callback,
       Interactor.ErrorCallback errorCallback) {
-    refreshPrivateMessageTimelineInteractor.refreshStreamTimeline(idChannel, idTargetUser, lastRefreshDate,
-        hasBeenPaused, callback, errorCallback);
+    refreshPrivateMessageTimelineInteractor.refreshStreamTimeline(idChannel, idTargetUser,
+        lastRefreshDate, hasBeenPaused, callback, errorCallback);
   }
 
   public void obtainOlderTimeline(String idTargetUser, Long currentOldestDate,
       Interactor.Callback<PrivateMessageTimeline> callback,
       Interactor.ErrorCallback errorCallback) {
 
-    getOlderPrivateMessageChannelTimelineInteractor.loadOlderTimeline(idTargetUser, currentOldestDate,
-        callback, errorCallback);
+    getOlderPrivateMessageChannelTimelineInteractor.loadOlderTimeline(idTargetUser,
+        currentOldestDate, callback, errorCallback);
   }
 }
