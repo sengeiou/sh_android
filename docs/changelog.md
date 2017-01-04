@@ -13,6 +13,15 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.24.2] - 2017-01-04
+
+### Fixed
+
+- Private messages request to server
+- Potatoes peeler mode
+- Private Message Channels UI
+
+
 ## [1.24.0] - 2016-12-21
 
 ### Added
