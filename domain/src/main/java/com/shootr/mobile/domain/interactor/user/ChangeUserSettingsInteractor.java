@@ -9,7 +9,7 @@ import com.shootr.mobile.domain.model.user.UserSettings;
 import com.shootr.mobile.domain.repository.user.UserSettingsRepository;
 import javax.inject.Inject;
 
-public class ChangeStartedShootingSettingsInteractor implements Interactor {
+public class ChangeUserSettingsInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -17,8 +17,9 @@ public class ChangeStartedShootingSettingsInteractor implements Interactor {
   private CompletedCallback callback;
   private ErrorCallback errorCallback;
   private UserSettings userSettings;
+  private String pushSettingsType;
 
-  @Inject public ChangeStartedShootingSettingsInteractor(InteractorHandler interactorHandler,
+  @Inject public ChangeUserSettingsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       UserSettingsRepository externalUserSettingsRepository) {
     this.interactorHandler = interactorHandler;
@@ -26,17 +27,18 @@ public class ChangeStartedShootingSettingsInteractor implements Interactor {
     this.externalUserSettingsRepository = externalUserSettingsRepository;
   }
 
-  public void changeStartedShotSettings(UserSettings userSettings, CompletedCallback callback,
-      ErrorCallback errorCallback) {
+  public void changeSettings(UserSettings userSettings, String pushSettingsType,
+      CompletedCallback callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     this.userSettings = userSettings;
+    this.pushSettingsType = pushSettingsType;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
     try {
-      externalUserSettingsRepository.modifyStartedShootingSettings(userSettings);
+      externalUserSettingsRepository.modifyUserSettings(userSettings, pushSettingsType);
       notifyResult();
     } catch (ServerCommunicationException error) {
       notifyError(error);
@@ -59,3 +61,4 @@ public class ChangeStartedShootingSettingsInteractor implements Interactor {
     });
   }
 }
+

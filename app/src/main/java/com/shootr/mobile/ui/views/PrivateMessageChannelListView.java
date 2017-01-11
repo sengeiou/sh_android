@@ -18,4 +18,6 @@ public interface PrivateMessageChannelListView {
   void showError(String errorMessage);
 
   void navigateToChannelTimeline(String channelId, String targetUserId);
+
+  void updateTitle(int unreads);
 }

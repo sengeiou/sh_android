@@ -115,10 +115,13 @@ public class PushNotification {
         public static final int PUSH_TYPE_SHOT = 1;
         public static final int PUSH_TYPE_ACTIVITY = 2;
         public static final int PUSH_TYPE_STREAM = 3;
+        public static final int PUSH_TYPE_PRIVATE_MESSAGE = 4;
 
         private int pushType;
         private String activityType;
         private String idUser;
+        private String username;
+        private String userPhoto;
         private String idShot;
         private String idStream;
         private String idActivity;
@@ -127,6 +130,7 @@ public class PushNotification {
         private String streamReadWriteMode;
         private String shotType;
         private String idPoll;
+        private String idTargetUser;
 
         public int getPushType() {
             return pushType;
@@ -226,6 +230,30 @@ public class PushNotification {
 
         public void setIdPoll(String idPoll) {
             this.idPoll = idPoll;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getUserPhoto() {
+            return userPhoto;
+        }
+
+        public void setUserPhoto(String userPhoto) {
+            this.userPhoto = userPhoto;
+        }
+
+        public String getIdTargetUser() {
+            return idTargetUser;
+        }
+
+        public void setIdTargetUser(String idTargetUser) {
+            this.idTargetUser = idTargetUser;
         }
     }
 }

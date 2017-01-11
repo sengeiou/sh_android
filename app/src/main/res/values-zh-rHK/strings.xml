@@ -185,6 +185,7 @@
   <string name="facebook_alert_dialog">需要電子郵件和好友列表。</string>
   <string name="favorites_emtpy">沒有最愛</string>
   <string name="favorite_streams_push_settings">喜愛的 streams</string>
+  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="finished_poll">%s 投票結果</string>
   <string name="follower_list_empty">没有关注者</string>
@@ -263,7 +264,6 @@
   <string name="niced_shot_activity_with_comment">"Nice了: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">你贊過的Shot</string>
-  <string name="nices_push_settings_off">關閉</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d 個nice</item>
   </plurals>

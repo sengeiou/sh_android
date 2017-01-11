@@ -289,7 +289,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void goToChannelsList() {
-    Intent intent = new Intent(this, ChannelListActivity.class);
+    Intent intent = new Intent(this, ChannelsContainerActivity.class);
     startActivity(intent);
   }
 

@@ -12,9 +12,11 @@ import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
+import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
+import com.shootr.mobile.ui.fragments.PrivateMessageTimelineFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -25,6 +27,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   public static final String ACTION_OPEN_PROFILE = "com.shootr.mobile.ACTION_OPEN_PROFILE";
   public static final String ACTION_OPEN_STREAM = "com.shootr.mobile.ACTION_OPEN_STREAM";
   public static final String ACTION_OPEN_SHOT_DETAIL = "com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL";
+  public static final String ACTION_OPEN_PRIVATE_MESSAGE = "com.shootr.mobile.ACTION_OPEN_PRIVATE_MESSAGE";
   public static final String ACTION_DISCARD_SHOT_NOTIFICATION =
       "com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION";
   public static final String ACTION_OPEN_SHOT_NOTIFICATION =
@@ -58,6 +61,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     String activityRedirection = context.getString(R.string.analytics_push_redirection_activity);
     String discardRedirection = context.getString(R.string.analytics_push_redirection_discard);
     String needUpdateRedirection = context.getString(R.string.analytics_push_redirection_need_update);
+    String privateMessageRedirection = context.getString(R.string.analytics_push_redirection_private_messages);
 
     String action = intent.getAction();
     switch (action) {
@@ -98,6 +102,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
         sendGoogleAnalythicsPushOpen(context, ACTION_NEED_UPDATE, needUpdateRedirection);
+        break;
+      case ACTION_OPEN_PRIVATE_MESSAGE:
+        openPrivateMessage(context, intent);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, privateMessageRedirection);
         break;
       default:
         openUpdateNeeded(context);
@@ -142,6 +150,12 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     String streamTitle = intent.getStringExtra(PollVoteActivity.EXTRA_STREAM_TITLE);
     decrementBadgeCount();
     startActivityFromIntent(context, PollVoteActivity.newIntentWithIdPoll(context, idPoll, streamTitle)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  }
+
+  public void openPrivateMessage(Context context, Intent intent) {
+    String idTargetUser = intent.getStringExtra(PrivateMessageTimelineFragment.EXTRA_ID_TARGET_USER);
+    startActivityFromIntent(context, PrivateMessageTimelineActivity.newIntent(context, idTargetUser)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 

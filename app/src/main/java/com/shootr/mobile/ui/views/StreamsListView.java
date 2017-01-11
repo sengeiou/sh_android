@@ -30,5 +30,5 @@ public interface StreamsListView extends LoadDataView {
 
     void scrollListToTop();
 
-    void updateChannelBadge(int unreadChannels);
+    void updateChannelBadge(int unreadChannels, boolean followingsChannel);
 }

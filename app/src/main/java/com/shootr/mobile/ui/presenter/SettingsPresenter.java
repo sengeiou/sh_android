@@ -3,12 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.user.ChangeCheckinSettingsInteractor;
-import com.shootr.mobile.domain.interactor.user.ChangeNewFollowersSettingsInteractor;
-import com.shootr.mobile.domain.interactor.user.ChangeNiceShotSettingsInteractor;
-import com.shootr.mobile.domain.interactor.user.ChangePollSettingsInteractor;
-import com.shootr.mobile.domain.interactor.user.ChangeReShotSettingsInteractor;
-import com.shootr.mobile.domain.interactor.user.ChangeStartedShootingSettingsInteractor;
+import com.shootr.mobile.domain.interactor.user.ChangeUserSettingsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetSettingsByIdUserInteractor;
 import com.shootr.mobile.domain.model.PushSettingType;
 import com.shootr.mobile.domain.model.user.UserSettings;
@@ -21,32 +16,17 @@ import javax.inject.Inject;
 public class SettingsPresenter implements Presenter {
 
   private final GetSettingsByIdUserInteractor getSettingsByIdUserInteractor;
-  private final ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor;
-  private final ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor;
-  private final ChangeReShotSettingsInteractor changeReShotSettingsInteractor;
-  private final ChangeNewFollowersSettingsInteractor changeNewFollowersSettingsInteractor;
-  private final ChangePollSettingsInteractor changePollSettingsInteractor;
-  private final ChangeCheckinSettingsInteractor changeCheckinSettingsInteractor;
+  private final ChangeUserSettingsInteractor changeUserSettingsInteractor;
   private final UserSettingsModelMapper userSettingsModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private SettingsView settingsView;
   private UserSettingsModel userSettingsModel;
 
   @Inject public SettingsPresenter(GetSettingsByIdUserInteractor getSettingsByIdUserInteractor,
-      ChangeStartedShootingSettingsInteractor changeStartedShootingSettingsInteractor,
-      ChangeNiceShotSettingsInteractor changeNiceShotSettingsInteractor,
-      ChangeReShotSettingsInteractor changeReShotSettingsInteractor,
-      ChangeNewFollowersSettingsInteractor changeNewFollowersSettingsInteractor,
-      ChangePollSettingsInteractor changePollSettingsInteractor,
-      ChangeCheckinSettingsInteractor changeCheckinSettingsInteractor,
+      ChangeUserSettingsInteractor changeUserSettingsInteractor,
       UserSettingsModelMapper userSettingsModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.getSettingsByIdUserInteractor = getSettingsByIdUserInteractor;
-    this.changeStartedShootingSettingsInteractor = changeStartedShootingSettingsInteractor;
-    this.changeNiceShotSettingsInteractor = changeNiceShotSettingsInteractor;
-    this.changeReShotSettingsInteractor = changeReShotSettingsInteractor;
-    this.changeNewFollowersSettingsInteractor = changeNewFollowersSettingsInteractor;
-    this.changePollSettingsInteractor = changePollSettingsInteractor;
-    this.changeCheckinSettingsInteractor = changeCheckinSettingsInteractor;
+    this.changeUserSettingsInteractor = changeUserSettingsInteractor;
     this.userSettingsModelMapper = userSettingsModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -65,28 +45,32 @@ public class SettingsPresenter implements Presenter {
       @Override public void onLoaded(UserSettings userSettings) {
         userSettingsModel = userSettingsModelMapper.map(userSettings);
         String startedShootingPushSettings = userSettingsModel.getStartedShootingPushSettings();
-        Integer optionStartShooting = mapStartedShootingOption(startedShootingPushSettings);
+        Integer optionStartShooting = mapOptionAllFavoriteOff(startedShootingPushSettings);
         settingsView.setStartedShootingSettings(optionStartShooting);
 
         String niceShotPushSettings = userSettingsModel.getNiceShotPushSettings();
-        Integer optionNiceShot = mapNiceShotOption(niceShotPushSettings);
+        Integer optionNiceShot = mapOptionAllOffFollowings(niceShotPushSettings);
         settingsView.setNiceShotSettings(optionNiceShot);
 
         String reshotPushSettings = userSettingsModel.getReShotPushSettings();
-        Integer optionReShot = mapReShotOption(reshotPushSettings);
+        Integer optionReShot = mapOptionAllOffFollowings(reshotPushSettings);
         settingsView.setReShotSettings(optionReShot);
 
         String newFollowersPushSettings = userSettingsModel.getNewFollowersPushSettings();
-        Integer optionNewFollowers = mapNewFollowersOption(newFollowersPushSettings);
+        Integer optionNewFollowers = mapOptionAllOffFollowings(newFollowersPushSettings);
         settingsView.setNewFollowersSettings(optionNewFollowers);
 
         String pollPushSettings = userSettingsModel.getPollPushSettings();
-        Integer optionPoll = mapPollOption(pollPushSettings);
+        Integer optionPoll = mapOptionAllFavoriteOff(pollPushSettings);
         settingsView.setPollSettings(optionPoll);
 
         String checkinPushSettings = userSettingsModel.getCheckinPushSettings();
-        Integer optioncheckin = mapCheckinOption(checkinPushSettings);
+        Integer optioncheckin = mapOptionAllFavoriteOff(checkinPushSettings);
         settingsView.setCheckinSettings(optioncheckin);
+
+        String privateMessagePushSettings = userSettingsModel.getPrivateMessagePushSettings();
+        Integer optionprivatemessage = mapOptionAllOffFollowings(privateMessagePushSettings);
+        settingsView.setPrivateMessageSettings(optionprivatemessage);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -95,9 +79,9 @@ public class SettingsPresenter implements Presenter {
     });
   }
 
-  @NonNull private Integer mapStartedShootingOption(String startedShootingPushSettings) {
+  @NonNull private Integer mapOptionAllFavoriteOff(String settings) {
     Integer option = 2;
-    switch (startedShootingPushSettings) {
+    switch (settings) {
       case PushSettingType.ALL:
         option = 2;
         break;
@@ -113,9 +97,9 @@ public class SettingsPresenter implements Presenter {
     return option;
   }
 
-  @NonNull private Integer mapReShotOption(String reShotPushSettings) {
+  @NonNull private Integer mapOptionAllOffFollowings(String settings) {
     Integer option = 2;
-    switch (reShotPushSettings) {
+    switch (settings) {
       case PushSettingType.ALL:
         option = 2;
         break;
@@ -123,78 +107,6 @@ public class SettingsPresenter implements Presenter {
         option = 0;
         break;
       case PushSettingType.FOLLOWING:
-        option = 1;
-        break;
-      default:
-        break;
-    }
-    return option;
-  }
-
-  @NonNull private Integer mapNiceShotOption(String niceShotPushSettings) {
-    Integer option = 2;
-    switch (niceShotPushSettings) {
-      case PushSettingType.ALL:
-        option = 2;
-        break;
-      case PushSettingType.OFF:
-        option = 0;
-        break;
-      case PushSettingType.FOLLOWING:
-        option = 1;
-        break;
-      default:
-        break;
-    }
-    return option;
-  }
-
-  @NonNull private Integer mapNewFollowersOption(String newFollowersPushSettings) {
-    Integer option = 2;
-    switch (newFollowersPushSettings) {
-      case PushSettingType.ALL:
-        option = 2;
-        break;
-      case PushSettingType.OFF:
-        option = 0;
-        break;
-      case PushSettingType.FOLLOWING:
-        option = 1;
-        break;
-      default:
-        break;
-    }
-    return option;
-  }
-
-  @NonNull private Integer mapPollOption(String pollPushSettings) {
-    Integer option = 2;
-    switch (pollPushSettings) {
-      case PushSettingType.ALL:
-        option = 2;
-        break;
-      case PushSettingType.OFF:
-        option = 0;
-        break;
-      case PushSettingType.FAVORITE_STREAMS:
-        option = 1;
-        break;
-      default:
-        break;
-    }
-    return option;
-  }
-
-  @NonNull private Integer mapCheckinOption(String checkinPushSettings) {
-    Integer option = 2;
-    switch (checkinPushSettings) {
-      case PushSettingType.ALL:
-        option = 2;
-        break;
-      case PushSettingType.OFF:
-        option = 0;
-        break;
-      case PushSettingType.FAVORITE_STREAMS:
         option = 1;
         break;
       default:
@@ -215,8 +127,9 @@ public class SettingsPresenter implements Presenter {
       final UserSettingsModel changedSettings = userSettingsModel;
       if (changedSettings != null) {
         changedSettings.setStartedShootingPushSettings(selectedOption);
-        changeStartedShootingSettingsInteractor.changeStartedShotSettings(
+        changeUserSettingsInteractor.changeSettings(
             userSettingsModelMapper.reverseMap(changedSettings),
+            PushSettingType.STARTED_SHOOTING,
             new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                 userSettingsModel = changedSettings;
@@ -225,7 +138,7 @@ public class SettingsPresenter implements Presenter {
             }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                 Integer option =
-                    mapStartedShootingOption(userSettingsModel.getStartedShootingPushSettings());
+                    mapOptionAllFavoriteOff(userSettingsModel.getStartedShootingPushSettings());
                 settingsView.setStartedShootingSettings(option);
               }
             });
@@ -237,15 +150,17 @@ public class SettingsPresenter implements Presenter {
     final UserSettingsModel changedSettings = userSettingsModel;
     if (changedSettings != null) {
       changedSettings.setReShotPushSettings(selectedOption);
-      changeReShotSettingsInteractor.changeReShotSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.SHARED_SHOT,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               userSettingsModel = changedSettings;
               settingsView.sendNotificationAnalytics(PushSettingType.SHARED_SHOT);
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-              Integer option = mapReShotOption(userSettingsModel.getReShotPushSettings());
+              Integer option = mapOptionAllFavoriteOff(userSettingsModel.getReShotPushSettings());
               settingsView.setReShotSettings(option);
             }
           });
@@ -256,15 +171,17 @@ public class SettingsPresenter implements Presenter {
     final UserSettingsModel changedSettings = userSettingsModel;
     if (changedSettings != null) {
       changedSettings.setNiceShotPushSettings(selectedOption);
-      changeNiceShotSettingsInteractor.changeNiceShotSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.NICE_SHOT,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               userSettingsModel = changedSettings;
               settingsView.sendNotificationAnalytics(PushSettingType.NICE_SHOT);
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-              Integer option = mapNiceShotOption(userSettingsModel.getNiceShotPushSettings());
+              Integer option = mapOptionAllOffFollowings(userSettingsModel.getNiceShotPushSettings());
               settingsView.setNiceShotSettings(option);
             }
           });
@@ -275,16 +192,17 @@ public class SettingsPresenter implements Presenter {
     final UserSettingsModel changedSettings = userSettingsModel;
     if (changedSettings != null) {
       changedSettings.setNewFollowersPushSettings(selectedOption);
-      changeNewFollowersSettingsInteractor.changeNewFollowersSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.NEW_FOLLOWERS,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               userSettingsModel = changedSettings;
               settingsView.sendNotificationAnalytics(PushSettingType.NEW_FOLLOWERS);
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-              Integer option =
-                  mapNewFollowersOption(userSettingsModel.getNewFollowersPushSettings());
+              Integer option = mapOptionAllOffFollowings(userSettingsModel.getNewFollowersPushSettings());
               settingsView.setNewFollowersSettings(option);
             }
           });
@@ -295,16 +213,39 @@ public class SettingsPresenter implements Presenter {
     final UserSettingsModel changedSettings = userSettingsModel;
     if (changedSettings != null) {
       changedSettings.setPollPushSettings(selectedOption);
-      changePollSettingsInteractor.changePollSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.POLL,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               userSettingsModel = changedSettings;
               settingsView.sendNotificationAnalytics(PushSettingType.POLL);
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-              Integer option = mapPollOption(userSettingsModel.getPollPushSettings());
+              Integer option = mapOptionAllFavoriteOff(userSettingsModel.getPollPushSettings());
               settingsView.setPollSettings(option);
+            }
+          });
+    }
+  }
+
+  public void privateMessageSettingChanged(String selectedOption) {
+    final UserSettingsModel changedSettings = userSettingsModel;
+    if (changedSettings != null) {
+      changedSettings.setPrivateMessagePushSettings(selectedOption);
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.PRIVATE_MESSAGE,
+          new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              userSettingsModel = changedSettings;
+              settingsView.sendNotificationAnalytics(PushSettingType.PRIVATE_MESSAGE);
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              Integer option = mapOptionAllOffFollowings(userSettingsModel.getPrivateMessagePushSettings());
+              settingsView.setPrivateMessageSettings(option);
             }
           });
     }
@@ -314,15 +255,17 @@ public class SettingsPresenter implements Presenter {
     final UserSettingsModel changedSettings = userSettingsModel;
     if (changedSettings != null) {
       changedSettings.setCheckinPushSettings(selectedOption);
-      changeCheckinSettingsInteractor.changeCheckinSettings(
-          userSettingsModelMapper.reverseMap(changedSettings), new Interactor.CompletedCallback() {
+      changeUserSettingsInteractor.changeSettings(
+          userSettingsModelMapper.reverseMap(changedSettings),
+          PushSettingType.CHECK_IN,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               userSettingsModel = changedSettings;
               settingsView.sendNotificationAnalytics(PushSettingType.CHECK_IN);
             }
           }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-              Integer option = mapCheckinOption(userSettingsModel.getCheckinPushSettings());
+              Integer option = mapOptionAllFavoriteOff(userSettingsModel.getCheckinPushSettings());
               settingsView.setCheckinSettings(option);
             }
           });

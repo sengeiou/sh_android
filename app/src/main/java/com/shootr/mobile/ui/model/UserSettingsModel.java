@@ -9,6 +9,7 @@ public class UserSettingsModel {
   private String newFollowersPushSettings;
   private String pollPushSettings;
   private String checkinPushSettings;
+  private String privateMessagePushSettings;
 
   public String getNewFollowersPushSettings() {
     return newFollowersPushSettings;
@@ -64,5 +65,13 @@ public class UserSettingsModel {
 
   public void setNiceShotPushSettings(String niceShotPushSettings) {
     this.niceShotPushSettings = niceShotPushSettings;
+  }
+
+  public String getPrivateMessagePushSettings() {
+    return privateMessagePushSettings;
+  }
+
+  public void setPrivateMessagePushSettings(String privateMessagePushSettings) {
+    this.privateMessagePushSettings = privateMessagePushSettings;
   }
 }

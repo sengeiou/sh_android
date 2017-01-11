@@ -185,6 +185,7 @@
   <string name="facebook_alert_dialog">O email e a lista de amigos são necessários.</string>
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
+  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="finished_poll">Resultado do questionário %s</string>
   <string name="follower_list_empty">Não há seguidores</string>
@@ -266,7 +267,6 @@
   <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
-  <string name="nices_push_settings_off">Nenhuma</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>

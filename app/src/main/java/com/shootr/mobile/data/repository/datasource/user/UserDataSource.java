@@ -39,4 +39,6 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
+
+    List<String> getFollowingIds(String userId);
 }

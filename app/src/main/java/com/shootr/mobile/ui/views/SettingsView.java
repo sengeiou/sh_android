@@ -12,6 +12,8 @@ public interface SettingsView {
 
   void setPollSettings(Integer reShotPushSettings);
 
+  void setPrivateMessageSettings(Integer reShotPushSettings);
+
   void setCheckinSettings(Integer reShotPushSettings);
 
   void setNewFollowersSettings(Integer reShotPushSettings);

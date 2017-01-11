@@ -5,7 +5,8 @@ import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
 import com.shootr.mobile.ui.activities.ChangePasswordActivity;
-import com.shootr.mobile.ui.activities.ChannelListActivity;
+import com.shootr.mobile.ui.activities.ChannelListFragment;
+import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.CropPictureActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
@@ -17,6 +18,7 @@ import com.shootr.mobile.ui.activities.FindContributorsActivity;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
+import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
 import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
@@ -111,7 +113,8 @@ import javax.inject.Singleton;
     FindFriendsFragment.class,
     FindStreamsFragment.class,
     CropPictureActivity.class,
-    EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListActivity.class
+    EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
+    ChannelsContainerActivity.class, FollowingChannelListFragment.class
   },
   complete = false) public class UiModule {
 

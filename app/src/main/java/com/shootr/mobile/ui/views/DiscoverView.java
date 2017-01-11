@@ -23,5 +23,5 @@ public interface DiscoverView extends LoadDataView {
 
   void hideBanner();
 
-  void updateChannelBadge(int unreadChannels);
+  void updateChannelBadge(int unreadChannels, boolean followingsChannel);
 }

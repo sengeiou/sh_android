@@ -154,6 +154,10 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
+    @Override public List<String> getFollowingIds(String userId) {
+        throw new RuntimeException("Method not implemented for service.");
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }

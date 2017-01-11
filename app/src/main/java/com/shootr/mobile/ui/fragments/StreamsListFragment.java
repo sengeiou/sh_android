@@ -21,7 +21,7 @@ import butterknife.Unbinder;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.activities.ChannelListActivity;
+import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
@@ -35,6 +35,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.ui.views.nullview.NullStreamListView;
+import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -177,7 +178,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     public void navigateToChannelsList() {
       sendToMixPanel();
-      Intent intent = new Intent(getContext(), ChannelListActivity.class);
+      Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
       startActivity(intent);
     }
 
@@ -355,11 +356,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       }
     }
 
-  @Override public void updateChannelBadge(int unreadChannels) {
+  @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
     if (menu != null) {
       if (unreadChannels > 0) {
-        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, unreadChannels);
+        CustomActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), isFollowingChannels, unreadChannels);
+
       } else {
         ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
             menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
