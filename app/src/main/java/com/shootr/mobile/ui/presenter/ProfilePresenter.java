@@ -141,6 +141,7 @@ public class ProfilePresenter implements Presenter {
     profileView.resetTimelineAdapter();
     if (isCurrentUser) {
       profileView.showFriendsButton();
+      profileView.hideChannelButton();
     } else {
       profileView.hideFriendsButton();
     }
