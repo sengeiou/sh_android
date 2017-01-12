@@ -52,6 +52,7 @@ import timber.log.Timber;
 public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
 
   public static final int MAX_LENGTH = 140;
+  public static final int MAX_MESSAGE_LENGTH = 5000;
   private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
   private static final String EXTRA_SELECTED_IMAGE = "image";
@@ -148,6 +149,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
       } else if (isPrivateMessage) {
         String targetUser = getIntent().getStringExtra(EXTRA_ID_TARGET_USER);
         presenter.initializeAsNewMessage(this, targetUser);
+        charCounter.setText(String.valueOf(MAX_MESSAGE_LENGTH));
       } else {
         presenter.initializeAsNewShot(this);
       }
