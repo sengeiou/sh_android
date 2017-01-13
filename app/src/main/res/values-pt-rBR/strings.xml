@@ -317,6 +317,8 @@
   <string name="poll_vote_timeout_retry">Tentar novamente</string>
   <string name="private_message_all">TODOS</string>
   <string name="private_message_following">SEGUINDO</string>
+  <string name="all_messages_title_plural">TODOS (%d)</string>
+  <string name="following_messages_title_plural">SEGUINDO (%d)</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
   <string name="private_message_push_settings">Mensagens Privadas</string>

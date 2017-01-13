@@ -317,6 +317,8 @@
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="private_message_all">TOTHOM</string>
   <string name="private_message_following">SEGUINT</string>
+  <string name="all_messages_title_plural">TOTHOM (%d)</string>
+  <string name="following_messages_title_plural">SEGUINT (%d)</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
   <string name="private_message_push_settings">Missatges Privats</string>
