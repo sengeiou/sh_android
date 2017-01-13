@@ -185,7 +185,6 @@
   <string name="facebook_alert_dialog">Es requereixen l\'email i la llista d\'amics.</string>
   <string name="favorites_emtpy">No hi ha favorits</string>
   <string name="favorite_streams_push_settings">Streams favorits</string>
-  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="finished_poll">Resultat de l\'enquesta %s</string>
   <string name="follower_list_empty">No hi ha seguidors</string>
@@ -316,7 +315,11 @@
     <item quantity="zero">%d vots</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
+  <string name="private_message_all">TOTHOM</string>
+  <string name="private_message_following">SEGUINT</string>
   <string name="private_message_image">Foto</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">Missatges Privats</string>
   <string name="private_message_timeline_empty_title">Sense missatges</string>
   <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Tots els shots</string>
