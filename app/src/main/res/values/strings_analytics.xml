@@ -92,6 +92,7 @@
     <string name="analytics_notification_disabled_newFollowers">newFollowers</string>
     <string name="analytics_notification_disabled_poll">poll</string>
     <string name="analytics_notification_disabled_checkin">check-in</string>
+    <string name="analytics_notification_disabled_private_message">privateMessage</string>
     <string name="analytics_push_redirection_stream">stream</string>
     <string name="analytics_push_redirection_profile">profile</string>
     <string name="analytics_push_redirection_shot_detail">shotDetail</string>
@@ -99,6 +100,7 @@
     <string name="analytics_push_redirection_activity">activity</string>
     <string name="analytics_push_redirection_need_update">needUpdate</string>
     <string name="analytics_push_redirection_discard">discard</string>
+    <string name="analytics_push_redirection_private_messages">privateMessage</string>
     <string name="appflyer_key">FEg6kuUpkGTE3FrD2BdHPg</string>
     <string name="analytics_action_open_cta_link">Ad</string>
     <string name="analytics_label_open_cta_link">Ad</string>

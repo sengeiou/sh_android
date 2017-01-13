@@ -84,6 +84,9 @@ public class GCMIntentService extends IntentService {
         case PushNotification.Parameters.PUSH_TYPE_STREAM:
           receivedStream(push);
           break;
+        case PushNotification.Parameters.PUSH_TYPE_PRIVATE_MESSAGE:
+          receivedPrivateMessage(push);
+          break;
         default:
           receivedUnknown(push);
       }
@@ -114,6 +117,10 @@ public class GCMIntentService extends IntentService {
 
   private void receivedStream(PushNotification pushNotification) throws JSONException, IOException {
     setupGoToStreamTimelineNotification(pushNotification);
+  }
+
+  private void receivedPrivateMessage(PushNotification pushNotification) throws JSONException, IOException {
+    setupGoToPrivateMessageNotification(pushNotification);
   }
 
   private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {
@@ -186,6 +193,12 @@ public class GCMIntentService extends IntentService {
     String idUser = push.getParameters().getIdUser();
     activityNotificationManager.sendFollowNotification(push.getNotificationValues(),
         checkNotNull(idUser));
+  }
+
+  private void setupGoToPrivateMessageNotification(PushNotification push) {
+    String idTargetUser = push.getParameters().getIdTargetUser();
+    activityNotificationManager.sendOpenPrivateMessageNotification(push.getNotificationValues(),
+        checkNotNull(idTargetUser));
   }
 
   private void setupGoToStreamTimelineNotification(PushNotification push) {

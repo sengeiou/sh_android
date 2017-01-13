@@ -91,6 +91,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userManager.searchUsers(searchString);
     }
 
+    @Override public List<String> getFollowingIds(String userId) {
+        return followManager.getUserFollowingIds(userId);
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }

@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.UserSettingsEntity;
 import com.shootr.mobile.data.mapper.UserSettingsMapper;
 import com.shootr.mobile.data.repository.datasource.settings.ExternalUserSettingsDatasource;
+import com.shootr.mobile.domain.model.PushSettingType;
 import com.shootr.mobile.domain.model.user.UserSettings;
 import com.shootr.mobile.domain.repository.user.UserSettingsRepository;
 import javax.inject.Inject;
@@ -22,33 +23,34 @@ public class RemoteUserSettingsRepository implements UserSettingsRepository {
     return mapper.reverseMapList(datasource.getUserSettings());
   }
 
-  @Override public void modifyStartedShootingSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapStartedShooting(userSettings);
-    datasource.modifyPushSettings(userSettingsEntities);
-  }
-
-  @Override public void modifyNiceShotSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapNiceShot(userSettings);
-    datasource.modifyPushSettings(userSettingsEntities);
-  }
-
-  @Override public void modifyReShotSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapReShot(userSettings);
-    datasource.modifyPushSettings(userSettingsEntities);
-  }
-
-  @Override public void modifyNewFollowersSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapNewFollowers(userSettings);
-    datasource.modifyPushSettings(userSettingsEntities);
-  }
-
-  @Override public void modifyPollSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapPoll(userSettings);
-    datasource.modifyPushSettings(userSettingsEntities);
-  }
-
-  @Override public void modifyCheckinSettings(UserSettings userSettings) {
-    UserSettingsEntity userSettingsEntities = mapper.mapCheckin(userSettings);
+  @Override public void modifyUserSettings(UserSettings userSettings, String pushType) {
+    UserSettingsEntity userSettingsEntities;
+    switch (pushType) {
+      case PushSettingType.STARTED_SHOOTING:
+        userSettingsEntities = mapper.mapStartedShooting(userSettings);
+        break;
+      case PushSettingType.NICE_SHOT:
+        userSettingsEntities = mapper.mapNiceShot(userSettings);
+        break;
+      case PushSettingType.SHARED_SHOT:
+        userSettingsEntities = mapper.mapReShot(userSettings);
+        break;
+      case PushSettingType.NEW_FOLLOWERS:
+        userSettingsEntities = mapper.mapNewFollowers(userSettings);
+        break;
+      case PushSettingType.POLL:
+        userSettingsEntities = mapper.mapPoll(userSettings);
+        break;
+      case PushSettingType.CHECK_IN:
+        userSettingsEntities = mapper.mapCheckin(userSettings);
+        break;
+      case PushSettingType.PRIVATE_MESSAGE:
+        userSettingsEntities = mapper.mapPrivateMessage(userSettings);
+        break;
+      default:
+        userSettingsEntities = new UserSettingsEntity();
+        break;
+    }
     datasource.modifyPushSettings(userSettingsEntities);
   }
 }

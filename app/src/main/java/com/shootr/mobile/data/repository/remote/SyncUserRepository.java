@@ -354,7 +354,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         this.getPeople();
     }
 
-    @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+  @Override public List<String> getFollowingIds(String userId) {
+    throw new IllegalArgumentException("No remote implementation");
+  }
+
+  @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         try {
             //TODO test if calll this method is necesary forceUpdatePeopleAndMe();
         } catch (ServerCommunicationException networkError) {

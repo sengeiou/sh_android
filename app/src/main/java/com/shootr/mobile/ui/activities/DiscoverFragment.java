@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.DiscoverPresenter;
 import com.shootr.mobile.ui.views.DiscoverView;
+import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -103,19 +104,6 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     }
   }
 
-  @Override public void updateChannelBadge(int unreadChannels) {
-    if (menu != null) {
-      if (unreadChannels > 0) {
-        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, unreadChannels);
-      } else {
-        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
-      }
-    }
-  }
-
-
   private void navigateToDiscoverSearch() {
     Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
     startActivity(intent);
@@ -124,7 +112,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
 
   public void navigateToChannelsList() {
     sendToMixPanel();
-    Intent intent = new Intent(getContext(), ChannelListActivity.class);
+    Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
     startActivity(intent);
   }
 
@@ -258,6 +246,19 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @Override public void hideBanner() {
     if (banner != null) {
       banner.setVisibility(View.GONE);
+    }
+  }
+
+  @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
+    if (menu != null) {
+      if (unreadChannels > 0) {
+        CustomActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), isFollowingChannels, unreadChannels);
+
+      } else {
+        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
+            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
+      }
     }
   }
 

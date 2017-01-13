@@ -178,6 +178,10 @@ public class DiscoverPresenter implements Presenter, ChannelsBadgeChanged.Receiv
   }
 
   @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
-    discoverView.updateChannelBadge(event.getUnreadChannels());
+    if (event.getUnreadFollowChannels() > 0) {
+      discoverView.updateChannelBadge(event.getUnreadFollowChannels(), true);
+    } else {
+      discoverView.updateChannelBadge(event.getUnreadChannels(), false);
+    }
   }
 }

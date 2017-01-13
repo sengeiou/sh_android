@@ -26,6 +26,7 @@ import timber.log.Timber;
 public class PostNewShotPresenter implements Presenter {
 
     private static final int MAX_LENGTH = 140;
+    private static final int MAX_MESSAGE_LENGTH = 5000;
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -46,6 +47,7 @@ public class PostNewShotPresenter implements Presenter {
     private Integer wordPosition;
     private String[] words;
     private String idTargetUser;
+    private int maxLength = MAX_LENGTH;
 
     @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
         PostNewShotInStreamInteractor postNewShotInStreamInteractor,
@@ -76,6 +78,7 @@ public class PostNewShotPresenter implements Presenter {
     public void initializeAsNewMessage(PostNewShotView postNewShotView, String idTargetUser) {
         this.setView(postNewShotView);
         this.idTargetUser = idTargetUser;
+        this.maxLength = MAX_MESSAGE_LENGTH;
     }
 
     public void initializeAsReply(PostNewShotView postNewShotView, String replyParentId, String replyToUsername) {
@@ -232,7 +235,7 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void updateCharCounter(String filteredText) {
-        int remainingLength = MAX_LENGTH - filteredText.length();
+        int remainingLength = maxLength - filteredText.length();
         postNewShotView.setRemainingCharactersCount(remainingLength);
 
         boolean isValidShot = remainingLength > 0;
@@ -256,7 +259,7 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private boolean isLessThanMaxLength(String text) {
-        return text.length() <= MAX_LENGTH;
+        return text.length() <= maxLength;
     }
 
     private String filterText(String originalText) {

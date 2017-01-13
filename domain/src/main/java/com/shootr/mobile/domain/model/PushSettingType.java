@@ -8,34 +8,18 @@ public interface PushSettingType {
   String NEW_FOLLOWERS = "STARTFOLLOW";
   String CHECK_IN = "CHECKIN";
   String POLL = "VOTED_IN_POLL";
+  String PRIVATE_MESSAGE = "PRIVATE_MESSAGE";
 
   String OFF = "NONE";
   String ALL = "ALL";
   String FAVORITE_STREAMS = "FAVORITE_STREAMS";
   String FOLLOWING = "FOLLOWING";
 
-
-  String[] TYPES_STARTED_SHOOTING = {
+  String[] TYPES_OFF_FAVORITE_ALL = {
       OFF, FAVORITE_STREAMS, ALL
   };
 
-  String[] TYPES_NICE_SHOT = {
-      OFF, FOLLOWING, ALL
-  };
-
-  String[] TYPES_RESHOT = {
-      OFF, FOLLOWING, ALL
-  };
-
-  String[] TYPES_POLL = {
-      OFF, FAVORITE_STREAMS, ALL
-  };
-
-  String[] TYPES_CHECKIN = {
-      OFF, FAVORITE_STREAMS, ALL
-  };
-
-  String[] TYPES_NEW_FOLLOWERS = {
+  String[] TYPES_OFF_FOLLOWING_ALL = {
       OFF, FOLLOWING, ALL
   };
 }

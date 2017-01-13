@@ -19,6 +19,7 @@ public class UserSettingsModelMapper extends Mapper<UserSettings, UserSettingsMo
     model.setNewFollowersPushSettings(value.getNewFollowersPushSettings());
     model.setPollPushSettings(value.getPollPushSettings());
     model.setCheckinPushSettings(value.getCheckinPushSettings());
+    model.setPrivateMessagePushSettings(value.getPrivateMessagePushSettings());
     return model;
   }
 
@@ -31,6 +32,7 @@ public class UserSettingsModelMapper extends Mapper<UserSettings, UserSettingsMo
     domainEntity.setNewFollowersPushSettings(value.getNewFollowersPushSettings());
     domainEntity.setPollPushSettings(value.getPollPushSettings());
     domainEntity.setCheckinPushSettings(value.getCheckinPushSettings());
+    domainEntity.setPrivateMessagePushSettings(value.getPrivateMessagePushSettings());
     return domainEntity;
   }
 }

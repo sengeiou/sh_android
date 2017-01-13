@@ -49,6 +49,8 @@
   <string name="alert_report_confirmed_email_title">必須確認電郵</string>
   <string name="alert_shootr_update">此內容僅能透過最新的Shootr瀏覽。</string>
   <string name="alert_update_shootr">此內容僅能透過最新的Shootr瀏覽</string>
+  <string name="all_messages_title">全部</string>
+  <string name="all_messages_title_plural">全部 (%d)</string>
   <string name="all_participants_button">所有參與者</string>
   <string name="all_push_settings">全部</string>
   <string name="ban_user_dialog_message">用戶在你的streams上發布的shots只對他/她的關注者可見。</string>
@@ -190,6 +192,8 @@
   <string name="follower_list_empty">没有关注者</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">沒有跟關注任何人</string>
+  <string name="following_messages_title">關注中</string>
+  <string name="following_messages_title_plural">關注中 (%d)</string>
   <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
   <!-- When there are no private message channels -->
@@ -263,7 +267,6 @@
   <string name="niced_shot_activity_with_comment">"Nice了: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">你贊過的Shot</string>
-  <string name="nices_push_settings_off">關閉</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d 個nice</item>
   </plurals>
@@ -312,6 +315,8 @@
   </plurals>
   <string name="poll_vote_timeout_retry">重試</string>
   <string name="private_message_image">照片</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">私信</string>
   <string name="private_message_timeline_empty_title">沒有信息</string>
   <string name="private_message_video">視頻</string>
   <string name="profile_all_shots">所有 shots</string>

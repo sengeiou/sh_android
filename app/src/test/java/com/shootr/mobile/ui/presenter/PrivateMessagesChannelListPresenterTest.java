@@ -1,11 +1,13 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -25,6 +27,8 @@ public class PrivateMessagesChannelListPresenterTest {
   @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock PrivateMessageChannelListView view;
+  @Mock Bus bus;
+  @Mock BusPublisher busPublisher;
 
   private PrivateMessagesChannelListPresenter presenter;
 
@@ -34,7 +38,7 @@ public class PrivateMessagesChannelListPresenterTest {
 
     presenter =
         new PrivateMessagesChannelListPresenter(getPrivateMessagesChannelsInteractor, mapper,
-            errorMessageFactory);
+            errorMessageFactory, busPublisher, bus);
   }
 
   @Test public void shouldRenderChannelsWhenInitializes() throws Exception {

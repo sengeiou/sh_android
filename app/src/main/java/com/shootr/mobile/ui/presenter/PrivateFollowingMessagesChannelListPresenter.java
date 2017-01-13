@@ -1,41 +1,40 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetFollowingPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class PrivateMessagesChannelListPresenter implements Presenter {
+public class PrivateFollowingMessagesChannelListPresenter implements Presenter, ChannelsBadgeChanged.Receiver {
 
-  private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
+  private final GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor;
   private final PrivateMessageChannelModelMapper mapper;
   private final ErrorMessageFactory errorMessageFactory;
-  private final BusPublisher busPublisher;
   private final Bus bus;
 
   private PrivateMessageChannelListView view;
   private boolean hasBeenPaused = false;
   private List<PrivateMessageChannelModel> privateMessageChannelModels;
+  private String idUser;
 
-  @Inject public PrivateMessagesChannelListPresenter(
-      GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
-      PrivateMessageChannelModelMapper mapper, ErrorMessageFactory errorMessageFactory,
-      BusPublisher busPublisher, @Main Bus bus) {
-    this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
+  @Inject public PrivateFollowingMessagesChannelListPresenter(
+      GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor,
+      PrivateMessageChannelModelMapper mapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+    this.getFollowingPrivateMessagesChannelsInteractor =
+        getFollowingPrivateMessagesChannelsInteractor;
     this.mapper = mapper;
     this.errorMessageFactory = errorMessageFactory;
-    this.busPublisher = busPublisher;
     this.bus = bus;
   }
 
@@ -43,14 +42,15 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
     this.view = findStreamsView;
   }
 
-  public void initialize(final PrivateMessageChannelListView view) {
+  public void initialize(String idUser, final PrivateMessageChannelListView view) {
     this.setView(view);
+    this.idUser = idUser;
     loadChannels();
   }
 
-  public void loadChannels() {
+  private void loadChannels() {
     view.showLoading();
-    getPrivateMessagesChannelsInteractor.loadChannels(
+    getFollowingPrivateMessagesChannelsInteractor.loadChannels(idUser,
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> result) {
             onLoadResults(result);
@@ -68,7 +68,6 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
       privateMessageChannelModels = mapper.transform(resultList);
       renderViewChannelList(privateMessageChannelModels);
       setupUnreads(resultList);
-      publishChannelBadge();
     } else {
       this.showViewEmpty();
     }
@@ -85,9 +84,6 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
     view.updateTitle(unreads);
   }
 
-  private void publishChannelBadge() {
-    busPublisher.post(new ChannelsBadgeChanged.Event());
-  }
 
   private void showViewEmpty() {
     view.showEmpty();
@@ -123,5 +119,9 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   public PrivateMessageChannelListView getView() {
     return view;
+  }
+
+  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
+    loadChannels();
   }
 }

@@ -281,7 +281,11 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
-    streamsListView.updateChannelBadge(event.getUnreadChannels());
+    if (event.getUnreadFollowChannels() > 0) {
+      streamsListView.updateChannelBadge(event.getUnreadFollowChannels(), true);
+    } else {
+      streamsListView.updateChannelBadge(event.getUnreadChannels(), false);
+    }
   }
   //endregion
 }

@@ -266,7 +266,6 @@
   <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
-  <string name="nices_push_settings_off">Nenhuma</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -316,7 +315,13 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Tentar novamente</string>
+  <string name="all_messages_title">TODOS</string>
+  <string name="following_messages_title">SEGUINDO</string>
+  <string name="all_messages_title_plural">TODOS (%d)</string>
+  <string name="following_messages_title_plural">SEGUINDO (%d)</string>
   <string name="private_message_image">Foto</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">Mensagens Privadas</string>
   <string name="private_message_timeline_empty_title">Não há mensagens</string>
   <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Todos os shots</string>

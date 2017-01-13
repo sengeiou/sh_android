@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -96,6 +97,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
   @BindView(R.id.profile_streams_number) TextView streamsCountView;
+  @BindView(R.id.channel_button) FloatingActionButton channelButton;
 
   @BindView(R.id.profile_marks_followers) TextView followersTextView;
   @BindView(R.id.profile_marks_following) TextView followingTextView;
@@ -208,7 +210,7 @@ public class ProfileActivity extends BaseActivity
     OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
       @Override public void markNice(ShotModel shot) {
         profilePresenter.markNiceShot(shot.getIdShot());
-          sendAnalytics(shot);
+        sendAnalytics(shot);
       }
 
       @Override public void unmarkNice(String idShot) {
@@ -289,7 +291,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void goToChannelsList() {
-    Intent intent = new Intent(this, ChannelListActivity.class);
+    Intent intent = new Intent(this, ChannelsContainerActivity.class);
     startActivity(intent);
   }
 
@@ -412,9 +414,9 @@ public class ProfileActivity extends BaseActivity
 
   private void takePhotoFromCamera() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    Uri temporaryPhotoUri = FileProvider.getUriForFile(ProfileActivity.this,
-        BuildConfig.APPLICATION_ID + ".provider",
-        getCameraPhotoFile());
+    Uri temporaryPhotoUri =
+        FileProvider.getUriForFile(ProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider",
+            getCameraPhotoFile());
     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
   }
@@ -505,7 +507,6 @@ public class ProfileActivity extends BaseActivity
     builder.setTargetUsername(userModel.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
-
 
   private void unfollowUser() {
     profilePresenter.unfollow();
@@ -1183,6 +1184,10 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void showUserSettings() {
     settingsMenuItem.setVisible(true);
+  }
+
+  @Override public void hideChannelButton() {
+    channelButton.setVisibility(View.GONE);
   }
 
   @OnClick(R.id.mutuals_container) public void onMutualsClick() {

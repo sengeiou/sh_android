@@ -11,6 +11,7 @@ public class UserSettings {
   private String newFollowersPushSettings;
   private String pollPushSettings;
   private String checkinPushSettings;
+  private String privateMessagePushSettings;
 
   public String getNewFollowersPushSettings() {
     return newFollowersPushSettings;
@@ -68,6 +69,14 @@ public class UserSettings {
     this.niceShotPushSettings = niceShotPushSettings;
   }
 
+  public String getPrivateMessagePushSettings() {
+    return privateMessagePushSettings;
+  }
+
+  public void setPrivateMessagePushSettings(String privateMessagePushSettings) {
+    this.privateMessagePushSettings = privateMessagePushSettings;
+  }
+
   public static Builder builder() {
     return new Builder();
   }
@@ -87,15 +96,11 @@ public class UserSettings {
       settings.newFollowersPushSettings = PushSettingType.ALL;
       settings.pollPushSettings = PushSettingType.FAVORITE_STREAMS;
       settings.checkinPushSettings = PushSettingType.FAVORITE_STREAMS;
+      settings.privateMessagePushSettings = PushSettingType.ALL;
     }
 
     public Builder user(String idUser) {
       settings.idUser = idUser;
-      return this;
-    }
-
-    public Builder startedShootingPushSettings(String value) {
-      settings.startedShootingPushSettings = value;
       return this;
     }
 

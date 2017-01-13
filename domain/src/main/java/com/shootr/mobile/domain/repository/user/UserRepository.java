@@ -47,4 +47,6 @@ public interface UserRepository {
     List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
 
     void forceUpdatePeople();
+
+    List<String> getFollowingIds(String userId);
 }

@@ -178,6 +178,7 @@
   <string name="facebook_alert_dialog">メールアドレスと友人は必須項目です。</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
+  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="finished_poll">アンケート %s の結果</string>
   <string name="follower_list_empty">フォロワーはいません</string>
@@ -256,7 +257,6 @@
   <string name="niced_shot_activity_with_comment">"あなたにナイス！をしました: "</string>
   <string name="nicers">ナイスをした人</string>
   <string name="nices_push_settings">ナイスショット</string>
-  <string name="nices_push_settings_off">オフ</string>
   <plurals name="nice_count_pattern">
     <item quantity="other">%d件のナイス！ </item>
   </plurals>

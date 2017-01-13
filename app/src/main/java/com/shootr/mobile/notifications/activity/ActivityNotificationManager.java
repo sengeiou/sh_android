@@ -66,8 +66,17 @@ import javax.inject.Singleton;
     showNotification(notification);
   }
 
+  public void sendOpenPrivateMessageNotification(PushNotification.NotificationValues values,
+      String idUser) {
+    PrivateMessageActivityNotification notification =
+        new PrivateMessageActivityNotification(context, notificationBuilderFactory, imageLoader,
+            values, idUser);
+    showNotification(notification);
+  }
+
   public void sendOpenStreamNotification(PushNotification.NotificationValues notificationValues,
-      String idStream, String idStreamHolder, String title, String readWriteMode, Boolean updateNeeded) {
+      String idStream, String idStreamHolder, String title, String readWriteMode,
+      Boolean updateNeeded) {
     StreamActivityNotification notification =
         new StreamActivityNotification(context, notificationBuilderFactory, imageLoader,
             notificationValues, idStream, idStreamHolder, title, readWriteMode, updateNeeded);
@@ -77,13 +86,14 @@ import javax.inject.Singleton;
   public void sendOpenPollVoteNotification(PushNotification.NotificationValues notificationValues,
       String idPoll, String streamTitle, Boolean updateNeeded) {
     PollActivityNotification notification =
-        new PollActivityNotification(context, idPoll, streamTitle, notificationBuilderFactory, imageLoader,
-            notificationValues, updateNeeded);
+        new PollActivityNotification(context, idPoll, streamTitle, notificationBuilderFactory,
+            imageLoader, notificationValues, updateNeeded);
     showNotification(notification);
   }
 
   public void sendOpenShotDetailNotification(
-      final PushNotification.NotificationValues notificationValues, String idShot, Boolean updateNeeded) {
+      final PushNotification.NotificationValues notificationValues, String idShot,
+      Boolean updateNeeded) {
     ShotActivityNotification notification =
         new ShotActivityNotification(context, notificationBuilderFactory, imageLoader,
             notificationValues, idShot, remoteShotRepository, shotModelMapper, updateNeeded);

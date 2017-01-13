@@ -6,16 +6,6 @@ public interface UserSettingsRepository {
 
   UserSettings getUserSettings();
 
-  void modifyStartedShootingSettings(UserSettings userSettings);
-
-  void modifyNiceShotSettings(UserSettings userSettings);
-
-  void modifyReShotSettings(UserSettings userSettings);
-
-  void modifyPollSettings(UserSettings userSettings);
-
-  void modifyCheckinSettings(UserSettings userSettings);
-
-  void modifyNewFollowersSettings(UserSettings userSettings);
+  void modifyUserSettings(UserSettings userSettings, String pushType);
 
 }

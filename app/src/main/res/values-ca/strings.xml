@@ -266,7 +266,6 @@
   <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
-  <string name="nices_push_settings_off">Cap</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice</item>
     <item quantity="other">%d nices</item>
@@ -316,7 +315,13 @@
     <item quantity="zero">%d vots</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
+  <string name="all_messages_title">TOTHOM</string>
+  <string name="following_messages_title">SEGUINT</string>
+  <string name="all_messages_title_plural">TOTHOM (%d)</string>
+  <string name="following_messages_title_plural">SEGUINT (%d)</string>
   <string name="private_message_image">Foto</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">Missatges Privats</string>
   <string name="private_message_timeline_empty_title">Sense missatges</string>
   <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Tots els shots</string>

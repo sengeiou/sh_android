@@ -21,7 +21,7 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
     userSettings.setIdUser(sessionRepository.getCurrentUserId());
     switch (value.getPushType()) {
       case PushSettingType.STARTED_SHOOTING:
-      userSettings.setStartedShootingPushSettings(value.getValue());
+        userSettings.setStartedShootingPushSettings(value.getValue());
         break;
       case PushSettingType.NICE_SHOT:
         userSettings.setNiceShotPushSettings(value.getValue());
@@ -37,6 +37,9 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
         break;
       case PushSettingType.NEW_FOLLOWERS:
         userSettings.setNewFollowersPushSettings(value.getValue());
+        break;
+      case PushSettingType.PRIVATE_MESSAGE:
+        userSettings.setPrivateMessagePushSettings(value.getValue());
         break;
       default:
         break;
@@ -79,6 +82,13 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
     return response;
   }
 
+  public UserSettingsEntity mapPrivateMessage(UserSettings userSettings) {
+    UserSettingsEntity response = new UserSettingsEntity();
+    response.setPushType(PushSettingType.PRIVATE_MESSAGE);
+    response.setValue(userSettings.getPrivateMessagePushSettings());
+    return response;
+  }
+
   public UserSettingsEntity mapPoll(UserSettings userSettings) {
     UserSettingsEntity response = new UserSettingsEntity();
     response.setPushType(PushSettingType.POLL);
@@ -105,18 +115,30 @@ public class UserSettingsMapper extends Mapper<UserSettingsEntity, UserSettings>
   }
 
   private void handleType(UserSettings domainValue, UserSettingsEntity userSetting) {
-    if (userSetting.getPushType().equals(PushSettingType.STARTED_SHOOTING)) {
-      domainValue.setStartedShootingPushSettings(userSetting.getValue());
-    } else if (userSetting.getPushType().equals(PushSettingType.NICE_SHOT)) {
-      domainValue.setNiceShotPushSettings(userSetting.getValue());
-    } else if (userSetting.getPushType().equals(PushSettingType.SHARED_SHOT)) {
-      domainValue.setReShotPushSettings(userSetting.getValue());
-    } else if (userSetting.getPushType().equals(PushSettingType.NEW_FOLLOWERS)) {
-      domainValue.setNewFollowersPushSettings(userSetting.getValue());
-    } else if (userSetting.getPushType().equals(PushSettingType.POLL)) {
-      domainValue.setPollPushSettings(userSetting.getValue());
-    } else if (userSetting.getPushType().equals(PushSettingType.CHECK_IN)) {
-      domainValue.setCheckinPushSettings(userSetting.getValue());
+    switch (userSetting.getPushType()) {
+      case PushSettingType.STARTED_SHOOTING:
+        domainValue.setStartedShootingPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.NICE_SHOT:
+        domainValue.setNiceShotPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.SHARED_SHOT:
+        domainValue.setReShotPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.NEW_FOLLOWERS:
+        domainValue.setNewFollowersPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.POLL:
+        domainValue.setPollPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.CHECK_IN:
+        domainValue.setCheckinPushSettings(userSetting.getValue());
+        break;
+      case PushSettingType.PRIVATE_MESSAGE:
+        domainValue.setPrivateMessagePushSettings(userSetting.getValue());
+        break;
+      default:
+        break;
     }
   }
 }

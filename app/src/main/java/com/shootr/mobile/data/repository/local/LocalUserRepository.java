@@ -144,4 +144,8 @@ public class LocalUserRepository implements UserRepository {
     @Override public void forceUpdatePeople() {
         throw new IllegalArgumentException("forceUpdatePeople has no local implementation");
     }
+
+    @Override public List<String> getFollowingIds(String userId) {
+        return localUserDataSource.getFollowingIds(userId);
+    }
 }
