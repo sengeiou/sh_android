@@ -489,8 +489,8 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="all_messages_title">All</string>
-  <string name="following_messages_title">Following</string>
-  <string name="all_messages_title_plural">All (%d)</string>
-  <string name="following_messages_title_plural">Following (%d)</string>
+  <string name="all_messages_title">ALL</string>
+  <string name="following_messages_title">FOLLOWING</string>
+  <string name="all_messages_title_plural">ALL (%d)</string>
+  <string name="following_messages_title_plural">FOLLOWING (%d)</string>
 </resources>
