@@ -315,8 +315,8 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
-  <string name="private_message_all">TODOS</string>
-  <string name="private_message_following">SIGUIENDO</string>
+  <string name="all_messages_title">TODOS</string>
+  <string name="following_messages_title">SIGUIENDO</string>
   <string name="all_messages_title_plural">TODOS (%d)</string>
   <string name="following_messages_title_plural">SIGUIENDO (%d)</string>
   <string name="private_message_image">Foto</string>
