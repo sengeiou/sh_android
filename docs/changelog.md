@@ -13,6 +13,21 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.24.4] - 2017-01-13
+
+### Added
+
+- Longer private messages (5000 chars)
+- Private messages pushes
+- Private messages filter
+- Private messages color badge
+
+### Removed
+- Channel list in my profile
+
+### Changed
+- Push settings refactor
+
 ## [1.24.2] - 2017-01-04
 
 ### Fixed
