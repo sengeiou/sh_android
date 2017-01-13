@@ -185,7 +185,6 @@
   <string name="facebook_alert_dialog">Se requieren el email y la lista de amigos.</string>
   <string name="favorites_emtpy">No hay favoritos</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
-  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="finished_poll">Resultado de la encuesta %s</string>
   <string name="follower_list_empty">No hay seguidores</string>
@@ -316,7 +315,11 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
+  <string name="private_message_all">TODOS</string>
+  <string name="private_message_following">SIGUIENDO</string>
   <string name="private_message_image">Foto</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">Mensajes Privados</string>
   <string name="private_message_timeline_empty_title">No hay mensajes</string>
   <string name="private_message_video">Vídeo</string>
   <string name="profile_all_shots">Todos los shots</string>
