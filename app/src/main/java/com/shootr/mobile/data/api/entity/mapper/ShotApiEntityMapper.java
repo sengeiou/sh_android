@@ -67,7 +67,7 @@ public class ShotApiEntityMapper {
         shotEntity.setCtaButtonText(shotApiEntity.getCtaButtonText());
         shotEntity.setCtaButtonLink(shotApiEntity.getCtaButtonLink());
         shotEntity.setVerifiedUser(shotApiEntity.getVerifiedUser());
-        shotEntity.setPadding((shotApiEntity.getIsPadding() != null && shotApiEntity.getIsPadding() == 1));
+        shotEntity.setPadding((shotApiEntity.getIsPadding()));
 
         return shotEntity;
     }

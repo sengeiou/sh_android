@@ -28,7 +28,7 @@ public class ShotEntity extends BaseMessageEntity {
     private String ctaButtonLink;
     private String ctaButtonText;
     private String ctaCaption;
-    private boolean isPadding;
+    private Integer isPadding;
 
 
     public String getIdShot() {
@@ -175,11 +175,11 @@ public class ShotEntity extends BaseMessageEntity {
         this.ctaCaption = ctaCaption;
     }
 
-    public boolean isPadding() {
+    public Integer isPadding() {
         return isPadding;
     }
 
-    public void setPadding(boolean padding) {
+    public void setPadding(Integer padding) {
         isPadding = padding;
     }
 }
