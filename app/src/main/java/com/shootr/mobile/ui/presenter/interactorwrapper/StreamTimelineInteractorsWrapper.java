@@ -34,7 +34,7 @@ public class StreamTimelineInteractorsWrapper {
     this.getOlderViewOnlyStreamTimelineInteractor = getOlderViewOnlyStreamTimelineInteractor;
   }
 
-  public void loadTimeline(String idStream, Boolean hasBeenPaused, Integer streamMode,
+  public void loadTimeline(String idStream, boolean filterActivated, Boolean hasBeenPaused, Integer streamMode,
       Interactor.Callback<Timeline> callback) {
     if (streamMode == 0) {
       getStreamTimelineInteractor.loadStreamTimeline(idStream, hasBeenPaused, callback);
@@ -43,7 +43,7 @@ public class StreamTimelineInteractorsWrapper {
     }
   }
 
-  public void refreshTimeline(String streamId, Long lastRefreshDate, Boolean hasBeenPaused,
+  public void refreshTimeline(String streamId, boolean filterActivated, Long lastRefreshDate, Boolean hasBeenPaused,
       Integer streamMode, Interactor.Callback<Timeline> callback,
       Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
@@ -55,7 +55,7 @@ public class StreamTimelineInteractorsWrapper {
     }
   }
 
-  public void obtainOlderTimeline(String streamId, Long currentOldestDate, Integer streamMode,
+  public void obtainOlderTimeline(String streamId, boolean filterActivated, Long currentOldestDate, Integer streamMode,
       Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
       getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,
