@@ -875,19 +875,19 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hideHoldingShots() {
-    /* no -op */
+    showHoldingShotsMenuItem.setVisible(false);
   }
 
   @Override public void showAllStreamShots() {
-    /* no-op */
+    showAllShotsMenuItem.setVisible(true);
   }
 
   @Override public void showHoldingShots() {
-   /* no-op */
+    showHoldingShotsMenuItem.setVisible(true);
   }
 
   @Override public void hideAllStreamShots() {
-    /* no-op */
+    showAllShotsMenuItem.setVisible(false);
   }
 
   @Override public void setTitle(String title) {

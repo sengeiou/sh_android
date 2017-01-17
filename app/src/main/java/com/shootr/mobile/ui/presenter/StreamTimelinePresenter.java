@@ -73,7 +73,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean hasBeenPaused = false;
   private boolean isEmpty = true;
   private String idAuthor;
-  private boolean filterActivated;
+  private boolean filterActivated = false;
   private boolean isFirstShotPosition;
   private boolean isFirstLoad;
   private boolean isTimelineInitialized;
@@ -576,7 +576,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onHoldingShotsClick() {
     showingHolderShots(true);
     streamTimelineView.showLoading();
-    streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, hasBeenPaused,
+    timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, 0,
         new Interactor.Callback<Timeline>() {
           @Override public void onLoaded(Timeline timeline) {
             List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -593,10 +593,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             streamTimelineView.hideHoldingShots();
             streamTimelineView.showAllStreamShots();
             streamTimelineView.hideLoading();
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorLoadingNewShots();
           }
         });
   }
