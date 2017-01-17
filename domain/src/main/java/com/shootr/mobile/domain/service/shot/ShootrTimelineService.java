@@ -15,6 +15,7 @@ import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -65,9 +66,22 @@ public class ShootrTimelineService {
     return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, language);
   }
 
-  public Timeline refreshTimelinesForStream(String idStream, Boolean isRealTime) {
+  public Timeline refreshTimelinesForStream(String idStream, boolean filterActivated, Boolean isRealTime) {
     List<Shot> shotsForStream = refreshStreamShots(idStream, isRealTime);
+    if (filterActivated) {
+      filterShots(shotsForStream);
+    }
     return buildSortedTimeline(shotsForStream);
+  }
+
+  private void filterShots(List<Shot> shotsForStream) {
+    Iterator<Shot> iterator = shotsForStream.iterator();
+    while (iterator.hasNext()) {
+      Shot shot = iterator.next();
+      if (shot.isPadding()) {
+        iterator.remove();
+      }
+    }
   }
 
   private List<Shot> refreshStreamShots(String idStream, Boolean isRealTime) {

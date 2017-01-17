@@ -76,7 +76,7 @@ public class RefreshViewOnlyStreamTimelineInteractor implements Interactor {
       long timestamp = new Date().getTime();
       Boolean isRealTime =
           calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
-      Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, isRealTime);
+      Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, false, isRealTime);
       filterViewOnlyTimeline(timeline);
       notifyLoaded(timeline);
       incrementCalls();
