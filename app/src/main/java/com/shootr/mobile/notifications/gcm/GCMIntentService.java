@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
+import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -40,6 +41,7 @@ public class GCMIntentService extends IntentService {
   @Inject ShotNotificationManager shotNotificationManager;
 
   @Inject ActivityNotificationManager activityNotificationManager;
+  @Inject MessageNotificationManager messageNotificationManager;
   @Inject ExternalShotRepository remoteShotRepository;
   @Inject ShotModelMapper shotModelMapper;
   @Inject JsonAdapter jsonAdapter;
@@ -197,8 +199,8 @@ public class GCMIntentService extends IntentService {
 
   private void setupGoToPrivateMessageNotification(PushNotification push) {
     String idTargetUser = push.getParameters().getIdTargetUser();
-    activityNotificationManager.sendOpenPrivateMessageNotification(push.getNotificationValues(),
-        checkNotNull(idTargetUser));
+    messageNotificationManager.sendOpenPrivateMessageNotification(push.getNotificationValues(),
+        checkNotNull(idTargetUser), push.getParameters().getComment());
   }
 
   private void setupGoToStreamTimelineNotification(PushNotification push) {

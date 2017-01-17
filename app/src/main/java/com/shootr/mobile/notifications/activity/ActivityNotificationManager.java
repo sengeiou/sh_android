@@ -66,14 +66,6 @@ import javax.inject.Singleton;
     showNotification(notification);
   }
 
-  public void sendOpenPrivateMessageNotification(PushNotification.NotificationValues values,
-      String idUser) {
-    PrivateMessageActivityNotification notification =
-        new PrivateMessageActivityNotification(context, notificationBuilderFactory, imageLoader,
-            values, idUser);
-    showNotification(notification);
-  }
-
   public void sendOpenStreamNotification(PushNotification.NotificationValues notificationValues,
       String idStream, String idStreamHolder, String title, String readWriteMode,
       Boolean updateNeeded) {

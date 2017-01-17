@@ -131,6 +131,7 @@ public class PushNotification {
         private String shotType;
         private String idPoll;
         private String idTargetUser;
+        private String comment;
 
         public int getPushType() {
             return pushType;
@@ -254,6 +255,14 @@ public class PushNotification {
 
         public void setIdTargetUser(String idTargetUser) {
             this.idTargetUser = idTargetUser;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
         }
     }
 }

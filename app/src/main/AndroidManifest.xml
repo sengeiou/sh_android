@@ -186,6 +186,8 @@
         <action android:name="com.shootr.mobile.ACTION_NEED_UPDATE"/>
         <action android:name="com.shootr.mobile.ACTION_OPEN_POLL_VOTE"/>
         <action android:name="com.shootr.mobile.ACTION_OPEN_PRIVATE_MESSAGE"/>
+        <action android:name="com.shootr.mobile.ACTION_OPEN_CHANNEL_LIST"/>
+        <action android:name="com.shootr.mobile.ACTION_DISCARD_PRIVATE_MESSAGE"/>
 
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
