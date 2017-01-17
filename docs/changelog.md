@@ -13,6 +13,16 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.24.6] - 2017-01-17
+
+### Changed
+
+- Notificaciones de mensajes
+
+### Fixed
+- Agujero en sincronización de profile
+- Actualización crashlytics
+
 ## [1.24.4] - 2017-01-13
 
 ### Added

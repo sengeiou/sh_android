@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.local;
 
+import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
@@ -67,6 +68,7 @@ public class LocalUserRepository implements UserRepository {
 
     @Override public User putUser(User user) {
         UserEntity currentOrNewEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
+        currentOrNewEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
         localUserDataSource.putUser(currentOrNewEntity);
         return user;
     }
@@ -86,6 +88,7 @@ public class LocalUserRepository implements UserRepository {
 
     @Override public void updateWatch(User user) {
         UserEntity entity = userEntityMapper.transform(user);
+        entity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
         localUserDataSource.updateWatch(entity);
     }
 
@@ -114,7 +117,7 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 
-    @Override public User updateUserProfile(User updatedUserEntity) {
+    @Override public void updateUserProfile(User updatedUserEntity) {
         throw new IllegalArgumentException("this method has no local implementation");
     }
 

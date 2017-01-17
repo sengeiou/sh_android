@@ -9,7 +9,9 @@ import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
+import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
+import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
@@ -28,6 +30,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
   public static final String ACTION_OPEN_STREAM = "com.shootr.mobile.ACTION_OPEN_STREAM";
   public static final String ACTION_OPEN_SHOT_DETAIL = "com.shootr.mobile.ACTION_OPEN_SHOT_DETAIL";
   public static final String ACTION_OPEN_PRIVATE_MESSAGE = "com.shootr.mobile.ACTION_OPEN_PRIVATE_MESSAGE";
+  public static final String ACTION_OPEN_CHANNEL_LIST = "com.shootr.mobile.ACTION_OPEN_CHANNEL_LIST";
+  public static final String ACTION_DISCARD_PRIVATE_MESSAGE = "com.shootr.mobile.ACTION_DISCARD_PRIVATE_MESSAGE";
   public static final String ACTION_DISCARD_SHOT_NOTIFICATION =
       "com.shootr.mobile.ACTION_DISCARD_SHOT_NOTIFICATION";
   public static final String ACTION_OPEN_SHOT_NOTIFICATION =
@@ -45,6 +49,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   @Inject ShotNotificationManager shotNotificationManager;
   @Inject ActivityNotificationManager activityNotificationManager;
+  @Inject MessageNotificationManager messageNotificationManager;
   @Inject @ActivityBadgeCount IntPreference badgeCount;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
@@ -107,6 +112,14 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         openPrivateMessage(context, intent);
         sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, privateMessageRedirection);
         break;
+      case ACTION_DISCARD_PRIVATE_MESSAGE:
+        messageNotificationManager.clearActivityNotifications();
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
+        break;
+      case ACTION_OPEN_CHANNEL_LIST:
+        openChannelList(context);
+        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, privateMessageRedirection);
+        break;
       default:
         openUpdateNeeded(context);
         break;
@@ -157,6 +170,14 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     String idTargetUser = intent.getStringExtra(PrivateMessageTimelineFragment.EXTRA_ID_TARGET_USER);
     startActivityFromIntent(context, PrivateMessageTimelineActivity.newIntent(context, idTargetUser)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    messageNotificationManager.clearActivityNotifications();
+  }
+
+  public void openChannelList(Context context) {
+    Intent channelIntent = new Intent(context, ChannelsContainerActivity.class);
+    startActivityFromIntent(context, channelIntent
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    messageNotificationManager.clearActivityNotifications();
   }
 
   public void openUpdateNeeded(Context context) {

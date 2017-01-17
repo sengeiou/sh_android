@@ -8,115 +8,124 @@ import javax.inject.Inject;
 
 public class UserEntityMapper {
 
-    private final MetadataMapper metadataMapper;
+  private final MetadataMapper metadataMapper;
 
-    @Inject public UserEntityMapper(MetadataMapper metadataMapper) {
-        this.metadataMapper = metadataMapper;
+  @Inject public UserEntityMapper(MetadataMapper metadataMapper) {
+    this.metadataMapper = metadataMapper;
+  }
+
+  public User transform(UserEntity userEntity, String currentUserId, boolean isFollower,
+      boolean isFollowing) {
+    if (userEntity == null) {
+      return null;
     }
+    User user = new User();
+    user.setIdUser(userEntity.getIdUser());
+    user.setUsername(userEntity.getUserName());
+    user.setName(userEntity.getName());
+    user.setVerifiedUser(userEntity.getVerifiedUser() != null && userEntity.getVerifiedUser() == 1);
+    user.setPhoto(userEntity.getPhoto());
+    user.setNumFollowings(userEntity.getNumFollowings());
+    user.setNumFollowers(userEntity.getNumFollowers());
+    user.setWebsite(userEntity.getWebsite());
+    user.setBio(userEntity.getBio());
+    user.setPoints(userEntity.getPoints());
 
-    public User transform(UserEntity userEntity, String currentUserId, boolean isFollower, boolean isFollowing) {
-        if (userEntity == null) {
-            return null;
+    user.setIdWatchingStream(userEntity.getIdWatchingStream());
+    user.setWatchingStreamTitle(userEntity.getWatchingStreamTitle());
+
+    user.setMe(userEntity.getIdUser().equals(currentUserId));
+    if (user.isMe()) {
+      user.setEmail(userEntity.getEmail());
+      if (userEntity.getEmailConfirmed() != null) {
+        if (userEntity.getEmailConfirmed() == 1) {
+          user.setEmailConfirmed(true);
+        } else {
+          user.setEmailConfirmed(false);
         }
-        User user = new User();
-        user.setIdUser(userEntity.getIdUser());
-        user.setUsername(userEntity.getUserName());
-        user.setName(userEntity.getName());
-        user.setEmail(userEntity.getEmail());
-        user.setEmailConfirmed(userEntity.getEmailConfirmed() != null && userEntity.getEmailConfirmed() == 1);
-        user.setVerifiedUser(userEntity.getVerifiedUser() != null && userEntity.getVerifiedUser() == 1);
-        user.setPhoto(userEntity.getPhoto());
-        user.setNumFollowings(userEntity.getNumFollowings());
-        user.setNumFollowers(userEntity.getNumFollowers());
-        user.setWebsite(userEntity.getWebsite());
-        user.setBio(userEntity.getBio());
-        user.setPoints(userEntity.getPoints());
-
-        user.setIdWatchingStream(userEntity.getIdWatchingStream());
-        user.setWatchingStreamTitle(userEntity.getWatchingStreamTitle());
-
-        user.setMe(userEntity.getIdUser().equals(currentUserId));
-        user.setFollower(isFollower);
-        user.setFollowing(isFollowing);
-
-        user.setJoinStreamDate(userEntity.getJoinStreamDate());
-        user.setSocialLogin(userEntity.getSocialLogin());
-        user.setReceivedReactions(
-            (userEntity.getReceivedReactions() == null ? 0L : userEntity.getReceivedReactions()));
-        user.setAnalyticsUserType(userEntity.getAnalyticsUserType() == null ? "NORMAL"
-            : userEntity.getAnalyticsUserType());
-
-        user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
-
-        user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
-        user.setFavoritedStreamsCount(userEntity.getFavoritedStreamsCount());
-
-        return user;
+      }
     }
+    user.setSocialLogin(userEntity.getSocialLogin());
+    user.setFollower(isFollower);
+    user.setFollowing(isFollowing);
 
-    public UserEntity transform(User user) {
-        if (user == null) {
-            return null;
-        }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setIdUser(user.getIdUser());
-        userEntity.setUserName(user.getUsername());
-        userEntity.setName(user.getName());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setEmailConfirmed(user.isEmailConfirmed() ? 1 : 0);
-        userEntity.setVerifiedUser(user.isVerifiedUser() ? 1 : 0);
-        userEntity.setPhoto(user.getPhoto());
-        userEntity.setPoints(user.getPoints());
-        userEntity.setNumFollowings(user.getNumFollowings());
-        userEntity.setNumFollowers(user.getNumFollowers());
-        userEntity.setWebsite(user.getWebsite());
-        userEntity.setBio(user.getBio());
+    user.setJoinStreamDate(userEntity.getJoinStreamDate());
+    user.setReceivedReactions(
+        (userEntity.getReceivedReactions() == null ? 0L : userEntity.getReceivedReactions()));
+    user.setAnalyticsUserType(
+        userEntity.getAnalyticsUserType() == null ? "NORMAL" : userEntity.getAnalyticsUserType());
 
-        userEntity.setIdWatchingStream(user.getIdWatchingStream());
+    user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
-        userEntity.setWatchingStreamTitle(user.getWatchingStreamTitle());
+    user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
+    user.setFavoritedStreamsCount(userEntity.getFavoritedStreamsCount());
 
-        userEntity.setJoinStreamDate(user.getJoinStreamDate());
+    return user;
+  }
 
-        metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
-        userEntity.setSocialLogin(user.isSocialLogin());
-        userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
-        userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
-        userEntity.setAnalyticsUserType(user.getAnalyticsUserType());
-        userEntity.setReceivedReactions(user.getReceivedReactions());
-
-        return userEntity;
+  public UserEntity transform(User user) {
+    if (user == null) {
+      return null;
     }
+    UserEntity userEntity = new UserEntity();
+    userEntity.setIdUser(user.getIdUser());
+    userEntity.setUserName(user.getUsername());
+    userEntity.setName(user.getName());
+    userEntity.setEmail(user.getEmail());
+    userEntity.setEmailConfirmed(user.isEmailConfirmed() ? 1 : 0);
+    userEntity.setVerifiedUser(user.isVerifiedUser() ? 1 : 0);
+    userEntity.setPhoto(user.getPhoto());
+    userEntity.setPoints(user.getPoints());
+    userEntity.setNumFollowings(user.getNumFollowings());
+    userEntity.setNumFollowers(user.getNumFollowers());
+    userEntity.setWebsite(user.getWebsite());
+    userEntity.setBio(user.getBio());
 
-    public List<UserEntity> transform(List<User> users) {
-        List<UserEntity> userEntities = new ArrayList<>(users.size());
-        UserEntity userEntity;
-        for (User user : users) {
-            userEntity = transform(user);
-            if (userEntity != null) {
-                userEntities.add(userEntity);
-            }
-        }
-        return userEntities;
-    }
+    userEntity.setIdWatchingStream(user.getIdWatchingStream());
 
-    public List<User> transformEntities(List<UserEntity> entities) {
-        List<User> users = new ArrayList<>(entities.size());
-        User user;
-        for (UserEntity userEntity : entities) {
-            user = transform(userEntity);
-            if (user != null) {
-                users.add(user);
-            }
-        }
-        return users;
-    }
+    userEntity.setWatchingStreamTitle(user.getWatchingStreamTitle());
 
-    public User transform(UserEntity user, String idCurrentUser) {
-        return transform(user, idCurrentUser, false, false);
-    }
+    userEntity.setJoinStreamDate(user.getJoinStreamDate());
 
-    public User transform(UserEntity user) {
-        return transform(user, "-1L", false, false);
+    metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
+    userEntity.setSocialLogin(user.isSocialLogin());
+    userEntity.setCreatedStreamsCount(user.getCreatedStreamsCount());
+    userEntity.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
+    userEntity.setAnalyticsUserType(user.getAnalyticsUserType());
+    userEntity.setReceivedReactions(user.getReceivedReactions());
+
+    return userEntity;
+  }
+
+  public List<UserEntity> transform(List<User> users) {
+    List<UserEntity> userEntities = new ArrayList<>(users.size());
+    UserEntity userEntity;
+    for (User user : users) {
+      userEntity = transform(user);
+      if (userEntity != null) {
+        userEntities.add(userEntity);
+      }
     }
+    return userEntities;
+  }
+
+  public List<User> transformEntities(List<UserEntity> entities) {
+    List<User> users = new ArrayList<>(entities.size());
+    User user;
+    for (UserEntity userEntity : entities) {
+      user = transform(userEntity);
+      if (user != null) {
+        users.add(user);
+      }
+    }
+    return users;
+  }
+
+  public User transform(UserEntity user, String idCurrentUser) {
+    return transform(user, idCurrentUser, false, false);
+  }
+
+  public User transform(UserEntity user) {
+    return transform(user, "-1L", false, false);
+  }
 }

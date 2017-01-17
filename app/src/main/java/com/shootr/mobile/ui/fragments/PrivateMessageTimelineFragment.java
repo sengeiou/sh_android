@@ -520,7 +520,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void hideLoading() {
-    swipeRefreshLayout.setRefreshing(false);
+    if (swipeRefreshLayout != null) {
+      swipeRefreshLayout.setRefreshing(false);
+    }
   }
 
   @Override public void showError(String message) {

@@ -41,7 +41,7 @@ public interface UserRepository {
 
     List<User> getLocalPeopleFromIdStream(String idStream);
 
-    User updateUserProfile(User updatedUserEntity)
+    void updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;

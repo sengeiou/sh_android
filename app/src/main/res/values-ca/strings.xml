@@ -494,4 +494,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
+  <string name="new_messages_notification">%d missatges nous</string>
 </resources>
