@@ -128,6 +128,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.VERIFIED_USER
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.IS_PADDING
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -709,6 +711,8 @@ public class SQLiteUtils {
         + DatabaseContract.HighlightedShotTable.PROMOTED
         + " NUMBER NULL,"
         + DatabaseContract.HighlightedShotTable.VERIFIED_USER
+        + " NUMBER NULL,"
+        + DatabaseContract.HighlightedShotTable.IS_PADDING
         + " NUMBER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
