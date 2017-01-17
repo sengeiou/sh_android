@@ -64,6 +64,7 @@ public class ShotEntityMapper {
         shot.setCtaButtonText(shotEntity.getCtaButtonText());
         shot.setCtaCaption(shotEntity.getCtaCaption());
         shot.setPromoted(shotEntity.getPromoted());
+        shot.setPadding(shotEntity.isPadding());
         return shot;
     }
 
@@ -121,6 +122,7 @@ public class ShotEntityMapper {
         shotEntity.setCtaButtonText(shot.getCtaButtonText());
         shotEntity.setCtaCaption(shot.getCtaCaption());
         shotEntity.setPromoted(shot.getPromoted());
+        shotEntity.setPadding(shot.isPadding());
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;
