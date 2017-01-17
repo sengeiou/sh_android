@@ -9,8 +9,8 @@ public class User {
     private String username;
     private String name;
     private String email;
-    private Boolean emailConfirmed;
-    private Boolean verifiedUser;
+    private boolean emailConfirmed;
+    private boolean verifiedUser;
     private String photo;
     private Long numFollowings;
     private Long numFollowers;
@@ -32,7 +32,7 @@ public class User {
     private Long favoritedStreamsCount;
 
     private Integer relationship;
-    private Boolean socialLogin;
+    private boolean socialLogin;
     private String analyticsUserType;
     private Long receivedReactions;
 
@@ -156,19 +156,19 @@ public class User {
         this.email = email;
     }
 
-    public Boolean isEmailConfirmed() {
+    public boolean isEmailConfirmed() {
         return emailConfirmed;
     }
 
-    public void setEmailConfirmed(Boolean emailConfirmed) {
+    public void setEmailConfirmed(boolean emailConfirmed) {
         this.emailConfirmed = emailConfirmed;
     }
 
-    public Boolean isSocialLogin() {
+    public boolean isSocialLogin() {
         return socialLogin;
     }
 
-    public void setSocialLogin(Boolean socialLogin) {
+    public void setSocialLogin(boolean socialLogin) {
         this.socialLogin = socialLogin;
     }
 
@@ -227,11 +227,11 @@ public class User {
         this.metadata = metadata;
     }
 
-    public Boolean isVerifiedUser() {
+    public boolean isVerifiedUser() {
         return verifiedUser;
     }
 
-    public void setVerifiedUser(Boolean verifiedUser) {
+    public void setVerifiedUser(boolean verifiedUser) {
         this.verifiedUser = verifiedUser;
     }
 

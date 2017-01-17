@@ -37,25 +37,26 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
+public class SyncUserRepository
+    implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
-    public static final int PAGE_SIZE = 100;
-    public static final int PAGE = 0;
-    private final SessionRepository sessionRepository;
-    private final UserDataSource localUserDataSource;
-    private final UserDataSource remoteUserDataSource;
-    private final SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
-    private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
-    private final FollowDataSource localFollowDataSource;
-    private final UserEntityMapper userEntityMapper;
-    private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
-    private final SyncableUserEntityFactory syncableUserEntityFactory;
-    private final SyncTrigger syncTrigger;
-    private final Bus bus;
-    private final UserCache userCache;
-    private final FollowDataSource serviceFollowDataSource;
-    private final SynchroDataSource synchroDataSource;
-    private final AndroidTimeUtils androidTimeUtils;
+  public static final int PAGE_SIZE = 100;
+  public static final int PAGE = 0;
+  private final SessionRepository sessionRepository;
+  private final UserDataSource localUserDataSource;
+  private final UserDataSource remoteUserDataSource;
+  private final SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
+  private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
+  private final FollowDataSource localFollowDataSource;
+  private final UserEntityMapper userEntityMapper;
+  private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
+  private final SyncableUserEntityFactory syncableUserEntityFactory;
+  private final SyncTrigger syncTrigger;
+  private final Bus bus;
+  private final UserCache userCache;
+  private final FollowDataSource serviceFollowDataSource;
+  private final SynchroDataSource synchroDataSource;
+  private final AndroidTimeUtils androidTimeUtils;
 
   @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
@@ -142,228 +143,241 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
   }
 
-    @Override public User getUserById(String id) {
-        UserEntity remoteUser = remoteUserDataSource.getUser(id);
-        localUserDataSource.putUser(remoteUser);
-        return entityToDomain(remoteUser);
-    }
+  @Override public User getUserById(String id) {
+    UserEntity remoteUser = remoteUserDataSource.getUser(id);
+    remoteUser.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+    localUserDataSource.putUser(remoteUser);
+    return entityToDomain(remoteUser);
+  }
 
   @Override public User getUserForAnalythicsById(String id) {
     UserEntity remoteUser = remoteUserDataSource.getUser(id);
     return entityToDomain(remoteUser);
   }
 
-    @Override public User getUserByUsername(String username) {
-        UserEntity user = remoteUserDataSource.getUserByUsername(username);
-        return entityToDomain(user);
-    }
+  @Override public User getUserByUsername(String username) {
+    UserEntity user = remoteUserDataSource.getUserByUsername(username);
+    return entityToDomain(user);
+  }
 
-    private User entityToDomain(UserEntity remoteUser) {
-        if (remoteUser == null) {
-            return null;
-        }
-        return userEntityMapper.transform(remoteUser,
-          sessionRepository.getCurrentUserId(),
-          isFollower(remoteUser.getIdUser()),
-          isFollowing(remoteUser.getIdUser()));
+  private User entityToDomain(UserEntity remoteUser) {
+    if (remoteUser == null) {
+      return null;
     }
+    return userEntityMapper.transform(remoteUser, sessionRepository.getCurrentUserId(),
+        isFollower(remoteUser.getIdUser()), isFollowing(remoteUser.getIdUser()));
+  }
 
-    private SuggestedPeople suggestedPeopleEntityToDomain(SuggestedPeopleEntity remoteSuggestedPeopleEntity) {
-        if (remoteSuggestedPeopleEntity == null) {
-            return null;
-        }
-        return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
+  private SuggestedPeople suggestedPeopleEntityToDomain(
+      SuggestedPeopleEntity remoteSuggestedPeopleEntity) {
+    if (remoteSuggestedPeopleEntity == null) {
+      return null;
     }
+    return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
+  }
 
-    private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(
+  private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(
       List<SuggestedPeopleEntity> suggestedPeopleEntities) {
-        List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
-        for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
-            suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
-        }
-        return suggestedPeoples;
+    List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
+    for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
+      suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
     }
+    return suggestedPeoples;
+  }
 
-    @Override public boolean isFollower(String userId) {
-        return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
-    }
+  @Override public boolean isFollower(String userId) {
+    return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
+  }
 
-    @Override public boolean isFollowing(String userId) {
-        return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
-    }
+  @Override public boolean isFollowing(String userId) {
+    return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
+  }
 
-    @Override public User putUser(User user) {
-        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
-        try {
-            UserEntity remoteWatchEntity = remoteUserDataSource.putUser(currentOrNewUserEntity);
-            markEntitySynchronized(remoteWatchEntity);
-            localUserDataSource.putUser(remoteWatchEntity);
-            return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
-        } catch (ServerCommunicationException e) {
-            queueUpload(currentOrNewUserEntity, e);
-            return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
-        }
+  @Override public User putUser(User user) {
+    UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
+    try {
+      UserEntity remoteWatchEntity = remoteUserDataSource.putUser(currentOrNewUserEntity);
+      markEntitySynchronized(remoteWatchEntity);
+      localUserDataSource.putUser(remoteWatchEntity);
+      return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
+    } catch (ServerCommunicationException e) {
+      queueUpload(currentOrNewUserEntity, e);
+      return userEntityMapper.transform(currentOrNewUserEntity,
+          sessionRepository.getCurrentUserId());
     }
+  }
 
-    @Override public List<SuggestedPeople> getSuggestedPeople(String locale) {
-        List<SuggestedPeopleEntity> suggestions = cachedSuggestedPeopleDataSource.getSuggestedPeople(locale);
-        if (suggestions == null || suggestions.isEmpty()) {
-            suggestions = remoteSuggestedPeopleDataSource.getSuggestedPeople(locale);
-            cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestions);
-        }
-        return suggestedPeopleEntitiesToDomain(suggestions);
+  @Override public List<SuggestedPeople> getSuggestedPeople(String locale) {
+    List<SuggestedPeopleEntity> suggestions =
+        cachedSuggestedPeopleDataSource.getSuggestedPeople(locale);
+    if (suggestions == null || suggestions.isEmpty()) {
+      suggestions = remoteSuggestedPeopleDataSource.getSuggestedPeople(locale);
+      cachedSuggestedPeopleDataSource.putSuggestedPeople(suggestions);
     }
+    return suggestedPeopleEntitiesToDomain(suggestions);
+  }
 
-    @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
-        List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
-        return transformParticipantsEntities(allParticipants);
-    }
+  @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
+    List<UserEntity> allParticipants =
+        remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
+    return transformParticipantsEntities(allParticipants);
+  }
 
-    @Override public List<User> findParticipants(String idStream, String query) {
-        List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
-        return transformParticipantsEntities(allParticipants);
-    }
+  @Override public List<User> findParticipants(String idStream, String query) {
+    List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
+    return transformParticipantsEntities(allParticipants);
+  }
 
-    @Override public void updateWatch(User user) {
-        UserEntity entityWithWatchValues = userEntityMapper.transform(user);
-        try {
-            remoteUserDataSource.updateWatch(entityWithWatchValues);
-            entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-            localUserDataSource.updateWatch(entityWithWatchValues);
-        } catch (ServerCommunicationException e) {
-            localUserDataSource.updateWatch(entityWithWatchValues);
-            queueWatchUpload(entityWithWatchValues, e);
-        }
+  @Override public void updateWatch(User user) {
+    UserEntity entityWithWatchValues = userEntityMapper.transform(user);
+    try {
+      remoteUserDataSource.updateWatch(entityWithWatchValues);
+      entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+      entityWithWatchValues.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+      localUserDataSource.updateWatch(entityWithWatchValues);
+    } catch (ServerCommunicationException e) {
+      localUserDataSource.updateWatch(entityWithWatchValues);
+      queueWatchUpload(entityWithWatchValues, e);
     }
+  }
 
-    @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
-        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowing(idUser, page, pageSize));
-    }
+  @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
+    return userEntityMapper.transformEntities(
+        remoteUserDataSource.getFollowing(idUser, page, pageSize));
+  }
 
-    @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
-        return userEntityMapper.transformEntities(remoteUserDataSource.getFollowers(idUser, page, pageSize));
-    }
+  @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
+    return userEntityMapper.transformEntities(
+        remoteUserDataSource.getFollowers(idUser, page, pageSize));
+  }
 
-    @Override public List<User> getLocalPeople(String idUser) {
-        throw new IllegalArgumentException("No remote implementation");
-    }
+  @Override public List<User> getLocalPeople(String idUser) {
+    throw new IllegalArgumentException("No remote implementation");
+  }
 
   @Override public List<User> getLocalPeopleFromIdStream(String idStream) {
     throw new IllegalArgumentException("No remote implementation");
   }
 
-    @Override public User updateUserProfile(User updatedUserEntity)
+  @Override public void updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
-        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(updatedUserEntity);
-        try {
-            UserEntity remoteWatchEntity = remoteUserDataSource.updateUser(currentOrNewUserEntity);
-            markEntitySynchronized(remoteWatchEntity);
-            localUserDataSource.putUser(remoteWatchEntity);
-            return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
-        } catch (ServerCommunicationException e) {
-            queueUpload(currentOrNewUserEntity, e);
-            return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
-        }
+    UserEntity currentOrNewUserEntity =
+        syncableUserEntityFactory.updatedOrNewEntity(updatedUserEntity);
+    try {
+      UserEntity remoteWatchEntity = remoteUserDataSource.updateUser(currentOrNewUserEntity);
+      markEntitySynchronized(remoteWatchEntity);
+      localUserDataSource.putUser(remoteWatchEntity);
+    } catch (ServerCommunicationException e) {
+      queueUpload(currentOrNewUserEntity, e);
     }
+  }
 
-    @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
+  @Override public List<User> findFriends(String searchString, Integer pageOffset, String locale)
       throws IOException {
-        return transformUserEntitiesForPeople(remoteUserDataSource.findFriends(searchString, pageOffset, locale));
-    }
+    return transformUserEntitiesForPeople(
+        remoteUserDataSource.findFriends(searchString, pageOffset, locale));
+  }
 
-    private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
-        List<User> participants = new ArrayList<>(allParticipants.size());
-        for (UserEntity participantEntity : allParticipants) {
-            User participant = userEntityMapper.transform(participantEntity,
-              sessionRepository.getCurrentUserId(),
+  private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
+    List<User> participants = new ArrayList<>(allParticipants.size());
+    for (UserEntity participantEntity : allParticipants) {
+      User participant =
+          userEntityMapper.transform(participantEntity, sessionRepository.getCurrentUserId(),
               isFollower(participantEntity.getIdUser()),
               isFollowing(participantEntity.getIdUser()));
-            participants.add(participant);
+      participants.add(participant);
+    }
+    return participants;
+  }
+
+  //region Synchronization
+
+  private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
+    Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());
+    prepareEntityForSynchronization(userEntity);
+    syncTrigger.notifyNeedsSync(this);
+  }
+
+  private void queueWatchUpload(UserEntity entity, ServerCommunicationException reason) {
+    Timber.w(reason, "Watch upload queued: idUser %s", entity.getIdUser());
+    entity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+    entity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+    localUserDataSource.updateWatch(entity);
+    syncTrigger.notifyNeedsSync(this);
+  }
+
+  private void prepareEntityForSynchronization(UserEntity userEntity) {
+    if (!isEntityReadyForSync(userEntity)) {
+      userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+    }
+    localUserDataSource.putUser(userEntity);
+  }
+
+  private boolean isEntityReadyForSync(UserEntity userEntity) {
+    return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus())
+        || LocalSynchronized.SYNC_NEW.equals(userEntity.getSynchronizedStatus())
+        || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
+  }
+
+  private boolean isWatchReadyForSync(UserEntity userEntity) {
+    return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getWatchSynchronizedStatus())
+        || LocalSynchronized.SYNC_NEW.equals(userEntity.getWatchSynchronizedStatus())
+        || LocalSynchronized.SYNC_DELETED.equals(userEntity.getWatchSynchronizedStatus());
+  }
+
+  @Override public void dispatchSync() {
+    List<UserEntity> notSynchronized = localUserDataSource.getEntitiesNotSynchronized();
+    for (UserEntity userEntity : notSynchronized) {
+      if (isEntityReadyForSync(userEntity)) {
+        if (userEntity.getIdUser().equals(sessionRepository.getCurrentUserId())) {
+          UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
+          synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+          localUserDataSource.putUser(synchedEntity);
+          Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
         }
-        return participants;
-    }
-
-    //region Synchronization
-    private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
-        Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());
-        prepareEntityForSynchronization(userEntity);
-        syncTrigger.notifyNeedsSync(this);
-    }
-
-    private void queueWatchUpload(UserEntity entity, ServerCommunicationException reason) {
-        Timber.w(reason, "Watch upload queued: idUser %s", entity.getIdUser());
-        entity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
-        localUserDataSource.updateWatch(entity);
-        syncTrigger.notifyNeedsSync(this);
-    }
-
-    private void prepareEntityForSynchronization(UserEntity userEntity) {
-        if (!isEntityReadyForSync(userEntity)) {
-            userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+      }
+      if (isWatchReadyForSync(userEntity)) {
+        if (userEntity.getIdUser().equals(sessionRepository.getCurrentUserId())) {
+          remoteUserDataSource.updateWatch(userEntity);
+          userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+          userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+          localUserDataSource.updateWatch(userEntity);
         }
-        localUserDataSource.putUser(userEntity);
+      }
     }
+  }
+  //endregion
 
-    private boolean isEntityReadyForSync(UserEntity userEntity) {
-        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus())
-          || LocalSynchronized.SYNC_NEW.equals(userEntity.getSynchronizedStatus())
-          || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
-    }
+  private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
+    return transformParticipantsEntities(localUserEntities);
+  }
 
-    private boolean isWatchReadyForSync(UserEntity userEntity) {
-        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getWatchSynchronizedStatus())
-          || LocalSynchronized.SYNC_NEW.equals(userEntity.getWatchSynchronizedStatus())
-          || LocalSynchronized.SYNC_DELETED.equals(userEntity.getWatchSynchronizedStatus());
+  private void markSynchronized(List<UserEntity> peopleEntities) {
+    for (UserEntity userEntity : peopleEntities) {
+      markEntitySynchronized(userEntity);
     }
+  }
 
-    @Override public void dispatchSync() {
-        List<UserEntity> notSynchronized = localUserDataSource.getEntitiesNotSynchronized();
-        for (UserEntity userEntity : notSynchronized) {
-            if (isEntityReadyForSync(userEntity)) {
-                UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
-                synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-                localUserDataSource.putUser(synchedEntity);
-                Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
-            }
-            if (isWatchReadyForSync(userEntity)) {
-                remoteUserDataSource.updateWatch(userEntity);
-                userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-                localUserDataSource.updateWatch(userEntity);
-            }
-        }
-    }
-    //endregion
+  private void markEntitySynchronized(UserEntity userEntity) {
+    userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+  }
 
-    private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
-        return transformParticipantsEntities(localUserEntities);
-    }
-
-    private void markSynchronized(List<UserEntity> peopleEntities) {
-        for (UserEntity userEntity : peopleEntities) {
-            markEntitySynchronized(userEntity);
-        }
-    }
-
-    private void markEntitySynchronized(UserEntity userEntity) {
-        userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-    }
-
-    @Override public void forceUpdatePeople() {
-        syncTrigger.triggerSync();
-        userCache.invalidatePeople();
-        this.getPeople();
-    }
+  @Override public void forceUpdatePeople() {
+    syncTrigger.triggerSync();
+    userCache.invalidatePeople();
+    this.getPeople();
+  }
 
   @Override public List<String> getFollowingIds(String userId) {
     throw new IllegalArgumentException("No remote implementation");
   }
 
   @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
-        try {
-            //TODO test if calll this method is necesary forceUpdatePeopleAndMe();
-        } catch (ServerCommunicationException networkError) {
-            Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
+    try {
+      //TODO test if calll this method is necesary forceUpdatePeopleAndMe();
+    } catch (ServerCommunicationException networkError) {
+      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
             /* swallow silently */
-        }
     }
+  }
 }

@@ -58,10 +58,10 @@ public class ProfileEditPresenter implements Presenter {
   }
 
   private void fillCurrentUserData() {
-    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), false,
+    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), true,
         new Interactor.Callback<User>() {
           @Override public void onLoaded(User user) {
-            loadProfileData();
+            loadProfileData(user);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -70,25 +70,16 @@ public class ProfileEditPresenter implements Presenter {
         });
   }
 
-  private void loadProfileData() {
-    getUserByIdInteractor.loadUserById(sessionRepository.getCurrentUserId(), false,
-        new Interactor.Callback<User>() {
-          @Override public void onLoaded(User user) {
-            currentUserModel = userModelMapper.transform(user);
-            profileEditView.renderUserInfo(currentUserModel);
-            if (currentUserModel.isSocialLogin()) {
-              if (currentUserModel.getEmail() == null) {
-                profileEditView.hideEmailNotConfirmedError();
-              }
-            } else if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
-              profileEditView.showEmailNotConfirmedError();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            profileEditView.alertComunicationError();
-          }
-        });
+  private void loadProfileData(User user) {
+    currentUserModel = userModelMapper.transform(user);
+    profileEditView.renderUserInfo(currentUserModel);
+    if (currentUserModel.isSocialLogin()) {
+      if (currentUserModel.getEmail() == null) {
+        profileEditView.hideEmailNotConfirmedError();
+      }
+    } else if (!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert) {
+      profileEditView.showEmailNotConfirmedError();
+    }
   }
 
   public void discard() {
