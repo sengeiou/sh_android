@@ -27,6 +27,9 @@ public class ShotManager extends AbstractManager {
     }
 
     public void saveShot(ShotEntity shot) {
+        if (shot.isPadding() == null) {
+            shot.setPadding(readPadding(shot.getIdShot()));
+        }
         insertShot(shot, getWritableDatabase());
     }
 
@@ -41,6 +44,27 @@ public class ShotManager extends AbstractManager {
         } finally {
             database.endTransaction();
         }
+    }
+
+    private Integer readPadding(String idShot) {
+        String whereClause = ShotTable.ID_SHOT + " = ?";
+        String[] whereArguments = new String[] { String.valueOf(idShot) };
+        String[] selection = new String[] { ShotTable.IS_PADDING };
+        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
+            selection,
+            whereClause,
+            whereArguments,
+            null,
+            null,
+            null);
+
+        Integer padding = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            padding = queryResult.getInt(0);
+        }
+        queryResult.close();
+        return padding;
     }
 
     public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
