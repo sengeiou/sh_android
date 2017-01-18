@@ -575,31 +575,16 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   public void onHoldingShotsClick() {
     showingHolderShots(true);
-    streamTimelineView.showLoading();
-    timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, 0,
-        new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-            streamTimelineView.setShots(shotModels);
-            isEmpty = shotModels.isEmpty();
-            streamTimelineView.hideCheckingForShots();
-            if (isEmpty) {
-              streamTimelineView.showEmpty();
-              streamTimelineView.hideShots();
-            } else {
-              streamTimelineView.hideEmpty();
-              streamTimelineView.showShots();
-            }
-            streamTimelineView.hideHoldingShots();
-            streamTimelineView.showAllStreamShots();
-            streamTimelineView.hideLoading();
-          }
-        });
+    streamTimelineView.hideHoldingShots();
+    streamTimelineView.showAllStreamShots();
+    loadTimeline(0);
   }
 
   public void onAllStreamShotsClick() {
     showingHolderShots(false);
-    handleShotsChange();
+    streamTimelineView.hideAllStreamShots();
+    streamTimelineView.showHoldingShots();
+    loadTimeline(0);
   }
 
   private void handleShotsChange() {
