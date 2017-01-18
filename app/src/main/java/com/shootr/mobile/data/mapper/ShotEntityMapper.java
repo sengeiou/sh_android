@@ -64,7 +64,7 @@ public class ShotEntityMapper {
         shot.setCtaButtonText(shotEntity.getCtaButtonText());
         shot.setCtaCaption(shotEntity.getCtaCaption());
         shot.setPromoted(shotEntity.getPromoted());
-        shot.setPadding(shotEntity.isPadding() == 1);
+        shot.setPadding(shotEntity.isPadding() != null && shotEntity.isPadding() == 1);
         return shot;
     }
 
