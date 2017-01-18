@@ -25,7 +25,8 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
         @CurrentUserId StringPreference currentUserIdPreference,
-        @TimelineFilterActivated BooleanPreference timelineFilterPreference, CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+        @TimelineFilterActivated BooleanPreference timelineFilterPreference,
+        CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
         this.timelineFilterPreference = timelineFilterPreference;

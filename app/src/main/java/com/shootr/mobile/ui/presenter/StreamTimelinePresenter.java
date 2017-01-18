@@ -5,14 +5,12 @@ import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
-import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
-import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
@@ -458,20 +456,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     streamTimelineView.hideLoading();
     streamTimelineView.hideCheckingForShots();
     isRefreshing = false;
-  }
-
-  private void loadHolderOlderShots(long lastShotInScreenDate) {
-    loadingOlderShots();
-    streamHoldingTimelineInteractorsWrapper.obtainOlderTimeline(lastShotInScreenDate, idAuthor,
-        new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            loadOlderShotsInView(timeline);
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorLoadingOlderShots();
-          }
-        });
   }
 
   private void loadOlderShots(long lastShotInScreenDate) {

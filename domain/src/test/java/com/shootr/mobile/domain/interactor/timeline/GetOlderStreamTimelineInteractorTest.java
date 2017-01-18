@@ -32,6 +32,7 @@ public class GetOlderStreamTimelineInteractorTest {
   public static final String VISIBLE_STREAM_ID = "visible_stream_id";
   public static final String USER_ID = "user_id";
   private static final String STREAM_ID = "stream_id";
+  private static final boolean FILTER_ACTIVATED = false;
   String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock ExternalShotRepository remoteShotRepository;
   @Mock StreamRepository localStreamRepository;
@@ -50,7 +51,7 @@ public class GetOlderStreamTimelineInteractorTest {
   }
 
   @Test public void shouldGetShotsForStreamTimeline() throws Exception {
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, FILTER_ACTIVATED, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(remoteShotRepository).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
@@ -62,7 +63,7 @@ public class GetOlderStreamTimelineInteractorTest {
         any(StreamTimelineParameters.class))).thenThrow(new ShootrException() {
     });
 
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, FILTER_ACTIVATED, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
@@ -72,7 +73,7 @@ public class GetOlderStreamTimelineInteractorTest {
     when(remoteShotRepository.getShotsForStreamTimeline(
         any(StreamTimelineParameters.class))).thenReturn(shots());
 
-    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, CURRENT_OLDEST_DATE, callback,
+    getOlderStreamTimelineInteractor.loadOlderStreamTimeline(STREAM_ID, FILTER_ACTIVATED, CURRENT_OLDEST_DATE, callback,
         errorCallback);
 
     verify(callback).onLoaded(any(Timeline.class));

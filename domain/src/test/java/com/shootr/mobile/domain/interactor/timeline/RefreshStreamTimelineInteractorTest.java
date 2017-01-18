@@ -30,6 +30,7 @@ public class RefreshStreamTimelineInteractorTest {
   private static final Boolean PAUSED = true;
   public static final boolean IS_REAL_TIME = true;
   public static final boolean IS_NOT_REAL_TIME = false;
+  private static final boolean FILTER_ACTIVATED = false;
   @Spy SpyCallback spyCallback = new SpyCallback();
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock ShootrTimelineService shootrTimelineService;
@@ -48,10 +49,10 @@ public class RefreshStreamTimelineInteractorTest {
 
   @Test public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream()
       throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineForStream());
 
-    interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, REAL_TIME, spyCallback,
+    interactor.refreshStreamTimeline(ID_STREAM, FILTER_ACTIVATED, LAST_REFRESH_DATE, REAL_TIME, spyCallback,
         errorCallback);
 
     verify(spyCallback).onLoaded(timelineForStream());
@@ -60,33 +61,35 @@ public class RefreshStreamTimelineInteractorTest {
   @Test public void shouldRefreshTimelineForStreamAndWhitRealTime() throws Exception {
     interactor.incrementCalls();
 
-    interactor.refreshStreamTimeline(ID_STREAM, new Date().getTime(), NOT_PAUSED, spyCallback,
+    interactor.refreshStreamTimeline(ID_STREAM, FILTER_ACTIVATED, new Date().getTime(), NOT_PAUSED, spyCallback,
         errorCallback);
 
-    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);
+    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, IS_REAL_TIME);
   }
 
   @Test public void shouldRefreshTimelineForStreamWhenPausedWithoutRealTime() throws Exception {
-    interactor.refreshStreamTimeline(ID_STREAM, 0L, PAUSED, spyCallback, errorCallback);
+    interactor.refreshStreamTimeline(ID_STREAM, FILTER_ACTIVATED, 0L, PAUSED, spyCallback, errorCallback);
 
-    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_NOT_REAL_TIME);
+    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, IS_NOT_REAL_TIME);
   }
 
   @Test public void shouldRefreshTimelineForStreamWhenNotPausedWithRealTime() throws Exception {
     interactor.incrementCalls();
 
-    interactor.refreshStreamTimeline(ID_STREAM, 0L, NOT_PAUSED, spyCallback, errorCallback);
+    interactor.refreshStreamTimeline(ID_STREAM, FILTER_ACTIVATED, 0L, NOT_PAUSED, spyCallback,
+        errorCallback);
 
-    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);
+    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED,
+        IS_REAL_TIME);
   }
 
   @Test public void shouldRefreshTimelineForStreamWhenPausedWithRealTime() throws Exception {
     interactor.incrementCalls();
 
-    interactor.refreshStreamTimeline(ID_STREAM, new Date().getTime(), PAUSED, spyCallback,
+    interactor.refreshStreamTimeline(ID_STREAM, FILTER_ACTIVATED, new Date().getTime(), PAUSED, spyCallback,
         errorCallback);
 
-    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, IS_REAL_TIME);
+    verify(shootrTimelineService).refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, IS_REAL_TIME);
   }
 
   private Timeline timelineForStream() {
