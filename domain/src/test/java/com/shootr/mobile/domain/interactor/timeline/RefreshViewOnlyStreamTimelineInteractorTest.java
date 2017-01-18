@@ -43,6 +43,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   private static final String FOLLOWING_ID = "followingId";
   private static final String OTHER_USER_ID = "otherUserId";
   private static final String ID_SHOT = "idShot";
+  private static final boolean FILTER_ACTIVATED = false;
   private static final long LAST_REFRESH_DATE = new Date().getTime();
   @Mock Interactor.Callback<Timeline> callback;
   @Mock Interactor.ErrorCallback errorCallback;
@@ -67,7 +68,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldRefreshStreamTimelineForStreamWhenIsContributorShot() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithContributorShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
     setupSessionAndStreamRepository();
@@ -78,7 +79,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldRefreshStreamTimelineForStreamWhenIsHolderShot() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithHolderShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
     when(userRepository.isFollowing(anyString())).thenReturn(true);
@@ -90,7 +91,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldRefreshStreamTimelineForStreamWhenIsFollowingShot() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithFollowingShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
     when(userRepository.isFollowing(anyString())).thenReturn(true);
@@ -102,7 +103,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldRefreshStreamTimelineForStreamWhenIsMyShot() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithMyShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
     when(userRepository.isFollowing(anyString())).thenReturn(true);
@@ -114,7 +115,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldRefreshStreamTimelineOnlyWithViewOnlyShots() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenReturn(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithShots());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
     when(userRepository.isFollowing(anyString())).thenReturn(false);
@@ -126,7 +127,7 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
   }
 
   @Test public void shouldNotifyErrorWhenShootrTimelineServiceThrowsException() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, NOT_PAUSED)).thenThrow(
+    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenThrow(
         new ShootrException() {
         });
 

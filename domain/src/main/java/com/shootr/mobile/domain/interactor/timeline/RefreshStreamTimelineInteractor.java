@@ -36,8 +36,8 @@ public class RefreshStreamTimelineInteractor implements Interactor {
     this.localeProvider = localeProvider;
   }
 
-  public void refreshStreamTimeline(String streamId, boolean filterActivated, Long lastRefreshDate, Boolean goneBackground,
-      Callback<Timeline> callback, ErrorCallback errorCallback) {
+  public void refreshStreamTimeline(String streamId, boolean filterActivated, Long lastRefreshDate,
+      Boolean goneBackground, Callback<Timeline> callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.filterActivated = filterActivated;
     this.errorCallback = errorCallback;
@@ -56,7 +56,8 @@ public class RefreshStreamTimelineInteractor implements Interactor {
       long timestamp = new Date().getTime();
       Boolean isRealTime =
           calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
-      Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream, filterActivated, isRealTime);
+      Timeline timeline =
+          shootrTimelineService.refreshTimelinesForStream(idStream, filterActivated, isRealTime);
       notifyLoaded(timeline);
       incrementCalls();
     } catch (ShootrException error) {

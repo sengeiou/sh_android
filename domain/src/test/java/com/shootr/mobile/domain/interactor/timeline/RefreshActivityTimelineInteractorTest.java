@@ -77,7 +77,7 @@ public class RefreshActivityTimelineInteractorTest {
     interactor.refreshActivityTimeline(NOT_USER_ACTIVITY_TIMELINE, FOLLOWING, spyCallback,
         errorCallback);
 
-    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
+    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean(), anyBoolean());
   }
 
   @Test
@@ -103,7 +103,7 @@ public class RefreshActivityTimelineInteractorTest {
     interactor.refreshActivityTimeline(IS_USER_ACTIVITY_TIMELINE, ME, spyCallback,
         errorCallback);
 
-    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
+    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean(), anyBoolean());
   }
 
   @Test
@@ -117,7 +117,7 @@ public class RefreshActivityTimelineInteractorTest {
     interactor.refreshActivityTimeline(IS_USER_ACTIVITY_TIMELINE, ME, spyCallback,
         errorCallback);
 
-    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean());
+    verify(shootrTimelineService, never()).refreshTimelinesForStream(anyString(), anyBoolean(), anyBoolean());
   }
 
   @Test public void shouldNotifyErrorWhenShootrTimelineServiceThrowsShootrException()

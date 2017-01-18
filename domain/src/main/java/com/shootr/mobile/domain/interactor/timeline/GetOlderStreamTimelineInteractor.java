@@ -40,8 +40,8 @@ public class GetOlderStreamTimelineInteractor
     this.localStreamRepository = localStreamRepository;
   }
 
-  public void loadOlderStreamTimeline(String streamId, boolean filterActivated, Long currentOldestDate, Callback<Timeline> callback,
-      ErrorCallback errorCallback) {
+  public void loadOlderStreamTimeline(String streamId, boolean filterActivated,
+      Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
     this.streamId = streamId;
     this.filterActivated = filterActivated;
     this.currentOldestDate = currentOldestDate;
