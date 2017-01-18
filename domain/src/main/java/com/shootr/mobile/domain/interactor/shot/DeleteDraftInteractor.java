@@ -15,6 +15,7 @@ public class DeleteDraftInteractor implements Interactor {
 
   private Long queuedShotId;
   private Callback callback;
+  private boolean isShotType;
 
   @Inject public DeleteDraftInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, QueueRepository queueRepository) {
@@ -23,14 +24,17 @@ public class DeleteDraftInteractor implements Interactor {
     this.queueRepository = queueRepository;
   }
 
-  public void deleteDraft(Long queuedShotId, Callback callback) {
+  public void deleteDraft(Long queuedShotId, boolean isShotType, Callback callback) {
     this.queuedShotId = queuedShotId;
     this.callback = callback;
+    this.isShotType = isShotType;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    QueuedShot queuedShot = queueRepository.getQueue(queuedShotId, QueueRepository.SHOT_TYPE);
+    QueuedShot queuedShot =
+        (isShotType) ? queueRepository.getQueue(queuedShotId, QueueRepository.SHOT_TYPE)
+            : queueRepository.getQueue(queuedShotId, QueueRepository.MESSAGE_TYPE);
     queueRepository.remove(queuedShot);
     notifyDeleted();
   }
