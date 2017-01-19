@@ -880,10 +880,12 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showAllStreamShots() {
     showAllShotsMenuItem.setVisible(true);
+    toolbarDecorator.putFilterSubtitle();
   }
 
   @Override public void showHoldingShots() {
     showHoldingShotsMenuItem.setVisible(true);
+    toolbarDecorator.hideFilterSubtitle();
   }
 
   @Override public void hideAllStreamShots() {
