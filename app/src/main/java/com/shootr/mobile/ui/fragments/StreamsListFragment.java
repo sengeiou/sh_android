@@ -22,7 +22,7 @@ import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
-import com.shootr.mobile.ui.activities.FindStreamsActivity;
+import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -148,11 +148,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         presenter.initialize(this);
     }
 
-    private void navigateToFindstreams() {
-        Intent intent = new Intent(getActivity(), FindStreamsActivity.class);
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-    }
+  private void navigateToDiscoverSearch() {
+    Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
+    startActivity(intent);
+    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+  }
 
     @OnClick(R.id.streams_add_stream) public void onAddStream() {
         startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
@@ -167,7 +167,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                navigateToFindstreams();
+              navigateToDiscoverSearch();
                 return true;
             case R.id.menu_channel:
               navigateToChannelsList();
