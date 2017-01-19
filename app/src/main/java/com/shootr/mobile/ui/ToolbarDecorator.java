@@ -2,6 +2,7 @@ package com.shootr.mobile.ui;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -22,8 +23,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
-    private TextView subtitleText;
+    private TextView subtitleFilteredText;
     private ViewGroup titleContainer;
+    private TextView subtitleText;
 
     private CircleImageView avatar;
 
@@ -39,6 +41,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
         avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
+        subtitleFilteredText = (TextView) toolbar.findViewById(R.id.toolbar_filtered_subtitle);
         setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
@@ -66,13 +69,27 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         }
     }
 
-    public void setSubtitle(String  subtitle) {
+    public void setSubtitle(String subtitle) {
+
         if (subtitle == null) {
             hideSubtitle();
         } else {
-            subtitleText.setVisibility(View.VISIBLE);
+            if (subtitleFilteredText.getVisibility() == View.GONE) {
+                subtitleText.setVisibility(View.VISIBLE);
+            }
             subtitleText.setText(subtitle);
+            subtitleText.setTextColor(Color.parseColor("#80ffffff"));
         }
+    }
+
+    public void putFilterSubtitle() {
+        subtitleText.setVisibility(View.GONE);
+        subtitleFilteredText.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFilterSubtitle() {
+        subtitleText.setVisibility(View.VISIBLE);
+        subtitleFilteredText.setVisibility(View.GONE);
     }
 
     public void setTitleClickListener(View.OnClickListener clickListener) {
