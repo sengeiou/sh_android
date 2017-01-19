@@ -493,4 +493,5 @@
   <string name="following_messages_title">FOLLOWING</string>
   <string name="all_messages_title_plural">ALL (%d)</string>
   <string name="following_messages_title_plural">FOLLOWING (%d)</string>
+  <string name="filtered_by_important">Filtered by: Important</string>
 </resources>
