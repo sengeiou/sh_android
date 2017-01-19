@@ -60,7 +60,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15sp"
                 android:visibility="gone"
-                android:text="Filtered by: Important"
+                android:text="@string/filtered_by_important"
                 tools:text="following 3"
                 tools:visibility="visible" />
 

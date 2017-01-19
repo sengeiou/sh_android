@@ -469,4 +469,5 @@
   <string name="analytics_label_open_cta_link">Ad</string>
   <string name="title_activity_channels">Channels</string>
   <string name="new_messages_notification">%d new messages</string>
+  <string name="filtered_by_important">Filtered by: Important</string>
 </resources>
