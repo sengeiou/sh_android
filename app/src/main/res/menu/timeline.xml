@@ -7,14 +7,14 @@
 
     <item
       android:id="@+id/menu_showing_holding_shots"
-      android:icon="@drawable/ic_holding_shots"
+      android:icon="@drawable/ic_no_filter"
       android:title="@string/menu_holding_shots"
       android:visible="false"
       app:showAsAction="always" />
 
     <item
       android:id="@+id/menu_showing_all_shots"
-      android:icon="@drawable/ic_all_shots_stream"
+      android:icon="@drawable/filter_activated"
       android:title="@string/menu_all_shots"
       android:visible="false"
       app:showAsAction="always" />
