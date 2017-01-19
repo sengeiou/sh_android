@@ -17,7 +17,6 @@ import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.ui.activities.FindContributorsActivity;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
-import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
 import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
@@ -89,7 +88,6 @@ import javax.inject.Singleton;
     ListingActivity.class,
     FavoritesFragment.class,
     ActivityTimelineFragment.class,
-    FindStreamsActivity.class,
     WhaleActivity.class,
     EmailConfirmationActivity.class,
     AllShotsActivity.class,
