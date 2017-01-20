@@ -55,6 +55,7 @@ import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
+import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -114,7 +115,7 @@ import javax.inject.Singleton;
     FindStreamsFragment.class,
     CropPictureActivity.class,
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
-    ChannelsContainerActivity.class, FollowingChannelListFragment.class
+    ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class
   },
   complete = false) public class UiModule {
 
