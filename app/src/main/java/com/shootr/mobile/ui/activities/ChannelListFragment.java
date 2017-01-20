@@ -82,19 +82,27 @@ public class ChannelListFragment extends BaseFragment implements
   }
 
   @Override public void showLoading() {
-    loadingView.setVisibility(View.VISIBLE);
+    if (loadingView != null) {
+      loadingView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideLoading() {
-    loadingView.setVisibility(View.GONE);
+    if (loadingView != null) {
+      loadingView.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideEmpty() {
-    emptyView.setVisibility(View.GONE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.GONE);
+    }
   }
 
   @Override

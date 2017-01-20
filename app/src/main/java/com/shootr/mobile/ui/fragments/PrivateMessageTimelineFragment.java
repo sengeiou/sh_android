@@ -444,7 +444,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void hideCheckingForShots() {
-    checkingForShotsView.setVisibility(View.GONE);
+    if (checkingForShotsView != null) {
+      checkingForShotsView.setVisibility(View.GONE);
+    }
   }
 
   @Override public void setTitle(String title) {
@@ -508,11 +510,15 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideEmpty() {
-    emptyView.setVisibility(View.GONE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showLoading() {
