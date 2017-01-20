@@ -788,7 +788,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (hasBeenPaused) {
       isFirstLoad = false;
       isTimelineInitialized = false;
-      isFirstShotPosition = false;
       selectStream();
       loadNewShots();
     }
