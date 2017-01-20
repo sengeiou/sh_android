@@ -84,6 +84,7 @@ import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -152,9 +153,9 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  @BindView(R.id.shot_bar_drafts) View draftsButton;
+  //@BindView(R.id.shot_bar_drafts) View draftsButton;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
-  @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
+  @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
   @BindView(R.id.timeline_message) ClickableTextView streamMessage;
   @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
   @BindView(R.id.poll_question) TextView pollQuestion;
@@ -697,7 +698,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBarViewDelegate =
+    /*newShotBarViewDelegate =
         new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
           @Override public void openNewShotView() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
@@ -717,7 +718,7 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void openEditTopicDialog() {
             setupTopicCustomDialog();
           }
-        };
+        };*/
   }
 
   private void setupImageDialog(ShotModel shot) {
@@ -813,17 +814,17 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
-  @OnClick(R.id.shot_bar_text) public void startNewShot() {
-    newShotBarPresenter.newShotFromTextBox();
+  /*@OnClick(R.id.shot_bar_text) public void startNewShot() {
+    //newShotBarPresenter.newShotFromTextBox();
   }
 
   @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-    newShotBarPresenter.newShotFromImage();
+    //newShotBarPresenter.newShotFromImage();
   }
 
   @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-    startActivity(new Intent(getActivity(), DraftsActivity.class));
-  }
+    //startActivity(new Intent(getActivity(), DraftsActivity.class));
+  }*/
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);
@@ -1177,11 +1178,11 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showDraftsButton() {
-    newShotBarViewDelegate.showDraftsButton();
+    //newShotBarViewDelegate.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarViewDelegate.hideDraftsButton();
+    //newShotBarViewDelegate.hideDraftsButton();
   }
 
   @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {

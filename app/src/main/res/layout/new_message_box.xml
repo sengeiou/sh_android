@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/NewShotBar"
+    >
+
+  <View android:background="#cfd8dc"
+      android:layout_width = "match_parent"
+      android:layout_height="1dp"/>
+
+  <RelativeLayout android:id="@+id/shot_bar_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      >
+
+    <EditText
+        android:id="@+id/shot_bar_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@+id/shot_bar_drafts"
+        android:animateLayoutChanges="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/new_shot_placeholder"
+        android:textColor="@color/gray_60"
+        android:textSize="16sp"
+        />
+
+    <ImageButton
+        android:id="@+id/shot_bar_drafts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/shot_bar_photo"
+        android:background="?selectableItemBackground"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_drafts_24_gray54"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/shot_bar_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="?selectableItemBackground"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_editor_attach_file"
+        />
+
+  </RelativeLayout>
+</RelativeLayout>
