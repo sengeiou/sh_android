@@ -38,24 +38,26 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
     }
 
     public void confirm() {
-        resetPasswordConfirmationView.showLoading();
-        resetPasswordConfirmationView.hideConfirmationButton();
-        sendPasswordResetEmailInteractor.sendPasswordResetEmail(forgotPasswordUserModel.getIdUser(), //
-          new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  resetPasswordConfirmationView.showDoneButton();
-                  resetPasswordConfirmationView.
-                    showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
-                  resetPasswordConfirmationView.hideLoading();
-              }
-          }, //
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  resetPasswordConfirmationView.hideLoading();
-                  resetPasswordConfirmationView.showConfirmationButton();
-                  showErrorInView(error);
-              }
-          });
+        if (resetPasswordConfirmationView != null) {
+            resetPasswordConfirmationView.showLoading();
+            resetPasswordConfirmationView.hideConfirmationButton();
+            sendPasswordResetEmailInteractor.sendPasswordResetEmail(forgotPasswordUserModel.getIdUser(), //
+                new Interactor.CompletedCallback() {
+                    @Override public void onCompleted() {
+                        resetPasswordConfirmationView.showDoneButton();
+                        resetPasswordConfirmationView.
+                            showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
+                        resetPasswordConfirmationView.hideLoading();
+                    }
+                }, //
+                new Interactor.ErrorCallback() {
+                    @Override public void onError(ShootrException error) {
+                        resetPasswordConfirmationView.hideLoading();
+                        resetPasswordConfirmationView.showConfirmationButton();
+                        showErrorInView(error);
+                    }
+                });
+        }
     }
 
     public void done() {

@@ -141,12 +141,14 @@ public class HighlightedShotPresenter implements Presenter {
   }
 
   public void storeClickCount() {
-    clickShotLinkEventInteractor.countClickLinkEvent(
-        currentHighlightShot.getShotModel().getIdShot(), new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
+    if (currentHighlightShot != null) {
+      clickShotLinkEventInteractor.countClickLinkEvent(
+          currentHighlightShot.getShotModel().getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
         /* no-op */
-          }
-        });
+            }
+          });
+    }
   }
 
   private boolean isCurrentHighlightShot(HighlightedShotModel newHighlightedShotModel) {
