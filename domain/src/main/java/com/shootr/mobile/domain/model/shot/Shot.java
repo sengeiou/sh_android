@@ -28,6 +28,7 @@ public class Shot extends BaseMessage {
     private String ctaButtonLink;
     private String ctaButtonText;
     private Long promoted;
+    private boolean isPadding;
 
     public String getIdShot() {
         return idShot;
@@ -331,4 +332,11 @@ public class Shot extends BaseMessage {
         this.ctaButtonText = ctaButtonText;
     }
 
+    public boolean isPadding() {
+        return isPadding;
+    }
+
+    public void setPadding(boolean padding) {
+        isPadding = padding;
+    }
 }

@@ -75,6 +75,8 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.PROMOTED)));
     highlightedShot.setVerifiedUser(
         c.getLong(c.getColumnIndex(DatabaseContract.HighlightedShotTable.VERIFIED_USER)));
+    highlightedShot.setPadding(
+        (c.getInt(c.getColumnIndex(DatabaseContract.HighlightedShotTable.IS_PADDING))));
     setSynchronizedfromCursor(c, highlightedShot);
     return highlightedShot;
   }
@@ -114,6 +116,7 @@ public class HighlightedShotEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT, highlightedShot.getCtaButtonText());
     contentValues.put(DatabaseContract.HighlightedShotTable.CTA_CAPTION, highlightedShot.getCtaCaption());
     contentValues.put(DatabaseContract.HighlightedShotTable.VERIFIED_USER, highlightedShot.getVerifiedUser());
+    contentValues.put(DatabaseContract.HighlightedShotTable.IS_PADDING, highlightedShot.isPadding());
     setSynchronizedtoContentValues(highlightedShot, contentValues);
     return contentValues;
   }

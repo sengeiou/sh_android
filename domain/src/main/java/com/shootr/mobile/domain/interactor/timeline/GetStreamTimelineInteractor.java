@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ public class GetStreamTimelineInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final InternalShotRepository localShotRepository;
   private String idStream;
+  private boolean filterActivated;
   private Callback callback;
   private Boolean goneBackground;
 
@@ -29,9 +31,10 @@ public class GetStreamTimelineInteractor implements Interactor {
   }
   //endregion
 
-  public void loadStreamTimeline(String idStream, Boolean goneBackground,
+  public void loadStreamTimeline(String idStream, boolean filterActivated, Boolean goneBackground,
       Callback<Timeline> callback) {
     this.idStream = idStream;
+    this.filterActivated = filterActivated;
     this.goneBackground = goneBackground;
     this.callback = callback;
     interactorHandler.execute(this);
@@ -44,6 +47,21 @@ public class GetStreamTimelineInteractor implements Interactor {
   private void loadLocalShots() {
     List<Shot> shots = loadLocalShots(buildParameters());
     shots = sortShotsByPublishDate(shots);
+    if (filterActivated) {
+      filterShotsAndNotify(shots);
+    } else {
+      notifyTimelineFromShots(shots);
+    }
+  }
+
+  private void filterShotsAndNotify(List<Shot> shots) {
+    Iterator<Shot> iterator = shots.iterator();
+    while (iterator.hasNext()) {
+      Shot shot = iterator.next();
+      if (shot.isPadding()) {
+        iterator.remove();
+      }
+    }
     notifyTimelineFromShots(shots);
   }
 

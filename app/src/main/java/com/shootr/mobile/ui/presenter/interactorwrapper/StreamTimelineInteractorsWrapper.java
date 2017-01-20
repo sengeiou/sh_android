@@ -34,20 +34,20 @@ public class StreamTimelineInteractorsWrapper {
     this.getOlderViewOnlyStreamTimelineInteractor = getOlderViewOnlyStreamTimelineInteractor;
   }
 
-  public void loadTimeline(String idStream, Boolean hasBeenPaused, Integer streamMode,
+  public void loadTimeline(String idStream, boolean filterActivated, Boolean hasBeenPaused, Integer streamMode,
       Interactor.Callback<Timeline> callback) {
     if (streamMode == 0) {
-      getStreamTimelineInteractor.loadStreamTimeline(idStream, hasBeenPaused, callback);
+      getStreamTimelineInteractor.loadStreamTimeline(idStream, filterActivated, hasBeenPaused, callback);
     } else {
       getViewOnlyStreamTimelineInteractor.loadStreamTimeline(idStream, hasBeenPaused, callback);
     }
   }
 
-  public void refreshTimeline(String streamId, Long lastRefreshDate, Boolean hasBeenPaused,
+  public void refreshTimeline(String streamId, boolean filterActivated, Long lastRefreshDate, Boolean hasBeenPaused,
       Integer streamMode, Interactor.Callback<Timeline> callback,
       Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
-      refreshStreamTimelineInteractor.refreshStreamTimeline(streamId, lastRefreshDate,
+      refreshStreamTimelineInteractor.refreshStreamTimeline(streamId, filterActivated, lastRefreshDate,
           hasBeenPaused, callback, errorCallback);
     } else {
       refreshViewOnlyStreamTimelineInteractor.refreshStreamTimeline(streamId, lastRefreshDate,
@@ -55,10 +55,10 @@ public class StreamTimelineInteractorsWrapper {
     }
   }
 
-  public void obtainOlderTimeline(String streamId, Long currentOldestDate, Integer streamMode,
+  public void obtainOlderTimeline(String streamId, boolean filterActivated, Long currentOldestDate, Integer streamMode,
       Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
-      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,
+      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, filterActivated, currentOldestDate, callback,
           errorCallback);
     } else {
       getOlderViewOnlyStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,

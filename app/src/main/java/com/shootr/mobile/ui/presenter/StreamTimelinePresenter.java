@@ -5,14 +5,12 @@ import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
-import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
-import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
@@ -58,8 +56,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final Bus bus;
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
-  private final DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor;
-  private final ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
   private final CreateStreamInteractor createStreamInteractor;
   private final GetContributorsInteractor getContributorsInteractor;
@@ -73,7 +69,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean hasBeenPaused = false;
   private boolean isEmpty = true;
   private String idAuthor;
-  private boolean showingHoldingShots;
+  private boolean filterActivated = false;
   private boolean isFirstShotPosition;
   private boolean isFirstLoad;
   private boolean isTimelineInitialized;
@@ -94,9 +90,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       CallCtaCheckInInteractor callCtaCheckInInteractor, ShareShotInteractor shareShotInteractor,
       GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper,
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      Poller poller, DeleteLocalShotsByStreamInteractor deleteLocalShotsByStreamInteractor,
+      Poller poller,
       UpdateWatchNumberInteractor updateWatchNumberInteractor,
-      ReloadStreamTimelineInteractor reloadStreamTimelineInteractor,
       CreateStreamInteractor createStreamInteractor,
       GetContributorsInteractor getContributorsInteractor, SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
@@ -112,8 +107,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.poller = poller;
-    this.deleteLocalShotsByStreamInteractor = deleteLocalShotsByStreamInteractor;
-    this.reloadStreamTimelineInteractor = reloadStreamTimelineInteractor;
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     this.createStreamInteractor = createStreamInteractor;
     this.getContributorsInteractor = getContributorsInteractor;
@@ -134,10 +127,21 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     setIdAuthor(idAuthor);
     this.setView(streamTimelineView);
     handleStreamViewOnlyVisibility();
-    this.streamTimelineView.showHoldingShots();
     this.loadStream(streamTimelineView, idStream);
     this.selectStream();
     setupPoller();
+  }
+
+  private void handleFilterVisibility(Integer streamMode) {
+    if (streamMode == 0) {
+      if (sessionRepository.isTimelineFilterActivated()) {
+        filterActivated = true;
+        this.streamTimelineView.showAllStreamShots();
+      } else {
+        filterActivated = false;
+        this.streamTimelineView.showHoldingShots();
+      }
+    }
   }
 
   public void initialize(final StreamTimelineView streamTimelineView, String idStream, Integer streamMode) {
@@ -148,7 +152,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.shotModels = new TreeSet<>();
     this.setView(streamTimelineView);
     this.loadStream(streamTimelineView, idStream);
-    this.streamTimelineView.showHoldingShots();
     this.selectStream();
     setupPoller();
   }
@@ -178,7 +181,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   protected void showingHolderShots(boolean showingHoldingShots) {
-    this.showingHoldingShots = showingHoldingShots;
+    this.filterActivated = showingHoldingShots;
   }
 
   private void setupPoller() {
@@ -228,6 +231,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
+        handleFilterVisibility(streamModel.getReadWriteMode());
         setStreamMode(streamModel.getReadWriteMode());
         loadTimeline(streamModel.getReadWriteMode());
       }
@@ -247,26 +251,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   protected void loadTimeline(Integer readWriteMode) {
-    if (!showingHoldingShots) {
-      timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, readWriteMode,
-          new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              showShotsInView(timeline);
-              handleStreamViewOnlyVisibility();
-            }
-          });
-    } else {
-      streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, hasBeenPaused,
-          new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              showShotsInView(timeline);
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              showErrorLoadingNewShots();
-            }
-          });
-    }
+    timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, readWriteMode,
+        new Interactor.Callback<Timeline>() {
+          @Override public void onLoaded(Timeline timeline) {
+            showShotsInView(timeline);
+            handleStreamViewOnlyVisibility();
+          }
+        });
   }
 
   private void handleStreamViewOnlyVisibility() {
@@ -400,11 +391,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   public void refresh() {
-    if (showingHoldingShots) {
-      this.loadHolderNewShots();
-    } else {
-      this.loadNewShots();
-    }
+    this.loadNewShots();
   }
 
   public void showingLastShot(ShotModel lastShot) {
@@ -414,60 +401,25 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void handleOlderShotsToLoad(ShotModel lastShot) {
-    if (showingHoldingShots) {
-      this.loadHolderOlderShots(lastShot.getBirth().getTime());
-    } else {
-      this.loadOlderShots(lastShot.getBirth().getTime());
-    }
-  }
-
-  private void loadHolderNewShots() {
-    if (handleShotsRefresh()) {
-      return;
-    }
-    streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId, idAuthor, lastRefreshDate,
-        hasBeenPaused, new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            loadNewShotsInView(timeline);
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorLoadingNewShots();
-          }
-        });
+    this.loadOlderShots(lastShot.getBirth().getTime());
   }
 
   private void loadNewShots() {
     if (handleShotsRefresh()) {
       return;
     }
-    if (!showingHoldingShots) {
-      timelineInteractorWrapper.refreshTimeline(streamId, lastRefreshDate, hasBeenPaused,
-          streamMode, new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              updateTimelineLiveSettings();
-              loadNewShotsInView(timeline);
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              hasBeenPaused = false;
-              showErrorLoadingNewShots();
-            }
-          });
-    } else {
-      streamHoldingTimelineInteractorsWrapper.refreshTimeline(streamId, idAuthor, lastRefreshDate,
-          hasBeenPaused, new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              updateTimelineLiveSettings();
-              loadNewShotsInView(timeline);
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              hasBeenPaused = false;
-              showErrorLoadingNewShots();
-            }
-          });
-    }
+    timelineInteractorWrapper.refreshTimeline(streamId, filterActivated, lastRefreshDate,
+        hasBeenPaused, streamMode, new Interactor.Callback<Timeline>() {
+          @Override public void onLoaded(Timeline timeline) {
+            updateTimelineLiveSettings();
+            loadNewShotsInView(timeline);
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            hasBeenPaused = false;
+            showErrorLoadingNewShots();
+          }
+        });
   }
 
   private void updateTimelineLiveSettings() {
@@ -506,23 +458,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     isRefreshing = false;
   }
 
-  private void loadHolderOlderShots(long lastShotInScreenDate) {
-    loadingOlderShots();
-    streamHoldingTimelineInteractorsWrapper.obtainOlderTimeline(lastShotInScreenDate, idAuthor,
-        new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            loadOlderShotsInView(timeline);
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorLoadingOlderShots();
-          }
-        });
-  }
-
   private void loadOlderShots(long lastShotInScreenDate) {
     loadingOlderShots();
-    timelineInteractorWrapper.obtainOlderTimeline(streamId, lastShotInScreenDate, streamMode,
+    timelineInteractorWrapper.obtainOlderTimeline(streamId, filterActivated, lastShotInScreenDate, streamMode,
         new Interactor.Callback<Timeline>() {
           @Override public void onLoaded(Timeline timeline) {
             loadOlderShotsInView(timeline);
@@ -580,25 +518,12 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void refreshForUpdatingShotsInfo() {
-    if (!showingHoldingShots) {
-      timelineInteractorWrapper.loadTimeline(streamId, hasBeenPaused, streamMode,
-          new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              updateShotsInfo(timeline);
-            }
-          });
-    } else {
-      streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, hasBeenPaused,
-          new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
-              updateShotsInfo(timeline);
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              showErrorLoadingNewShots();
-            }
-          });
-    }
+    timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, streamMode,
+        new Interactor.Callback<Timeline>() {
+          @Override public void onLoaded(Timeline timeline) {
+            updateShotsInfo(timeline);
+          }
+        });
   }
 
   private void updateShotsInfo(Timeline timeline) {
@@ -624,55 +549,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   public void onHoldingShotsClick() {
     showingHolderShots(true);
-    streamTimelineView.showLoading();
-    streamHoldingTimelineInteractorsWrapper.loadTimeline(streamId, idAuthor, hasBeenPaused,
-        new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-            streamTimelineView.setShots(shotModels);
-            isEmpty = shotModels.isEmpty();
-            streamTimelineView.hideCheckingForShots();
-            if (isEmpty) {
-              streamTimelineView.showEmpty();
-              streamTimelineView.hideShots();
-            } else {
-              streamTimelineView.hideEmpty();
-              streamTimelineView.showShots();
-            }
-            streamTimelineView.hideHoldingShots();
-            streamTimelineView.showAllStreamShots();
-            streamTimelineView.hideLoading();
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorLoadingNewShots();
-          }
-        });
+    streamTimelineView.hideHoldingShots();
+    streamTimelineView.showAllStreamShots();
+    sessionRepository.setTimelineFilterActivated(true);
+    loadTimeline(0);
   }
 
   public void onAllStreamShotsClick() {
     showingHolderShots(false);
-    handleShotsChange();
-  }
-
-  private void handleShotsChange() {
-    streamTimelineView.showLoading();
-    deleteLocalShotsByStreamInteractor.deleteShot(streamId, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        reloadStreamTimelineInteractor.loadStreamTimeline(streamId,
-            new Interactor.Callback<Timeline>() {
-              @Override public void onLoaded(Timeline timeline) {
-                loadNewShotsInView(timeline);
-                streamTimelineView.showHoldingShots();
-                streamTimelineView.hideAllStreamShots();
-              }
-            }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                showErrorLoadingNewShots();
-              }
-            });
-      }
-    });
+    streamTimelineView.hideAllStreamShots();
+    streamTimelineView.showHoldingShots();
+    sessionRepository.setTimelineFilterActivated(false);
+    loadTimeline(0);
   }
 
   public void onShotDeleted(Integer count) {
@@ -696,10 +584,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   protected void setOldListSize(Integer oldListSize) {
-  }
-
-  private void handleVisibilityTimelineIndicatorInResume() {
-    streamTimelineView.hideNewShotsIndicator();
   }
 
   public void editStream(String topic) {

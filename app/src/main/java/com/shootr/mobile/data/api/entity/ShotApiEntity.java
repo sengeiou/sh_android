@@ -39,6 +39,7 @@ public class ShotApiEntity extends BaseMessageApiEntity {
     @SerializedName("CTACaption")
     private String ctaCaption;
     private Long verifiedUser;
+    private Integer isPadding;
 
     public String getIdShot() {
         return idShot;
@@ -238,5 +239,13 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
     public void setVerifiedUser(Long verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Integer getIsPadding() {
+        return isPadding;
+    }
+
+    public void setIsPadding(Integer isPadding) {
+        this.isPadding = isPadding;
     }
 }
