@@ -102,6 +102,20 @@ public class MessageBoxPresenter {
         });
   }
 
+  public void textChanged(String currentText) {
+    currentTextWritten = filterText(currentText);
+    //updateCharCounter(currentTextWritten);
+    updateSendButonEnabled(currentTextWritten);
+  }
+
+  private void updateSendButonEnabled(String filteredText) {
+    if (canSendShot(filteredText)) {
+      messageBoxView.showSendButton();
+    } else {
+      messageBoxView.hideSendButton();
+    }
+  }
+
 
   private String filterText(String originalText) {
     String trimmed = originalText.trim();
@@ -128,7 +142,8 @@ public class MessageBoxPresenter {
         selectedImageFile,
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            //TODO
+            messageBoxView.hideSendButton();
+            messageBoxView.clearTextBox();
           }
         },
         new Interactor.ErrorCallback() {
@@ -142,6 +157,8 @@ public class MessageBoxPresenter {
     messageBoxView.showError(errorMessageFactory.getCommunicationErrorMessage());
   }
 
-
+  public boolean isInitialized() {
+    return isInitialized;
+  }
 
 }

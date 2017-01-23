@@ -5,10 +5,6 @@ import java.util.List;
 
 public interface MessageBoxView {
 
-  void enableSendButton();
-
-  void disableSendButton();
-
   void showSendButton();
 
   void hideSendButton();
@@ -32,4 +28,6 @@ public interface MessageBoxView {
   void setCursorToEndOfText();
 
   void showError(String message);
+
+  void clearTextBox();
 }

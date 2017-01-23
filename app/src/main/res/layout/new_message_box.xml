@@ -13,6 +13,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:clickable="true"
+      android:minHeight="@dimen/new_shot_height"
       >
 
     <EditText
@@ -26,8 +27,22 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-light"
         android:hint="@string/new_shot_placeholder"
-        android:textColor="@color/gray_60"
+        android:textColor="@color/material_black"
         android:textSize="16sp"
+        android:background="@null"
+        />
+
+    <ImageButton android:id="@+id/new_shot_send_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="?selectableItemBackground"
+        android:enabled="false"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_send"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
         />
 
     <ImageButton
@@ -40,6 +55,7 @@
         android:paddingRight="16dp"
         android:src="@drawable/ic_drafts_24_gray54"
         android:visibility="gone"
+        android:layout_centerVertical="true"
         />
 
     <ImageButton
@@ -51,6 +67,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:src="@drawable/ic_editor_attach_file"
+        android:layout_centerVertical="true"
         />
 
   </RelativeLayout>
