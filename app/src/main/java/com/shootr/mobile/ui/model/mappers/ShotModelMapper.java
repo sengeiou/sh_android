@@ -54,13 +54,14 @@ public class ShotModelMapper {
     shotModel.setCtaCaption(shot.getCtaCaption());
     shotModel.setPromoted(shot.getPromoted());
     shotModel.setType(shot.getType());
-    shotModel.setHolderOrContributor(shot.isContributor() || shot.isHolder());
+    shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
-      shotModel.setHolderOrContributor(false);
+      if (userInfo.getVerifiedUser() == 1) {
+        shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
+      }
     } else {
       shotModel.setVerifiedUser(false);
-      shotModel.setHolderOrContributor(shot.isContributor() || shot.isHolder());
     }
     return shotModel;
   }
