@@ -29,6 +29,8 @@ public class Shot extends BaseMessage {
     private String ctaButtonText;
     private Long promoted;
     private boolean isPadding;
+    private boolean isHolder;
+    private boolean isContributor;
 
     public String getIdShot() {
         return idShot;
@@ -338,5 +340,21 @@ public class Shot extends BaseMessage {
 
     public void setPadding(boolean padding) {
         isPadding = padding;
+    }
+
+    public boolean isHolder() {
+        return isHolder;
+    }
+
+    public void setIsHolder(boolean holder) {
+        isHolder = holder;
+    }
+
+    public boolean isContributor() {
+        return isContributor;
+    }
+
+    public void setIsContributor(boolean contributor) {
+        isContributor = contributor;
     }
 }
