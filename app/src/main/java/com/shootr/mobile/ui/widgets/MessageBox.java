@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +26,16 @@ import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.eftimoff.androidplayer.listeners.PlayerEndListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
+import com.shootr.mobile.ui.activities.DraftsActivity;
+import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.views.MessageBoxView;
+import com.shootr.mobile.ui.views.NewShotBarView;
+import com.shootr.mobile.util.FeedbackMessage;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -40,33 +50,64 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   @Inject MessageBoxPresenter presenter;
 
+  private PhotoPickerController photoPickerController;
+  private NewShotBarViewDelegate newShotBarViewDelegate;
+  private Activity activity;
+
   public MessageBox(Context context) {
     super(context);
-    init();
   }
 
   public MessageBox(Context context, AttributeSet attrs) {
     super(context, attrs);
-    init();
   }
 
   public MessageBox(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    init();
   }
 
   public MessageBox(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
-    init();
   }
 
-  private void init() {
+  public NewShotBarViewDelegate getNewShotBarViewDelegate() {
+    return newShotBarViewDelegate;
+  }
+
+  public void init(final String idStream, final String streamTitle, Activity parentActivity,
+      PhotoPickerController photoPickerController, FeedbackMessage feedbackMessage, OnClickListener attachClickListener) {
+    this.photoPickerController = photoPickerController;
+    this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
     setClickable(true);
     LayoutInflater inflater = LayoutInflater.from(getContext());
     inflater.inflate(R.layout.new_message_box, this);
     ButterKnife.bind(this);
     presenter.initializeAsNewShot(this);
+
+    newShotBarViewDelegate =
+        new NewShotBarViewDelegate(photoPickerController, draftButton, feedbackMessage) {
+          @Override public void openNewShotView() {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(activity) //
+                .setStreamData(idStream, streamTitle).build();
+            activity.startActivity(newShotIntent);
+          }
+
+          @Override public void openNewShotViewWithImage(File image) {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(activity) //
+                .withImage(image) //
+                .setStreamData(idStream, streamTitle).build();
+            activity.startActivity(newShotIntent);
+          }
+
+          @Override public void openEditTopicDialog() {
+            //setupTopicCustomDialog();
+          }
+        };
+
+    sendImageButton.setOnClickListener(attachClickListener);
   }
 
   @OnClick(R.id.new_shot_send_button) public void onSendShot() {
@@ -78,6 +119,10 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
       presenter.sendShot(newShotText.getText().toString());
       //sendShotToMixPanel();
     }
+  }
+
+  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
+    activity.startActivity(new Intent(activity, DraftsActivity.class));
   }
 
   @OnTextChanged(R.id.shot_bar_text) public void onTextChanged() {
@@ -160,5 +205,29 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   @Override public void clearTextBox() {
     newShotText.setText(EMPTY_TEXT);
+  }
+
+  public void pickImage() {
+    newShotBarViewDelegate.pickImage();
+  }
+
+  public void showHolderOptions() {
+    newShotBarViewDelegate.showHolderOptions();
+  }
+
+  public void openNewShotViewWithImage(File image) {
+    newShotBarViewDelegate.openNewShotViewWithImage(image);
+  }
+
+  public void openEditTopicDialog() {
+    newShotBarViewDelegate.openEditTopicDialog();
+  }
+
+  public void showDraftsButton() {
+    //newShotBarViewDelegate.showDraftsButton();
+  }
+
+  public void hideDraftsButton() {
+    //newShotBarViewDelegate.hideDraftsButton();
   }
 }

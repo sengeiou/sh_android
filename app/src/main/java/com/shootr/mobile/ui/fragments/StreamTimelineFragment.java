@@ -198,7 +198,6 @@ public class StreamTimelineFragment extends BaseFragment
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
-  private NewShotBarView newShotBarViewDelegate;
   private Integer[] watchNumberCount;
   private View footerProgress;
   private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
@@ -719,6 +718,12 @@ public class StreamTimelineFragment extends BaseFragment
             setupTopicCustomDialog();
           }
         };*/
+    newShotBarContainer.init(idStream, streamTitle, getActivity(), photoPickerController,
+        feedbackMessage, new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            newShotBarPresenter.newShotFromImage();
+          }
+        });
   }
 
   private void setupImageDialog(ShotModel shot) {
@@ -1150,12 +1155,12 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void openNewShotView() {
-    newShotBarViewDelegate.openNewShotView();
+    newShotBarContainer.getNewShotBarViewDelegate().openNewShotView();
   }
 
   @Override public void pickImage() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.pickImage();
+      newShotBarContainer.pickImage();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
@@ -1163,26 +1168,26 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showHolderOptions() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.showHolderOptions();
+      newShotBarContainer.showHolderOptions();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
   }
 
   @Override public void openNewShotViewWithImage(File image) {
-    newShotBarViewDelegate.openNewShotViewWithImage(image);
+    newShotBarContainer.openNewShotViewWithImage(image);
   }
 
   @Override public void openEditTopicDialog() {
-    newShotBarViewDelegate.openEditTopicDialog();
+    newShotBarContainer.openEditTopicDialog();
   }
 
   @Override public void showDraftsButton() {
-    //newShotBarViewDelegate.showDraftsButton();
+    newShotBarContainer.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    //newShotBarViewDelegate.hideDraftsButton();
+    newShotBarContainer.hideDraftsButton();
   }
 
   @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {
