@@ -130,6 +130,10 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.IS_PADDING
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.FROM_HOLDER
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.FROM_CONTRIBUTOR
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
