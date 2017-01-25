@@ -40,6 +40,8 @@ public class ShotApiEntity extends BaseMessageApiEntity {
     private String ctaCaption;
     private Long verifiedUser;
     private Integer isPadding;
+    private Integer fromHolder;
+    private Integer fromContributor;
 
     public String getIdShot() {
         return idShot;
@@ -247,5 +249,21 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
     public void setIsPadding(Integer isPadding) {
         this.isPadding = isPadding;
+    }
+
+    public Integer getFromHolder() {
+        return fromHolder;
+    }
+
+    public void setFromHolder(Integer fromHolder) {
+        this.fromHolder = fromHolder;
+    }
+
+    public Integer getFromContributor() {
+        return fromContributor;
+    }
+
+    public void setFromContributor(Integer fromContributor) {
+        this.fromContributor = fromContributor;
     }
 }
