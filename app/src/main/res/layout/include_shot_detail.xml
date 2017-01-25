@@ -50,6 +50,10 @@
                     android:textStyle="bold"
                     tools:text="Ignasi" />
 
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
                 <ImageView
                     android:id="@+id/verified_user"
                     android:layout_width="12dp"
@@ -62,15 +66,16 @@
                     />
                 <ImageView
                     android:id="@+id/holder_or_contributor_user"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_centerVertical="true"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="4dp"
                     android:src="@drawable/ic_favorite_not_added_28_gray50"
-                    android:layout_toEndOf="@+id/shot_user_name"
                     android:visibility="gone"
                     tools:visibility="visible"
                 />
+</FrameLayout>
+
 
             </LinearLayout>
 

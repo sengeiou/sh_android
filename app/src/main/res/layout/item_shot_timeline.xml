@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    >
+>
 
   <RelativeLayout
-      android:layout_weight=".9"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_weight=".9"
       android:descendantFocusability="blocksDescendants"
+      android:paddingBottom="12dp"
       android:paddingLeft="16dp"
       android:paddingTop="12dp"
-      android:paddingBottom="12dp"
-      >
+  >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/shot_avatar"
@@ -25,73 +25,74 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:src="@drawable/ic_contact_picture_default"
-        />
+    />
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_toRightOf="@+id/shot_avatar"
-        android:id="@+id/linearLayout2"
         android:layout_toStartOf="@+id/action_container"
-        >
+        android:orientation="vertical"
+    >
       <RelativeLayout
+          android:id="@+id/shot_name_container"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal"
-          android:id="@+id/shot_name_container"
-          >
+      >
 
         <TextView
             android:id="@+id/shot_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="176dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:ellipsize="end"
+            android:maxWidth="176dp"
+            android:singleLine="true"
             android:textColor="@color/gray_10"
             android:textSize="14sp"
-            android:singleLine="true"
             android:textStyle="bold"
             tools:text="Ignasi to cnhdscbhbggkk gfggdfjkjbrbf"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            />
-
-        <ImageView
-            android:id="@+id/verified_user"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginLeft="2dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_verified_shot"
-            android:layout_toEndOf="@+id/shot_user_name"
-            android:visibility="gone"
-            tools:visibility="visible"
-            />
-
-        <ImageView
-            android:id="@+id/holder_or_contributor_user"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="0dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_favorite_not_added_28_gray50"
-            android:layout_toEndOf="@+id/shot_user_name"
-            android:visibility="gone"
-            tools:visibility="visible"
         />
+        <FrameLayout
+            android:id="@+id/verified_user_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/shot_user_name"
+            >
+          <ImageView
+              android:id="@+id/verified_user"
+              android:layout_width="10dp"
+              android:layout_height="10dp"
+              android:layout_marginLeft="2dp"
+              android:src="@drawable/ic_action_verified_shot"
+              android:visibility="gone"
+              tools:visibility="visible"
+          />
 
+          <ImageView
+              android:id="@+id/holder_or_contributor_user"
+              android:layout_width="10dp"
+              android:layout_height="10dp"
+              android:layout_marginLeft="2dp"
+              android:src="@drawable/ic_favorite_not_added_28_gray50"
+              android:visibility="gone"
+              tools:visibility="visible"
+          />
+        </FrameLayout>
         <TextView
             android:id="@+id/shot_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toEndOf="@+id/verified_user_container"
+            android:maxLines="1"
             android:textColor="@color/gray_80"
             android:textSize="14sp"
-            android:layout_marginLeft="8dp"
-            android:maxLines="1"
             tools:text="22m"
-            android:layout_toEndOf="@+id/verified_user"
-            />
-
+        />
 
 
       </RelativeLayout>
@@ -106,20 +107,20 @@
           android:textColorLink="@color/links"
           android:textSize="14sp"
           tools:text="Who's the referee? vfdvsdfvgdngjbn mgjknjn gmkfg"
-          tools:visibility ="visible"
+          tools:visibility="visible"
 
-          />
+      />
       <FrameLayout
           android:id="@+id/shot_media_content"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:focusable="false"
           android:layout_marginRight="24dp"
           android:layout_marginTop="4dp"
+          android:focusable="false"
           android:focusableInTouchMode="false"
           android:visibility="gone"
           tools:visibility="gone"
-          >
+      >
 
         <com.shootr.mobile.ui.widgets.ProportionalImageView
             android:id="@+id/shot_image_landscape"
@@ -130,7 +131,7 @@
             app:riv_corner_radius="10dp"
             tools:src="@drawable/sample_avatar"
             tools:visibility="gone"
-            />
+        />
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/default_image"
             android:layout_width="match_parent"
@@ -140,18 +141,18 @@
             android:scaleType="centerCrop"
             android:visibility="gone"
             app:riv_corner_radius="5dp"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
 
         <FrameLayout
             android:id="@+id/shot_video_frame"
             android:layout_width="match_parent"
             android:layout_height="165dp"
+            android:layout_gravity="left|bottom"
             android:background="@drawable/round_corner"
             android:foreground="?selectableItemBackground"
             android:visibility="gone"
             tools:visibility="visible"
-            android:layout_gravity="left|bottom"
-            >
+        >
 
           <TextView
               android:id="@+id/shot_video_title"
@@ -160,7 +161,7 @@
               android:layout_margin="8dp"
               android:textColor="@color/white"
               tools:text="Titulo del video"
-              />
+          />
 
           <ImageView
               android:layout_width="wrap_content"
@@ -168,7 +169,7 @@
               android:layout_gravity="center"
               android:scaleType="center"
               android:src="@drawable/ic_video_play_circle_48_white"
-              />
+          />
 
           <TextView
               android:id="@+id/shot_video_duration"
@@ -178,7 +179,7 @@
               android:layout_margin="8dp"
               android:textColor="@color/white"
               tools:text="0:00"
-              />
+          />
         </FrameLayout>
       </FrameLayout>
 
@@ -191,7 +192,7 @@
           android:visibility="gone"
           tools:text="8 responses"
           tools:visibility="visible"
-          />
+      />
     </LinearLayout>
 
     <LinearLayout
@@ -199,22 +200,22 @@
         android:layout_width="46dp"
         android:layout_height="28dp"
         android:layout_alignParentEnd="true"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:gravity="end"
-        >
+        android:orientation="horizontal"
+    >
       <TextView
           android:id="@+id/shot_nice_count"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginRight="4dp"
+          android:layout_marginTop="2dp"
+          android:gravity="center"
           android:textColor="@color/gray_80"
           android:textSize="12sp"
-          android:gravity="center"
-          android:layout_marginTop="2dp"
-          android:layout_marginRight="4dp"
           tools:text="2"
-          />
+      />
       <com.sackcentury.shinebuttonlib.ShineButton
           android:id="@+id/shot_nice_button"
           android:layout_width="20dp"
@@ -233,23 +234,23 @@
           app:siShape="@drawable/ic_action_favorite_gray"
           app:small_shine_color="@color/accent"
           app:small_shine_offset_angle="20"
-          />
+      />
     </LinearLayout>
   </RelativeLayout>
   <LinearLayout
-      android:layout_weight=".1"
       android:layout_width="2.1dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
       android:layout_marginRight="2dp"
-      android:layout_height="24dp"
-      android:background="@color/gray_92"
-      android:layout_gravity="center"
-      />
-  <LinearLayout
       android:layout_weight=".1"
-      android:layout_width="2.3dp"
-      android:layout_marginRight="4dp"
-      android:layout_height="24dp"
       android:background="@color/gray_92"
+  />
+  <LinearLayout
+      android:layout_width="2.3dp"
+      android:layout_height="24dp"
       android:layout_gravity="center"
-      />
+      android:layout_marginRight="4dp"
+      android:layout_weight=".1"
+      android:background="@color/gray_92"
+  />
 </LinearLayout>

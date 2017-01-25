@@ -113,9 +113,9 @@
             />
         <ImageView
             android:id="@+id/holder_or_contributor_user"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="0dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="2dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_favorite_not_added_28_gray50"
             android:layout_toEndOf="@+id/shot_user_name"
