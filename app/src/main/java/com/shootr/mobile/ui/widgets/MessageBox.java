@@ -17,6 +17,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,6 +79,8 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   @BindView(R.id.shot_bar_photo) ImageButton sendImageButton;
   @BindView(R.id.new_shot_send_button) ImageButton sendShotButton;
   @BindView(R.id.new_shot_mentions) NestedListView mentionsListView;
+  @BindView(R.id.new_shot_char_counter)
+  TextView charCounter;
 
   @Inject MessageBoxPresenter presenter;
   @Inject
@@ -87,6 +91,8 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   private Activity activity;
   private Subscription commentSubscription;
   private MentionsAdapter adapter;
+  private int charCounterColorError;
+  private int charCounterColorNormal;
 
   public MessageBox(Context context) {
     super(context);
@@ -154,6 +160,9 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     mentionsListView.setAdapter(adapter);
 
     initializeSubscription();
+
+    charCounterColorError = getResources().getColor(R.color.error);
+    charCounterColorNormal = getResources().getColor(R.color.gray_70);
   }
 
   private void initializeSubscription() {
@@ -264,10 +273,12 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
 
   @Override public void showSendButton() {
+    charCounter.setVisibility(VISIBLE);
     animateView(sendImageButton, sendShotButton);
   }
 
   @Override public void hideSendButton() {
+    charCounter.setVisibility(GONE);
     animateView(sendShotButton, sendImageButton);
   }
 
@@ -299,15 +310,15 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   @Override public void setRemainingCharactersCount(int remainingCharacters) {
-
+    charCounter.setText(String.valueOf(remainingCharacters));
   }
 
   @Override public void setRemainingCharactersColorValid() {
-
+    charCounter.setTextColor(charCounterColorNormal);
   }
 
   @Override public void setRemainingCharactersColorInvalid() {
-
+    charCounter.setTextColor(charCounterColorError);
   }
 
   @Override public void renderMentionSuggestions(List<UserModel> mentionSuggestions) {

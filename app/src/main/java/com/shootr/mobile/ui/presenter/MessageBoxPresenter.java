@@ -111,7 +111,7 @@ public class MessageBoxPresenter {
 
   public void textChanged(String currentText) {
     currentTextWritten = filterText(currentText);
-    //updateCharCounter(currentTextWritten);
+    updateCharCounter(currentTextWritten);
     updateSendButonEnabled(currentTextWritten);
   }
 
@@ -120,6 +120,18 @@ public class MessageBoxPresenter {
       messageBoxView.showSendButton();
     } else {
       messageBoxView.hideSendButton();
+    }
+  }
+
+  private void updateCharCounter(String filteredText) {
+    int remainingLength = maxLength - filteredText.length();
+    messageBoxView.setRemainingCharactersCount(remainingLength);
+
+    boolean isValidShot = remainingLength > 0;
+    if (isValidShot) {
+      messageBoxView.setRemainingCharactersColorValid();
+    } else {
+      messageBoxView.setRemainingCharactersColorInvalid();
     }
   }
 
