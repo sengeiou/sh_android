@@ -21,38 +21,72 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
+
 import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.eftimoff.androidplayer.listeners.PlayerEndListener;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
+import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.views.MessageBoxView;
 import com.shootr.mobile.ui.views.NewShotBarView;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.ImageLoader;
+
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
 public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   private static final String EMPTY_TEXT = "";
+  public static final int MAX_LENGTH = 140;
+  public static final int MAX_MESSAGE_LENGTH = 5000;
+  private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
+
+  private static final String EXTRA_SELECTED_IMAGE = "image";
+  private static final String EXTRA_REPLY_PARENT_ID = "parentId";
+  private static final String EXTRA_REPLY_USERNAME = "parentUsername";
+  public static final String EXTRA_PHOTO = "photo";
+  public static final String EXTRA_ID_STREAM = "idStream";
+  public static final String EXTRA_STREAM_TITLE = "streamTitle";
+  public static final String EXTRA_IS_PRIVATE_MESSAGE = "privateMessage";
+  public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
+  public static final String SPACE = " ";
   
   @BindView(R.id.shot_bar_text) EditText newShotText;
   @BindView(R.id.shot_bar_drafts) ImageButton draftButton;
   @BindView(R.id.shot_bar_photo) ImageButton sendImageButton;
   @BindView(R.id.new_shot_send_button) ImageButton sendShotButton;
+  @BindView(R.id.new_shot_mentions) NestedListView mentionsListView;
 
   @Inject MessageBoxPresenter presenter;
+  @Inject
+  CrashReportTool crashReportTool;
 
   private PhotoPickerController photoPickerController;
   private NewShotBarViewDelegate newShotBarViewDelegate;
   private Activity activity;
+  private Subscription commentSubscription;
+  private MentionsAdapter adapter;
 
   public MessageBox(Context context) {
     super(context);
@@ -75,7 +109,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   public void init(final String idStream, final String streamTitle, Activity parentActivity,
-      PhotoPickerController photoPickerController, FeedbackMessage feedbackMessage, OnClickListener attachClickListener) {
+      PhotoPickerController photoPickerController, ImageLoader imageLoader, FeedbackMessage feedbackMessage, OnClickListener attachClickListener) {
     this.photoPickerController = photoPickerController;
     this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
@@ -108,6 +142,103 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
         };
 
     sendImageButton.setOnClickListener(attachClickListener);
+
+    if (adapter == null) {
+      adapter = new MentionsAdapter(getContext(), new OnMentionClickListener() {
+        @Override public void mention(UserModel user) {
+          presenter.onMentionClicked(user);
+        }
+      }, imageLoader);
+    }
+
+    mentionsListView.setAdapter(adapter);
+
+    initializeSubscription();
+  }
+
+  private void initializeSubscription() {
+    commentSubscription = RxTextView.textChangeEvents(newShotText)//
+            .debounce(100, TimeUnit.MILLISECONDS)//
+            .observeOn(AndroidSchedulers.mainThread())//
+            .subscribe(getShotCommentObserver());
+  }
+
+  private Observer<TextViewTextChangeEvent> getShotCommentObserver() {
+    return new Observer<TextViewTextChangeEvent>() {
+      @Override public void onCompleted() {
+        Timber.d("autocomplete mention onComplete");
+      }
+
+      @Override public void onError(Throwable e) {
+        crashReportTool.logException(e);
+      }
+
+      @Override public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
+        checkIfWritingMention(onTextChangeEvent);
+      }
+    };
+  }
+
+  public void checkIfWritingMention(TextViewTextChangeEvent onTextChangeEvent) {
+    Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
+    String input = onTextChangeEvent.text().toString();
+    String[] words = input.split(SPACE);
+
+    Integer wordPosition = 0;
+    Integer characterPosition = 0;
+
+    if (input.length() > 0 && !input.endsWith(SPACE)) {
+      autocompleteWhenInputEndsWithoutSpace(pattern, input, words, wordPosition, characterPosition);
+    } else if (input.length() <= 0) {
+      presenter.onStopMentioning();
+    } else if (input.endsWith(SPACE)) {
+      autocompleteWhenInputEndsWithSpace(pattern, input, words, wordPosition);
+    }
+  }
+
+  public void autocompleteWhenInputEndsWithoutSpace(Pattern pattern, String input, String[] words,
+                                                    Integer wordPosition, Integer characterPosition) {
+    for (String word : words) {
+      characterPosition += word.length();
+      Matcher matcher = pattern.matcher(word);
+      if (matcher.find()) {
+        autocompleteIfNoMentionedBefore(input, words, wordPosition, word);
+        autocompleteIfWritingUsername(words, wordPosition, characterPosition, word);
+      } else {
+        presenter.onStopMentioning();
+      }
+      characterPosition++;
+      wordPosition++;
+    }
+  }
+
+  public void autocompleteIfWritingUsername(String[] words, Integer wordPosition,
+                                            Integer characterPosition, String word) {
+    if (newShotText.getSelectionEnd() == characterPosition) {
+      presenter.autocompleteMention(word, words, wordPosition);
+    }
+  }
+
+  public void autocompleteIfNoMentionedBefore(String input, String[] words, Integer wordPosition,
+                                              String word) {
+    Pattern wordPattern = Pattern.compile(word + SPACE);
+    Matcher wordMatcher = wordPattern.matcher(input);
+    if (!wordMatcher.find()) {
+      presenter.autocompleteMention(word, words, wordPosition);
+    }
+  }
+
+  public void autocompleteWhenInputEndsWithSpace(Pattern pattern, String input, String[] words,
+                                                 Integer wordPosition) {
+    if (words.length >= 1) {
+      String word = words[wordPosition];
+      Matcher matcher = pattern.matcher(word);
+      if (matcher.find() && newShotText.getSelectionEnd() != input.length()) {
+        presenter.autocompleteMention(word, words, wordPosition);
+      } else {
+        presenter.onStopMentioning();
+      }
+    }
   }
 
   @OnClick(R.id.new_shot_send_button) public void onSendShot() {
@@ -180,23 +311,25 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   @Override public void renderMentionSuggestions(List<UserModel> mentionSuggestions) {
-
+    mentionsListView.setVisibility(View.VISIBLE);
+    adapter.setItems(mentionSuggestions);
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void showMentionSuggestions() {
-
+    mentionsListView.setVisibility(View.VISIBLE);
   }
 
   @Override public void hideMentionSuggestions() {
-
+    mentionsListView.setVisibility(View.GONE);
   }
 
   @Override public void mentionUser(String comment) {
-
+    newShotText.setText(comment);
   }
 
   @Override public void setCursorToEndOfText() {
-
+    newShotText.setSelection(newShotText.getText().length());
   }
 
   @Override public void showError(String message) {
@@ -224,10 +357,10 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   public void showDraftsButton() {
-    //newShotBarViewDelegate.showDraftsButton();
+    newShotBarViewDelegate.showDraftsButton();
   }
 
   public void hideDraftsButton() {
-    //newShotBarViewDelegate.hideDraftsButton();
+    newShotBarViewDelegate.hideDraftsButton();
   }
 }

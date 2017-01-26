@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     style="@style/NewShotBar"
     >
+
+  <com.shootr.mobile.ui.widgets.NestedListView android:id="@+id/new_shot_mentions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:visibility="gone"
+      />
 
   <View android:background="#cfd8dc"
       android:layout_width = "match_parent"
       android:layout_height="1dp"/>
 
-  <RelativeLayout android:id="@+id/shot_bar_container"
+  <LinearLayout android:id="@+id/shot_bar_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:clickable="true"
       android:minHeight="@dimen/new_shot_height"
+      android:orientation="horizontal"
       >
 
     <EditText
         android:id="@+id/shot_bar_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
         android:layout_marginLeft="16dp"
-        android:layout_toLeftOf="@+id/shot_bar_drafts"
         android:animateLayoutChanges="true"
         android:ellipsize="end"
         android:fontFamily="sans-serif-light"
@@ -35,40 +42,37 @@
     <ImageButton android:id="@+id/new_shot_send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:background="?selectableItemBackground"
         android:enabled="false"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:src="@drawable/ic_send"
         android:visibility="gone"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         />
 
     <ImageButton
         android:id="@+id/shot_bar_drafts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/shot_bar_photo"
         android:background="?selectableItemBackground"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:src="@drawable/ic_drafts_24_gray54"
         android:visibility="gone"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         />
 
     <ImageButton
         android:id="@+id/shot_bar_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:background="?selectableItemBackground"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:src="@drawable/ic_editor_attach_file"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         />
 
-  </RelativeLayout>
-</RelativeLayout>
+  </LinearLayout>
+</LinearLayout>

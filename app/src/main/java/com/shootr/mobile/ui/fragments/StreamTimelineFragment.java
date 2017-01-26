@@ -718,7 +718,7 @@ public class StreamTimelineFragment extends BaseFragment
             setupTopicCustomDialog();
           }
         };*/
-    newShotBarContainer.init(idStream, streamTitle, getActivity(), photoPickerController,
+    newShotBarContainer.init(idStream, streamTitle, getActivity(), photoPickerController, imageLoader,
         feedbackMessage, new View.OnClickListener() {
           @Override public void onClick(View view) {
             newShotBarPresenter.newShotFromImage();

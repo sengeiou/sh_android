@@ -1,16 +1,23 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
+import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MessageBoxView;
 import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import java.io.File;
+import java.util.List;
+
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -24,13 +31,12 @@ public class MessageBoxPresenter {
   private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
   private final PostNewPrivateMessageInteractor postNewPrivateMessageInteractor;
   private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
+  private final UserModelMapper userModelMapper;
 
   private MessageBoxView messageBoxView;
   private File selectedImageFile;
   private String shotCommentToSend;
   private String currentTextWritten = "";
-  private boolean isReply;
-  private String replyParentId;
   private boolean isInitialized = false;
   private Integer wordPosition;
   private String[] words;
@@ -38,14 +44,15 @@ public class MessageBoxPresenter {
   private int maxLength = MAX_LENGTH;
 
   @Inject public MessageBoxPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      PostNewShotInStreamInteractor postNewShotInStreamInteractor,
-      PostNewPrivateMessageInteractor postNewPrivateMessageInteractor,
-      GetMentionedPeopleInteractor getMentionedPeopleInteractor) {
+                                     PostNewShotInStreamInteractor postNewShotInStreamInteractor,
+                                     PostNewPrivateMessageInteractor postNewPrivateMessageInteractor,
+                                     GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
     this.postNewPrivateMessageInteractor = postNewPrivateMessageInteractor;
     this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
+    this.userModelMapper = userModelMapper;
   }
 
   protected void setView(MessageBoxView postNewShotView) {
@@ -161,4 +168,56 @@ public class MessageBoxPresenter {
     return isInitialized;
   }
 
+  public void autocompleteMention(String username, String[] words, Integer wordPosition) {
+    this.words = words;
+    this.wordPosition = wordPosition;
+    String extractedUsername = username.substring(1);
+    if (extractedUsername.length() >= 1) {
+      loadMentions(extractedUsername);
+    }
+  }
+
+  public void loadMentions(String extractedUsername) {
+    getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
+      @Override public void onLoaded(List<User> users) {
+        List<UserModel> mentionSuggestions = userModelMapper.transform(users);
+        if (!mentionSuggestions.isEmpty()) {
+          messageBoxView.showMentionSuggestions();
+          messageBoxView.renderMentionSuggestions(mentionSuggestions);
+        } else {
+          messageBoxView.hideMentionSuggestions();
+        }
+      }
+    });
+  }
+
+  public void onMentionClicked(UserModel user) {
+    String shotComment = mountShotComment(user);
+    messageBoxView.mentionUser(shotComment);
+    messageBoxView.hideMentionSuggestions();
+    messageBoxView.setCursorToEndOfText();
+  }
+
+  @NonNull
+  public String mountShotComment(UserModel user) {
+    String shotComment = "";
+    Integer position = 0;
+    for (String word : words) {
+      if (equals(position, wordPosition)) {
+        shotComment += "@" + user.getUsername() + " ";
+      } else {
+        shotComment += word + " ";
+      }
+      position++;
+    }
+    return shotComment;
+  }
+
+  private boolean equals(Integer a, Integer b) {
+    return a != null && a.equals(b);
+  }
+
+  public void onStopMentioning() {
+    messageBoxView.hideMentionSuggestions();
+  }
 }
