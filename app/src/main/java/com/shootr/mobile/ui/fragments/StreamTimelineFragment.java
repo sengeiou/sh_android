@@ -697,33 +697,18 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    /*newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getActivity()) //
-                .setStreamData(idStream, streamTitle).build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openNewShotViewWithImage(File image) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(getActivity()) //
-                .withImage(image) //
-                .setStreamData(idStream, streamTitle).build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openEditTopicDialog() {
-            setupTopicCustomDialog();
-          }
-        };*/
     newShotBarContainer.init(idStream, streamTitle, getActivity(), photoPickerController, imageLoader,
-        feedbackMessage, new View.OnClickListener() {
-          @Override public void onClick(View view) {
-            newShotBarPresenter.newShotFromImage();
-          }
-        });
+            feedbackMessage, new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                newShotBarPresenter.newShotFromImage();
+              }
+            }, new MessageBox.OpenTopicDialog() {
+              @Override
+              public void showTopicDIalog() {
+                setupTopicCustomDialog();
+              }
+            });
   }
 
   private void setupImageDialog(ShotModel shot) {

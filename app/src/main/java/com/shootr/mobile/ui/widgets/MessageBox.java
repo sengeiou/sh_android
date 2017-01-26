@@ -7,11 +7,9 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -28,9 +26,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-import com.eftimoff.androidplayer.Player;
-import com.eftimoff.androidplayer.actions.property.PropertyAction;
-import com.eftimoff.androidplayer.listeners.PlayerEndListener;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
@@ -44,7 +39,6 @@ import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.views.MessageBoxView;
-import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -115,7 +109,8 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   public void init(final String idStream, final String streamTitle, Activity parentActivity,
-      PhotoPickerController photoPickerController, ImageLoader imageLoader, FeedbackMessage feedbackMessage, OnClickListener attachClickListener) {
+                   PhotoPickerController photoPickerController, ImageLoader imageLoader, FeedbackMessage feedbackMessage, final OnClickListener attachClickListener,
+                   final OpenTopicDialog openTopicDialog) {
     this.photoPickerController = photoPickerController;
     this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
@@ -143,7 +138,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
           }
 
           @Override public void openEditTopicDialog() {
-            //setupTopicCustomDialog();
+            openTopicDialog.showTopicDIalog();
           }
         };
 
@@ -373,5 +368,9 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   public void hideDraftsButton() {
     newShotBarViewDelegate.hideDraftsButton();
+  }
+
+  public interface OpenTopicDialog {
+    void showTopicDIalog();
   }
 }
