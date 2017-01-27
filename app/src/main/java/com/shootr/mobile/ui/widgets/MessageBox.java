@@ -55,7 +55,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String SPACE = " ";
-  
+
   @BindView(R.id.shot_bar_text) EditText newShotText;
   @BindView(R.id.shot_bar_drafts) ImageButton draftButton;
   @BindView(R.id.shot_bar_photo) ImageButton sendImageButton;
