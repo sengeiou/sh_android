@@ -16,22 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
-
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.ui.activities.DraftsActivity;
-import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
@@ -42,14 +35,16 @@ import com.shootr.mobile.ui.views.MessageBoxView;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 public class MessageBox extends RelativeLayout implements MessageBoxView {
 
@@ -58,14 +53,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   public static final int MAX_MESSAGE_LENGTH = 5000;
   private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
-  private static final String EXTRA_SELECTED_IMAGE = "image";
-  private static final String EXTRA_REPLY_PARENT_ID = "parentId";
-  private static final String EXTRA_REPLY_USERNAME = "parentUsername";
-  public static final String EXTRA_PHOTO = "photo";
-  public static final String EXTRA_ID_STREAM = "idStream";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
-  public static final String EXTRA_IS_PRIVATE_MESSAGE = "privateMessage";
-  public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
   public static final String SPACE = " ";
   
   @BindView(R.id.shot_bar_text) EditText newShotText;
@@ -108,9 +96,9 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     return newShotBarViewDelegate;
   }
 
-  public void init(final String idStream, final String streamTitle, Activity parentActivity,
-                   PhotoPickerController photoPickerController, ImageLoader imageLoader, FeedbackMessage feedbackMessage, final OnClickListener attachClickListener,
-                   final OpenTopicDialog openTopicDialog) {
+  public void init(Activity parentActivity, PhotoPickerController photoPickerController,
+      ImageLoader imageLoader, FeedbackMessage feedbackMessage,
+      final OnActionsClick onActionsClick) {
     this.photoPickerController = photoPickerController;
     this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
@@ -123,26 +111,23 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     newShotBarViewDelegate =
         new NewShotBarViewDelegate(photoPickerController, draftButton, feedbackMessage) {
           @Override public void openNewShotView() {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(activity) //
-                .setStreamData(idStream, streamTitle).build();
-            activity.startActivity(newShotIntent);
+            onActionsClick.onNewShotClick();
           }
 
           @Override public void openNewShotViewWithImage(File image) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(activity) //
-                .withImage(image) //
-                .setStreamData(idStream, streamTitle).build();
-            activity.startActivity(newShotIntent);
+            onActionsClick.onShotWithImageClick(image);
           }
 
           @Override public void openEditTopicDialog() {
-            openTopicDialog.showTopicDIalog();
+            onActionsClick.onTopicClick();
           }
         };
 
-    sendImageButton.setOnClickListener(attachClickListener);
+    sendImageButton.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View view) {
+        onActionsClick.onAttachClick();
+      }
+    });
 
     if (adapter == null) {
       adapter = new MentionsAdapter(getContext(), new OnMentionClickListener() {
@@ -370,7 +355,13 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     newShotBarViewDelegate.hideDraftsButton();
   }
 
-  public interface OpenTopicDialog {
-    void showTopicDIalog();
+  public interface OnActionsClick {
+    void onTopicClick();
+
+    void onNewShotClick();
+
+    void onShotWithImageClick(File image);
+
+    void onAttachClick();
   }
 }

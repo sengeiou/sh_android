@@ -34,7 +34,6 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
@@ -697,18 +696,32 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBarContainer.init(idStream, streamTitle, getActivity(), photoPickerController, imageLoader,
-            feedbackMessage, new View.OnClickListener() {
+    newShotBarContainer.init(getActivity(), photoPickerController, imageLoader,
+            feedbackMessage, new MessageBox.OnActionsClick() {
               @Override
-              public void onClick(View view) {
-                newShotBarPresenter.newShotFromImage();
-              }
-            }, new MessageBox.OpenTopicDialog() {
-              @Override
-              public void showTopicDIalog() {
+              public void onTopicClick() {
                 setupTopicCustomDialog();
               }
-            });
+
+          @Override public void onNewShotClick() {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .setStreamData(idStream, streamTitle).build();
+            getActivity().startActivity(newShotIntent);
+          }
+
+          @Override public void onShotWithImageClick(File image) {
+            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                .from(getActivity()) //
+                .withImage(image) //
+                .setStreamData(idStream, streamTitle).build();
+            getActivity().startActivity(newShotIntent);
+          }
+
+          @Override public void onAttachClick() {
+            newShotBarPresenter.newShotFromImage();
+          }
+        });
   }
 
   private void setupImageDialog(ShotModel shot) {
