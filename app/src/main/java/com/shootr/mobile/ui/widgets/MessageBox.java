@@ -75,6 +75,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   private MentionsAdapter adapter;
   private int charCounterColorError;
   private int charCounterColorNormal;
+  private boolean isPrivateMessage;
 
   public MessageBox(Context context) {
     super(context);
@@ -98,7 +99,8 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
 
   public void init(Activity parentActivity, PhotoPickerController photoPickerController,
       ImageLoader imageLoader, FeedbackMessage feedbackMessage,
-      final OnActionsClick onActionsClick) {
+      final OnActionsClick onActionsClick, boolean isPrivateMessage, String idTargetUser) {
+    this.isPrivateMessage = isPrivateMessage;
     this.photoPickerController = photoPickerController;
     this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
@@ -106,7 +108,12 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     LayoutInflater inflater = LayoutInflater.from(getContext());
     inflater.inflate(R.layout.new_message_box, this);
     ButterKnife.bind(this);
-    presenter.initializeAsNewShot(this);
+
+    if (!isPrivateMessage) {
+      presenter.initializeAsNewShot(this);
+    } else {
+      presenter.initializeAsNewMessage(this, idTargetUser);
+    }
 
     newShotBarViewDelegate =
         new NewShotBarViewDelegate(photoPickerController, draftButton, feedbackMessage) {
@@ -231,7 +238,6 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   }
 
   @OnClick(R.id.new_shot_send_button) public void onSendShot() {
-    boolean isPrivateMessage = false; //TODO
     if (isPrivateMessage) {
       presenter.sendMessage(newShotText.getText().toString());
       //sendPrivateMessageToMixPanel();

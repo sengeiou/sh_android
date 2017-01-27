@@ -152,7 +152,6 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  //@BindView(R.id.shot_bar_drafts) View draftsButton;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
   @BindView(R.id.timeline_message) ClickableTextView streamMessage;
@@ -721,7 +720,7 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void onAttachClick() {
             newShotBarPresenter.newShotFromImage();
           }
-        });
+        }, false, null);
   }
 
   private void setupImageDialog(ShotModel shot) {
@@ -816,18 +815,6 @@ public class StreamTimelineFragment extends BaseFragment
               watchNumberCount[1]));
     }
   }
-
-  /*@OnClick(R.id.shot_bar_text) public void startNewShot() {
-    //newShotBarPresenter.newShotFromTextBox();
-  }
-
-  @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-    //newShotBarPresenter.newShotFromImage();
-  }
-
-  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-    //startActivity(new Intent(getActivity(), DraftsActivity.class));
-  }*/
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     shotsTimeline.scrollToPosition(0);

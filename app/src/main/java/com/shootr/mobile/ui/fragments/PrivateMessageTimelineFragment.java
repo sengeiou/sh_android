@@ -44,6 +44,7 @@ package com.shootr.mobile.ui.fragments;
     import com.shootr.mobile.ui.views.NewShotBarView;
     import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
     import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
+    import com.shootr.mobile.ui.widgets.MessageBox;
     import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
     import com.shootr.mobile.util.AnalyticsTool;
     import com.shootr.mobile.util.AndroidTimeUtils;
@@ -83,8 +84,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  @BindView(R.id.shot_bar_drafts) View draftsButton;
-  @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
+  @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBar;
   @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
 
@@ -119,7 +119,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
     messageRecycler.setLayoutManager(preCachingLayoutManager);
     messageRecycler.setHasFixedSize(false);
-    newShotBarContainer.setVisibility(View.VISIBLE);
+    newShotBar.setVisibility(View.VISIBLE);
     return fragmentView;
   }
 
@@ -132,10 +132,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    initializeViews();
-    setHasOptionsMenu(true);
     idTargetUser = getArguments().getString(EXTRA_ID_TARGET_USER);
     idChannel = getArguments().getString(EXTRA_ID_CHANNEL);
+    initializeViews();
+    setHasOptionsMenu(true);
     setStreamTitleClickListener(idTargetUser);
     setupPresentersInitialization(idTargetUser, idChannel);
   }
@@ -367,9 +367,14 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
+    newShotBar.init(getActivity(), photoPickerController, imageLoader,
+        feedbackMessage, new MessageBox.OnActionsClick() {
+          @Override
+          public void onTopicClick() {
+            /* no-op */
+          }
+
+          @Override public void onNewShotClick() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .isPrivateMessage(true)
@@ -379,7 +384,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             startActivity(newShotIntent);
           }
 
-          @Override public void openNewShotViewWithImage(File image) {
+          @Override public void onShotWithImageClick(File image) {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .isPrivateMessage(true).withImage(image) //
@@ -387,22 +392,11 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             startActivity(newShotIntent);
           }
 
-          @Override public void openEditTopicDialog() {
-
+          @Override public void onAttachClick() {
+            newShotBarPresenter.newMessageFromImage();
           }
-        };
-  }
+        }, true, idTargetUser);
 
-  @OnClick(R.id.shot_bar_text) public void startNewShot() {
-    newShotBarPresenter.newMessageFromTextBox();
-  }
-
-  @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-    newShotBarPresenter.newMessageFromImage();
-  }
-
-  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-    startActivity(new Intent(getActivity(), DraftsActivity.class));
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
@@ -535,7 +529,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void pickImage() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.pickImage();
+      newShotBar.pickImage();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
@@ -546,18 +540,18 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void openNewShotViewWithImage(File image) {
-    newShotBarViewDelegate.openNewShotViewWithImage(image);
+    newShotBar.openNewShotViewWithImage(image);
   }
 
   @Override public void openEditTopicDialog() {
-    newShotBarViewDelegate.openEditTopicDialog();
+    newShotBar.openEditTopicDialog();
   }
 
   @Override public void showDraftsButton() {
-    newShotBarViewDelegate.showDraftsButton();
+    newShotBar.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarViewDelegate.hideDraftsButton();
+    newShotBar.hideDraftsButton();
   }
 }

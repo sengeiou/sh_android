@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
-
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -12,12 +11,10 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MessageBoxView;
-import com.shootr.mobile.ui.views.PostNewShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -44,9 +41,9 @@ public class MessageBoxPresenter {
   private int maxLength = MAX_LENGTH;
 
   @Inject public MessageBoxPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
-                                     PostNewShotInStreamInteractor postNewShotInStreamInteractor,
-                                     PostNewPrivateMessageInteractor postNewPrivateMessageInteractor,
-                                     GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
+      PostNewShotInStreamInteractor postNewShotInStreamInteractor,
+      PostNewPrivateMessageInteractor postNewPrivateMessageInteractor,
+      GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
@@ -87,7 +84,7 @@ public class MessageBoxPresenter {
 
     if (canSendShot(shotCommentToSend)) {
       if (idTargetUser != null) {
-        //postMessage(idTargetUser);
+        postMessage(idTargetUser);
       }
     } else {
       Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
@@ -99,7 +96,8 @@ public class MessageBoxPresenter {
         selectedImageFile, idTargetUser,
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            //TODO
+            messageBoxView.hideSendButton();
+            messageBoxView.clearTextBox();
           }
         },
         new Interactor.ErrorCallback() {
