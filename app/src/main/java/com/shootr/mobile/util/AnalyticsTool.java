@@ -1,6 +1,5 @@
 package com.shootr.mobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import com.shootr.mobile.domain.model.user.User;
 
@@ -11,8 +10,6 @@ public interface AnalyticsTool {
   void setUser(User user);
 
   void analyticsStart(Context context, String name);
-
-  void analyticsStop(Context context, Activity activity);
 
   void analyticsSendAction(Builder builder);
 

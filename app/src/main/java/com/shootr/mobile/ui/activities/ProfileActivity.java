@@ -369,7 +369,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void onPause() {
     super.onPause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
     profilePresenter.pause();
     suggestedPeoplePresenter.pause();
   }

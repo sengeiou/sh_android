@@ -148,7 +148,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenShotDetail);
         sendScreenToAnalythics();
         writePermissionManager.init(this);
         setupPhotoPicker();
@@ -668,4 +667,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         progressBar.setVisibility(View.GONE);
     }
     //endregion
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        sendScreenToAnalythics();
+    }
 }

@@ -48,7 +48,7 @@ import javax.inject.Inject;
 
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
-    public static final int REQUEST_NEW_STREAM = 3;
+  public static final int REQUEST_NEW_STREAM = 3;
 
   @BindView(R.id.streams_list) RecyclerView streamsList;
   @BindView(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -59,8 +59,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_screen_stream_list) String analyticsScreenStreamList;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
-  @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
-  @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
+  @BindString(R.string.analytics_action_external_share_stream) String
+      analyticsActionExternalShareStream;
+  @BindString(R.string.analytics_label_external_share_stream) String
+      analyticsLabelExternalShareStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
@@ -74,79 +76,76 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
 
-    private StreamsListAdapter adapter;
-    private Unbinder unbinder;
+  private StreamsListAdapter adapter;
+  private Unbinder unbinder;
   private Menu menu;
 
-    public static StreamsListFragment newInstance() {
-        return new StreamsListFragment();
-    }
+  public static StreamsListFragment newInstance() {
+    return new StreamsListFragment();
+  }
 
-    //region Lifecycle
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_streams_list, container, false);
-    }
+  //region Lifecycle
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.activity_streams_list, container, false);
+  }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
-        initializePresenter();
-        initializeViews(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), analyticsScreenStreamList);
-    }
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    setHasOptionsMenu(true);
+    initializePresenter();
+    initializeViews(savedInstanceState);
+  }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(), getActivity());
-        unbinder.unbind();
-        presenter.setView(new NullStreamListView());
-    }
-    //endregion
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+    presenter.setView(new NullStreamListView());
+  }
+  //endregion
 
-    protected void initializeViews(Bundle savedInstanceState) {
-        unbinder = ButterKnife.bind(this, getView());
-        streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+  protected void initializeViews(Bundle savedInstanceState) {
+    unbinder = ButterKnife.bind(this, getView());
+    streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-      adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
-        @Override public void onStreamClick(StreamResultModel stream) {
-          presenter.selectStream(stream);
-        }
+    adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+      @Override public void onStreamClick(StreamResultModel stream) {
+        presenter.selectStream(stream);
+      }
 
-        @Override public boolean onStreamLongClick(StreamResultModel stream) {
-          presenter.onStreamLongClicked(stream);
-          return true;
-        }
-      }, new OnFavoriteClickListener() {
-        @Override public void onFavoriteClick(StreamResultModel stream) {
-          presenter.addToFavorites(stream, false);
-          sendFavoriteAnalytics(stream);
-        }
+      @Override public boolean onStreamLongClick(StreamResultModel stream) {
+        presenter.onStreamLongClicked(stream);
+        return true;
+      }
+    }, new OnFavoriteClickListener() {
+      @Override public void onFavoriteClick(StreamResultModel stream) {
+        presenter.addToFavorites(stream, false);
+        sendFavoriteAnalytics(stream);
+      }
 
-        @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-          presenter.removeFromFavorites(stream, false);
-        }
-      }, true);
-        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
-            @Override public void onUnwatchClick() {
-                presenter.unwatchStream();
-            }
-        });
-        streamsList.setAdapter(adapter);
+      @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
+        presenter.removeFromFavorites(stream, false);
+      }
+    }, true);
+    adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+      @Override public void onUnwatchClick() {
+        presenter.unwatchStream();
+      }
+    });
+    streamsList.setAdapter(adapter);
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-          R.color.refresh_2,
-          R.color.refresh_3,
-          R.color.refresh_4);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
-                presenter.refresh();
-            }
-        });
-    }
+    swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
+        R.color.refresh_3, R.color.refresh_4);
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override public void onRefresh() {
+        presenter.refresh();
+      }
+    });
+  }
 
-    protected void initializePresenter() {
-        presenter.initialize(this);
-    }
+  protected void initializePresenter() {
+    presenter.initialize(this);
+  }
 
   private void navigateToDiscoverSearch() {
     Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
@@ -154,33 +153,33 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
-    @OnClick(R.id.streams_add_stream) public void onAddStream() {
-        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-    }
+  @OnClick(R.id.streams_add_stream) public void onAddStream() {
+    startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
+  }
 
-    //region Activity methods
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.streams_list, menu);
-      this.menu = menu;
-    }
+  //region Activity methods
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.streams_list, menu);
+    this.menu = menu;
+  }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_search:
-              navigateToDiscoverSearch();
-                return true;
-            case R.id.menu_channel:
-              navigateToChannelsList();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_search:
+        navigateToDiscoverSearch();
+        return true;
+      case R.id.menu_channel:
+        navigateToChannelsList();
+      default:
+        return super.onOptionsItemSelected(item);
     }
+  }
 
-    public void navigateToChannelsList() {
-      sendToMixPanel();
-      Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
-      startActivity(intent);
-    }
+  public void navigateToChannelsList() {
+    sendToMixPanel();
+    Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
+    startActivity(intent);
+  }
 
   private void sendToMixPanel() {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
@@ -192,28 +191,28 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     analyticsTool.analyticsSendAction(builder);
   }
 
-    @Override public void onResume() {
-        super.onResume();
-        presenter.resume();
-        redrawStreamListWithCurrentValues();
-    }
+  @Override public void onResume() {
+    super.onResume();
+    presenter.resume();
+    redrawStreamListWithCurrentValues();
+  }
 
-    private void redrawStreamListWithCurrentValues() {
-        adapter.notifyDataSetChanged();
-    }
+  private void redrawStreamListWithCurrentValues() {
+    adapter.notifyDataSetChanged();
+  }
 
-    @Override public void onPause() {
-        super.onPause();
-        presenter.pause();
-    }
+  @Override public void onPause() {
+    super.onPause();
+    presenter.pause();
+  }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
-            String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-            presenter.streamCreated(streamId);
-        }
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
+      String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+      presenter.streamCreated(streamId);
     }
+  }
 
   private CustomContextMenu.Builder baseContextualMenuWithFavorite(final StreamResultModel stream) {
     return new CustomContextMenu.Builder(getActivity()).addAction(
@@ -234,9 +233,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     });
   }
 
-  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(final StreamResultModel stream) {
-    return new CustomContextMenu.Builder(getActivity()).addAction(
-        R.string.menu_remove_favorite, new Runnable() {
+  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(
+      final StreamResultModel stream) {
+    return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_remove_favorite,
+        new Runnable() {
           @Override public void run() {
             presenter.removeFromFavorites(stream, true);
           }
@@ -281,87 +281,86 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     Intents.maybeStartActivity(getActivity(), shareIntent);
   }
 
-    //region View methods
-    @Override public void renderStream(List<StreamResultModel> streams) {
-        adapter.setStreams(streams);
-    }
+  //region View methods
+  @Override public void renderStream(List<StreamResultModel> streams) {
+    adapter.setStreams(streams);
+  }
 
-    @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
-        adapter.setCurrentWatchingStream(streamId);
-    }
+  @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
+    adapter.setCurrentWatchingStream(streamId);
+  }
 
-    @Override public void showContent() {
-        streamsList.setVisibility(View.VISIBLE);
-    }
+  @Override public void showContent() {
+    streamsList.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void navigateToStreamTimeline(String idStream, String tag, String authorId) {
-        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, tag, authorId));
-    }
+  @Override public void navigateToStreamTimeline(String idStream, String tag, String authorId) {
+    startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, tag, authorId));
+  }
 
-    @Override public void navigateToCreatedStreamDetail(String streamId) {
-        startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
-    }
+  @Override public void navigateToCreatedStreamDetail(String streamId) {
+    startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
+  }
 
-    @Override public void showAddedToFavorites() {
-        feedbackMessage.show(getView(), addedToFavorites);
-    }
+  @Override public void showAddedToFavorites() {
+    feedbackMessage.show(getView(), addedToFavorites);
+  }
 
-    @Override public void showRemovedFromFavorites() {
-      feedbackMessage.show(getView(), removedFromFavorites);
-    }
+  @Override public void showRemovedFromFavorites() {
+    feedbackMessage.show(getView(), removedFromFavorites);
+  }
 
-    @Override public void showStreamShared() {
-        feedbackMessage.show(getView(), sharedStream);
-    }
+  @Override public void showStreamShared() {
+    feedbackMessage.show(getView(), sharedStream);
+  }
 
-    @Override public void showContextMenuWithMute(final StreamResultModel stream) {
-      if (stream.isFavorited()) {
-        baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
-          @Override public void run() {
-            presenter.onMuteClicked(stream);
-          }
-        }).show();
-      } else {
-        baseContextualMenuWithFavorite(stream).addAction(R.string.mute, new Runnable() {
-          @Override public void run() {
-            presenter.onMuteClicked(stream);
-          }
-        }).show();
-      }
+  @Override public void showContextMenuWithMute(final StreamResultModel stream) {
+    if (stream.isFavorited()) {
+      baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
+        @Override public void run() {
+          presenter.onMuteClicked(stream);
+        }
+      }).show();
+    } else {
+      baseContextualMenuWithFavorite(stream).addAction(R.string.mute, new Runnable() {
+        @Override public void run() {
+          presenter.onMuteClicked(stream);
+        }
+      }).show();
     }
+  }
 
-    @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
-      if (stream.isFavorited()) {
-        baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
-          @Override public void run() {
-            presenter.onUnmuteClicked(stream);
-          }
-        }).show();
-      } else {
-        baseContextualMenuWithFavorite(stream).addAction(R.string.unmute, new Runnable() {
-          @Override public void run() {
-            presenter.onUnmuteClicked(stream);
-          }
-        }).show();
-      }
+  @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
+    if (stream.isFavorited()) {
+      baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
+        @Override public void run() {
+          presenter.onUnmuteClicked(stream);
+        }
+      }).show();
+    } else {
+      baseContextualMenuWithFavorite(stream).addAction(R.string.unmute, new Runnable() {
+        @Override public void run() {
+          presenter.onUnmuteClicked(stream);
+        }
+      }).show();
     }
+  }
 
-    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
-        adapter.setMutedStreamIds(mutedStreamIds);
-    }
+  @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
+    adapter.setMutedStreamIds(mutedStreamIds);
+  }
 
-    @Override public void scrollListToTop() {
-      if (streamsList != null) {
-        streamsList.scrollToPosition(0);
-      }
+  @Override public void scrollListToTop() {
+    if (streamsList != null) {
+      streamsList.scrollToPosition(0);
     }
+  }
 
   @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
     if (menu != null) {
       if (unreadChannels > 0) {
         CustomActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
             menu.findItem(R.id.menu_channel).getIcon(), isFollowingChannels, unreadChannels);
-
       } else {
         ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
             menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
@@ -370,25 +369,30 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void showEmpty() {
-        emptyView.setVisibility(View.VISIBLE);
-    }
+    emptyView.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void hideEmpty() {
-        emptyView.setVisibility(View.GONE);
-    }
+  @Override public void hideEmpty() {
+    emptyView.setVisibility(View.GONE);
+  }
 
-    @Override public void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
-    }
+  @Override public void showLoading() {
+    loadingView.setVisibility(View.VISIBLE);
+  }
 
-    @Override public void hideLoading() {
-        loadingView.setVisibility(View.GONE);
-        swipeRefreshLayout.setRefreshing(false);
-    }
+  @Override public void hideLoading() {
+    loadingView.setVisibility(View.GONE);
+    swipeRefreshLayout.setRefreshing(false);
+  }
 
-    @Override public void showError(String message) {
-        feedbackMessage.show(getView(), message);
-    }
+  @Override public void showError(String message) {
+    feedbackMessage.show(getView(), message);
+  }
 
-    //endregion
+  //endregion
+
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamList);
+  }
 }

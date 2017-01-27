@@ -45,94 +45,94 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
 
-    @BindView(R.id.favorites_list) RecyclerView favoritesList;
-    @BindView(R.id.favorites_empty) View empty;
-    @BindView(R.id.favorites_loading) View loading;
-    @BindString(R.string.shared_stream_notification) String sharedStream;
-    @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
-  @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShareStream;
-  @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShareStream;
+  @BindView(R.id.favorites_list) RecyclerView favoritesList;
+  @BindView(R.id.favorites_empty) View empty;
+  @BindView(R.id.favorites_loading) View loading;
+  @BindString(R.string.shared_stream_notification) String sharedStream;
+  @BindString(R.string.analytics_screen_favorites) String analyticsScreenFavorites;
+  @BindString(R.string.analytics_action_external_share_stream) String
+      analyticsActionExternalShareStream;
+  @BindString(R.string.analytics_label_external_share_stream) String
+      analyticsLabelExternalShareStream;
   @BindString(R.string.analytics_source_favorites) String streamsSource;
 
-    private WatchableStreamsAdapter adapter;
-    private Unbinder unbinder;
+  private WatchableStreamsAdapter adapter;
+  private Unbinder unbinder;
 
-    public static Fragment newInstance() {
-        return new FavoritesFragment();
-    }
+  public static Fragment newInstance() {
+    return new FavoritesFragment();
+  }
 
-    @Nullable @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.fragment_favorites, container, false);
-        unbinder = ButterKnife.bind(this, fragmentView);
-        return fragmentView;
-    }
+  @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View fragmentView = inflater.inflate(R.layout.fragment_favorites, container, false);
+    unbinder = ButterKnife.bind(this, fragmentView);
+    return fragmentView;
+  }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(), getActivity());
-        unbinder.unbind();
-        favoritesListPresenter.setView(new NullFavoritesListView());
-    }
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+    favoritesListPresenter.setView(new NullFavoritesListView());
+  }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        analyticsTool.analyticsStart(getContext(), analyticsScreenFavorites);
-        initializePresenter();
-        initializeViews();
-    }
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    initializePresenter();
+    initializeViews();
+  }
 
-    @Override public void onResume() {
-        super.onResume();
-        favoritesListPresenter.resume();
-    }
+  @Override public void onResume() {
+    super.onResume();
+    favoritesListPresenter.resume();
+  }
 
-    @Override public void onPause() {
-        super.onPause();
-        favoritesListPresenter.pause();
-    }
+  @Override public void onPause() {
+    super.onPause();
+    favoritesListPresenter.pause();
+  }
 
-    private void initializeViews() {
-        favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
-            @Override public void onStreamClick(StreamResultModel stream) {
-                favoritesListPresenter.selectStream(stream);
-            }
+  private void initializeViews() {
+    favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
+      @Override public void onStreamClick(StreamResultModel stream) {
+        favoritesListPresenter.selectStream(stream);
+      }
 
-            @Override public boolean onStreamLongClick(StreamResultModel stream) {
-                favoritesListPresenter.onFavoriteLongClicked(stream);
-                return true;
-            }
-        }, null, false);
-        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
-            @Override public void onUnwatchClick() {
-                favoritesListPresenter.unwatchStream();
-            }
+      @Override public boolean onStreamLongClick(StreamResultModel stream) {
+        favoritesListPresenter.onFavoriteLongClicked(stream);
+        return true;
+      }
+    }, null, false);
+    adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+      @Override public void onUnwatchClick() {
+        favoritesListPresenter.unwatchStream();
+      }
+    });
+    favoritesList.setAdapter(adapter);
+  }
+
+  private void initializePresenter() {
+    favoritesListPresenter.initialize(this);
+  }
+
+  private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
+    return new CustomContextMenu.Builder(getActivity()) //
+        .addAction(R.string.menu_remove_favorite, new Runnable() {
+          @Override public void run() {
+            favoritesListPresenter.removeFromFavorites(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+          @Override public void run() {
+            favoritesListPresenter.shareStream(stream);
+          }
+        }).addAction(R.string.share_via, new Runnable() {
+          @Override public void run() {
+            shareStream(stream);
+            sendExternalShareAnalytics(stream);
+          }
         });
-        favoritesList.setAdapter(adapter);
-    }
-
-    private void initializePresenter() {
-        favoritesListPresenter.initialize(this);
-    }
-
-    private CustomContextMenu.Builder baseContextualMenu(final StreamResultModel stream) {
-        return new CustomContextMenu.Builder(getActivity()) //
-          .addAction(R.string.menu_remove_favorite, new Runnable() {
-              @Override public void run() {
-                  favoritesListPresenter.removeFromFavorites(stream);
-              }
-          }).addAction(R.string.share_stream_via_shootr, new Runnable() {
-              @Override public void run() {
-                  favoritesListPresenter.shareStream(stream);
-              }
-          }).addAction(R.string.share_via, new Runnable() {
-              @Override public void run() {
-                  shareStream(stream);
-                sendExternalShareAnalytics(stream);
-              }
-          });
-    }
+  }
 
   private void sendExternalShareAnalytics(StreamResultModel stream) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
@@ -224,5 +224,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getContext(), analyticsScreenFavorites);
   }
 }

@@ -47,6 +47,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_discover) String discoverSource;
+  @BindString(R.string.analytics_screen_discover) String analyticsDiscover;
 
   @Inject DiscoverPresenter discoverPresenter;
   @Inject ImageLoader imageLoader;
@@ -270,5 +271,11 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
   @Override public void onPause() {
     super.onPause();
     discoverPresenter.pause();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getContext(), analyticsDiscover);
   }
 }

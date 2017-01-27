@@ -301,7 +301,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override protected void initializePresenter() {
     idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
     streamDetailPresenter.initialize(this, idStream);
-    sendAnalythics();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -379,7 +378,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override protected void onPause() {
     super.onPause();
     streamDetailPresenter.pause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 
   private void setTitleResultForPreviousActivity(String title) {
@@ -808,4 +806,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     feedbackMessage.show(getView(), message);
   }
   //endregion
+
+  @Override public void onStart() {
+    super.onStart();
+    sendAnalythics();
+  }
 }

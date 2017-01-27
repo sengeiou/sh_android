@@ -191,7 +191,6 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override protected void onPause() {
     super.onPause();
     presenter.pause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 
   @Override public void showEmpty() {

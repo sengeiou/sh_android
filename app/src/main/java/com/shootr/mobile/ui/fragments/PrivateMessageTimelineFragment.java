@@ -125,7 +125,6 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    analyticsTool.analyticsStop(getContext(), getActivity());
     unbinder.unbind();
     newShotBarPresenter.setView(new NullNewShotBarView());
   }

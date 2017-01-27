@@ -1,6 +1,5 @@
 package com.shootr.mobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -80,10 +79,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     tracker = getTracker(context, APP_TRACKER);
     tracker.setScreenName(name);
     tracker.send(new HitBuilders.AppViewBuilder().build());
-  }
-
-  @Override public void analyticsStop(Context context, Activity activity) {
-    GoogleAnalytics.getInstance(context).reportActivityStop(activity);
   }
 
   @Override public void analyticsSendAction(Builder builder) {

@@ -175,6 +175,10 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_filter_on_stream) String analyticsActionFilterOnStream;
+  @BindString(R.string.analytics_label_filter_on_stream) String analyticsLabelFilterOnStream;
+  @BindString(R.string.analytics_action_filter_off_stream) String analyticsActionFilterOffStream;
+  @BindString(R.string.analytics_label_filter_off_stream) String analyticsLabelFilterOffStream;
   @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
   @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
@@ -250,7 +254,6 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    analyticsTool.analyticsStop(getContext(), getActivity());
     unbinder.unbind();
     streamTimelinePresenter.setView(new NullStreamTimelineView());
     newShotBarPresenter.setView(new NullNewShotBarView());
@@ -269,7 +272,6 @@ public class StreamTimelineFragment extends BaseFragment
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
     setupPresentersInitialization(idStream, streamAuthorIdUser, streamMode);
-    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
     sendTimelineAnalytics();
   }
 
@@ -317,9 +319,11 @@ public class StreamTimelineFragment extends BaseFragment
     switch (item.getItemId()) {
       case R.id.menu_showing_holding_shots:
         streamTimelinePresenter.onHoldingShotsClick();
+        sendFilterOnAnalytics();
         return true;
       case R.id.menu_showing_all_shots:
         streamTimelinePresenter.onAllStreamShotsClick();
+        sendFilterOffAnalytics();
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
@@ -374,6 +378,32 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
         : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendFilterOnAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFilterOnStream);
+    builder.setLabelId(analyticsLabelFilterOnStream);
+    builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendFilterOffAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFilterOffStream);
+    builder.setLabelId(analyticsLabelFilterOffStream);
+    builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+    builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -1242,7 +1272,6 @@ public class StreamTimelineFragment extends BaseFragment
   private void sendShareExternalShotAnalytics(ShotModel shot) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
-    builder.setAction(getString(R.string.menu_share_shot_via));
     builder.setActionId(analyticsActionExternalShare);
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(timelineSource);
@@ -1789,5 +1818,9 @@ public class StreamTimelineFragment extends BaseFragment
     adapter.setHighlightedShot(highlightedShotModel);
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+  }
   //endregion
 }

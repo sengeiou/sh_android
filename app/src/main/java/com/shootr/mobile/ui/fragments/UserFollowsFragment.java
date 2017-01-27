@@ -200,7 +200,6 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        analyticsTool.analyticsStop(getContext(), getActivity());
         unbinder.unbind();
         userFollowsPresenter.setView(new NullUserFollowsView());
     }
