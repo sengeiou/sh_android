@@ -93,9 +93,7 @@ public class SyncActivityRepository implements ActivityRepository {
       Shot remoteShot = remoteShotRepository.getShot(idShot, parameters.getStreamTypes(),
           parameters.getShotTypes());
       localShotRepository.putShot(remoteShot);
-      return checkNotNull(remoteShot,
-          "Shot for activity not found remotely. Shot id: %s; Activity id: %s", idShot,
-          activity.getIdActivity());
+      return remoteShot;
     } catch (ShotNotFoundException exception) {
       return null;
     }

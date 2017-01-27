@@ -10,33 +10,35 @@ import javax.inject.Inject;
 
 public class ServiceNicerDatasource implements NicerDataSource {
 
-    private final NicerApiService nicerApiService;
+  private final NicerApiService nicerApiService;
 
-    @Inject public ServiceNicerDatasource(NicerApiService nicerApiService) {
-        this.nicerApiService = nicerApiService;
-    }
+  @Inject public ServiceNicerDatasource(NicerApiService nicerApiService) {
+    this.nicerApiService = nicerApiService;
+  }
 
-    @Override public List<NicerEntity> getNicers(String idShot) {
-        try {
-            return nicerApiService.getNicers(idShot);
-        } catch (ApiException | IOException cause) {
-            throw new ServerCommunicationException(cause);
-        }
+  @Override public List<NicerEntity> getNicers(String idShot) {
+    try {
+      return nicerApiService.getNicers(idShot);
+    } catch (ApiException | IOException cause) {
+      throw new ServerCommunicationException(cause);
+    } catch (Exception e) {
+      throw new ServerCommunicationException(e);
     }
+  }
 
-    @Override public List<NicerEntity> getNicersWithUser(String idShot) {
-        try {
-            return nicerApiService.getNicersWithUser(idShot);
-        } catch (ApiException | IOException cause) {
-            throw new ServerCommunicationException(cause);
-        }
+  @Override public List<NicerEntity> getNicersWithUser(String idShot) {
+    try {
+      return nicerApiService.getNicersWithUser(idShot);
+    } catch (ApiException | IOException cause) {
+      throw new ServerCommunicationException(cause);
     }
+  }
 
-    @Override public List<NicerEntity> getNices(String idUser) {
-        try {
-            return nicerApiService.getNices(idUser);
-        } catch (ApiException | IOException cause) {
-            throw new ServerCommunicationException(cause);
-        }
+  @Override public List<NicerEntity> getNices(String idUser) {
+    try {
+      return nicerApiService.getNices(idUser);
+    } catch (ApiException | IOException cause) {
+      throw new ServerCommunicationException(cause);
     }
+  }
 }
