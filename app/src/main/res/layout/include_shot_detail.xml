@@ -65,7 +65,7 @@
                     tools:visibility="visible"
                     />
                 <ImageView
-                    android:id="@+id/holder_or_contributor_user"
+                    android:id="@+id/ic_watchers_gray60_18"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_gravity="center"
