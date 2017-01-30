@@ -76,6 +76,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   private int charCounterColorError;
   private int charCounterColorNormal;
   private boolean isPrivateMessage;
+  private OnActionsClick onActionsClick;
 
   public MessageBox(Context context) {
     super(context);
@@ -102,6 +103,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
       final OnActionsClick onActionsClick, boolean isPrivateMessage, String idTargetUser) {
     this.isPrivateMessage = isPrivateMessage;
     this.photoPickerController = photoPickerController;
+    this.onActionsClick = onActionsClick;
     this.activity = parentActivity;
     ShootrApplication.get(getContext()).getObjectGraph().inject(this);
     setClickable(true);
@@ -240,11 +242,10 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   @OnClick(R.id.new_shot_send_button) public void onSendShot() {
     if (isPrivateMessage) {
       presenter.sendMessage(newShotText.getText().toString());
-      //sendPrivateMessageToMixPanel();
     } else {
       presenter.sendShot(newShotText.getText().toString());
-      //sendShotToMixPanel();
     }
+    onActionsClick.onSendClick();
   }
 
   @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
@@ -377,5 +378,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     void onShotWithImageClick(File image);
 
     void onAttachClick();
+
+    void onSendClick();
   }
 }

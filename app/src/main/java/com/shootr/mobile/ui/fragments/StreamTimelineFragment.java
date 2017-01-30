@@ -193,6 +193,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_timeline_scroll) String analyticsLabelTimelineScrollAction;
   @BindString(R.string.analytics_action_mute) String analyticsActionMute;
   @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
+  @BindString(R.string.analytics_action_shot) String analyticsActionSendShot;
+  @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -720,8 +722,29 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void onAttachClick() {
             newShotBarPresenter.newShotFromImage();
           }
+
+          @Override public void onSendClick() {
+            sendShotToMixPanel();
+          }
         }, false, null);
   }
+
+  private void sendShotToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionSendShot);
+    builder.setLabelId(analyticsLabelSendShot);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    if (streamTitle != null) {
+      builder.setStreamName(streamTitle);
+    }
+    if (idStream != null) {
+      builder.setIdStream(idStream);
+    }
+    analyticsTool.analyticsSendAction(builder);
+  }
+
 
   private void setupImageDialog(ShotModel shot) {
     sendImageAnalytics();

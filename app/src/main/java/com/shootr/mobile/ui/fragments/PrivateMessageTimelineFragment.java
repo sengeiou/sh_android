@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -86,6 +87,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBar;
   @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
+
+  @BindString(R.string.analytics_action_private_message) String analyticsActionSendPrivateMessage;
+  @BindString(R.string.analytics_label_private_message) String analyticsLabelSendPrivateMessage;
+  @BindString(R.string.analytics_source_timeline) String timelineSource;
 
   private MessagesTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -394,9 +399,26 @@ public class PrivateMessageTimelineFragment extends BaseFragment
           @Override public void onAttachClick() {
             newShotBarPresenter.newMessageFromImage();
           }
+
+          @Override public void onSendClick() {
+            sendPrivateMessageToMixPanel();
+          }
         }, true, idTargetUser);
 
   }
+
+  private void sendPrivateMessageToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionSendPrivateMessage);
+    builder.setLabelId(analyticsLabelSendPrivateMessage);
+    builder.setSource(timelineSource);
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(streamTitle);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     messageRecycler.scrollToPosition(0);
