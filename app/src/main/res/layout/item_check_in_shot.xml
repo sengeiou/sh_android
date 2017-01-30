@@ -118,10 +118,11 @@
             />
         <ImageView
             android:id="@+id/holder_or_contributor_user"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_favorite_not_added_28_gray50"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_holder_contributor"
             android:visibility="gone"
             tools:visibility="visible"
         />

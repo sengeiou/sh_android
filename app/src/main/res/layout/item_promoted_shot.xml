@@ -113,11 +113,11 @@
             />
         <ImageView
             android:id="@+id/holder_or_contributor_user"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginLeft="2dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="0dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_watchers_gray60_18"
+            android:src="@drawable/ic_holder_contributor"
             android:layout_toEndOf="@+id/shot_user_name"
             android:visibility="gone"
             tools:visibility="visible"
