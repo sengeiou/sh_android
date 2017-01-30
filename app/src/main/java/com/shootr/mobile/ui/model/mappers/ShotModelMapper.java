@@ -57,11 +57,6 @@ public class ShotModelMapper {
     shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
-      if (userInfo.getVerifiedUser() == 1) {
-        shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
-      }
-    } else {
-      shotModel.setVerifiedUser(false);
     }
     return shotModel;
   }
