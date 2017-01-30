@@ -337,6 +337,14 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     newShotText.setText(EMPTY_TEXT);
   }
 
+  @Override public void enableSendButton() {
+    sendShotButton.setEnabled(true);
+  }
+
+  @Override public void disableSendButton() {
+    sendShotButton.setEnabled(false);
+  }
+
   public void pickImage() {
     newShotBarViewDelegate.pickImage();
   }

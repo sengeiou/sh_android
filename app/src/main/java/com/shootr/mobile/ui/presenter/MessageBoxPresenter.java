@@ -115,9 +115,18 @@ public class MessageBoxPresenter {
 
   private void updateSendButonEnabled(String filteredText) {
     if (canSendShot(filteredText)) {
+      messageBoxView.enableSendButton();
       messageBoxView.showSendButton();
     } else {
+      hideOrDisableSendButton(filteredText);
+    }
+  }
+
+  private void hideOrDisableSendButton(String filteredText) {
+    if (filteredText.length() <= 0) {
       messageBoxView.hideSendButton();
+    } else {
+      messageBoxView.disableSendButton();
     }
   }
 

@@ -30,4 +30,8 @@ public interface MessageBoxView {
   void showError(String message);
 
   void clearTextBox();
+
+  void enableSendButton();
+
+  void disableSendButton();
 }
