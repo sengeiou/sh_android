@@ -1,61 +1,62 @@
 package com.shootr.mobile.ui.fragments;
 
-    import android.app.Activity;
-    import android.content.Intent;
-    import android.net.Uri;
-    import android.os.Bundle;
-    import android.support.annotation.Nullable;
-    import android.support.v4.widget.SwipeRefreshLayout;
-    import android.support.v7.widget.RecyclerView;
-    import android.view.LayoutInflater;
-    import android.view.Menu;
-    import android.view.MenuInflater;
-    import android.view.MenuItem;
-    import android.view.View;
-    import android.view.ViewGroup;
-    import android.widget.RelativeLayout;
-    import android.widget.TextView;
-    import butterknife.BindView;
-    import butterknife.ButterKnife;
-    import butterknife.OnClick;
-    import butterknife.Unbinder;
-    import com.shootr.mobile.R;
-    import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
-    import com.shootr.mobile.domain.repository.SessionRepository;
-    import com.shootr.mobile.ui.ToolbarDecorator;
-    import com.shootr.mobile.ui.activities.DraftsActivity;
-    import com.shootr.mobile.ui.activities.NewStreamActivity;
-    import com.shootr.mobile.ui.activities.PhotoViewActivity;
-    import com.shootr.mobile.ui.activities.PostNewShotActivity;
-    import com.shootr.mobile.ui.activities.ProfileActivity;
-    import com.shootr.mobile.ui.activities.StreamDetailActivity;
-    import com.shootr.mobile.ui.adapters.MessagesTimelineAdapter;
-    import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-    import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
-    import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
-    import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
-    import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
-    import com.shootr.mobile.ui.base.BaseFragment;
-    import com.shootr.mobile.ui.component.PhotoPickerController;
-    import com.shootr.mobile.ui.model.BaseMessageModel;
-    import com.shootr.mobile.ui.model.PrivateMessageModel;
-    import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
-    import com.shootr.mobile.ui.presenter.PrivateMessageTimelinePresenter;
-    import com.shootr.mobile.ui.views.NewShotBarView;
-    import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
-    import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
-    import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
-    import com.shootr.mobile.util.AnalyticsTool;
-    import com.shootr.mobile.util.AndroidTimeUtils;
-    import com.shootr.mobile.util.CrashReportTool;
-    import com.shootr.mobile.util.FeedbackMessage;
-    import com.shootr.mobile.util.ImageLoader;
-    import com.shootr.mobile.util.MenuItemValueHolder;
-    import com.shootr.mobile.util.WritePermissionManager;
-    import java.io.File;
-    import java.util.List;
-    import javax.inject.Inject;
-    import timber.log.Timber;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+import com.shootr.mobile.R;
+import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.activities.NewStreamActivity;
+import com.shootr.mobile.ui.activities.PhotoViewActivity;
+import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.StreamDetailActivity;
+import com.shootr.mobile.ui.adapters.MessagesTimelineAdapter;
+import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.base.BaseFragment;
+import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.BaseMessageModel;
+import com.shootr.mobile.ui.model.PrivateMessageModel;
+import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
+import com.shootr.mobile.ui.presenter.PrivateMessageTimelinePresenter;
+import com.shootr.mobile.ui.views.NewShotBarView;
+import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
+import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
+import com.shootr.mobile.ui.widgets.MessageBox;
+import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
+import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.AndroidTimeUtils;
+import com.shootr.mobile.util.CrashReportTool;
+import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.WritePermissionManager;
+import java.io.File;
+import java.util.List;
+import javax.inject.Inject;
+import timber.log.Timber;
 
 public class PrivateMessageTimelineFragment extends BaseFragment
     implements PrivateMessageChannelTimelineView, NewShotBarView {
@@ -83,10 +84,13 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  @BindView(R.id.shot_bar_drafts) View draftsButton;
-  @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
+  @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBar;
   @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
+
+  @BindString(R.string.analytics_action_private_message) String analyticsActionSendPrivateMessage;
+  @BindString(R.string.analytics_label_private_message) String analyticsLabelSendPrivateMessage;
+  @BindString(R.string.analytics_source_timeline) String timelineSource;
 
   private MessagesTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -119,7 +123,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
     messageRecycler.setLayoutManager(preCachingLayoutManager);
     messageRecycler.setHasFixedSize(false);
-    newShotBarContainer.setVisibility(View.VISIBLE);
+    newShotBar.setVisibility(View.VISIBLE);
     return fragmentView;
   }
 
@@ -131,10 +135,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    initializeViews();
-    setHasOptionsMenu(true);
     idTargetUser = getArguments().getString(EXTRA_ID_TARGET_USER);
     idChannel = getArguments().getString(EXTRA_ID_CHANNEL);
+    initializeViews();
+    setHasOptionsMenu(true);
     setStreamTitleClickListener(idTargetUser);
     setupPresentersInitialization(idTargetUser, idChannel);
   }
@@ -366,9 +370,14 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
+    newShotBar.init(getActivity(), photoPickerController, imageLoader,
+        feedbackMessage, new MessageBox.OnActionsClick() {
+          @Override
+          public void onTopicClick() {
+            /* no-op */
+          }
+
+          @Override public void onNewShotClick() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .isPrivateMessage(true)
@@ -378,7 +387,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             startActivity(newShotIntent);
           }
 
-          @Override public void openNewShotViewWithImage(File image) {
+          @Override public void onShotWithImageClick(File image) {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .isPrivateMessage(true).withImage(image) //
@@ -386,23 +395,29 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             startActivity(newShotIntent);
           }
 
-          @Override public void openEditTopicDialog() {
-
+          @Override public void onAttachClick() {
+            newShotBarPresenter.newMessageFromImage();
           }
-        };
+
+          @Override public void onSendClick() {
+            sendPrivateMessageToMixPanel();
+          }
+        }, true, idTargetUser);
+
   }
 
-  @OnClick(R.id.shot_bar_text) public void startNewShot() {
-    newShotBarPresenter.newMessageFromTextBox();
+  private void sendPrivateMessageToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionSendPrivateMessage);
+    builder.setLabelId(analyticsLabelSendPrivateMessage);
+    builder.setSource(timelineSource);
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(streamTitle);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
-  @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-    newShotBarPresenter.newMessageFromImage();
-  }
-
-  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-    startActivity(new Intent(getActivity(), DraftsActivity.class));
-  }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     messageRecycler.scrollToPosition(0);
@@ -540,7 +555,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void pickImage() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.pickImage();
+      newShotBar.pickImage();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
@@ -551,18 +566,18 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void openNewShotViewWithImage(File image) {
-    newShotBarViewDelegate.openNewShotViewWithImage(image);
+    newShotBar.openNewShotViewWithImage(image);
   }
 
   @Override public void openEditTopicDialog() {
-    newShotBarViewDelegate.openEditTopicDialog();
+    newShotBar.openEditTopicDialog();
   }
 
   @Override public void showDraftsButton() {
-    newShotBarViewDelegate.showDraftsButton();
+    newShotBar.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarViewDelegate.hideDraftsButton();
+    newShotBar.hideDraftsButton();
   }
 }

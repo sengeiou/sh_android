@@ -34,7 +34,6 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
@@ -84,6 +83,7 @@ import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -152,9 +152,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
-  @BindView(R.id.shot_bar_drafts) View draftsButton;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
-  @BindView(R.id.timeline_new_shot_bar) View newShotBarContainer;
+  @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
   @BindView(R.id.timeline_message) ClickableTextView streamMessage;
   @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
   @BindView(R.id.poll_question) TextView pollQuestion;
@@ -198,10 +197,11 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_timeline_scroll) String analyticsLabelTimelineScrollAction;
   @BindString(R.string.analytics_action_mute) String analyticsActionMute;
   @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
+  @BindString(R.string.analytics_action_shot) String analyticsActionSendShot;
+  @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
-  private NewShotBarView newShotBarViewDelegate;
   private Integer[] watchNumberCount;
   private View footerProgress;
   private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
@@ -727,28 +727,54 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, draftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
+    newShotBarContainer.init(getActivity(), photoPickerController, imageLoader,
+            feedbackMessage, new MessageBox.OnActionsClick() {
+              @Override
+              public void onTopicClick() {
+                setupTopicCustomDialog();
+              }
+
+          @Override public void onNewShotClick() {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .setStreamData(idStream, streamTitle).build();
-            startActivity(newShotIntent);
+            getActivity().startActivity(newShotIntent);
           }
 
-          @Override public void openNewShotViewWithImage(File image) {
+          @Override public void onShotWithImageClick(File image) {
             Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                 .from(getActivity()) //
                 .withImage(image) //
                 .setStreamData(idStream, streamTitle).build();
-            startActivity(newShotIntent);
+            getActivity().startActivity(newShotIntent);
           }
 
-          @Override public void openEditTopicDialog() {
-            setupTopicCustomDialog();
+          @Override public void onAttachClick() {
+            newShotBarPresenter.newShotFromImage();
           }
-        };
+
+          @Override public void onSendClick() {
+            sendShotToMixPanel();
+          }
+        }, false, null);
   }
+
+  private void sendShotToMixPanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionSendShot);
+    builder.setLabelId(analyticsLabelSendShot);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    if (streamTitle != null) {
+      builder.setStreamName(streamTitle);
+    }
+    if (idStream != null) {
+      builder.setIdStream(idStream);
+    }
+    analyticsTool.analyticsSendAction(builder);
+  }
+
 
   private void setupImageDialog(ShotModel shot) {
     sendImageAnalytics();
@@ -841,18 +867,6 @@ public class StreamTimelineFragment extends BaseFragment
           .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1],
               watchNumberCount[1]));
     }
-  }
-
-  @OnClick(R.id.shot_bar_text) public void startNewShot() {
-    newShotBarPresenter.newShotFromTextBox();
-  }
-
-  @OnClick(R.id.shot_bar_photo) public void startNewShotWithPhoto() {
-    newShotBarPresenter.newShotFromImage();
-  }
-
-  @OnClick(R.id.shot_bar_drafts) public void openDraftsClicked() {
-    startActivity(new Intent(getActivity(), DraftsActivity.class));
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
@@ -1181,12 +1195,12 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void openNewShotView() {
-    newShotBarViewDelegate.openNewShotView();
+    newShotBarContainer.getNewShotBarViewDelegate().openNewShotView();
   }
 
   @Override public void pickImage() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.pickImage();
+      newShotBarContainer.pickImage();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
@@ -1194,26 +1208,26 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showHolderOptions() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBarViewDelegate.showHolderOptions();
+      newShotBarContainer.showHolderOptions();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
   }
 
   @Override public void openNewShotViewWithImage(File image) {
-    newShotBarViewDelegate.openNewShotViewWithImage(image);
+    newShotBarContainer.openNewShotViewWithImage(image);
   }
 
   @Override public void openEditTopicDialog() {
-    newShotBarViewDelegate.openEditTopicDialog();
+    newShotBarContainer.openEditTopicDialog();
   }
 
   @Override public void showDraftsButton() {
-    newShotBarViewDelegate.showDraftsButton();
+    newShotBarContainer.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarViewDelegate.hideDraftsButton();
+    newShotBarContainer.hideDraftsButton();
   }
 
   @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {

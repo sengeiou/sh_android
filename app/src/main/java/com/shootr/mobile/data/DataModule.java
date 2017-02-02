@@ -32,6 +32,7 @@ import com.shootr.mobile.service.ApiModule;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
+import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
 import com.shootr.mobile.ui.presenter.PeoplePresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
@@ -124,7 +125,7 @@ import static android.content.Context.MODE_PRIVATE;
 
         ContributorManager.class,
 
-        ShotEventManager.class, NewMessageBarPresenter.class
+        ShotEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class
     },
     includes = {
         ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,

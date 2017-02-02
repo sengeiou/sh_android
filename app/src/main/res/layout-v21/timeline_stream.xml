@@ -91,11 +91,10 @@
 
   </android.support.design.widget.CoordinatorLayout>
 
-  <include
-      layout="@layout/include_new_shot_bar"
+  <com.shootr.mobile.ui.widgets.MessageBox
       android:id="@+id/timeline_new_shot_bar"
       android:layout_width="match_parent"
-      android:layout_height="@dimen/new_shot_height"
+      android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
       android:layout_gravity="bottom"
       />

@@ -47,7 +47,7 @@ public class MentionsAdapter extends BindableAdapter<UserModel> {
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
-        View rowView = inflater.inflate(R.layout.item_list_user, container, false);
+        View rowView = inflater.inflate(R.layout.item_mention, container, false);
         rowView.setTag(new ViewHolder(rowView, onMentionClickListener));
         return rowView;
     }
