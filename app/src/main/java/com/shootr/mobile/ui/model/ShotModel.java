@@ -25,6 +25,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private Long promoted;
     private boolean canBePinned;
     private boolean titleEnabled;
+    private boolean isHolderOrContributor;
 
     public String getIdShot() {
         return idShot;
@@ -188,6 +189,14 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isHolderOrContributor() {
+        return isHolderOrContributor;
+    }
+
+    public void setHolderOrContributor(boolean holderOrContributor) {
+        isHolderOrContributor = holderOrContributor;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

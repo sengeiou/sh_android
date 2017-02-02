@@ -33,7 +33,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
 
     private static final String EXTRA_STREAM = "stream";
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
-    public static final String IS_HOLDER = "isHolder";
+    public static final String IS_HOLDER = "isFromHolder";
     public static final boolean IS_NOT_ADDING = false;
 
     private ContributorsListAdapter adapter;

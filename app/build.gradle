@@ -42,7 +42,7 @@ def versionRevision = 7
 
 def isSnapshot = true
 def isPreProduction = false
-def databaseVersion = 43
+def databaseVersion = 44
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
