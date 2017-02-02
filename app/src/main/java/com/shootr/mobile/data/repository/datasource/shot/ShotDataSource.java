@@ -58,4 +58,6 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   void callCtaCheckIn(String idStream) throws UserCannotCheckInRequestException,
       UserAlreadyCheckInRequestException;
+
+  boolean hasNewFilteredShots(String idStream, String lastTimeFiltered);
 }

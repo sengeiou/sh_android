@@ -115,4 +115,8 @@ public class LocalShotRepository implements InternalShotRepository {
   @Override public void hideHighlightedShot(String idHighlightedShot) {
     localShotDataSource.hideHighlightedShot(idHighlightedShot);
   }
+
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+    return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered);
+  }
 }

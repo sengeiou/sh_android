@@ -23,4 +23,8 @@ public interface SessionRepository {
     boolean isTimelineFilterActivated();
 
     void setTimelineFilterActivated(boolean isFilterActivated);
+
+    String getLastTimeFiltered();
+
+    void setLastTimeFiltered(String lastTimeFiltered);
 }

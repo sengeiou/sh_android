@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
@@ -100,6 +101,7 @@ public class StreamTimelinePresenterTest {
   @Mock SessionRepository sessionRepository;
   @Mock GetContributorsInteractor getContributorsInteractor;
   @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
+  @Mock GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
@@ -113,7 +115,7 @@ public class StreamTimelinePresenterTest {
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
         createStreamInteractor,
-        getContributorsInteractor, sessionRepository);
+        getContributorsInteractor, getNewFilteredShotsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }
@@ -201,7 +203,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView).showShots();
+    verify(streamTimelineView, times(2)).showShots();
   }
 
   @Test
@@ -213,10 +215,10 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView).showShots();
+    verify(streamTimelineView, times(2)).showShots();
   }
 
-  @Test public void shouldNotShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
+  @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
       throws Exception {
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupIsNotFirstShotPosition();
@@ -226,11 +228,11 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test
-  public void shouldNotShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPositionAndIsViewOnlyStream()
+  public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPositionAndIsViewOnlyStream()
       throws Exception {
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupIsNotFirstShotPosition();
@@ -240,7 +242,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
@@ -312,7 +314,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(PUBLIC);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView).showEmpty();
+    verify(streamTimelineView, times(2)).showEmpty();
   }
 
   @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotListAndIsViewOnly()
@@ -324,7 +326,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(VIEW_ONLY);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView).showEmpty();
+    verify(streamTimelineView, times(2)).showEmpty();
   }
 
   @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -335,7 +337,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView).hideEmpty();
+    verify(streamTimelineView, times(2)).hideEmpty();
   }
 
   @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShotsAndIsViewOnlyStream()
@@ -347,7 +349,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView).hideEmpty();
+    verify(streamTimelineView, times(2)).hideEmpty();
   }
 
   @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -358,7 +360,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView).hideEmpty();
+    verify(streamTimelineView, times(2)).hideEmpty();
   }
 
   @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShotsAndIsViewOnlyStream()
@@ -370,7 +372,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView).hideEmpty();
+    verify(streamTimelineView, times(2)).hideEmpty();
   }
 
   @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList()
@@ -522,7 +524,7 @@ public class StreamTimelinePresenterTest {
     verify(streamTimelineView).hideLoading();
   }
 
-  @Test public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition()
+  @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition()
       throws Exception {
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
@@ -534,11 +536,11 @@ public class StreamTimelinePresenterTest {
 
     presenter.refresh();
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test
-  public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPositionAndViewOnly()
+  public void shouldShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPositionAndViewOnly()
       throws Exception {
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
@@ -550,7 +552,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.refresh();
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition()

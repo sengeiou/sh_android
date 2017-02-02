@@ -338,6 +338,10 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }

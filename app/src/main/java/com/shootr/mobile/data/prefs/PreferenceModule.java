@@ -41,4 +41,8 @@ import javax.inject.Singleton;
     BooleanPreference provideIsTimelineFilterActivated(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "timeline_filter", false);
     }
+
+    @Provides @Singleton @LastTimeFiltered StringPreference provideLastTimeFiltered(SharedPreferences preferences) {
+        return new StringPreference(preferences, "last_time_filtered", "0");
+    }
 }

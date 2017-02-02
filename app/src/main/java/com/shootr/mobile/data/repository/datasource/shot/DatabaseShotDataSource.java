@@ -104,7 +104,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
   }
 
   @Override public void shareShot(String idShot) {
-    throw new IllegalArgumentException("shareShot should not have local implementation");
+    throw new IllegalArgumentException("hasNewFilteredShots should not have local implementation");
   }
 
   @Override public void deleteShot(String idShot) {
@@ -150,6 +150,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
   @Override public void callCtaCheckIn(String idStream) {
     throw new IllegalArgumentException("Should not have local implementation");
+  }
+
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+    return shotManager.hasNewFilteredShots(idStream, lastTimeFiltered);
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

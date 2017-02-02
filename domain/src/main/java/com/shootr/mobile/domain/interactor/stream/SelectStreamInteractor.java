@@ -76,6 +76,7 @@ public class SelectStreamInteractor implements Interactor {
       if (selectedStream != null) {
         User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
         sessionRepository.setTimelineFilterActivated(false);
+        sessionRepository.setLastTimeFiltered("0");
         sessionRepository.setCurrentUser(updatedUser);
         notifyLoaded(selectedStream);
         remoteUserRepository.updateWatch(updatedUser);

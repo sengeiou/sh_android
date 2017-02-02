@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -84,6 +85,7 @@ import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.MessageBox;
+import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -221,6 +223,7 @@ public class StreamTimelineFragment extends BaseFragment
   private boolean scrollMoved;
   private String idStream;
   private String streamTitle;
+  private Menu menu;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -310,6 +313,7 @@ public class StreamTimelineFragment extends BaseFragment
     removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
     muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
     unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+    this.menu = menu;
     if (isAdded()) {
       updateWatchNumberIcon();
     }
@@ -323,6 +327,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_showing_all_shots:
         streamTimelinePresenter.onAllStreamShotsClick();
+        hideFilterAlert();
         sendFilterOffAnalytics();
         return true;
       case R.id.menu_stream_add_favorite:
@@ -1078,6 +1083,21 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void storeCtaClickLink(ShotModel shotModel) {
     highlightedShotPresenter.storeClickCount();
     sendOpenCtaLinkAnalythics(shotModel);
+  }
+
+  @Override public void showFilterAlert() {
+    if (showHoldingShotsMenuItem != null) {
+      CustomActionItemBadge.updateFilterAlert(getActivity(), showHoldingShotsMenuItem,
+          showHoldingShotsMenuItem.getIcon(), " ");
+    }
+  }
+
+  private void hideFilterAlert() {
+    if (showHoldingShotsMenuItem != null) {
+      ActionItemBadge.update(getActivity(), showHoldingShotsMenuItem,
+          showHoldingShotsMenuItem.getIcon(), ActionItemBadge.BadgeStyles.RED,
+          null);
+    }
   }
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {

@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository;
 
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
+import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
@@ -17,6 +18,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     private final StringPreference currentUserIdPreference;
     private final BooleanPreference timelineFilterPreference;
+    private final StringPreference lastTimeFilteredPreference;
     private final CrashReportTool crashReportTool;
 
     private final AnalyticsTool analyticsTool;
@@ -26,10 +28,12 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
         @CurrentUserId StringPreference currentUserIdPreference,
         @TimelineFilterActivated BooleanPreference timelineFilterPreference,
-        CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+        @LastTimeFiltered StringPreference lastTimeFiltered, CrashReportTool crashReportTool,
+        AnalyticsTool analyticsTool) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
         this.timelineFilterPreference = timelineFilterPreference;
+        this.lastTimeFilteredPreference = lastTimeFiltered;
         this.crashReportTool = crashReportTool;
         this.analyticsTool = analyticsTool;
     }
@@ -80,5 +84,13 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override public void setTimelineFilterActivated(boolean isFilterActivated) {
         timelineFilterPreference.set(isFilterActivated);
+    }
+
+    @Override public String getLastTimeFiltered() {
+        return lastTimeFilteredPreference.get();
+    }
+
+    @Override public void setLastTimeFiltered(String lastTimeFiltered) {
+        lastTimeFilteredPreference.set(lastTimeFiltered);
     }
 }

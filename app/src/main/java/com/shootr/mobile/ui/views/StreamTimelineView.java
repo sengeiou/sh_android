@@ -40,4 +40,6 @@ public interface StreamTimelineView extends TimelineView  {
     void openCtaAction(String link);
 
     void storeCtaClickLink(ShotModel shotModel);
+
+    void showFilterAlert();
 }

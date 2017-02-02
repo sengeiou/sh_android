@@ -74,6 +74,18 @@ public class ShotManager extends AbstractManager {
         return readShots(whereSelection, whereArguments, String.valueOf(limit));
     }
 
+    public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+        String whereSelection = ShotTable.ID_STREAM
+            + " = ? and "
+            + ShotTable.BIRTH
+            + " > ? and "
+            + ShotTable.IS_PADDING
+            + " <> 1";
+        String[] whereArguments = new String[] { idStream, lastTimeFiltered };
+
+        return readShots(whereSelection, whereArguments, null).size() > 0;
+    }
+
     public List<ShotEntity> getAllShotsFromUser(String idUser) {
         String whereSelection = ShotTable.ID_USER + " = ? and " + ShotTable.PROFILE_HIDDEN + " IS NULL";
         String[] whereArguments = new String[] { idUser };
