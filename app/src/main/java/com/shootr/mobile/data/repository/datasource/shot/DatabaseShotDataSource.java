@@ -21,13 +21,13 @@ public class DatabaseShotDataSource implements ShotDataSource {
     this.highlightedManager = highlightedManager;
   }
 
-  @Override public ShotEntity putShot(ShotEntity shotEntity) {
-    shotManager.saveShot(shotEntity);
+  @Override public ShotEntity putShot(ShotEntity shotEntity, String idUserMe) {
+    shotManager.saveShot(shotEntity, idUserMe);
     return shotEntity;
   }
 
-  @Override public void putShots(List<ShotEntity> shotEntities) {
-    shotManager.saveShots(shotEntities);
+  @Override public void putShots(List<ShotEntity> shotEntities, String idUserMe) {
+    shotManager.saveShots(shotEntities, idUserMe);
   }
 
   @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
@@ -114,6 +114,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
   @Override public List<ShotEntity> getUserShotsForStreamTimeline(
       StreamTimelineParameters timelineParameters) {
     return shotManager.getUserShotsByParameters(timelineParameters);
+  }
+
+  @Override public List<ShotEntity> updateImportantShots(StreamTimelineParameters parameters) {
+    throw new IllegalArgumentException("shareShot should not have local implementation");
   }
 
   @Override public void deleteShotsByIdStream(String idStream) {

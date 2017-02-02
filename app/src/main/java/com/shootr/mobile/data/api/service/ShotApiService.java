@@ -101,4 +101,9 @@ public interface ShotApiService {
 
   @PUT("/stream/{idStream}/checkin") Response checkIn(@Path("idStream") String idStream)
       throws ApiException, IOException;
+
+  @GET("/shot/streamTimeline/important?includeEmbed=true") List<ShotApiEntity> getImportantShots(
+      @Query("idStream") String idStream, @Query("streamReadWriteMode") String[] streamTypes,
+      @Query("shotType") String[] shotTypes, @Query("maxTimestamp") Long maxTimestamp,
+      @Query("count") Integer count) throws ApiException, IOException;
 }

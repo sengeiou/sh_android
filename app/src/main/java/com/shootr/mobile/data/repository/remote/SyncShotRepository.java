@@ -21,6 +21,7 @@ import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,26 +35,28 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
   private final UserDataSource userDataSource;
   private final SyncTrigger syncTrigger;
+  private final SessionRepository sessionRepository;
 
   @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource,
       @Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper,
       HighlightedShotEntityMapper highlightedShotEntityMapper, @Local UserDataSource userDataSource,
-      SyncTrigger syncTrigger) {
+      SyncTrigger syncTrigger, SessionRepository sessionRepository) {
     this.remoteShotDataSource = remoteShotDataSource;
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
     this.userDataSource = userDataSource;
     this.syncTrigger = syncTrigger;
+    this.sessionRepository = sessionRepository;
   }
 
   @Override public Shot putShot(Shot shot) {
     ShotEntity shotEntity = shotEntityMapper.transform(shot);
-    ShotEntity responseShotEntity = remoteShotDataSource.putShot(shotEntity);
+    ShotEntity responseShotEntity = remoteShotDataSource.putShot(shotEntity, sessionRepository.getCurrentUserId());
     UserEntity userEntity = userDataSource.getUser(responseShotEntity.getIdUser());
     responseShotEntity.setUsername(userEntity.getUserName());
     responseShotEntity.setUserPhoto(userEntity.getPhoto());
-    localShotDataSource.putShot(responseShotEntity);
+    localShotDataSource.putShot(responseShotEntity, sessionRepository.getCurrentUserId());
     return shotEntityMapper.transform(responseShotEntity);
   }
 
@@ -61,7 +64,7 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     try {
       List<ShotEntity> shotEntitiesFromTimeline =
           remoteShotDataSource.getShotsForStreamTimeline(parameters);
-      localShotDataSource.putShots(shotEntitiesFromTimeline);
+      localShotDataSource.putShots(shotEntitiesFromTimeline, sessionRepository.getCurrentUserId());
       return shotEntityMapper.transform(shotEntitiesFromTimeline);
     } catch (ServerCommunicationException e) {
       e.printStackTrace();
@@ -107,10 +110,10 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     ShotDetailEntity shotDetail =
         remoteShotDataSource.getShotDetail(idShot, streamTypes, shotTypes);
     if (shotDetail.getParents() != null) {
-      localShotDataSource.putShots(shotDetail.getParents());
+      localShotDataSource.putShots(shotDetail.getParents(), sessionRepository.getCurrentUserId());
     }
     if (shotDetail.getReplies() != null) {
-      localShotDataSource.putShots(shotDetail.getReplies());
+      localShotDataSource.putShots(shotDetail.getReplies(), sessionRepository.getCurrentUserId());
     }
     return shotEntityMapper.transform(shotDetail);
   }
@@ -140,7 +143,7 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   public List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters) {
     List<ShotEntity> shotEntitiesFromTimeline =
         remoteShotDataSource.getUserShotsForStreamTimeline(timelineParameters);
-    localShotDataSource.putShots(shotEntitiesFromTimeline);
+    localShotDataSource.putShots(shotEntitiesFromTimeline, sessionRepository.getCurrentUserId());
     return shotEntityMapper.transform(shotEntitiesFromTimeline);
   }
 
@@ -151,11 +154,11 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
       remoteShotDataSource.hideShot(idShot, timestamp);
       shotEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
       shotEntity.setProfileHidden(timestamp);
-      localShotDataSource.putShot(shotEntity);
+      localShotDataSource.putShot(shotEntity, sessionRepository.getCurrentUserId());
     } catch (ServerCommunicationException e) {
       shotEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
       localShotDataSource.hideShot(idShot, timestamp);
-      localShotDataSource.putShot(shotEntity);
+      localShotDataSource.putShot(shotEntity, sessionRepository.getCurrentUserId());
       syncTrigger.notifyNeedsSync(this);
     }
   }
@@ -177,9 +180,14 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     localShotDataSource.putHighlightShot(highlightedShotEntity);
   }
 
-  @Override public void callCtaCheckIn(String idStream) throws UserAlreadyCheckInRequestException,
-      UserCannotCheckInRequestException {
+  @Override public void callCtaCheckIn(String idStream)
+      throws UserAlreadyCheckInRequestException, UserCannotCheckInRequestException {
     remoteShotDataSource.callCtaCheckIn(idStream);
+  }
+
+  @Override public List<Shot> updateImportantShots(StreamTimelineParameters parameters) {
+    return shotEntityMapper.transform(
+        remoteShotDataSource.updateImportantShots(parameters));
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {

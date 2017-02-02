@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.timeline.GetImportantShotsTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderViewOnlyStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetStreamTimelineInteractor;
@@ -18,6 +19,7 @@ public class StreamTimelineInteractorsWrapper {
   private final GetViewOnlyStreamTimelineInteractor getViewOnlyStreamTimelineInteractor;
   private final GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
   private final GetOlderViewOnlyStreamTimelineInteractor getOlderViewOnlyStreamTimelineInteractor;
+  private final GetImportantShotsTimelineInteractor getImportantShotsTimelineInteractor;
 
   @Inject public StreamTimelineInteractorsWrapper(
       RefreshStreamTimelineInteractor refreshStreamTimelineInteractor,
@@ -25,44 +27,54 @@ public class StreamTimelineInteractorsWrapper {
       GetStreamTimelineInteractor getStreamTimelineInteractor,
       GetViewOnlyStreamTimelineInteractor getViewOnlyStreamTimelineInteractor,
       GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor,
-      GetOlderViewOnlyStreamTimelineInteractor getOlderViewOnlyStreamTimelineInteractor) {
+      GetOlderViewOnlyStreamTimelineInteractor getOlderViewOnlyStreamTimelineInteractor,
+      GetImportantShotsTimelineInteractor getImportantShotsTimelineInteractor) {
     this.refreshStreamTimelineInteractor = refreshStreamTimelineInteractor;
     this.refreshViewOnlyStreamTimelineInteractor = refreshViewOnlyStreamTimelineInteractor;
     this.getStreamTimelineInteractor = getStreamTimelineInteractor;
     this.getViewOnlyStreamTimelineInteractor = getViewOnlyStreamTimelineInteractor;
     this.getOlderStreamTimelineInteractor = getOlderStreamTimelineInteractor;
     this.getOlderViewOnlyStreamTimelineInteractor = getOlderViewOnlyStreamTimelineInteractor;
+    this.getImportantShotsTimelineInteractor = getImportantShotsTimelineInteractor;
   }
 
-  public void loadTimeline(String idStream, boolean filterActivated, Boolean hasBeenPaused, Integer streamMode,
-      Interactor.Callback<Timeline> callback) {
+  public void loadTimeline(String idStream, boolean filterActivated, Boolean hasBeenPaused,
+      Integer streamMode, Interactor.Callback<Timeline> callback) {
     if (streamMode == 0) {
-      getStreamTimelineInteractor.loadStreamTimeline(idStream, filterActivated, hasBeenPaused, callback);
+      getStreamTimelineInteractor.loadStreamTimeline(idStream, filterActivated, hasBeenPaused,
+          callback);
     } else {
       getViewOnlyStreamTimelineInteractor.loadStreamTimeline(idStream, hasBeenPaused, callback);
     }
   }
 
-  public void refreshTimeline(String streamId, boolean filterActivated, Long lastRefreshDate, Boolean hasBeenPaused,
-      Integer streamMode, Interactor.Callback<Timeline> callback,
+  public void refreshTimeline(String streamId, boolean filterActivated, Long lastRefreshDate,
+      Boolean hasBeenPaused, Integer streamMode, Interactor.Callback<Timeline> callback,
       Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
-      refreshStreamTimelineInteractor.refreshStreamTimeline(streamId, filterActivated, lastRefreshDate,
-          hasBeenPaused, callback, errorCallback);
+      refreshStreamTimelineInteractor.refreshStreamTimeline(streamId, filterActivated,
+          lastRefreshDate, hasBeenPaused, callback, errorCallback);
     } else {
       refreshViewOnlyStreamTimelineInteractor.refreshStreamTimeline(streamId, lastRefreshDate,
           hasBeenPaused, callback, errorCallback);
     }
   }
 
-  public void obtainOlderTimeline(String streamId, boolean filterActivated, Long currentOldestDate, Integer streamMode,
-      Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+  public void obtainOlderTimeline(String streamId, boolean filterActivated, Long currentOldestDate,
+      Integer streamMode, Interactor.Callback<Timeline> callback,
+      Interactor.ErrorCallback errorCallback) {
     if (streamMode == 0) {
-      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, filterActivated, currentOldestDate, callback,
-          errorCallback);
+      getOlderStreamTimelineInteractor.loadOlderStreamTimeline(streamId, filterActivated,
+          currentOldestDate, callback, errorCallback);
     } else {
-      getOlderViewOnlyStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate, callback,
-          errorCallback);
+      getOlderViewOnlyStreamTimelineInteractor.loadOlderStreamTimeline(streamId, currentOldestDate,
+          callback, errorCallback);
     }
+  }
+
+  public void obtainImportantShotsTimeline(String streamId,
+      Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+    getImportantShotsTimelineInteractor.getImportantShotsTimeline(streamId, callback,
+        errorCallback);
   }
 }

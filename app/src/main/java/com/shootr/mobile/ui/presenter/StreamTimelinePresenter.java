@@ -72,6 +72,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean isEmpty = true;
   private String idAuthor;
   private boolean filterActivated = false;
+  private boolean calledForImportant = false;
   private boolean isFirstShotPosition;
   private boolean isFirstLoad;
   private boolean isTimelineInitialized;
@@ -122,7 +123,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.streamTimelineView = streamTimelineView;
   }
 
-  public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor, Integer streamMode) {
+  public void initialize(StreamTimelineView streamTimelineView, String idStream, String idAuthor,
+      Integer streamMode) {
     this.streamId = idStream;
     this.setStreamMode(streamMode);
     this.newShotsNumber = 0;
@@ -149,7 +151,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
   }
 
-  public void initialize(final StreamTimelineView streamTimelineView, String idStream, Integer streamMode) {
+  public void initialize(final StreamTimelineView streamTimelineView, String idStream,
+      Integer streamMode) {
     this.streamId = idStream;
     this.setStreamMode(streamMode);
     this.newShotsNumber = 0;
@@ -270,6 +273,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, readWriteMode,
         new Interactor.Callback<Timeline>() {
           @Override public void onLoaded(Timeline timeline) {
+            manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
             setupSHotsVisibility(timeline);
@@ -283,6 +287,23 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.showShots();
     } else {
       streamTimelineView.showEmpty();
+    }
+  }
+
+  private void manageCallImportantShots() {
+    if (filterActivated
+        && !calledForImportant) {
+      calledForImportant = true;
+      timelineInteractorWrapper.obtainImportantShotsTimeline(streamId,
+          new Interactor.Callback<Timeline>() {
+            @Override public void onLoaded(Timeline timelineFiltered) {
+              loadTimeline(0);
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
+            }
+          });
     }
   }
 
@@ -355,7 +376,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     setShotsWithoutReposition(shots);
   }
 
-  private void handleNewShots(Timeline timeline, List<ShotModel> shots, Boolean isFirstShotPosition) {
+  private void handleNewShots(Timeline timeline, List<ShotModel> shots,
+      Boolean isFirstShotPosition) {
     List<ShotModel> newShots = new ArrayList<>();
     checkForNewShots(shots, newShots);
     shotModels.addAll(newShots);
@@ -489,8 +511,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadOlderShots(long lastShotInScreenDate) {
     loadingOlderShots();
-    timelineInteractorWrapper.obtainOlderTimeline(streamId, filterActivated, lastShotInScreenDate, streamMode,
-        new Interactor.Callback<Timeline>() {
+    timelineInteractorWrapper.obtainOlderTimeline(streamId, filterActivated, lastShotInScreenDate,
+        streamMode, new Interactor.Callback<Timeline>() {
           @Override public void onLoaded(Timeline timeline) {
             loadOlderShotsInView(timeline);
           }
@@ -720,8 +742,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   public void onCtaPressed(ShotModel shotModel) {
-    if (shotModel.getCtaButtonLink().startsWith(SCHEMA) && shotModel.getType().equals(
-        ShotType.CTACHECKIN)) {
+    if (shotModel.getCtaButtonLink().startsWith(SCHEMA) && shotModel.getType()
+        .equals(ShotType.CTACHECKIN)) {
       callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
         @Override public void onCompleted() {
           streamTimelineView.showChecked();

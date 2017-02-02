@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
-  ShotEntity putShot(ShotEntity shotEntity);
+  ShotEntity putShot(ShotEntity shotEntity, String idUserMe);
 
-  void putShots(List<ShotEntity> shotEntities);
+  void putShots(List<ShotEntity> shotEntities, String idUserMe);
 
   List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
@@ -39,6 +39,8 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
   void deleteShot(String idShot);
 
   List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
+
+  List<ShotEntity> updateImportantShots(StreamTimelineParameters parameters);
 
   void deleteShotsByIdStream(String idStream);
 

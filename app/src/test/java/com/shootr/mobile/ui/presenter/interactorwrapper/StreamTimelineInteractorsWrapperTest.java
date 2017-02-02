@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.timeline.GetImportantShotsTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderViewOnlyStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetStreamTimelineInteractor;
@@ -28,6 +29,7 @@ public class StreamTimelineInteractorsWrapperTest {
   @Mock RefreshStreamTimelineInteractor refreshStreamTimelineInteractor;
   @Mock RefreshViewOnlyStreamTimelineInteractor refreshViewOnlyStreamTimelineInteractor;
   @Mock GetStreamTimelineInteractor getStreamTimelineInteractor;
+  @Mock GetImportantShotsTimelineInteractor getImportantShotsTimelineInteractor;
   @Mock GetViewOnlyStreamTimelineInteractor getViewOnlyStreamTimelineInteractor;
   @Mock GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
   @Mock GetOlderViewOnlyStreamTimelineInteractor getOlderViewOnlyStreamTimelineInteractor;
@@ -40,7 +42,7 @@ public class StreamTimelineInteractorsWrapperTest {
         new StreamTimelineInteractorsWrapper(refreshStreamTimelineInteractor,
             refreshViewOnlyStreamTimelineInteractor, getStreamTimelineInteractor,
             getViewOnlyStreamTimelineInteractor, getOlderStreamTimelineInteractor,
-            getOlderViewOnlyStreamTimelineInteractor);
+            getOlderViewOnlyStreamTimelineInteractor, getImportantShotsTimelineInteractor);
   }
 
   @Test public void shouldGetStreamTimelineWhenStreamModeIsZero() throws Exception {

@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -18,16 +19,20 @@ public class LocalShotRepository implements InternalShotRepository {
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final SessionRepository sessionRepository;
 
   @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource,
-      ShotEntityMapper shotEntityMapper, HighlightedShotEntityMapper highlightedShotEntityMapper) {
+      ShotEntityMapper shotEntityMapper, HighlightedShotEntityMapper highlightedShotEntityMapper,
+      SessionRepository sessionRepository) {
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.sessionRepository = sessionRepository;
   }
 
   @Override public Shot putShot(Shot shot) {
-    localShotDataSource.putShot(shotEntityMapper.transform(shot));
+    localShotDataSource.putShot(shotEntityMapper.transform(shot),
+        sessionRepository.getCurrentUserId());
     return shot;
   }
 
@@ -81,7 +86,8 @@ public class LocalShotRepository implements InternalShotRepository {
   }
 
   @Override public void putShots(List<Shot> shotsFromUser) {
-    localShotDataSource.putShots(shotEntityMapper.transformInEntities(shotsFromUser));
+    localShotDataSource.putShots(shotEntityMapper.transformInEntities(shotsFromUser),
+        sessionRepository.getCurrentUserId());
   }
 
   @Override public void deleteShot(String idShot) {
@@ -105,7 +111,8 @@ public class LocalShotRepository implements InternalShotRepository {
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {
-    return highlightedShotEntityMapper.mapToDomain(localShotDataSource.getHighlightedShot(idStream));
+    return highlightedShotEntityMapper.mapToDomain(
+        localShotDataSource.getHighlightedShot(idStream));
   }
 
   @Override public void dismissHighlightedShot(String idHighlightedShot) {

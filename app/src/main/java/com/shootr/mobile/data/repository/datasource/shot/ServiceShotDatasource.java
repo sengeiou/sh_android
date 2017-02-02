@@ -20,6 +20,7 @@ import com.shootr.mobile.domain.exception.StreamRemovedException;
 import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
 import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,14 +35,15 @@ public class ServiceShotDatasource implements ShotDataSource {
 
   @Inject public ServiceShotDatasource(ShotApiService shotApiService,
       ShotApiEntityMapper shotApiEntityMapper,
-      HighlightedShotEntityMapper highlightedShotEntityMapper, DatabaseShotDataSource databaseShotDataSource) {
+      HighlightedShotEntityMapper highlightedShotEntityMapper,
+      DatabaseShotDataSource databaseShotDataSource) {
     this.shotApiService = shotApiService;
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
     this.databaseShotDataSource = databaseShotDataSource;
   }
 
-  @Override public ShotEntity putShot(ShotEntity shotEntity) {
+  @Override public ShotEntity putShot(ShotEntity shotEntity, String idUserMe) {
     try {
       return shotApiService.postNewShot(shotEntity);
     } catch (IOException e) {
@@ -59,9 +61,9 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
-  @Override public void putShots(List<ShotEntity> shotEntities) {
+  @Override public void putShots(List<ShotEntity> shotEntities, String idUserMe) {
     for (ShotEntity shotEntity : shotEntities) {
-      putShot(shotEntity);
+      putShot(shotEntity, idUserMe);
     }
   }
 
@@ -226,6 +228,21 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
+  @Override
+  public List<ShotEntity> updateImportantShots(StreamTimelineParameters timelineParameters) {
+    AndroidTimeUtils androidTimeUtils = new AndroidTimeUtils();
+    try {
+      List<ShotApiEntity> shots = shotApiService.getImportantShots(timelineParameters.getStreamId(),
+          timelineParameters.getStreamTypes(), timelineParameters.getShotTypes(),
+          androidTimeUtils.getCurrentTime(), timelineParameters.getLimit());
+      return shotApiEntityMapper.transform(shots);
+    } catch (ApiException | IOException e) {
+      throw new ServerCommunicationException(e);
+    } catch (Exception generalError) {
+      throw new ServerCommunicationException(generalError);
+    }
+  }
+
   @Override public void deleteShotsByIdStream(String idStream) {
     throw new IllegalArgumentException("This method should not have remote implementation");
   }
@@ -248,9 +265,8 @@ public class ServiceShotDatasource implements ShotDataSource {
 
   @Override public HighlightedShotEntity getHighlightedShot(String idStream) {
     try {
-      StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder()
-          .forStream(idStream)
-          .build();
+      StreamTimelineParameters streamTimelineParameters =
+          StreamTimelineParameters.builder().forStream(idStream).build();
       List<HighlightedShotApiEntity> highlightedShot =
           shotApiService.getHighlightedShot(idStream, streamTimelineParameters.getShotTypes());
       HighlightedShotEntity localHighlightedShot =
@@ -330,7 +346,8 @@ public class ServiceShotDatasource implements ShotDataSource {
     } catch (ApiException e) {
       if (String.valueOf(e.getErrorInfo().code()).equals(ShootrError.ERROR_CODE_CHECKIN)) {
         throw new UserCannotCheckInRequestException(e);
-      } else if (String.valueOf(e.getErrorInfo().code()).equals(ShootrError.ERROR_ALREADY_CHECKIN)) {
+      } else if (String.valueOf(e.getErrorInfo().code())
+          .equals(ShootrError.ERROR_ALREADY_CHECKIN)) {
         throw new UserAlreadyCheckInRequestException(e);
       } else {
         throw new ServerCommunicationException(e);
