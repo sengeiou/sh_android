@@ -206,7 +206,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         sessionRepository.getLastTimeFiltered(), new Interactor.Callback<Boolean>() {
           @Override public void onLoaded(Boolean hasNewFilteredShots) {
             if (hasNewFilteredShots) {
-              streamTimelineView.showFilterAlert();
+              if (!filterActivated) {
+                streamTimelineView.showFilterAlert();
+              }
             }
           }
         });
@@ -276,20 +278,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            setupShotsVisibility(timeline);
           }
         });
   }
-
-  private void setupShotsVisibility(Timeline timeline) {
-    if (timeline.getShots().size() > 0) {
-      streamTimelineView.hideEmpty();
-      streamTimelineView.showShots();
-    } else {
-      streamTimelineView.showEmpty();
-    }
-  }
-
+  
   private void manageCallImportantShots() {
     if (filterActivated
         && !calledForImportant) {
@@ -404,6 +396,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       newShotsNumber += newShots.size();
       showTimeLineIndicator();
     }
+    streamTimelineView.showShots();
   }
 
   private void showTimeLineIndicator() {
@@ -604,6 +597,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     streamTimelineView.showAllStreamShots();
     sessionRepository.setTimelineFilterActivated(true);
     sessionRepository.setLastTimeFiltered(String.valueOf(new Date().getTime()));
+    isFirstLoad = true;
     loadTimeline(0);
   }
 
@@ -612,6 +606,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     streamTimelineView.hideAllStreamShots();
     streamTimelineView.showHoldingShots();
     sessionRepository.setTimelineFilterActivated(false);
+    isFirstLoad = true;
     loadTimeline(0);
   }
 

@@ -203,7 +203,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, times(2)).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test
@@ -215,7 +215,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, times(2)).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
@@ -314,7 +314,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(PUBLIC);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, times(2)).showEmpty();
+    verify(streamTimelineView).showEmpty();
   }
 
   @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotListAndIsViewOnly()
@@ -326,7 +326,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(VIEW_ONLY);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, times(2)).showEmpty();
+    verify(streamTimelineView).showEmpty();
   }
 
   @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -337,7 +337,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, times(2)).hideEmpty();
+    verify(streamTimelineView).hideEmpty();
   }
 
   @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShotsAndIsViewOnlyStream()
@@ -349,7 +349,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, times(2)).hideEmpty();
+    verify(streamTimelineView).hideEmpty();
   }
 
   @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -360,7 +360,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, times(2)).hideEmpty();
+    verify(streamTimelineView).hideEmpty();
   }
 
   @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShotsAndIsViewOnlyStream()
@@ -372,7 +372,7 @@ public class StreamTimelinePresenterTest {
     presenter.setIsFirstLoad(true);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, times(2)).hideEmpty();
+    verify(streamTimelineView).hideEmpty();
   }
 
   @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList()
