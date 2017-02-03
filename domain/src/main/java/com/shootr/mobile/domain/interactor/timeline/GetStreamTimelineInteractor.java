@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
