@@ -34,6 +34,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
     return shotManager.getShotsByStreamParameters(parameters);
   }
 
+  @Override public List<ShotEntity> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters) {
+    return shotManager.getShotsByStreamParametersFiltered(parameters);
+  }
+
   @Override public ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes) {
     return shotManager.getShotById(shotId);
   }

@@ -41,6 +41,11 @@ public class LocalShotRepository implements InternalShotRepository {
     return shotEntityMapper.transform(shotsForEvent);
   }
 
+  @Override public List<Shot> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters) {
+    List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForStreamTimelineFiltered(parameters);
+    return shotEntityMapper.transform(shotsForEvent);
+  }
+
   @Override public Shot getShot(String shotId, String[] streamTypes, String[] shotTypes) {
     ShotEntity shot = localShotDataSource.getShot(shotId, streamTypes, shotTypes);
     return shotEntityMapper.transform(shot);

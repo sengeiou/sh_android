@@ -72,6 +72,11 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     }
   }
 
+  @Override
+  public List<Shot> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters) {
+    throw new IllegalStateException("Method not valid for service");
+  }
+
   @Override public Shot getShot(String shotId, String[] streamTypes, String[] shotTypes) {
     ShotEntity shot = localShotDataSource.getShot(shotId, streamTypes, shotTypes);
     if (shot == null) {
@@ -186,8 +191,10 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   }
 
   @Override public List<Shot> updateImportantShots(StreamTimelineParameters parameters) {
-    return shotEntityMapper.transform(
-        remoteShotDataSource.updateImportantShots(parameters));
+    List<ShotEntity> shots = remoteShotDataSource.updateImportantShots(parameters);
+    localShotDataSource.putShots(shots, sessionRepository.getCurrentUserId());
+
+    return shotEntityMapper.transform(shots);
   }
 
   @Override public HighlightedShot getHighlightedShots(String idStream) {

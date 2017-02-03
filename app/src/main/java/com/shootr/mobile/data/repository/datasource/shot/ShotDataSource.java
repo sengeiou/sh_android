@@ -17,6 +17,8 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
+  List<ShotEntity> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters);
+
   ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes);
 
   List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes);

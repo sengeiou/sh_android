@@ -88,6 +88,11 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
+  @Override
+  public List<ShotEntity> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters) {
+    throw new IllegalStateException("Method not valid for service");
+  }
+
   @Override public ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes)
       throws ShotNotFoundException {
     try {
