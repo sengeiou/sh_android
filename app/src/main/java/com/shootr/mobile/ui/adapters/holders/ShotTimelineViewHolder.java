@@ -197,7 +197,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupIsHolderOrContributor(ShotModel shot) {
-    if (shot.getParentShotId() == null && shot.isHolderOrContributor()) {
+    if (!shot.isVerifiedUser() && shot.getParentShotId() == null && shot.isHolderOrContributor()) {
       holderOrContributor.setVisibility(View.VISIBLE);
     } else {
       holderOrContributor.setVisibility(View.GONE);
