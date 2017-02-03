@@ -281,7 +281,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           }
         });
   }
-  
+
   private void manageCallImportantShots() {
     if (filterActivated
         && !calledForImportant) {
