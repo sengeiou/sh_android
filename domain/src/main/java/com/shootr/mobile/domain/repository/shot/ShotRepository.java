@@ -10,6 +10,8 @@ public interface ShotRepository {
 
   List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
+  List<Shot> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters);
+
   List<Shot> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
 
   Shot getShot(String shotId, String[] streamTypes, String[] shotTypes);

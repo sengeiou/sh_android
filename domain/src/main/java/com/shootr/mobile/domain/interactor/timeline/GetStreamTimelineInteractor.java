@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -45,28 +44,22 @@ public class GetStreamTimelineInteractor implements Interactor {
   }
 
   private void loadLocalShots() {
-    List<Shot> shots = loadLocalShots(buildParameters());
-    shots = sortShotsByPublishDate(shots);
+    List<Shot> shots;
     if (filterActivated) {
-      filterShotsAndNotify(shots);
+      shots = loadLocalShotsFiltered(buildParameters());
     } else {
-      notifyTimelineFromShots(shots);
+      shots = loadLocalShots(buildParameters());
     }
-  }
-
-  private void filterShotsAndNotify(List<Shot> shots) {
-    Iterator<Shot> iterator = shots.iterator();
-    while (iterator.hasNext()) {
-      Shot shot = iterator.next();
-      if (shot.isPadding()) {
-        iterator.remove();
-      }
-    }
+    shots = sortShotsByPublishDate(shots);
     notifyTimelineFromShots(shots);
   }
 
   private List<Shot> loadLocalShots(StreamTimelineParameters timelineParameters) {
     return localShotRepository.getShotsForStreamTimeline(timelineParameters);
+  }
+
+  private List<Shot> loadLocalShotsFiltered(StreamTimelineParameters timelineParameters) {
+    return localShotRepository.getShotsForStreamTimelineFiltered(timelineParameters);
   }
 
   private StreamTimelineParameters buildParameters() {

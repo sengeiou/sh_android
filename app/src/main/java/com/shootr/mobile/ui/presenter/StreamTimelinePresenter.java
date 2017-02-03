@@ -276,12 +276,12 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            setupSHotsVisibility(timeline);
+            setupShotsVisibility(timeline);
           }
         });
   }
 
-  private void setupSHotsVisibility(Timeline timeline) {
+  private void setupShotsVisibility(Timeline timeline) {
     if (timeline.getShots().size() > 0) {
       streamTimelineView.hideEmpty();
       streamTimelineView.showShots();

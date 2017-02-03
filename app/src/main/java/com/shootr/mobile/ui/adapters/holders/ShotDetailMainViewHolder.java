@@ -132,7 +132,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupIsHolderOrContributor(ShotModel shotModel) {
-    if (shotModel.getParentShotId() == null && shotModel.isHolderOrContributor()) {
+    if (!shotModel.isVerifiedUser() && shotModel.getParentShotId() == null && shotModel.isHolderOrContributor()) {
       holderOrContributor.setVisibility(View.VISIBLE);
     } else {
       holderOrContributor.setVisibility(View.GONE);

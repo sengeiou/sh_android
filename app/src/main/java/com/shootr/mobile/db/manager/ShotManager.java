@@ -40,30 +40,30 @@ public class ShotManager extends AbstractManager {
   }
 
   public void saveShots(List<ShotEntity> shotList, String idUserMe) {
-      SQLiteDatabase database = getWritableDatabase();
-      try {
-          database.beginTransaction();
-          for (ShotEntity shot : shotList) {
-              setPaddingtoShot(shot, idUserMe);
-              insertShot(shot, database);
-          }
-          database.setTransactionSuccessful();
-      } finally {
-          database.endTransaction();
+    SQLiteDatabase database = getWritableDatabase();
+    try {
+      database.beginTransaction();
+      for (ShotEntity shot : shotList) {
+        setPaddingtoShot(shot, idUserMe);
+        insertShot(shot, database);
       }
+      database.setTransactionSuccessful();
+    } finally {
+      database.endTransaction();
+    }
   }
 
-    public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
-        String whereSelection = ShotTable.ID_STREAM
-            + " = ? and "
-            + ShotTable.BIRTH
-            + " > ? and "
-            + ShotTable.IS_PADDING
-            + " <> 1";
-        String[] whereArguments = new String[] { idStream, lastTimeFiltered };
+  public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+    String whereSelection = ShotTable.ID_STREAM
+        + " = ? and "
+        + ShotTable.BIRTH
+        + " > ? and "
+        + ShotTable.IS_PADDING
+        + " <> 1";
+    String[] whereArguments = new String[] { idStream, lastTimeFiltered };
 
-        return readShots(whereSelection, whereArguments, null).size() > 0;
-    }
+    return readShots(whereSelection, whereArguments, null).size() > 0;
+  }
 
   private Integer readPadding(String idShot) {
     String whereClause = ShotTable.ID_SHOT + " = ?";
@@ -98,6 +98,18 @@ public class ShotManager extends AbstractManager {
 
   public List<ShotEntity> getShotsByStreamParameters(StreamTimelineParameters parameters) {
     String streamSelection = ShotTable.ID_STREAM + " = ?";
+
+    String[] whereArguments = new String[1];
+    whereArguments[0] = String.valueOf(parameters.getStreamId());
+    String whereClause = streamSelection;
+
+    return readShots(whereClause, whereArguments);
+  }
+
+  public List<ShotEntity> getShotsByStreamParametersFiltered(StreamTimelineParameters parameters) {
+    String streamSelection =
+        ShotTable.ID_STREAM + " = ? AND " +
+        ShotTable.IS_PADDING + " = 0";
 
     String[] whereArguments = new String[1];
     whereArguments[0] = String.valueOf(parameters.getStreamId());
