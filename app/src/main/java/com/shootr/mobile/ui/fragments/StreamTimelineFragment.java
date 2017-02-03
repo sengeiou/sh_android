@@ -372,6 +372,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setStreamName((streamTitle != null) ? streamTitle
         : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendTimelineScrollAnalytics() {
@@ -423,6 +424,7 @@ public class StreamTimelineFragment extends BaseFragment
         : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @Override public void onResume() {
@@ -778,6 +780,7 @@ public class StreamTimelineFragment extends BaseFragment
       builder.setIdStream(idStream);
     }
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
 

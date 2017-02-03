@@ -416,6 +416,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     builder.setTargetUsername(streamTitle);
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
 

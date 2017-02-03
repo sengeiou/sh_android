@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.activities.registro;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -20,7 +19,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.appsflyer.AppsFlyerLib;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -72,7 +70,6 @@ public class LoginSelectionActivity extends BaseActivity {
   @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
   @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
   @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
-  @BindString(R.string.appflyer_key) String dev_key;
 
   @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
   @Inject FeedbackMessage feedbackMessage;
@@ -197,7 +194,6 @@ public class LoginSelectionActivity extends BaseActivity {
     } else {
       if (shouldShowIntro.get()) {
         shouldShowIntro.set(false);
-        startTracking(this.getApplication(), dev_key);
         startActivity(new Intent(this, IntroActivity.class));
         finish();
       } else {
@@ -291,12 +287,7 @@ public class LoginSelectionActivity extends BaseActivity {
     builder.setLabelId(analyticsLabelSignup);
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
-  }
-
-  public void startTracking(Application application, String key) {
-    AppsFlyerLib.getInstance().setCollectIMEI(false);
-    AppsFlyerLib.getInstance().setCollectAndroidID(false);
-    AppsFlyerLib.getInstance().startTracking(application, key);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @OnClick(R.id.login_btn_login) public void login() {

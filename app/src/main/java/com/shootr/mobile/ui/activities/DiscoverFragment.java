@@ -168,6 +168,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     builder.setStreamName(streamTitle);
     builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void setupGridlayout() {

@@ -273,6 +273,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @OnClick(R.id.stream_share_button) public void onShareClick() {

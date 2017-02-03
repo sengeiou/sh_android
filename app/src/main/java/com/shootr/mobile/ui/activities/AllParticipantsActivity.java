@@ -207,6 +207,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @Override public void unFollow(int position) {

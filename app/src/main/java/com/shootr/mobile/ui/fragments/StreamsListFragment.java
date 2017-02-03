@@ -274,6 +274,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     builder.setStreamName(streamResultModel.getStreamModel().getTitle());
     builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void shareStream(StreamResultModel stream) {
