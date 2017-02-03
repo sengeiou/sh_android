@@ -75,6 +75,8 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override public void destroySession() {
         currentUserIdPreference.delete();
         sessionTokenPreference.delete();
+        lastTimeFilteredPreference.delete();
+        timelineFilterPreference.delete();
         currentUser = null;
     }
 
