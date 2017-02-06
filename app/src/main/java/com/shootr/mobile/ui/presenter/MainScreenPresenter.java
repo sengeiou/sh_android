@@ -6,6 +6,7 @@ import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
+import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
@@ -26,7 +27,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
+public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver {
 
   private final GetCurrentUserInteractor getCurrentUserInteractor;
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
@@ -196,5 +197,9 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
   @Override @Subscribe public void onBadgeChanged(BadgeChanged.Event event) {
     updateActivityBadge();
+  }
+
+  @Override @Subscribe public void onUnwatchDone(UnwatchDone.Event event) {
+    mainScreenView.hideConnectController();
   }
 }
