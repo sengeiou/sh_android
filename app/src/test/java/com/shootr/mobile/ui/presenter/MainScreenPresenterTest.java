@@ -64,7 +64,7 @@ public class MainScreenPresenterTest {
               sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
-              getFollowingIdsInteractor, bus, busPublisher);
+              getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher);
         mainScreenPresenter.setView(view);
     }
 

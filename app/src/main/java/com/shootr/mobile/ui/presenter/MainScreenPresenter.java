@@ -11,15 +11,19 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
@@ -39,6 +43,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final GetFollowingInteractor followingInteractor;
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   private final GetFollowingIdsInteractor getFollowingIdsInteractor;
+  private final GetLocalStreamInteractor getStreamInteractor;
+  private final StreamModelMapper streamModelMapper;
   private final Bus bus;
   private final BusPublisher busPublisher;
 
@@ -55,7 +61,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SessionRepository sessionRepository, UserModelMapper userModelMapper,
       @ActivityBadgeCount IntPreference badgeCount, GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
-      GetFollowingIdsInteractor getFollowingIdsInteractor, @Main Bus bus, BusPublisher busPublisher) {
+      GetFollowingIdsInteractor getFollowingIdsInteractor, GetLocalStreamInteractor getStreamInteractor,
+      StreamModelMapper streamModelMapper, @Main Bus bus, BusPublisher busPublisher) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
@@ -66,6 +73,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.followingInteractor = followingInteractor;
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
     this.getFollowingIdsInteractor = getFollowingIdsInteractor;
+    this.getStreamInteractor = getStreamInteractor;
+    this.streamModelMapper = streamModelMapper;
     this.bus = bus;
     this.busPublisher = busPublisher;
   }
@@ -126,7 +135,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   private void loadConnectedStream() {
     if (sessionRepository.getCurrentUser().getIdWatchingStream() != null) {
-      mainScreenView.showConnectController();
+      getStreamInteractor.loadStream(sessionRepository.getCurrentUser().getIdWatchingStream(),
+          new GetLocalStreamInteractor.Callback() {
+            @Override public void onLoaded(Stream stream) {
+              mainScreenView.showConnectController(streamModelMapper.transform(stream));
+            }
+          });
     } else {
       mainScreenView.hideConnectController();
     }

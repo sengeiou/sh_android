@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
@@ -239,7 +240,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
   }
 
-  @Override public void showConnectController() {
+  @Override public void showConnectController(StreamModel streamModel) {
     connectController.setVisibility(View.VISIBLE);
   }
 
