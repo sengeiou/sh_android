@@ -10,4 +10,6 @@ public interface InternalShotRepository extends ShotRepository {
   void deleteShotsByStream(String idStream);
 
   void hideHighlightedShot(String idHighlightedShot);
+
+  boolean hasNewFilteredShots(String idStream, String lastTimeFiltered);
 }

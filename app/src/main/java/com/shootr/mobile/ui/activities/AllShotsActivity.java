@@ -496,7 +496,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   private void sendExternalShareAnalytics(ShotModel shot) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getBaseContext());
-    builder.setAction(getString(R.string.menu_share_shot_via));
     builder.setActionId(analyticsActionExternalShare);
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(allShotsSource);
@@ -509,7 +508,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   private void sendShareAnalytics(ShotModel shot) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getBaseContext());
-    builder.setAction(getString(R.string.menu_share_shot_via_shootr));
     builder.setActionId(analyticsActionShareShot);
     builder.setLabelId(analyticsLabelShareShot);
     builder.setSource(allShotsSource);

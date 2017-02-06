@@ -104,7 +104,6 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void onPause() {
         super.onPause();
-        analyticsTool.analyticsStop(getBaseContext(), this);
         presenter.pause();
     }
 

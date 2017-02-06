@@ -33,8 +33,8 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    analyticsTool.analyticsStart(this, analyticsChannelList);
-    SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    SectionsPagerAdapter sectionsPagerAdapter =
+        new SectionsPagerAdapter(getSupportFragmentManager());
     viewPager.setAdapter(sectionsPagerAdapter);
     viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
     viewPager.setPageMarginDrawable(R.drawable.page_margin);
@@ -77,9 +77,8 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
 
   public void setTabTitle(Fragment fragment, int unreads) {
     if (fragment instanceof ChannelListFragment) {
-      String resource =
-          setupPluralResource(unreads, R.string.all_messages_title,
-              R.string.all_messages_title_plural);
+      String resource = setupPluralResource(unreads, R.string.all_messages_title,
+          R.string.all_messages_title_plural);
       setupTabTitle(0, resource);
     } else {
       String resource = setupPluralResource(unreads, R.string.following_messages_title,
@@ -88,8 +87,7 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
     }
   }
 
-  @NonNull private String setupPluralResource(int unreads, int resource,
-      int pluralResource) {
+  @NonNull private String setupPluralResource(int unreads, int resource, int pluralResource) {
     String title;
     if (unreads == 0) {
       title = getString(resource);
@@ -124,7 +122,8 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
         case 1:
           return FollowingChannelListFragment.newInstance();
         default:
-          throw new IllegalStateException(String.format("Item for position %d doesn't exists", position));
+          throw new IllegalStateException(
+              String.format("Item for position %d doesn't exists", position));
       }
     }
 
@@ -139,10 +138,14 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
         case 1:
           return getString(R.string.following_messages_title);
         default:
-          throw new IllegalStateException(String.format("Item title for position %d doesn't exists",
-              position));
+          throw new IllegalStateException(
+              String.format("Item title for position %d doesn't exists", position));
       }
     }
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(this, analyticsChannelList);
+  }
 }

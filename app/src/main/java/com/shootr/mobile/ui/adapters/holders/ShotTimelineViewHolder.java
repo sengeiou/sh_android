@@ -43,6 +43,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.shot_avatar) ImageView avatar;
   @BindView(R.id.shot_user_name) TextView name;
   @BindView(R.id.verified_user) ImageView verifiedUser;
+  @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @Nullable @BindView(R.id.shot_timestamp) TextView timestamp;
   @BindView(R.id.shot_text) ClickableTextView text;
   @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
@@ -63,8 +64,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   public ShotTimelineViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-      OnUsernameClickListener onUsernameClickListener,
-      AndroidTimeUtils timeUtils, ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
+      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
+      ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
     super(view);
     this.numberFormatUtil = numberFormatUtil;
@@ -85,6 +86,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
     setupVerified(shot);
+    setupIsHolderOrContributor(shot);
     bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
@@ -103,6 +105,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       OnUrlClickListener onUrlClickListener) {
     bindUsername(shot);
     setupVerified(shot);
+    setupIsHolderOrContributor(shot);
     bindComment(shot, onUrlClickListener);
     bindElapsedTime(shot);
     bindUserPhoto(shot);
@@ -121,7 +124,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupListeners(final ShotModel shot, final ShotClickListener shotClickListener,
-      final OnShotLongClick onShotLongClick, @Nullable final OnReshootClickListener reshootClickListener) {
+      final OnShotLongClick onShotLongClick,
+      @Nullable final OnReshootClickListener reshootClickListener) {
     shotContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         shotClickListener.onClick(shot);
@@ -192,6 +196,14 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
+  private void setupIsHolderOrContributor(ShotModel shot) {
+    if (!shot.isVerifiedUser() && shot.getParentShotId() == null && shot.isHolderOrContributor()) {
+      holderOrContributor.setVisibility(View.VISIBLE);
+    } else {
+      holderOrContributor.setVisibility(View.GONE);
+    }
+  }
+
   private String getReplyName(ShotModel shot) {
     return view.getContext()
         .getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
@@ -234,7 +246,6 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
         setupImage(defaultImage, shot, onLongClickListener, onTouchListener, onImageClickListener,
             imageUrl);
       }
-
     } else {
       defaultImage.setVisibility(View.GONE);
       proportionalImageView.setVisibility(View.GONE);
@@ -247,13 +258,15 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     defaultImage.setVisibility(View.GONE);
     proportionalImageView.setInitialHeight(shot.getImage().getImageHeight().intValue());
     proportionalImageView.setInitialWidth(shot.getImage().getImageWidth().intValue());
-    setupImage(proportionalImageView, shot, onLongClickListener, onTouchListener, onImageClickListener,
-        imageUrl);
+    setupImage(proportionalImageView, shot, onLongClickListener, onTouchListener,
+        onImageClickListener, imageUrl);
   }
 
   private boolean isValidImageSizes(ShotModel shot) {
-    return shot.getImage().getImageHeight() != null && shot.getImage().getImageHeight() != 0
-        && shot.getImage().getImageWidth() != null && shot.getImage().getImageWidth() != 0;
+    return shot.getImage().getImageHeight() != null
+        && shot.getImage().getImageHeight() != 0
+        && shot.getImage().getImageWidth() != null
+        && shot.getImage().getImageWidth() != 0;
   }
 
   private void setupImage(ImageView imageView, final ShotModel shot,

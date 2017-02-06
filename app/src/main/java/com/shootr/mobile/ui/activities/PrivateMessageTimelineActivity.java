@@ -51,7 +51,6 @@ public class PrivateMessageTimelineActivity extends BaseToolbarDecoratedActivity
 
   @Override public void onPause() {
     super.onPause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -80,7 +79,6 @@ public class PrivateMessageTimelineActivity extends BaseToolbarDecoratedActivity
 
   @Override protected void initializePresenter() {
         /* no-op: no presenter here, just a dummy container activity */
-    analyticsTool.analyticsStart(getBaseContext(), analyticsPrivateMessageTimeline);
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -94,5 +92,10 @@ public class PrivateMessageTimelineActivity extends BaseToolbarDecoratedActivity
   @Override public void onBackPressed() {
     super.onBackPressed();
     overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getBaseContext(), analyticsPrivateMessageTimeline);
   }
 }

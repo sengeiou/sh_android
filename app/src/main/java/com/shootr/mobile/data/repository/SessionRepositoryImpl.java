@@ -1,8 +1,11 @@
 package com.shootr.mobile.data.repository;
 
+import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
+import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
+import com.shootr.mobile.data.prefs.TimelineFilterActivated;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -14,6 +17,8 @@ public class SessionRepositoryImpl implements SessionRepository {
     private final StringPreference sessionTokenPreference;
 
     private final StringPreference currentUserIdPreference;
+    private final BooleanPreference timelineFilterPreference;
+    private final StringPreference lastTimeFilteredPreference;
     private final CrashReportTool crashReportTool;
 
     private final AnalyticsTool analyticsTool;
@@ -21,10 +26,14 @@ public class SessionRepositoryImpl implements SessionRepository {
     private User currentUser;
 
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
-      @CurrentUserId StringPreference currentUserIdPreference, CrashReportTool crashReportTool,
-      AnalyticsTool analyticsTool) {
+        @CurrentUserId StringPreference currentUserIdPreference,
+        @TimelineFilterActivated BooleanPreference timelineFilterPreference,
+        @LastTimeFiltered StringPreference lastTimeFiltered, CrashReportTool crashReportTool,
+        AnalyticsTool analyticsTool) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
+        this.timelineFilterPreference = timelineFilterPreference;
+        this.lastTimeFilteredPreference = lastTimeFiltered;
         this.crashReportTool = crashReportTool;
         this.analyticsTool = analyticsTool;
     }
@@ -66,6 +75,24 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override public void destroySession() {
         currentUserIdPreference.delete();
         sessionTokenPreference.delete();
+        lastTimeFilteredPreference.delete();
+        timelineFilterPreference.delete();
         currentUser = null;
+    }
+
+    @Override public boolean isTimelineFilterActivated() {
+        return timelineFilterPreference.get();
+    }
+
+    @Override public void setTimelineFilterActivated(boolean isFilterActivated) {
+        timelineFilterPreference.set(isFilterActivated);
+    }
+
+    @Override public String getLastTimeFiltered() {
+        return lastTimeFilteredPreference.get();
+    }
+
+    @Override public void setLastTimeFiltered(String lastTimeFiltered) {
+        lastTimeFilteredPreference.set(lastTimeFiltered);
     }
 }

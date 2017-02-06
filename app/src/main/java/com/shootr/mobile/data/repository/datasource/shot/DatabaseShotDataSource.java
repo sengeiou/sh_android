@@ -21,17 +21,21 @@ public class DatabaseShotDataSource implements ShotDataSource {
     this.highlightedManager = highlightedManager;
   }
 
-  @Override public ShotEntity putShot(ShotEntity shotEntity) {
-    shotManager.saveShot(shotEntity);
+  @Override public ShotEntity putShot(ShotEntity shotEntity, String idUserMe) {
+    shotManager.saveShot(shotEntity, idUserMe);
     return shotEntity;
   }
 
-  @Override public void putShots(List<ShotEntity> shotEntities) {
-    shotManager.saveShots(shotEntities);
+  @Override public void putShots(List<ShotEntity> shotEntities, String idUserMe) {
+    shotManager.saveShots(shotEntities, idUserMe);
   }
 
   @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
     return shotManager.getShotsByStreamParameters(parameters);
+  }
+
+  @Override public List<ShotEntity> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters) {
+    return shotManager.getShotsByStreamParametersFiltered(parameters);
   }
 
   @Override public ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes) {
@@ -104,7 +108,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
   }
 
   @Override public void shareShot(String idShot) {
-    throw new IllegalArgumentException("shareShot should not have local implementation");
+    throw new IllegalArgumentException("hasNewFilteredShots should not have local implementation");
   }
 
   @Override public void deleteShot(String idShot) {
@@ -114,6 +118,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
   @Override public List<ShotEntity> getUserShotsForStreamTimeline(
       StreamTimelineParameters timelineParameters) {
     return shotManager.getUserShotsByParameters(timelineParameters);
+  }
+
+  @Override public List<ShotEntity> updateImportantShots(StreamTimelineParameters parameters) {
+    throw new IllegalArgumentException("shareShot should not have local implementation");
   }
 
   @Override public void deleteShotsByIdStream(String idStream) {
@@ -150,6 +158,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
   @Override public void callCtaCheckIn(String idStream) {
     throw new IllegalArgumentException("Should not have local implementation");
+  }
+
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+    return shotManager.hasNewFilteredShots(idStream, lastTimeFiltered);
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

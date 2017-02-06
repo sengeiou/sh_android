@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
@@ -100,6 +101,7 @@ public class StreamTimelinePresenterTest {
   @Mock SessionRepository sessionRepository;
   @Mock GetContributorsInteractor getContributorsInteractor;
   @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
+  @Mock GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
@@ -110,10 +112,10 @@ public class StreamTimelinePresenterTest {
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, callCtaCheckInInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
-        streamModelMapper, bus, errorMessageFactory, poller, deleteLocalShotsByStreamInteractor,
+        streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
-        reloadStreamTimelineInteractor, createStreamInteractor,
-        getContributorsInteractor, sessionRepository);
+        createStreamInteractor,
+        getContributorsInteractor, getNewFilteredShotsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }
@@ -136,7 +138,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.selectStream();
 
-    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyInt(),
+    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyBoolean(), anyInt(),
         anyCallback());
   }
 
@@ -216,7 +218,7 @@ public class StreamTimelinePresenterTest {
     verify(streamTimelineView).showShots();
   }
 
-  @Test public void shouldNotShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
+  @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPosition()
       throws Exception {
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupIsNotFirstShotPosition();
@@ -226,11 +228,11 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test
-  public void shouldNotShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPositionAndIsViewOnlyStream()
+  public void shouldShowShotsInViewWhenLoadTimelineRespondsShotsAndIsNotFirstPositionAndIsViewOnlyStream()
       throws Exception {
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupIsNotFirstShotPosition();
@@ -240,7 +242,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
@@ -522,7 +524,7 @@ public class StreamTimelinePresenterTest {
     verify(streamTimelineView).hideLoading();
   }
 
-  @Test public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition()
+  @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPosition()
       throws Exception {
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
@@ -534,11 +536,11 @@ public class StreamTimelinePresenterTest {
 
     presenter.refresh();
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test
-  public void shouldNotShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPositionAndViewOnly()
+  public void shouldShowShotsIfReceivedShotsWhenRefresTimelineAndIsNotInFirstPositionAndViewOnly()
       throws Exception {
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
@@ -550,7 +552,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.refresh();
 
-    verify(streamTimelineView, never()).showShots();
+    verify(streamTimelineView).showShots();
   }
 
   @Test public void shouldNotShowStreamTimelineIndicatorWhenRefreshTimelineAndIsInFirstPosition()
@@ -592,7 +594,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -602,7 +604,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(),
+    verify(timelineInteractorWrapper).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(), anyCallback(),
         anyErrorCallback());
   }
 
@@ -612,7 +614,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -623,7 +625,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -650,7 +652,7 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
@@ -662,101 +664,17 @@ public class StreamTimelinePresenterTest {
     presenter.showingLastShot(lastShotModel());
     presenter.showingLastShot(lastShotModel());
 
-    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyLong(), anyInt(),
+    verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(),
         anyCallback(), anyErrorCallback());
   }
 
-  @Test public void shouldObtainHolderOlderTimelineWhenShowingLastShot() throws Exception {
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyString(),
-        anyCallback(), anyErrorCallback());
-  }
-
-  @Test public void shouldObtainHolderOlderTimelineWhenShowingLastShotAndIsViewOnly()
-      throws Exception {
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-    presenter.setStreamMode(VIEW_ONLY);
-
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyString(),
-        anyCallback(), anyErrorCallback());
-  }
-
-  @Test
-  public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted()
-      throws Exception {
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-
-    presenter.showingLastShot(lastShotModel());
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
-        anyString(), anyCallback(), anyErrorCallback());
-  }
-
-  @Test
-  public void shouldObtainHolderOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecutedAndViewOnly()
-      throws Exception {
-    presenter.setStreamMode(VIEW_ONLY);
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-
-    presenter.showingLastShot(lastShotModel());
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
-        anyString(), anyCallback(), anyErrorCallback());
-  }
-
-  @Test public void shouldObtainHolderOlderTimelineOnlyOnceWhenCallbacksEmptyList()
-      throws Exception {
-    setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-
-    presenter.showingLastShot(lastShotModel());
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
-        anyString(), anyCallback(), anyErrorCallback());
-  }
-
-  @Test public void shouldObtainHolderOlderTimelineOnlyOnceWhenCallbacksEmptyListAndIsViewOnly()
-      throws Exception {
-    setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
-    presenter.setStreamMode(VIEW_ONLY);
-    presenter.setIdAuthor(ID_AUTHOR);
-    presenter.showingHolderShots(true);
-
-    presenter.showingLastShot(lastShotModel());
-    presenter.showingLastShot(lastShotModel());
-
-    verify(streamHoldingTimelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(),
-        anyString(), anyCallback(), anyErrorCallback());
-  }
   //endregion
 
   //region Bus streams
   @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
     shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-    verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyLong(), anyBoolean(),
-        anyInt(), anyCallback(), anyErrorCallback());
-  }
-
-  @Test public void shouldRefreshTimelineWhenShotSentAndIsViewOnlyStream() throws Exception {
-    presenter.setStreamMode(VIEW_ONLY);
-
-    shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
-
-    verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyLong(), anyBoolean(),
+    verify(timelineInteractorWrapper).refreshTimeline(anyString(), anyBoolean(), anyLong(), anyBoolean(),
         anyInt(), anyCallback(), anyErrorCallback());
   }
 
@@ -768,7 +686,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.resume();
 
-    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyInt(),
+    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyBoolean(), anyInt(),
         anyCallback());
   }
 
@@ -780,7 +698,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.resume();
 
-    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyInt(),
+    verify(timelineInteractorWrapper).loadTimeline(anyString(), anyBoolean(), anyBoolean(), anyInt(),
         anyCallback());
   }
 
@@ -793,27 +711,12 @@ public class StreamTimelinePresenterTest {
     assertThat(annotationPresent).isTrue();
   }
 
-  @Test public void shouldShowHoldingShotsButtonWhenInitialize() throws Exception {
-    presenter.initialize(streamTimelineView, ID_STREAM, SELECTED_STREAM_ID, PUBLIC);
-
-    verify(streamTimelineView).showHoldingShots();
-  }
-
   @Test public void shouldHideHolingShotsButtonWhenItHasBeenClicked() throws Exception {
     setupLoadHolderTimelineInteractorCallbacks(timelineWithShots());
 
     presenter.onHoldingShotsClick();
 
     verify(streamTimelineView).hideHoldingShots();
-  }
-
-  @Test public void shouldShowAllShotsButtonWhenHoldingShotsButtonHasBeenClicked()
-      throws Exception {
-    setupLoadHolderTimelineInteractorCallbacks(timelineWithShots());
-
-    presenter.onHoldingShotsClick();
-
-    verify(streamTimelineView).showAllStreamShots();
   }
 
   @Test public void shouldHideAllShotsButtonWhenItHasBeenClicked() throws Exception {
@@ -835,52 +738,13 @@ public class StreamTimelinePresenterTest {
     presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
     presenter.onAllStreamShotsClick();
 
-    verify(streamTimelineView, times(2)).showHoldingShots();
-  }
-
-  @Test public void shouldShowLoadingWhenAllStreamShotsClicked() throws Exception {
-    presenter.onAllStreamShotsClick();
-
-    verify(streamTimelineView).showLoading();
-  }
-
-  @Test public void shouldHideLoadingWhenAllStreamShotsClickedAndallbackReturned()
-      throws Exception {
-    presenter.setStreamMode(PUBLIC);
-    setupDeleteLocalShotsInteractorCallback();
-    setupReloadStreamTimelineInteractorCallback();
-
-    presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
-    presenter.onAllStreamShotsClick();
-
-    verify(streamTimelineView).hideLoading();
-  }
-
-  @Test
-  public void shouldHideLoadingWhenAllStreamShotsClickedAndallbackReturnedAndIsViewOnlyStream()
-      throws Exception {
-    presenter.setStreamMode(VIEW_ONLY);
-    setupDeleteLocalShotsInteractorCallback();
-    setupReloadStreamTimelineInteractorCallback();
-
-    presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
-    presenter.onAllStreamShotsClick();
-
-    verify(streamTimelineView).hideLoading();
+    verify(streamTimelineView).showHoldingShots();
   }
 
   @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
     presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
 
     verify(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
-  }
-
-  @Test public void shouldSetToolbarTitleIfInitializedWithoutAuthorIdUser() throws Exception {
-    setupGetStreamInteractorCallback();
-
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
-
-    verify(streamTimelineView).setTitle(anyString());
   }
 
   @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
@@ -991,7 +855,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(),
+    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }
@@ -1006,7 +870,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(),
+    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }
@@ -1016,7 +880,7 @@ public class StreamTimelinePresenterTest {
 
     presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
 
-    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(),
+    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback());
     assertThat(booleanArgumentCaptor.getValue()).isFalse();
   }
@@ -1028,7 +892,7 @@ public class StreamTimelinePresenterTest {
     presenter.initialize(streamTimelineView, ID_STREAM, VIEW_ONLY);
     presenter.setStreamMode(VIEW_ONLY);
 
-    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(),
+    verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback());
     assertThat(booleanArgumentCaptor.getValue()).isFalse();
   }
@@ -1044,7 +908,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyLong(),
+    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyBoolean(), anyLong(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback(), anyErrorCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }
@@ -1061,7 +925,7 @@ public class StreamTimelinePresenterTest {
     presenter.pause();
     presenter.resume();
 
-    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyLong(),
+    verify(timelineInteractorWrapper, times(1)).refreshTimeline(anyString(), anyBoolean(), anyLong(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback(), anyErrorCallback());
     assertThat(booleanArgumentCaptor.getValue()).isTrue();
   }
@@ -1214,27 +1078,27 @@ public class StreamTimelinePresenterTest {
   private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[4]).onLoaded(timeline);
         return null;
       }
     }).when(timelineInteractorWrapper)
-        .obtainOlderTimeline(anyString(), anyLong(), anyInt(), anyCallback(), anyErrorCallback());
+        .obtainOlderTimeline(anyString(), anyBoolean(), anyLong(), anyInt(), anyCallback(), anyErrorCallback());
   }
 
   private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer<Void>() {
       @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[4]).onLoaded(timeline);
         return null;
       }
     }).when(timelineInteractorWrapper)
-        .loadTimeline(anyString(), anyBoolean(), anyInt(), anyCallback());
+        .loadTimeline(anyString(), anyBoolean(), anyBoolean(), anyInt(), anyCallback());
   }
 
   private void setupLoadHolderTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer<Void>() {
       @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[3]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[4]).onLoaded(timeline);
         return null;
       }
     }).when(streamHoldingTimelineInteractorsWrapper)
@@ -1244,11 +1108,11 @@ public class StreamTimelinePresenterTest {
   private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {
     doAnswer(new Answer<Void>() {
       @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback<Timeline>) invocation.getArguments()[4]).onLoaded(timeline);
+        ((Interactor.Callback<Timeline>) invocation.getArguments()[5]).onLoaded(timeline);
         return null;
       }
     }).when(timelineInteractorWrapper)
-        .refreshTimeline(anyString(), anyLong(), anyBoolean(), anyInt(), anyCallback(),
+        .refreshTimeline(anyString(), anyBoolean(), anyLong(), anyBoolean(), anyInt(), anyCallback(),
             anyErrorCallback());
   }
 

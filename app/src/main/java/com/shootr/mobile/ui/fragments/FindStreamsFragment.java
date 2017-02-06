@@ -125,6 +125,7 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
     builder.setStreamName(stream.getStreamModel().getTitle());
     builder.setIdStream(stream.getStreamModel().getIdStream());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendExternalShareAnalytics(StreamResultModel streamResultModel) {

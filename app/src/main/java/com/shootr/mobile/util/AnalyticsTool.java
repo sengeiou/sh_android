@@ -1,20 +1,20 @@
 package com.shootr.mobile.util;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import com.shootr.mobile.domain.model.user.User;
 
 public interface AnalyticsTool {
 
-  void init(Context context);
+  void init(Application application);
 
   void setUser(User user);
 
   void analyticsStart(Context context, String name);
 
-  void analyticsStop(Context context, Activity activity);
-
   void analyticsSendAction(Builder builder);
+
+  void appsFlyerSendAction(Builder builder);
 
   class Builder {
 

@@ -340,6 +340,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         builder.setTargetUsername(replyUsername);
       }
       analyticsTool.analyticsSendAction(builder);
+      analyticsTool.appsFlyerSendAction(builder);
     } else {
       AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
       builder.setContext(getBaseContext());
@@ -354,6 +355,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         builder.setIdStream(idStream);
       }
       analyticsTool.analyticsSendAction(builder);
+      analyticsTool.appsFlyerSendAction(builder);
     }
   }
 

@@ -1,8 +1,9 @@
 package com.shootr.mobile.util;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -11,6 +12,7 @@ import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.user.User;
 import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +21,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String APP_TRACKER = "app_tracker";
   private static final String MIX_PANEL_PRO = "017c3e7d9670fec221d97a4eeeca00bf";
   private static final String MIX_PANEL_TST = "e86d9d782e8d6d32b0c2263d5cf2758a";
+  private static final String APPSFLYER = "FEg6kuUpkGTE3FrD2BdHPg";
   private static final String DISTINCT_ID = "distinct_id";
   private static final String ID_STREAM = "idStream";
   private static final String STREAM_TITLE = "streamTitle";
@@ -43,17 +46,23 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private MixpanelAPI mixpanel;
   private HashMap<String, Tracker> trackers = new HashMap();
   private User user;
+  private AppsFlyerLib appsFlyerLib;
 
-  @Override public void init(Context context) {
+  @Override public void init(Application application) {
     try {
-      GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-      tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
+      GoogleAnalytics analytics = GoogleAnalytics.getInstance(application);
+      tracker = analytics.newTracker(application.getString(R.string.google_analytics_tracking_id));
       tracker.enableAutoActivityTracking(false);
       tracker.enableExceptionReporting(true);
     } catch (Exception error) {
     }
     mixpanel =
-        MixpanelAPI.getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+        MixpanelAPI.getInstance(application, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+
+    appsFlyerLib = AppsFlyerLib.getInstance();
+    appsFlyerLib.setCollectIMEI(false);
+    appsFlyerLib.setCollectAndroidID(false);
+    appsFlyerLib.startTracking(application, APPSFLYER);
   }
 
   private void storeUserMixPanel() {
@@ -82,10 +91,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     tracker.send(new HitBuilders.AppViewBuilder().build());
   }
 
-  @Override public void analyticsStop(Context context, Activity activity) {
-    GoogleAnalytics.getInstance(context).reportActivityStop(activity);
-  }
-
   @Override public void analyticsSendAction(Builder builder) {
     Context context = builder.getContext();
     String action = builder.getAction();
@@ -104,6 +109,50 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
         pushRedirection, idStream, stream, idPoll, context);
+  }
+
+  @Override public void appsFlyerSendAction(Builder builder) {
+    if (appsFlyerLib != null) {
+      Context context = builder.getContext();
+      String actionId = builder.getActionId();
+      String source = builder.getSource();
+      String idTargetUser = builder.getIdTargetUser();
+      String targetUsername = builder.getTargetUsername();
+      String idStream = builder.getIdStream();
+      String stream = builder.getStreamName();
+      User user = builder.getUser();
+
+      try {
+        if (user != null) {
+          Map<String, Object> eventData = new HashMap<>();
+          eventData.put(DISTINCT_ID, user.getIdUser());
+          if (idStream != null) {
+            eventData.put(ID_STREAM, idStream);
+          }
+          if (stream != null) {
+            eventData.put(STREAM_TITLE, stream);
+          }
+          eventData.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
+          eventData.put(USER_TYPE, user.getAnalyticsUserType());
+          if (source != null) {
+            eventData.put(SOURCE, source);
+          }
+          if (idTargetUser != null) {
+            eventData.put(ID_TARGET_USER, idTargetUser);
+          }
+          if (targetUsername != null) {
+            eventData.put(TARGET_USERNAME, targetUsername);
+          }
+          eventData.put(FAVORITES, user.getFavoritedStreamsCount());
+          eventData.put(FOLLOWING, user.getNumFollowings());
+          eventData.put(FOLLOWERS, user.getNumFollowers());
+
+          appsFlyerLib.trackEvent(context, actionId, eventData);
+        }
+      }  catch (NullPointerException error) {
+        Log.e("Shootr", "Unable to build appsflyer object", error);
+      }
+    }
   }
 
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,

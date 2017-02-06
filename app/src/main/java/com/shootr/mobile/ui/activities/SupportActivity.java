@@ -47,7 +47,6 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamSupport);
         versionNumber.setText(VersionUtils.getVersionName(getApplication()));
     }
 
@@ -98,6 +97,11 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
 
     @Override protected void onPause() {
         super.onPause();
-        analyticsTool.analyticsStop(getBaseContext(), this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamSupport);
     }
 }

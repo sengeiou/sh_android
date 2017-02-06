@@ -72,53 +72,53 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     switch (action) {
       case ACTION_DISCARD_SHOT_NOTIFICATION:
         shotNotificationManager.clearShotNotifications();
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
+        sendGoogleAnalythicsPushOpen(context, discardRedirection);
         break;
       case ACTION_OPEN_SHOT_NOTIFICATION:
         openActivities(context);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, activityRedirection);
+        sendGoogleAnalythicsPushOpen(context, activityRedirection);
         break;
       case ACTION_OPEN_ACTIVITY_NOTIFICATION:
         startActivityFromIntent(context, MainTabbedActivity.getMultipleActivitiesIntent(context)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, activityRedirection);
+        sendGoogleAnalythicsPushOpen(context, activityRedirection);
         break;
       case ACTION_DISCARD_ACTIVITY_NOTIFICATION:
         activityNotificationManager.clearActivityNotifications();
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
+        sendGoogleAnalythicsPushOpen(context, discardRedirection);
         break;
       case ACTION_OPEN_PROFILE:
         openProfile(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, profileRedirection);
+        sendGoogleAnalythicsPushOpen(context, profileRedirection);
         break;
       case ACTION_OPEN_STREAM:
         openStream(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, streamRedirection);
+        sendGoogleAnalythicsPushOpen(context, streamRedirection);
         break;
       case ACTION_OPEN_SHOT_DETAIL:
         openShotDetail(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, shotDetailRedirection);
+        sendGoogleAnalythicsPushOpen(context, shotDetailRedirection);
         break;
       case ACTION_OPEN_POLL_VOTE:
         openPollVote(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, pollRedirection);
+        sendGoogleAnalythicsPushOpen(context, pollRedirection);
         break;
       case ACTION_NEED_UPDATE:
         openUpdateNeeded(context);
-        sendGoogleAnalythicsPushOpen(context, ACTION_NEED_UPDATE, needUpdateRedirection);
+        sendGoogleAnalythicsPushOpen(context, needUpdateRedirection);
         break;
       case ACTION_OPEN_PRIVATE_MESSAGE:
         openPrivateMessage(context, intent);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, privateMessageRedirection);
+        sendGoogleAnalythicsPushOpen(context, privateMessageRedirection);
         break;
       case ACTION_DISCARD_PRIVATE_MESSAGE:
         messageNotificationManager.clearActivityNotifications();
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, discardRedirection);
+        sendGoogleAnalythicsPushOpen(context, discardRedirection);
         break;
       case ACTION_OPEN_CHANNEL_LIST:
         openChannelList(context);
-        sendGoogleAnalythicsPushOpen(context, analyticsActionPushOpen, privateMessageRedirection);
+        sendGoogleAnalythicsPushOpen(context, privateMessageRedirection);
         break;
       default:
         openUpdateNeeded(context);
@@ -196,10 +196,9 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     badgeCount.set(numberOfActivities - 1);
   }
 
-  private void sendGoogleAnalythicsPushOpen(Context context, String action, String redirection) {
+  private void sendGoogleAnalythicsPushOpen(Context context, String redirection) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(context);
-    builder.setAction(action);
     builder.setActionId(analyticsActionPushOpen);
     builder.setLabelId(analyticsLabelPushOpen);
     builder.setUser(sessionRepository.getCurrentUser());

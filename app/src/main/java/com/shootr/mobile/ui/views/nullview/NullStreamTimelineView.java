@@ -130,6 +130,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void showFilterAlert() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

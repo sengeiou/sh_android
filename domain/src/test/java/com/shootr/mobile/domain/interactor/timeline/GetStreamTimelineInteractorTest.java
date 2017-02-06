@@ -38,6 +38,7 @@ public class GetStreamTimelineInteractorTest {
   private static final String STREAM_AUTHOR_ID = "stream_author";
   private static final String ID_CURRENT_USER = "current_user";
   private static final String STREAM_ID = "stream";
+  private static final boolean FILTER_ACTIVATED = false;
 
   private static final Long DATE_OLDER = 1000L;
   private static final Long DATE_MIDDLE = 2000L;
@@ -67,7 +68,7 @@ public class GetStreamTimelineInteractorTest {
   }
 
   @Test public void shouldLoadLocalShots() throws Exception {
-    interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
+    interactor.loadStreamTimeline(STREAM_ID, FILTER_ACTIVATED, NOT_PAUSED, spyCallback);
 
     verify(localShotRepository).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
   }
@@ -77,7 +78,7 @@ public class GetStreamTimelineInteractorTest {
     when(localShotRepository.getShotsForStreamTimeline(
         any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
-    interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
+    interactor.loadStreamTimeline(STREAM_ID, FILTER_ACTIVATED, NOT_PAUSED, spyCallback);
     List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
     assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
@@ -88,7 +89,7 @@ public class GetStreamTimelineInteractorTest {
     when(localShotRepository.getShotsForStreamTimeline(
         any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
-    interactor.loadStreamTimeline(STREAM_ID, NOT_PAUSED, spyCallback);
+    interactor.loadStreamTimeline(STREAM_ID, FILTER_ACTIVATED, NOT_PAUSED, spyCallback);
 
     verify(spyCallback).onLoaded(any(Timeline.class));
   }

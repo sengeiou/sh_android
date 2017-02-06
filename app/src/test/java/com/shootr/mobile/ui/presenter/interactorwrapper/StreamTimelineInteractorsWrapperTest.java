@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter.interactorwrapper;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.timeline.GetImportantShotsTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetOlderViewOnlyStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.GetStreamTimelineInteractor;
@@ -23,10 +24,12 @@ public class StreamTimelineInteractorsWrapperTest {
 
   public static final String ID_STREAM = "idStream";
   public static final long LAST_REFRESH_DATE = 0L;
+  private static final boolean FILTER_ACTIVATED = false;
   private StreamTimelineInteractorsWrapper streamTimelineInteractorsWrapper;
   @Mock RefreshStreamTimelineInteractor refreshStreamTimelineInteractor;
   @Mock RefreshViewOnlyStreamTimelineInteractor refreshViewOnlyStreamTimelineInteractor;
   @Mock GetStreamTimelineInteractor getStreamTimelineInteractor;
+  @Mock GetImportantShotsTimelineInteractor getImportantShotsTimelineInteractor;
   @Mock GetViewOnlyStreamTimelineInteractor getViewOnlyStreamTimelineInteractor;
   @Mock GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
   @Mock GetOlderViewOnlyStreamTimelineInteractor getOlderViewOnlyStreamTimelineInteractor;
@@ -39,33 +42,33 @@ public class StreamTimelineInteractorsWrapperTest {
         new StreamTimelineInteractorsWrapper(refreshStreamTimelineInteractor,
             refreshViewOnlyStreamTimelineInteractor, getStreamTimelineInteractor,
             getViewOnlyStreamTimelineInteractor, getOlderStreamTimelineInteractor,
-            getOlderViewOnlyStreamTimelineInteractor);
+            getOlderViewOnlyStreamTimelineInteractor, getImportantShotsTimelineInteractor);
   }
 
   @Test public void shouldGetStreamTimelineWhenStreamModeIsZero() throws Exception {
-    streamTimelineInteractorsWrapper.loadTimeline(ID_STREAM, false, 0, callback);
+    streamTimelineInteractorsWrapper.loadTimeline(ID_STREAM, FILTER_ACTIVATED, false, 0, callback);
 
-    verify(getStreamTimelineInteractor).loadStreamTimeline(anyString(), anyBoolean(),
+    verify(getStreamTimelineInteractor).loadStreamTimeline(anyString(), anyBoolean(), anyBoolean(),
         anyCallback());
   }
 
   @Test public void shouldGetViewOnlyStreamTimelineWhenStreamModeIsOne() throws Exception {
-    streamTimelineInteractorsWrapper.loadTimeline(ID_STREAM, false, 1, callback);
+    streamTimelineInteractorsWrapper.loadTimeline(ID_STREAM, FILTER_ACTIVATED, false, 1, callback);
 
     verify(getViewOnlyStreamTimelineInteractor).loadStreamTimeline(anyString(), anyBoolean(),
         anyCallback());
   }
 
   @Test public void shouldrefreshStreamTimelineWhenStreamModeIsZero() throws Exception {
-    streamTimelineInteractorsWrapper.refreshTimeline(ID_STREAM, LAST_REFRESH_DATE, false, 0,
+    streamTimelineInteractorsWrapper.refreshTimeline(ID_STREAM, FILTER_ACTIVATED, LAST_REFRESH_DATE, false, 0,
         callback, errorCallback);
 
-    verify(refreshStreamTimelineInteractor).refreshStreamTimeline(anyString(), anyLong(),
+    verify(refreshStreamTimelineInteractor).refreshStreamTimeline(anyString(), anyBoolean(), anyLong(),
         anyBoolean(), anyCallback(), anyErrorCallback());
   }
 
   @Test public void shouldRefreshViewOnlyStreamTimelineWhenStreamModeIsOne() throws Exception {
-    streamTimelineInteractorsWrapper.refreshTimeline(ID_STREAM, LAST_REFRESH_DATE, false, 1,
+    streamTimelineInteractorsWrapper.refreshTimeline(ID_STREAM, FILTER_ACTIVATED, LAST_REFRESH_DATE, false, 1,
         callback, errorCallback);
 
     verify(refreshViewOnlyStreamTimelineInteractor).refreshStreamTimeline(anyString(), anyLong(),
@@ -73,15 +76,15 @@ public class StreamTimelineInteractorsWrapperTest {
   }
 
   @Test public void shouldGetOlderStreamTimelineInteractorWhenStreamModeIsZero() throws Exception {
-    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, LAST_REFRESH_DATE, 0, callback,
-        errorCallback);
+    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, FILTER_ACTIVATED,
+        LAST_REFRESH_DATE, 0, callback, errorCallback);
 
-    verify(getOlderStreamTimelineInteractor).loadOlderStreamTimeline(anyString(), anyLong(), anyCallback(),
-        anyErrorCallback());
+    verify(getOlderStreamTimelineInteractor).loadOlderStreamTimeline(anyString(), anyBoolean(),
+        anyLong(), anyCallback(), anyErrorCallback());
   }
 
   @Test public void shouldGetOlderViewOnlyStreamTimelineWhenStreamModeIsOne() throws Exception {
-    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, LAST_REFRESH_DATE, 1, callback,
+    streamTimelineInteractorsWrapper.obtainOlderTimeline(ID_STREAM, FILTER_ACTIVATED, LAST_REFRESH_DATE, 1, callback,
         errorCallback);
 
     verify(getOlderViewOnlyStreamTimelineInteractor).loadOlderStreamTimeline(anyString(), anyLong(),

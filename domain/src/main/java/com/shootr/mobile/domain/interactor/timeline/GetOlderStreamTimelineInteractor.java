@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class GetOlderStreamTimelineInteractor
 
   private Long currentOldestDate;
   private String streamId;
+  private boolean filterActivated;
   private Callback<Timeline> callback;
   private ErrorCallback errorCallback;
 
@@ -38,9 +40,10 @@ public class GetOlderStreamTimelineInteractor
     this.localStreamRepository = localStreamRepository;
   }
 
-  public void loadOlderStreamTimeline(String streamId, Long currentOldestDate, Callback<Timeline> callback,
-      ErrorCallback errorCallback) {
+  public void loadOlderStreamTimeline(String streamId, boolean filterActivated,
+      Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
     this.streamId = streamId;
+    this.filterActivated = filterActivated;
     this.currentOldestDate = currentOldestDate;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -52,11 +55,24 @@ public class GetOlderStreamTimelineInteractor
       StreamTimelineParameters timelineParameters = buildTimelineParameters();
       List<Shot> olderShots = remoteShotRepository.getShotsForStreamTimeline(timelineParameters);
       sortShotsByPublishDate(olderShots);
+      if (filterActivated) {
+        filterOlderShots(olderShots);
+      }
       notifyTimelineFromShots(olderShots);
     } catch (ShootrException error) {
       notifyError(error);
     } catch (NullPointerException ignored) {
       /* no-op */
+    }
+  }
+
+  private void filterOlderShots(List<Shot> olderShots) {
+    Iterator<Shot> iterator = olderShots.iterator();
+    while (iterator.hasNext()) {
+      Shot shot = iterator.next();
+      if (shot.isPadding()) {
+        iterator.remove();
+      }
     }
   }
 

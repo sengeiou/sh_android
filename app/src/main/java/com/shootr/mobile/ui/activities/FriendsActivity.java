@@ -33,8 +33,8 @@ import com.shootr.mobile.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FriendsActivity extends BaseToolbarDecoratedActivity implements PeopleView,
-    SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class FriendsActivity extends BaseToolbarDecoratedActivity
+    implements PeopleView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
 
   public static final int REQUEST_CAN_CHANGE_DATA = 1;
   @Inject ImageLoader imageLoader;
@@ -60,7 +60,6 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ButterKnife.bind(this);
-    analyticsTool.analyticsStart(this, analyticsScreenFriends);
     presenter.setView(this);
     presenter.initialize();
     suggestedPeoplePresenter.initialize(this);
@@ -90,7 +89,6 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
     super.onPause();
     presenter.pause();
     suggestedPeoplePresenter.pause();
-    analyticsTool.analyticsStop(this, this);
     presenter.setView(new NullPeopleView());
     suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
   }
@@ -106,8 +104,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   }
 
   private void openUserProfile(String idUser) {
-    startActivityForResult(ProfileActivity.getIntent(this, idUser),
-        REQUEST_CAN_CHANGE_DATA);
+    startActivityForResult(ProfileActivity.getIntent(this, idUser), REQUEST_CAN_CHANGE_DATA);
     overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
   }
 
@@ -116,8 +113,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
     intent.setAction(Intent.ACTION_SEND);
     intent.putExtra(Intent.EXTRA_TEXT, this.getString(R.string.invite_friends_message));
     intent.setType("text/plain");
-    startActivity(
-        Intent.createChooser(intent, this.getString(R.string.invite_friends_title)));
+    startActivity(Intent.createChooser(intent, this.getString(R.string.invite_friends_title)));
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,8 +136,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
 
   private void findFriends() {
     // TODO not going through the presenter? You naughty boy...
-    startActivityForResult(new Intent(this, FindFriendsActivity.class),
-        REQUEST_CAN_CHANGE_DATA);
+    startActivityForResult(new Intent(this, FindFriendsActivity.class), REQUEST_CAN_CHANGE_DATA);
     this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
@@ -152,8 +147,8 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
   private FriendsAdapter getPeopleAdapter() {
     if (peopleAdapter == null) {
       suggestedPeopleAdapter = getSuggestedPeopleAdapter();
-      peopleAdapter = new FriendsAdapter(this, imageLoader, suggestedPeopleAdapter,
-          new OnUserClickListener() {
+      peopleAdapter =
+          new FriendsAdapter(this, imageLoader, suggestedPeopleAdapter, new OnUserClickListener() {
             @Override public void onUserClick(String idUser) {
               openUserProfile(idUser);
             }
@@ -224,6 +219,7 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @Override public void unFollow(final int position) {
@@ -257,5 +253,10 @@ public class FriendsActivity extends BaseToolbarDecoratedActivity implements Peo
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
 
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(this, analyticsScreenFriends);
   }
 }

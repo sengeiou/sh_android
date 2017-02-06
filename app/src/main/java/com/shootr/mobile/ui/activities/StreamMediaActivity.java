@@ -147,6 +147,5 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void onPause() {
         super.onPause();
-        analyticsTool.analyticsStop(getBaseContext(), this);
     }
 }

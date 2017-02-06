@@ -369,7 +369,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void onPause() {
     super.onPause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
     profilePresenter.pause();
     suggestedPeoplePresenter.pause();
   }
@@ -494,6 +493,7 @@ public class ProfileActivity extends BaseActivity
     builder.setIdTargetUser(idUser);
     builder.setTargetUsername(profilePresenter.getUsername());
     analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendWhoToFollowAnalytics(UserModel userModel) {

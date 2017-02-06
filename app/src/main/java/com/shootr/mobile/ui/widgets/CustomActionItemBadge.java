@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.MenuItem;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
+import com.shootr.mobile.R;
 
 public class CustomActionItemBadge extends ActionItemBadge {
 
@@ -19,4 +20,13 @@ public class CustomActionItemBadge extends ActionItemBadge {
         Color.parseColor("#FF4444"), Color.parseColor("#FF4444"), Color.WHITE);
     update(act, menu, icon, (following ? followingBadgeStyle : badgeStyle), badgeCount);
   }
+
+  public static void updateFilterAlert(Activity act, MenuItem menu, Drawable icon,
+      String badgeCount) {
+    BadgeStyle followingBadgeStyle = new BadgeStyle(BadgeStyle.Style.DEFAULT,
+        R.layout.filter_badge,
+        Color.parseColor("#FF57B3E3"), Color.parseColor("#FF57B3E3"), Color.WHITE);
+    update(act, menu, icon, followingBadgeStyle, badgeCount);
+  }
+
 }

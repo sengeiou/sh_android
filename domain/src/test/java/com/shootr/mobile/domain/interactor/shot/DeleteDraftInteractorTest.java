@@ -30,19 +30,19 @@ public class DeleteDraftInteractorTest {
   }
 
   @Test public void shouldGetShotFromShotQueueRepository() throws Exception {
-    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, callback);
+    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, true, callback);
 
     verify(queueRepository).getQueue(QUEUED_SHOT_ID, QueueRepository.SHOT_TYPE);
   }
 
   @Test public void shouldRemoveShotFromShotQueueRepository() throws Exception {
-    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, callback);
+    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, true, callback);
 
     verify(queueRepository).remove(any(QueuedShot.class));
   }
 
   @Test public void shouldNotifyDeleted() throws Exception {
-    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, callback);
+    deleteDraftInteractor.deleteDraft(QUEUED_SHOT_ID, true, callback);
 
     verify(callback).onDeleted();
   }

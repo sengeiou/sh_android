@@ -17,7 +17,6 @@ import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.ui.activities.FindContributorsActivity;
 import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
-import com.shootr.mobile.ui.activities.FindStreamsActivity;
 import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
 import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
@@ -55,6 +54,7 @@ import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
+import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -89,7 +89,6 @@ import javax.inject.Singleton;
     ListingActivity.class,
     FavoritesFragment.class,
     ActivityTimelineFragment.class,
-    FindStreamsActivity.class,
     WhaleActivity.class,
     EmailConfirmationActivity.class,
     AllShotsActivity.class,
@@ -114,7 +113,7 @@ import javax.inject.Singleton;
     FindStreamsFragment.class,
     CropPictureActivity.class,
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
-    ChannelsContainerActivity.class, FollowingChannelListFragment.class
+    ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class
   },
   complete = false) public class UiModule {
 

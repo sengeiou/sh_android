@@ -53,6 +53,17 @@
               tools:text="following 3"
               tools:visibility="visible" />
 
+            <TextView android:id="@+id/toolbar_filtered_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:visibility="gone"
+                android:text="@string/filtered_by_important"
+                tools:text="following 3"
+                tools:visibility="visible" />
+
         </LinearLayout>
     </LinearLayout>
 

@@ -36,4 +36,13 @@ import javax.inject.Singleton;
     @Provides @Singleton @ShouldShowIntro BooleanPreference provideShouldShowIntro(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "should_show_intro", true);
     }
+
+    @Provides @Singleton @TimelineFilterActivated
+    BooleanPreference provideIsTimelineFilterActivated(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "timeline_filter", false);
+    }
+
+    @Provides @Singleton @LastTimeFiltered StringPreference provideLastTimeFiltered(SharedPreferences preferences) {
+        return new StringPreference(preferences, "last_time_filtered", "0");
+    }
 }

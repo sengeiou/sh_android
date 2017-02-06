@@ -13,6 +13,7 @@ import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +53,7 @@ public class SyncShotRepositoryTest {
   @Mock SyncTrigger syncTrigger;
   @Mock UserDataSource userDataSource;
   @Mock HighlightedShotEntityMapper highlightedShotEntityMapper;
+  @Mock SessionRepository sessionRepository;
 
   private SyncShotRepository syncShotRepository;
 
@@ -59,7 +61,7 @@ public class SyncShotRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncShotRepository =
         new SyncShotRepository(remoteShotDataSource, localShotDataSource, shotEntityMapper,
-            highlightedShotEntityMapper, userDataSource, syncTrigger);
+            highlightedShotEntityMapper, userDataSource, syncTrigger, sessionRepository);
   }
 
   @Test public void shouldGetRemoteShotWhenGetShotAndLocalShotIsNull() throws Exception {
@@ -109,17 +111,17 @@ public class SyncShotRepositoryTest {
 
   @Test public void shouldPutShotInRemoteWhenDataSourceWhenCallPutShot() throws Exception {
     when(userDataSource.getUser(ID_USER)).thenReturn(userEntity());
-    when(remoteShotDataSource.putShot(any(ShotEntity.class))).thenReturn(shotEntity());
+    when(remoteShotDataSource.putShot(any(ShotEntity.class), anyString())).thenReturn(shotEntity());
 
     syncShotRepository.putShot(shot());
 
-    verify(remoteShotDataSource).putShot(any(ShotEntity.class));
+    verify(remoteShotDataSource).putShot(any(ShotEntity.class), anyString());
   }
 
   @Test public void shouldPutShotsInLocalWhenGetShotsForStreamTimeline() throws Exception {
     syncShotRepository.getShotsForStreamTimeline(PARAMETERS);
 
-    verify(localShotDataSource).putShots(anyList());
+    verify(localShotDataSource).putShots(anyList(), anyString());
   }
 
   @Test public void shouldGetRepliesFromRemoteWhenCallGetReplies() throws Exception {
@@ -148,7 +150,7 @@ public class SyncShotRepositoryTest {
 
     syncShotRepository.getShotDetail(ID_SHOT, STREAM_TYPES, SHOT_TYPES);
 
-    verify(localShotDataSource).putShots(anyList());
+    verify(localShotDataSource).putShots(anyList(), anyString());
   }
 
   @Test public void shouldGetAllShotsFromUserFromRemoteWhenCallGetAllShotsFromUser()
@@ -169,7 +171,7 @@ public class SyncShotRepositoryTest {
   @Test public void shouldPutShotsInLocalWhenGetUserShotsForStreamTimeline() throws Exception {
     syncShotRepository.getUserShotsForStreamTimeline(PARAMETERS);
 
-    verify(localShotDataSource).putShots(anyList());
+    verify(localShotDataSource).putShots(anyList(), anyString());
   }
 
   private UserEntity userEntity() {

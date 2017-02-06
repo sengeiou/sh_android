@@ -101,6 +101,5 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
   @Override protected void onPause() {
     super.onPause();
-    analyticsTool.analyticsStop(getBaseContext(), this);
   }
 }

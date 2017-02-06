@@ -59,16 +59,21 @@ public class GetShotDetailInteractor implements Interactor {
   }
 
   private void loadLocalShotDetail() {
-    ShotDetail localShotDetail =
-        localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-    orderParents(localShotDetail);
-    localShotDetail.setNicers(nicerRepository.getNicers(idShot));
-    notifyLoaded(reorderReplies(localShotDetail));
+    try {
+      ShotDetail localShotDetail =
+          localShotRepository.getShotDetail(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
+      if (localShotDetail != null) {
+        orderParents(localShotDetail);
+        localShotDetail.setNicers(nicerRepository.getNicers(idShot));
+        notifyLoaded(reorderReplies(localShotDetail));
+      }
+    } catch (ShootrException error) {
+      notifyError(error);
+    }
   }
 
   private void orderParents(ShotDetail localShotDetail) {
-    if (localShotDetail != null &&
-        localShotDetail.getParents() != null) {
+    if (localShotDetail != null && localShotDetail.getParents() != null) {
       List<Shot> unorderedParents = localShotDetail.getParents();
       List<Shot> reorderedParents = orderParentsShots(unorderedParents);
       localShotDetail.setParents(reorderedParents);

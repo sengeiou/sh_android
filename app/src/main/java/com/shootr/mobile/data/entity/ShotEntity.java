@@ -28,6 +28,9 @@ public class ShotEntity extends BaseMessageEntity {
     private String ctaButtonLink;
     private String ctaButtonText;
     private String ctaCaption;
+    private Integer isPadding;
+    private Integer isFromHolder;
+    private Integer isFromContributor;
 
 
     public String getIdShot() {
@@ -174,5 +177,27 @@ public class ShotEntity extends BaseMessageEntity {
         this.ctaCaption = ctaCaption;
     }
 
+    public Integer isPadding() {
+        return isPadding;
+    }
 
+    public void setPadding(Integer padding) {
+        isPadding = padding;
+    }
+
+    public Integer isFromContributor() {
+        return isFromContributor;
+    }
+
+    public void setFromContributor(Integer isFromContributor) {
+        this.isFromContributor = isFromContributor;
+    }
+
+    public Integer isFromHolder() {
+        return isFromHolder;
+    }
+
+    public void setFromHolder(Integer isFromHolder) {
+        this.isFromHolder = isFromHolder;
+    }
 }

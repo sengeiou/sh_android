@@ -11,11 +11,13 @@ import java.util.List;
 
 public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
-  ShotEntity putShot(ShotEntity shotEntity);
+  ShotEntity putShot(ShotEntity shotEntity, String idUserMe);
 
-  void putShots(List<ShotEntity> shotEntities);
+  void putShots(List<ShotEntity> shotEntities, String idUserMe);
 
   List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
+
+  List<ShotEntity> getShotsForStreamTimelineFiltered(StreamTimelineParameters parameters);
 
   ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes);
 
@@ -40,6 +42,8 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   List<ShotEntity> getUserShotsForStreamTimeline(StreamTimelineParameters timelineParameters);
 
+  List<ShotEntity> updateImportantShots(StreamTimelineParameters parameters);
+
   void deleteShotsByIdStream(String idStream);
 
   void hideShot(String idShot, Long timestamp);
@@ -58,4 +62,6 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   void callCtaCheckIn(String idStream) throws UserCannotCheckInRequestException,
       UserAlreadyCheckInRequestException;
+
+  boolean hasNewFilteredShots(String idStream, String lastTimeFiltered);
 }

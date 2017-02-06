@@ -19,4 +19,12 @@ public interface SessionRepository {
     void createSession(String userId, String sessionToken, User loggedInUser);
 
     void destroySession();
+
+    boolean isTimelineFilterActivated();
+
+    void setTimelineFilterActivated(boolean isFilterActivated);
+
+    String getLastTimeFiltered();
+
+    void setLastTimeFiltered(String lastTimeFiltered);
 }
