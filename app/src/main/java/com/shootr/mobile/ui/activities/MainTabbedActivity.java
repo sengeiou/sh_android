@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -16,8 +15,9 @@ import butterknife.ButterKnife;
 import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarBadge;
-import com.roughike.bottombar.OnMenuTabClickListener;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
@@ -48,7 +48,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBar bottomBar;
-  private BottomBarBadge unreadActivities;
+  private BottomBarTab activitiesTab;
   private Fragment currentFragment;
 
   public static Intent getUpdateNeededIntent(Context context) {
@@ -86,13 +86,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
-    bottomBar = BottomBar.attach(findViewById(R.id.container), savedInstanceState);
-    bottomBar.noNavBarGoodness();
-    bottomBar.noTopOffset();
+    bottomBar = (BottomBar) findViewById(R.id.bottomBar);
     setupBottomMenu();
-    bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
-      @Override public void onMenuTabSelected(@IdRes int menuItemId) {
-        switch (menuItemId) {
+    activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
+    bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+      @Override public void onTabSelected(@IdRes int tabId) {
+        switch (tabId) {
           case R.id.bottombar_streams:
             StreamsListFragment streamsListFragment = StreamsListFragment.newInstance();
             currentFragment = streamsListFragment;
@@ -113,14 +112,16 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 ActivityTimelineContainerFragment.newInstance();
             currentFragment = activityTimelineFragment;
             switchTab(activityTimelineFragment);
+            activitiesTab.removeBadge();
             break;
           default:
             break;
         }
       }
-
-      @Override public void onMenuTabReSelected(@IdRes int menuItemId) {
-        scrollToTop(menuItemId);
+    });
+    bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+      @Override public void onTabReSelected(@IdRes int tabId) {
+        scrollToTop(tabId);
       }
     });
     loadIntentData();
@@ -130,9 +131,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void setupBottomMenu() {
     if (defaultTabUtils.getDefaultTabPosition(getSessionHandler().getCurrentUserId())
         == DefaultTabUtils.DEFAULT_POSITION) {
-      bottomBar.setItems(R.menu.bottombar_menu);
+      bottomBar.setItems(R.xml.bottombar_menu);
     } else {
-      bottomBar.setItems(R.menu.bottombar_menu_discover);
+      bottomBar.setItems(R.xml.bottombar_menu_discover);
     }
   }
 
@@ -229,24 +230,20 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void showActivityBadge(int count) {
-    if (currentFragment != null &&
-        !(currentFragment instanceof ActivityTimelineContainerFragment)) {
+    if (currentFragment != null
+        && !(currentFragment instanceof ActivityTimelineContainerFragment)) {
       showBadge(count);
     }
   }
 
   private void showBadge(int count) {
-    if (unreadActivities == null) {
-      unreadActivities = bottomBar.makeBadgeForTabAt(ACTIVITY_FRAGMENT, Color.TRANSPARENT, count);
-    } else {
-      unreadActivities.setCount(count);
-      unreadActivities.show();
+    if (activitiesTab != null) {
+      activitiesTab.setBadgeCount(count);
     }
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    bottomBar.onSaveInstanceState(outState);
   }
 
   private void setToolbarClickListener(final UserModel userModel) {

@@ -1,9 +1,35 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <!-- This could be your fragment container, or something -->
   <FrameLayout
       android:id="@+id/container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-</FrameLayout>
+      android:layout_height="match_parent"
+      android:layout_above="@+id/connect_controller" />
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:id="@+id/connect_controller"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:background="@color/accent"
+      android:layout_above="@+id/bottomBar"
+      android:visibility="gone"
+      />
+
+  <com.roughike.bottombar.BottomBar
+      android:id="@+id/bottomBar"
+      android:layout_width="match_parent"
+      android:layout_height="60dp"
+      app:bb_inActiveTabColor="#ffffff"
+      app:bb_activeTabColor="#ffffff"
+      android:layout_alignParentBottom="true"
+      app:bb_showShadow="false"
+      app:bb_inActiveTabAlpha=".5"
+      app:bb_tabXmlResource="@xml/bottombar_menu" />
+
+</RelativeLayout>
+
