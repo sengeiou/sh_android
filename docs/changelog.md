@@ -13,11 +13,25 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.25.0] - 2017-02-06
+
+### Added
+- Admin and contributor mark in shots
+- Stream filter with alert
+- AppsFlyer for shootr
+- New textBox for timeline
+- Search users in hot
+
+### Changed
+
+- Pre production endpoint
+
 ## [1.24.6] - 2017-01-17
 
 ### Changed
 
 - Notificaciones de mensajes
+- Analythics like IOS
 
 ### Fixed
 - Agujero en sincronización de profile
