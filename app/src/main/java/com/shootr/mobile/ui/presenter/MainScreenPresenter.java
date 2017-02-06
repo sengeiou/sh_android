@@ -80,6 +80,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     this.sendDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
+    this.loadConnectedStream();
   }
 
   private void sendDeviceInfo() {
@@ -119,6 +120,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
                     /* no-op */
             }
           });
+    }
+  }
+
+  private void loadConnectedStream() {
+    if (sessionRepository.getCurrentUser().getIdWatchingStream() != null) {
+      mainScreenView.showConnectController();
+    } else {
+      mainScreenView.hideConnectController();
     }
   }
 
@@ -172,6 +181,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
   @Override public void resume() {
     updateActivityBadge();
     loadChannelsForBadge();
+    loadConnectedStream();
     bus.register(this);
     if (hasBeenPaused) {
       loadCurrentUser();

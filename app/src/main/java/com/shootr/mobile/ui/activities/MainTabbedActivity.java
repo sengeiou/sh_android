@@ -10,6 +10,7 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.eftimoff.androidplayer.Player;
@@ -50,6 +51,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private BottomBar bottomBar;
   private BottomBarTab activitiesTab;
   private Fragment currentFragment;
+  private LinearLayout connectController;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -86,6 +88,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
+    connectController = (LinearLayout) findViewById(R.id.connect_controller);
     bottomBar = (BottomBar) findViewById(R.id.bottomBar);
     setupBottomMenu();
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
@@ -234,6 +237,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         && !(currentFragment instanceof ActivityTimelineContainerFragment)) {
       showBadge(count);
     }
+  }
+
+  @Override public void showConnectController() {
+    connectController.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideConnectController() {
+    connectController.setVisibility(View.GONE);
   }
 
   private void showBadge(int count) {

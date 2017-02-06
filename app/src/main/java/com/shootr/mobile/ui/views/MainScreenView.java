@@ -7,4 +7,8 @@ public interface MainScreenView {
     void setUserData(UserModel userModel);
 
     void showActivityBadge(int count);
+
+    void showConnectController();
+
+    void hideConnectController();
 }
