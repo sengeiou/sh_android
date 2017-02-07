@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
@@ -37,6 +38,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
   private final SendShotEventStatsIneteractor sendShotEventStatsIneteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
+  private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
   private final IntPreference badgeCount;
@@ -58,8 +60,9 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
       SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
-      SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      @ActivityBadgeCount IntPreference badgeCount, GetFollowingInteractor followingInteractor,
+      UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
+      UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
+      GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetFollowingIdsInteractor getFollowingIdsInteractor, GetLocalStreamInteractor getStreamInteractor,
       StreamModelMapper streamModelMapper, @Main Bus bus, BusPublisher busPublisher) {
@@ -67,6 +70,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
+    this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
     this.badgeCount = badgeCount;
@@ -207,6 +211,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   @Override public void pause() {
     bus.unregister(this);
     hasBeenPaused = true;
+  }
+
+  public void unwatchStream() {
+    unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    });
   }
 
   @Override @Subscribe public void onBadgeChanged(BadgeChanged.Event event) {

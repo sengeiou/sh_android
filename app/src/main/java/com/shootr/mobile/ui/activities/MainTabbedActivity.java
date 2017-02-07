@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
@@ -53,7 +54,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @BindView(R.id.bottomBar) BottomBar bottomBar;
   @BindView(R.id.connect_controller) LinearLayout connectController;
   @BindView(R.id.stream_title) TextView streamTitle;
-  @BindView(R.id.close_button) ImageButton closeButton;
   @BindView(R.id.stream_image) CircleImageView streamImage;
   @BindView(R.id.stream_image_without_image) ImageView streamImageWithoutPicture;
   @Inject MainScreenPresenter mainScreenPresenter;
@@ -295,5 +295,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
       }
     });
+  }
+
+  @OnClick(R.id.close_button) public void onCloseClick() {
+    mainScreenPresenter.unwatchStream();
   }
 }
