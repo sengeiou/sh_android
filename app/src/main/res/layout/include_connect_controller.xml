@@ -10,7 +10,6 @@
     >
 
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
       android:layout_width="match_parent"
       android:layout_height="50dp"
       android:background="@color/primary"
@@ -25,7 +24,6 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:src="@drawable/ic_contact_picture_default"
-        app:border_width="1dp"
         />
     <ImageView
         android:id="@+id/stream_image_without_image"
