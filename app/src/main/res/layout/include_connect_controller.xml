@@ -26,6 +26,16 @@
         android:src="@drawable/ic_contact_picture_default"
         app:border_width="1dp"
         />
+    <ImageView
+        android:id="@+id/stream_image_without_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        android:visibility="gone"
+        />
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -54,8 +64,8 @@
 
     <ImageButton
         android:id="@+id/close_button"
-        android:layout_width="16sp"
-        android:layout_height="16sp"
+        android:layout_width="12sp"
+        android:layout_height="12sp"
         android:layout_gravity="center"
         android:src="@drawable/ic_action_navigation_close_white"
         android:layout_marginRight="8dp"

@@ -10,9 +10,14 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.roughike.bottombar.BottomBar;
@@ -32,6 +37,9 @@ import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.DefaultTabUtils;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
+import de.hdodenhof.circleimageview.CircleImageView;
 import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
@@ -42,17 +50,23 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
   private static final int ACTIVITY_FRAGMENT = 3;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
+  @BindView(R.id.bottomBar) BottomBar bottomBar;
+  @BindView(R.id.connect_controller) LinearLayout connectController;
+  @BindView(R.id.stream_title) TextView streamTitle;
+  @BindView(R.id.close_button) ImageButton closeButton;
+  @BindView(R.id.stream_image) CircleImageView streamImage;
+  @BindView(R.id.stream_image_without_image) ImageView streamImageWithoutPicture;
   @Inject MainScreenPresenter mainScreenPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject DeeplinkingNavigator deeplinkingNavigator;
   @Inject DefaultTabUtils defaultTabUtils;
   @Inject CrashReportTool crashReportTool;
+  @Inject ImageLoader imageLoader;
+  @Inject InitialsLoader initialsLoader;
 
   private ToolbarDecorator toolbarDecorator;
-  private BottomBar bottomBar;
   private BottomBarTab activitiesTab;
   private Fragment currentFragment;
-  private LinearLayout connectController;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -89,8 +103,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
-    connectController = (LinearLayout) findViewById(R.id.connect_controller);
-    bottomBar = (BottomBar) findViewById(R.id.bottomBar);
     setupBottomMenu();
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -242,6 +254,23 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void showConnectController(StreamModel streamModel) {
     connectController.setVisibility(View.VISIBLE);
+    streamTitle.setText(streamModel.getTitle());
+    setupStreamPicture(streamModel);
+  }
+
+  private void setupStreamPicture(StreamModel streamModel) {
+    if (streamModel.getPicture() == null) {
+      String initials = initialsLoader.getLetters(streamModel.getTitle());
+      int backgroundColor = initialsLoader.getColorForLetters(initials);
+      TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
+      streamImageWithoutPicture.setImageDrawable(textDrawable);
+      streamImageWithoutPicture.setVisibility(View.VISIBLE);
+      streamImage.setVisibility(View.GONE);
+    } else {
+      imageLoader.load(streamModel.getPicture(), streamImage);
+      streamImageWithoutPicture.setVisibility(View.GONE);
+      streamImage.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideConnectController() {
