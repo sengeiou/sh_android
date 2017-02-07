@@ -10,7 +10,6 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -277,6 +276,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     connectController.setVisibility(View.GONE);
   }
 
+  @Override public void goToTimeline(StreamModel streamModel) {
+    startActivity(
+        StreamTimelineActivity.newIntent(this, streamModel.getIdStream(), streamModel.getTitle(),
+            streamModel.getAuthorId()));
+  }
+
   private void showBadge(int count) {
     if (activitiesTab != null) {
       activitiesTab.setBadgeCount(count);
@@ -299,5 +304,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @OnClick(R.id.close_button) public void onCloseClick() {
     mainScreenPresenter.unwatchStream();
+  }
+
+  @OnClick(R.id.stream_info_container) public void onConnectControllerClick() {
+    mainScreenPresenter.onControllerClick();
   }
 }

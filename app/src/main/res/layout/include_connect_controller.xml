@@ -37,6 +37,7 @@
         android:visibility="gone"
         />
     <LinearLayout
+        android:id="@+id/stream_info_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"

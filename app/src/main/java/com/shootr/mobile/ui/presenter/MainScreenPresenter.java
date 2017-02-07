@@ -23,6 +23,7 @@ import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChanne
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -55,6 +56,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private UserModel userModel;
   private int unreadChannels = 0;
   private int unreadFollowChannels = 0;
+  private StreamModel streamModel;
 
   @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
@@ -142,7 +144,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       getStreamInteractor.loadStream(sessionRepository.getCurrentUser().getIdWatchingStream(),
           new GetLocalStreamInteractor.Callback() {
             @Override public void onLoaded(Stream stream) {
-              mainScreenView.showConnectController(streamModelMapper.transform(stream));
+              streamModel = streamModelMapper.transform(stream);
+              mainScreenView.showConnectController(streamModel);
             }
           });
     } else {
@@ -227,5 +230,9 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Override @Subscribe public void onUnwatchDone(UnwatchDone.Event event) {
     mainScreenView.hideConnectController();
+  }
+
+  public void onControllerClick() {
+    mainScreenView.goToTimeline(streamModel);
   }
 }

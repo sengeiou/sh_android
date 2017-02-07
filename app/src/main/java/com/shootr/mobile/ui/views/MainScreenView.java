@@ -12,4 +12,6 @@ public interface MainScreenView {
     void showConnectController(StreamModel streamModel);
 
     void hideConnectController();
+
+    void goToTimeline(StreamModel streamModel);
 }
