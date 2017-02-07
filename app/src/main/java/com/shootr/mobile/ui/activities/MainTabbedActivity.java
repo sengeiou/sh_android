@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,8 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.eftimoff.androidplayer.Player;
-import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
@@ -89,16 +86,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     loadIntentData();
     handleUpdateVersion();
     handleMultipleActivitiesIntent();
-    setupAnimation();
-  }
-
-  private void setupAnimation() {
-    PropertyAction bottomBarAction = PropertyAction.newPropertyAction(bottomBar)
-        .interpolator(new AccelerateDecelerateInterpolator())
-        .translationY(ANIMATION_TRANSLATION)
-        .duration(ANIMATION_DURATION)
-        .build();
-    Player.init().animate(bottomBarAction).play();
   }
 
   private void setupBottomBar(Bundle savedInstanceState) {
