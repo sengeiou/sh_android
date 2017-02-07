@@ -186,7 +186,6 @@
               />
         </FrameLayout>
       </FrameLayout>
-
       <TextView
           android:id="@+id/shot_reply_count"
           android:layout_width="wrap_content"
@@ -240,21 +239,19 @@
         app:small_shine_offset_angle="20"
         />
     </LinearLayout>
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/linearLayout2"
+    >
+      <ImageView
+          android:id="@+id/open_menu"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="bottom|end"
+          android:src="@drawable/ic_more_vert"
+          android:visibility="gone"
+          tools:visibility="visible"
+      />
+    </FrameLayout>
   </RelativeLayout>
-  <LinearLayout
-      android:layout_weight=".1"
-      android:layout_width="2.1dp"
-      android:layout_marginRight="2dp"
-      android:layout_height="24dp"
-      android:background="@color/gray_92"
-      android:layout_gravity="center"
-      />
-  <LinearLayout
-      android:layout_weight=".1"
-      android:layout_width="2.3dp"
-      android:layout_marginRight="4dp"
-      android:layout_height="24dp"
-      android:background="@color/gray_92"
-      android:layout_gravity="center"
-      />
 </LinearLayout>
