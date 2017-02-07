@@ -288,7 +288,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
-    adapter.setCurrentWatchingStream(streamId);
+    /* no-op */
   }
 
   @Override public void showContent() {
