@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -35,6 +36,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   private final OnVideoClickListener videoClickListener;
   private final OnNiceShotListener onNiceShotListener;
   private final OnUsernameClickListener onUsernameClickListener;
+  private final OnOpenShotMenuListener onOpenShotMenuListener;
   private final AndroidTimeUtils timeUtils;
   private final ImageLoader imageLoader;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -65,6 +67,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   public ShotTimelineViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnOpenShotMenuListener onOpenShotMenuListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
       ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
@@ -74,6 +77,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
     this.onNiceShotListener = onNiceShotListener;
+    this.onOpenShotMenuListener = onOpenShotMenuListener;
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.imageLoader = imageLoader;
@@ -84,7 +88,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
+      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener,
+      OnOpenShotMenuListener onOpenShotMenuListener) {
     bindUsername(shot);
     setupVerified(shot);
     setupIsHolderOrContributor(shot);
@@ -96,14 +101,15 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener);
+    setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener,
+        onOpenShotMenuListener);
     setupSwipeLayout();
   }
 
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnUrlClickListener onUrlClickListener) {
+      OnUrlClickListener onUrlClickListener, OnOpenShotMenuListener onOpenShotMenuListener) {
     bindUsername(shot);
     setupVerified(shot);
     setupIsHolderOrContributor(shot);
@@ -115,7 +121,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick, null);
+    setupListeners(shot, shotClickListener, onShotLongClick, null, onOpenShotMenuListener);
     setupSwipeLayout();
   }
 
@@ -126,7 +132,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void setupListeners(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick,
-      @Nullable final OnReshootClickListener reshootClickListener) {
+      @Nullable final OnReshootClickListener reshootClickListener,
+      final OnOpenShotMenuListener onOpenShotMenuListener) {
     shotContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         shotClickListener.onClick(shot);
@@ -144,6 +151,15 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
           if (reshootClickListener != null) {
             reshootClickListener.onReshootClick(shot);
             swipeLayout.close(true);
+          }
+        }
+      });
+    }
+    if (openImageMenu != null) {
+      openImageMenu.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (onOpenShotMenuListener != null) {
+            onOpenShotMenuListener.openMenu(shot);
           }
         }
       });

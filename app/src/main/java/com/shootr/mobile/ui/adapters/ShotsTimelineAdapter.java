@@ -17,6 +17,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -50,6 +51,7 @@ public class ShotsTimelineAdapter
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final ShotClickListener shotClickListener;
   private final OnShotLongClick onShotLongClick;
+  private final OnOpenShotMenuListener onOpenShotMenuListener;
   private final OnImageLongClickListener onLongClickListener;
   private final View.OnTouchListener onTouchListener;
   private final OnImageClickListener onImageClickListener;
@@ -68,9 +70,10 @@ public class ShotsTimelineAdapter
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
       ShotClickListener shotClickListener, OnShotLongClick onShotLongClick,
-      OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      OnUrlClickListener onShotUrlClickListener, OnHideHighlightShot onHideHighlightClickListener,
+      OnOpenShotMenuListener onOpenShotMenuListener, OnImageLongClickListener onLongClickListener,
+      View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
+      OnUrlClickListener onUrlClickListener, OnUrlClickListener onShotUrlClickListener,
+      OnHideHighlightShot onHideHighlightClickListener,
       OnReshootClickListener onReshootClickListener, OnCtaClickListener onCtaClickListener,
       NumberFormatUtil numberFormatUtil, Boolean isAdmin) {
     this.imageLoader = imageLoader;
@@ -79,6 +82,7 @@ public class ShotsTimelineAdapter
     this.onNiceShotListener = onNiceShotListener;
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
+    this.onOpenShotMenuListener = onOpenShotMenuListener;
     this.onUrlClickListener = onUrlClickListener;
     this.onShotUrlClickListener = onShotUrlClickListener;
     this.onHideHighlightClickListener = onHideHighlightClickListener;
@@ -154,14 +158,16 @@ public class ShotsTimelineAdapter
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.highlighted_shot_promoted, parent, false);
       return new HighlightedPromotedShotViewHolder(v, avatarClickListener, videoClickListener,
-          onNiceShotListener, onHideHighlightClickListener, onUsernameClickListener, timeUtils,
-          imageLoader, shotTextSpannableBuilder, numberFormatUtil);
+          onNiceShotListener, onOpenShotMenuListener, onHideHighlightClickListener,
+          onUsernameClickListener, timeUtils, imageLoader, shotTextSpannableBuilder,
+          numberFormatUtil);
     } else {
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.highlighted_shot, parent, false);
       return new HighLightedShotViewHolder(v, avatarClickListener, videoClickListener,
-          onNiceShotListener, onHideHighlightClickListener, onUsernameClickListener, timeUtils,
-          imageLoader, shotTextSpannableBuilder, numberFormatUtil);
+          onNiceShotListener, onOpenShotMenuListener, onHideHighlightClickListener,
+          onUsernameClickListener, timeUtils, imageLoader, shotTextSpannableBuilder,
+          numberFormatUtil);
     }
   }
 
@@ -175,14 +181,14 @@ public class ShotsTimelineAdapter
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.item_swipeable_promoted_shot, parent, false);
       return new PromotedShotViewHolder(v, avatarClickListener, videoClickListener,
-          onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
-          shotTextSpannableBuilder);
+          onNiceShotListener, onOpenShotMenuListener, onUsernameClickListener, timeUtils,
+          imageLoader, numberFormatUtil, shotTextSpannableBuilder);
     } else {
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.item_swipeable_shot_timeline, parent, false);
       return new ShotTimelineViewHolder(v, avatarClickListener, videoClickListener,
-          onNiceShotListener, onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
-          shotTextSpannableBuilder);
+          onNiceShotListener, onOpenShotMenuListener, onUsernameClickListener, timeUtils,
+          imageLoader, numberFormatUtil, shotTextSpannableBuilder);
     }
   }
 
@@ -195,11 +201,13 @@ public class ShotsTimelineAdapter
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
       ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel, shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
-          onImageClickListener, onUrlClickListener, isAdmin, onCtaClickListener);
+          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, isAdmin,
+          onCtaClickListener);
     } else {
       ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
           shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-          onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
+          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
+          isAdmin);
     }
   }
 
@@ -212,11 +220,12 @@ public class ShotsTimelineAdapter
         || holder.getItemViewType() == TYPE_ITEM_CHECK_IN) {
       ((PromotedShotViewHolder) holder).render(shots.get(position), shotClickListener,
           onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
-          onReshootClickListener, onShotUrlClickListener, onCtaClickListener);
+          onReshootClickListener, onShotUrlClickListener, onOpenShotMenuListener,
+          onCtaClickListener);
     } else {
       ((ShotTimelineViewHolder) holder).render(shots.get(position), shotClickListener,
           onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
-          onReshootClickListener, onShotUrlClickListener);
+          onReshootClickListener, onShotUrlClickListener, onOpenShotMenuListener);
     }
   }
 

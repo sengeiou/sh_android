@@ -11,6 +11,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -32,23 +33,26 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
 
-  public HighLightedShotViewHolder(View view,
-      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener,
+  public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
+      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnOpenShotMenuListener onOpenShotMenuListener,
       OnHideHighlightShot onHideHighlightClickListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
-      ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder, NumberFormatUtil numberFormatUtil) {
-    super(view, avatarClickListener, videoClickListener, onNiceShotListener,
-        onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil, shotTextSpannableBuilder);
+      ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder,
+      NumberFormatUtil numberFormatUtil) {
+    super(view, avatarClickListener, videoClickListener, onNiceShotListener, onOpenShotMenuListener,
+        onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
+        shotTextSpannableBuilder);
     this.onHideHighlightClickListener = onHideHighlightClickListener;
   }
 
   public void renderHighLight(HighlightedShotModel highlightedShotModel, final ShotModel shotModel,
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener, Boolean isAdmin) {
+      OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
+      OnOpenShotMenuListener onOpenShotMenuListener, Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener, onUrlClickListener);
+        onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener);
     setupSwipeLayout();
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick);
 
@@ -59,7 +63,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       dismissContainer.setBackgroundColor(
           dismissContainer.getResources().getColor(R.color.gray_50));
     }
-
   }
 
   private void setupSwipeLayout() {
