@@ -50,6 +50,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -558,6 +559,11 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }, new OnShotLongClick() {
       @Override public void onShotLongClick(ShotModel shot) {
+        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
+        reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
+      }
+    }, new OnOpenShotMenuListener() {
+      @Override public void openMenu(ShotModel shot) {
         String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
       }
