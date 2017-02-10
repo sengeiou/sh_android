@@ -99,7 +99,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       }
     });
     openHighlightedMenu.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick (View view){
+      @Override public void onClick(View view) {
         onOpenShotMenuListener.openMenu(highlightedShotModel.getShotModel());
       }
     });
