@@ -57,7 +57,8 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
         onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener);
     setupSwipeLayout();
     setupHighlightedMenu();
-    setupListeners(highlightedShotModel, shotClickListener, onShotLongClick);
+    setupListeners(highlightedShotModel, shotClickListener, onShotLongClick,
+        onOpenShotMenuListener);
 
     if (isAdmin) {
       dismissContainer.setBackgroundColor(
@@ -69,7 +70,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   }
 
   private void setupHighlightedMenu() {
-      openImageMenu.setVisibility(View.GONE);
+    openImageMenu.setVisibility(View.GONE);
     openHighlightedMenu.setVisibility(View.VISIBLE);
   }
 
@@ -79,7 +80,8 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   }
 
   private void setupListeners(final HighlightedShotModel highlightedShotModel,
-      final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick) {
+      final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
+      final OnOpenShotMenuListener onOpenShotMenuListener) {
     shotContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         shotClickListener.onClick(highlightedShotModel.getShotModel());
@@ -94,6 +96,11 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     hideHighlighted.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onHideHighlightClickListener.onHideClick(highlightedShotModel);
+      }
+    });
+    openHighlightedMenu.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick (View view){
+        onOpenShotMenuListener.openMenu(highlightedShotModel.getShotModel());
       }
     });
   }
