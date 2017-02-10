@@ -33,7 +33,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
-  @BindView(R.id.open_menu_highlighted) ImageView openHighlightedMenu;
+  @BindView(R.id.open_menu) ImageView openHighlightedMenu;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
