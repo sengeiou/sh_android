@@ -4,20 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <!-- This could be your fragment container, or something -->
+  <android.support.design.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/bottomBar"
+      >
   <FrameLayout
       android:id="@+id/container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_above="@+id/connect_controller" />
+      android:layout_height="match_parent">
+  </FrameLayout>
 
-  <include
-      layout="@layout/include_connect_controller"
-      android:id="@+id/connect_controller"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_above="@+id/bottomBar"
-      android:visibility="gone"
-      />
+    <include
+        layout="@layout/include_connect_controller"
+        android:id="@+id/connect_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_gravity="bottom"
+        />
+
+  </android.support.design.widget.CoordinatorLayout>
 
   <com.roughike.bottombar.BottomBar
       android:id="@+id/bottomBar"
