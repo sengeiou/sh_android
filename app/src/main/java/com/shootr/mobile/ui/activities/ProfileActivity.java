@@ -14,8 +14,10 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -30,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
+import com.github.clans.fab.FloatingActionMenu;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -116,6 +119,8 @@ public class ProfileActivity extends BaseActivity
 
   @BindView(R.id.profile_user_verified) ImageView userVerified;
   @BindView(R.id.mutuals_container) View mutualsContainer;
+  @BindView(R.id.profile_container) CoordinatorLayout profileContainer;
+  @BindView(R.id.fab_menu) FloatingActionMenu floatingMenu;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
@@ -162,6 +167,8 @@ public class ProfileActivity extends BaseActivity
 
   private String idUser;
   private String username;
+
+  private int mScrollOffset = 4;
 
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
@@ -250,6 +257,21 @@ public class ProfileActivity extends BaseActivity
         reportShotPresenter.onShotLongPressed(shot);
       }
     });
+
+
+
+    /*profileContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+      @Override
+      public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX,
+          int oldScrollY) {
+          if (oldScrollY > 0) {
+            floatingMenu.hideMenu(true);
+          } else {
+            floatingMenu.showMenu(true);
+          }
+        }
+    });*/
+
   }
 
   private void sendAnalytics(ShotModel shot) {

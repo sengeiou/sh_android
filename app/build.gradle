@@ -237,6 +237,7 @@ dependencies {
   compile 'com.mikepenz:actionitembadge:3.3.0@aar'
   compile 'com.mikepenz:iconics-core:2.8.0@aar'
   compile 'com.appsflyer:af-android-sdk:4+@aar'
+  compile 'com.github.clans:fab:1.6.4'
 }
 
 /**
