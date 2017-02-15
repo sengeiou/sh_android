@@ -21,7 +21,8 @@ public class QuickReturnFabMenu extends CoordinatorLayout.Behavior<View> {
   }
 
   @Override
-  public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
+  public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target,
+      int dx, int dy, int[] consumed) {
 
     if (dy > 0) {
       ((FloatingActionMenu) child).hideMenu(true);

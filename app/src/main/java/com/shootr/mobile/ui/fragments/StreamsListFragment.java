@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;

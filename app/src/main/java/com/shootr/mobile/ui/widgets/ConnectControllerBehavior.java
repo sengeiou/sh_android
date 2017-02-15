@@ -2,12 +2,9 @@ package com.shootr.mobile.ui.widgets;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import com.roughike.bottombar.BottomBar;
 import com.shootr.mobile.R;
 
 public class ConnectControllerBehavior extends CoordinatorLayout.Behavior<LinearLayout> {
