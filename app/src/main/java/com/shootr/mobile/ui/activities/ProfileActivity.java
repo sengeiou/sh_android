@@ -17,7 +17,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -1218,5 +1217,21 @@ public class ProfileActivity extends BaseActivity
 
   @OnClick(R.id.channel_button) public void onChannelClick() {
     profilePresenter.onChannelClick();
+  }
+
+  @OnClick(R.id.fab_edit_profile) public void onFabEditClick() {
+    closeFabMenu();
+    editProfile();
+  }
+
+  @OnClick(R.id.fab_new_stream) public void onAddStream() {
+    closeFabMenu();
+    startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+  }
+
+  private void closeFabMenu() {
+    if (floatingMenu != null) {
+      floatingMenu.close(true);
+    }
   }
 }
