@@ -94,37 +94,44 @@
 
   <com.github.clans.fab.FloatingActionMenu
       android:id="@+id/fab_menu"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:layout_alignParentBottom="true"
       android:layout_alignParentRight="true"
-      android:layout_marginLeft="10dp"
-      android:layout_marginTop="10dp"
       android:layout_gravity="bottom|right"
-      android:layout_marginBottom="8dp"
-      android:layout_marginRight="8dp"
+      android:paddingRight="10dp"
+      android:paddingBottom="10dp"
       android:visibility="gone"
+      tools:visibility="visible"
       app:layout_behavior="com.shootr.mobile.ui.widgets.QuickReturnFabMenu"
       fab:menu_animationDelayPerItem="0"
       fab:menu_shadowColor="#444"
       fab:menu_colorNormal="@color/primary_dark"
       fab:menu_colorPressed="@color/primary_disabled"
       fab:menu_colorRipple="@color/accent"
+      fab:menu_backgroundColor="#70000000"
+      fab:menu_fab_show_animation="@anim/show_from_bottom"
+      fab:menu_fab_hide_animation="@anim/hide_to_bottom"
      >
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_verified_shot"
-        fab:fab_label="Menu item 1"
+        android:src="@drawable/ic_edit_24_blue"
+        fab:fab_label="@string/profile_edit_profile"
+        fab:fab_colorNormal="@color/white"
+        fab:fab_colorPressed="@color/primary_disabled"
         fab:fab_size="mini"/>
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_label="Menu item 2"
+        android:src="@drawable/ic_stream_24_blue"
+        fab:fab_label="@string/activity_new_stream_title"
+        fab:fab_colorNormal="@color/white"
+        fab:fab_colorPressed="@color/primary_disabled"
         fab:fab_size="mini"/>
 
   </com.github.clans.fab.FloatingActionMenu>

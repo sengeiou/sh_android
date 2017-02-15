@@ -257,6 +257,8 @@ public class ProfileActivity extends BaseActivity
         reportShotPresenter.onShotLongPressed(shot);
       }
     });
+
+    floatingMenu.setClosedOnTouchOutside(true);
   }
 
   private void sendAnalytics(ShotModel shot) {
